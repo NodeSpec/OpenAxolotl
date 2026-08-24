@@ -782,4 +782,7 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 | File | Kind | Language | Status |
 |------|------|----------|--------|
+| `.nodespec/tests/req-006.tests.md` - Test plan for requirement: Level Contract v1 Specification | test-plan | markdown | draft |
+| `.nodespec/tests/req-017.tests.md` - Test plan for requirement: AI-Agent Contributor Workflow and Documentation | test-plan | markdown | draft |
+| `.nodespec/tests/req-009.tests.md` - Test plan for requirement: Open Lagoon Hub and World Loading | test-plan | markdown | draft |
 | `.nodespec/tests/req-027.tests.md` - Test plan for requirement: Performance Targets | test-plan | markdown | draft |

@@ -338,4 +338,5 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 | File | Kind | Language | Status |
 |------|------|----------|--------|
+| `.nodespec/tests/req-019.tests.md` - Test plan for requirement: Kid-Appropriate Tone and Accessibility | test-plan | markdown | draft |
 | `.nodespec/tests/req-002.tests.md` - Test plan for requirement: Regeneration and Capability Loss System | test-plan | markdown | draft |

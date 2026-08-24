@@ -7,29 +7,29 @@ component inventory, connection topology, and links to per-component task docume
 
 | Component | Role | Technology | Parent | Task Document | Test Plan |
 |-----------|------|------------|--------|---------------|-----------|
-| OpenAxolotl Game Client | game-client | godot | --- | [`.nodespec/tasks/openaxolotl-game-client-22222222.task.md`](./.nodespec/tasks/openaxolotl-game-client-22222222.task.md) | [`.nodespec/tests/req-027.tests.md`](./.nodespec/tests/req-027.tests.md) |
-| Axolotl Controller | shared-library | godot | --- | [`.nodespec/tasks/axolotl-controller-22222222.task.md`](./.nodespec/tasks/axolotl-controller-22222222.task.md) | --- |
-| Camera System | shared-library | godot | --- | [`.nodespec/tasks/camera-system-22222222.task.md`](./.nodespec/tasks/camera-system-22222222.task.md) | --- |
-| Regeneration and Capability System | shared-library | godot | --- | [`.nodespec/tasks/regeneration-and-capability-system-22222222.task.md`](./.nodespec/tasks/regeneration-and-capability-system-22222222.task.md) | [`.nodespec/tests/req-002.tests.md`](./.nodespec/tests/req-002.tests.md) |
-| Lives and Checkpoint System | shared-library | godot | --- | [`.nodespec/tasks/lives-and-checkpoint-system-22222222.task.md`](./.nodespec/tasks/lives-and-checkpoint-system-22222222.task.md) | --- |
-| Gill Mod Ability Framework | shared-library | godot | --- | [`.nodespec/tasks/gill-mod-ability-framework-22222222.task.md`](./.nodespec/tasks/gill-mod-ability-framework-22222222.task.md) | --- |
-| Save System | shared-library | godot | --- | [`.nodespec/tasks/save-system-22222222.task.md`](./.nodespec/tasks/save-system-22222222.task.md) | --- |
-| Restoration State System | shared-library | godot | --- | [`.nodespec/tasks/restoration-state-system-22222222.task.md`](./.nodespec/tasks/restoration-state-system-22222222.task.md) | --- |
-| Collectibles System | shared-library | godot | --- | [`.nodespec/tasks/collectibles-system-22222222.task.md`](./.nodespec/tasks/collectibles-system-22222222.task.md) | --- |
-| Drift Fleet Enemy Framework | shared-library | godot | --- | [`.nodespec/tasks/drift-fleet-enemy-framework-22222222.task.md`](./.nodespec/tasks/drift-fleet-enemy-framework-22222222.task.md) | --- |
-| World: Coral Cove | shared-library | godot | --- | [`.nodespec/tasks/world-coral-cove-22222222.task.md`](./.nodespec/tasks/world-coral-cove-22222222.task.md) | --- |
-| World: Bubble Bay | shared-library | godot | --- | [`.nodespec/tasks/world-bubble-bay-22222222.task.md`](./.nodespec/tasks/world-bubble-bay-22222222.task.md) | --- |
-| Level Contract Compliance Checker | cli-tool | python-backend | --- | [`.nodespec/tasks/level-contract-compliance-checker-22222222.task.md`](./.nodespec/tasks/level-contract-compliance-checker-22222222.task.md) | --- |
-| Asset Contract Validator | cli-tool | python-backend | --- | [`.nodespec/tasks/asset-contract-validator-22222222.task.md`](./.nodespec/tasks/asset-contract-validator-22222222.task.md) | --- |
-| CI Pipeline | ci-cd-pipeline | github-actions | --- | [`.nodespec/tasks/ci-pipeline-22222222.task.md`](./.nodespec/tasks/ci-pipeline-22222222.task.md) | --- |
-| Player HUD | shared-library | godot | --- | [`.nodespec/tasks/player-hud-22222222.task.md`](./.nodespec/tasks/player-hud-22222222.task.md) | --- |
-| Audio System | shared-library | godot | --- | [`.nodespec/tasks/audio-system-22222222.task.md`](./.nodespec/tasks/audio-system-22222222.task.md) | --- |
-| Input System | shared-library | godot | --- | [`.nodespec/tasks/input-system-22222222.task.md`](./.nodespec/tasks/input-system-22222222.task.md) | --- |
+| OpenAxolotl Game Client | game-client | godot | --- | [`.nodespec/tasks/openaxolotl-game-client-22222222.task.md`](./.nodespec/tasks/openaxolotl-game-client-22222222.task.md) | [`.nodespec/tests/req-006.tests.md`](./.nodespec/tests/req-006.tests.md) |
+| Axolotl Controller | shared-library | godot | --- | [`.nodespec/tasks/axolotl-controller-22222222.task.md`](./.nodespec/tasks/axolotl-controller-22222222.task.md) | [`.nodespec/tests/req-001.tests.md`](./.nodespec/tests/req-001.tests.md) |
+| Camera System | shared-library | godot | --- | [`.nodespec/tasks/camera-system-22222222.task.md`](./.nodespec/tasks/camera-system-22222222.task.md) | [`.nodespec/tests/req-005.tests.md`](./.nodespec/tests/req-005.tests.md) |
+| Regeneration and Capability System | shared-library | godot | --- | [`.nodespec/tasks/regeneration-and-capability-system-22222222.task.md`](./.nodespec/tasks/regeneration-and-capability-system-22222222.task.md) | [`.nodespec/tests/req-019.tests.md`](./.nodespec/tests/req-019.tests.md) |
+| Lives and Checkpoint System | shared-library | godot | --- | [`.nodespec/tasks/lives-and-checkpoint-system-22222222.task.md`](./.nodespec/tasks/lives-and-checkpoint-system-22222222.task.md) | [`.nodespec/tests/req-003.tests.md`](./.nodespec/tests/req-003.tests.md) |
+| Gill Mod Ability Framework | shared-library | godot | --- | [`.nodespec/tasks/gill-mod-ability-framework-22222222.task.md`](./.nodespec/tasks/gill-mod-ability-framework-22222222.task.md) | [`.nodespec/tests/req-004.tests.md`](./.nodespec/tests/req-004.tests.md) |
+| Save System | shared-library | godot | --- | [`.nodespec/tasks/save-system-22222222.task.md`](./.nodespec/tasks/save-system-22222222.task.md) | [`.nodespec/tests/req-014.tests.md`](./.nodespec/tests/req-014.tests.md) |
+| Restoration State System | shared-library | godot | --- | [`.nodespec/tasks/restoration-state-system-22222222.task.md`](./.nodespec/tasks/restoration-state-system-22222222.task.md) | [`.nodespec/tests/req-008.tests.md`](./.nodespec/tests/req-008.tests.md) |
+| Collectibles System | shared-library | godot | --- | [`.nodespec/tasks/collectibles-system-22222222.task.md`](./.nodespec/tasks/collectibles-system-22222222.task.md) | [`.nodespec/tests/req-010.tests.md`](./.nodespec/tests/req-010.tests.md) |
+| Drift Fleet Enemy Framework | shared-library | godot | --- | [`.nodespec/tasks/drift-fleet-enemy-framework-22222222.task.md`](./.nodespec/tasks/drift-fleet-enemy-framework-22222222.task.md) | [`.nodespec/tests/req-012.tests.md`](./.nodespec/tests/req-012.tests.md) |
+| World: Coral Cove | shared-library | godot | --- | [`.nodespec/tasks/world-coral-cove-22222222.task.md`](./.nodespec/tasks/world-coral-cove-22222222.task.md) | [`.nodespec/tests/req-011.tests.md`](./.nodespec/tests/req-011.tests.md) |
+| World: Bubble Bay | shared-library | godot | --- | [`.nodespec/tasks/world-bubble-bay-22222222.task.md`](./.nodespec/tasks/world-bubble-bay-22222222.task.md) | [`.nodespec/tests/req-028.tests.md`](./.nodespec/tests/req-028.tests.md) |
+| Level Contract Compliance Checker | cli-tool | python-backend | --- | [`.nodespec/tasks/level-contract-compliance-checker-22222222.task.md`](./.nodespec/tasks/level-contract-compliance-checker-22222222.task.md) | [`.nodespec/tests/req-007.tests.md`](./.nodespec/tests/req-007.tests.md) |
+| Asset Contract Validator | cli-tool | python-backend | --- | [`.nodespec/tasks/asset-contract-validator-22222222.task.md`](./.nodespec/tasks/asset-contract-validator-22222222.task.md) | [`.nodespec/tests/req-015.tests.md`](./.nodespec/tests/req-015.tests.md) |
+| CI Pipeline | ci-cd-pipeline | github-actions | --- | [`.nodespec/tasks/ci-pipeline-22222222.task.md`](./.nodespec/tasks/ci-pipeline-22222222.task.md) | [`.nodespec/tests/req-018.tests.md`](./.nodespec/tests/req-018.tests.md) |
+| Player HUD | shared-library | godot | --- | [`.nodespec/tasks/player-hud-22222222.task.md`](./.nodespec/tasks/player-hud-22222222.task.md) | [`.nodespec/tests/req-022.tests.md`](./.nodespec/tests/req-022.tests.md) |
+| Audio System | shared-library | godot | --- | [`.nodespec/tasks/audio-system-22222222.task.md`](./.nodespec/tasks/audio-system-22222222.task.md) | [`.nodespec/tests/req-023.tests.md`](./.nodespec/tests/req-023.tests.md) |
+| Input System | shared-library | godot | --- | [`.nodespec/tasks/input-system-22222222.task.md`](./.nodespec/tasks/input-system-22222222.task.md) | [`.nodespec/tests/req-024.tests.md`](./.nodespec/tests/req-024.tests.md) |
 | Balance and Tuning Data | shared-library | godot | --- | [`.nodespec/tasks/balance-and-tuning-data-22222222.task.md`](./.nodespec/tasks/balance-and-tuning-data-22222222.task.md) | [`.nodespec/tests/req-025.tests.md`](./.nodespec/tests/req-025.tests.md) |
-| Test Harness and Fixtures | cli-tool | python-backend | --- | [`.nodespec/tasks/test-harness-and-fixtures-22222222.task.md`](./.nodespec/tasks/test-harness-and-fixtures-22222222.task.md) | --- |
-| Flagship Boss Encounter | shared-library | godot | --- | [`.nodespec/tasks/flagship-boss-encounter-22222222.task.md`](./.nodespec/tasks/flagship-boss-encounter-22222222.task.md) | --- |
+| Test Harness and Fixtures | cli-tool | python-backend | --- | [`.nodespec/tasks/test-harness-and-fixtures-22222222.task.md`](./.nodespec/tasks/test-harness-and-fixtures-22222222.task.md) | [`.nodespec/tests/req-026.tests.md`](./.nodespec/tests/req-026.tests.md) |
+| Flagship Boss Encounter | shared-library | godot | --- | [`.nodespec/tasks/flagship-boss-encounter-22222222.task.md`](./.nodespec/tasks/flagship-boss-encounter-22222222.task.md) | [`.nodespec/tests/req-013.tests.md`](./.nodespec/tests/req-013.tests.md) |
 | World Static Analysis Gate | cli-tool | python-backend | --- | [`.nodespec/tasks/world-static-analysis-gate-22222222.task.md`](./.nodespec/tasks/world-static-analysis-gate-22222222.task.md) | [`.nodespec/tests/req-030.tests.md`](./.nodespec/tests/req-030.tests.md) |
-| World: Reference Template | shared-library | godot | --- | [`.nodespec/tasks/world-reference-template-22222222.task.md`](./.nodespec/tasks/world-reference-template-22222222.task.md) | --- |
+| World: Reference Template | shared-library | godot | --- | [`.nodespec/tasks/world-reference-template-22222222.task.md`](./.nodespec/tasks/world-reference-template-22222222.task.md) | [`.nodespec/tests/req-029.tests.md`](./.nodespec/tests/req-029.tests.md) |
 
 ## Connection Topology
 
@@ -160,7 +160,33 @@ Use these as the primary brief when implementing or modifying a component.
 Each requirement has a test plan documenting acceptance criteria assessments,
 recommended test types, framework suggestions, and test scenarios.
 
-- **World Static Analysis Gate**: [`.nodespec/tests/req-030.tests.md`](./.nodespec/tests/req-030.tests.md)
+- **Save System**: [`.nodespec/tests/req-014.tests.md`](./.nodespec/tests/req-014.tests.md)
+- **Input System**: [`.nodespec/tests/req-024.tests.md`](./.nodespec/tests/req-024.tests.md)
+- **CI Pipeline**: [`.nodespec/tests/req-018.tests.md`](./.nodespec/tests/req-018.tests.md)
+- **Test Harness and Fixtures**: [`.nodespec/tests/req-026.tests.md`](./.nodespec/tests/req-026.tests.md)
 - **Balance and Tuning Data**: [`.nodespec/tests/req-025.tests.md`](./.nodespec/tests/req-025.tests.md)
+- **World Static Analysis Gate**: [`.nodespec/tests/req-030.tests.md`](./.nodespec/tests/req-030.tests.md)
+- **Regeneration and Capability System**: [`.nodespec/tests/req-019.tests.md`](./.nodespec/tests/req-019.tests.md)
+- **Audio System**: [`.nodespec/tests/req-023.tests.md`](./.nodespec/tests/req-023.tests.md)
+- **Asset Contract Validator**: [`.nodespec/tests/req-015.tests.md`](./.nodespec/tests/req-015.tests.md)
+- **World: Reference Template**: [`.nodespec/tests/req-029.tests.md`](./.nodespec/tests/req-029.tests.md)
+- **Gill Mod Ability Framework**: [`.nodespec/tests/req-004.tests.md`](./.nodespec/tests/req-004.tests.md)
+- ****: [`.nodespec/tests/req-021.tests.md`](./.nodespec/tests/req-021.tests.md)
+- **World Static Analysis Gate**: [`.nodespec/tests/req-020.tests.md`](./.nodespec/tests/req-020.tests.md)
+- **Flagship Boss Encounter**: [`.nodespec/tests/req-013.tests.md`](./.nodespec/tests/req-013.tests.md)
+- **World: Bubble Bay**: [`.nodespec/tests/req-028.tests.md`](./.nodespec/tests/req-028.tests.md)
+- **Level Contract Compliance Checker**: [`.nodespec/tests/req-007.tests.md`](./.nodespec/tests/req-007.tests.md)
+- **Player HUD**: [`.nodespec/tests/req-022.tests.md`](./.nodespec/tests/req-022.tests.md)
+- **Collectibles System**: [`.nodespec/tests/req-010.tests.md`](./.nodespec/tests/req-010.tests.md)
 - **Regeneration and Capability System**: [`.nodespec/tests/req-002.tests.md`](./.nodespec/tests/req-002.tests.md)
+- **Lives and Checkpoint System**: [`.nodespec/tests/req-003.tests.md`](./.nodespec/tests/req-003.tests.md)
+- **Restoration State System**: [`.nodespec/tests/req-008.tests.md`](./.nodespec/tests/req-008.tests.md)
+- **Asset Contract Validator**: [`.nodespec/tests/req-016.tests.md`](./.nodespec/tests/req-016.tests.md)
+- **Drift Fleet Enemy Framework**: [`.nodespec/tests/req-012.tests.md`](./.nodespec/tests/req-012.tests.md)
+- **OpenAxolotl Game Client**: [`.nodespec/tests/req-006.tests.md`](./.nodespec/tests/req-006.tests.md)
+- **Camera System**: [`.nodespec/tests/req-005.tests.md`](./.nodespec/tests/req-005.tests.md)
+- **Axolotl Controller**: [`.nodespec/tests/req-001.tests.md`](./.nodespec/tests/req-001.tests.md)
+- **OpenAxolotl Game Client**: [`.nodespec/tests/req-017.tests.md`](./.nodespec/tests/req-017.tests.md)
+- **OpenAxolotl Game Client**: [`.nodespec/tests/req-009.tests.md`](./.nodespec/tests/req-009.tests.md)
 - **OpenAxolotl Game Client**: [`.nodespec/tests/req-027.tests.md`](./.nodespec/tests/req-027.tests.md)
+- **World: Coral Cove**: [`.nodespec/tests/req-011.tests.md`](./.nodespec/tests/req-011.tests.md)

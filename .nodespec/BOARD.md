@@ -63,6 +63,7 @@ status: in-progress · criteria 0/7 · tasks 0/14 · tests 0/0/0 of 0
 - [ ] **T12 — Implement: "Water-powered dash is usable in both grammars, consumes a charge, and recharges only while in water" (REQ-001).** <!-- t:292f2549 -->
 - [ ] **T13 — Implement: "Both movement grammars feel distinct, responsive, and pleasurable in hands-on play" (REQ-001).** <!-- t:f6d9a45b -->
 - [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-001.tests.md
 
 ## REQ-002 — Regeneration and Capability Loss System <!-- r:REQ-002 -->
 status: in-progress · criteria 0/7 · tasks 0/12 · tests 0/0/0 of 0
@@ -115,6 +116,7 @@ status: in-progress · criteria 0/8 · tasks 0/11 · tests 0/0/0 of 0
 - [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
 - [ ] **T10 — Implement: "Losing all lives reads as a meaningful setback without feeling punishing, across repeated play" (REQ-003).** <!-- t:f17eefd2 -->
 - [ ] **T11 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-003.tests.md
 
 ## REQ-004 — Gill Mod Ability System <!-- r:REQ-004 -->
 status: in-progress · criteria 0/7 · tasks 0/10 · tests 0/0/0 of 0
@@ -137,6 +139,7 @@ status: in-progress · criteria 0/7 · tasks 0/10 · tests 0/0/0 of 0
 - [ ] **T8 — Expose the interface Player HUD consumes, per Contract "HUD State Interface" (dependency).** <!-- t:3e14fc4a -->
 - [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
 - [ ] **T10 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-004.tests.md
 
 ## REQ-005 — Camera System <!-- r:REQ-005 -->
 status: in-progress · criteria 0/5 · tasks 0/7 · tests 0/0/0 of 0
@@ -154,6 +157,7 @@ status: in-progress · criteria 0/5 · tasks 0/7 · tests 0/0/0 of 0
 - [ ] **T5 — Expose the interface World: Bubble Bay consumes, per Contract "Camera Hint Interface" (dependency).** <!-- t:1bd904b8 -->
 - [ ] **T6 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
 - [ ] **T7 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-005.tests.md
 
 ## REQ-006 — Level Contract v1 Specification <!-- r:REQ-006 -->
 status: in-progress · criteria 0/10 · tasks 0/19 · tests 0/0/0 of 0
@@ -189,6 +193,7 @@ status: in-progress · criteria 0/10 · tasks 0/19 · tests 0/0/0 of 0
 - [ ] **T17 — Implement: "Official worlds sustain the documented frame-rate target on the baseline specification during normal traversal" (REQ-027).** <!-- t:6305f4b4 -->
 - [ ] **T18 — Implement: "The game remains smooth during a Flagship encounter combined with a restoration reversion, the heaviest expected load case" (REQ-027).** <!-- t:447b635f -->
 - [ ] **T19 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-006.tests.md
 
 ## REQ-007 — Level Contract Automated Compliance Checker <!-- r:REQ-007 -->
 status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
@@ -201,6 +206,7 @@ status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Checker is runnable locally with a single documented command
 - [ ] A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it
 - [ ] Adding a new rule to the contract schema changes checker behavior without any code change to the checker
+### Tests — .nodespec/tests/req-007.tests.md
 
 ## REQ-008 — World Restoration State System <!-- r:REQ-008 -->
 status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
@@ -213,6 +219,7 @@ status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Reverting a region to barren leaves its unlocked flag set, so restoration can be redone without refighting the Flagship
 - [ ] A world declares its restorable regions declaratively through the Level Contract rather than through bespoke scripting
 - [ ] The broken-to-restored transformation is visually dramatic and satisfying in hands-on play
+### Tests — .nodespec/tests/req-008.tests.md
 
 ## REQ-009 — Open Lagoon Hub and World Loading <!-- r:REQ-009 -->
 status: in-progress · criteria 0/6 · tasks 0/19 · tests 0/0/0 of 0
@@ -243,6 +250,7 @@ status: in-progress · criteria 0/6 · tasks 0/19 · tests 0/0/0 of 0
 - [ ] **T17 — Implement: "Official worlds sustain the documented frame-rate target on the baseline specification during normal traversal" (REQ-027).** <!-- t:6305f4b4 -->
 - [ ] **T18 — Implement: "The game remains smooth during a Flagship encounter combined with a restoration reversion, the heaviest expected load case" (REQ-027).** <!-- t:447b635f -->
 - [ ] **T19 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-009.tests.md
 
 ## REQ-010 — Collectibles System <!-- r:REQ-010 -->
 status: in-progress · criteria 0/6 · tasks 0/0 · tests 0/0/0 of 0
@@ -253,6 +261,7 @@ status: in-progress · criteria 0/6 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Collected state survives losing all lives and respawning at a checkpoint, so collection is never lost to the life layer
 - [ ] A world declaring no collectibles remains contract-valid and fully completable
 - [ ] Worlds declare collectibles declaratively through the Level Contract optional element rather than through bespoke scripting
+### Tests — .nodespec/tests/req-010.tests.md
 
 ## REQ-011 — Official MVP Worlds <!-- r:REQ-011 -->
 status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
@@ -264,6 +273,7 @@ status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Each official world contains at least one mandatory traversal challenge gated on a specific Gill Mod, and across the official set all three MVP mods are each required by at least one world
 - [ ] Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen
 - [ ] Each world is fun to play through and delivers a satisfying broken-to-restored payoff
+### Tests — .nodespec/tests/req-011.tests.md
 
 ## REQ-012 — Drift Fleet Enemy Roster <!-- r:REQ-012 -->
 status: in-progress · criteria 0/7 · tasks 0/10 · tests 0/0/0 of 0
@@ -286,6 +296,7 @@ status: in-progress · criteria 0/7 · tasks 0/10 · tests 0/0/0 of 0
 - [ ] **T8 — Expose the interface Flagship Boss Encounter consumes, per Contract "Enemy Registration Interface" (dependency).** <!-- t:119f06e1 -->
 - [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
 - [ ] **T10 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-012.tests.md
 
 ## REQ-013 — Flagship Boss Encounter <!-- r:REQ-013 -->
 status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
@@ -297,6 +308,7 @@ status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Checkpoints within the encounter restore lives and capability state and resume the encounter at the last completed phase rather than from its start
 - [ ] A world declaring no boss remains contract-valid and fully completable
 - [ ] The encounter reads as a climactic set piece and its restoration payoff lands
+### Tests — .nodespec/tests/req-013.tests.md
 
 ## REQ-014 — Save System <!-- r:REQ-014 -->
 status: in-progress · criteria 0/6 · tasks 0/0 · tests 0/0/0 of 0
@@ -307,6 +319,7 @@ status: in-progress · criteria 0/6 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Loading a save whose world module has changed its contract-visible state applies the documented save-compatibility policy and leaves the profile readable
 - [ ] Save file format carries a version field and a defined upgrade path across format versions
 - [ ] Save-compatibility policy for forked and divergent worlds is decided and documented
+### Tests — .nodespec/tests/req-014.tests.md
 
 ## REQ-015 — Asset Contract and AI-Art Provenance <!-- r:REQ-015 -->
 status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
@@ -318,6 +331,7 @@ status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly
 - [ ] Contract documents the style and art-direction expectations a human maintainer reviews against
 - [ ] A contributor can produce a conforming asset from the Asset Contract document alone
+### Tests — .nodespec/tests/req-015.tests.md
 
 ## REQ-016 — Asset Contract Automated Validator <!-- r:REQ-016 -->
 status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
@@ -329,6 +343,7 @@ status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Validator exits non-zero on failure and runs as a required CI check on every pull request touching assets
 - [ ] Validator is runnable locally with a single documented command
 - [ ] A deliberately non-conforming fixture asset fails validation and conforming official assets pass
+### Tests — .nodespec/tests/req-016.tests.md
 
 ## REQ-017 — AI-Agent Contributor Workflow and Documentation <!-- r:REQ-017 -->
 status: in-progress · criteria 0/6 · tasks 0/19 · tests 0/0/0 of 0
@@ -359,6 +374,7 @@ status: in-progress · criteria 0/6 · tasks 0/19 · tests 0/0/0 of 0
 - [ ] **T17 — Implement: "Official worlds sustain the documented frame-rate target on the baseline specification during normal traversal" (REQ-027).** <!-- t:6305f4b4 -->
 - [ ] **T18 — Implement: "The game remains smooth during a Flagship encounter combined with a restoration reversion, the heaviest expected load case" (REQ-027).** <!-- t:447b635f -->
 - [ ] **T19 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-017.tests.md
 
 ## REQ-018 — PC Build and Distribution <!-- r:REQ-018 -->
 status: in-progress · criteria 0/6 · tasks 0/11 · tests 0/0/0 of 0
@@ -385,6 +401,7 @@ status: in-progress · criteria 0/6 · tasks 0/11 · tests 0/0/0 of 0
 - [ ] **T9 — Configure the service to satisfy: "Building and running the game from a clean clone is documented as a reproducible sequence of at most five commands, and following that sequence verbatim produces a running game" (REQ-018).** <!-- t:eea3a388 -->
 - [ ] **T10 — Configure the service to satisfy: "The packaged build launches and is playable end to end on a clean PC without a development environment installed" (REQ-018).** <!-- t:e6ea8c59 -->
 - [ ] **T11 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-018.tests.md
 
 ## REQ-019 — Kid-Appropriate Tone and Accessibility <!-- r:REQ-019 -->
 status: in-progress · criteria 0/6 · tasks 0/12 · tests 0/0/0 of 0
@@ -408,6 +425,7 @@ status: in-progress · criteria 0/6 · tasks 0/12 · tests 0/0/0 of 0
 - [ ] **T10 — Implement: "Regen stations restore all lost capabilities on use" (REQ-002).** <!-- t:b6ffc0b7 -->
 - [ ] **T11 — Implement: "Each loss and regrowth plays comedic, non-gruesome feedback consistent with the family-appropriate tone" (REQ-002).** <!-- t:2c4f8fa3 -->
 - [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-019.tests.md
 
 ## REQ-020 — Community Lagoon Submission Pipeline (Post-MVP) <!-- r:REQ-020 -->
 status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
@@ -420,6 +438,7 @@ status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Portal tiering distinguishes Official, Community, and Experimental Lagoons
 - [ ] Pipeline opens only after Level Contract v1 is declared frozen
 - [ ] Content guidelines and the maintainer review checklist are documented for a family-audience bar
+### Tests — .nodespec/tests/req-020.tests.md
 
 ## REQ-021 — Licensing Policy — Code, Assets, and AI Provenance <!-- r:REQ-021 -->
 status: pending · criteria 0/5 · tasks 0/0 · tests 0/0/0 of 0
@@ -429,6 +448,7 @@ status: pending · criteria 0/5 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Policy documents how AI-generated asset provenance and generator terms of service affect redistribution and relicensing
 - [ ] Contributor licensing terms for submitted worlds and assets are documented in the contribution guide
 - [ ] Licensing decision is resolved before the public README and contribution guide ship
+### Tests — .nodespec/tests/req-021.tests.md
 
 ## REQ-022 — Player HUD and Game-State Readout <!-- r:REQ-022 -->
 status: in-progress · criteria 0/7 · tasks 0/9 · tests 0/0/0 of 0
@@ -450,6 +470,7 @@ status: in-progress · criteria 0/7 · tasks 0/9 · tests 0/0/0 of 0
 - [ ] **T7 — Expose the interface OpenAxolotl Game Client consumes, per Contract "HUD State Interface" (dependency).** <!-- t:e7bec61e -->
 - [ ] **T8 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
 - [ ] **T9 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-022.tests.md
 
 ## REQ-023 — Audio System, Music and Sound Design <!-- r:REQ-023 -->
 status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
@@ -462,6 +483,7 @@ status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Master, music, and effects volumes are independently adjustable and persist across sessions
 - [ ] Audio assets conform to the Asset Contract including provenance requirements
 - [ ] Sound design supports the comedic, family-appropriate tone rather than undercutting it
+### Tests — .nodespec/tests/req-023.tests.md
 
 ## REQ-024 — Input and Control Scheme <!-- r:REQ-024 -->
 status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
@@ -473,6 +495,7 @@ status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Switching between keyboard and gamepad mid-session is handled without requiring a restart, and on-screen prompts follow the active device
 - [ ] Worlds read player intent through the controller interface and never read raw input directly
 - [ ] The full verb set is playable without modal overload or uncomfortable finger contortion
+### Tests — .nodespec/tests/req-024.tests.md
 
 ## REQ-025 — Balance and Tuning Configuration <!-- r:REQ-025 -->
 status: in-progress · criteria 0/7 · tasks 0/12 · tests 0/0/0 of 0
@@ -511,6 +534,7 @@ status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Named fixtures exist for a conforming world, a non-conforming world, a malicious world, a conforming asset, and a non-conforming asset, and are shared by the checker, validator, and static-analysis tests
 - [ ] Test output identifies the failing requirement or criterion it maps to, so a contributor or agent can locate what broke
 - [ ] The suite runs in CI on every pull request
+### Tests — .nodespec/tests/req-026.tests.md
 
 ## REQ-027 — Performance Targets <!-- r:REQ-027 -->
 status: in-progress · criteria 0/6 · tasks 0/19 · tests 0/0/0 of 0
@@ -556,6 +580,7 @@ status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Bubble Bay declares no boss and remains contract-valid and fully completable, proving the optional-boss path
 - [ ] Bubble Bay sustains the documented frame-rate target on the baseline specification during normal traversal
 - [ ] Bubble Bay is fun to play through and delivers a satisfying broken-to-restored payoff
+### Tests — .nodespec/tests/req-028.tests.md
 
 ## REQ-029 — Reference Template World <!-- r:REQ-029 -->
 status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
@@ -568,6 +593,7 @@ status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] The template is completable from spawn to finish condition
 - [ ] A contract change that would make the template non-conforming fails CI rather than passing silently
 - [ ] The template is documented as the canonical starting point for a new world, with instructions on what to copy and what to change
+### Tests — .nodespec/tests/req-029.tests.md
 
 ## REQ-030 — No Multiplayer — Enforced Single-Player Constraint <!-- r:REQ-030 -->
 status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0

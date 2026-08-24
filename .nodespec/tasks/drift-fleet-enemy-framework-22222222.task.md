@@ -305,3 +305,9 @@ Startup/initialization order based on edge directions and interaction patterns.
 - World: Bubble Bay (initiates Enemy Registration Interface against this node (dependency))
 - Flagship Boss Encounter (initiates Enemy Registration Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-012.tests.md` - Test plan for requirement: Drift Fleet Enemy Roster | test-plan | markdown | draft |

@@ -311,3 +311,9 @@ Startup/initialization order based on edge directions and interaction patterns.
 - Player HUD (initiates HUD State Interface against this node (dependency))
 - Flagship Boss Encounter (initiates Checkpoint and Life Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-003.tests.md` - Test plan for requirement: Lives, Checkpoints and Hard Failure State | test-plan | markdown | draft |

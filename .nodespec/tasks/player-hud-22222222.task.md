@@ -291,3 +291,9 @@ Startup/initialization order based on edge directions and interaction patterns.
 **Depends on THIS node being available:**
 - OpenAxolotl Game Client (initiates HUD State Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-022.tests.md` - Test plan for requirement: Player HUD and Game-State Readout | test-plan | markdown | draft |

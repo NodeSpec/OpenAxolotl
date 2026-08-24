@@ -1,7 +1,7 @@
 {
   "modelVersion": 1,
   "generatedBy": "nodespec",
-  "modelHash": "cabfa90c7f5a6c02f9944aaaf43ed78c68914473baf8c40ebee7f21fee4aaf7c",
+  "modelHash": "4d6125c70fbd959b7a9c5c262bbb6b286deb613bd288640c86522d745903ecc5",
   "nodes": [
     {
       "id": "22222222-0000-4000-8000-000000000001",
@@ -1285,11 +1285,41 @@
   ],
   "artifacts": [
     {
+      "id": "0a2aafe0-abad-4cd7-9ec6-05bd0c6d6b8b",
+      "nodeId": "22222222-0000-4000-8000-000000000007",
+      "path": ".nodespec/tests/req-014.tests.md",
+      "kind": "test-plan"
+    },
+    {
       "id": "0bd4d29e-d640-4870-8e2a-fb3d5f99847d",
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": ".nodespec/tasks/axolotl-controller-22222222.task.md",
       "kind": "task",
       "contentHash": "0000000049cb9029"
+    },
+    {
+      "id": "0fdc36fe-8793-4c51-b280-70f575fc5fc3",
+      "nodeId": "22222222-0000-4000-8000-000000000018",
+      "path": ".nodespec/tests/req-024.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "15f4cd11-d098-4a50-a914-9792d70a2076",
+      "nodeId": "22222222-0000-4000-8000-000000000015",
+      "path": ".nodespec/tests/req-018.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "1e278c12-9b0b-481e-8fa7-1177d730adc3",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": ".nodespec/tests/req-026.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "20d88150-2f2b-4900-8d21-0c4ca9fd1962",
+      "nodeId": "22222222-0000-4000-8000-000000000019",
+      "path": ".nodespec/tests/req-025.tests.md",
+      "kind": "test-plan"
     },
     {
       "id": "2572f535-6e01-4ae9-adad-42b4d8bc9ebd",
@@ -1310,6 +1340,12 @@
       "path": ".nodespec/tasks/balance-and-tuning-data-22222222.task.md",
       "kind": "task",
       "contentHash": "0000000039f0a86d"
+    },
+    {
+      "id": "2d01ba4f-02f5-4216-8b1e-efe35715c879",
+      "nodeId": "22222222-0000-4000-8000-000000000004",
+      "path": ".nodespec/tests/req-019.tests.md",
+      "kind": "test-plan"
     },
     {
       "id": "2d7dbbce-a06f-41b6-8444-0b723ec47259",
@@ -1340,11 +1376,29 @@
       "contentHash": "000000001fbf4763"
     },
     {
+      "id": "4170cb30-a8cb-4278-989e-1bfafdfa09d8",
+      "nodeId": "22222222-0000-4000-8000-000000000017",
+      "path": ".nodespec/tests/req-023.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "46e568a0-0bf7-41fb-9d7a-581643fa7d1d",
+      "nodeId": "22222222-0000-4000-8000-000000000014",
+      "path": ".nodespec/tests/req-015.tests.md",
+      "kind": "test-plan"
+    },
+    {
       "id": "4e19af3d-d5c5-44e0-9712-995b526eeff6",
       "nodeId": "22222222-0000-4000-8000-000000000023",
       "path": ".nodespec/tasks/world-reference-template-22222222.task.md",
       "kind": "task",
       "contentHash": "000000000f317520"
+    },
+    {
+      "id": "531b668d-bc4c-4453-8c19-7e5c34381935",
+      "nodeId": "22222222-0000-4000-8000-000000000023",
+      "path": ".nodespec/tests/req-029.tests.md",
+      "kind": "test-plan"
     },
     {
       "id": "593d8f4d-b34b-42cf-9c7d-aa1b453dc307",
@@ -1354,6 +1408,36 @@
       "contentHash": "0000000035fd5e97"
     },
     {
+      "id": "5c5635e8-dd7c-4547-a944-89aad1d4911a",
+      "nodeId": "22222222-0000-4000-8000-000000000006",
+      "path": ".nodespec/tests/req-004.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "5ca38f14-9688-4013-9534-8e02909bfbc8",
+      "nodeId": "",
+      "path": ".nodespec/tests/req-021.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "6041e06c-f75a-479b-b290-f87469f81820",
+      "nodeId": "22222222-0000-4000-8000-000000000022",
+      "path": ".nodespec/tests/req-020.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "644aa3f8-81de-414a-bb82-baa7bbc8dc5e",
+      "nodeId": "22222222-0000-4000-8000-000000000021",
+      "path": ".nodespec/tests/req-013.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "7a256a32-3f1e-4c52-936a-5f7f9273d970",
+      "nodeId": "22222222-0000-4000-8000-000000000012",
+      "path": ".nodespec/tests/req-028.tests.md",
+      "kind": "test-plan"
+    },
+    {
       "id": "7b370a67-59bc-45c8-b4b3-b5ce124e0e2f",
       "nodeId": "22222222-0000-4000-8000-000000000005",
       "path": ".nodespec/tasks/lives-and-checkpoint-system-22222222.task.md",
@@ -1361,11 +1445,35 @@
       "contentHash": "000000004a417a23"
     },
     {
+      "id": "899292ac-aa14-458a-a448-b35868dd7fb3",
+      "nodeId": "22222222-0000-4000-8000-000000000013",
+      "path": ".nodespec/tests/req-007.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "8b22346d-5cf5-4c57-aaca-73a303ae60cd",
+      "nodeId": "22222222-0000-4000-8000-000000000016",
+      "path": ".nodespec/tests/req-022.tests.md",
+      "kind": "test-plan"
+    },
+    {
       "id": "90a25f7f-c54c-4918-b6d5-c0c000ee3e0b",
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": ".nodespec/tasks/openaxolotl-game-client-22222222.task.md",
       "kind": "task",
       "contentHash": "00000000257de9f2"
+    },
+    {
+      "id": "9322fd06-4e15-421e-a22c-37db3f9fa5b2",
+      "nodeId": "22222222-0000-4000-8000-000000000009",
+      "path": ".nodespec/tests/req-010.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "949c5b9e-2384-4469-85f1-ba687c863632",
+      "nodeId": "22222222-0000-4000-8000-000000000004",
+      "path": ".nodespec/tests/req-002.tests.md",
+      "kind": "test-plan"
     },
     {
       "id": "ac4ac3dc-ceb3-424d-a581-0a605cbb8140",
@@ -1389,9 +1497,39 @@
       "contentHash": "000000003e20787c"
     },
     {
-      "id": "c4b2a1c9-0a64-40cd-9db3-ce3b88cc3f48",
-      "nodeId": "22222222-0000-4000-8000-000000000019",
-      "path": ".nodespec/tests/req-025.tests.md",
+      "id": "b3bb640b-8bdb-4914-844b-05877479067d",
+      "nodeId": "22222222-0000-4000-8000-000000000005",
+      "path": ".nodespec/tests/req-003.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "b5019d80-b867-4c42-a14b-888b42e5793c",
+      "nodeId": "22222222-0000-4000-8000-000000000008",
+      "path": ".nodespec/tests/req-008.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "b69feb9b-b62a-4245-a3e8-340bd799ff95",
+      "nodeId": "22222222-0000-4000-8000-000000000014",
+      "path": ".nodespec/tests/req-016.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "ba961011-0dbb-42bc-bf50-479b5de72770",
+      "nodeId": "22222222-0000-4000-8000-000000000010",
+      "path": ".nodespec/tests/req-012.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "bf2e6ecd-a5b5-45a1-91d6-0c0f87a3c465",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": ".nodespec/tests/req-006.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "c15c01cd-938e-4740-a7ef-922f8f8e6231",
+      "nodeId": "22222222-0000-4000-8000-000000000003",
+      "path": ".nodespec/tests/req-005.tests.md",
       "kind": "test-plan"
     },
     {
@@ -1407,6 +1545,12 @@
       "path": ".nodespec/tasks/gill-mod-ability-framework-22222222.task.md",
       "kind": "task",
       "contentHash": "000000001290f8f8"
+    },
+    {
+      "id": "d4c0028f-5a54-4159-af29-09276013cd7e",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": ".nodespec/tests/req-001.tests.md",
+      "kind": "test-plan"
     },
     {
       "id": "d4cd8eac-a4ce-47e0-b6ec-880df99538fe",
@@ -1430,9 +1574,15 @@
       "contentHash": "000000001244d8db"
     },
     {
-      "id": "e6d1398b-111a-451c-9cfa-363452f4f371",
-      "nodeId": "22222222-0000-4000-8000-000000000004",
-      "path": ".nodespec/tests/req-002.tests.md",
+      "id": "ddbe9b50-0c2a-4e11-9fe4-aeeebb00ed4b",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": ".nodespec/tests/req-017.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "e07f23e5-ad99-45ab-a42d-25ad1e48c4f9",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": ".nodespec/tests/req-009.tests.md",
       "kind": "test-plan"
     },
     {
@@ -1468,6 +1618,12 @@
       "path": ".nodespec/tasks/world-coral-cove-22222222.task.md",
       "kind": "task",
       "contentHash": "000000002cf291ea"
+    },
+    {
+      "id": "ff7f3927-3216-482f-be19-6e0a01f05587",
+      "nodeId": "22222222-0000-4000-8000-000000000011",
+      "path": ".nodespec/tests/req-011.tests.md",
+      "kind": "test-plan"
     }
   ]
 }

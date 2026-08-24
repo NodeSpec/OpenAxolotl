@@ -306,3 +306,9 @@ Startup/initialization order based on edge directions and interaction patterns.
 - World: Bubble Bay (initiates Gill Mod Registration Interface against this node (dependency))
 - Player HUD (initiates HUD State Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-004.tests.md` - Test plan for requirement: Gill Mod Ability System | test-plan | markdown | draft |

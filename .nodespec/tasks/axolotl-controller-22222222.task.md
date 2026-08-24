@@ -315,3 +315,9 @@ Startup/initialization order based on edge directions and interaction patterns.
 - Player HUD (initiates HUD State Interface against this node (dependency))
 - Input System (initiates Player Input Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-001.tests.md` - Test plan for requirement: Axolotl Character Controller — Dual Movement Grammars | test-plan | markdown | draft |
