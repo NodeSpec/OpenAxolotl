@@ -1,0 +1,1473 @@
+{
+  "modelVersion": 1,
+  "generatedBy": "nodespec",
+  "modelHash": "cabfa90c7f5a6c02f9944aaaf43ed78c68914473baf8c40ebee7f21fee4aaf7c",
+  "nodes": [
+    {
+      "id": "22222222-0000-4000-8000-000000000001",
+      "type": "game-client",
+      "label": "OpenAxolotl Game Client",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "1a560816-31b5-496a-80cd-a914c48d6b00",
+          "name": "server_sync",
+          "direction": "in"
+        },
+        {
+          "id": "cc4b7740-1491-46c6-8267-ff3c1dae62eb",
+          "name": "player_input",
+          "direction": "out"
+        }
+      ],
+      "contentHash": "d5b0a5cf1be75c99dec01d91f081d1aeaec8e3cacf7f2c38ff31c2399a16308f"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000002",
+      "type": "shared-library",
+      "label": "Axolotl Controller",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "129bd50a-dd1e-4d5d-9af6-9f29512ddc7f",
+          "name": "Module Import",
+          "direction": "in"
+        },
+        {
+          "id": "eff45ba2-86f4-4ccb-bbb3-30b353046d42",
+          "name": "exports",
+          "direction": "out"
+        }
+      ],
+      "contentHash": "4931b3e148b8a7e3049c3e20fccaa85fd3ef89a54cc9b9f556771ea28b89f90c"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000003",
+      "type": "shared-library",
+      "label": "Camera System",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "2e35bd3a-366f-4924-bace-7c71d47ac1ff",
+          "name": "exports",
+          "direction": "out"
+        },
+        {
+          "id": "385bd953-c0b6-4e49-9fcf-ecce1e79e113",
+          "name": "Module Import",
+          "direction": "in"
+        }
+      ],
+      "contentHash": "ec9b85494ccd3ecdc4bb8ba6f4eb5982743a69cbab50202cb4ab68896020c8a2"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000004",
+      "type": "shared-library",
+      "label": "Regeneration and Capability System",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "00b9fdc9-8bbe-45b1-a07e-739646b29741",
+          "name": "exports",
+          "direction": "out"
+        },
+        {
+          "id": "ef0beb7a-b604-41a5-9775-83f6a9b74d0d",
+          "name": "Module Import",
+          "direction": "in"
+        }
+      ],
+      "contentHash": "e1f5bcca3ac09439ec18863ab572bc20a9e14fbfd22148eadf9932aec8173efa"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000005",
+      "type": "shared-library",
+      "label": "Lives and Checkpoint System",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "0d12be38-90ac-414a-94b7-45d51c1d087b",
+          "name": "Module Import",
+          "direction": "in"
+        },
+        {
+          "id": "dbb9af05-5499-4fc2-9281-2a42b1dd89cd",
+          "name": "exports",
+          "direction": "out"
+        }
+      ],
+      "contentHash": "e84178082710a0b708174415a0aa06d9d278962e7ec7bf1cb7f05651d7e79180"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000006",
+      "type": "shared-library",
+      "label": "Gill Mod Ability Framework",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "6e5744cb-69eb-4df2-bade-761563f05248",
+          "name": "exports",
+          "direction": "out"
+        },
+        {
+          "id": "ac8d5a67-d373-4960-8887-78f53963c594",
+          "name": "Module Import",
+          "direction": "in"
+        }
+      ],
+      "contentHash": "808e4706a81ea2b5ba531043685fdd4b2b1af6f1b78567e63f801019d72164f6"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000007",
+      "type": "shared-library",
+      "label": "Save System",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "79bb87dc-24d3-4fbf-ab47-fb5b232d36d2",
+          "name": "Module Import",
+          "direction": "in"
+        },
+        {
+          "id": "98166ad5-7f72-4233-a0c4-67fb4579ea40",
+          "name": "exports",
+          "direction": "out"
+        }
+      ],
+      "contentHash": "a808466c4a1b12cd0a3e13b5f8553e4325b927e4d4ad0e67e596724253516295"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000008",
+      "type": "shared-library",
+      "label": "Restoration State System",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "d986468d-bdae-45b9-a0a4-6f1a0645153e",
+          "name": "exports",
+          "direction": "out"
+        },
+        {
+          "id": "e8d5fed2-1ec4-4679-b430-8b10ad9be516",
+          "name": "Module Import",
+          "direction": "in"
+        }
+      ],
+      "contentHash": "da6c420afca7efe9ddf5cb3a174075ac9169adc69459be73468c7396f8ff2751"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000009",
+      "type": "shared-library",
+      "label": "Collectibles System",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "21b1c9dc-88b9-4f43-8399-e338352a6018",
+          "name": "Module Import",
+          "direction": "in"
+        },
+        {
+          "id": "bda08a8f-f96c-452f-b29e-08d4c75e6a2b",
+          "name": "exports",
+          "direction": "out"
+        }
+      ],
+      "contentHash": "18efabd66e96643f3165b130e39387acc967bd88bb4b66aa06381fe255777112"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000010",
+      "type": "shared-library",
+      "label": "Drift Fleet Enemy Framework",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "412542f0-6cce-46cb-92a6-eb922aeb64d2",
+          "name": "Module Import",
+          "direction": "in"
+        },
+        {
+          "id": "9707287d-5eca-4ec0-98b5-29279fbefd82",
+          "name": "exports",
+          "direction": "out"
+        }
+      ],
+      "contentHash": "1f77e7fe3bfa53934fd210193eb819e6e70f24971b70f68dd0aa751418854898"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000011",
+      "type": "shared-library",
+      "label": "World: Coral Cove",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "9602c923-11fb-43e0-974b-d55c247875df",
+          "name": "Module Import",
+          "direction": "in"
+        },
+        {
+          "id": "c7067bdf-b51b-4955-a8cf-389caaa9d007",
+          "name": "exports",
+          "direction": "out"
+        }
+      ],
+      "contentHash": "cc41acb3ee92329577075fc5e368d9b74216638fc8844efa9ee2dd7f677ebee7"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000012",
+      "type": "shared-library",
+      "label": "World: Bubble Bay",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "5895c9de-b246-40f0-bd47-d292d53edbe9",
+          "name": "exports",
+          "direction": "out"
+        },
+        {
+          "id": "8a4f76f3-56f1-40d8-9829-2eb7e7e06fa5",
+          "name": "Module Import",
+          "direction": "in"
+        }
+      ],
+      "contentHash": "ba7c9d53d99eb49acc959017d73169c56e939a11581fa60d2869cc1472d82197"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000013",
+      "type": "cli-tool",
+      "label": "Level Contract Compliance Checker",
+      "technology": "python-backend",
+      "ports": [
+        {
+          "id": "bfeec2cb-2a5c-48c7-b9d9-7442a181ed86",
+          "name": "commands",
+          "direction": "in"
+        },
+        {
+          "id": "f85daa3e-034b-42ba-aa9e-5facf3e2c91e",
+          "name": "api_calls",
+          "direction": "out"
+        }
+      ],
+      "contentHash": "c350f5077409d38ba93e9df69977b03184a24fc135792beb09b76580e21e3202"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000014",
+      "type": "cli-tool",
+      "label": "Asset Contract Validator",
+      "technology": "python-backend",
+      "ports": [
+        {
+          "id": "0da54059-44ce-47bf-92d8-d41e42a38e75",
+          "name": "commands",
+          "direction": "in"
+        },
+        {
+          "id": "f86f1070-b4c7-413c-8f93-cb1d0017b955",
+          "name": "api_calls",
+          "direction": "out"
+        }
+      ],
+      "contentHash": "2cf83d1dbc1ef00d6e047037f83cd3e244af5f061c4cdb55f2f811fe0245a01e"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000015",
+      "type": "ci-cd-pipeline",
+      "label": "CI Pipeline",
+      "technology": "github-actions",
+      "ports": [
+        {
+          "id": "469b8548-4cd9-4730-9a7b-94ea769eb7f6",
+          "name": "trigger-in",
+          "direction": "in"
+        },
+        {
+          "id": "f6acfc74-8496-4d5e-9a12-ef62d562a996",
+          "name": "output-out",
+          "direction": "out"
+        }
+      ],
+      "contentHash": "b3021112f5f934697df5e7eb1e980fcaddca209c9c420555adc30eca4dcdc5b1"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000016",
+      "type": "shared-library",
+      "label": "Player HUD",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "025ec6fb-35df-4919-bc2d-c5a947663477",
+          "name": "exports",
+          "direction": "out"
+        },
+        {
+          "id": "58406780-c604-493b-b8a5-c1706efe509e",
+          "name": "Module Import",
+          "direction": "in"
+        }
+      ],
+      "contentHash": "978a462b66a88684a0dcebf79c0efae87fe70d20b64ce6f656306da6a757abe2"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000017",
+      "type": "shared-library",
+      "label": "Audio System",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "6f4b851e-d2c5-4184-a658-45ec98698081",
+          "name": "exports",
+          "direction": "out"
+        },
+        {
+          "id": "b5b1a313-04c6-4183-8990-11887e169a63",
+          "name": "Module Import",
+          "direction": "in"
+        }
+      ],
+      "contentHash": "5ea97bd4ccff33b3d7225e3eef9714c91e22f53968d3a7a9a9882c34adced95f"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000018",
+      "type": "shared-library",
+      "label": "Input System",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "8241f2c1-1bd7-4a3c-a670-2e95d5c97aac",
+          "name": "exports",
+          "direction": "out"
+        },
+        {
+          "id": "a02380ce-5c79-44e9-a708-70f66273fd83",
+          "name": "Module Import",
+          "direction": "in"
+        }
+      ],
+      "contentHash": "718dc2fcde90fa3cc06af5d3fd0a89a7c34383a31f3f44f97b16edde4df160bd"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000019",
+      "type": "shared-library",
+      "label": "Balance and Tuning Data",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "326e8396-6848-45a7-9fc1-35b5e6579360",
+          "name": "Module Import",
+          "direction": "in"
+        },
+        {
+          "id": "9d943954-4195-4342-8141-a7b869aad041",
+          "name": "exports",
+          "direction": "out"
+        }
+      ],
+      "contentHash": "92220c2ba294621216f7d27bebf66c6edc8e96003336e08a05c34e92f4b2b765"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000020",
+      "type": "cli-tool",
+      "label": "Test Harness and Fixtures",
+      "technology": "python-backend",
+      "ports": [
+        {
+          "id": "23e65ee8-bcb3-4405-affa-923b6229787b",
+          "name": "commands",
+          "direction": "in"
+        },
+        {
+          "id": "ba81c75f-2696-4b94-afd9-c0d98e11931e",
+          "name": "api_calls",
+          "direction": "out"
+        }
+      ],
+      "contentHash": "6e91c12f80e082e38b2a3a41163f1fff45c9eef65072382a11715ab9cbe26d65"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000021",
+      "type": "shared-library",
+      "label": "Flagship Boss Encounter",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "3613f498-360d-4db7-ae6a-2a2d5201ac67",
+          "name": "Module Import",
+          "direction": "in"
+        },
+        {
+          "id": "d6289a22-eed1-4384-8286-aa3f93305dd4",
+          "name": "exports",
+          "direction": "out"
+        }
+      ],
+      "contentHash": "dac322758974c29f54dfad9a0c23aeb463154277199c83521d3b2bc09a5b3bc2"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000022",
+      "type": "cli-tool",
+      "label": "World Static Analysis Gate",
+      "technology": "python-backend",
+      "ports": [
+        {
+          "id": "d4a461d4-458f-44b1-8341-6475fb3075e2",
+          "name": "commands",
+          "direction": "in"
+        },
+        {
+          "id": "e39b4aba-3db9-4cae-b170-fa8e0d87a820",
+          "name": "api_calls",
+          "direction": "out"
+        }
+      ],
+      "contentHash": "8b4969d3b3f33131d279c9f2a19203215eafab06c268c58ddd51155ea784df30"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000023",
+      "type": "shared-library",
+      "label": "World: Reference Template",
+      "technology": "godot",
+      "ports": [
+        {
+          "id": "078c0ae5-90b4-40f5-b754-ec5b46933790",
+          "name": "Module Import",
+          "direction": "in"
+        },
+        {
+          "id": "aeb9969e-e1b5-457f-aa79-ab4413622662",
+          "name": "exports",
+          "direction": "out"
+        }
+      ],
+      "contentHash": "58f0cba575a7295800211056433bb18e82f5e94379a345deb7f016226e0fa3e9"
+    }
+  ],
+  "edges": [
+    {
+      "id": "33333333-0000-4000-8000-000000000001",
+      "source": "22222222-0000-4000-8000-000000000001",
+      "target": "22222222-0000-4000-8000-000000000002",
+      "contractId": "11111111-0000-4000-8000-000000000002",
+      "label": "instantiates player",
+      "contentHash": "51cd5c76613ee0b0f055915452e3e0febc95af4c8e59bdc790b641981f3d62e4"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000002",
+      "source": "22222222-0000-4000-8000-000000000001",
+      "target": "22222222-0000-4000-8000-000000000003",
+      "contractId": "11111111-0000-4000-8000-000000000011",
+      "label": "drives camera",
+      "contentHash": "78583fedfba5342057d5f155db8a9e7ebdcd9b01af7516ea4c7a3b649306020d"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000003",
+      "source": "22222222-0000-4000-8000-000000000001",
+      "target": "22222222-0000-4000-8000-000000000007",
+      "contractId": "11111111-0000-4000-8000-000000000003",
+      "label": "reads profile and progress",
+      "contentHash": "924b81c4219f5f98b398c9aadff6f566c83a6d2d63858a566c9ec52765e601fd"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000004",
+      "source": "22222222-0000-4000-8000-000000000001",
+      "target": "22222222-0000-4000-8000-000000000005",
+      "contractId": "11111111-0000-4000-8000-000000000010",
+      "label": "owns run lifecycle",
+      "contentHash": "3ba43187ca21a2981d46d70a1bf589397a2c9078b5d51eab4cb5a0242f922cf7"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000005",
+      "source": "22222222-0000-4000-8000-000000000001",
+      "target": "22222222-0000-4000-8000-000000000011",
+      "contractId": "11111111-0000-4000-8000-000000000001",
+      "label": "discovers and loads world",
+      "contentHash": "0146201c9bec5e1ccc9c5e00ee5b296593fd4b985aa10d4cc773e300fc86b1a8"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000006",
+      "source": "22222222-0000-4000-8000-000000000001",
+      "target": "22222222-0000-4000-8000-000000000012",
+      "contractId": "11111111-0000-4000-8000-000000000001",
+      "label": "discovers and loads world",
+      "contentHash": "d6bb3f6bc25921f66ab45f258a66cccee18809a86a5fc99f15c8790bc5b7fb50"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000007",
+      "source": "22222222-0000-4000-8000-000000000004",
+      "target": "22222222-0000-4000-8000-000000000002",
+      "contractId": "11111111-0000-4000-8000-000000000009",
+      "label": "applies capability modifiers",
+      "contentHash": "54fefe60141ae1f34abb698ff04cf54fdc27eda3d40c56a1db043eea09086471"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000008",
+      "source": "22222222-0000-4000-8000-000000000006",
+      "target": "22222222-0000-4000-8000-000000000002",
+      "contractId": "11111111-0000-4000-8000-000000000002",
+      "label": "binds ability hooks",
+      "contentHash": "c98e08c7a1712f78dfa2ac4c29a3bfd4d8b3a5859630247a3879bb8aa596457e"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000009",
+      "source": "22222222-0000-4000-8000-000000000004",
+      "target": "22222222-0000-4000-8000-000000000006",
+      "contractId": "11111111-0000-4000-8000-000000000009",
+      "label": "gill loss shortens boost duration",
+      "contentHash": "cd00dcf58d2d825876d3b19bfaa189eb86d55f9552d4ed5eec8ae1b79ca41451"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000010",
+      "source": "22222222-0000-4000-8000-000000000005",
+      "target": "22222222-0000-4000-8000-000000000004",
+      "contractId": "11111111-0000-4000-8000-000000000009",
+      "label": "checkpoint restores capability state",
+      "contentHash": "982370d2c867edca97a6020a10cd30afbec2b2263c29c241e1142c01701d9dc3"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000011",
+      "source": "22222222-0000-4000-8000-000000000005",
+      "target": "22222222-0000-4000-8000-000000000007",
+      "contractId": "11111111-0000-4000-8000-000000000003",
+      "label": "persists checkpoint",
+      "contentHash": "177fc70209ba9d5f894b0a9a66703daaf0b0a235d0beb9af7898bb81c5288b4b"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000012",
+      "source": "22222222-0000-4000-8000-000000000008",
+      "target": "22222222-0000-4000-8000-000000000007",
+      "contractId": "11111111-0000-4000-8000-000000000003",
+      "label": "persists restoration state",
+      "contentHash": "325b0333a34358f21931a06e1bc24327c09bdf90fd0bd4a7cb4f3e7a95357056"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000013",
+      "source": "22222222-0000-4000-8000-000000000009",
+      "target": "22222222-0000-4000-8000-000000000008",
+      "contractId": "11111111-0000-4000-8000-000000000006",
+      "label": "resources advance restoration",
+      "contentHash": "da78c862e3992b13c14376617fcde0b9cad0d8226adb7d30aa77e110c8e0600d"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000014",
+      "source": "22222222-0000-4000-8000-000000000009",
+      "target": "22222222-0000-4000-8000-000000000007",
+      "contractId": "11111111-0000-4000-8000-000000000003",
+      "label": "persists collected state",
+      "contentHash": "a3cd866ae9a553c5e3e2c8cbf81825634eb66b6200a04e0ecd5a72e0507a93e1"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000015",
+      "source": "22222222-0000-4000-8000-000000000010",
+      "target": "22222222-0000-4000-8000-000000000004",
+      "contractId": "11111111-0000-4000-8000-000000000009",
+      "label": "hits strip capability",
+      "contentHash": "5b814184bc1d0654fa65e0ad14786f961aa30d21330f8db8ea78a5dc58b85f09"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000016",
+      "source": "22222222-0000-4000-8000-000000000010",
+      "target": "22222222-0000-4000-8000-000000000005",
+      "contractId": "11111111-0000-4000-8000-000000000010",
+      "label": "Dredger wipes and boss finishers cost a life",
+      "contentHash": "fe786ad0e801e6e0ea9194567611c4c6f6bf58a8b68fbb4831f300821dd959e7"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000017",
+      "source": "22222222-0000-4000-8000-000000000010",
+      "target": "22222222-0000-4000-8000-000000000008",
+      "contractId": "11111111-0000-4000-8000-000000000006",
+      "label": "Dredgers revert restoration; Flagship unlocks it",
+      "contentHash": "07cc8f0392588359b5af2a266f8c82a066aa654437114ebaa6891d44d83f66af"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000018",
+      "source": "22222222-0000-4000-8000-000000000011",
+      "target": "22222222-0000-4000-8000-000000000008",
+      "contractId": "11111111-0000-4000-8000-000000000006",
+      "label": "declares restorable regions",
+      "contentHash": "e1aa6111253f63ce4d2f4e4fdce45149c95d440a2a8b8f861a70cc1957fc819d"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000019",
+      "source": "22222222-0000-4000-8000-000000000011",
+      "target": "22222222-0000-4000-8000-000000000010",
+      "contractId": "11111111-0000-4000-8000-000000000005",
+      "label": "populates enemies",
+      "contentHash": "d3fa55dc79656f36f8aa43e6d03f967832df8efd75b3411a43580539366d5995"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000020",
+      "source": "22222222-0000-4000-8000-000000000011",
+      "target": "22222222-0000-4000-8000-000000000006",
+      "contractId": "11111111-0000-4000-8000-000000000004",
+      "label": "places and emphasizes Gill Mods",
+      "contentHash": "3730e6e997301a1502f7edf9d5259e3d02572fe4e5e5f66d4c21b764c6812db0"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000021",
+      "source": "22222222-0000-4000-8000-000000000011",
+      "target": "22222222-0000-4000-8000-000000000009",
+      "contractId": "11111111-0000-4000-8000-000000000018",
+      "label": "registers collectibles",
+      "contentHash": "6ca9952ac0a31c6e5ae6b2a44381c44cbd6650e5b2a2c7e5d131bf17f088085e"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000022",
+      "source": "22222222-0000-4000-8000-000000000012",
+      "target": "22222222-0000-4000-8000-000000000008",
+      "contractId": "11111111-0000-4000-8000-000000000006",
+      "label": "declares restorable regions",
+      "contentHash": "230155235a04a9c7b9da875137f3b17798fd0205163aa8351dfc7ce8874c76fd"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000023",
+      "source": "22222222-0000-4000-8000-000000000012",
+      "target": "22222222-0000-4000-8000-000000000010",
+      "contractId": "11111111-0000-4000-8000-000000000005",
+      "label": "populates enemies",
+      "contentHash": "0b09851ace06d0a378f59cb4ab0f6e6edcb7076b60bef2453a3a7a477ad43541"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000024",
+      "source": "22222222-0000-4000-8000-000000000012",
+      "target": "22222222-0000-4000-8000-000000000006",
+      "contractId": "11111111-0000-4000-8000-000000000004",
+      "label": "places and emphasizes Gill Mods",
+      "contentHash": "f266e43e002fb53286485c768fccd2332eb0652dac23409385d459d949db262f"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000025",
+      "source": "22222222-0000-4000-8000-000000000012",
+      "target": "22222222-0000-4000-8000-000000000009",
+      "contractId": "11111111-0000-4000-8000-000000000018",
+      "label": "registers collectibles",
+      "contentHash": "7b17b21d214f0579a83645a0d6cc9f9b5a83f0c38c73ae4bc2f1685372f2441a"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000026",
+      "source": "22222222-0000-4000-8000-000000000013",
+      "target": "22222222-0000-4000-8000-000000000011",
+      "contractId": "11111111-0000-4000-8000-000000000001",
+      "label": "validates conformance",
+      "contentHash": "fd4f6c99a4c9b4f3ff4ad84cb85c7ceb583e32401eba1c42aebcf73690fba4ed"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000027",
+      "source": "22222222-0000-4000-8000-000000000013",
+      "target": "22222222-0000-4000-8000-000000000012",
+      "contractId": "11111111-0000-4000-8000-000000000001",
+      "label": "validates conformance",
+      "contentHash": "c262e91b1a52bdc3c06199ec35748565c9d583150278f2a83bd55862a3535a92"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000028",
+      "source": "22222222-0000-4000-8000-000000000014",
+      "target": "22222222-0000-4000-8000-000000000001",
+      "contractId": "11111111-0000-4000-8000-000000000007",
+      "label": "validates asset tree and provenance",
+      "contentHash": "5ff66926f723a5d9a979bbaf0f2546995d48ca0ea3c2d86df19c622c721f4ac6"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000029",
+      "source": "22222222-0000-4000-8000-000000000015",
+      "target": "22222222-0000-4000-8000-000000000013",
+      "contractId": "11111111-0000-4000-8000-000000000008",
+      "label": "required check — blocks merge",
+      "contentHash": "b10408b0b68fcbdc3e317621925a1eda8853f3f8705584724bd65471985debdb"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000030",
+      "source": "22222222-0000-4000-8000-000000000015",
+      "target": "22222222-0000-4000-8000-000000000014",
+      "contractId": "11111111-0000-4000-8000-000000000008",
+      "label": "required check — blocks merge",
+      "contentHash": "6a10944bd846ffcf50d1fd7a881991755972285fac4d201a731893395fa08e2a"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000031",
+      "source": "22222222-0000-4000-8000-000000000015",
+      "target": "22222222-0000-4000-8000-000000000001",
+      "contractId": "11111111-0000-4000-8000-000000000011",
+      "label": "builds and tests PC artifact",
+      "contentHash": "ae95f7562f55119e37f0dd92b992a42ad146c13a12db783edcc851527ea54d3d"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000032",
+      "source": "22222222-0000-4000-8000-000000000001",
+      "target": "22222222-0000-4000-8000-000000000016",
+      "contractId": "11111111-0000-4000-8000-000000000016",
+      "label": "mounts HUD",
+      "contentHash": "cbe0e6c483358ff11ae972f094b41806972ccbfc6c6bb1a0e10b703f170fe199"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000033",
+      "source": "22222222-0000-4000-8000-000000000016",
+      "target": "22222222-0000-4000-8000-000000000004",
+      "contractId": "11111111-0000-4000-8000-000000000016",
+      "label": "reads capability state",
+      "contentHash": "3023fe6b5cf685981826fbcae63fc8b7eda87d9482f1da14b25dccede8e0b5ea"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000034",
+      "source": "22222222-0000-4000-8000-000000000016",
+      "target": "22222222-0000-4000-8000-000000000005",
+      "contractId": "11111111-0000-4000-8000-000000000016",
+      "label": "reads life count",
+      "contentHash": "5f6d6e4d3e18db83536b32d1c11fed729919da140cbe8563d4f5c6ed743c08d9"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000035",
+      "source": "22222222-0000-4000-8000-000000000016",
+      "target": "22222222-0000-4000-8000-000000000006",
+      "contractId": "11111111-0000-4000-8000-000000000016",
+      "label": "reads equipped mod and charge",
+      "contentHash": "b1b447d5ae754e18817c36f57c1ee5fbee6ccacc34b74e94c4a0bb6ef4970fc2"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000036",
+      "source": "22222222-0000-4000-8000-000000000016",
+      "target": "22222222-0000-4000-8000-000000000008",
+      "contractId": "11111111-0000-4000-8000-000000000016",
+      "label": "reads region restoration progress",
+      "contentHash": "5294272e69ee62506b2b98836b5141d431afb2a3dc70344a67610167d151b8ab"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000037",
+      "source": "22222222-0000-4000-8000-000000000016",
+      "target": "22222222-0000-4000-8000-000000000002",
+      "contractId": "11111111-0000-4000-8000-000000000016",
+      "label": "reads dash charge",
+      "contentHash": "122ec282d0cfacfac8a7de974c0f6d828aa795cdfd806bab62c5b7f4b48417c1"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000038",
+      "source": "22222222-0000-4000-8000-000000000001",
+      "target": "22222222-0000-4000-8000-000000000017",
+      "contractId": "11111111-0000-4000-8000-000000000014",
+      "label": "mounts audio system",
+      "contentHash": "c770b48b9098a11e1668192619f104a65d98b5af2f22fb2383f855dc5bc1079c"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000039",
+      "source": "22222222-0000-4000-8000-000000000004",
+      "target": "22222222-0000-4000-8000-000000000017",
+      "contractId": "11111111-0000-4000-8000-000000000014",
+      "label": "loss and regrowth cues",
+      "contentHash": "5cdbf2f0c178bbf7f13588db9b64283717dc1804135c5e54d29ac9ed24ad7f8b"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000040",
+      "source": "22222222-0000-4000-8000-000000000006",
+      "target": "22222222-0000-4000-8000-000000000017",
+      "contractId": "11111111-0000-4000-8000-000000000014",
+      "label": "per-mod activation cues",
+      "contentHash": "a9788fe057f5d3d8d70bf322307da5a542d980893bfc2eeb8de5f6272a80f04c"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000041",
+      "source": "22222222-0000-4000-8000-000000000008",
+      "target": "22222222-0000-4000-8000-000000000017",
+      "contractId": "11111111-0000-4000-8000-000000000014",
+      "label": "ambience blooms with restoration",
+      "contentHash": "0a7aab8caea580e3e785308d20beca6f949ad7b24256fa423ae56daa79545253"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000042",
+      "source": "22222222-0000-4000-8000-000000000002",
+      "target": "22222222-0000-4000-8000-000000000017",
+      "contractId": "11111111-0000-4000-8000-000000000014",
+      "label": "grammar-specific movement audio",
+      "contentHash": "0d6d6d3c64409904b9ce54e50de8a10801f0fdbc9891235bb5549a3e18495c39"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000043",
+      "source": "22222222-0000-4000-8000-000000000001",
+      "target": "22222222-0000-4000-8000-000000000018",
+      "contractId": "11111111-0000-4000-8000-000000000015",
+      "label": "mounts input system",
+      "contentHash": "f4efa4ea63fc14a77b360c53c7e2cae180a22363a234e5042c7445a2047fcd75"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000044",
+      "source": "22222222-0000-4000-8000-000000000018",
+      "target": "22222222-0000-4000-8000-000000000002",
+      "contractId": "11111111-0000-4000-8000-000000000015",
+      "label": "delivers player intent",
+      "contentHash": "ef42a863cfe744a4a13452f28bf022750e72990ca6cadf24dda9abba13f3744a"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000045",
+      "source": "22222222-0000-4000-8000-000000000002",
+      "target": "22222222-0000-4000-8000-000000000019",
+      "contractId": "11111111-0000-4000-8000-000000000013",
+      "label": "reads dash and movement values",
+      "contentHash": "9d1eab3b9ea9cd68dcfb1848403996da34c455ccd00e7105a361e126f8443395"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000046",
+      "source": "22222222-0000-4000-8000-000000000004",
+      "target": "22222222-0000-4000-8000-000000000019",
+      "contractId": "11111111-0000-4000-8000-000000000013",
+      "label": "reads capability-loss modifiers",
+      "contentHash": "0a4c16c9b9f552c20059d1e04ba3c42d147ece3554b029b439b6b5e39d378193"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000047",
+      "source": "22222222-0000-4000-8000-000000000005",
+      "target": "22222222-0000-4000-8000-000000000019",
+      "contractId": "11111111-0000-4000-8000-000000000013",
+      "label": "reads default lives per attempt",
+      "contentHash": "9f39428b581b2819230ec2aed418aa7061a7f1a5e5b66828f79f511570ca80f3"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000048",
+      "source": "22222222-0000-4000-8000-000000000006",
+      "target": "22222222-0000-4000-8000-000000000019",
+      "contractId": "11111111-0000-4000-8000-000000000013",
+      "label": "reads mod durations and cooldowns",
+      "contentHash": "c8db07ec3a804df6ebc9b588de90b4b244b8958f96a51ca6207d8ee6fb34f94b"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000049",
+      "source": "22222222-0000-4000-8000-000000000010",
+      "target": "22222222-0000-4000-8000-000000000019",
+      "contractId": "11111111-0000-4000-8000-000000000013",
+      "label": "reads debuff magnitudes and windows",
+      "contentHash": "025e9c065ba50e0171a10916e3ffbaaba7725e0d240a76246555728b264a104b"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000050",
+      "source": "22222222-0000-4000-8000-000000000008",
+      "target": "22222222-0000-4000-8000-000000000019",
+      "contractId": "11111111-0000-4000-8000-000000000013",
+      "label": "reads restoration resource costs",
+      "contentHash": "daa2876a3be7a7d04a17c016042cf06e0bd21aeb2b78bf5546b86a023eb9a3e4"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000051",
+      "source": "22222222-0000-4000-8000-000000000021",
+      "target": "22222222-0000-4000-8000-000000000010",
+      "contractId": "11111111-0000-4000-8000-000000000005",
+      "label": "registers as apex Drift Fleet unit",
+      "contentHash": "c2c157e90f4f7f512413aab441b3d421defd891b217695b07e1887a3d3314a4b"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000052",
+      "source": "22222222-0000-4000-8000-000000000021",
+      "target": "22222222-0000-4000-8000-000000000008",
+      "contractId": "11111111-0000-4000-8000-000000000006",
+      "label": "defeat sets region unlocked flag",
+      "contentHash": "d25ceba2354d7d4a90ccfa812407f09e05855d528afcccd0b227764ce3c3209b"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000053",
+      "source": "22222222-0000-4000-8000-000000000021",
+      "target": "22222222-0000-4000-8000-000000000005",
+      "contractId": "11111111-0000-4000-8000-000000000010",
+      "label": "finishing moves cost a life",
+      "contentHash": "bdde895315d95f269add1b95b0b741c0bf0b36c6fe4b084b51b293df8e71cbb7"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000054",
+      "source": "22222222-0000-4000-8000-000000000011",
+      "target": "22222222-0000-4000-8000-000000000021",
+      "contractId": "11111111-0000-4000-8000-000000000005",
+      "label": "hosts the boss encounter",
+      "contentHash": "9aa8475ac6e25c27a09744e2d43076e364a955c7d8ab88433f79acc613b6419f"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000055",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000011",
+      "contractId": "11111111-0000-4000-8000-000000000012",
+      "label": "enforces sanctioned API surface",
+      "contentHash": "03ad37bca1d5b81768153843886abba6f48481b35409250e71ce697fca77dff4"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000056",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000012",
+      "contractId": "11111111-0000-4000-8000-000000000012",
+      "label": "enforces sanctioned API surface",
+      "contentHash": "bb4b8c32f4f125a8cf4f5a7e1932f8852b439c46c6d0e358e9faa5d0e0905431"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000057",
+      "source": "22222222-0000-4000-8000-000000000015",
+      "target": "22222222-0000-4000-8000-000000000022",
+      "contractId": "11111111-0000-4000-8000-000000000008",
+      "label": "required check — blocks merge",
+      "contentHash": "360b0610e1f88792e85631a860c2eea1f348b3d8b1f4399787e9a94d57a5cf91"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000058",
+      "source": "22222222-0000-4000-8000-000000000015",
+      "target": "22222222-0000-4000-8000-000000000020",
+      "contractId": "11111111-0000-4000-8000-000000000008",
+      "label": "required check — blocks merge",
+      "contentHash": "e36e50e69484ce7ed89f94b0e073ef38fae23baed0c6f513880ece2b8784fa50"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000059",
+      "source": "22222222-0000-4000-8000-000000000020",
+      "target": "22222222-0000-4000-8000-000000000001",
+      "contractId": "11111111-0000-4000-8000-000000000011",
+      "label": "headless playthrough smoke test",
+      "contentHash": "bd74f393b9acb717885adc7a9ec521f91082a6d4b1e4d9caa57e423385a328ff"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000060",
+      "source": "22222222-0000-4000-8000-000000000014",
+      "target": "22222222-0000-4000-8000-000000000017",
+      "contractId": "11111111-0000-4000-8000-000000000007",
+      "label": "validates audio asset provenance",
+      "contentHash": "256ac2b39b73a6841bc3bf97607c8c4ad9ea543011bf3894c9975b2011c2c831"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000061",
+      "source": "22222222-0000-4000-8000-000000000011",
+      "target": "22222222-0000-4000-8000-000000000003",
+      "contractId": "11111111-0000-4000-8000-000000000017",
+      "label": "places camera hint volumes",
+      "contentHash": "ea0c77aea13e53c09700cacf7d5cad551b659d25f9a72515610d44b3c709881f"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000062",
+      "source": "22222222-0000-4000-8000-000000000012",
+      "target": "22222222-0000-4000-8000-000000000003",
+      "contractId": "11111111-0000-4000-8000-000000000017",
+      "label": "places camera hint volumes",
+      "contentHash": "fa0b22dc554b31438b9bdcd065841d110c087250c7bf10e0bc9a2d3121f4fb3c"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000063",
+      "source": "22222222-0000-4000-8000-000000000003",
+      "target": "22222222-0000-4000-8000-000000000019",
+      "contractId": "11111111-0000-4000-8000-000000000013",
+      "label": "reads camera framing values",
+      "contentHash": "07df845ee35f7b291b59de9af92c6341d3cfa5197fb7f68f5f39e8afad89a62f"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000064",
+      "source": "22222222-0000-4000-8000-000000000011",
+      "target": "22222222-0000-4000-8000-000000000007",
+      "contractId": "11111111-0000-4000-8000-000000000003",
+      "label": "required save integration",
+      "contentHash": "b0a08334f70ce55a9ad1f5cd9515381e9eeab0011f3cba00e1b2166e9a75acad"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000065",
+      "source": "22222222-0000-4000-8000-000000000012",
+      "target": "22222222-0000-4000-8000-000000000007",
+      "contractId": "11111111-0000-4000-8000-000000000003",
+      "label": "required save integration",
+      "contentHash": "cb557ef8849b391a88ed5ca62e6e0919ba9038a3f741a2a22d1e380bc26df2d1"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000066",
+      "source": "22222222-0000-4000-8000-000000000011",
+      "target": "22222222-0000-4000-8000-000000000017",
+      "contractId": "11111111-0000-4000-8000-000000000014",
+      "label": "declares music and ambience",
+      "contentHash": "81cdaef6e4219fec7c86c5d55ccd38e983d2e1e396f8aeaf5675e2ad8d88d94a"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000067",
+      "source": "22222222-0000-4000-8000-000000000012",
+      "target": "22222222-0000-4000-8000-000000000017",
+      "contractId": "11111111-0000-4000-8000-000000000014",
+      "label": "declares music and ambience",
+      "contentHash": "1c542f0e80bd3f6b2a558283195f874967457ec72a1bf0899ed59787f9460153"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000068",
+      "source": "22222222-0000-4000-8000-000000000013",
+      "target": "22222222-0000-4000-8000-000000000020",
+      "contractId": "11111111-0000-4000-8000-000000000019",
+      "label": "asserts against shared world fixtures",
+      "contentHash": "390701d2ca740e9dd60da502aeaebf408e3c19516467141472be6439d56890ac"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000069",
+      "source": "22222222-0000-4000-8000-000000000014",
+      "target": "22222222-0000-4000-8000-000000000020",
+      "contractId": "11111111-0000-4000-8000-000000000019",
+      "label": "asserts against shared asset fixtures",
+      "contentHash": "ee5398d0595bd6ccf9941afd849944869b21545240111136d7ce2c823a0393d7"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000070",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000020",
+      "contractId": "11111111-0000-4000-8000-000000000019",
+      "label": "asserts against the malicious world fixture",
+      "contentHash": "e03f186f8ad30f3bd5db1ad8a077f5b59f94d83c722494b632c2a6b02d975a2d"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000071",
+      "source": "22222222-0000-4000-8000-000000000001",
+      "target": "22222222-0000-4000-8000-000000000023",
+      "contractId": "11111111-0000-4000-8000-000000000001",
+      "label": "discovers and loads world",
+      "contentHash": "9600de2b4fbc84960c40ccffd5f6370c14f7201fcea8d4fb77357e6484a90931"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000072",
+      "source": "22222222-0000-4000-8000-000000000013",
+      "target": "22222222-0000-4000-8000-000000000023",
+      "contractId": "11111111-0000-4000-8000-000000000001",
+      "label": "validates conformance",
+      "contentHash": "275e60a3c43cffb6f71597524be85cc680b219cc21f6d91eda2e5bf403753484"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000073",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000023",
+      "contractId": "11111111-0000-4000-8000-000000000012",
+      "label": "enforces sanctioned API surface",
+      "contentHash": "cd8679c7098000b8e2c58710c28185b2681567888210e1e5cf1bf7ac52b5898b"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000074",
+      "source": "22222222-0000-4000-8000-000000000023",
+      "target": "22222222-0000-4000-8000-000000000007",
+      "contractId": "11111111-0000-4000-8000-000000000003",
+      "label": "required save integration",
+      "contentHash": "4349e911482f32e80c610b3873faf912ce9012dff7fccd715482c3797395047d"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000075",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000001",
+      "contractId": "11111111-0000-4000-8000-000000000020",
+      "label": "bans multiplayer APIs repo-wide",
+      "contentHash": "f7c5806c2b00ba84a9f74c1dda478ed210ac7f398a076f0f449d682b2ba9cf47"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000076",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000002",
+      "contractId": "11111111-0000-4000-8000-000000000020",
+      "label": "bans multiplayer APIs in movement code",
+      "contentHash": "fe88ed9c9ab7d6c72133b6e7ac30e82fa8f83931355ff0bbaba9a473a33543f3"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000077",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000018",
+      "contractId": "11111111-0000-4000-8000-000000000020",
+      "label": "bans multiplayer APIs in input handling",
+      "contentHash": "5358bca4218567e217ea4372f199e4eed362f1fafa627a84a9213378e911cd33"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000078",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000007",
+      "contractId": "11111111-0000-4000-8000-000000000020",
+      "label": "bans network-backed persistence",
+      "contentHash": "ff66243bf852d08a7fb048c8dbe580f057ce12b07e324be8654aff62d71df700"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000079",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000003",
+      "contractId": "11111111-0000-4000-8000-000000000020",
+      "label": "bans multiplayer APIs",
+      "contentHash": "3486c51014663c17607d8ab3ec8419ee517dfaed99d9ff23beadf6439d588aae"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000080",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000004",
+      "contractId": "11111111-0000-4000-8000-000000000020",
+      "label": "bans multiplayer APIs",
+      "contentHash": "0d80f9715f07248e7225380fa732491cd8ace6f49c27a049eee29ccd8c18af24"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000081",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000005",
+      "contractId": "11111111-0000-4000-8000-000000000020",
+      "label": "bans multiplayer APIs",
+      "contentHash": "514d56535f20fc5a1bbbcf3d72787ded68bc50f5afe458e725194ece991bcaf7"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000082",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000006",
+      "contractId": "11111111-0000-4000-8000-000000000020",
+      "label": "bans multiplayer APIs",
+      "contentHash": "0c200c9fda449912c014c1dbf0a4468daca0ea30a57933dec5a4206f76dcdb88"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000083",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000008",
+      "contractId": "11111111-0000-4000-8000-000000000020",
+      "label": "bans multiplayer APIs",
+      "contentHash": "61eaa747d8d64b6306d0ff228e4905026fabb955d82e5e3ee560f93a343ef567"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000084",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000009",
+      "contractId": "11111111-0000-4000-8000-000000000020",
+      "label": "bans multiplayer APIs",
+      "contentHash": "f582dd0d8abf0e1b5e0aa996bd428ba451f61fb2f69073f6b0c573a8bf98705c"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000085",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000010",
+      "contractId": "11111111-0000-4000-8000-000000000020",
+      "label": "bans multiplayer APIs",
+      "contentHash": "c37adcc857aba7aac2e5da273e3914c8f33eba8c56196950f6d690d468b2c595"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000086",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000016",
+      "contractId": "11111111-0000-4000-8000-000000000020",
+      "label": "bans multiplayer APIs",
+      "contentHash": "39495f2cb218634bb1abeb3297ae9648b50ebe800a1178ebe1e1166ac4b7df24"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000087",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000017",
+      "contractId": "11111111-0000-4000-8000-000000000020",
+      "label": "bans multiplayer APIs",
+      "contentHash": "dc6c89e5dd059ef0a128d84950bf0676db094c11ce313979cb9049350c6c56ce"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000088",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000019",
+      "contractId": "11111111-0000-4000-8000-000000000020",
+      "label": "bans multiplayer APIs",
+      "contentHash": "425af2f7ba7c8f84a9b333b8dd086f9a2bb881e2da8dc2c362ec2769a30962bf"
+    },
+    {
+      "id": "33333333-0000-4000-8000-000000000089",
+      "source": "22222222-0000-4000-8000-000000000022",
+      "target": "22222222-0000-4000-8000-000000000021",
+      "contractId": "11111111-0000-4000-8000-000000000020",
+      "label": "bans multiplayer APIs",
+      "contentHash": "e43077b8e7b7a95a2eaa63f766a5e8110f7db5d3692650ea0ce47937bceb8500"
+    }
+  ],
+  "contracts": [
+    {
+      "id": "11111111-0000-4000-8000-000000000001",
+      "kind": "dependency",
+      "name": "Level Contract v1",
+      "schemaHash": "5dafdde26974a7592f96f1d4f43c473b829099e0bbe4fbe970828a091e01d5c9",
+      "contentHash": "aa1dc1ccfd879e4fc24357b1f243ad9e8220ed70822dcc0e8548784dfbbd2a6f"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000002",
+      "kind": "dependency",
+      "name": "Axolotl Controller Interface",
+      "contentHash": "2a7df69b5eb07d07e2dd52d844145bee488e3584171010ebd148a55eccd678d5"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000003",
+      "kind": "dependency",
+      "name": "Save Integration Interface",
+      "contentHash": "e6b10fad7875d5d86d311909663c69279d19b621c6fb781fba822823418594a9"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000004",
+      "kind": "dependency",
+      "name": "Gill Mod Registration Interface",
+      "contentHash": "136fe22e19602c5fd422153bd4974b44a39a780d15f5cb07b73fa35162e4ba4c"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000005",
+      "kind": "dependency",
+      "name": "Enemy Registration Interface",
+      "contentHash": "3609eed9502d570b4423e81db29bae1f4a57d2ecaea0517ecf888cb7d27b06f9"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000006",
+      "kind": "dependency",
+      "name": "Restoration Region Interface",
+      "contentHash": "b7415d7b5e911643988ed7d64b2024ba6593e024ecfbadfacf032dd49c19a649"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000007",
+      "kind": "custom",
+      "name": "Asset Contract v1",
+      "schemaHash": "75efaa1ffdbbf1108dfe315b76c70cd1dd489278dd1fcf933719ed609539e4dc",
+      "contentHash": "b89acda5e9cb55d1034bf7529fc9aac14d32abd954beec03f2791fc0f378aa2a"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000008",
+      "kind": "ipc",
+      "name": "Validator CLI Invocation",
+      "specFormat": "json_schema",
+      "schemaHash": "dacfb22f572a8bfa972b4893e359d556c4ee4bfdbf96109683411d6b70788765",
+      "contentHash": "1f326d5d5237fd4b9849445fb2e4f0ad6616e294108ebeaabcb8960c6498eaba"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000009",
+      "kind": "dependency",
+      "name": "Capability Modifier Interface",
+      "contentHash": "529aae954fd4b09c28c9f144df3ac90fa43255aefa28888cda529f22572e3e09"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000010",
+      "kind": "dependency",
+      "name": "Checkpoint and Life Interface",
+      "contentHash": "211476f4658776fb32c7e1c0edf82ae2d6bc3e22a9d8104de6fc88e3c918bc43"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000011",
+      "kind": "dependency",
+      "name": "Core Module Dependency",
+      "contentHash": "5b92f714734677f163cabeb37e6a422e148d5e69c4f4d514a8e00b10533f91b2"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000012",
+      "kind": "dependency",
+      "name": "Sanctioned World API Surface",
+      "contentHash": "874f878f039e4a4b42b6c0f2867be6590afc11d9b3ca47790707b34fb3970cc8"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000013",
+      "kind": "dependency",
+      "name": "Tuning Data Interface",
+      "contentHash": "478336841c64f209473237331a62cdc9d65f822836d1821821a6ac7d3b4f11ba"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000014",
+      "kind": "dependency",
+      "name": "Audio Event Interface",
+      "contentHash": "c01afe6a8dfc7b412aee42b79e9018b193e8889be96e1d52cc6b4c342cba01d4"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000015",
+      "kind": "dependency",
+      "name": "Player Input Interface",
+      "contentHash": "f647e0b9596da8673d089ec31adeacede6c56a464c7c66b295e220a76e5b892b"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000016",
+      "kind": "dependency",
+      "name": "HUD State Interface",
+      "contentHash": "48b93f9abf507aab050b1dd611e30b4f926dad2fb18053e62f4ae782abd6dfa4"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000017",
+      "kind": "dependency",
+      "name": "Camera Hint Interface",
+      "contentHash": "2b34d0065b7e3e03b6d20e52932624c645e1a03eee8e6983fd9e0b309d56ffed"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000018",
+      "kind": "dependency",
+      "name": "Collectible Registration Interface",
+      "contentHash": "0e86e40fc571b71b8660d088d9e39e70c2b82f350bdd9aecc94dce77386228ec"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000019",
+      "kind": "dependency",
+      "name": "Shared Test Fixtures",
+      "contentHash": "8ee69494ad148cc2cd79c8addba6a47a4f827dc9ab6055230f39280b8b97d977"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000020",
+      "kind": "dependency",
+      "name": "Engine Feature Policy",
+      "specFormat": "json_schema",
+      "schemaHash": "c960ae0cea41760972f2caa1cb75e743b185c50fb6810131a9f17445b9e80482",
+      "contentHash": "559c84824e9ddc65d72c9e5224f3791de647bc08afb5aa17bcda80704365c2f9"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "0bd4d29e-d640-4870-8e2a-fb3d5f99847d",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": ".nodespec/tasks/axolotl-controller-22222222.task.md",
+      "kind": "task",
+      "contentHash": "0000000049cb9029"
+    },
+    {
+      "id": "2572f535-6e01-4ae9-adad-42b4d8bc9ebd",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": ".nodespec/tasks/test-harness-and-fixtures-22222222.task.md",
+      "kind": "task",
+      "contentHash": "000000000e5854fc"
+    },
+    {
+      "id": "29ad0c70-2bd7-47d7-bb24-9c96fc413662",
+      "nodeId": "22222222-0000-4000-8000-000000000022",
+      "path": ".nodespec/tests/req-030.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "2bd12771-52a5-44d7-9d85-99222e443f1f",
+      "nodeId": "22222222-0000-4000-8000-000000000019",
+      "path": ".nodespec/tasks/balance-and-tuning-data-22222222.task.md",
+      "kind": "task",
+      "contentHash": "0000000039f0a86d"
+    },
+    {
+      "id": "2d7dbbce-a06f-41b6-8444-0b723ec47259",
+      "nodeId": "22222222-0000-4000-8000-000000000008",
+      "path": ".nodespec/tasks/restoration-state-system-22222222.task.md",
+      "kind": "task",
+      "contentHash": "000000000a01ea82"
+    },
+    {
+      "id": "38f4bd65-2641-4e68-adb3-990ec024c4f3",
+      "nodeId": "22222222-0000-4000-8000-000000000014",
+      "path": ".nodespec/tasks/asset-contract-validator-22222222.task.md",
+      "kind": "task",
+      "contentHash": "000000002ace0565"
+    },
+    {
+      "id": "39a759a6-12c4-4143-89e2-2f4a280d5989",
+      "nodeId": "22222222-0000-4000-8000-000000000010",
+      "path": ".nodespec/tasks/drift-fleet-enemy-framework-22222222.task.md",
+      "kind": "task",
+      "contentHash": "0000000022a1b7d7"
+    },
+    {
+      "id": "3a05d372-ee14-4d00-9e47-d4b158619045",
+      "nodeId": "22222222-0000-4000-8000-000000000012",
+      "path": ".nodespec/tasks/world-bubble-bay-22222222.task.md",
+      "kind": "task",
+      "contentHash": "000000001fbf4763"
+    },
+    {
+      "id": "4e19af3d-d5c5-44e0-9712-995b526eeff6",
+      "nodeId": "22222222-0000-4000-8000-000000000023",
+      "path": ".nodespec/tasks/world-reference-template-22222222.task.md",
+      "kind": "task",
+      "contentHash": "000000000f317520"
+    },
+    {
+      "id": "593d8f4d-b34b-42cf-9c7d-aa1b453dc307",
+      "nodeId": "22222222-0000-4000-8000-000000000017",
+      "path": ".nodespec/tasks/audio-system-22222222.task.md",
+      "kind": "task",
+      "contentHash": "0000000035fd5e97"
+    },
+    {
+      "id": "7b370a67-59bc-45c8-b4b3-b5ce124e0e2f",
+      "nodeId": "22222222-0000-4000-8000-000000000005",
+      "path": ".nodespec/tasks/lives-and-checkpoint-system-22222222.task.md",
+      "kind": "task",
+      "contentHash": "000000004a417a23"
+    },
+    {
+      "id": "90a25f7f-c54c-4918-b6d5-c0c000ee3e0b",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": ".nodespec/tasks/openaxolotl-game-client-22222222.task.md",
+      "kind": "task",
+      "contentHash": "00000000257de9f2"
+    },
+    {
+      "id": "ac4ac3dc-ceb3-424d-a581-0a605cbb8140",
+      "nodeId": "22222222-0000-4000-8000-000000000021",
+      "path": ".nodespec/tasks/flagship-boss-encounter-22222222.task.md",
+      "kind": "task",
+      "contentHash": "0000000061ae6471"
+    },
+    {
+      "id": "b0179edc-fe31-43a7-9632-d3ef783a1b0f",
+      "nodeId": "22222222-0000-4000-8000-000000000016",
+      "path": ".nodespec/tasks/player-hud-22222222.task.md",
+      "kind": "task",
+      "contentHash": "00000000590e31eb"
+    },
+    {
+      "id": "b02588b5-e423-4a27-8590-896df521bca5",
+      "nodeId": "22222222-0000-4000-8000-000000000004",
+      "path": ".nodespec/tasks/regeneration-and-capability-system-22222222.task.md",
+      "kind": "task",
+      "contentHash": "000000003e20787c"
+    },
+    {
+      "id": "c4b2a1c9-0a64-40cd-9db3-ce3b88cc3f48",
+      "nodeId": "22222222-0000-4000-8000-000000000019",
+      "path": ".nodespec/tests/req-025.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "c82d1db9-709c-42c4-9db2-444dc5cf0a94",
+      "nodeId": "22222222-0000-4000-8000-000000000013",
+      "path": ".nodespec/tasks/level-contract-compliance-checker-22222222.task.md",
+      "kind": "task",
+      "contentHash": "000000007dd45544"
+    },
+    {
+      "id": "cec511c1-b810-4951-953c-f53864d2a651",
+      "nodeId": "22222222-0000-4000-8000-000000000006",
+      "path": ".nodespec/tasks/gill-mod-ability-framework-22222222.task.md",
+      "kind": "task",
+      "contentHash": "000000001290f8f8"
+    },
+    {
+      "id": "d4cd8eac-a4ce-47e0-b6ec-880df99538fe",
+      "nodeId": "22222222-0000-4000-8000-000000000018",
+      "path": ".nodespec/tasks/input-system-22222222.task.md",
+      "kind": "task",
+      "contentHash": "0000000056e40838"
+    },
+    {
+      "id": "d7ea3f37-b241-41fe-bd1c-7bd168f31922",
+      "nodeId": "22222222-0000-4000-8000-000000000007",
+      "path": ".nodespec/tasks/save-system-22222222.task.md",
+      "kind": "task",
+      "contentHash": "00000000211280d9"
+    },
+    {
+      "id": "dd34421e-020b-4dbd-bf36-0f6bb6b9bfa4",
+      "nodeId": "22222222-0000-4000-8000-000000000015",
+      "path": ".nodespec/tasks/ci-pipeline-22222222.task.md",
+      "kind": "task",
+      "contentHash": "000000001244d8db"
+    },
+    {
+      "id": "e6d1398b-111a-451c-9cfa-363452f4f371",
+      "nodeId": "22222222-0000-4000-8000-000000000004",
+      "path": ".nodespec/tests/req-002.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "eb8c37da-a0e0-4f41-a539-875e2280c488",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": ".nodespec/tests/req-027.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "eed4fd61-c84e-4291-872d-38e66bd807b5",
+      "nodeId": "22222222-0000-4000-8000-000000000009",
+      "path": ".nodespec/tasks/collectibles-system-22222222.task.md",
+      "kind": "task",
+      "contentHash": "000000004c66c26a"
+    },
+    {
+      "id": "f0cf8393-1f65-45ff-905b-dc65b0309b20",
+      "nodeId": "22222222-0000-4000-8000-000000000003",
+      "path": ".nodespec/tasks/camera-system-22222222.task.md",
+      "kind": "task",
+      "contentHash": "0000000044c2f4e6"
+    },
+    {
+      "id": "f19b7652-7442-4460-8a39-65a8b1c3617a",
+      "nodeId": "22222222-0000-4000-8000-000000000022",
+      "path": ".nodespec/tasks/world-static-analysis-gate-22222222.task.md",
+      "kind": "task",
+      "contentHash": "00000000236ae035"
+    },
+    {
+      "id": "f54d988d-24d4-4d41-8663-21ee23754463",
+      "nodeId": "22222222-0000-4000-8000-000000000011",
+      "path": ".nodespec/tasks/world-coral-cove-22222222.task.md",
+      "kind": "task",
+      "contentHash": "000000002cf291ea"
+    }
+  ]
+}

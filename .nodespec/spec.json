@@ -1,0 +1,637 @@
+{
+  "specVersion": 1,
+  "generatedBy": "nodespec",
+  "specHash": "e6643c392b49fa0a471a4129ef44473384f4c79b6b7bbac181584998a8baa911",
+  "vision": "OpenAxolotl — Play it. Fork it. Build a world.\n\nA colorful 3D action-platformer in Godot where a tiny axolotl explores strange aquatic worlds, restoring damaged habitats and rescuing creatures. Every world is a self-contained module anyone — human or AI coding agent — can fork, replace, or extend. Open source is a gameplay feature, not a line in the README.\n\nFOUR PILLARS\n\n1. Regeneration is the constant loop; lives are the hard failure state. Damage strips a capability — tail, gill, leg — with comedic pop-and-sparkle framing rather than draining a health bar, and never ends a run on its own. A separate limited life count is spent only on catastrophic events and returns the player to the last checkpoint. Regeneration stays expressive and ever-present; lives supply the stakes.\n\n2. Two movement grammars, one axolotl. Water and land are mechanically distinct, joined by a water-powered dash as the signature transition skill. This is the answer to \"why is this not a cute skin on generic platformer mechanics.\"\n\n3. The world regenerates with you. Regions progress barren, resourced, restored — opening real traversal paths rather than swapping visuals — and Drift Fleet dredgers can undo that progress. This carries the open-source metaphor mechanically, without a child ever needing to notice it.\n\n4. The repo is the game. Every world conforms to a versioned Level Contract published as a machine-readable schema. A contributor never needs to understand the whole game, only the contract. The project is effectively an open-source platformer SDK.\n\nANTAGONISTS\nThe Drift Fleet: faceless industrial extraction machinery, deliberately never human characters. Nets, hooks, dredges and pollution, with no gore and no humanized violence — the same machinery that broke the habitat is what the player disables to heal it.\n\nMVP SCOPE\nPC only. Two official worlds plus a minimal reference template. Three Gill Mods — Bubble, Jet, Glow — built to depth rather than breadth; Electric, Frost and Giant are post-MVP and double as the reference example for community-built mods. Contract compliance, asset conformance, and world static analysis are automated and merge-blocking, so an AI agent can verify its own work before submitting.\n\nCOMMUNITY (post-MVP)\nOpens only once Level Contract v1 is frozen; opening earlier means every core update breaks early contributor worlds. Community worlds ship code like any other world — safety comes from static analysis against the sanctioned world API surface plus mandatory human review, never an automated-only merge path. This is a family game with an agent-authored contribution pipeline, so that gate is load-bearing.\n\nNON-GOALS (firm, not deferrals)\nNo multiplayer, in any phase. No console certification. No level-editor GUI, ever — worlds are authored as code and Godot scenes only, so humans and AI agents build the same way and the contract surface stays narrow enough to check.\n\nOPEN ITEMS\nLicensing split between code and official art/audio, entangled with AI-generation provenance. Save-compatibility policy for forked and divergent worlds.",
+  "constraints": [],
+  "preferences": {},
+  "requirements": [
+    {
+      "requirementId": "REQ-001",
+      "name": "Axolotl Character Controller — Dual Movement Grammars",
+      "description": "The player character controller implementing two mechanically distinct movement grammars joined by a signature transition skill. WATER: fast directional swimming, current interaction, diving, bubble boost, underwater tunnel traversal. LAND: waddle locomotion, hop, climbing on wet/climbable surfaces, tongue grapple to anchor points. TRANSITION: a water-powered dash usable in both grammars, charged in water and spent anywhere, which is the signature move binding the two grammars together. The controller exposes a stable, documented public interface that any Level Contract-conforming world binds against, so no world ever re-implements or forks movement. This is Pillar 2 and the core answer to \"why is this not a cute skin on generic platformer mechanics.\"",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "Crossing a water volume boundary switches movement grammar in the same physics frame as the crossing, with no frame rendered in the previous grammar, and retains momentum magnitude per tuning key controller.transition.momentum_retention_ratio",
+        "Water grammar supports full 3D directional swimming, dive, and a bubble boost governed by a cooldown",
+        "Land grammar supports waddle locomotion, hop, and climbing on surfaces tagged as climbable",
+        "Tongue grapple attaches to anchor points at or within tuning key controller.grapple.max_range_m, rejects anchors beyond it, and pulls the axolotl to the attached anchor",
+        "Water-powered dash is usable in both grammars, consumes a charge, and recharges only while in water",
+        "Controller exposes a documented public interface (movement state, capability modifiers, ability hooks) that worlds bind to without modifying controller internals",
+        "Both movement grammars feel distinct, responsive, and pleasurable in hands-on play"
+      ],
+      "contentHash": "70bf62476922961e27059a4f09fb362c4318b4bec754ed609f440cab2a5c4b2b"
+    },
+    {
+      "requirementId": "REQ-002",
+      "name": "Regeneration and Capability Loss System",
+      "description": "Pillar 1, soft layer — the signature mechanic and the game's constant feedback loop. Damage does not deplete a health bar; it strips a CAPABILITY. Losing the tail reduces swim speed, losing a gill reduces boost duration, losing a leg reduces climb height. Each loss is presented with comedic pop-and-sparkle framing, never gruesome. Capability loss modulates difficulty by making the world harder to traverse, and NEVER by itself ends a run — that is exclusively the life layer's job. Regen stations restore lost capabilities and can additionally reconfigure the axolotl into temporary mutation loadouts, turning healing from a chore into a build-crafting moment. Capability state is restored at checkpoints alongside lives.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "Damage from enemies and non-catastrophic hazards strips a specific capability rather than reducing a health value",
+        "Each capability loss applies a defined, measurable movement modifier: tail reduces swim speed, gill reduces boost duration, leg reduces climb height",
+        "Capability loss alone never triggers a life loss, a death, or a run reset under any combination of losses",
+        "Regen stations restore all lost capabilities on use",
+        "Regen stations can apply a temporary mutation loadout that alters the axolotl configuration for the duration given by tuning key regen.mutation.duration_s, after which the axolotl reverts to its base configuration",
+        "Capability state is fully restored when the player respawns at a checkpoint",
+        "Each loss and regrowth plays comedic, non-gruesome feedback consistent with the family-appropriate tone"
+      ],
+      "contentHash": "db304060c13e90985918f922a7224facf951e8ae455a8366381ab8a89956d73e"
+    },
+    {
+      "requirementId": "REQ-003",
+      "name": "Lives, Checkpoints and Hard Failure State",
+      "description": "Pillar 1, hard layer — the stakes that the capability layer deliberately does not provide. A limited life count per attempt. ONLY catastrophic events cost a life directly: bottomless pits, crush hazards, boss finishing moves, and Dredger area-wipe attacks. Ordinary enemy contact does not — it strips capability instead. Reaching zero lives returns the player to the last checkpoint with lives replenished; it is NOT a full level restart and NOT a save-file penalty. Checkpoints are the anchor for both systems: they refill lives AND restore capability state, which is precisely why the Level Contract lists checkpoints as required rather than optional. Worlds may override the lives-per-attempt count, otherwise a global default applies.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "Lives decrement only from designated catastrophic sources: pit volumes, crush hazards, boss finishers, and Dredger area-wipe attacks",
+        "Ordinary enemy and hazard contact never decrements lives",
+        "Reaching zero lives respawns the player at the last activated checkpoint with the life count replenished",
+        "Reaching zero lives never restarts the world from the beginning and never modifies or penalizes the save file",
+        "Activating a checkpoint records respawn position and restores both life count and capability state",
+        "A world can declare a lives-per-attempt override through the Level Contract, and the global default applies when it does not",
+        "Checkpoint spacing in every official world keeps the replay time from any checkpoint to the next at or below tuning key progression.max_retry_seconds",
+        "Losing all lives reads as a meaningful setback without feeling punishing, across repeated play"
+      ],
+      "contentHash": "d588d9deb13208c3e6b135c83d402d3a37c8d7edb45093544fcd5e80cc7770b3"
+    },
+    {
+      "requirementId": "REQ-004",
+      "name": "Gill Mod Ability System",
+      "description": "The collectible ability layer, built on the axolotl's visually iconic external gills. THREE Gill Mods ship at MVP — depth per power beats breadth of roster: BUBBLE GILLS produce bounceable bubbles for traversal, JET GILLS give a water dash for speed and combat, GLOW GILLS illuminate caves and activate bioluminescent objects for exploration. Electric, Frost, and Giant Gills are explicitly post-MVP and serve double duty as the first official post-launch content AND the reference example of what a well-built community-contributed Gill Mod looks like. The system must therefore be an extensible ability framework with a documented registration interface, not three hardcoded special cases — a world declaring a custom ability through the Level Contract plugs in here. Equipped Gill Mods interact with the capability layer: a lost gill shortens boost duration, and a Hookline Rig snag temporarily strips the equipped mod.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "Bubble, Jet, and Glow Gill Mods are implemented, and each one unlocks at least one traversal or interaction affordance that is unavailable without it",
+        "Gill Mods are registered through a documented extension interface, and a fixture mod can be added without modifying any file in the ability system core",
+        "A world can declare and supply a custom Gill Mod through the Level Contract optional custom-ability element",
+        "Equipping and switching Gill Mods is available to the player and reflected on the axolotl visually",
+        "Gill capability loss multiplies the equipped mod's boost duration by tuning key capability.gill_loss.boost_duration_multiplier",
+        "A Hookline Rig snag removes the equipped mod for the window given by tuning key enemy.hookline.mod_strip_seconds, then restores it automatically",
+        "Each of the three MVP Gill Mods is developed to real depth rather than existing as a shallow one-note gimmick"
+      ],
+      "contentHash": "40a192000ad49acfd1f5e9dcd9c4928205b4512e974840f36ff798dd9572ae7e"
+    },
+    {
+      "requirementId": "REQ-005",
+      "name": "Camera System",
+      "description": "A third-person camera that reads well across both movement grammars and inside confined spaces. Must handle full 3D underwater freedom (where the axolotl can pitch and roll) and grounded land traversal (where a more conventional follow camera reads better) without the player fighting it. Supports per-world camera hint volumes so a Level Contract-conforming world can direct framing for set pieces, tunnels, and boss arenas without scripting its own camera. Collision-aware so tight underwater tunnels and cave interiors never clip through geometry.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "Camera follows the axolotl in both water and land grammars, and during a grammar transition its per-frame position and rotation deltas stay at or below tuning keys camera.smoothing.max_position_delta_m_per_frame and camera.smoothing.max_rotation_delta_deg_per_frame",
+        "Camera performs collision avoidance against level geometry, never clipping inside walls or terrain in confined tunnels",
+        "Worlds can place camera hint volumes that override framing (distance, angle, lock axis) declaratively without custom camera code",
+        "Camera behavior is fully driven by exported configuration values rather than hardcoded constants",
+        "Camera never induces disorientation or fights the player during underwater traversal in hands-on play"
+      ],
+      "contentHash": "822f3f1472d6ac9c5a5847ef3ca84315d7ec8681f66a0cd619177527f0ce0c82"
+    },
+    {
+      "requirementId": "REQ-006",
+      "name": "Level Contract v1 Specification",
+      "description": "THE ANCHOR REQUIREMENT of the entire project. A versioned specification defining what any world module must provide to be a valid OpenAxolotl world, published in TWO forms: a MACHINE-READABLE SCHEMA FILE that the compliance checker consumes as its single source of truth, and a PROSE DOCUMENT explaining each element and its rationale to human contributors. Publishing the schema as the authority is what makes conformance genuinely testable rather than a matter of reading a document carefully. REQUIRED elements: spawn point, checkpoints, finish condition, axolotl controller compatibility, save integration. OPTIONAL elements: collectibles, enemies, boss, custom ability, secret areas, NPCs, per-world lives-per-attempt override. Checkpoints are REQUIRED (not optional) because they anchor two separate systems: life refill and capability-state restore. The contract also defines the SANCTIONED WORLD API SURFACE — the public interfaces a world module may call — which is what the community static-analysis gate enforces against. The contract must be explicitly versioned with a defined v1-to-v2 migration story, and frozen at v1 only after the official MVP worlds have battle-tested it. Worlds are authored as code and Godot scenes only; there is no editor GUI authoring path, which keeps the contract surface narrow and checkable.",
+      "category": "technical",
+      "acceptanceCriteria": [
+        "Contract is published as a machine-readable schema file that the compliance checker loads as its single source of truth, with no conformance rules hardcoded in the checker",
+        "Schema enumerates every required element (spawn point, checkpoints, finish condition, controller compatibility, save integration) with a machine-checkable conformance rule for each",
+        "Schema enumerates every optional element together with the defined default behavior applied when it is absent",
+        "Schema carries an explicit contract version identifier, and every world module declares the contract version it targets",
+        "Schema defines the world module directory layout and file naming convention",
+        "Schema enumerates the sanctioned world API surface that a world module may call",
+        "A prose contract document explains every schema element and its rationale for human contributors",
+        "A documented migration path describes how a v1 world is brought forward when the contract version increments",
+        "A contributor unfamiliar with the codebase can produce a conforming world from the contract document alone",
+        "Contract is frozen at v1 only after the official MVP worlds have been built against it and their friction fed back into it"
+      ],
+      "contentHash": "3332ca032ea9acc44b0d3058d6df6d91c550565bb9b98a0bf7f921adb30da5ad"
+    },
+    {
+      "requirementId": "REQ-007",
+      "name": "Level Contract Automated Compliance Checker",
+      "description": "The tool that makes \"AI agents can build compliant levels\" a fact rather than a hope. A runnable checker that validates any world module against the Level Contract and reports precise, actionable conformance failures. It must be runnable locally by a contributor, invokable by an AI coding agent as a self-check before submitting, and runnable in CI on every pull request as the automated pre-screen that runs BEFORE any human review. Because there is no editor GUI authoring path, the checker only ever needs to validate code and Godot scene files — a deliberately narrow and checkable surface. Failure output must name the specific missing or malformed contract element, not merely report pass/fail, because its primary consumer is an agent trying to self-correct.",
+      "category": "technical",
+      "acceptanceCriteria": [
+        "Checker loads the Level Contract schema file as its source of truth and validates presence and well-formedness of every required element it declares",
+        "Checker validates a world's declared contract version and rejects a world targeting an unsupported version",
+        "Checker validates world module directory layout and naming convention",
+        "Failure output names the specific failing element, its file location, and the violated rule, emitted as structured machine-readable output an AI coding agent can parse",
+        "Checker exits with a non-zero status on failure and zero on success",
+        "Checker is runnable locally with a single documented command",
+        "A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it",
+        "Adding a new rule to the contract schema changes checker behavior without any code change to the checker"
+      ],
+      "contentHash": "40e51b383628d1d77681036e87b628ec79150686411a48d0024f78badb84490a"
+    },
+    {
+      "requirementId": "REQ-008",
+      "name": "World Restoration State System",
+      "description": "Pillar 3 — the mechanic that carries the open-source metaphor without a child ever needing to get the metaphor. Regions within a world hold a first-class, inspectable restoration state with EXACTLY three states — barren, resourced, restored — plus a SEPARATE BOOLEAN UNLOCKED FLAG that gates whether progression may begin at all. The flag is deliberately not a fourth state: defeating a region's Flagship sets the flag, permitting a barren region to start progressing, while the state enum itself stays a simple three-step progression. The player collects a resource, restores water, plants bloom, wildlife appears, and new traversal paths open — so restoration is genuinely mechanical, gating progression and opening routes, not merely a cosmetic swap. Restoration state persists through the save system. It is also reversible under pressure: Dredger enemies flatten restored terrain back to barren, which gives the loop stakes and makes those encounters urgent.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "A region exposes a queryable restoration state with exactly the progression barren, resourced, restored, and a separate boolean unlocked flag",
+        "A region whose unlocked flag is false cannot advance out of barren regardless of resources delivered",
+        "Advancing restoration state changes traversable geometry or opens paths that were not previously available, not only visuals",
+        "Restoration state and unlocked flag per region persist through the save-integration interface across sessions",
+        "Dredger attacks revert a restored region to barren, and the reverted state is reflected in traversal and persistence",
+        "Reverting a region to barren leaves its unlocked flag set, so restoration can be redone without refighting the Flagship",
+        "A world declares its restorable regions declaratively through the Level Contract rather than through bespoke scripting",
+        "The broken-to-restored transformation is visually dramatic and satisfying in hands-on play"
+      ],
+      "contentHash": "9bccf1d93a4b04efe869c967e41e3c8e4fdb35687262ffde67d6434772678e63"
+    },
+    {
+      "requirementId": "REQ-009",
+      "name": "Open Lagoon Hub and World Loading",
+      "description": "The hub that makes the modular architecture visible as a place. The Open Lagoon is a central space containing portals to worlds; the player enters a discrete, bounded, checkpointed world through a portal and returns on completion. Level selection is deliberately discrete rather than an interconnected open world. The hub discovers available world modules at runtime from the worlds directory rather than referencing a hardcoded list, which is what allows a world to be added, forked, or replaced without editing the hub. Portals are tiered and visually distinguished — Official Lagoons at MVP, with Community and Experimental tiers reserved for the post-MVP community layer. A world that fails to load must not break the hub.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "Hub discovers installed world modules at runtime from the worlds directory with no hardcoded world list",
+        "Entering a portal loads the corresponding world at its spawn point, and completing the finish condition returns the player to the hub",
+        "Adding, removing, or replacing a world module changes the available portals without any edit to hub code",
+        "A world module that fails to load or fails contract validation is surfaced as unavailable without crashing or blocking the hub",
+        "Portals carry a tier designation (Official, Community, Experimental) and are visually distinguished by tier",
+        "Hub reflects per-world completion and restoration progress read through the save-integration interface"
+      ],
+      "contentHash": "36e472a1faa894422ef00fe6214e4e3890e043da7c4f9c2bed5a50e3fd3716f6"
+    },
+    {
+      "requirementId": "REQ-010",
+      "name": "Collectibles System",
+      "description": "The reward layer for optional branches off a world's critical path, and the resource economy feeding restoration. Two distinct kinds: RESTORATION RESOURCES, which are consumed to advance a region's restoration state and are therefore mechanically load-bearing, and DISCOVERY COLLECTIBLES (rescued creatures, secrets), which reward exploration and persist to the profile. Collectibles are an optional Level Contract element, so a world may ship with none and must remain fully valid and completable. Collection state persists through the save-integration interface and survives death and checkpoint respawn, so exploration is never punished by the life layer.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "Restoration resources are collectible and are consumed to advance a region's restoration state",
+        "Discovery collectibles are collectible, counted per world, and persisted to the profile",
+        "Collected state persists through the save-integration interface across sessions",
+        "Collected state survives losing all lives and respawning at a checkpoint, so collection is never lost to the life layer",
+        "A world declaring no collectibles remains contract-valid and fully completable",
+        "Worlds declare collectibles declaratively through the Level Contract optional element rather than through bespoke scripting"
+      ],
+      "contentHash": "5179190eac30cf20aa981316dbefabfeef967f7da497be46ffc083873e22a310"
+    },
+    {
+      "requirementId": "REQ-011",
+      "name": "Official MVP Worlds",
+      "description": "Two to three official worlds at MVP — Coral Cove, Bubble Bay, and one more — each a discrete, bounded, checkpointed playthrough space entered from the Open Lagoon. Their purpose is dual and the second purpose is the more important one: they are shipped content AND they are the battle-test of the Level Contract. They must be built as ordinary contract-conforming world modules using only the public extension interfaces, taking no shortcuts unavailable to an outside contributor — if a core team world needs a private back door, that is a contract defect to fix, not a special case to permit. Friction encountered building them feeds back into the contract, and only once that feedback is absorbed is the contract frozen at v1. Each world should exercise both movement grammars, at least one restoration region, and a distinct Gill Mod emphasis.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "At least two official worlds are implemented, each passing the Level Contract compliance checker",
+        "Each official world is completable from spawn to finish condition",
+        "Each official world calls only the sanctioned world API surface, using no private back doors unavailable to an outside contributor, verified by the same static analysis applied to community submissions",
+        "Each official world exercises both movement grammars and contains at least one restorable region",
+        "Each official world contains at least one mandatory traversal challenge gated on a specific Gill Mod, and across the official set all three MVP mods are each required by at least one world",
+        "Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen",
+        "Each world is fun to play through and delivers a satisfying broken-to-restored payoff"
+      ],
+      "contentHash": "fe154d30d8879e7ea18f4c46bbf04f7e009281a96ed3a0401b15756e3a0102d6"
+    },
+    {
+      "requirementId": "REQ-012",
+      "name": "Drift Fleet Enemy Roster",
+      "description": "The antagonist faction: faceless industrial extraction machinery, deliberately NOT human characters. This preserves every intended gameplay hook — nets, hooks, dredging, pollution — without making a real profession the villain, and it fits the restoration theme better, since the machinery that broke the habitat is exactly what the player disables to heal it. Each enemy is designed against a specific capability or system rather than being a generic damage-dealer. NETBOTS: drifting drone trawlers dragging ghost nets that entangle and strip swim-speed capability; countered with Jet Gills. HOOKLINE RIGS: patrolling barbed-lure rigs that snag and briefly strip the equipped Gill Mod; countered by spotting the line in murk with Glow Gills. DREDGERS: heavy bottom-scrapers that revert restored terrain to barren, with area-wipe attacks that cost a life. RUNOFF DRONES: toxin sprayers that cloud water, debuffing vision and gill recharge to push the player onto land routes and exercise the second movement grammar. Enemies are an optional Level Contract element and are registered extensibly so a world can supply its own.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "Netbots entangle the player and strip swim-speed capability, and Jet Gills provide a functioning counter",
+        "Hookline Rigs snag the player and strip the equipped Gill Mod for the window given by tuning key enemy.hookline.mod_strip_seconds, and Glow Gills reveal the line before it triggers",
+        "Dredgers revert restored regions to barren, and their area-wipe attack decrements a life",
+        "Runoff Drones apply a vision and gill-recharge debuff while the player is inside the toxin volume, with magnitudes and duration given by tuning keys enemy.runoff.vision_debuff_factor, enemy.runoff.gill_recharge_multiplier, and enemy.runoff.duration_s",
+        "Enemies are registered through a documented extension interface, and a fixture enemy can be added without modifying any file in the enemy system core",
+        "A world declaring no enemies remains contract-valid and fully completable",
+        "Runoff Drone encounters make land routes read as the favorable path in hands-on play"
+      ],
+      "contentHash": "8bb80262e5163b1b47c278f007a6570d70f96a654d72b06feaa3702f597a62d0"
+    },
+    {
+      "requirementId": "REQ-013",
+      "name": "Flagship Boss Encounter",
+      "description": "The regional set-piece encounter and the mechanic that ties boss design directly to Pillar 3. The Flagship is the source vessel anchoring a region's Drift Fleet presence — the largest piece of extraction machinery, still faceless, still unmanned. Its finishing moves are one of the few life-costing catastrophic events, while its ordinary attacks strip capability like any other Drift Fleet unit, so the fight escalates along both layers at once. Defeating it flips the whole region from barren to restorable, making the boss the gate on the restoration payoff rather than a detached spectacle. The encounter should require both movement grammars and the Gill Mod its world emphasizes. Boss is an optional Level Contract element, so a world without one remains fully valid.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "Flagship ordinary attacks strip capability, and its designated finishing moves decrement a life",
+        "Defeating the Flagship sets its region's restoration unlocked flag, permitting restoration to begin",
+        "The encounter contains at least one mandatory phase completable only in the water grammar and at least one completable only in the land grammar",
+        "The encounter contains at least one mandatory phase gated on the Gill Mod its host world requires",
+        "Checkpoints within the encounter restore lives and capability state and resume the encounter at the last completed phase rather than from its start",
+        "A world declaring no boss remains contract-valid and fully completable",
+        "The encounter reads as a climactic set piece and its restoration payoff lands"
+      ],
+      "contentHash": "00bc8922af2febdff16b9b9172a335da30434daf448f4c830816d7a85d76bfcb"
+    },
+    {
+      "requirementId": "REQ-014",
+      "name": "Save System",
+      "description": "Persistent player progress across sessions: which worlds are unlocked and completed, per-world restoration state, collectibles gathered, Gill Mods unlocked, and last checkpoint reached. Every Level Contract-conforming world integrates with this system through a defined save-integration interface rather than writing its own persistence. Because worlds are forkable and replaceable, the save format must degrade gracefully: a save referencing a world that has been modified, forked, or removed must not corrupt the profile or block loading. The exact save-compatibility policy for divergent forked worlds is a named open item to be resolved and documented as part of this requirement.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "Save persists world unlock/completion state, per-world restoration state and unlocked flags, collectibles, unlocked Gill Mods, and last checkpoint",
+        "Worlds write and read save data exclusively through the defined save-integration interface, never touching the save file directly",
+        "Loading a save that references a missing or renamed world module degrades gracefully with the profile intact and the remaining worlds playable",
+        "Loading a save whose world module has changed its contract-visible state applies the documented save-compatibility policy and leaves the profile readable",
+        "Save file format carries a version field and a defined upgrade path across format versions",
+        "Save-compatibility policy for forked and divergent worlds is decided and documented"
+      ],
+      "contentHash": "ff81ede5cbc27da93b84cf30f5c15c51c4158ee56641b3bb26dde4cec4c1e6e8"
+    },
+    {
+      "requirementId": "REQ-015",
+      "name": "Asset Contract and AI-Art Provenance",
+      "description": "The art-side sibling of the Level Contract: a specification any character, creature, or prop asset must conform to in order to enter the repo. Contributors generate art with whatever external AI tool they choose (offline authoring — no in-editor generation plugin at MVP), then drop conforming output into the repo. The contract defines required file types, directory layout and naming convention, resolution and format specs, alpha-channel handling, and a required provenance.json per asset. Provenance records author, generation method, and applicable license terms for EVERY asset; AI-generated assets additionally record the generation tool and prompt, which do not apply to hand-authored work. Provenance capture is not bookkeeping: AI-generated art may carry different rights and attribution obligations depending on generator terms of service, which is why it intersects directly with the project licensing decision.",
+      "category": "technical",
+      "acceptanceCriteria": [
+        "Asset Contract specifies required file types, resolution/format constraints, and alpha-channel handling per asset category",
+        "Asset Contract specifies the asset directory layout and naming convention",
+        "Every asset requires a provenance.json recording author, generation method, and applicable license terms",
+        "AI-generated assets additionally record the generation tool and the prompt used; these fields are not required for hand-authored assets",
+        "provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly",
+        "Contract documents the style and art-direction expectations a human maintainer reviews against",
+        "A contributor can produce a conforming asset from the Asset Contract document alone"
+      ],
+      "contentHash": "01468f6d2827761eec7cdbf9e224d87b617ac551f07b52a79e4e6717cf17b233"
+    },
+    {
+      "requirementId": "REQ-016",
+      "name": "Asset Contract Automated Validator",
+      "description": "The art-pipeline counterpart to the Level Contract checker, and the automated half of the two-stage art gate. Validates submitted assets against the Asset Contract on every pull request BEFORE a human maintainer spends time on art-direction review: correct file types, conforming resolution and format, valid alpha handling, correct directory placement and naming, and a present, schema-valid provenance.json. Structural conformance is machine-checked; style and art-direction judgment remains explicitly human. Like the level checker, it must be locally runnable and produce failures specific enough for a contributor or an AI agent to correct without guesswork.",
+      "category": "technical",
+      "acceptanceCriteria": [
+        "Validator checks file type, resolution, format, and alpha-channel conformance per asset category",
+        "Validator checks directory placement and naming convention conformance",
+        "Validator requires a provenance.json per asset and validates it against the defined schema, failing on a missing or malformed one",
+        "Failure output names the specific asset and the specific violated rule",
+        "Validator exits non-zero on failure and runs as a required CI check on every pull request touching assets",
+        "Validator is runnable locally with a single documented command",
+        "A deliberately non-conforming fixture asset fails validation and conforming official assets pass"
+      ],
+      "contentHash": "1b988e07db8c9d760e317cd55bfc80bd77a5c5ceb11491df88a6fcc841f7f833"
+    },
+    {
+      "requirementId": "REQ-017",
+      "name": "AI-Agent Contributor Workflow and Documentation",
+      "description": "The requirement that produces the project's distinctive public identity: an open-source game designed for humans AND AI coding agents to extend together. A contributor must be able to open any AI coding agent, point it at this repository, say \"create a new OpenAxolotl level set inside a giant aquarium where the player uses Bubble Gills to climb to the top,\" and get a compliant world. That only works if the repository carries machine-readable, agent-consumable documentation of everything an agent needs: the architecture, the Level Contract, the Asset Contract, Godot and GDScript conventions, existing mechanics and their extension interfaces, acceptance criteria, and how to run the checkers and tests to self-verify before submitting. This documentation is a first-class deliverable, not README garnish, and it must be validated by actually driving an agent through it end to end.",
+      "category": "technical",
+      "acceptanceCriteria": [
+        "A reference example world exists, passes the compliance checker, and is documented as the canonical starting point for a new world",
+        "Documentation states the exact commands to run the Level Contract checker, the Asset Contract validator, and the test suite locally, and a test proves those documented commands succeed as written",
+        "Repository documents the architecture, Level Contract, Asset Contract, and Godot/GDScript conventions in a form an AI coding agent can consume directly from the repo",
+        "Documentation enumerates the extension interfaces for abilities, enemies, and worlds with worked examples",
+        "README states the agent-authored contribution workflow with a concrete example prompt",
+        "An AI coding agent, given only the repository and a one-sentence world brief, produces a world that passes the compliance checker"
+      ],
+      "contentHash": "9f54f813d2a78c6c52fc75dc4b5be1db43bb9c0e094c88e7db9466948465c686"
+    },
+    {
+      "requirementId": "REQ-018",
+      "name": "PC Build and Distribution",
+      "description": "A reproducible PC build of the game produced from the repository, plus the CI that proves the project stays buildable and playable as contributions land. PC-only is a firm non-goal boundary, not a staging step: no console certification is planned in any phase. The build must package the core game together with its official worlds, and the pipeline must run the Level Contract checker, the Asset Contract validator, and the automated test suite so that a contribution which breaks the game or violates either contract cannot merge. Because contributors and AI agents need a fast local loop, building and running from a clean clone must be a short, documented sequence.",
+      "category": "technical",
+      "acceptanceCriteria": [
+        "A PC build is produced from a clean checkout via a single documented command",
+        "The build packages the core game and all official worlds into a runnable artifact",
+        "CI runs the Level Contract checker, the Asset Contract validator, and the automated test suite on every pull request",
+        "A pull request failing any contract check or test cannot merge",
+        "Building and running the game from a clean clone is documented as a reproducible sequence of at most five commands, and following that sequence verbatim produces a running game",
+        "The packaged build launches and is playable end to end on a clean PC without a development environment installed"
+      ],
+      "contentHash": "f126b2a7bc45dee012f30f32c68cdb9e49b131f00a8b111cd16e4cd437c6d3e2"
+    },
+    {
+      "requirementId": "REQ-019",
+      "name": "Kid-Appropriate Tone and Accessibility",
+      "description": "A cross-cutting constraint on every system in the game. Capability loss must read as comedic and magical — a cartoon POP, a puff, sparkly regrowth — never gruesome, bloody, or distressing, because the signature mechanic is literally limb loss in a game for families. Antagonists are faceless machinery with no gore and no humanized violence. Beyond tone, the game must be playable by younger players and mixed-skill families: readable visual language for hazards and interactables, no reliance on color alone, remappable controls, and a difficulty floor where the capability layer softens failure rather than punishing it. This requirement constrains art, animation, enemy design, and failure feedback throughout.",
+      "category": "non-functional",
+      "acceptanceCriteria": [
+        "Hazards, interactables, and restoration state are distinguishable without relying on color alone",
+        "Every capability-loss type triggers both a visual and an audio feedback cue",
+        "The game is completable using a single input device with no required simultaneous inputs beyond that device's capability",
+        "Capability loss and regrowth are presented with comedic, non-gruesome feedback across every loss type",
+        "No enemy, hazard, or failure state depicts blood, gore, or humanized violence",
+        "Tone reads as playful and family-appropriate to a reviewer playing the capability-loss loop repeatedly"
+      ],
+      "contentHash": "b539831267a1024a21451481c7b12ab3a65e99f32fffeb5608be8e9e9fe3a45b"
+    },
+    {
+      "requirementId": "REQ-020",
+      "name": "Community Lagoon Submission Pipeline (Post-MVP)",
+      "description": "POST-MVP, and strictly sequenced: this opens only after Level Contract v1 is frozen. Opening earlier means every core update breaks early contributor worlds and burns exactly the goodwill the project depends on. Contributors submit worlds by pull request; accepted worlds become packaged community worlds surfaced in the hub as Community Lagoon portals, visibly credited to their author. SECURITY MODEL: community worlds are GDScript modules exactly like official worlds — the code-authoring premise applies to everyone, and there is no separate data-only contributor path. Safety therefore comes from two controls rather than from forbidding code: automated static analysis that rejects any world script reaching outside the sanctioned world API surface defined by the Level Contract (no filesystem, network, OS-execution, or dynamic-evaluation calls), and mandatory human maintainer review before merge. Both stages are required; there is no automated-only merge path. This gating is load-bearing rather than a nicety — this is a game marketed to families with an AI-agent-authored contribution pipeline, and an ungated path would be the project's largest risk. Tiering is Official, Community, and Experimental Lagoons.",
+      "category": "business",
+      "acceptanceCriteria": [
+        "Every submission passes automated contract-compliance and content-policy pre-screening before human review",
+        "Static analysis rejects any community world script calling filesystem, network, OS-execution, or dynamic-evaluation APIs, or otherwise reaching outside the sanctioned world API surface defined by the Level Contract",
+        "A deliberately malicious fixture world attempting each forbidden call class is rejected by the static-analysis gate",
+        "Every submission requires explicit human maintainer approval before merge, enforced by branch protection with no automated-only merge path",
+        "Accepted community worlds are packaged and surfaced in the hub as Community Lagoon portals credited to their author",
+        "Portal tiering distinguishes Official, Community, and Experimental Lagoons",
+        "Pipeline opens only after Level Contract v1 is declared frozen",
+        "Content guidelines and the maintainer review checklist are documented for a family-audience bar"
+      ],
+      "contentHash": "11e503dd4a5fe3ddeba8229e4573e7886b99010f4889c351c5ab60887f1755c2"
+    },
+    {
+      "requirementId": "REQ-021",
+      "name": "Licensing Policy — Code, Assets, and AI Provenance",
+      "description": "A NAMED OPEN ITEM that blocks the public-facing README and contribution guide. The project's headline claim is \"fork it,\" which requires an explicit and defensible split between the code license and the official art/audio license — these likely cannot both be maximally permissive if the axolotl character IP is to stay controlled. This decision is entangled with AI-art provenance: assets generated through external AI tools carry the generator's terms of service, captured per-asset in provenance.json, which may constrain how official and community art can be relicensed or redistributed. Both must be resolved together, not separately, and must be resolved before any public contribution workflow copy is written. Contributor licensing terms for submitted worlds and assets are part of this decision.",
+      "category": "business",
+      "acceptanceCriteria": [
+        "Code license is chosen and applied to the repository",
+        "Official art and audio asset license is chosen, documented, and distinguished from the code license",
+        "Policy documents how AI-generated asset provenance and generator terms of service affect redistribution and relicensing",
+        "Contributor licensing terms for submitted worlds and assets are documented in the contribution guide",
+        "Licensing decision is resolved before the public README and contribution guide ship"
+      ],
+      "contentHash": "6373c6f215dcfd370f8efe59f4cd66b418708a5620551c7d80f245b93b21f478"
+    },
+    {
+      "requirementId": "REQ-022",
+      "name": "Player HUD and Game-State Readout",
+      "description": "Without a HUD the signature mechanic is invisible: the player must be able to see at a glance which capabilities they currently have, which they have lost, how many lives remain, which Gill Mod is equipped and its charge, and a region's restoration progress. This is the readout layer for both halves of Pillar 1 and for Pillar 3, and it carries a specific tone burden — capability loss must read as funny and legible rather than alarming, so the HUD is where the family-appropriate framing either lands or fails. It must also satisfy the accessibility constraint that state is never communicated by color alone. Kept deliberately minimal and diegetic where possible so it does not clutter a colorful 3D platformer.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "HUD displays current lives, and the display reflects a life lost or replenished within the same frame the change is raised",
+        "HUD displays which capabilities are currently intact and which are lost, reflecting a loss or regrowth within the same frame the change is raised",
+        "HUD displays the equipped Gill Mod and its remaining charge or cooldown",
+        "HUD surfaces the active region's restoration state and progress toward the next state",
+        "All HUD state is distinguishable without relying on color alone, using shape, icon, or text in addition",
+        "HUD reflects the water-powered dash charge and its recharge state",
+        "Capability-loss presentation in the HUD reads as playful rather than alarming"
+      ],
+      "contentHash": "fed4d2536958ee1aa2119eb75030225ace163575f4f638e4642016cecf762b36"
+    },
+    {
+      "requirementId": "REQ-023",
+      "name": "Audio System, Music and Sound Design",
+      "description": "Audio was referenced by the tone requirement and by the licensing decision but nothing owned producing it. Audio carries real mechanical weight here: the comedic pop-and-sparkle of capability loss is at least half a sound cue, the two movement grammars need distinct audio identities to sell the water/land split, and the barren-to-restored transformation is dramatically weaker without the soundscape blooming alongside the visuals. Audio assets fall under the Asset Contract and its provenance requirements, including AI-generated audio, and under the licensing split still to be decided. Worlds may supply their own music and ambience through the contract; a world supplying none falls back to defaults rather than playing silence.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "Distinct audio cues play for every capability loss and every regrowth",
+        "Water and land movement grammars have distinct movement and ambience audio, switching with the grammar transition",
+        "Region restoration state changes are accompanied by a corresponding change in ambient soundscape",
+        "Gill Mod activation produces a per-mod distinct audio cue",
+        "Worlds may declare their own music and ambience through the Level Contract, and a world declaring none falls back to defaults rather than silence",
+        "Master, music, and effects volumes are independently adjustable and persist across sessions",
+        "Audio assets conform to the Asset Contract including provenance requirements",
+        "Sound design supports the comedic, family-appropriate tone rather than undercutting it"
+      ],
+      "contentHash": "fdace1861fa2eb7cb9e322231893e2bcbe8d7df225215dc7449cf0685c30880d"
+    },
+    {
+      "requirementId": "REQ-024",
+      "name": "Input and Control Scheme",
+      "description": "The control scheme is the concern that drove the PC-only platform decision and until now had no home requirement. The axolotl carries an unusually wide verb set for a platformer: two full movement grammars, dive, hop, climb, tongue grapple, water-powered dash, bubble boost, plus equipping and activating Gill Mods. Fitting that onto a comfortable scheme without modal overload is a real design problem, not a formality. The scheme must be context-sensitive so that water and land verbs can share bindings where they do not conflict, must support both keyboard-and-mouse and gamepad on PC, and must be fully remappable per the accessibility constraint. Input handling belongs to the controller's published interface so that worlds never read raw input directly.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "Every player verb is bound in both a keyboard-and-mouse scheme and a gamepad scheme",
+        "Bindings are context-sensitive by movement grammar, so water-only and land-only verbs may share a physical input without conflict",
+        "Every binding is remappable, and remapped bindings persist across sessions",
+        "Rebinding rejects a conflicting assignment within the same context rather than silently overriding it",
+        "Switching between keyboard and gamepad mid-session is handled without requiring a restart, and on-screen prompts follow the active device",
+        "Worlds read player intent through the controller interface and never read raw input directly",
+        "The full verb set is playable without modal overload or uncomfortable finger contortion"
+      ],
+      "contentHash": "ad438742ffeaf7bb0daeccb894e8a644de60d4856fa700d12fcfa8c4c121bf39"
+    },
+    {
+      "requirementId": "REQ-025",
+      "name": "Balance and Tuning Configuration",
+      "description": "Many acceptance criteria across the player systems assert a \"configured modifier\", \"bounded window\", or \"configured magnitude\" without anywhere defining the values. Without a single named home for those numbers, tests have nothing to assert against and every system invents its own constants. This requirement establishes one authoritative, data-driven tuning surface covering capability-loss modifiers (swim speed, boost duration, climb height), default lives per attempt, dash charge and recharge rates, Gill Mod durations and cooldowns, enemy debuff magnitudes and windows, and restoration resource costs. Values live in data rather than code so they can be tuned without recompiling and so an AI agent or contributor can adjust balance without touching system logic. Worlds may override a documented subset; everything else stays global to keep the game coherent across forks.",
+      "category": "technical",
+      "acceptanceCriteria": [
+        "All balance values are defined in data files rather than as constants in system code",
+        "The tuning surface covers capability-loss modifiers, default lives per attempt, dash charge and recharge, Gill Mod durations and cooldowns, enemy debuff magnitudes and windows, restoration resource costs, grapple range, camera smoothing thresholds, mutation loadout duration, momentum retention across grammar transitions, and maximum retry duration",
+        "Every value carries a documented name, unit, and permitted range",
+        "Changing a tuning value alters observable behavior with no code change and no recompile",
+        "The set of values a world may override through the Level Contract is explicitly enumerated, and an override outside that set is rejected",
+        "Loading a tuning file with a missing or out-of-range value fails with a named error rather than silently defaulting",
+        "Every tuning key cited by another requirement's acceptance criteria exists in the tuning data with a documented unit and permitted range, and a test fails when a cited key is absent"
+      ],
+      "contentHash": "57c6d76c79496f28efaf927b927541cbd465a346e8677b4c6647fe975def7344"
+    },
+    {
+      "requirementId": "REQ-026",
+      "name": "Automated Test Suite and Test Harness",
+      "description": "REQ-018 requires CI to run \"the automated test suite\" but nothing required that suite to exist or defined its scope. For a project whose central claim is that AI agents can contribute compliant worlds, the test harness is load-bearing infrastructure: it is how an agent proves its own work before submitting, and it is what stops a contributed world from silently breaking core systems. Scope covers three tiers — unit tests for system logic, integration tests exercising a system against the controller and save interfaces, and headless playthrough smoke tests that drive an official world from spawn to finish condition to catch regressions no unit test would. Godot supports headless execution, so playthrough tests are runnable in CI without a display. Test fixtures (a conforming world, a non-conforming world, a malicious world, a conforming and non-conforming asset) are themselves deliverables, since several requirements assert against them.",
+      "category": "technical",
+      "acceptanceCriteria": [
+        "The suite runs headless with a single documented command and exits non-zero on any failure",
+        "Unit tests cover the capability, lives, restoration, ability-registration, and save-interface logic",
+        "Integration tests exercise each system against the controller and save-integration interfaces rather than in isolation only",
+        "A headless playthrough smoke test drives an official world from spawn to finish condition and asserts completion",
+        "Named fixtures exist for a conforming world, a non-conforming world, a malicious world, a conforming asset, and a non-conforming asset, and are shared by the checker, validator, and static-analysis tests",
+        "Test output identifies the failing requirement or criterion it maps to, so a contributor or agent can locate what broke",
+        "The suite runs in CI on every pull request"
+      ],
+      "contentHash": "0015409abd2a3ef25c989bb4fbb2fb53fa9d4282529de607e8df262b9384a5ac"
+    },
+    {
+      "requirementId": "REQ-027",
+      "name": "Performance Targets",
+      "description": "A colorful 3D platformer for families on unspecified PC hardware needs stated performance targets, and this project has a specific risk most platformers do not: restoration state changes swap traversable geometry at runtime, potentially across a large region, while Dredgers can revert it mid-encounter. That is a hitch waiting to happen at exactly the moment the game is trying to deliver its most satisfying visual payoff. Targets also matter for the contribution pipeline — a community world that tanks frame rate is a defect the automated pre-screen should be able to catch, which requires a number to check against. Includes frame rate on a defined baseline machine, world load time from hub portal, and a bound on the hitch introduced by a restoration transition.",
+      "category": "non-functional",
+      "acceptanceCriteria": [
+        "A baseline target PC specification is documented, and the frame-rate target, the maximum permitted frame-time spike, and the world load-time budget on that baseline are each stated as numbers",
+        "Official worlds sustain the documented frame-rate target on the baseline specification during normal traversal",
+        "A restoration state transition completes without exceeding the documented maximum frame-time spike",
+        "World load time from selecting a hub portal to player control stays within the documented load-time budget",
+        "A performance regression test runs in CI against an official world and fails when any of the three documented targets is breached",
+        "The game remains smooth during a Flagship encounter combined with a restoration reversion, the heaviest expected load case"
+      ],
+      "contentHash": "1e7e05a95328509349a0b0aa656656bcacbb4f682cecaedad81a920cd03f52b2"
+    },
+    {
+      "requirementId": "REQ-028",
+      "name": "Official World: Bubble Bay",
+      "description": "The second official MVP world, and the second half of the Level Contract battle-test. Where Coral Cove hosts the Flagship encounter, Bubble Bay deliberately ships WITHOUT a boss — that is not a scope cut but a deliberate proof that the contract's optional elements really are optional and that a world declaring no boss remains valid and completable. It must emphasize a different Gill Mod from Coral Cove so the two official worlds together exercise all three MVP mods. Like every world it is built exclusively through the sanctioned world API surface, with no private back doors an outside contributor could not use, verified by the same static-analysis gate community submissions face.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "Bubble Bay passes the Level Contract compliance checker",
+        "Bubble Bay passes the World Static Analysis Gate, calling only the sanctioned world API surface",
+        "Bubble Bay is completable from spawn to finish condition",
+        "Bubble Bay exercises both movement grammars and contains at least one restorable region",
+        "Bubble Bay contains at least one mandatory traversal challenge gated on a Gill Mod that Coral Cove does not emphasize",
+        "Bubble Bay declares no boss and remains contract-valid and fully completable, proving the optional-boss path",
+        "Bubble Bay sustains the documented frame-rate target on the baseline specification during normal traversal",
+        "Bubble Bay is fun to play through and delivers a satisfying broken-to-restored payoff"
+      ],
+      "contentHash": "5f5dcdbc2511e62b489dda082fa3e0c9c24e79cf8514ca788bc96c26e925e478"
+    },
+    {
+      "requirementId": "REQ-029",
+      "name": "Reference Template World",
+      "description": "The canonical starting point a contributor or AI coding agent copies to begin a new world. Deliberately minimal: it implements the five REQUIRED Level Contract elements and nothing optional, which makes it both the smallest possible proof that the contract is satisfiable and a live test that every optional element's declared default actually works when absent. Coral Cove and Bubble Bay are full official worlds and far too large to serve this purpose. Because it is what every new contributor copies, it must never drift out of conformance: it is validated by the compliance checker and the static-analysis gate on every pull request exactly like any other world, so a contract change that would break the template fails CI rather than silently teaching the wrong pattern.",
+      "category": "technical",
+      "acceptanceCriteria": [
+        "The template implements all five required Level Contract elements: spawn point, checkpoints, finish condition, controller compatibility, save integration",
+        "The template declares no optional contract elements, exercising every optional element's absent-default path",
+        "The template passes the Level Contract compliance checker as a required CI check",
+        "The template passes the World Static Analysis Gate, calling only the sanctioned world API surface",
+        "The hub discovers and loads the template like any other world, with no special case in loader code",
+        "The template is completable from spawn to finish condition",
+        "A contract change that would make the template non-conforming fails CI rather than passing silently",
+        "The template is documented as the canonical starting point for a new world, with instructions on what to copy and what to change"
+      ],
+      "contentHash": "611e2e282215e118e1a8d0d5e646f194e4fb6b431bba002adfa20029dc6ace27"
+    },
+    {
+      "requirementId": "REQ-030",
+      "name": "No Multiplayer — Enforced Single-Player Constraint",
+      "description": "\"No multiplayer\" is a firm non-goal in every phase, and this requirement makes it machine-enforced rather than merely stated. The enforcement exists because the constraint is actively working against its environment: general Godot guidance, sample code, and the engine's own documentation are heavily multiplayer-oriented, and the technology guidance embedded in this project's own node context carries an RPC/server-authority movement sample that directly contradicts this non-goal. A human or AI contributor following ordinary Godot idiom would reach for @rpc and MultiplayerAPI without ever intending to add multiplayer. A documented non-goal cannot stop that; a merge-blocking static check can. Scope is deliberately repo-wide — core systems, official worlds, the reference template, and community submissions alike — because the risk is highest in exactly the core movement and input code where the contradicting sample appears. Single-player also means no network layer at all: no peers, no synchronizers, no authority checks, no server-side validation scaffolding.",
+      "category": "technical",
+      "acceptanceCriteria": [
+        "A static check rejects any use of Godot multiplayer APIs, including @rpc annotations, rpc/rpc_id/rpc_config calls, is_multiplayer_authority and set_multiplayer_authority, the multiplayer property and MultiplayerAPI, any MultiplayerPeer implementation (ENet, WebRTC, WebSocket), and MultiplayerSynchronizer or MultiplayerSpawner nodes",
+        "The check scans core systems, official worlds, the reference template, and community submissions — not world modules alone",
+        "A fixture file exercising each forbidden multiplayer API class is rejected by the check, with output naming the specific API and file",
+        "The check runs as a required CI check and a pull request introducing any forbidden multiplayer API cannot merge",
+        "project.godot declares no networking or multiplayer autoloads, peer configuration, or network-related project settings",
+        "No architecture node is a game server, and no networking or multiplayer service appears anywhere in the project's technology set",
+        "The Level Contract's sanctioned world API surface lists every multiplayer API as forbidden, so world modules are covered by the same ban as core",
+        "Contributor documentation states the project is single-player only and warns that general Godot multiplayer guidance and engine sample code do not apply here"
+      ],
+      "contentHash": "58dbf9ddfab5ecbcfe3888f8876ffaa108a230478fcbcc34daf7d8d629647bf5"
+    }
+  ],
+  "mappings": [
+    {
+      "requirementId": "REQ-001",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-002",
+      "nodeId": "22222222-0000-4000-8000-000000000004",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-003",
+      "nodeId": "22222222-0000-4000-8000-000000000005",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-004",
+      "nodeId": "22222222-0000-4000-8000-000000000006",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-005",
+      "nodeId": "22222222-0000-4000-8000-000000000003",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-006",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-007",
+      "nodeId": "22222222-0000-4000-8000-000000000013",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-008",
+      "nodeId": "22222222-0000-4000-8000-000000000008",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-009",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-010",
+      "nodeId": "22222222-0000-4000-8000-000000000009",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-011",
+      "nodeId": "22222222-0000-4000-8000-000000000011",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-012",
+      "nodeId": "22222222-0000-4000-8000-000000000010",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-013",
+      "nodeId": "22222222-0000-4000-8000-000000000021",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-014",
+      "nodeId": "22222222-0000-4000-8000-000000000007",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-015",
+      "nodeId": "22222222-0000-4000-8000-000000000014",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-016",
+      "nodeId": "22222222-0000-4000-8000-000000000014",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-017",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-018",
+      "nodeId": "22222222-0000-4000-8000-000000000015",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-019",
+      "nodeId": "22222222-0000-4000-8000-000000000004",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-020",
+      "nodeId": "22222222-0000-4000-8000-000000000022",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-022",
+      "nodeId": "22222222-0000-4000-8000-000000000016",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-023",
+      "nodeId": "22222222-0000-4000-8000-000000000017",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-024",
+      "nodeId": "22222222-0000-4000-8000-000000000018",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-025",
+      "nodeId": "22222222-0000-4000-8000-000000000019",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-026",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-027",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-028",
+      "nodeId": "22222222-0000-4000-8000-000000000012",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-029",
+      "nodeId": "22222222-0000-4000-8000-000000000023",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-030",
+      "nodeId": "22222222-0000-4000-8000-000000000022",
+      "mappingType": "implements"
+    }
+  ]
+}
