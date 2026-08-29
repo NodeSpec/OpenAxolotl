@@ -22,10 +22,10 @@ _Not yet authored._ **Consuming AI — author this section BEFORE building.** Wo
 
 Ordered WORK ORDERS synthesized from the model — this node's deliverable kind, contracts, criterion attribution, configuration, and dependency chain. They guarantee coverage, scope, and traceability; they deliberately do NOT contain the implementation detail — that is your job (see the expansion directive below the list).
 
-- [ ] **T1 — Scaffold the Godot component.**
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
   Create the source layout, build files, and test harness this node's working code lives in.
   Start from the catalog's suggested structure: `scripts/main.gd`, `scenes/main.tscn`, `project.godot`, `export_presets.cfg`.
-- [ ] **T2 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Save Integration Interface" (dependency).**
+- [ ] **T2 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Save Integration Interface" (dependency).** <!-- t:cb40db8d -->
   Record the endpoint/identifiers OpenAxolotl Game Client needs in this node's config artifacts — coordinate with OpenAxolotl Game Client.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
   ↳ serves (unverified match): REQ-014 "Save persists world unlock/completion state, per-world restoration state and unlocked flags, collectibles, unlocked Gill Mods, and last checkpoint" — requirement not mapped to that node; verify or reassign before relying on it
@@ -34,28 +34,28 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
   ↳ serves (unverified match): REQ-014 "Loading a save whose world module has changed its contract-visible state applies the documented save-compatibility policy and leaves the profile readable" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-014 "Save file format carries a version field and a defined upgrade path across format versions" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-014 "Save-compatibility policy for forked and divergent worlds is decided and documented" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T3 — Expose the interface Lives and Checkpoint System consumes, per Contract "Save Integration Interface" (dependency).**
+- [ ] **T3 — Expose the interface Lives and Checkpoint System consumes, per Contract "Save Integration Interface" (dependency).** <!-- t:a041b2c2 -->
   Record the endpoint/identifiers Lives and Checkpoint System needs in this node's config artifacts — coordinate with Lives and Checkpoint System.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T4 — Expose the interface Restoration State System consumes, per Contract "Save Integration Interface" (dependency).**
+- [ ] **T4 — Expose the interface Restoration State System consumes, per Contract "Save Integration Interface" (dependency).** <!-- t:9852989b -->
   Record the endpoint/identifiers Restoration State System needs in this node's config artifacts — coordinate with Restoration State System.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T5 — Expose the interface Collectibles System consumes, per Contract "Save Integration Interface" (dependency).**
+- [ ] **T5 — Expose the interface Collectibles System consumes, per Contract "Save Integration Interface" (dependency).** <!-- t:a0a401c7 -->
   Record the endpoint/identifiers Collectibles System needs in this node's config artifacts — coordinate with Collectibles System.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T6 — Expose the interface World: Coral Cove consumes, per Contract "Save Integration Interface" (dependency).**
+- [ ] **T6 — Expose the interface World: Coral Cove consumes, per Contract "Save Integration Interface" (dependency).** <!-- t:3b780d31 -->
   Record the endpoint/identifiers World: Coral Cove needs in this node's config artifacts — coordinate with World: Coral Cove.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T7 — Expose the interface World: Bubble Bay consumes, per Contract "Save Integration Interface" (dependency).**
+- [ ] **T7 — Expose the interface World: Bubble Bay consumes, per Contract "Save Integration Interface" (dependency).** <!-- t:11b748db -->
   Record the endpoint/identifiers World: Bubble Bay needs in this node's config artifacts — coordinate with World: Bubble Bay.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T8 — Expose the interface World: Reference Template consumes, per Contract "Save Integration Interface" (dependency).**
+- [ ] **T8 — Expose the interface World: Reference Template consumes, per Contract "Save Integration Interface" (dependency).** <!-- t:ee05929c -->
   Record the endpoint/identifiers World: Reference Template needs in this node's config artifacts — coordinate with World: Reference Template.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T10 — Verify every acceptance criterion above and tick its box.**
+- [ ] **T10 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -304,3 +304,9 @@ Startup/initialization order based on edge directions and interaction patterns.
 - World: Bubble Bay (initiates Save Integration Interface against this node (dependency))
 - World: Reference Template (initiates Save Integration Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-014.tests.md` - Test plan for requirement: Save System | test-plan | markdown | draft |

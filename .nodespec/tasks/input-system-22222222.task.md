@@ -22,33 +22,33 @@ _Not yet authored._ **Consuming AI — author this section BEFORE building.** Wo
 
 Ordered WORK ORDERS synthesized from the model — this node's deliverable kind, contracts, criterion attribution, configuration, and dependency chain. They guarantee coverage, scope, and traceability; they deliberately do NOT contain the implementation detail — that is your job (see the expansion directive below the list).
 
-- [ ] **T1 — Scaffold the Godot component.**
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
   Create the source layout, build files, and test harness this node's working code lives in.
   Start from the catalog's suggested structure: `scripts/main.gd`, `scenes/main.tscn`, `project.godot`, `export_presets.cfg`.
-- [ ] **T2 — Implement the integration with Axolotl Controller (godot) per Contract "Player Input Interface" (dependency).**
+- [ ] **T2 — Implement the integration with Axolotl Controller (godot) per Contract "Player Input Interface" (dependency).** <!-- t:5edd7a53 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
   ↳ serves (unverified match): REQ-024 "Every player verb is bound in both a keyboard-and-mouse scheme and a gamepad scheme" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-024 "Bindings are context-sensitive by movement grammar, so water-only and land-only verbs may share a physical input without conflict" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-024 "Worlds read player intent through the controller interface and never read raw input directly" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T3 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Player Input Interface" (dependency).**
+- [ ] **T3 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Player Input Interface" (dependency).** <!-- t:f6257813 -->
   Record the endpoint/identifiers OpenAxolotl Game Client needs in this node's config artifacts — coordinate with OpenAxolotl Game Client.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T4 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T4 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T5 — Implement: "Every binding is remappable, and remapped bindings persist across sessions" (REQ-024).**
+- [ ] **T5 — Implement: "Every binding is remappable, and remapped bindings persist across sessions" (REQ-024).** <!-- t:c1fe8388 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-024 "Every binding is remappable, and remapped bindings persist across sessions"
-- [ ] **T6 — Implement: "Rebinding rejects a conflicting assignment within the same context rather than silently overriding it" (REQ-024).**
+- [ ] **T6 — Implement: "Rebinding rejects a conflicting assignment within the same context rather than silently overriding it" (REQ-024).** <!-- t:fb4356c2 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-024 "Rebinding rejects a conflicting assignment within the same context rather than silently overriding it"
-- [ ] **T7 — Implement: "Switching between keyboard and gamepad mid-session is handled without requiring a restart, and on-screen prompts follow the active device" (REQ-024).**
+- [ ] **T7 — Implement: "Switching between keyboard and gamepad mid-session is handled without requiring a restart, and on-screen prompts follow the active device" (REQ-024).** <!-- t:b5f0609a -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-024 "Switching between keyboard and gamepad mid-session is handled without requiring a restart, and on-screen prompts follow the active device"
-- [ ] **T8 — Implement: "The full verb set is playable without modal overload or uncomfortable finger contortion" (REQ-024).**
+- [ ] **T8 — Implement: "The full verb set is playable without modal overload or uncomfortable finger contortion" (REQ-024).** <!-- t:789ff73c -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-024 "The full verb set is playable without modal overload or uncomfortable finger contortion"
-- [ ] **T9 — Verify every acceptance criterion above and tick its box.**
+- [ ] **T9 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -251,3 +251,9 @@ Startup/initialization order based on edge directions and interaction patterns.
 **Depends on THIS node being available:**
 - OpenAxolotl Game Client (initiates Player Input Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-024.tests.md` - Test plan for requirement: Input and Control Scheme | test-plan | markdown | draft |

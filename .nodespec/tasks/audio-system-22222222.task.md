@@ -22,51 +22,51 @@ _Not yet authored._ **Consuming AI — author this section BEFORE building.** Wo
 
 Ordered WORK ORDERS synthesized from the model — this node's deliverable kind, contracts, criterion attribution, configuration, and dependency chain. They guarantee coverage, scope, and traceability; they deliberately do NOT contain the implementation detail — that is your job (see the expansion directive below the list).
 
-- [ ] **T1 — Scaffold the Godot component.**
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
   Create the source layout, build files, and test harness this node's working code lives in.
   Start from the catalog's suggested structure: `scripts/main.gd`, `scenes/main.tscn`, `project.godot`, `export_presets.cfg`.
-- [ ] **T2 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Audio Event Interface" (dependency).**
+- [ ] **T2 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:a3e554a0 -->
   Record the endpoint/identifiers OpenAxolotl Game Client needs in this node's config artifacts — coordinate with OpenAxolotl Game Client.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
   ↳ serves (unverified match): REQ-023 "Distinct audio cues play for every capability loss and every regrowth" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-023 "Water and land movement grammars have distinct movement and ambience audio, switching with the grammar transition" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-023 "Gill Mod activation produces a per-mod distinct audio cue" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-023 "Audio assets conform to the Asset Contract including provenance requirements" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T3 — Expose the interface Regeneration and Capability System consumes, per Contract "Audio Event Interface" (dependency).**
+- [ ] **T3 — Expose the interface Regeneration and Capability System consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:438878f7 -->
   Record the endpoint/identifiers Regeneration and Capability System needs in this node's config artifacts — coordinate with Regeneration and Capability System.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T4 — Expose the interface Gill Mod Ability Framework consumes, per Contract "Audio Event Interface" (dependency).**
+- [ ] **T4 — Expose the interface Gill Mod Ability Framework consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:b27187ae -->
   Record the endpoint/identifiers Gill Mod Ability Framework needs in this node's config artifacts — coordinate with Gill Mod Ability Framework.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T5 — Expose the interface Restoration State System consumes, per Contract "Audio Event Interface" (dependency).**
+- [ ] **T5 — Expose the interface Restoration State System consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:1259c312 -->
   Record the endpoint/identifiers Restoration State System needs in this node's config artifacts — coordinate with Restoration State System.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T6 — Expose the interface Axolotl Controller consumes, per Contract "Audio Event Interface" (dependency).**
+- [ ] **T6 — Expose the interface Axolotl Controller consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:379cfe13 -->
   Record the endpoint/identifiers Axolotl Controller needs in this node's config artifacts — coordinate with Axolotl Controller.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T7 — Expose the interface Asset Contract Validator consumes, per Contract "Asset Contract v1" (custom).**
+- [ ] **T7 — Expose the interface Asset Contract Validator consumes, per Contract "Asset Contract v1" (custom).** <!-- t:8c09fb30 -->
   Record the endpoint/identifiers Asset Contract Validator needs in this node's config artifacts — coordinate with Asset Contract Validator.
   Build to the contract schema EXACTLY (see Interface Contracts).
   ↳ serves (unverified match): REQ-023 "Worlds may declare their own music and ambience through the Level Contract, and a world declaring none falls back to defaults rather than silence" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T8 — Expose the interface World: Coral Cove consumes, per Contract "Audio Event Interface" (dependency).**
+- [ ] **T8 — Expose the interface World: Coral Cove consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:5958d6a4 -->
   Record the endpoint/identifiers World: Coral Cove needs in this node's config artifacts — coordinate with World: Coral Cove.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T9 — Expose the interface World: Bubble Bay consumes, per Contract "Audio Event Interface" (dependency).**
+- [ ] **T9 — Expose the interface World: Bubble Bay consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:910ebd52 -->
   Record the endpoint/identifiers World: Bubble Bay needs in this node's config artifacts — coordinate with World: Bubble Bay.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T10 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T10 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T11 — Implement: "Region restoration state changes are accompanied by a corresponding change in ambient soundscape" (REQ-023).**
+- [ ] **T11 — Implement: "Region restoration state changes are accompanied by a corresponding change in ambient soundscape" (REQ-023).** <!-- t:7240d028 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-023 "Region restoration state changes are accompanied by a corresponding change in ambient soundscape"
-- [ ] **T12 — Implement: "Master, music, and effects volumes are independently adjustable and persist across sessions" (REQ-023).**
+- [ ] **T12 — Implement: "Master, music, and effects volumes are independently adjustable and persist across sessions" (REQ-023).** <!-- t:eccb0ba5 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-023 "Master, music, and effects volumes are independently adjustable and persist across sessions"
-- [ ] **T13 — Implement: "Sound design supports the comedic, family-appropriate tone rather than undercutting it" (REQ-023).**
+- [ ] **T13 — Implement: "Sound design supports the comedic, family-appropriate tone rather than undercutting it" (REQ-023).** <!-- t:e3ce4c83 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-023 "Sound design supports the comedic, family-appropriate tone rather than undercutting it"
-- [ ] **T14 — Verify every acceptance criterion above and tick its box.**
+- [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -369,3 +369,9 @@ Startup/initialization order based on edge directions and interaction patterns.
 - World: Coral Cove (initiates Audio Event Interface against this node (dependency))
 - World: Bubble Bay (initiates Audio Event Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-023.tests.md` - Test plan for requirement: Audio System, Music and Sound Design | test-plan | markdown | draft |

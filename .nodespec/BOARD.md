@@ -9,30 +9,30 @@
 | [REQ-004](#req-004--gill-mod-ability-system) — Gill Mod Ability System | 🔵 in-progress | 0/7 | 0/10 | 0/0/0 of 0 | Gill Mod Ability Framework |
 | [REQ-005](#req-005--camera-system) — Camera System | 🔵 in-progress | 0/5 | 0/7 | 0/0/0 of 0 | Camera System |
 | [REQ-006](#req-006--level-contract-v1-specification) — Level Contract v1 Specification | 🔵 in-progress | 0/10 | 0/19 | 0/0/0 of 0 | OpenAxolotl Game Client |
-| [REQ-007](#req-007--level-contract-automated-compliance-checker) — Level Contract Automated Compliance Checker | 🔵 in-progress | 0/8 | 0/0 | 0/0/0 of 0 | Level Contract Compliance Checker |
-| [REQ-008](#req-008--world-restoration-state-system) — World Restoration State System | 🔵 in-progress | 0/8 | 0/0 | 0/0/0 of 0 | Restoration State System |
+| [REQ-007](#req-007--level-contract-automated-compliance-checker) — Level Contract Automated Compliance Checker | 🔵 in-progress | 0/8 | 0/12 | 0/0/0 of 0 | Level Contract Compliance Checker |
+| [REQ-008](#req-008--world-restoration-state-system) — World Restoration State System | 🔵 in-progress | 0/8 | 0/13 | 0/0/0 of 0 | Restoration State System |
 | [REQ-009](#req-009--open-lagoon-hub-and-world-loading) — Open Lagoon Hub and World Loading | 🔵 in-progress | 0/6 | 0/19 | 0/0/0 of 0 | OpenAxolotl Game Client |
-| [REQ-010](#req-010--collectibles-system) — Collectibles System | 🔵 in-progress | 0/6 | 0/0 | 0/0/0 of 0 | Collectibles System |
-| [REQ-011](#req-011--official-mvp-worlds) — Official MVP Worlds | 🔵 in-progress | 0/7 | 0/0 | 0/0/0 of 0 | World: Coral Cove |
+| [REQ-010](#req-010--collectibles-system) — Collectibles System | 🔵 in-progress | 0/6 | 0/8 | 0/0/0 of 0 | Collectibles System |
+| [REQ-011](#req-011--official-mvp-worlds) — Official MVP Worlds | 🔵 in-progress | 0/7 | 0/13 | 0/0/0 of 0 | World: Coral Cove |
 | [REQ-012](#req-012--drift-fleet-enemy-roster) — Drift Fleet Enemy Roster | 🔵 in-progress | 0/7 | 0/10 | 0/0/0 of 0 | Drift Fleet Enemy Framework |
-| [REQ-013](#req-013--flagship-boss-encounter) — Flagship Boss Encounter | 🔵 in-progress | 0/7 | 0/0 | 0/0/0 of 0 | Flagship Boss Encounter |
-| [REQ-014](#req-014--save-system) — Save System | 🔵 in-progress | 0/6 | 0/0 | 0/0/0 of 0 | Save System |
-| [REQ-015](#req-015--asset-contract-and-ai-art-provenance) — Asset Contract and AI-Art Provenance | 🔵 in-progress | 0/7 | 0/0 | 0/0/0 of 0 | Asset Contract Validator |
-| [REQ-016](#req-016--asset-contract-automated-validator) — Asset Contract Automated Validator | 🔵 in-progress | 0/7 | 0/0 | 0/0/0 of 0 | Asset Contract Validator |
+| [REQ-013](#req-013--flagship-boss-encounter) — Flagship Boss Encounter | 🔵 in-progress | 0/7 | 0/7 | 0/0/0 of 0 | Flagship Boss Encounter |
+| [REQ-014](#req-014--save-system) — Save System | 🔵 in-progress | 0/6 | 0/10 | 0/0/0 of 0 | Save System |
+| [REQ-015](#req-015--asset-contract-and-ai-art-provenance) — Asset Contract and AI-Art Provenance | 🔵 in-progress | 0/7 | 0/7 | 0/0/0 of 0 | Asset Contract Validator |
+| [REQ-016](#req-016--asset-contract-automated-validator) — Asset Contract Automated Validator | 🔵 in-progress | 0/7 | 0/7 | 0/0/0 of 0 | Asset Contract Validator |
 | [REQ-017](#req-017--ai-agent-contributor-workflow-and-documentation) — AI-Agent Contributor Workflow and Documentation | 🔵 in-progress | 0/6 | 0/19 | 0/0/0 of 0 | OpenAxolotl Game Client |
 | [REQ-018](#req-018--pc-build-and-distribution) — PC Build and Distribution | 🔵 in-progress | 0/6 | 0/11 | 0/0/0 of 0 | CI Pipeline |
 | [REQ-019](#req-019--kid-appropriate-tone-and-accessibility) — Kid-Appropriate Tone and Accessibility | 🔵 in-progress | 0/6 | 0/12 | 0/0/0 of 0 | Regeneration and Capability System |
-| [REQ-020](#req-020--community-lagoon-submission-pipeline-post-mvp) — Community Lagoon Submission Pipeline (Post-MVP) | 🔵 in-progress | 0/8 | 0/0 | 0/0/0 of 0 | World Static Analysis Gate |
+| [REQ-020](#req-020--community-lagoon-submission-pipeline-post-mvp) — Community Lagoon Submission Pipeline (Post-MVP) | 🔵 in-progress | 0/8 | 0/28 | 0/0/0 of 0 | World Static Analysis Gate |
 | [REQ-021](#req-021--licensing-policy--code-assets-and-ai-provenance) — Licensing Policy — Code, Assets, and AI Provenance | ⬜ pending | 0/5 | 0/0 | 0/0/0 of 0 | — |
 | [REQ-022](#req-022--player-hud-and-game-state-readout) — Player HUD and Game-State Readout | 🔵 in-progress | 0/7 | 0/9 | 0/0/0 of 0 | Player HUD |
-| [REQ-023](#req-023--audio-system-music-and-sound-design) — Audio System, Music and Sound Design | 🔵 in-progress | 0/8 | 0/0 | 0/0/0 of 0 | Audio System |
-| [REQ-024](#req-024--input-and-control-scheme) — Input and Control Scheme | 🔵 in-progress | 0/7 | 0/0 | 0/0/0 of 0 | Input System |
+| [REQ-023](#req-023--audio-system-music-and-sound-design) — Audio System, Music and Sound Design | 🔵 in-progress | 0/8 | 0/14 | 0/0/0 of 0 | Audio System |
+| [REQ-024](#req-024--input-and-control-scheme) — Input and Control Scheme | 🔵 in-progress | 0/7 | 0/9 | 0/0/0 of 0 | Input System |
 | [REQ-025](#req-025--balance-and-tuning-configuration) — Balance and Tuning Configuration | 🔵 in-progress | 0/7 | 0/12 | 0/0/0 of 0 | Balance and Tuning Data |
-| [REQ-026](#req-026--automated-test-suite-and-test-harness) — Automated Test Suite and Test Harness | 🔵 in-progress | 0/7 | 0/0 | 0/0/0 of 0 | Test Harness and Fixtures |
+| [REQ-026](#req-026--automated-test-suite-and-test-harness) — Automated Test Suite and Test Harness | 🔵 in-progress | 0/7 | 0/9 | 0/0/0 of 0 | Test Harness and Fixtures |
 | [REQ-027](#req-027--performance-targets) — Performance Targets | 🔵 in-progress | 0/6 | 0/19 | 0/0/0 of 0 | OpenAxolotl Game Client |
-| [REQ-028](#req-028--official-world-bubble-bay) — Official World: Bubble Bay | 🔵 in-progress | 0/8 | 0/0 | 0/0/0 of 0 | World: Bubble Bay |
-| [REQ-029](#req-029--reference-template-world) — Reference Template World | 🔵 in-progress | 0/8 | 0/0 | 0/0/0 of 0 | World: Reference Template |
-| [REQ-030](#req-030--no-multiplayer--enforced-single-player-constraint) — No Multiplayer — Enforced Single-Player Constraint | 🔵 in-progress | 0/8 | 0/0 | 0/0/0 of 0 | World Static Analysis Gate |
+| [REQ-028](#req-028--official-world-bubble-bay) — Official World: Bubble Bay | 🔵 in-progress | 0/8 | 0/15 | 0/0/0 of 0 | World: Bubble Bay |
+| [REQ-029](#req-029--reference-template-world) — Reference Template World | 🔵 in-progress | 0/8 | 0/7 | 0/0/0 of 0 | World: Reference Template |
+| [REQ-030](#req-030--no-multiplayer--enforced-single-player-constraint) — No Multiplayer — Enforced Single-Player Constraint | 🔵 in-progress | 0/8 | 0/28 | 0/0/0 of 0 | World Static Analysis Gate |
 
 ## REQ-001 — Axolotl Character Controller — Dual Movement Grammars <!-- r:REQ-001 -->
 status: in-progress · criteria 0/7 · tasks 0/14 · tests 0/0/0 of 0
@@ -196,20 +196,38 @@ status: in-progress · criteria 0/10 · tasks 0/19 · tests 0/0/0 of 0
 ### Tests — .nodespec/tests/req-006.tests.md
 
 ## REQ-007 — Level Contract Automated Compliance Checker <!-- r:REQ-007 -->
-status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
+status: in-progress · criteria 0/8 · tasks 0/12 · tests 0/0/0 of 0
 ### Criteria
 - [ ] Checker loads the Level Contract schema file as its source of truth and validates presence and well-formedness of every required element it declares
 - [ ] Checker validates a world's declared contract version and rejects a world targeting an unsupported version
 - [ ] Checker validates world module directory layout and naming convention
+  ↳ tasks: T7 ☐ (Level Contract Compliance Checker)
 - [ ] Failure output names the specific failing element, its file location, and the violated rule, emitted as structured machine-readable output an AI coding agent can parse
+  ↳ tasks: T8 ☐ (Level Contract Compliance Checker)
 - [ ] Checker exits with a non-zero status on failure and zero on success
+  ↳ tasks: T9 ☐ (Level Contract Compliance Checker)
 - [ ] Checker is runnable locally with a single documented command
+  ↳ tasks: T10 ☐ (Level Contract Compliance Checker)
 - [ ] A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it
+  ↳ tasks: T11 ☐ (Level Contract Compliance Checker)
 - [ ] Adding a new rule to the contract schema changes checker behavior without any code change to the checker
+### Tasks — Level Contract Compliance Checker <!-- n:22222222-0000-4000-8000-000000000013 -->
+- [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
+- [ ] **T2 — Implement the integration with World: Coral Cove (godot) per Contract "Level Contract v1" (dependency).** <!-- t:bd68a2e3 -->
+- [ ] **T3 — Implement the integration with World: Bubble Bay (godot) per Contract "Level Contract v1" (dependency).** <!-- t:04060a69 -->
+- [ ] **T4 — Implement the integration with Test Harness and Fixtures (python-backend) per Contract "Shared Test Fixtures" (dependency).** <!-- t:7d12e948 -->
+- [ ] **T5 — Implement the integration with World: Reference Template (godot) per Contract "Level Contract v1" (dependency).** <!-- t:d6a167a4 -->
+- [ ] **T6 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).** <!-- t:a39cc42a -->
+- [ ] **T7 — Implement: "Checker validates world module directory layout and naming convention" (REQ-007).** <!-- t:79b9e9b6 -->
+- [ ] **T8 — Implement: "Failure output names the specific failing element, its file location, and the violated rule, emitted as structured machine-readable output an AI coding agent can parse" (REQ-007).** <!-- t:c9ec3bbd -->
+- [ ] **T9 — Implement: "Checker exits with a non-zero status on failure and zero on success" (REQ-007).** <!-- t:ef232550 -->
+- [ ] **T10 — Implement: "Checker is runnable locally with a single documented command" (REQ-007).** <!-- t:49f81077 -->
+- [ ] **T11 — Implement: "A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it" (REQ-007).** <!-- t:d30c83d8 -->
+- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-007.tests.md
 
 ## REQ-008 — World Restoration State System <!-- r:REQ-008 -->
-status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
+status: in-progress · criteria 0/8 · tasks 0/13 · tests 0/0/0 of 0
 ### Criteria
 - [ ] A region exposes a queryable restoration state with exactly the progression barren, resourced, restored, and a separate boolean unlocked flag
 - [ ] A region whose unlocked flag is false cannot advance out of barren regardless of resources delivered
@@ -219,6 +237,21 @@ status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Reverting a region to barren leaves its unlocked flag set, so restoration can be redone without refighting the Flagship
 - [ ] A world declares its restorable regions declaratively through the Level Contract rather than through bespoke scripting
 - [ ] The broken-to-restored transformation is visually dramatic and satisfying in hands-on play
+  ↳ tasks: T12 ☐ (Restoration State System)
+### Tasks — Restoration State System <!-- n:22222222-0000-4000-8000-000000000008 -->
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
+- [ ] **T2 — Implement the integration with Save System (godot) per Contract "Save Integration Interface" (dependency).** <!-- t:bcbdac74 -->
+- [ ] **T3 — Implement the integration with Audio System (godot) per Contract "Audio Event Interface" (dependency).** <!-- t:218035d2 -->
+- [ ] **T4 — Implement the integration with Balance and Tuning Data (godot) per Contract "Tuning Data Interface" (dependency).** <!-- t:03c75344 -->
+- [ ] **T5 — Expose the interface Collectibles System consumes, per Contract "Restoration Region Interface" (dependency).** <!-- t:e38c9912 -->
+- [ ] **T6 — Expose the interface Drift Fleet Enemy Framework consumes, per Contract "Restoration Region Interface" (dependency).** <!-- t:cd966a9d -->
+- [ ] **T7 — Expose the interface World: Coral Cove consumes, per Contract "Restoration Region Interface" (dependency).** <!-- t:7a4f7070 -->
+- [ ] **T8 — Expose the interface World: Bubble Bay consumes, per Contract "Restoration Region Interface" (dependency).** <!-- t:4245b3fe -->
+- [ ] **T9 — Expose the interface Player HUD consumes, per Contract "HUD State Interface" (dependency).** <!-- t:3e14fc4a -->
+- [ ] **T10 — Expose the interface Flagship Boss Encounter consumes, per Contract "Restoration Region Interface" (dependency).** <!-- t:db3d4e32 -->
+- [ ] **T11 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
+- [ ] **T12 — Implement: "The broken-to-restored transformation is visually dramatic and satisfying in hands-on play" (REQ-008).** <!-- t:65920f8b -->
+- [ ] **T13 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-008.tests.md
 
 ## REQ-009 — Open Lagoon Hub and World Loading <!-- r:REQ-009 -->
@@ -253,18 +286,28 @@ status: in-progress · criteria 0/6 · tasks 0/19 · tests 0/0/0 of 0
 ### Tests — .nodespec/tests/req-009.tests.md
 
 ## REQ-010 — Collectibles System <!-- r:REQ-010 -->
-status: in-progress · criteria 0/6 · tasks 0/0 · tests 0/0/0 of 0
+status: in-progress · criteria 0/6 · tasks 0/8 · tests 0/0/0 of 0
 ### Criteria
 - [ ] Restoration resources are collectible and are consumed to advance a region's restoration state
 - [ ] Discovery collectibles are collectible, counted per world, and persisted to the profile
 - [ ] Collected state persists through the save-integration interface across sessions
 - [ ] Collected state survives losing all lives and respawning at a checkpoint, so collection is never lost to the life layer
+  ↳ tasks: T7 ☐ (Collectibles System)
 - [ ] A world declaring no collectibles remains contract-valid and fully completable
 - [ ] Worlds declare collectibles declaratively through the Level Contract optional element rather than through bespoke scripting
+### Tasks — Collectibles System <!-- n:22222222-0000-4000-8000-000000000009 -->
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
+- [ ] **T2 — Implement the integration with Restoration State System (godot) per Contract "Restoration Region Interface" (dependency).** <!-- t:b339696f -->
+- [ ] **T3 — Implement the integration with Save System (godot) per Contract "Save Integration Interface" (dependency).** <!-- t:bcbdac74 -->
+- [ ] **T4 — Expose the interface World: Coral Cove consumes, per Contract "Collectible Registration Interface" (dependency).** <!-- t:42732291 -->
+- [ ] **T5 — Expose the interface World: Bubble Bay consumes, per Contract "Collectible Registration Interface" (dependency).** <!-- t:f2860287 -->
+- [ ] **T6 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
+- [ ] **T7 — Implement: "Collected state survives losing all lives and respawning at a checkpoint, so collection is never lost to the life layer" (REQ-010).** <!-- t:1c6045bc -->
+- [ ] **T8 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-010.tests.md
 
 ## REQ-011 — Official MVP Worlds <!-- r:REQ-011 -->
-status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
+status: in-progress · criteria 0/7 · tasks 0/13 · tests 0/0/0 of 0
 ### Criteria
 - [ ] At least two official worlds are implemented, each passing the Level Contract compliance checker
 - [ ] Each official world is completable from spawn to finish condition
@@ -273,6 +316,20 @@ status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Each official world contains at least one mandatory traversal challenge gated on a specific Gill Mod, and across the official set all three MVP mods are each required by at least one world
 - [ ] Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen
 - [ ] Each world is fun to play through and delivers a satisfying broken-to-restored payoff
+### Tasks — World: Coral Cove <!-- n:22222222-0000-4000-8000-000000000011 -->
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
+- [ ] **T2 — Implement the integration with Restoration State System (godot) per Contract "Restoration Region Interface" (dependency).** <!-- t:b339696f -->
+- [ ] **T3 — Implement the integration with Drift Fleet Enemy Framework (godot) per Contract "Enemy Registration Interface" (dependency).** <!-- t:091d8bdf -->
+- [ ] **T4 — Implement the integration with Gill Mod Ability Framework (godot) per Contract "Gill Mod Registration Interface" (dependency).** <!-- t:9ef5b42c -->
+- [ ] **T5 — Implement the integration with Collectibles System (godot) per Contract "Collectible Registration Interface" (dependency).** <!-- t:9bc134aa -->
+- [ ] **T6 — Implement the integration with Flagship Boss Encounter (godot) per Contract "Enemy Registration Interface" (dependency).** <!-- t:1f8b6190 -->
+- [ ] **T7 — Implement the integration with Camera System (godot) per Contract "Camera Hint Interface" (dependency).** <!-- t:e3e65073 -->
+- [ ] **T8 — Implement the integration with Save System (godot) per Contract "Save Integration Interface" (dependency).** <!-- t:bcbdac74 -->
+- [ ] **T9 — Implement the integration with Audio System (godot) per Contract "Audio Event Interface" (dependency).** <!-- t:218035d2 -->
+- [ ] **T10 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Level Contract v1" (dependency).** <!-- t:99890668 -->
+- [ ] **T11 — Expose the interface Level Contract Compliance Checker consumes, per Contract "Level Contract v1" (dependency).** <!-- t:87778b5e -->
+- [ ] **T12 — Expose the interface World Static Analysis Gate consumes, per Contract "Sanctioned World API Surface" (dependency).** <!-- t:a14fa597 -->
+- [ ] **T13 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-011.tests.md
 
 ## REQ-012 — Drift Fleet Enemy Roster <!-- r:REQ-012 -->
@@ -299,7 +356,7 @@ status: in-progress · criteria 0/7 · tasks 0/10 · tests 0/0/0 of 0
 ### Tests — .nodespec/tests/req-012.tests.md
 
 ## REQ-013 — Flagship Boss Encounter <!-- r:REQ-013 -->
-status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
+status: in-progress · criteria 0/7 · tasks 0/7 · tests 0/0/0 of 0
 ### Criteria
 - [ ] Flagship ordinary attacks strip capability, and its designated finishing moves decrement a life
 - [ ] Defeating the Flagship sets its region's restoration unlocked flag, permitting restoration to begin
@@ -308,10 +365,18 @@ status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Checkpoints within the encounter restore lives and capability state and resume the encounter at the last completed phase rather than from its start
 - [ ] A world declaring no boss remains contract-valid and fully completable
 - [ ] The encounter reads as a climactic set piece and its restoration payoff lands
+### Tasks — Flagship Boss Encounter <!-- n:22222222-0000-4000-8000-000000000021 -->
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
+- [ ] **T2 — Implement the integration with Drift Fleet Enemy Framework (godot) per Contract "Enemy Registration Interface" (dependency).** <!-- t:091d8bdf -->
+- [ ] **T3 — Implement the integration with Restoration State System (godot) per Contract "Restoration Region Interface" (dependency).** <!-- t:b339696f -->
+- [ ] **T4 — Implement the integration with Lives and Checkpoint System (godot) per Contract "Checkpoint and Life Interface" (dependency).** <!-- t:25e4d91d -->
+- [ ] **T5 — Expose the interface World: Coral Cove consumes, per Contract "Enemy Registration Interface" (dependency).** <!-- t:26bebacb -->
+- [ ] **T6 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
+- [ ] **T7 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-013.tests.md
 
 ## REQ-014 — Save System <!-- r:REQ-014 -->
-status: in-progress · criteria 0/6 · tasks 0/0 · tests 0/0/0 of 0
+status: in-progress · criteria 0/6 · tasks 0/10 · tests 0/0/0 of 0
 ### Criteria
 - [ ] Save persists world unlock/completion state, per-world restoration state and unlocked flags, collectibles, unlocked Gill Mods, and last checkpoint
 - [ ] Worlds write and read save data exclusively through the defined save-integration interface, never touching the save file directly
@@ -319,22 +384,42 @@ status: in-progress · criteria 0/6 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Loading a save whose world module has changed its contract-visible state applies the documented save-compatibility policy and leaves the profile readable
 - [ ] Save file format carries a version field and a defined upgrade path across format versions
 - [ ] Save-compatibility policy for forked and divergent worlds is decided and documented
+### Tasks — Save System <!-- n:22222222-0000-4000-8000-000000000007 -->
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
+- [ ] **T2 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Save Integration Interface" (dependency).** <!-- t:cb40db8d -->
+- [ ] **T3 — Expose the interface Lives and Checkpoint System consumes, per Contract "Save Integration Interface" (dependency).** <!-- t:a041b2c2 -->
+- [ ] **T4 — Expose the interface Restoration State System consumes, per Contract "Save Integration Interface" (dependency).** <!-- t:9852989b -->
+- [ ] **T5 — Expose the interface Collectibles System consumes, per Contract "Save Integration Interface" (dependency).** <!-- t:a0a401c7 -->
+- [ ] **T6 — Expose the interface World: Coral Cove consumes, per Contract "Save Integration Interface" (dependency).** <!-- t:3b780d31 -->
+- [ ] **T7 — Expose the interface World: Bubble Bay consumes, per Contract "Save Integration Interface" (dependency).** <!-- t:11b748db -->
+- [ ] **T8 — Expose the interface World: Reference Template consumes, per Contract "Save Integration Interface" (dependency).** <!-- t:ee05929c -->
+- [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
+- [ ] **T10 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-014.tests.md
 
 ## REQ-015 — Asset Contract and AI-Art Provenance <!-- r:REQ-015 -->
-status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
+status: in-progress · criteria 0/7 · tasks 0/7 · tests 0/0/0 of 0
 ### Criteria
 - [ ] Asset Contract specifies required file types, resolution/format constraints, and alpha-channel handling per asset category
 - [ ] Asset Contract specifies the asset directory layout and naming convention
 - [ ] Every asset requires a provenance.json recording author, generation method, and applicable license terms
 - [ ] AI-generated assets additionally record the generation tool and the prompt used; these fields are not required for hand-authored assets
 - [ ] provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly
+  ↳ tasks: T6 ☐ (Asset Contract Validator)
 - [ ] Contract documents the style and art-direction expectations a human maintainer reviews against
 - [ ] A contributor can produce a conforming asset from the Asset Contract document alone
+### Tasks — Asset Contract Validator <!-- n:22222222-0000-4000-8000-000000000014 -->
+- [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
+- [ ] **T2 — Implement the integration with OpenAxolotl Game Client (godot) per Contract "Asset Contract v1" (custom).** <!-- t:33a614a7 -->
+- [ ] **T3 — Implement the integration with Audio System (godot) per Contract "Asset Contract v1" (custom).** <!-- t:1ee9a25e -->
+- [ ] **T4 — Implement the integration with Test Harness and Fixtures (python-backend) per Contract "Shared Test Fixtures" (dependency).** <!-- t:7d12e948 -->
+- [ ] **T5 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).** <!-- t:a39cc42a -->
+- [ ] **T6 — Implement: "provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly" (REQ-015).** <!-- t:a4f99d10 -->
+- [ ] **T7 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-015.tests.md
 
 ## REQ-016 — Asset Contract Automated Validator <!-- r:REQ-016 -->
-status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
+status: in-progress · criteria 0/7 · tasks 0/7 · tests 0/0/0 of 0
 ### Criteria
 - [ ] Validator checks file type, resolution, format, and alpha-channel conformance per asset category
 - [ ] Validator checks directory placement and naming convention conformance
@@ -343,6 +428,14 @@ status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] Validator exits non-zero on failure and runs as a required CI check on every pull request touching assets
 - [ ] Validator is runnable locally with a single documented command
 - [ ] A deliberately non-conforming fixture asset fails validation and conforming official assets pass
+### Tasks — Asset Contract Validator <!-- n:22222222-0000-4000-8000-000000000014 -->
+- [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
+- [ ] **T2 — Implement the integration with OpenAxolotl Game Client (godot) per Contract "Asset Contract v1" (custom).** <!-- t:33a614a7 -->
+- [ ] **T3 — Implement the integration with Audio System (godot) per Contract "Asset Contract v1" (custom).** <!-- t:1ee9a25e -->
+- [ ] **T4 — Implement the integration with Test Harness and Fixtures (python-backend) per Contract "Shared Test Fixtures" (dependency).** <!-- t:7d12e948 -->
+- [ ] **T5 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).** <!-- t:a39cc42a -->
+- [ ] **T6 — Implement: "provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly" (REQ-015).** <!-- t:a4f99d10 -->
+- [ ] **T7 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-016.tests.md
 
 ## REQ-017 — AI-Agent Contributor Workflow and Documentation <!-- r:REQ-017 -->
@@ -428,16 +521,49 @@ status: in-progress · criteria 0/6 · tasks 0/12 · tests 0/0/0 of 0
 ### Tests — .nodespec/tests/req-019.tests.md
 
 ## REQ-020 — Community Lagoon Submission Pipeline (Post-MVP) <!-- r:REQ-020 -->
-status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
+status: in-progress · criteria 0/8 · tasks 0/28 · tests 0/0/0 of 0
 ### Criteria
 - [ ] Every submission passes automated contract-compliance and content-policy pre-screening before human review
 - [ ] Static analysis rejects any community world script calling filesystem, network, OS-execution, or dynamic-evaluation APIs, or otherwise reaching outside the sanctioned world API surface defined by the Level Contract
 - [ ] A deliberately malicious fixture world attempting each forbidden call class is rejected by the static-analysis gate
 - [ ] Every submission requires explicit human maintainer approval before merge, enforced by branch protection with no automated-only merge path
+  ↳ tasks: T22 ☐ (World Static Analysis Gate)
 - [ ] Accepted community worlds are packaged and surfaced in the hub as Community Lagoon portals credited to their author
 - [ ] Portal tiering distinguishes Official, Community, and Experimental Lagoons
+  ↳ tasks: T23 ☐ (World Static Analysis Gate)
 - [ ] Pipeline opens only after Level Contract v1 is declared frozen
+  ↳ tasks: T24 ☐ (World Static Analysis Gate)
 - [ ] Content guidelines and the maintainer review checklist are documented for a family-audience bar
+  ↳ tasks: T25 ☐ (World Static Analysis Gate)
+### Tasks — World Static Analysis Gate <!-- n:22222222-0000-4000-8000-000000000022 -->
+- [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
+- [ ] **T2 — Implement the integration with World: Coral Cove (godot) per Contract "Sanctioned World API Surface" (dependency).** <!-- t:77966695 -->
+- [ ] **T3 — Implement the integration with World: Bubble Bay (godot) per Contract "Sanctioned World API Surface" (dependency).** <!-- t:e89d6a3b -->
+- [ ] **T4 — Implement the integration with Test Harness and Fixtures (python-backend) per Contract "Shared Test Fixtures" (dependency).** <!-- t:7d12e948 -->
+- [ ] **T5 — Implement the integration with World: Reference Template (godot) per Contract "Sanctioned World API Surface" (dependency).** <!-- t:399a52b4 -->
+- [ ] **T6 — Implement the integration with OpenAxolotl Game Client (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:a43ca1c2 -->
+- [ ] **T7 — Implement the integration with Axolotl Controller (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:546745c9 -->
+- [ ] **T8 — Implement the integration with Input System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:bd31611d -->
+- [ ] **T9 — Implement the integration with Save System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:a9445cde -->
+- [ ] **T10 — Implement the integration with Camera System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:ef1a4794 -->
+- [ ] **T11 — Implement the integration with Regeneration and Capability System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:e9c4ec1d -->
+- [ ] **T12 — Implement the integration with Lives and Checkpoint System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:981e0017 -->
+- [ ] **T13 — Implement the integration with Gill Mod Ability Framework (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:62d73ed0 -->
+- [ ] **T14 — Implement the integration with Restoration State System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:fe53cd74 -->
+- [ ] **T15 — Implement the integration with Collectibles System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:52cba5a0 -->
+- [ ] **T16 — Implement the integration with Drift Fleet Enemy Framework (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:974ec999 -->
+- [ ] **T17 — Implement the integration with Player HUD (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:73051846 -->
+- [ ] **T18 — Implement the integration with Audio System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:6ce65853 -->
+- [ ] **T19 — Implement the integration with Balance and Tuning Data (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:1662a95a -->
+- [ ] **T20 — Implement the integration with Flagship Boss Encounter (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:ea212880 -->
+- [ ] **T21 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).** <!-- t:a39cc42a -->
+- [ ] **T22 — Implement: "Every submission requires explicit human maintainer approval before merge, enforced by branch protection with no automated-only merge path" (REQ-020).** <!-- t:acff5839 -->
+- [ ] **T23 — Implement: "Portal tiering distinguishes Official, Community, and Experimental Lagoons" (REQ-020).** <!-- t:ace3d125 -->
+- [ ] **T24 — Implement: "Pipeline opens only after Level Contract v1 is declared frozen" (REQ-020).** <!-- t:82d1202c -->
+- [ ] **T25 — Implement: "Content guidelines and the maintainer review checklist are documented for a family-audience bar" (REQ-020).** <!-- t:1ef7c7b6 -->
+- [ ] **T26 — Implement: "project.godot declares no networking or multiplayer autoloads, peer configuration, or network-related project settings" (REQ-030).** <!-- t:528ceeb3 -->
+- [ ] **T27 — Implement: "No architecture node is a game server, and no networking or multiplayer service appears anywhere in the project's technology set" (REQ-030).** <!-- t:207ac8e5 -->
+- [ ] **T28 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-020.tests.md
 
 ## REQ-021 — Licensing Policy — Code, Assets, and AI Provenance <!-- r:REQ-021 -->
@@ -473,28 +599,60 @@ status: in-progress · criteria 0/7 · tasks 0/9 · tests 0/0/0 of 0
 ### Tests — .nodespec/tests/req-022.tests.md
 
 ## REQ-023 — Audio System, Music and Sound Design <!-- r:REQ-023 -->
-status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
+status: in-progress · criteria 0/8 · tasks 0/14 · tests 0/0/0 of 0
 ### Criteria
 - [ ] Distinct audio cues play for every capability loss and every regrowth
 - [ ] Water and land movement grammars have distinct movement and ambience audio, switching with the grammar transition
 - [ ] Region restoration state changes are accompanied by a corresponding change in ambient soundscape
+  ↳ tasks: T11 ☐ (Audio System)
 - [ ] Gill Mod activation produces a per-mod distinct audio cue
 - [ ] Worlds may declare their own music and ambience through the Level Contract, and a world declaring none falls back to defaults rather than silence
 - [ ] Master, music, and effects volumes are independently adjustable and persist across sessions
+  ↳ tasks: T12 ☐ (Audio System)
 - [ ] Audio assets conform to the Asset Contract including provenance requirements
 - [ ] Sound design supports the comedic, family-appropriate tone rather than undercutting it
+  ↳ tasks: T13 ☐ (Audio System)
+### Tasks — Audio System <!-- n:22222222-0000-4000-8000-000000000017 -->
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
+- [ ] **T2 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:a3e554a0 -->
+- [ ] **T3 — Expose the interface Regeneration and Capability System consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:438878f7 -->
+- [ ] **T4 — Expose the interface Gill Mod Ability Framework consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:b27187ae -->
+- [ ] **T5 — Expose the interface Restoration State System consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:1259c312 -->
+- [ ] **T6 — Expose the interface Axolotl Controller consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:379cfe13 -->
+- [ ] **T7 — Expose the interface Asset Contract Validator consumes, per Contract "Asset Contract v1" (custom).** <!-- t:8c09fb30 -->
+- [ ] **T8 — Expose the interface World: Coral Cove consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:5958d6a4 -->
+- [ ] **T9 — Expose the interface World: Bubble Bay consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:910ebd52 -->
+- [ ] **T10 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
+- [ ] **T11 — Implement: "Region restoration state changes are accompanied by a corresponding change in ambient soundscape" (REQ-023).** <!-- t:7240d028 -->
+- [ ] **T12 — Implement: "Master, music, and effects volumes are independently adjustable and persist across sessions" (REQ-023).** <!-- t:eccb0ba5 -->
+- [ ] **T13 — Implement: "Sound design supports the comedic, family-appropriate tone rather than undercutting it" (REQ-023).** <!-- t:e3ce4c83 -->
+- [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-023.tests.md
 
 ## REQ-024 — Input and Control Scheme <!-- r:REQ-024 -->
-status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
+status: in-progress · criteria 0/7 · tasks 0/9 · tests 0/0/0 of 0
 ### Criteria
 - [ ] Every player verb is bound in both a keyboard-and-mouse scheme and a gamepad scheme
 - [ ] Bindings are context-sensitive by movement grammar, so water-only and land-only verbs may share a physical input without conflict
 - [ ] Every binding is remappable, and remapped bindings persist across sessions
+  ↳ tasks: T5 ☐ (Input System)
 - [ ] Rebinding rejects a conflicting assignment within the same context rather than silently overriding it
+  ↳ tasks: T6 ☐ (Input System)
 - [ ] Switching between keyboard and gamepad mid-session is handled without requiring a restart, and on-screen prompts follow the active device
+  ↳ tasks: T7 ☐ (Input System)
 - [ ] Worlds read player intent through the controller interface and never read raw input directly
 - [ ] The full verb set is playable without modal overload or uncomfortable finger contortion
+  ↳ tasks: T8 ☐ (Input System)
+### Tasks — Input System <!-- n:22222222-0000-4000-8000-000000000018 -->
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
+- [ ] **T2 — Implement the integration with Axolotl Controller (godot) per Contract "Player Input Interface" (dependency).** <!-- t:5edd7a53 -->
+- [ ] **T3 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Player Input Interface" (dependency).** <!-- t:f6257813 -->
+- [ ] **T4 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
+- [ ] **T5 — Implement: "Every binding is remappable, and remapped bindings persist across sessions" (REQ-024).** <!-- t:c1fe8388 -->
+- [ ] **T6 — Implement: "Rebinding rejects a conflicting assignment within the same context rather than silently overriding it" (REQ-024).** <!-- t:fb4356c2 -->
+- [ ] **T7 — Implement: "Switching between keyboard and gamepad mid-session is handled without requiring a restart, and on-screen prompts follow the active device" (REQ-024).** <!-- t:b5f0609a -->
+- [ ] **T8 — Implement: "The full verb set is playable without modal overload or uncomfortable finger contortion" (REQ-024).** <!-- t:789ff73c -->
+- [ ] **T9 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-024.tests.md
 
 ## REQ-025 — Balance and Tuning Configuration <!-- r:REQ-025 -->
@@ -525,15 +683,27 @@ status: in-progress · criteria 0/7 · tasks 0/12 · tests 0/0/0 of 0
 ### Tests — .nodespec/tests/req-025.tests.md
 
 ## REQ-026 — Automated Test Suite and Test Harness <!-- r:REQ-026 -->
-status: in-progress · criteria 0/7 · tasks 0/0 · tests 0/0/0 of 0
+status: in-progress · criteria 0/7 · tasks 0/9 · tests 0/0/0 of 0
 ### Criteria
 - [ ] The suite runs headless with a single documented command and exits non-zero on any failure
+  ↳ tasks: T7 ☐ (Test Harness and Fixtures)
 - [ ] Unit tests cover the capability, lives, restoration, ability-registration, and save-interface logic
 - [ ] Integration tests exercise each system against the controller and save-integration interfaces rather than in isolation only
 - [ ] A headless playthrough smoke test drives an official world from spawn to finish condition and asserts completion
 - [ ] Named fixtures exist for a conforming world, a non-conforming world, a malicious world, a conforming asset, and a non-conforming asset, and are shared by the checker, validator, and static-analysis tests
 - [ ] Test output identifies the failing requirement or criterion it maps to, so a contributor or agent can locate what broke
 - [ ] The suite runs in CI on every pull request
+  ↳ tasks: T8 ☐ (Test Harness and Fixtures)
+### Tasks — Test Harness and Fixtures <!-- n:22222222-0000-4000-8000-000000000020 -->
+- [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
+- [ ] **T2 — Implement the integration with OpenAxolotl Game Client (godot) per Contract "Core Module Dependency" (dependency).** <!-- t:06ec8f9a -->
+- [ ] **T3 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).** <!-- t:a39cc42a -->
+- [ ] **T4 — Expose the interface Level Contract Compliance Checker consumes, per Contract "Shared Test Fixtures" (dependency).** <!-- t:7575f84a -->
+- [ ] **T5 — Expose the interface Asset Contract Validator consumes, per Contract "Shared Test Fixtures" (dependency).** <!-- t:159e5c24 -->
+- [ ] **T6 — Expose the interface World Static Analysis Gate consumes, per Contract "Shared Test Fixtures" (dependency).** <!-- t:8b32d9ab -->
+- [ ] **T7 — Implement: "The suite runs headless with a single documented command and exits non-zero on any failure" (REQ-026).** <!-- t:4d9f8c5b -->
+- [ ] **T8 — Implement: "The suite runs in CI on every pull request" (REQ-026).** <!-- t:2f756ac8 -->
+- [ ] **T9 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-026.tests.md
 
 ## REQ-027 — Performance Targets <!-- r:REQ-027 -->
@@ -570,20 +740,39 @@ status: in-progress · criteria 0/6 · tasks 0/19 · tests 0/0/0 of 0
 ### Tests — .nodespec/tests/req-027.tests.md
 
 ## REQ-028 — Official World: Bubble Bay <!-- r:REQ-028 -->
-status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
+status: in-progress · criteria 0/8 · tasks 0/15 · tests 0/0/0 of 0
 ### Criteria
 - [ ] Bubble Bay passes the Level Contract compliance checker
 - [ ] Bubble Bay passes the World Static Analysis Gate, calling only the sanctioned world API surface
 - [ ] Bubble Bay is completable from spawn to finish condition
+  ↳ tasks: T12 ☐ (World: Bubble Bay)
 - [ ] Bubble Bay exercises both movement grammars and contains at least one restorable region
 - [ ] Bubble Bay contains at least one mandatory traversal challenge gated on a Gill Mod that Coral Cove does not emphasize
 - [ ] Bubble Bay declares no boss and remains contract-valid and fully completable, proving the optional-boss path
 - [ ] Bubble Bay sustains the documented frame-rate target on the baseline specification during normal traversal
+  ↳ tasks: T13 ☐ (World: Bubble Bay)
 - [ ] Bubble Bay is fun to play through and delivers a satisfying broken-to-restored payoff
+  ↳ tasks: T14 ☐ (World: Bubble Bay)
+### Tasks — World: Bubble Bay <!-- n:22222222-0000-4000-8000-000000000012 -->
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
+- [ ] **T2 — Implement the integration with Restoration State System (godot) per Contract "Restoration Region Interface" (dependency).** <!-- t:b339696f -->
+- [ ] **T3 — Implement the integration with Drift Fleet Enemy Framework (godot) per Contract "Enemy Registration Interface" (dependency).** <!-- t:091d8bdf -->
+- [ ] **T4 — Implement the integration with Gill Mod Ability Framework (godot) per Contract "Gill Mod Registration Interface" (dependency).** <!-- t:9ef5b42c -->
+- [ ] **T5 — Implement the integration with Collectibles System (godot) per Contract "Collectible Registration Interface" (dependency).** <!-- t:9bc134aa -->
+- [ ] **T6 — Implement the integration with Camera System (godot) per Contract "Camera Hint Interface" (dependency).** <!-- t:e3e65073 -->
+- [ ] **T7 — Implement the integration with Save System (godot) per Contract "Save Integration Interface" (dependency).** <!-- t:bcbdac74 -->
+- [ ] **T8 — Implement the integration with Audio System (godot) per Contract "Audio Event Interface" (dependency).** <!-- t:218035d2 -->
+- [ ] **T9 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Level Contract v1" (dependency).** <!-- t:99890668 -->
+- [ ] **T10 — Expose the interface Level Contract Compliance Checker consumes, per Contract "Level Contract v1" (dependency).** <!-- t:87778b5e -->
+- [ ] **T11 — Expose the interface World Static Analysis Gate consumes, per Contract "Sanctioned World API Surface" (dependency).** <!-- t:a14fa597 -->
+- [ ] **T12 — Implement: "Bubble Bay is completable from spawn to finish condition" (REQ-028).** <!-- t:ce77b10c -->
+- [ ] **T13 — Implement: "Bubble Bay sustains the documented frame-rate target on the baseline specification during normal traversal" (REQ-028).** <!-- t:d531be48 -->
+- [ ] **T14 — Implement: "Bubble Bay is fun to play through and delivers a satisfying broken-to-restored payoff" (REQ-028).** <!-- t:47acb3d7 -->
+- [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-028.tests.md
 
 ## REQ-029 — Reference Template World <!-- r:REQ-029 -->
-status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
+status: in-progress · criteria 0/8 · tasks 0/7 · tests 0/0/0 of 0
 ### Criteria
 - [ ] The template implements all five required Level Contract elements: spawn point, checkpoints, finish condition, controller compatibility, save integration
 - [ ] The template declares no optional contract elements, exercising every optional element's absent-default path
@@ -591,19 +780,59 @@ status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
 - [ ] The template passes the World Static Analysis Gate, calling only the sanctioned world API surface
 - [ ] The hub discovers and loads the template like any other world, with no special case in loader code
 - [ ] The template is completable from spawn to finish condition
+  ↳ tasks: T6 ☐ (World: Reference Template)
 - [ ] A contract change that would make the template non-conforming fails CI rather than passing silently
 - [ ] The template is documented as the canonical starting point for a new world, with instructions on what to copy and what to change
+### Tasks — World: Reference Template <!-- n:22222222-0000-4000-8000-000000000023 -->
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
+- [ ] **T2 — Implement the integration with Save System (godot) per Contract "Save Integration Interface" (dependency).** <!-- t:bcbdac74 -->
+- [ ] **T3 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Level Contract v1" (dependency).** <!-- t:99890668 -->
+- [ ] **T4 — Expose the interface Level Contract Compliance Checker consumes, per Contract "Level Contract v1" (dependency).** <!-- t:87778b5e -->
+- [ ] **T5 — Expose the interface World Static Analysis Gate consumes, per Contract "Sanctioned World API Surface" (dependency).** <!-- t:a14fa597 -->
+- [ ] **T6 — Implement: "The template is completable from spawn to finish condition" (REQ-029).** <!-- t:5542522e -->
+- [ ] **T7 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-029.tests.md
 
 ## REQ-030 — No Multiplayer — Enforced Single-Player Constraint <!-- r:REQ-030 -->
-status: in-progress · criteria 0/8 · tasks 0/0 · tests 0/0/0 of 0
+status: in-progress · criteria 0/8 · tasks 0/28 · tests 0/0/0 of 0
 ### Criteria
 - [ ] A static check rejects any use of Godot multiplayer APIs, including @rpc annotations, rpc/rpc_id/rpc_config calls, is_multiplayer_authority and set_multiplayer_authority, the multiplayer property and MultiplayerAPI, any MultiplayerPeer implementation (ENet, WebRTC, WebSocket), and MultiplayerSynchronizer or MultiplayerSpawner nodes
 - [ ] The check scans core systems, official worlds, the reference template, and community submissions — not world modules alone
 - [ ] A fixture file exercising each forbidden multiplayer API class is rejected by the check, with output naming the specific API and file
 - [ ] The check runs as a required CI check and a pull request introducing any forbidden multiplayer API cannot merge
 - [ ] project.godot declares no networking or multiplayer autoloads, peer configuration, or network-related project settings
+  ↳ tasks: T26 ☐ (World Static Analysis Gate)
 - [ ] No architecture node is a game server, and no networking or multiplayer service appears anywhere in the project's technology set
+  ↳ tasks: T27 ☐ (World Static Analysis Gate)
 - [ ] The Level Contract's sanctioned world API surface lists every multiplayer API as forbidden, so world modules are covered by the same ban as core
 - [ ] Contributor documentation states the project is single-player only and warns that general Godot multiplayer guidance and engine sample code do not apply here
+### Tasks — World Static Analysis Gate <!-- n:22222222-0000-4000-8000-000000000022 -->
+- [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
+- [ ] **T2 — Implement the integration with World: Coral Cove (godot) per Contract "Sanctioned World API Surface" (dependency).** <!-- t:77966695 -->
+- [ ] **T3 — Implement the integration with World: Bubble Bay (godot) per Contract "Sanctioned World API Surface" (dependency).** <!-- t:e89d6a3b -->
+- [ ] **T4 — Implement the integration with Test Harness and Fixtures (python-backend) per Contract "Shared Test Fixtures" (dependency).** <!-- t:7d12e948 -->
+- [ ] **T5 — Implement the integration with World: Reference Template (godot) per Contract "Sanctioned World API Surface" (dependency).** <!-- t:399a52b4 -->
+- [ ] **T6 — Implement the integration with OpenAxolotl Game Client (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:a43ca1c2 -->
+- [ ] **T7 — Implement the integration with Axolotl Controller (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:546745c9 -->
+- [ ] **T8 — Implement the integration with Input System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:bd31611d -->
+- [ ] **T9 — Implement the integration with Save System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:a9445cde -->
+- [ ] **T10 — Implement the integration with Camera System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:ef1a4794 -->
+- [ ] **T11 — Implement the integration with Regeneration and Capability System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:e9c4ec1d -->
+- [ ] **T12 — Implement the integration with Lives and Checkpoint System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:981e0017 -->
+- [ ] **T13 — Implement the integration with Gill Mod Ability Framework (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:62d73ed0 -->
+- [ ] **T14 — Implement the integration with Restoration State System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:fe53cd74 -->
+- [ ] **T15 — Implement the integration with Collectibles System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:52cba5a0 -->
+- [ ] **T16 — Implement the integration with Drift Fleet Enemy Framework (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:974ec999 -->
+- [ ] **T17 — Implement the integration with Player HUD (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:73051846 -->
+- [ ] **T18 — Implement the integration with Audio System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:6ce65853 -->
+- [ ] **T19 — Implement the integration with Balance and Tuning Data (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:1662a95a -->
+- [ ] **T20 — Implement the integration with Flagship Boss Encounter (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:ea212880 -->
+- [ ] **T21 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).** <!-- t:a39cc42a -->
+- [ ] **T22 — Implement: "Every submission requires explicit human maintainer approval before merge, enforced by branch protection with no automated-only merge path" (REQ-020).** <!-- t:acff5839 -->
+- [ ] **T23 — Implement: "Portal tiering distinguishes Official, Community, and Experimental Lagoons" (REQ-020).** <!-- t:ace3d125 -->
+- [ ] **T24 — Implement: "Pipeline opens only after Level Contract v1 is declared frozen" (REQ-020).** <!-- t:82d1202c -->
+- [ ] **T25 — Implement: "Content guidelines and the maintainer review checklist are documented for a family-audience bar" (REQ-020).** <!-- t:1ef7c7b6 -->
+- [ ] **T26 — Implement: "project.godot declares no networking or multiplayer autoloads, peer configuration, or network-related project settings" (REQ-030).** <!-- t:528ceeb3 -->
+- [ ] **T27 — Implement: "No architecture node is a game server, and no networking or multiplayer service appears anywhere in the project's technology set" (REQ-030).** <!-- t:207ac8e5 -->
+- [ ] **T28 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-030.tests.md

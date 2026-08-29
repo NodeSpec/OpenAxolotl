@@ -22,35 +22,35 @@ _Not yet authored._ **Consuming AI — author this section BEFORE building.** Wo
 
 Ordered WORK ORDERS synthesized from the model — this node's deliverable kind, contracts, criterion attribution, configuration, and dependency chain. They guarantee coverage, scope, and traceability; they deliberately do NOT contain the implementation detail — that is your job (see the expansion directive below the list).
 
-- [ ] **T1 — Scaffold the Python component.**
+- [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
   Create the source layout, build files, and test harness this node's working code lives in.
   Start from the catalog's suggested structure: `src/main.py`, `src/routes/__init__.py`, `pyproject.toml`.
-- [ ] **T2 — Implement the integration with OpenAxolotl Game Client (godot) per Contract "Core Module Dependency" (dependency).**
+- [ ] **T2 — Implement the integration with OpenAxolotl Game Client (godot) per Contract "Core Module Dependency" (dependency).** <!-- t:06ec8f9a -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T3 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).**
+- [ ] **T3 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).** <!-- t:a39cc42a -->
   Record the endpoint/identifiers CI Pipeline needs in this node's config artifacts — coordinate with CI Pipeline.
   Build to the contract schema EXACTLY (see Interface Contracts).
   ↳ serves (unverified match): REQ-026 "Named fixtures exist for a conforming world, a non-conforming world, a malicious world, a conforming asset, and a non-conforming asset, and are shared by the checker, validator, and static-analysis tests" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T4 — Expose the interface Level Contract Compliance Checker consumes, per Contract "Shared Test Fixtures" (dependency).**
+- [ ] **T4 — Expose the interface Level Contract Compliance Checker consumes, per Contract "Shared Test Fixtures" (dependency).** <!-- t:7575f84a -->
   Record the endpoint/identifiers Level Contract Compliance Checker needs in this node's config artifacts — coordinate with Level Contract Compliance Checker.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
   ↳ serves (unverified match): REQ-026 "Unit tests cover the capability, lives, restoration, ability-registration, and save-interface logic" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-026 "Integration tests exercise each system against the controller and save-integration interfaces rather than in isolation only" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-026 "A headless playthrough smoke test drives an official world from spawn to finish condition and asserts completion" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-026 "Test output identifies the failing requirement or criterion it maps to, so a contributor or agent can locate what broke" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T5 — Expose the interface Asset Contract Validator consumes, per Contract "Shared Test Fixtures" (dependency).**
+- [ ] **T5 — Expose the interface Asset Contract Validator consumes, per Contract "Shared Test Fixtures" (dependency).** <!-- t:159e5c24 -->
   Record the endpoint/identifiers Asset Contract Validator needs in this node's config artifacts — coordinate with Asset Contract Validator.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T6 — Expose the interface World Static Analysis Gate consumes, per Contract "Shared Test Fixtures" (dependency).**
+- [ ] **T6 — Expose the interface World Static Analysis Gate consumes, per Contract "Shared Test Fixtures" (dependency).** <!-- t:8b32d9ab -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T7 — Implement: "The suite runs headless with a single documented command and exits non-zero on any failure" (REQ-026).**
+- [ ] **T7 — Implement: "The suite runs headless with a single documented command and exits non-zero on any failure" (REQ-026).** <!-- t:4d9f8c5b -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-026 "The suite runs headless with a single documented command and exits non-zero on any failure"
-- [ ] **T8 — Implement: "The suite runs in CI on every pull request" (REQ-026).**
+- [ ] **T8 — Implement: "The suite runs in CI on every pull request" (REQ-026).** <!-- t:2f756ac8 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-026 "The suite runs in CI on every pull request"
-- [ ] **T9 — Verify every acceptance criterion above and tick its box.**
+- [ ] **T9 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -360,3 +360,9 @@ Startup/initialization order based on edge directions and interaction patterns.
 - Level Contract Compliance Checker (initiates Shared Test Fixtures against this node (dependency))
 - Asset Contract Validator (initiates Shared Test Fixtures against this node (dependency))
 - World Static Analysis Gate (initiates Shared Test Fixtures against this node (dependency))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-026.tests.md` - Test plan for requirement: Automated Test Suite and Test Harness | test-plan | markdown | draft |

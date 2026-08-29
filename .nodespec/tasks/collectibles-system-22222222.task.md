@@ -22,31 +22,31 @@ _Not yet authored._ **Consuming AI — author this section BEFORE building.** Wo
 
 Ordered WORK ORDERS synthesized from the model — this node's deliverable kind, contracts, criterion attribution, configuration, and dependency chain. They guarantee coverage, scope, and traceability; they deliberately do NOT contain the implementation detail — that is your job (see the expansion directive below the list).
 
-- [ ] **T1 — Scaffold the Godot component.**
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
   Create the source layout, build files, and test harness this node's working code lives in.
   Start from the catalog's suggested structure: `scripts/main.gd`, `scenes/main.tscn`, `project.godot`, `export_presets.cfg`.
-- [ ] **T2 — Implement the integration with Restoration State System (godot) per Contract "Restoration Region Interface" (dependency).**
+- [ ] **T2 — Implement the integration with Restoration State System (godot) per Contract "Restoration Region Interface" (dependency).** <!-- t:b339696f -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
   ↳ serves (unverified match): REQ-010 "Restoration resources are collectible and are consumed to advance a region's restoration state" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-010 "Collected state persists through the save-integration interface across sessions" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T3 — Implement the integration with Save System (godot) per Contract "Save Integration Interface" (dependency).**
+- [ ] **T3 — Implement the integration with Save System (godot) per Contract "Save Integration Interface" (dependency).** <!-- t:bcbdac74 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T4 — Expose the interface World: Coral Cove consumes, per Contract "Collectible Registration Interface" (dependency).**
+- [ ] **T4 — Expose the interface World: Coral Cove consumes, per Contract "Collectible Registration Interface" (dependency).** <!-- t:42732291 -->
   Record the endpoint/identifiers World: Coral Cove needs in this node's config artifacts — coordinate with World: Coral Cove.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
   ↳ serves (unverified match): REQ-010 "Discovery collectibles are collectible, counted per world, and persisted to the profile" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-010 "A world declaring no collectibles remains contract-valid and fully completable" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-010 "Worlds declare collectibles declaratively through the Level Contract optional element rather than through bespoke scripting" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T5 — Expose the interface World: Bubble Bay consumes, per Contract "Collectible Registration Interface" (dependency).**
+- [ ] **T5 — Expose the interface World: Bubble Bay consumes, per Contract "Collectible Registration Interface" (dependency).** <!-- t:f2860287 -->
   Record the endpoint/identifiers World: Bubble Bay needs in this node's config artifacts — coordinate with World: Bubble Bay.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T6 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T6 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T7 — Implement: "Collected state survives losing all lives and respawning at a checkpoint, so collection is never lost to the life layer" (REQ-010).**
+- [ ] **T7 — Implement: "Collected state survives losing all lives and respawning at a checkpoint, so collection is never lost to the life layer" (REQ-010).** <!-- t:1c6045bc -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-010 "Collected state survives losing all lives and respawning at a checkpoint, so collection is never lost to the life layer"
-- [ ] **T8 — Verify every acceptance criterion above and tick its box.**
+- [ ] **T8 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -267,3 +267,9 @@ Startup/initialization order based on edge directions and interaction patterns.
 - World: Coral Cove (initiates Collectible Registration Interface against this node (dependency))
 - World: Bubble Bay (initiates Collectible Registration Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-010.tests.md` - Test plan for requirement: Collectibles System | test-plan | markdown | draft |

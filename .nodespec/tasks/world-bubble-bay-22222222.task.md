@@ -22,47 +22,47 @@ _Not yet authored._ **Consuming AI — author this section BEFORE building.** Wo
 
 Ordered WORK ORDERS synthesized from the model — this node's deliverable kind, contracts, criterion attribution, configuration, and dependency chain. They guarantee coverage, scope, and traceability; they deliberately do NOT contain the implementation detail — that is your job (see the expansion directive below the list).
 
-- [ ] **T1 — Scaffold the Godot component.**
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
   Create the source layout, build files, and test harness this node's working code lives in.
   Start from the catalog's suggested structure: `scripts/main.gd`, `scenes/main.tscn`, `project.godot`, `export_presets.cfg`.
-- [ ] **T2 — Implement the integration with Restoration State System (godot) per Contract "Restoration Region Interface" (dependency).**
+- [ ] **T2 — Implement the integration with Restoration State System (godot) per Contract "Restoration Region Interface" (dependency).** <!-- t:b339696f -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
   ↳ serves (unverified match): REQ-028 "Bubble Bay exercises both movement grammars and contains at least one restorable region" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T3 — Implement the integration with Drift Fleet Enemy Framework (godot) per Contract "Enemy Registration Interface" (dependency).**
+- [ ] **T3 — Implement the integration with Drift Fleet Enemy Framework (godot) per Contract "Enemy Registration Interface" (dependency).** <!-- t:091d8bdf -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T4 — Implement the integration with Gill Mod Ability Framework (godot) per Contract "Gill Mod Registration Interface" (dependency).**
+- [ ] **T4 — Implement the integration with Gill Mod Ability Framework (godot) per Contract "Gill Mod Registration Interface" (dependency).** <!-- t:9ef5b42c -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
   ↳ serves (unverified match): REQ-028 "Bubble Bay contains at least one mandatory traversal challenge gated on a Gill Mod that Coral Cove does not emphasize" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T5 — Implement the integration with Collectibles System (godot) per Contract "Collectible Registration Interface" (dependency).**
+- [ ] **T5 — Implement the integration with Collectibles System (godot) per Contract "Collectible Registration Interface" (dependency).** <!-- t:9bc134aa -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T6 — Implement the integration with Camera System (godot) per Contract "Camera Hint Interface" (dependency).**
+- [ ] **T6 — Implement the integration with Camera System (godot) per Contract "Camera Hint Interface" (dependency).** <!-- t:e3e65073 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T7 — Implement the integration with Save System (godot) per Contract "Save Integration Interface" (dependency).**
+- [ ] **T7 — Implement the integration with Save System (godot) per Contract "Save Integration Interface" (dependency).** <!-- t:bcbdac74 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T8 — Implement the integration with Audio System (godot) per Contract "Audio Event Interface" (dependency).**
+- [ ] **T8 — Implement the integration with Audio System (godot) per Contract "Audio Event Interface" (dependency).** <!-- t:218035d2 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T9 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Level Contract v1" (dependency).**
+- [ ] **T9 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Level Contract v1" (dependency).** <!-- t:99890668 -->
   Record the endpoint/identifiers OpenAxolotl Game Client needs in this node's config artifacts — coordinate with OpenAxolotl Game Client.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
   ↳ serves (unverified match): REQ-028 "Bubble Bay passes the Level Contract compliance checker" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-028 "Bubble Bay declares no boss and remains contract-valid and fully completable, proving the optional-boss path" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T10 — Expose the interface Level Contract Compliance Checker consumes, per Contract "Level Contract v1" (dependency).**
+- [ ] **T10 — Expose the interface Level Contract Compliance Checker consumes, per Contract "Level Contract v1" (dependency).** <!-- t:87778b5e -->
   Record the endpoint/identifiers Level Contract Compliance Checker needs in this node's config artifacts — coordinate with Level Contract Compliance Checker.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T11 — Expose the interface World Static Analysis Gate consumes, per Contract "Sanctioned World API Surface" (dependency).**
+- [ ] **T11 — Expose the interface World Static Analysis Gate consumes, per Contract "Sanctioned World API Surface" (dependency).** <!-- t:a14fa597 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
   ↳ serves (unverified match): REQ-028 "Bubble Bay passes the World Static Analysis Gate, calling only the sanctioned world API surface" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T12 — Implement: "Bubble Bay is completable from spawn to finish condition" (REQ-028).**
+- [ ] **T12 — Implement: "Bubble Bay is completable from spawn to finish condition" (REQ-028).** <!-- t:ce77b10c -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-028 "Bubble Bay is completable from spawn to finish condition"
-- [ ] **T13 — Implement: "Bubble Bay sustains the documented frame-rate target on the baseline specification during normal traversal" (REQ-028).**
+- [ ] **T13 — Implement: "Bubble Bay sustains the documented frame-rate target on the baseline specification during normal traversal" (REQ-028).** <!-- t:d531be48 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-028 "Bubble Bay sustains the documented frame-rate target on the baseline specification during normal traversal"
-- [ ] **T14 — Implement: "Bubble Bay is fun to play through and delivers a satisfying broken-to-restored payoff" (REQ-028).**
+- [ ] **T14 — Implement: "Bubble Bay is fun to play through and delivers a satisfying broken-to-restored payoff" (REQ-028).** <!-- t:47acb3d7 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-028 "Bubble Bay is fun to play through and delivers a satisfying broken-to-restored payoff"
-- [ ] **T15 — Verify every acceptance criterion above and tick its box.**
+- [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -466,3 +466,9 @@ Startup/initialization order based on edge directions and interaction patterns.
 - OpenAxolotl Game Client (initiates Level Contract v1 against this node (dependency))
 - Level Contract Compliance Checker (initiates Level Contract v1 against this node (dependency))
 - World Static Analysis Gate (initiates Sanctioned World API Surface against this node (dependency))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-028.tests.md` - Test plan for requirement: Official World: Bubble Bay | test-plan | markdown | draft |

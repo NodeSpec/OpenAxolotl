@@ -22,10 +22,10 @@ _Not yet authored._ **Consuming AI — author this section BEFORE building.** Wo
 
 Ordered WORK ORDERS synthesized from the model — this node's deliverable kind, contracts, criterion attribution, configuration, and dependency chain. They guarantee coverage, scope, and traceability; they deliberately do NOT contain the implementation detail — that is your job (see the expansion directive below the list).
 
-- [ ] **T1 — Scaffold the Python component.**
+- [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
   Create the source layout, build files, and test harness this node's working code lives in.
   Start from the catalog's suggested structure: `src/main.py`, `src/routes/__init__.py`, `pyproject.toml`.
-- [ ] **T2 — Implement the integration with World: Coral Cove (godot) per Contract "Sanctioned World API Surface" (dependency).**
+- [ ] **T2 — Implement the integration with World: Coral Cove (godot) per Contract "Sanctioned World API Surface" (dependency).** <!-- t:77966695 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
   ↳ serves (unverified match): REQ-020 "Static analysis rejects any community world script calling filesystem, network, OS-execution, or dynamic-evaluation APIs, or otherwise reaching outside the sanctioned world API surface defined by the Level Contract" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-020 "A deliberately malicious fixture world attempting each forbidden call class is rejected by the static-analysis gate" — requirement not mapped to that node; verify or reassign before relying on it
@@ -35,66 +35,66 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
   ↳ serves (unverified match): REQ-030 "A fixture file exercising each forbidden multiplayer API class is rejected by the check, with output naming the specific API and file" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-030 "The check runs as a required CI check and a pull request introducing any forbidden multiplayer API cannot merge" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-030 "The Level Contract's sanctioned world API surface lists every multiplayer API as forbidden, so world modules are covered by the same ban as core" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T3 — Implement the integration with World: Bubble Bay (godot) per Contract "Sanctioned World API Surface" (dependency).**
+- [ ] **T3 — Implement the integration with World: Bubble Bay (godot) per Contract "Sanctioned World API Surface" (dependency).** <!-- t:e89d6a3b -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T4 — Implement the integration with Test Harness and Fixtures (python-backend) per Contract "Shared Test Fixtures" (dependency).**
+- [ ] **T4 — Implement the integration with Test Harness and Fixtures (python-backend) per Contract "Shared Test Fixtures" (dependency).** <!-- t:7d12e948 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T5 — Implement the integration with World: Reference Template (godot) per Contract "Sanctioned World API Surface" (dependency).**
+- [ ] **T5 — Implement the integration with World: Reference Template (godot) per Contract "Sanctioned World API Surface" (dependency).** <!-- t:399a52b4 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T6 — Implement the integration with OpenAxolotl Game Client (godot) per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T6 — Implement the integration with OpenAxolotl Game Client (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:a43ca1c2 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
   ↳ serves (unverified match): REQ-020 "Every submission passes automated contract-compliance and content-policy pre-screening before human review" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-030 "Contributor documentation states the project is single-player only and warns that general Godot multiplayer guidance and engine sample code do not apply here" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T7 — Implement the integration with Axolotl Controller (godot) per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T7 — Implement the integration with Axolotl Controller (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:546745c9 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T8 — Implement the integration with Input System (godot) per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T8 — Implement the integration with Input System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:bd31611d -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T9 — Implement the integration with Save System (godot) per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T9 — Implement the integration with Save System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:a9445cde -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T10 — Implement the integration with Camera System (godot) per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T10 — Implement the integration with Camera System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:ef1a4794 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T11 — Implement the integration with Regeneration and Capability System (godot) per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T11 — Implement the integration with Regeneration and Capability System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:e9c4ec1d -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T12 — Implement the integration with Lives and Checkpoint System (godot) per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T12 — Implement the integration with Lives and Checkpoint System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:981e0017 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T13 — Implement the integration with Gill Mod Ability Framework (godot) per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T13 — Implement the integration with Gill Mod Ability Framework (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:62d73ed0 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T14 — Implement the integration with Restoration State System (godot) per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T14 — Implement the integration with Restoration State System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:fe53cd74 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T15 — Implement the integration with Collectibles System (godot) per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T15 — Implement the integration with Collectibles System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:52cba5a0 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T16 — Implement the integration with Drift Fleet Enemy Framework (godot) per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T16 — Implement the integration with Drift Fleet Enemy Framework (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:974ec999 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T17 — Implement the integration with Player HUD (godot) per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T17 — Implement the integration with Player HUD (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:73051846 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T18 — Implement the integration with Audio System (godot) per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T18 — Implement the integration with Audio System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:6ce65853 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T19 — Implement the integration with Balance and Tuning Data (godot) per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T19 — Implement the integration with Balance and Tuning Data (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:1662a95a -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T20 — Implement the integration with Flagship Boss Encounter (godot) per Contract "Engine Feature Policy" (dependency).**
+- [ ] **T20 — Implement the integration with Flagship Boss Encounter (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:ea212880 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T21 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).**
+- [ ] **T21 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).** <!-- t:a39cc42a -->
   Record the endpoint/identifiers CI Pipeline needs in this node's config artifacts — coordinate with CI Pipeline.
   Build to the contract schema EXACTLY (see Interface Contracts).
-- [ ] **T22 — Implement: "Every submission requires explicit human maintainer approval before merge, enforced by branch protection with no automated-only merge path" (REQ-020).**
+- [ ] **T22 — Implement: "Every submission requires explicit human maintainer approval before merge, enforced by branch protection with no automated-only merge path" (REQ-020).** <!-- t:acff5839 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-020 "Every submission requires explicit human maintainer approval before merge, enforced by branch protection with no automated-only merge path"
-- [ ] **T23 — Implement: "Portal tiering distinguishes Official, Community, and Experimental Lagoons" (REQ-020).**
+- [ ] **T23 — Implement: "Portal tiering distinguishes Official, Community, and Experimental Lagoons" (REQ-020).** <!-- t:ace3d125 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-020 "Portal tiering distinguishes Official, Community, and Experimental Lagoons"
-- [ ] **T24 — Implement: "Pipeline opens only after Level Contract v1 is declared frozen" (REQ-020).**
+- [ ] **T24 — Implement: "Pipeline opens only after Level Contract v1 is declared frozen" (REQ-020).** <!-- t:82d1202c -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-020 "Pipeline opens only after Level Contract v1 is declared frozen"
-- [ ] **T25 — Implement: "Content guidelines and the maintainer review checklist are documented for a family-audience bar" (REQ-020).**
+- [ ] **T25 — Implement: "Content guidelines and the maintainer review checklist are documented for a family-audience bar" (REQ-020).** <!-- t:1ef7c7b6 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-020 "Content guidelines and the maintainer review checklist are documented for a family-audience bar"
-- [ ] **T26 — Implement: "project.godot declares no networking or multiplayer autoloads, peer configuration, or network-related project settings" (REQ-030).**
+- [ ] **T26 — Implement: "project.godot declares no networking or multiplayer autoloads, peer configuration, or network-related project settings" (REQ-030).** <!-- t:528ceeb3 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-030 "project.godot declares no networking or multiplayer autoloads, peer configuration, or network-related project settings"
-- [ ] **T27 — Implement: "No architecture node is a game server, and no networking or multiplayer service appears anywhere in the project's technology set" (REQ-030).**
+- [ ] **T27 — Implement: "No architecture node is a game server, and no networking or multiplayer service appears anywhere in the project's technology set" (REQ-030).** <!-- t:207ac8e5 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-030 "No architecture node is a game server, and no networking or multiplayer service appears anywhere in the project's technology set"
-- [ ] **T28 — Verify every acceptance criterion above and tick its box.**
+- [ ] **T28 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -1373,3 +1373,10 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 **Depends on THIS node being available:**
 - CI Pipeline (initiates Validator CLI Invocation against this node (ipc))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-030.tests.md` - Test plan for requirement: No Multiplayer — Enforced Single-Player Constraint | test-plan | markdown | draft |
+| `.nodespec/tests/req-020.tests.md` - Test plan for requirement: Community Lagoon Submission Pipeline (Post-MVP) | test-plan | markdown | draft |

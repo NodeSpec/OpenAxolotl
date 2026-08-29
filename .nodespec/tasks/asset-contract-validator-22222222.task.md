@@ -22,10 +22,10 @@ _Not yet authored._ **Consuming AI — author this section BEFORE building.** Wo
 
 Ordered WORK ORDERS synthesized from the model — this node's deliverable kind, contracts, criterion attribution, configuration, and dependency chain. They guarantee coverage, scope, and traceability; they deliberately do NOT contain the implementation detail — that is your job (see the expansion directive below the list).
 
-- [ ] **T1 — Scaffold the Python component.**
+- [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
   Create the source layout, build files, and test harness this node's working code lives in.
   Start from the catalog's suggested structure: `src/main.py`, `src/routes/__init__.py`, `pyproject.toml`.
-- [ ] **T2 — Implement the integration with OpenAxolotl Game Client (godot) per Contract "Asset Contract v1" (custom).**
+- [ ] **T2 — Implement the integration with OpenAxolotl Game Client (godot) per Contract "Asset Contract v1" (custom).** <!-- t:33a614a7 -->
   Build to the contract schema EXACTLY (see Interface Contracts).
   ↳ serves (unverified match): REQ-015 "Asset Contract specifies required file types, resolution/format constraints, and alpha-channel handling per asset category" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-015 "Asset Contract specifies the asset directory layout and naming convention" — requirement not mapped to that node; verify or reassign before relying on it
@@ -38,19 +38,19 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
   ↳ serves (unverified match): REQ-016 "Failure output names the specific asset and the specific violated rule" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-016 "Validator exits non-zero on failure and runs as a required CI check on every pull request touching assets" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-016 "A deliberately non-conforming fixture asset fails validation and conforming official assets pass" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T3 — Implement the integration with Audio System (godot) per Contract "Asset Contract v1" (custom).**
+- [ ] **T3 — Implement the integration with Audio System (godot) per Contract "Asset Contract v1" (custom).** <!-- t:1ee9a25e -->
   Build to the contract schema EXACTLY (see Interface Contracts).
-- [ ] **T4 — Implement the integration with Test Harness and Fixtures (python-backend) per Contract "Shared Test Fixtures" (dependency).**
+- [ ] **T4 — Implement the integration with Test Harness and Fixtures (python-backend) per Contract "Shared Test Fixtures" (dependency).** <!-- t:7d12e948 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T5 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).**
+- [ ] **T5 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).** <!-- t:a39cc42a -->
   Record the endpoint/identifiers CI Pipeline needs in this node's config artifacts — coordinate with CI Pipeline.
   Build to the contract schema EXACTLY (see Interface Contracts).
   ↳ serves (unverified match): REQ-016 "Validator checks directory placement and naming convention conformance" — requirement not mapped to that node; verify or reassign before relying on it
   ↳ serves (unverified match): REQ-016 "Validator is runnable locally with a single documented command" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T6 — Implement: "provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly" (REQ-015).**
+- [ ] **T6 — Implement: "provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly" (REQ-015).** <!-- t:a4f99d10 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-015 "provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly"
-- [ ] **T7 — Verify every acceptance criterion above and tick its box.**
+- [ ] **T7 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -450,3 +450,10 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 **Depends on THIS node being available:**
 - CI Pipeline (initiates Validator CLI Invocation against this node (ipc))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-015.tests.md` - Test plan for requirement: Asset Contract and AI-Art Provenance | test-plan | markdown | draft |
+| `.nodespec/tests/req-016.tests.md` - Test plan for requirement: Asset Contract Automated Validator | test-plan | markdown | draft |
