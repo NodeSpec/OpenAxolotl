@@ -1,7 +1,7 @@
 {
   "modelVersion": 1,
   "generatedBy": "nodespec",
-  "modelHash": "1abbb778c092cbe9d95e9bb3dbce08c194ed679eecbee3eb65731cc622a5f892",
+  "modelHash": "52aea7811afb76f39ca5d6ab37ef31a07430abf2923125b48b75fcb29cccfc2f",
   "nodes": [
     {
       "id": "22222222-0000-4000-8000-000000000001",
@@ -1461,7 +1461,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": ".nodespec/tasks/openaxolotl-game-client-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000000b7f409a"
+      "contentHash": "0000000061a1f0de"
     },
     {
       "id": "9322fd06-4e15-421e-a22c-37db3f9fa5b2",
