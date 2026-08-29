@@ -16,7 +16,79 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+This node carries pillar three — the world regenerates with you — and it is the
+mechanical form of the open-source metaphor. Its state model is deliberately
+small and exactly specified, because both the save system and every world module
+depend on it being predictable.
+
+**Placement and shape.** This is a `shared-library` node: it lives in its own
+directory under `core/`, exposes a `class_name`-registered public surface, and is
+consumed by other systems and by world modules as a dependency. It is not an
+autoload unless it genuinely needs one global instance — prefer an explicit
+reference passed in over a singleton, because a singleton is untestable under
+GdUnit4 without process-level teardown, and this project's whole verification
+story runs through GdUnit4.
+
+**Catalog guidance that does not apply here.** The Godot technology guidance in
+this packet carries multiplayer sample code — `@rpc` annotations,
+`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
+guidance and it is forbidden in this project. REQ-030 bans the whole Godot
+multiplayer surface, the Engine Feature Policy contract records the ban
+machine-readably, and the World Static Analysis Gate fails CI on any occurrence
+anywhere in `core/`, `worlds/` or the reference template. This is single-player
+only, in every phase, with no deferral. Systems talk to each other through
+signals and direct calls on the interfaces declared in this packet.
+
+**Exactly three states plus one flag.** A region exposes `barren`, `resourced`,
+`restored` — no more, no intermediate, no "restoring" transient — and a separate
+boolean `unlocked` flag. The two axes are independent and that independence is
+load-bearing: a region with `unlocked == false` cannot advance out of `barren`
+no matter how many resources are delivered (the Flagship gates it), and reverting
+a restored region to `barren` leaves `unlocked` set, so the player redoes the
+restoration without refighting the boss. Model them as two separate fields; the
+moment they are collapsed into one enum, the revert criterion becomes impossible
+to satisfy.
+
+**Restoration must change traversal.** The criterion says advancing state opens
+paths that were not previously available, not only visuals. Implement state
+change as enabling or disabling collision geometry and navigation, with the
+visual change riding along — if a designer can satisfy a state change by swapping
+a material, the pillar is lost. A test asserts a path is untraversable at
+`barren` and traversable at `restored` by driving the controller through it.
+
+**Reversion.** Dredger attacks revert a restored region to `barren`, and the
+revert must be reflected in traversal and in persistence, not just in the
+displayed state. Route reversion through the same state-transition path as
+advancement so the two can never diverge — one `set_state()` with the geometry,
+audio and save side effects hanging off it.
+
+**Declarative regions.** A world declares its restorable regions through the
+Level Contract, not through bespoke scripting. This node reads that declaration
+and instantiates regions from it; a world author writes data, never a state
+machine. That is what keeps the sanctioned world API surface narrow enough for
+the static gate to check.
+
+**Persistence and neighbours.** State and the unlocked flag persist per region
+through the Save Integration Interface. Collectibles feed resources in; the Drift
+Fleet framework and the Flagship encounter drive reversion and unlocking; the
+HUD reads current state and progress toward the next; the Audio System shifts
+ambience on transition. All of those are interface calls in this packet — emit
+semantic transition signals and let consumers subscribe, rather than calling into
+each consumer.
+
+**No magic numbers.** Every balance value this system uses is read from the
+Balance and Tuning Data node through the Tuning Data Interface, never declared as
+a GDScript constant. REQ-025 makes that a checked property: a cited tuning key
+that does not exist in the tuning data fails a test, and changing a value must
+alter behavior with no recompile.
+
+**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
+each test name carries the requirement id it proves (`test_req_0NN_...`) — the
+harness parses that id back out and reports it as the failing rule, which is how
+a contributor or agent locates what broke. Unit-tier tests exercise this system's
+logic as plain objects; integration-tier tests drive it against the real
+controller and the real save interface via GdUnit4's `scene_runner`, because the
+criteria explicitly reject isolation-only coverage. The "visually dramatic and satisfying" criterion is manual.
 
 ## Implementation Tasks
 

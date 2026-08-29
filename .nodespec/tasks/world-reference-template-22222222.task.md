@@ -16,7 +16,67 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+The template is the canonical starting point for a new world, and it is also the
+project's minimality test. Its value comes from what it does *not* contain: it
+declares no optional Level Contract elements at all, so every optional element's
+absent-default path is exercised by something that ships and runs in CI.
+
+**Placement and shape.** A world is a self-contained module under `worlds/`,
+discovered by the hub at runtime with no entry in any code-side list. It declares
+itself through a manifest validated against `contracts/level_contract.v1.json`,
+and it may call only the symbols in the sanctioned world API surface — the World
+Static Analysis Gate rejects anything else. Build it exactly the way an outside
+contributor would: no private back doors, no reaching into a core system's
+internals, no engine API a community world could not also use. That constraint is
+the point of the official worlds, and one of them states it as a criterion.
+
+**Catalog guidance that does not apply here.** The Godot technology guidance in
+this packet carries multiplayer sample code — `@rpc` annotations,
+`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
+guidance and it is forbidden in this project. REQ-030 bans the whole Godot
+multiplayer surface, the Engine Feature Policy contract records the ban
+machine-readably, and the World Static Analysis Gate fails CI on any occurrence
+anywhere in `core/`, `worlds/` or the reference template. This is single-player
+only, in every phase, with no deferral. Systems talk to each other through
+signals and direct calls on the interfaces declared in this packet.
+
+**Required five, optional zero.** Implement exactly the five required elements —
+spawn point, checkpoints, finish condition, controller compatibility, save
+integration — and declare no optional element. That means no enemies, no
+collectibles, no boss, no camera hints, no world-supplied audio. Each of those
+absences is a default path asserted by a criterion somewhere else in the project
+(a world declaring no collectibles stays completable; audio falls back to defaults
+rather than silence; the bossless world stays contract-valid), and this template
+is what keeps all of them exercised.
+
+**No special case in the loader.** The hub discovers and loads the template like
+any other world, with no branch in loader code. That is the criterion, and it is
+also the cheapest ongoing proof that world discovery is genuinely generic — if
+someone adds a special case for the template, this criterion fails.
+
+**Contract changes must break it loudly.** A contract change that would make the
+template non-conforming has to fail CI rather than pass silently. So the template
+runs through `oax-level-check` as a required check, and it must stay minimal: a
+template that declares extra elements "for illustration" would satisfy new
+required elements accidentally and stop functioning as a tripwire.
+
+**Written to be copied.** The documentation criterion is manual: instructions
+covering what to copy and what to change. Write the module so those instructions
+are short — clear file names, one manifest, comments marking the three or four
+places a new world author actually edits. This is the file an AI coding agent
+starts from when given a one-sentence world brief, so its legibility is
+load-bearing for REQ-017's agent-authored-world criterion.
+
+**Completable.** The template runs from spawn to finish condition. Keep the
+traversal trivial; its job is to prove the contract, not to entertain.
+
+**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
+each test name carries the requirement id it proves (`test_req_0NN_...`) — the
+harness parses that id back out and reports it as the failing rule, which is how
+a contributor or agent locates what broke. Unit-tier tests exercise this system's
+logic as plain objects; integration-tier tests drive it against the real
+controller and the real save interface via GdUnit4's `scene_runner`, because the
+criteria explicitly reject isolation-only coverage.
 
 ## Implementation Tasks
 

@@ -16,7 +16,82 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+This node owns both halves of the asset story: the Asset Contract itself
+(`contracts/asset_contract.v1.json` plus its prose companion) and the validator
+that enforces it. The provenance requirement is the part that makes this node
+unusual — the project accepts AI-generated art as a first-class source, and the
+contract is how that stays honest rather than becoming an untracked license
+liability.
+
+**Catalog guidance that does not apply here.** The Python technology guidance in
+this packet describes a FastAPI web service — `fastapi`/`uvicorn`, SQLAlchemy
+async sessions, Celery workers, `src/main.py` + `src/routes/__init__.py`, CORS
+and JWT. None of it applies. This node is a short-lived, synchronous,
+filesystem-only command-line program with no HTTP surface, no database, no
+broker and no async runtime. Ignore the suggested file structure in T1 and the
+SDK/API pattern snippets entirely. What carries over from that guidance is only
+the tooling advice: `uv` for the environment with a committed lockfile, `ruff`
+for lint and format, `pytest` with fixtures, strict `mypy`, and pinned
+dependencies.
+
+**Packaging.** All four Python validators share one distribution at `tools/`
+(`tools/pyproject.toml`, package `openaxolotl_tools`), because they share the
+fixture corpus, the result-emitting code and the CI invocation convention;
+splitting them into four distributions would duplicate all three. Each tool is
+its own subpackage with its own console entry point declared in
+`[project.scripts]`. `openaxolotl_tools/common/` holds the pieces every tool
+needs: `result.py` (builds and serialises the `Validator CLI Invocation`
+result object), `cli.py` (the shared `argparse` parent parser giving every tool
+the identical `--target/--format/--fail-fast` surface), and `schemas.py`
+(loads and caches the JSON Schema files from `contracts/`).
+
+**Two schema files.** `contracts/asset_contract.v1.json` declares, per asset
+category, the permitted file types, resolution and format constraints,
+alpha-channel handling, the directory layout and the naming convention.
+`contracts/provenance.schema.json` declares the per-asset `provenance.json`
+sidecar: `author`, `generationMethod` (enum `ai-generated` | `hand-authored`),
+and license terms, with a JSON Schema `if/then` making `tool` and `prompt`
+required only when `generationMethod` is `ai-generated`. Expressing that
+conditional in the schema rather than in Python is what keeps the rule visible to
+a contributor reading the contract and to an agent generating assets.
+
+**Validator.** Package `openaxolotl_tools/assetcheck/`, entry point
+`oax-asset-check`. Structural checks (path placement, naming) run against the
+filesystem; format checks read image headers with Pillow and audio headers with
+`soundfile` — read headers only, never decode whole files, because this runs on
+every asset in the repository on every pull request touching assets. A missing
+`provenance.json` and a malformed one are distinct rule ids
+(`provenance.missing`, `provenance.invalid`), because the remediation differs.
+
+**Emitting results.** Every run ends by constructing exactly one result object
+matching the `Validator CLI Invocation` `resultSchema` — `tool`,
+`schemaVersion`, `target`, `passed`, `violations[]` — and printing it as JSON
+when `--format json`, or as a human-readable rendering of the same object when
+`--format text` (the default). Text output is a *rendering* of the object, never
+a separate code path, so a message can never appear in one format and not the
+other. `schemaVersion` is read from the schema file actually loaded, not
+hardcoded, so a contract bump is visible in every result. Exit codes follow the
+contract exactly: `0` clean, `1` one or more `severity: "error"` violations, `2`
+invocation error — bad arguments, unreadable target, missing or unparseable
+schema file. A `warning`-severity violation is reported but never changes the
+exit code, per the contract's merge-gate rule. `violations[].rule` is a stable
+dotted id, never a message string, because that id is what an AI agent maps back
+to the contract element it broke.
+
+**What this node does not do.** Style and art-direction conformance is explicitly
+manual — a human maintainer reviews against the documented expectations. Do not
+attempt to automate it, and do not let a heuristic style check creep into the
+validator: a false rejection of a legitimate contribution is far more damaging
+here than a style miss that review catches. The two manual criteria on this node
+prove out by ticking their boxes in this task doc and having the user approve the
+resulting change card; `report_test_results` will refuse to bind them.
+
+**Neighbours.** The Audio System and the Game Client consume the asset contract
+rather than this validator's code — they need the directory layout and naming
+convention to resolve assets at runtime, so keep those facts in the schema file
+both sides read, not in validator-internal constants. Fixtures (one conforming
+asset, one deliberately non-conforming asset) come from the Test Harness through
+the Shared Test Fixtures contract.
 
 ## Implementation Tasks
 

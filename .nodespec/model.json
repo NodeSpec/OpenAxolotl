@@ -1,7 +1,7 @@
 {
   "modelVersion": 1,
   "generatedBy": "nodespec",
-  "modelHash": "db1fbd301f50fb7b84a01b9b4b493f172b489316bacb3937dbd754b601125ac5",
+  "modelHash": "1abbb778c092cbe9d95e9bb3dbce08c194ed679eecbee3eb65731cc622a5f892",
   "nodes": [
     {
       "id": "22222222-0000-4000-8000-000000000001",
@@ -1295,7 +1295,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": ".nodespec/tasks/axolotl-controller-22222222.task.md",
       "kind": "task",
-      "contentHash": "00000000075dffab"
+      "contentHash": "000000004676f13d"
     },
     {
       "id": "0fdc36fe-8793-4c51-b280-70f575fc5fc3",
@@ -1326,7 +1326,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000020",
       "path": ".nodespec/tasks/test-harness-and-fixtures-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000024e21e1c"
+      "contentHash": "000000004f0fc067"
     },
     {
       "id": "29ad0c70-2bd7-47d7-bb24-9c96fc413662",
@@ -1339,7 +1339,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000019",
       "path": ".nodespec/tasks/balance-and-tuning-data-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000011354c92"
+      "contentHash": "000000002215058b"
     },
     {
       "id": "2d01ba4f-02f5-4216-8b1e-efe35715c879",
@@ -1352,28 +1352,28 @@
       "nodeId": "22222222-0000-4000-8000-000000000008",
       "path": ".nodespec/tasks/restoration-state-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000006c485c91"
+      "contentHash": "000000005888d66e"
     },
     {
       "id": "38f4bd65-2641-4e68-adb3-990ec024c4f3",
       "nodeId": "22222222-0000-4000-8000-000000000014",
       "path": ".nodespec/tasks/asset-contract-validator-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000039f34dd6"
+      "contentHash": "0000000078bb1504"
     },
     {
       "id": "39a759a6-12c4-4143-89e2-2f4a280d5989",
       "nodeId": "22222222-0000-4000-8000-000000000010",
       "path": ".nodespec/tasks/drift-fleet-enemy-framework-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000050332634"
+      "contentHash": "0000000009cac55e"
     },
     {
       "id": "3a05d372-ee14-4d00-9e47-d4b158619045",
       "nodeId": "22222222-0000-4000-8000-000000000012",
       "path": ".nodespec/tasks/world-bubble-bay-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000002d9b66ac"
+      "contentHash": "00000000421f16ee"
     },
     {
       "id": "4170cb30-a8cb-4278-989e-1bfafdfa09d8",
@@ -1392,7 +1392,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000023",
       "path": ".nodespec/tasks/world-reference-template-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000003718dd80"
+      "contentHash": "000000007fca539c"
     },
     {
       "id": "531b668d-bc4c-4453-8c19-7e5c34381935",
@@ -1405,7 +1405,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000017",
       "path": ".nodespec/tasks/audio-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000013a3f60b"
+      "contentHash": "0000000002af8c73"
     },
     {
       "id": "5c5635e8-dd7c-4547-a944-89aad1d4911a",
@@ -1415,7 +1415,7 @@
     },
     {
       "id": "5ca38f14-9688-4013-9534-8e02909bfbc8",
-      "nodeId": "",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": ".nodespec/tests/req-021.tests.md",
       "kind": "test-plan"
     },
@@ -1442,7 +1442,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000005",
       "path": ".nodespec/tasks/lives-and-checkpoint-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000079d7d0e4"
+      "contentHash": "000000006b9fceed"
     },
     {
       "id": "899292ac-aa14-458a-a448-b35868dd7fb3",
@@ -1461,7 +1461,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": ".nodespec/tasks/openaxolotl-game-client-22222222.task.md",
       "kind": "task",
-      "contentHash": "00000000467e5c71"
+      "contentHash": "000000000b7f409a"
     },
     {
       "id": "9322fd06-4e15-421e-a22c-37db3f9fa5b2",
@@ -1480,21 +1480,21 @@
       "nodeId": "22222222-0000-4000-8000-000000000021",
       "path": ".nodespec/tasks/flagship-boss-encounter-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000005aeba154"
+      "contentHash": "0000000064839209"
     },
     {
       "id": "b0179edc-fe31-43a7-9632-d3ef783a1b0f",
       "nodeId": "22222222-0000-4000-8000-000000000016",
       "path": ".nodespec/tasks/player-hud-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000005507e0ef"
+      "contentHash": "000000005418732b"
     },
     {
       "id": "b02588b5-e423-4a27-8590-896df521bca5",
       "nodeId": "22222222-0000-4000-8000-000000000004",
       "path": ".nodespec/tasks/regeneration-and-capability-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000073b26730"
+      "contentHash": "000000001574f942"
     },
     {
       "id": "b3bb640b-8bdb-4914-844b-05877479067d",
@@ -1537,14 +1537,14 @@
       "nodeId": "22222222-0000-4000-8000-000000000013",
       "path": ".nodespec/tasks/level-contract-compliance-checker-22222222.task.md",
       "kind": "task",
-      "contentHash": "00000000699abebc"
+      "contentHash": "000000007264c70a"
     },
     {
       "id": "cec511c1-b810-4951-953c-f53864d2a651",
       "nodeId": "22222222-0000-4000-8000-000000000006",
       "path": ".nodespec/tasks/gill-mod-ability-framework-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000001cb52c1d"
+      "contentHash": "000000004230dfee"
     },
     {
       "id": "d4c0028f-5a54-4159-af29-09276013cd7e",
@@ -1557,21 +1557,21 @@
       "nodeId": "22222222-0000-4000-8000-000000000018",
       "path": ".nodespec/tasks/input-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000006343b562"
+      "contentHash": "000000002158eddc"
     },
     {
       "id": "d7ea3f37-b241-41fe-bd1c-7bd168f31922",
       "nodeId": "22222222-0000-4000-8000-000000000007",
       "path": ".nodespec/tasks/save-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "00000000277cfc1b"
+      "contentHash": "0000000066194775"
     },
     {
       "id": "dd34421e-020b-4dbd-bf36-0f6bb6b9bfa4",
       "nodeId": "22222222-0000-4000-8000-000000000015",
       "path": ".nodespec/tasks/ci-pipeline-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000005c0eb5ac"
+      "contentHash": "000000005a94b9c8"
     },
     {
       "id": "ddbe9b50-0c2a-4e11-9fe4-aeeebb00ed4b",
@@ -1596,28 +1596,28 @@
       "nodeId": "22222222-0000-4000-8000-000000000009",
       "path": ".nodespec/tasks/collectibles-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000005cbc6b1d"
+      "contentHash": "0000000022efb362"
     },
     {
       "id": "f0cf8393-1f65-45ff-905b-dc65b0309b20",
       "nodeId": "22222222-0000-4000-8000-000000000003",
       "path": ".nodespec/tasks/camera-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000039ad4980"
+      "contentHash": "000000005c962f8c"
     },
     {
       "id": "f19b7652-7442-4460-8a39-65a8b1c3617a",
       "nodeId": "22222222-0000-4000-8000-000000000022",
       "path": ".nodespec/tasks/world-static-analysis-gate-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000046ecf6e7"
+      "contentHash": "000000003d063e64"
     },
     {
       "id": "f54d988d-24d4-4d41-8663-21ee23754463",
       "nodeId": "22222222-0000-4000-8000-000000000011",
       "path": ".nodespec/tasks/world-coral-cove-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000003a9c861"
+      "contentHash": "000000004e4eb56d"
     },
     {
       "id": "ff7f3927-3216-482f-be19-6e0a01f05587",

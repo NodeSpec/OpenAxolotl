@@ -7,7 +7,7 @@ component inventory, connection topology, and links to per-component task docume
 
 | Component | Role | Technology | Parent | Task Document | Test Plan |
 |-----------|------|------------|--------|---------------|-----------|
-| OpenAxolotl Game Client | game-client | godot | --- | [`.nodespec/tasks/openaxolotl-game-client-22222222.task.md`](./.nodespec/tasks/openaxolotl-game-client-22222222.task.md) | [`.nodespec/tests/req-006.tests.md`](./.nodespec/tests/req-006.tests.md) |
+| OpenAxolotl Game Client | game-client | godot | --- | [`.nodespec/tasks/openaxolotl-game-client-22222222.task.md`](./.nodespec/tasks/openaxolotl-game-client-22222222.task.md) | [`.nodespec/tests/req-021.tests.md`](./.nodespec/tests/req-021.tests.md) |
 | Axolotl Controller | shared-library | godot | --- | [`.nodespec/tasks/axolotl-controller-22222222.task.md`](./.nodespec/tasks/axolotl-controller-22222222.task.md) | [`.nodespec/tests/req-001.tests.md`](./.nodespec/tests/req-001.tests.md) |
 | Camera System | shared-library | godot | --- | [`.nodespec/tasks/camera-system-22222222.task.md`](./.nodespec/tasks/camera-system-22222222.task.md) | [`.nodespec/tests/req-005.tests.md`](./.nodespec/tests/req-005.tests.md) |
 | Regeneration and Capability System | shared-library | godot | --- | [`.nodespec/tasks/regeneration-and-capability-system-22222222.task.md`](./.nodespec/tasks/regeneration-and-capability-system-22222222.task.md) | [`.nodespec/tests/req-019.tests.md`](./.nodespec/tests/req-019.tests.md) |
@@ -171,7 +171,7 @@ recommended test types, framework suggestions, and test scenarios.
 - **Asset Contract Validator**: [`.nodespec/tests/req-015.tests.md`](./.nodespec/tests/req-015.tests.md)
 - **World: Reference Template**: [`.nodespec/tests/req-029.tests.md`](./.nodespec/tests/req-029.tests.md)
 - **Gill Mod Ability Framework**: [`.nodespec/tests/req-004.tests.md`](./.nodespec/tests/req-004.tests.md)
-- ****: [`.nodespec/tests/req-021.tests.md`](./.nodespec/tests/req-021.tests.md)
+- **OpenAxolotl Game Client**: [`.nodespec/tests/req-021.tests.md`](./.nodespec/tests/req-021.tests.md)
 - **World Static Analysis Gate**: [`.nodespec/tests/req-020.tests.md`](./.nodespec/tests/req-020.tests.md)
 - **Flagship Boss Encounter**: [`.nodespec/tests/req-013.tests.md`](./.nodespec/tests/req-013.tests.md)
 - **World: Bubble Bay**: [`.nodespec/tests/req-028.tests.md`](./.nodespec/tests/req-028.tests.md)

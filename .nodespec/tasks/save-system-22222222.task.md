@@ -16,7 +16,69 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+Every system in the game persists through this node's interface, and no system
+touches the save file. That single rule is what makes forked and divergent worlds
+survivable, and it is a checked criterion rather than a convention.
+
+**Placement and shape.** This is a `shared-library` node: it lives in its own
+directory under `core/`, exposes a `class_name`-registered public surface, and is
+consumed by other systems and by world modules as a dependency. It is not an
+autoload unless it genuinely needs one global instance — prefer an explicit
+reference passed in over a singleton, because a singleton is untestable under
+GdUnit4 without process-level teardown, and this project's whole verification
+story runs through GdUnit4.
+
+**Catalog guidance that does not apply here.** The Godot technology guidance in
+this packet carries multiplayer sample code — `@rpc` annotations,
+`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
+guidance and it is forbidden in this project. REQ-030 bans the whole Godot
+multiplayer surface, the Engine Feature Policy contract records the ban
+machine-readably, and the World Static Analysis Gate fails CI on any occurrence
+anywhere in `core/`, `worlds/` or the reference template. This is single-player
+only, in every phase, with no deferral. Systems talk to each other through
+signals and direct calls on the interfaces declared in this packet.
+
+**One interface, no back doors.** Worlds write and read save data exclusively
+through the Save Integration Interface. The static gate enforces it for world
+modules by keeping direct file APIs off the sanctioned surface; for core systems
+it is a code-review rule plus a test that the save file has exactly one writer.
+Give each world a namespaced region of the profile keyed by its module id, so a
+world can never read or clobber another world's data.
+
+**Graceful degradation is the interesting requirement.** A save referencing a
+missing or renamed world module must degrade with the profile intact and the
+remaining worlds playable. That means unknown-module data is *retained*, not
+pruned — a world removed and later reinstalled should find its progress waiting.
+Deserialize per-module lazily so an unparseable module blob cannot fail the whole
+profile load; record it as unavailable and keep going, mirroring how the hub
+surfaces an unloadable module as an unavailable portal.
+
+**Versioning.** The save format carries a version field with a defined upgrade
+path across format versions. Implement upgrades as an ordered chain of
+single-step migrations, each tested against a committed fixture save of the prior
+version — a direct v1→v3 migration is untestable once v2 saves exist in the wild.
+
+**The open item.** Save-compatibility policy for forked and divergent worlds is
+not yet decided; it is one of the project's two open items and its criterion is
+manual. Until it is settled, do not encode a policy implicitly — the criterion
+"loading a save whose world module has changed its contract-visible state applies
+the documented save-compatibility policy" cannot be met by an undocumented
+default. Structure the load path so the policy is a single injectable decision
+point, and raise the decision with the user rather than picking one silently.
+
+**What is persisted.** World unlock and completion state; per-world restoration
+state and unlocked flags; collectibles; unlocked Gill Mods; last checkpoint. Plus
+settings — audio bus volumes and input bindings — which have no other home.
+Remember that the Lives system is forbidden from writing here on zero lives:
+losing all lives must not modify or penalise the save file.
+
+**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
+each test name carries the requirement id it proves (`test_req_0NN_...`) — the
+harness parses that id back out and reports it as the failing rule, which is how
+a contributor or agent locates what broke. Unit-tier tests exercise this system's
+logic as plain objects; integration-tier tests drive it against the real
+controller and the real save interface via GdUnit4's `scene_runner`, because the
+criteria explicitly reject isolation-only coverage.
 
 ## Implementation Tasks
 

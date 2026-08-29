@@ -23,7 +23,7 @@
 | [REQ-018](#req-018--pc-build-and-distribution) — PC Build and Distribution | 🔵 in-progress | 0/6 | 0/11 | 0/0/0 of 0 | CI Pipeline |
 | [REQ-019](#req-019--kid-appropriate-tone-and-accessibility) — Kid-Appropriate Tone and Accessibility | 🔵 in-progress | 0/6 | 0/12 | 0/0/0 of 0 | Regeneration and Capability System |
 | [REQ-020](#req-020--community-lagoon-submission-pipeline-post-mvp) — Community Lagoon Submission Pipeline (Post-MVP) | 🔵 in-progress | 0/8 | 0/28 | 0/0/0 of 0 | World Static Analysis Gate |
-| [REQ-021](#req-021--licensing-policy--code-assets-and-ai-provenance) — Licensing Policy — Code, Assets, and AI Provenance | ⬜ pending | 0/5 | 0/0 | 0/0/0 of 0 | — |
+| [REQ-021](#req-021--licensing-policy--code-assets-and-ai-provenance) — Licensing Policy — Code, Assets, and AI Provenance | ⬜ pending | 0/5 | 0/19 | 0/0/0 of 0 | OpenAxolotl Game Client |
 | [REQ-022](#req-022--player-hud-and-game-state-readout) — Player HUD and Game-State Readout | 🔵 in-progress | 0/7 | 0/9 | 0/0/0 of 0 | Player HUD |
 | [REQ-023](#req-023--audio-system-music-and-sound-design) — Audio System, Music and Sound Design | 🔵 in-progress | 0/8 | 0/14 | 0/0/0 of 0 | Audio System |
 | [REQ-024](#req-024--input-and-control-scheme) — Input and Control Scheme | 🔵 in-progress | 0/7 | 0/9 | 0/0/0 of 0 | Input System |
@@ -567,13 +567,33 @@ status: in-progress · criteria 0/8 · tasks 0/28 · tests 0/0/0 of 0
 ### Tests — .nodespec/tests/req-020.tests.md
 
 ## REQ-021 — Licensing Policy — Code, Assets, and AI Provenance <!-- r:REQ-021 -->
-status: pending · criteria 0/5 · tasks 0/0 · tests 0/0/0 of 0
+status: pending · criteria 0/5 · tasks 0/19 · tests 0/0/0 of 0
 ### Criteria
 - [ ] Code license is chosen and applied to the repository
 - [ ] Official art and audio asset license is chosen, documented, and distinguished from the code license
 - [ ] Policy documents how AI-generated asset provenance and generator terms of service affect redistribution and relicensing
 - [ ] Contributor licensing terms for submitted worlds and assets are documented in the contribution guide
 - [ ] Licensing decision is resolved before the public README and contribution guide ship
+### Tasks — OpenAxolotl Game Client <!-- n:22222222-0000-4000-8000-000000000001 -->
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
+- [ ] **T2 — Implement the integration with Axolotl Controller (godot) per Contract "Axolotl Controller Interface" (dependency).** <!-- t:a33cf1c7 -->
+- [ ] **T3 — Implement the integration with Camera System (godot) per Contract "Core Module Dependency" (dependency).** <!-- t:3d3effd0 -->
+- [ ] **T4 — Implement the integration with Save System (godot) per Contract "Save Integration Interface" (dependency).** <!-- t:bcbdac74 -->
+- [ ] **T5 — Implement the integration with Lives and Checkpoint System (godot) per Contract "Checkpoint and Life Interface" (dependency).** <!-- t:25e4d91d -->
+- [ ] **T6 — Implement the integration with World: Coral Cove (godot) per Contract "Level Contract v1" (dependency).** <!-- t:bd68a2e3 -->
+- [ ] **T7 — Implement the integration with World: Bubble Bay (godot) per Contract "Level Contract v1" (dependency).** <!-- t:04060a69 -->
+- [ ] **T8 — Implement the integration with Player HUD (godot) per Contract "HUD State Interface" (dependency).** <!-- t:c8a2f551 -->
+- [ ] **T9 — Implement the integration with Audio System (godot) per Contract "Audio Event Interface" (dependency).** <!-- t:218035d2 -->
+- [ ] **T10 — Implement the integration with Input System (godot) per Contract "Player Input Interface" (dependency).** <!-- t:da38b8ef -->
+- [ ] **T11 — Implement the integration with World: Reference Template (godot) per Contract "Level Contract v1" (dependency).** <!-- t:d6a167a4 -->
+- [ ] **T12 — Expose the interface Asset Contract Validator consumes, per Contract "Asset Contract v1" (custom).** <!-- t:8c09fb30 -->
+- [ ] **T13 — Expose the interface CI Pipeline consumes, per Contract "Core Module Dependency" (dependency).** <!-- t:8c23999f -->
+- [ ] **T14 — Expose the interface Test Harness and Fixtures consumes, per Contract "Core Module Dependency" (dependency).** <!-- t:61c95f0c -->
+- [ ] **T15 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
+- [ ] **T16 — Implement: "Schema enumerates every optional element together with the defined default behavior applied when it is absent" (REQ-006).** <!-- t:516930f9 -->
+- [ ] **T17 — Implement: "Official worlds sustain the documented frame-rate target on the baseline specification during normal traversal" (REQ-027).** <!-- t:6305f4b4 -->
+- [ ] **T18 — Implement: "The game remains smooth during a Flagship encounter combined with a restoration reversion, the heaviest expected load case" (REQ-027).** <!-- t:447b635f -->
+- [ ] **T19 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-021.tests.md
 
 ## REQ-022 — Player HUD and Game-State Readout <!-- r:REQ-022 -->

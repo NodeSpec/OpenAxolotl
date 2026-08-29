@@ -16,7 +16,75 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+This node supplies the stakes the capability system deliberately does not. Its
+criteria are mostly negative — what must *never* decrement a life, what must
+*never* happen at zero — and negative criteria are proven by an exhaustive
+allowlist, not by spot checks.
+
+**Placement and shape.** This is a `shared-library` node: it lives in its own
+directory under `core/`, exposes a `class_name`-registered public surface, and is
+consumed by other systems and by world modules as a dependency. It is not an
+autoload unless it genuinely needs one global instance — prefer an explicit
+reference passed in over a singleton, because a singleton is untestable under
+GdUnit4 without process-level teardown, and this project's whole verification
+story runs through GdUnit4.
+
+**Catalog guidance that does not apply here.** The Godot technology guidance in
+this packet carries multiplayer sample code — `@rpc` annotations,
+`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
+guidance and it is forbidden in this project. REQ-030 bans the whole Godot
+multiplayer surface, the Engine Feature Policy contract records the ban
+machine-readably, and the World Static Analysis Gate fails CI on any occurrence
+anywhere in `core/`, `worlds/` or the reference template. This is single-player
+only, in every phase, with no deferral. Systems talk to each other through
+signals and direct calls on the interfaces declared in this packet.
+
+**Lives decrement from a closed set.** Pit volumes, crush hazards, boss finishers
+and Dredger area-wipe attacks. Implement that as an explicit enumeration of
+catastrophic sources, and make `lose_life()` require a source from that
+enumeration as an argument — an unlisted source is a runtime error, not a silent
+life loss. That shape turns "ordinary enemy and hazard contact never decrements
+lives" from a thing you hope holds into a thing that cannot compile wrong, and it
+gives the test a clean assertion: every non-catastrophic source rejected.
+
+**Zero lives is a setback, never a reset.** Respawn at the last activated
+checkpoint with the life count replenished and capability state restored. The
+world does not restart from the beginning, and the save file is neither modified
+nor penalised — the criterion names both, so assert both: a checkpoint respawn
+test that reads the save file's bytes before and after and asserts no write. This
+is the crucial design property that keeps failure family-friendly, and it is easy
+to break later with a well-meaning "autosave on death".
+
+**Checkpoints.** Activating a checkpoint records respawn position and restores
+both life count and capability state — capability restoration goes through the
+Regeneration system's interface, not by reaching into its flags. Checkpoint state
+persists through the Save Integration Interface. A world may declare a
+lives-per-attempt override through the Level Contract; when it does not, the
+global default from the tuning data applies. Resolve the override at world load
+and hold one effective value, rather than consulting the contract on every
+decrement.
+
+**Checkpoint spacing is a measurable property.** Every official world must keep
+replay time from any checkpoint to the next at or below
+`progression.max_retry_seconds`. That is verified by walking a world's checkpoint
+graph in a headless test and comparing against the tuning key, not by a designer's
+judgement — so expose the checkpoint list as queryable data on the loaded world
+rather than as scene nodes only.
+
+**No magic numbers.** Every balance value this system uses is read from the
+Balance and Tuning Data node through the Tuning Data Interface, never declared as
+a GDScript constant. REQ-025 makes that a checked property: a cited tuning key
+that does not exist in the tuning data fails a test, and changing a value must
+alter behavior with no recompile.
+
+**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
+each test name carries the requirement id it proves (`test_req_0NN_...`) — the
+harness parses that id back out and reports it as the failing rule, which is how
+a contributor or agent locates what broke. Unit-tier tests exercise this system's
+logic as plain objects; integration-tier tests drive it against the real
+controller and the real save interface via GdUnit4's `scene_runner`, because the
+criteria explicitly reject isolation-only coverage. "Losing all lives reads as a meaningful setback without feeling
+punishing" is manual and proves out through repeated play plus a task-doc tick.
 
 ## Implementation Tasks
 

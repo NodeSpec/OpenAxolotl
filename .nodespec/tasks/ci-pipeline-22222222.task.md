@@ -18,7 +18,52 @@ This component is an engine that owns its own internals (GitHub Actions). Never 
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+This node is the `.github/workflows/` directory and nothing else. It owns no
+game code and no validator logic; its whole job is to invoke the four repo
+validators exactly the way a contributor invokes them locally, and to turn a
+non-zero exit into a blocked merge.
+
+**Local/CI parity is the binding constraint.** The `Validator CLI Invocation`
+contract requires the documented local command and the CI invocation to be
+character-identical, so a contributor can never pass locally and fail here.
+Achieve that by having every workflow step call the same console entry points
+(`oax-level-check`, `oax-asset-check`, `oax-static-gate`, `oax-test`) with the
+same flags documented in `docs/commands.md`, adding only `--format json` for
+machine consumption. Do not inline `python -m ...`, do not add extra flags, and
+do not reimplement a check as a shell one-liner in a workflow file — a check
+that exists only in YAML cannot be run locally and therefore violates the
+contract.
+
+**Jobs.** One workflow (`pr.yml`) runs on every pull request with four required
+jobs — level contract, asset contract, static analysis gate, test harness — plus
+a build job. Each validator job publishes its JSON result as an artifact so a
+failure is inspectable without re-running. All four are configured as required
+status checks in branch protection; that branch-protection configuration is also
+what enforces REQ-020's rule that no community submission can reach `main`
+without explicit human maintainer approval, so it is part of this node's
+deliverable and belongs documented in `docs/branch-protection.md` even though
+the setting itself lives in repository settings rather than in a file.
+
+**Build job.** Godot export runs headless in a container pinned to the same
+Godot version as `project.godot`, using export presets committed at
+`export_presets.cfg`. The build must package the core game and every official
+world into one runnable artifact from a clean checkout via a single documented
+command — implement that command as a script (`scripts/build.sh`) invoked
+identically by CI and by a human, for the same parity reason as the validators.
+The "at most five commands from a clean clone" criterion is verified by the
+harness executing the documented sequence, not by inspection.
+
+**Godot in CI.** Use `godot --headless` with the export templates cached between
+runs; do not install a display server. The performance regression test and the
+headless playthrough smoke test both need a real Godot binary, so the test-harness
+job needs the same container image as the build job — share it rather than
+maintaining two.
+
+**Caching and pinning.** Pin the Godot version, the Python version and the
+action versions by SHA. An unpinned toolchain turns a green PR red on an
+unrelated day, which in this project is worse than usual: contributors here
+include AI agents that will treat a red check as a defect in their own world
+module and start editing code to fix a toolchain drift.
 
 ## Implementation Tasks
 

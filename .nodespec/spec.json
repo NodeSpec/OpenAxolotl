@@ -1,7 +1,7 @@
 {
   "specVersion": 1,
   "generatedBy": "nodespec",
-  "specHash": "e6643c392b49fa0a471a4129ef44473384f4c79b6b7bbac181584998a8baa911",
+  "specHash": "92b704bca574fd26d31d36baa78def266e05955c690db3f58ca1855f738bb702",
   "vision": "OpenAxolotl — Play it. Fork it. Build a world.\n\nA colorful 3D action-platformer in Godot where a tiny axolotl explores strange aquatic worlds, restoring damaged habitats and rescuing creatures. Every world is a self-contained module anyone — human or AI coding agent — can fork, replace, or extend. Open source is a gameplay feature, not a line in the README.\n\nFOUR PILLARS\n\n1. Regeneration is the constant loop; lives are the hard failure state. Damage strips a capability — tail, gill, leg — with comedic pop-and-sparkle framing rather than draining a health bar, and never ends a run on its own. A separate limited life count is spent only on catastrophic events and returns the player to the last checkpoint. Regeneration stays expressive and ever-present; lives supply the stakes.\n\n2. Two movement grammars, one axolotl. Water and land are mechanically distinct, joined by a water-powered dash as the signature transition skill. This is the answer to \"why is this not a cute skin on generic platformer mechanics.\"\n\n3. The world regenerates with you. Regions progress barren, resourced, restored — opening real traversal paths rather than swapping visuals — and Drift Fleet dredgers can undo that progress. This carries the open-source metaphor mechanically, without a child ever needing to notice it.\n\n4. The repo is the game. Every world conforms to a versioned Level Contract published as a machine-readable schema. A contributor never needs to understand the whole game, only the contract. The project is effectively an open-source platformer SDK.\n\nANTAGONISTS\nThe Drift Fleet: faceless industrial extraction machinery, deliberately never human characters. Nets, hooks, dredges and pollution, with no gore and no humanized violence — the same machinery that broke the habitat is what the player disables to heal it.\n\nMVP SCOPE\nPC only. Two official worlds plus a minimal reference template. Three Gill Mods — Bubble, Jet, Glow — built to depth rather than breadth; Electric, Frost and Giant are post-MVP and double as the reference example for community-built mods. Contract compliance, asset conformance, and world static analysis are automated and merge-blocking, so an AI agent can verify its own work before submitting.\n\nCOMMUNITY (post-MVP)\nOpens only once Level Contract v1 is frozen; opening earlier means every core update breaks early contributor worlds. Community worlds ship code like any other world — safety comes from static analysis against the sanctioned world API surface plus mandatory human review, never an automated-only merge path. This is a family game with an agent-authored contribution pipeline, so that gate is load-bearing.\n\nNON-GOALS (firm, not deferrals)\nNo multiplayer, in any phase. No console certification. No level-editor GUI, ever — worlds are authored as code and Godot scenes only, so humans and AI agents build the same way and the contract surface stays narrow enough to check.\n\nOPEN ITEMS\nLicensing split between code and official art/audio, entangled with AI-generation provenance. Save-compatibility policy for forked and divergent worlds.",
   "constraints": [],
   "preferences": {},
@@ -586,6 +586,11 @@
     {
       "requirementId": "REQ-020",
       "nodeId": "22222222-0000-4000-8000-000000000022",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-021",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
       "mappingType": "implements"
     },
     {

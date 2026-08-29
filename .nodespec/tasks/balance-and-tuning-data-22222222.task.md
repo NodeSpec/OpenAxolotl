@@ -16,7 +16,74 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+This node is the reason no other system holds a magic number. It is mostly data
+plus a strict loader, and its strictness is the whole value — a tuning file that
+silently defaults is worse than one that refuses to load.
+
+**Placement and shape.** This is a `shared-library` node: it lives in its own
+directory under `core/`, exposes a `class_name`-registered public surface, and is
+consumed by other systems and by world modules as a dependency. It is not an
+autoload unless it genuinely needs one global instance — prefer an explicit
+reference passed in over a singleton, because a singleton is untestable under
+GdUnit4 without process-level teardown, and this project's whole verification
+story runs through GdUnit4.
+
+**Catalog guidance that does not apply here.** The Godot technology guidance in
+this packet carries multiplayer sample code — `@rpc` annotations,
+`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
+guidance and it is forbidden in this project. REQ-030 bans the whole Godot
+multiplayer surface, the Engine Feature Policy contract records the ban
+machine-readably, and the World Static Analysis Gate fails CI on any occurrence
+anywhere in `core/`, `worlds/` or the reference template. This is single-player
+only, in every phase, with no deferral. Systems talk to each other through
+signals and direct calls on the interfaces declared in this packet.
+
+**Data files, not constants.** All balance values live in data (`core/tuning/*.tres`
+or JSON — pick one and keep it uniform) and are read through the Tuning Data
+Interface. Changing a value alters observable behavior with no code change and no
+recompile, which means consumers read through the interface at use time rather
+than caching into a `const` at load. The tuning surface is enumerated in the
+criteria and spans capability-loss modifiers, default lives per attempt, dash
+charge and recharge, Gill Mod durations and cooldowns, enemy debuff magnitudes and
+windows, restoration resource costs, grapple range, camera smoothing thresholds,
+mutation loadout duration, momentum retention across grammar transitions, and
+maximum retry duration.
+
+**Every key carries name, unit and permitted range.** Store those alongside the
+value, not in a separate document — the loader validates against the declared
+range, and a missing or out-of-range value fails with a *named* error identifying
+the key. Never substitute a default for a bad value; a silent default turns a
+balance bug into a mystery.
+
+**Keys cited by other requirements must exist.** REQ-025's last criterion makes
+this node responsible for the whole project's tuning-key integrity: every key
+cited in another requirement's acceptance criteria exists here with a documented
+unit and range, and a test fails when a cited key is absent. Implement that as a
+real test with an explicit list of cited keys —
+`controller.transition.momentum_retention_ratio`, `controller.grapple.max_range_m`,
+`capability.gill_loss.boost_duration_multiplier`, `regen.mutation.duration_s`,
+`enemy.hookline.mod_strip_seconds`, `enemy.runoff.vision_debuff_factor`,
+`enemy.runoff.gill_recharge_multiplier`, `enemy.runoff.duration_s`,
+`camera.smoothing.max_position_delta_m_per_frame`,
+`camera.smoothing.max_rotation_delta_deg_per_frame`,
+`progression.max_retry_seconds` — kept in one place and asserted key by key. When
+a requirement gains a new tuning key, that list is the thing to update.
+
+**World overrides are a closed set.** The values a world may override through the
+Level Contract are explicitly enumerated, and an override outside that set is
+rejected. Declare the overridable set in the tuning data itself and have the Level
+Contract schema reference it, so there is one list rather than two that drift.
+Rejection is an error at world load, surfaced the same way a contract violation is
+— the world becomes unavailable rather than silently running with an ignored
+override.
+
+**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
+each test name carries the requirement id it proves (`test_req_0NN_...`) — the
+harness parses that id back out and reports it as the failing rule, which is how
+a contributor or agent locates what broke. Unit-tier tests exercise this system's
+logic as plain objects; integration-tier tests drive it against the real
+controller and the real save interface via GdUnit4's `scene_runner`, because the
+criteria explicitly reject isolation-only coverage.
 
 ## Implementation Tasks
 
