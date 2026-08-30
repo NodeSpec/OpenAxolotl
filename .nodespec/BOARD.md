@@ -69,6 +69,7 @@ status: in-progress · criteria 0/7 · tasks 0/17 · tests 0/0/0 of 0
 - [ ] **T15 — Implement: "Controller exposes a documented public interface (movement state, capability modifiers, ability hooks) that worlds bind to without modifying controller internals" (REQ-001).** <!-- t:bcccf8f0 -->
 - [ ] **T16 — Implement: "Both movement grammars feel distinct, responsive, and pleasurable in hands-on play" (REQ-001).** <!-- t:f6d9a45b -->
 - [ ] **T17 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-001.tests.md
 
 ## REQ-002 — Regeneration and Capability Loss System <!-- r:REQ-002 -->
 status: in-progress · criteria 0/7 · tasks 0/23 · tests 0/0/0 of 0
@@ -111,6 +112,7 @@ status: in-progress · criteria 0/7 · tasks 0/23 · tests 0/0/0 of 0
 - [ ] **T21 — Implement: "No enemy, hazard, or failure state depicts blood, gore, or humanized violence" (REQ-019).** <!-- t:e8e0e69d -->
 - [ ] **T22 — Implement: "Tone reads as playful and family-appropriate to a reviewer playing the capability-loss loop repeatedly" (REQ-019).** <!-- t:578a483a -->
 - [ ] **T23 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-002.tests.md
 
 ## REQ-003 — Lives, Checkpoints and Hard Failure State <!-- r:REQ-003 -->
 status: in-progress · criteria 0/8 · tasks 0/18 · tests 0/0/0 of 0
@@ -150,6 +152,7 @@ status: in-progress · criteria 0/8 · tasks 0/18 · tests 0/0/0 of 0
 - [ ] **T16 — Implement: "Checkpoint spacing in every official world keeps the replay time from any checkpoint to the next at or below tuning key progression.max_retry_seconds" (REQ-003).** <!-- t:1d442410 -->
 - [ ] **T17 — Implement: "Losing all lives reads as a meaningful setback without feeling punishing, across repeated play" (REQ-003).** <!-- t:f17eefd2 -->
 - [ ] **T18 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-003.tests.md
 
 ## REQ-004 — Gill Mod Ability System <!-- r:REQ-004 -->
 status: in-progress · criteria 0/7 · tasks 0/17 · tests 0/0/0 of 0
@@ -186,6 +189,7 @@ status: in-progress · criteria 0/7 · tasks 0/17 · tests 0/0/0 of 0
 - [ ] **T15 — Implement: "A Hookline Rig snag removes the equipped mod for the window given by tuning key enemy.hookline.mod_strip_seconds, then restores it automatically" (REQ-004).** <!-- t:b01ec144 -->
 - [ ] **T16 — Implement: "Each of the three MVP Gill Mods is developed to real depth rather than existing as a shallow one-note gimmick" (REQ-004).** <!-- t:79238c0a -->
 - [ ] **T17 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-004.tests.md
 
 ## REQ-005 — Camera System <!-- r:REQ-005 -->
 status: in-progress · criteria 0/5 · tasks 0/12 · tests 0/0/0 of 0
@@ -213,6 +217,7 @@ status: in-progress · criteria 0/5 · tasks 0/12 · tests 0/0/0 of 0
 - [ ] **T10 — Implement: "Camera behavior is fully driven by exported configuration values rather than hardcoded constants" (REQ-005).** <!-- t:d891c2fa -->
 - [ ] **T11 — Implement: "Camera never induces disorientation or fights the player during underwater traversal in hands-on play" (REQ-005).** <!-- t:2c711dea -->
 - [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-005.tests.md
 
 ## REQ-006 — Level Contract v1 Specification <!-- r:REQ-006 -->
 status: in-progress · criteria 0/10 · tasks 0/49 · tests 0/0/0 of 0
@@ -287,6 +292,7 @@ status: in-progress · criteria 0/10 · tasks 0/49 · tests 0/0/0 of 0
 - [ ] **T47 — Implement: "Contributor licensing terms for submitted worlds and assets are documented in the contribution guide" (REQ-021).** <!-- t:6f240208 -->
 - [ ] **T48 — Implement: "Licensing decision is resolved before the public README and contribution guide ship" (REQ-021).** <!-- t:ac788e6d -->
 - [ ] **T49 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-006.tests.md
 
 ## REQ-007 — Level Contract Automated Compliance Checker <!-- r:REQ-007 -->
 status: in-progress · criteria 0/8 · tasks 0/15 · tests 0/0/0 of 0
@@ -323,6 +329,7 @@ status: in-progress · criteria 0/8 · tasks 0/15 · tests 0/0/0 of 0
 - [ ] **T13 — Implement: "A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it" (REQ-007).** <!-- t:d30c83d8 -->
 - [ ] **T14 — Implement: "Adding a new rule to the contract schema changes checker behavior without any code change to the checker" (REQ-007).** <!-- t:d1effc90 -->
 - [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-007.tests.md
 
 ## REQ-008 — World Restoration State System <!-- r:REQ-008 -->
 status: in-progress · criteria 0/8 · tasks 0/20 · tests 0/0/0 of 0
@@ -364,6 +371,7 @@ status: in-progress · criteria 0/8 · tasks 0/20 · tests 0/0/0 of 0
 - [ ] **T18 — Implement: "A world declares its restorable regions declaratively through the Level Contract rather than through bespoke scripting" (REQ-008).** <!-- t:60b41fb9 -->
 - [ ] **T19 — Implement: "The broken-to-restored transformation is visually dramatic and satisfying in hands-on play" (REQ-008).** <!-- t:65920f8b -->
 - [ ] **T20 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-008.tests.md
 
 ## REQ-009 — Open Lagoon Hub and World Loading <!-- r:REQ-009 -->
 status: in-progress · criteria 0/6 · tasks 0/49 · tests 0/0/0 of 0
@@ -430,6 +438,7 @@ status: in-progress · criteria 0/6 · tasks 0/49 · tests 0/0/0 of 0
 - [ ] **T47 — Implement: "Contributor licensing terms for submitted worlds and assets are documented in the contribution guide" (REQ-021).** <!-- t:6f240208 -->
 - [ ] **T48 — Implement: "Licensing decision is resolved before the public README and contribution guide ship" (REQ-021).** <!-- t:ac788e6d -->
 - [ ] **T49 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-009.tests.md
 
 ## REQ-010 — Collectibles System <!-- r:REQ-010 -->
 status: in-progress · criteria 0/6 · tasks 0/13 · tests 0/0/0 of 0
@@ -460,6 +469,7 @@ status: in-progress · criteria 0/6 · tasks 0/13 · tests 0/0/0 of 0
 - [ ] **T11 — Implement: "A world declaring no collectibles remains contract-valid and fully completable" (REQ-010).** <!-- t:954a5a3c -->
 - [ ] **T12 — Implement: "Worlds declare collectibles declaratively through the Level Contract optional element rather than through bespoke scripting" (REQ-010).** <!-- t:db34f4ca -->
 - [ ] **T13 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-010.tests.md
 
 ## REQ-011 — Official MVP Worlds <!-- r:REQ-011 -->
 status: in-progress · criteria 0/7 · tasks 0/20 · tests 0/0/0 of 0
@@ -499,6 +509,7 @@ status: in-progress · criteria 0/7 · tasks 0/20 · tests 0/0/0 of 0
 - [ ] **T18 — Implement: "Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen" (REQ-011).** <!-- t:472ee673 -->
 - [ ] **T19 — Implement: "Each world is fun to play through and delivers a satisfying broken-to-restored payoff" (REQ-011).** <!-- t:e1d96cf2 -->
 - [ ] **T20 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-011.tests.md
 
 ## REQ-012 — Drift Fleet Enemy Roster <!-- r:REQ-012 -->
 status: in-progress · criteria 0/7 · tasks 0/17 · tests 0/0/0 of 0
@@ -535,6 +546,7 @@ status: in-progress · criteria 0/7 · tasks 0/17 · tests 0/0/0 of 0
 - [ ] **T15 — Implement: "A world declaring no enemies remains contract-valid and fully completable" (REQ-012).** <!-- t:a2dfe7b9 -->
 - [ ] **T16 — Implement: "Runoff Drone encounters make land routes read as the favorable path in hands-on play" (REQ-012).** <!-- t:a13cf8f3 -->
 - [ ] **T17 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-012.tests.md
 
 ## REQ-013 — Flagship Boss Encounter <!-- r:REQ-013 -->
 status: in-progress · criteria 0/7 · tasks 0/14 · tests 0/0/0 of 0
@@ -568,6 +580,7 @@ status: in-progress · criteria 0/7 · tasks 0/14 · tests 0/0/0 of 0
 - [ ] **T12 — Implement: "A world declaring no boss remains contract-valid and fully completable" (REQ-013).** <!-- t:ad57a8df -->
 - [ ] **T13 — Implement: "The encounter reads as a climactic set piece and its restoration payoff lands" (REQ-013).** <!-- t:89189d9f -->
 - [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-013.tests.md
 
 ## REQ-014 — Save System <!-- r:REQ-014 -->
 status: in-progress · criteria 0/6 · tasks 0/16 · tests 0/0/0 of 0
@@ -601,6 +614,7 @@ status: in-progress · criteria 0/6 · tasks 0/16 · tests 0/0/0 of 0
 - [ ] **T14 — Implement: "Save file format carries a version field and a defined upgrade path across format versions" (REQ-014).** <!-- t:ab289ad0 -->
 - [ ] **T15 — Implement: "Save-compatibility policy for forked and divergent worlds is decided and documented" (REQ-014).** <!-- t:585c3fd6 -->
 - [ ] **T16 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-014.tests.md
 
 ## REQ-015 — Asset Contract and AI-Art Provenance <!-- r:REQ-015 -->
 status: in-progress · criteria 0/7 · tasks 0/20 · tests 0/0/0 of 0
@@ -640,6 +654,7 @@ status: in-progress · criteria 0/7 · tasks 0/20 · tests 0/0/0 of 0
 - [ ] **T18 — Implement: "Validator is runnable locally with a single documented command" (REQ-016).** <!-- t:1aad56aa -->
 - [ ] **T19 — Implement: "A deliberately non-conforming fixture asset fails validation and conforming official assets pass" (REQ-016).** <!-- t:58c57927 -->
 - [ ] **T20 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-015.tests.md
 
 ## REQ-016 — Asset Contract Automated Validator <!-- r:REQ-016 -->
 status: in-progress · criteria 0/7 · tasks 0/20 · tests 0/0/0 of 0
@@ -679,6 +694,7 @@ status: in-progress · criteria 0/7 · tasks 0/20 · tests 0/0/0 of 0
 - [ ] **T18 — Implement: "Validator is runnable locally with a single documented command" (REQ-016).** <!-- t:1aad56aa -->
 - [ ] **T19 — Implement: "A deliberately non-conforming fixture asset fails validation and conforming official assets pass" (REQ-016).** <!-- t:58c57927 -->
 - [ ] **T20 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-016.tests.md
 
 ## REQ-017 — AI-Agent Contributor Workflow and Documentation <!-- r:REQ-017 -->
 status: in-progress · criteria 0/6 · tasks 0/49 · tests 0/0/0 of 0
@@ -745,6 +761,7 @@ status: in-progress · criteria 0/6 · tasks 0/49 · tests 0/0/0 of 0
 - [ ] **T47 — Implement: "Contributor licensing terms for submitted worlds and assets are documented in the contribution guide" (REQ-021).** <!-- t:6f240208 -->
 - [ ] **T48 — Implement: "Licensing decision is resolved before the public README and contribution guide ship" (REQ-021).** <!-- t:ac788e6d -->
 - [ ] **T49 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-017.tests.md
 
 ## REQ-018 — PC Build and Distribution <!-- r:REQ-018 -->
 status: in-progress · criteria 0/6 · tasks 0/13 · tests 0/0/0 of 0
@@ -775,6 +792,7 @@ status: in-progress · criteria 0/6 · tasks 0/13 · tests 0/0/0 of 0
 - [ ] **T11 — Configure the service to satisfy: "Building and running the game from a clean clone is documented as a reproducible sequence of at most five commands, and following that sequence verbatim produces a running game" (REQ-018).** <!-- t:eea3a388 -->
 - [ ] **T12 — Configure the service to satisfy: "The packaged build launches and is playable end to end on a clean PC without a development environment installed" (REQ-018).** <!-- t:e6ea8c59 -->
 - [ ] **T13 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-018.tests.md
 
 ## REQ-019 — Kid-Appropriate Tone and Accessibility <!-- r:REQ-019 -->
 status: in-progress · criteria 0/6 · tasks 0/23 · tests 0/0/0 of 0
@@ -815,6 +833,7 @@ status: in-progress · criteria 0/6 · tasks 0/23 · tests 0/0/0 of 0
 - [ ] **T21 — Implement: "No enemy, hazard, or failure state depicts blood, gore, or humanized violence" (REQ-019).** <!-- t:e8e0e69d -->
 - [ ] **T22 — Implement: "Tone reads as playful and family-appropriate to a reviewer playing the capability-loss loop repeatedly" (REQ-019).** <!-- t:578a483a -->
 - [ ] **T23 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-019.tests.md
 
 ## REQ-020 — Community Lagoon Submission Pipeline (Post-MVP) <!-- r:REQ-020 -->
 status: in-progress · criteria 0/8 · tasks 0/38 · tests 0/0/0 of 0
@@ -874,6 +893,7 @@ status: in-progress · criteria 0/8 · tasks 0/38 · tests 0/0/0 of 0
 - [ ] **T36 — Implement: "The Level Contract's sanctioned world API surface lists every multiplayer API as forbidden, so world modules are covered by the same ban as core" (REQ-030).** <!-- t:481025f1 -->
 - [ ] **T37 — Implement: "Contributor documentation states the project is single-player only and warns that general Godot multiplayer guidance and engine sample code do not apply here" (REQ-030).** <!-- t:97ad73fc -->
 - [ ] **T38 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-020.tests.md
 
 ## REQ-021 — Licensing Policy — Code, Assets, and AI Provenance <!-- r:REQ-021 -->
 status: pending · criteria 0/5 · tasks 0/49 · tests 0/0/0 of 0
@@ -938,6 +958,7 @@ status: pending · criteria 0/5 · tasks 0/49 · tests 0/0/0 of 0
 - [ ] **T47 — Implement: "Contributor licensing terms for submitted worlds and assets are documented in the contribution guide" (REQ-021).** <!-- t:6f240208 -->
 - [ ] **T48 — Implement: "Licensing decision is resolved before the public README and contribution guide ship" (REQ-021).** <!-- t:ac788e6d -->
 - [ ] **T49 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-021.tests.md
 
 ## REQ-022 — Player HUD and Game-State Readout <!-- r:REQ-022 -->
 status: in-progress · criteria 0/7 · tasks 0/16 · tests 0/0/0 of 0
@@ -973,6 +994,7 @@ status: in-progress · criteria 0/7 · tasks 0/16 · tests 0/0/0 of 0
 - [ ] **T14 — Implement: "HUD reflects the water-powered dash charge and its recharge state" (REQ-022).** <!-- t:90d10233 -->
 - [ ] **T15 — Implement: "Capability-loss presentation in the HUD reads as playful rather than alarming" (REQ-022).** <!-- t:56a6d91b -->
 - [ ] **T16 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-022.tests.md
 
 ## REQ-023 — Audio System, Music and Sound Design <!-- r:REQ-023 -->
 status: in-progress · criteria 0/8 · tasks 0/19 · tests 0/0/0 of 0
@@ -1013,6 +1035,7 @@ status: in-progress · criteria 0/8 · tasks 0/19 · tests 0/0/0 of 0
 - [ ] **T17 — Implement: "Audio assets conform to the Asset Contract including provenance requirements" (REQ-023).** <!-- t:0b27ef8e -->
 - [ ] **T18 — Implement: "Sound design supports the comedic, family-appropriate tone rather than undercutting it" (REQ-023).** <!-- t:e3ce4c83 -->
 - [ ] **T19 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-023.tests.md
 
 ## REQ-024 — Input and Control Scheme <!-- r:REQ-024 -->
 status: in-progress · criteria 0/7 · tasks 0/12 · tests 0/0/0 of 0
@@ -1044,6 +1067,7 @@ status: in-progress · criteria 0/7 · tasks 0/12 · tests 0/0/0 of 0
 - [ ] **T10 — Implement: "Worlds read player intent through the controller interface and never read raw input directly" (REQ-024).** <!-- t:23ab5188 -->
 - [ ] **T11 — Implement: "The full verb set is playable without modal overload or uncomfortable finger contortion" (REQ-024).** <!-- t:789ff73c -->
 - [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-024.tests.md
 
 ## REQ-025 — Balance and Tuning Configuration <!-- r:REQ-025 -->
 status: in-progress · criteria 0/7 · tasks 0/17 · tests 0/0/0 of 0
@@ -1080,6 +1104,7 @@ status: in-progress · criteria 0/7 · tasks 0/17 · tests 0/0/0 of 0
 - [ ] **T15 — Implement: "Loading a tuning file with a missing or out-of-range value fails with a named error rather than silently defaulting" (REQ-025).** <!-- t:137fc35b -->
 - [ ] **T16 — Implement: "Every tuning key cited by another requirement's acceptance criteria exists in the tuning data with a documented unit and permitted range, and a test fails when a cited key is absent" (REQ-025).** <!-- t:0e6c904b -->
 - [ ] **T17 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-025.tests.md
 
 ## REQ-026 — Automated Test Suite and Test Harness <!-- r:REQ-026 -->
 status: in-progress · criteria 0/7 · tasks 0/14 · tests 0/0/0 of 0
@@ -1113,6 +1138,7 @@ status: in-progress · criteria 0/7 · tasks 0/14 · tests 0/0/0 of 0
 - [ ] **T12 — Implement: "Test output identifies the failing requirement or criterion it maps to, so a contributor or agent can locate what broke" (REQ-026).** <!-- t:b4f55d49 -->
 - [ ] **T13 — Implement: "The suite runs in CI on every pull request" (REQ-026).** <!-- t:2f756ac8 -->
 - [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-026.tests.md
 
 ## REQ-027 — Performance Targets <!-- r:REQ-027 -->
 status: in-progress · criteria 0/6 · tasks 0/49 · tests 0/0/0 of 0
@@ -1179,6 +1205,7 @@ status: in-progress · criteria 0/6 · tasks 0/49 · tests 0/0/0 of 0
 - [ ] **T47 — Implement: "Contributor licensing terms for submitted worlds and assets are documented in the contribution guide" (REQ-021).** <!-- t:6f240208 -->
 - [ ] **T48 — Implement: "Licensing decision is resolved before the public README and contribution guide ship" (REQ-021).** <!-- t:ac788e6d -->
 - [ ] **T49 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-027.tests.md
 
 ## REQ-028 — Official World: Bubble Bay <!-- r:REQ-028 -->
 status: in-progress · criteria 0/8 · tasks 0/20 · tests 0/0/0 of 0
@@ -1220,6 +1247,7 @@ status: in-progress · criteria 0/8 · tasks 0/20 · tests 0/0/0 of 0
 - [ ] **T18 — Implement: "Bubble Bay sustains the documented frame-rate target on the baseline specification during normal traversal" (REQ-028).** <!-- t:d531be48 -->
 - [ ] **T19 — Implement: "Bubble Bay is fun to play through and delivers a satisfying broken-to-restored payoff" (REQ-028).** <!-- t:47acb3d7 -->
 - [ ] **T20 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-028.tests.md
 
 ## REQ-029 — Reference Template World <!-- r:REQ-029 -->
 status: in-progress · criteria 0/8 · tasks 0/14 · tests 0/0/0 of 0
@@ -1255,6 +1283,7 @@ status: in-progress · criteria 0/8 · tasks 0/14 · tests 0/0/0 of 0
 - [ ] **T12 — Implement: "A contract change that would make the template non-conforming fails CI rather than passing silently" (REQ-029).** <!-- t:8239af3c -->
 - [ ] **T13 — Implement: "The template is documented as the canonical starting point for a new world, with instructions on what to copy and what to change" (REQ-029).** <!-- t:ceeee88b -->
 - [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-029.tests.md
 
 ## REQ-030 — No Multiplayer — Enforced Single-Player Constraint <!-- r:REQ-030 -->
 status: in-progress · criteria 0/8 · tasks 0/38 · tests 0/0/0 of 0
@@ -1314,3 +1343,4 @@ status: in-progress · criteria 0/8 · tasks 0/38 · tests 0/0/0 of 0
 - [ ] **T36 — Implement: "The Level Contract's sanctioned world API surface lists every multiplayer API as forbidden, so world modules are covered by the same ban as core" (REQ-030).** <!-- t:481025f1 -->
 - [ ] **T37 — Implement: "Contributor documentation states the project is single-player only and warns that general Godot multiplayer guidance and engine sample code do not apply here" (REQ-030).** <!-- t:97ad73fc -->
 - [ ] **T38 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-030.tests.md

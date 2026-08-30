@@ -16,7 +16,79 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+This tool answers one question for one world module: does it conform to
+`contracts/level_contract.v1.json`? It is the gate every world module — the two
+official worlds, the reference template, and every future community submission —
+passes through, and it is the first thing an AI agent authoring a world runs
+against its own output.
+
+**Catalog guidance that does not apply here.** The Python technology guidance in
+this packet describes a FastAPI web service — `fastapi`/`uvicorn`, SQLAlchemy
+async sessions, Celery workers, `src/main.py` + `src/routes/__init__.py`, CORS
+and JWT. None of it applies. This node is a short-lived, synchronous,
+filesystem-only command-line program with no HTTP surface, no database, no
+broker and no async runtime. Ignore the suggested file structure in T1 and the
+SDK/API pattern snippets entirely. What carries over from that guidance is only
+the tooling advice: `uv` for the environment with a committed lockfile, `ruff`
+for lint and format, `pytest` with fixtures, strict `mypy`, and pinned
+dependencies.
+
+**Packaging.** All four Python validators share one distribution at `tools/`
+(`tools/pyproject.toml`, package `openaxolotl_tools`), because they share the
+fixture corpus, the result-emitting code and the CI invocation convention;
+splitting them into four distributions would duplicate all three. Each tool is
+its own subpackage with its own console entry point declared in
+`[project.scripts]`. `openaxolotl_tools/common/` holds the pieces every tool
+needs: `result.py` (builds and serialises the `Validator CLI Invocation`
+result object), `cli.py` (the shared `argparse` parent parser giving every tool
+the identical `--target/--format/--fail-fast` surface), and `schemas.py`
+(loads and caches the JSON Schema files from `contracts/`).
+
+**The checker holds no rules of its own.** Package `openaxolotl_tools/levelcheck/`,
+entry point `oax-level-check`. It loads `contracts/level_contract.v1.json` at
+startup and validates the target module's manifest against it with `jsonschema`;
+every required element, optional-element default, and naming rule comes from that
+file. The criterion "adding a new rule to the contract schema changes checker
+behavior without any code change" is the design constraint that decides this
+node's whole shape: any time you find yourself writing an `if element ==` branch,
+that rule belongs in the schema instead. The only logic that legitimately lives
+in Python is what JSON Schema cannot express — directory-layout and file-naming
+checks against the filesystem, and the contract-version comparison that rejects a
+world targeting a version this checker does not support.
+
+**Version handling.** Read `contractVersion` from the module manifest and compare
+it against the versions the loaded schema declares support for. An unsupported
+version is a single clear violation with rule id `contract.version.unsupported`,
+not a cascade of downstream "missing element" errors — an agent reading a
+hundred violations caused by one version mismatch will fix the wrong thing.
+Detect and short-circuit.
+
+**Emitting results.** Every run ends by constructing exactly one result object
+matching the `Validator CLI Invocation` `resultSchema` — `tool`,
+`schemaVersion`, `target`, `passed`, `violations[]` — and printing it as JSON
+when `--format json`, or as a human-readable rendering of the same object when
+`--format text` (the default). Text output is a *rendering* of the object, never
+a separate code path, so a message can never appear in one format and not the
+other. `schemaVersion` is read from the schema file actually loaded, not
+hardcoded, so a contract bump is visible in every result. Exit codes follow the
+contract exactly: `0` clean, `1` one or more `severity: "error"` violations, `2`
+invocation error — bad arguments, unreadable target, missing or unparseable
+schema file. A `warning`-severity violation is reported but never changes the
+exit code, per the contract's merge-gate rule. `violations[].rule` is a stable
+dotted id, never a message string, because that id is what an AI agent maps back
+to the contract element it broke.
+
+**Fixtures.** The conforming world, the non-conforming world and the malicious
+world fixtures come from the Test Harness node via the Shared Test Fixtures
+contract — import them from `openaxolotl_tools.harness.fixtures` rather than
+keeping a private copy, because the criterion requires the checker, validator and
+static gate to share one corpus. This checker's own test asserts that the
+non-conforming fixture fails with the *specific expected* rule id, not merely
+that it fails; a checker that rejects everything would otherwise pass.
+
+**Reporting up.** Violation messages carry a `remediation` string saying what to
+change. This is the field an AI agent acts on, so write it as an instruction
+("declare `spawn_point` in `world.json`"), not as a restatement of the problem.
 
 ## Implementation Tasks
 

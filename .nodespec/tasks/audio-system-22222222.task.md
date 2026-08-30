@@ -16,7 +16,71 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+Audio is driven entirely by semantic events. No other system knows a file path or
+a bus name; they emit "tail lost", "entered water", "region restored", and this
+node decides what that sounds like.
+
+**Placement and shape.** This is a `shared-library` node: it lives in its own
+directory under `core/`, exposes a `class_name`-registered public surface, and is
+consumed by other systems and by world modules as a dependency. It is not an
+autoload unless it genuinely needs one global instance — prefer an explicit
+reference passed in over a singleton, because a singleton is untestable under
+GdUnit4 without process-level teardown, and this project's whole verification
+story runs through GdUnit4.
+
+**Catalog guidance that does not apply here.** The Godot technology guidance in
+this packet carries multiplayer sample code — `@rpc` annotations,
+`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
+guidance and it is forbidden in this project. REQ-030 bans the whole Godot
+multiplayer surface, the Engine Feature Policy contract records the ban
+machine-readably, and the World Static Analysis Gate fails CI on any occurrence
+anywhere in `core/`, `worlds/` or the reference template. This is single-player
+only, in every phase, with no deferral. Systems talk to each other through
+signals and direct calls on the interfaces declared in this packet.
+
+**The Audio Event Interface is an enum, not a string.** Every producer — the
+Regeneration system, the Gill Mod framework, the Restoration system, the Axolotl
+Controller, and world modules — sends a declared event identifier. Keeping the
+event set closed is what lets a test assert full coverage: every capability-loss
+and regrowth type has a distinct cue, and every Gill Mod has a per-mod distinct
+cue. Assert distinctness by mapping the event set to resolved audio resources and
+checking the mapping is total and injective where the criteria require distinct
+cues; a missing mapping is a test failure rather than silence at runtime.
+
+**Grammar and restoration soundscapes.** Water and land have distinct movement
+and ambience audio that switches with the grammar transition — subscribe to the
+controller's grammar-change signal and crossfade, rather than sampling a water
+volume independently, so audio can never disagree with the controller about which
+grammar is active. Region restoration state changes shift the ambient soundscape
+correspondingly, driven off the Restoration Region Interface's transition signal.
+
+**World-supplied audio with a real fallback.** Worlds may declare their own music
+and ambience through the Level Contract, and a world declaring none falls back to
+defaults rather than to silence — that is a checked criterion and the reference
+template, which declares no optional elements, is what exercises it. Resolve
+declared-or-default at world load and hold the resolved set, so the fallback path
+is taken once rather than tested per playback.
+
+**Mixing and settings.** Master, music and effects are separate Godot audio buses
+with independently adjustable volumes that persist across sessions — persist them
+through the Save Integration Interface's settings path, alongside input bindings,
+not in a private file.
+
+**Assets.** Every audio asset conforms to the Asset Contract including the
+provenance sidecar; the Asset Contract Validator checks them in CI. AI-generated
+audio records its tool and prompt, hand-authored audio does not — the schema's
+conditional handles that, so nothing special is needed here beyond placing files
+per the declared layout.
+
+**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
+each test name carries the requirement id it proves (`test_req_0NN_...`) — the
+harness parses that id back out and reports it as the failing rule, which is how
+a contributor or agent locates what broke. Unit-tier tests exercise this system's
+logic as plain objects; integration-tier tests drive it against the real
+controller and the real save interface via GdUnit4's `scene_runner`, because the
+criteria explicitly reject isolation-only coverage. Headless CI has no audio device; run Godot with a dummy audio driver and
+assert on the resolved playback requests rather than on sound. "Sound design
+supports the comedic tone" is manual.
 
 ## Implementation Tasks
 

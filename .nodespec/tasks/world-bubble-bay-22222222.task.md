@@ -16,7 +16,64 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+Bubble Bay is the second official world and it carries a specific structural
+proof: it declares no boss, which is how the optional-boss path in the Level
+Contract gets exercised by something real rather than only by a fixture.
+
+**Placement and shape.** A world is a self-contained module under `worlds/`,
+discovered by the hub at runtime with no entry in any code-side list. It declares
+itself through a manifest validated against `contracts/level_contract.v1.json`,
+and it may call only the symbols in the sanctioned world API surface — the World
+Static Analysis Gate rejects anything else. Build it exactly the way an outside
+contributor would: no private back doors, no reaching into a core system's
+internals, no engine API a community world could not also use. That constraint is
+the point of the official worlds, and one of them states it as a criterion.
+
+**Catalog guidance that does not apply here.** The Godot technology guidance in
+this packet carries multiplayer sample code — `@rpc` annotations,
+`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
+guidance and it is forbidden in this project. REQ-030 bans the whole Godot
+multiplayer surface, the Engine Feature Policy contract records the ban
+machine-readably, and the World Static Analysis Gate fails CI on any occurrence
+anywhere in `core/`, `worlds/` or the reference template. This is single-player
+only, in every phase, with no deferral. Systems talk to each other through
+signals and direct calls on the interfaces declared in this packet.
+
+**The bossless proof.** Declaring no boss must leave this world contract-valid
+and fully completable. That has a consequence for the Restoration system: since
+defeating a Flagship is what normally sets a region's `unlocked` flag, a bossless
+world needs another declared means of unlocking, defined by the Level Contract's
+default for a world with no boss. Do not solve this locally with a script — if the
+contract cannot express it, that is contract feedback for the v1 freeze.
+
+**Gill Mod split.** Bubble Bay contains at least one mandatory traversal challenge
+gated on a Gill Mod that Coral Cove does not emphasize. Coordinate with Coral Cove
+so that across the two worlds all three MVP mods — Bubble, Jet, Glow — are each
+required somewhere; the criterion on the official set is a union property, and it
+fails if both worlds lean on the same mod.
+
+**Coverage this world owns.** Both movement grammars exercised, at least one
+restorable region, completable from spawn to finish condition, passing both the
+Level Contract compliance checker and the World Static Analysis Gate.
+
+**Completability is a headless test.** Same discipline as Coral Cove: the critical
+path must be drivable by simulated input in the playthrough smoke test —
+deterministic placement on the mandatory route, no frame-rate-dependent timing
+windows.
+
+**Declare, don't script.** Regions, collectibles, enemies, camera hints,
+checkpoints and audio come from Level Contract elements. Any script this world
+needs is either a sanctioned-API call or a signal that the contract is missing
+something.
+
+**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
+each test name carries the requirement id it proves (`test_req_0NN_...`) — the
+harness parses that id back out and reports it as the failing rule, which is how
+a contributor or agent locates what broke. Unit-tier tests exercise this system's
+logic as plain objects; integration-tier tests drive it against the real
+controller and the real save interface via GdUnit4's `scene_runner`, because the
+criteria explicitly reject isolation-only coverage. Frame-rate on the baseline spec is asserted by the CI performance test.
+Fun and the restoration payoff are manual.
 
 ## Implementation Tasks
 

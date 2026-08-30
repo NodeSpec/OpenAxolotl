@@ -16,7 +16,73 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+Coral Cove is the first official world and the one that carries the cross-world
+criteria for the official set — including the requirement that both official
+worlds are built with no privileges an outside contributor lacks.
+
+**Placement and shape.** A world is a self-contained module under `worlds/`,
+discovered by the hub at runtime with no entry in any code-side list. It declares
+itself through a manifest validated against `contracts/level_contract.v1.json`,
+and it may call only the symbols in the sanctioned world API surface — the World
+Static Analysis Gate rejects anything else. Build it exactly the way an outside
+contributor would: no private back doors, no reaching into a core system's
+internals, no engine API a community world could not also use. That constraint is
+the point of the official worlds, and one of them states it as a criterion.
+
+**Catalog guidance that does not apply here.** The Godot technology guidance in
+this packet carries multiplayer sample code — `@rpc` annotations,
+`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
+guidance and it is forbidden in this project. REQ-030 bans the whole Godot
+multiplayer surface, the Engine Feature Policy contract records the ban
+machine-readably, and the World Static Analysis Gate fails CI on any occurrence
+anywhere in `core/`, `worlds/` or the reference template. This is single-player
+only, in every phase, with no deferral. Systems talk to each other through
+signals and direct calls on the interfaces declared in this packet.
+
+**No back doors, verified by the same gate.** The criterion says each official
+world calls only the sanctioned world API surface, using no private back doors,
+*verified by the same static analysis applied to community submissions*. So
+Coral Cove runs through `oax-static-gate` in CI exactly as a submission would. If
+building this world requires an API that is not sanctioned, the correct fix is to
+add it to the sanctioned surface deliberately — updating
+`contracts/sanctioned_api.v1.json` and the interfaces it reflects — never to work
+around the gate. Every such addition is a decision about what community
+contributors may do, so treat it as a contract change, not a build fix.
+
+**Coverage this world owns.** Both movement grammars exercised, at least one
+restorable region, at least one mandatory traversal challenge gated on a specific
+Gill Mod, and a Flagship encounter (Bubble Bay declares none, so Coral Cove is
+where the boss path is proven). Across the official set all three MVP mods must
+each be required by at least one world — coordinate the split with Bubble Bay so
+the union genuinely covers Bubble, Jet and Glow rather than both worlds gating on
+the same one.
+
+**Completability is a headless test.** The playthrough smoke test drives this
+world from spawn to finish condition and asserts completion. Design the critical
+path so it is drivable by simulated input — deterministic enemy placement on the
+mandatory route, no timing window that depends on frame rate — otherwise the smoke
+test becomes flaky and the project loses its regression net.
+
+**Declare, don't script.** Regions, collectibles, enemies, camera hints, checkpoints
+and audio are all declared through the Level Contract's elements. Reach for a
+script only where the contract has no element for what you need, and when that
+happens, treat it as contract feedback rather than as a local workaround.
+
+**Contract feedback is a deliverable.** One manual criterion says friction
+discovered while building the official worlds is fed back into the Level Contract
+before v1 is frozen. Keep a running list as you build — every place the contract
+made you fight it — and land those changes before the freeze. Freezing v1 without
+that feedback is what would break every early community world on the first core
+update.
+
+**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
+each test name carries the requirement id it proves (`test_req_0NN_...`) — the
+harness parses that id back out and reports it as the failing rule, which is how
+a contributor or agent locates what broke. Unit-tier tests exercise this system's
+logic as plain objects; integration-tier tests drive it against the real
+controller and the real save interface via GdUnit4's `scene_runner`, because the
+criteria explicitly reject isolation-only coverage. Frame-rate on the baseline spec is asserted via `Performance.get_monitor()`
+in the CI performance test. Fun and the restoration payoff are manual.
 
 ## Implementation Tasks
 

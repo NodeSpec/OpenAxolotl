@@ -16,7 +16,84 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+This node is pillar two of the game: two mechanically distinct movement grammars
+joined by one signature transition skill. Everything else in the project binds to
+its public interface, so its surface is effectively frozen the moment the first
+world module ships against it — design the interface before the physics.
+
+**Placement and shape.** This is a `shared-library` node: it lives in its own
+directory under `core/`, exposes a `class_name`-registered public surface, and is
+consumed by other systems and by world modules as a dependency. It is not an
+autoload unless it genuinely needs one global instance — prefer an explicit
+reference passed in over a singleton, because a singleton is untestable under
+GdUnit4 without process-level teardown, and this project's whole verification
+story runs through GdUnit4.
+
+**Catalog guidance that does not apply here.** The Godot technology guidance in
+this packet carries multiplayer sample code — `@rpc` annotations,
+`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
+guidance and it is forbidden in this project. REQ-030 bans the whole Godot
+multiplayer surface, the Engine Feature Policy contract records the ban
+machine-readably, and the World Static Analysis Gate fails CI on any occurrence
+anywhere in `core/`, `worlds/` or the reference template. This is single-player
+only, in every phase, with no deferral. Systems talk to each other through
+signals and direct calls on the interfaces declared in this packet.
+
+**Grammar switching is the hard part.** The criterion is exact: crossing a water
+volume boundary switches grammar *in the same physics frame* as the crossing,
+with no frame rendered in the previous grammar. That rules out reacting to an
+`Area3D` `body_entered` signal in `_process` — signal delivery lands a frame
+late. Do the volume test inside `_physics_process` before movement integration,
+so detection and grammar switch happen in one tick. Momentum carries across the
+switch at `controller.transition.momentum_retention_ratio`, applied to magnitude
+rather than the vector, so a swimmer surfacing keeps speed without keeping an
+underwater heading.
+
+**Two state machines, one body.** Implement water and land as separate movement
+strategies behind a common interface rather than as branches inside one
+`_physics_process`, and keep the `CharacterBody3D` motion call shared. Water
+grammar owns full 3D directional swimming, dive and a cooldown-governed bubble
+boost; land grammar owns waddle, hop and climbing on surfaces tagged climbable
+(use a physics layer or a group for the tag — never a name check). The
+water-powered dash sits above both grammars because it works in either, and its
+charge recharges only while in water, which is what makes it read as a transition
+skill rather than a generic ability.
+
+**Tongue grapple.** Range is `controller.grapple.max_range_m`, tested inclusively
+— an anchor exactly at max range attaches, one beyond it is rejected. Anchor
+discovery is a group query plus a raycast, not a proximity scan of the whole
+scene.
+
+**The public interface is the deliverable.** Worlds bind to movement state,
+capability modifiers and ability hooks without touching controller internals.
+That means: movement state exposed as a read-only enum plus signals on change;
+capability modifiers applied through the Capability Modifier Interface as
+multiplicative factors this node consumes but never authors; ability hooks
+registered by the Gill Mod framework rather than known to the controller.
+Anything a world can only achieve by reaching into a private member is a hole in
+this interface — fix the interface, not the world. The World Static Analysis Gate
+enforces the resulting allowlist, so an omission here becomes a rejected world
+module later.
+
+**No magic numbers.** Every balance value this system uses is read from the
+Balance and Tuning Data node through the Tuning Data Interface, never declared as
+a GDScript constant. REQ-025 makes that a checked property: a cited tuning key
+that does not exist in the tuning data fails a test, and changing a value must
+alter behavior with no recompile.
+
+**Input.** Read player intent from the Input System's Player Input Interface.
+Worlds must never read raw input, and neither should this node reach into
+`Input` directly for gameplay verbs — that indirection is what makes rebinding
+and context-sensitive bindings possible.
+
+**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
+each test name carries the requirement id it proves (`test_req_0NN_...`) — the
+harness parses that id back out and reports it as the failing rule, which is how
+a contributor or agent locates what broke. Unit-tier tests exercise this system's
+logic as plain objects; integration-tier tests drive it against the real
+controller and the real save interface via GdUnit4's `scene_runner`, because the
+criteria explicitly reject isolation-only coverage. The one manual criterion here — that both grammars feel distinct and
+pleasurable — is proven by hands-on play and a task-doc tick, not by a test.
 
 ## Implementation Tasks
 

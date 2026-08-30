@@ -16,7 +16,76 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+This node is where the project's extensibility claim gets tested first. The MVP
+ships three mods built to depth — Bubble, Jet, Glow — but the framework's real
+deliverable is the registration interface that lets a fourth arrive without
+touching a file in this directory.
+
+**Placement and shape.** This is a `shared-library` node: it lives in its own
+directory under `core/`, exposes a `class_name`-registered public surface, and is
+consumed by other systems and by world modules as a dependency. It is not an
+autoload unless it genuinely needs one global instance — prefer an explicit
+reference passed in over a singleton, because a singleton is untestable under
+GdUnit4 without process-level teardown, and this project's whole verification
+story runs through GdUnit4.
+
+**Catalog guidance that does not apply here.** The Godot technology guidance in
+this packet carries multiplayer sample code — `@rpc` annotations,
+`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
+guidance and it is forbidden in this project. REQ-030 bans the whole Godot
+multiplayer surface, the Engine Feature Policy contract records the ban
+machine-readably, and the World Static Analysis Gate fails CI on any occurrence
+anywhere in `core/`, `worlds/` or the reference template. This is single-player
+only, in every phase, with no deferral. Systems talk to each other through
+signals and direct calls on the interfaces declared in this packet.
+
+**The extension interface is the product.** The criterion is precise: a fixture
+mod can be added without modifying any file in the ability system core. Build to
+that by making registration data-driven — a mod is a resource declaring its
+identity, its affordance hooks, its duration and cooldown tuning keys, and its
+audio and HUD identifiers — discovered from a directory rather than listed in a
+registry constant. Write the fixture mod first and let it drive the interface;
+an interface designed around the three known mods will quietly assume something
+only they do. Post-MVP mods (Electric, Frost, Giant) are the intended proof, and
+a world may supply its own custom mod through the Level Contract's optional
+custom-ability element, so the same path must work from inside a world module
+under the sanctioned API allowlist.
+
+**Depth over breadth.** Each of the three MVP mods unlocks at least one traversal
+or interaction affordance unavailable without it — that is a checked criterion,
+so each affordance needs to be identifiable in a test (a gated path a headless
+run can attempt with and without the mod equipped). "Developed to real depth
+rather than a one-note gimmick" is the manual companion criterion.
+
+**Two external forces modify mods, and both are timers.** Gill capability loss
+multiplies the equipped mod's boost duration by
+`capability.gill_loss.boost_duration_multiplier` — a modifier consumed through
+the Capability Modifier Interface, applied at activation, never stored as mutated
+mod state. A Hookline Rig snag removes the equipped mod for
+`enemy.hookline.mod_strip_seconds` and then restores it automatically; own that
+restore timer here rather than in the enemy, so a despawned enemy cannot strand
+the player without a mod. Test the interaction of the two: snagged while
+gill-damaged, then restored, must land back at the damaged multiplier and not at
+the base duration.
+
+**Presentation.** Equipping and switching is player-available and reflected on the
+axolotl visually. Emit semantic events to the Audio System (per-mod distinct cue)
+and to the HUD (equipped mod, remaining charge or cooldown) rather than driving
+either directly.
+
+**No magic numbers.** Every balance value this system uses is read from the
+Balance and Tuning Data node through the Tuning Data Interface, never declared as
+a GDScript constant. REQ-025 makes that a checked property: a cited tuning key
+that does not exist in the tuning data fails a test, and changing a value must
+alter behavior with no recompile.
+
+**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
+each test name carries the requirement id it proves (`test_req_0NN_...`) — the
+harness parses that id back out and reports it as the failing rule, which is how
+a contributor or agent locates what broke. Unit-tier tests exercise this system's
+logic as plain objects; integration-tier tests drive it against the real
+controller and the real save interface via GdUnit4's `scene_runner`, because the
+criteria explicitly reject isolation-only coverage.
 
 ## Implementation Tasks
 

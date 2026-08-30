@@ -16,7 +16,79 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+This node is the Godot project itself plus three things that only make sense at
+project scope: the Level Contract v1 schema every other module is judged
+against, the Open Lagoon hub that discovers and loads world modules at runtime,
+and the contributor-facing documentation and performance budgets.
+
+**Repository layout (project-wide, settled here once).** The Godot project root
+IS the repository root — `project.godot` sits at the top level so every core
+system, world module and contract schema is reachable as a plain `res://` path
+with no import gymnastics. `core/` holds one directory per core system node,
+`hub/` holds the Open Lagoon hub and world loader, `worlds/` holds world
+modules discovered at runtime, `contracts/` holds the machine-readable schema
+files, `test/` holds GdUnit4 GDScript tests mirroring `core/`, and `addons/`
+holds GdUnit4 itself. The Python tooling lives under `tools/` and the shared
+test fixtures under `fixtures/`; both carry a `.gdignore` file so Godot's
+importer never scans them — this matters because the fixture set deliberately
+contains malformed and malicious world modules that would otherwise break
+editor import for everyone.
+
+**Catalog guidance that does not apply here.** The Godot technology guidance in
+this packet includes multiplayer sample code — `@rpc` annotations,
+`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
+guidance and it is forbidden in this project. REQ-030 bans the entire Godot
+multiplayer surface, the Engine Feature Policy contract records the ban
+machine-readably, and the World Static Analysis Gate fails CI on any occurrence
+in core, worlds, the template or submissions. Cross-node communication in this
+project is signals and direct calls through the declared interfaces, never RPC.
+`project.godot` must additionally declare no networking autoloads, no peer
+configuration and no network-related project settings — that is a checked
+criterion, not a style preference.
+
+**The Level Contract is a data file, not code.** `contracts/level_contract.v1.json`
+is a JSON Schema document and it is the single source of truth: the compliance
+checker loads it and hardcodes nothing, and the hub loads the same file to
+validate a module before loading it. Adding a conformance rule means editing
+that file only. The schema declares the five required elements (spawn point,
+checkpoints, finish condition, controller compatibility, save integration), each
+optional element together with the default applied when absent, the
+`contractVersion` identifier every world module must declare, the module
+directory layout and naming convention, and a `sanctionedApi` block naming the
+symbols a world may call. Keep `contracts/sanctioned_api.v1.json` derived from
+the actual architecture edges rather than authored from intent — an allowlist
+written from memory drifts from the interfaces that really exist, and the static
+gate then rejects legitimate world code. The prose companion at
+`docs/level-contract.md` explains each element and its rationale; it is
+documentation of the schema, never a second source of truth.
+
+**Hub and loader.** `hub/world_registry.gd` scans `res://worlds/` at runtime,
+reads each module's manifest, validates it against the loaded schema, and builds
+the portal list from what survives. There is no hardcoded world list anywhere,
+including no special case for the reference template — the template must go
+through the identical path, which is what proves the path is genuinely generic.
+A module that fails to load or fails validation is recorded with its failure
+reason and surfaced as an unavailable portal; it never propagates an exception
+into the hub. Portals carry a `tier` field (`official`, `community`,
+`experimental`) coming from the manifest, and tier is distinguished by shape and
+label as well as color, because REQ-019 and REQ-022 forbid color-only encoding
+project-wide. Per-world completion and restoration progress are read through the
+Save Integration Interface — the hub never opens the save file.
+
+**Performance budgets.** State the baseline PC specification and the three
+numbers (frame-rate target, maximum permitted frame-time spike, world load-time
+budget) in `docs/performance.md` and mirror them as data in the tuning set so
+the CI regression test reads the same numbers the documentation states. Measure
+in-engine with `Performance.get_monitor()` rather than wall-clock timing around
+the frame loop. The load-time budget is measured from portal selection to the
+frame the player first has control, not to scene instantiation.
+
+**Documentation.** REQ-017's testable criterion is that the exact documented
+commands succeed as written. Keep the command strings in one place —
+`docs/commands.md` — and have the harness parse that file and execute what it
+finds, so documentation drift fails CI instead of quietly misleading a
+contributor. The remaining REQ-017 criteria are manual and prove out through
+task-doc ticks plus user approval, not through `report_test_results`.
 
 ## Implementation Tasks
 

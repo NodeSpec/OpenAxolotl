@@ -16,7 +16,102 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+This is the project's security and policy gate. It answers: does this GDScript
+call anything it is not sanctioned to call? Two requirements ride on it — the
+community submission pipeline (REQ-020) and the project-wide multiplayer ban
+(REQ-030) — and both are load-bearing. This is a family game whose contribution
+pipeline explicitly welcomes AI agents; this gate plus mandatory human review is
+what stands between that pipeline and arbitrary code execution on a player's
+machine.
+
+**Catalog guidance that does not apply here.** The Python technology guidance in
+this packet describes a FastAPI web service — `fastapi`/`uvicorn`, SQLAlchemy
+async sessions, Celery workers, `src/main.py` + `src/routes/__init__.py`, CORS
+and JWT. None of it applies. This node is a short-lived, synchronous,
+filesystem-only command-line program with no HTTP surface, no database, no
+broker and no async runtime. Ignore the suggested file structure in T1 and the
+SDK/API pattern snippets entirely. What carries over from that guidance is only
+the tooling advice: `uv` for the environment with a committed lockfile, `ruff`
+for lint and format, `pytest` with fixtures, strict `mypy`, and pinned
+dependencies.
+
+**Packaging.** All four Python validators share one distribution at `tools/`
+(`tools/pyproject.toml`, package `openaxolotl_tools`), because they share the
+fixture corpus, the result-emitting code and the CI invocation convention;
+splitting them into four distributions would duplicate all three. Each tool is
+its own subpackage with its own console entry point declared in
+`[project.scripts]`. `openaxolotl_tools/common/` holds the pieces every tool
+needs: `result.py` (builds and serialises the `Validator CLI Invocation`
+result object), `cli.py` (the shared `argparse` parent parser giving every tool
+the identical `--target/--format/--fail-fast` surface), and `schemas.py`
+(loads and caches the JSON Schema files from `contracts/`).
+
+**Scope is wider than community worlds.** The multiplayer check scans core
+systems, official worlds, the reference template *and* submissions. The
+sanctioned-API check scans world modules only, since core systems legitimately
+call engine APIs a world may not. Encode that split as two rule sets over one
+walker, driven by which directory a file sits in, rather than as two tools.
+
+**Parsing GDScript.** There is no GDScript AST library to lean on, and regex over
+source text is not defensible for a security gate — it misses continuation lines
+and flags matches inside strings and comments. Implement a small tokenizer in
+`openaxolotl_tools/staticgate/gdscript.py` that strips comments and string
+literals first, then extracts identifiers, annotations and call targets with line
+numbers. Everything downstream works on that token stream. Getting the tokenizer
+right is the majority of this node's real work; budget accordingly, and test it
+against source containing forbidden identifiers inside comments and strings,
+which must NOT be flagged.
+
+**Forbidden classes.** The sanctioned-API rule set rejects filesystem
+(`FileAccess`, `DirAccess`), network (`HTTPRequest`, `HTTPClient`, `TCPServer`,
+`StreamPeer*`, `PacketPeer*`), OS execution (`OS.execute`, `OS.shell_open`) and
+dynamic evaluation (`Expression`, `GDScript.new()` + `reload`, `load` on a
+runtime-built path) — anything outside the `sanctionedApi` block of
+`contracts/level_contract.v1.json`. The multiplayer rule set rejects `@rpc`
+annotations, `rpc`/`rpc_id`/`rpc_config` calls, `is_multiplayer_authority` and
+`set_multiplayer_authority`, the `multiplayer` property and `MultiplayerAPI`,
+every `MultiplayerPeer` implementation (ENet, WebRTC, WebSocket), and the
+`MultiplayerSynchronizer` and `MultiplayerSpawner` node types in both `.gd` and
+`.tscn` files. Scene files matter: a `MultiplayerSpawner` can be added in the
+editor without any script mentioning it.
+
+**Both rule sets are data.** They load from `contracts/sanctioned_api.v1.json`
+and `contracts/engine_feature_policy.v1.json`. The multiplayer ban therefore
+exists in three enforced places — the policy file this gate reads, the Level
+Contract's forbidden list covering world modules, and `project.godot` settings —
+which is what makes "no multiplayer" a machine-checked property rather than a
+line in the README. Violation output names the specific API and the file, per the
+criterion.
+
+**project.godot check.** A dedicated rule parses `project.godot` and fails on any
+networking or multiplayer autoload, peer configuration or network-related
+setting. This is a text-format INI file; parse it with `configparser` rather than
+pattern-matching.
+
+**Emitting results.** Every run ends by constructing exactly one result object
+matching the `Validator CLI Invocation` `resultSchema` — `tool`,
+`schemaVersion`, `target`, `passed`, `violations[]` — and printing it as JSON
+when `--format json`, or as a human-readable rendering of the same object when
+`--format text` (the default). Text output is a *rendering* of the object, never
+a separate code path, so a message can never appear in one format and not the
+other. `schemaVersion` is read from the schema file actually loaded, not
+hardcoded, so a contract bump is visible in every result. Exit codes follow the
+contract exactly: `0` clean, `1` one or more `severity: "error"` violations, `2`
+invocation error — bad arguments, unreadable target, missing or unparseable
+schema file. A `warning`-severity violation is reported but never changes the
+exit code, per the contract's merge-gate rule. `violations[].rule` is a stable
+dotted id, never a message string, because that id is what an AI agent maps back
+to the contract element it broke.
+
+**Fixtures.** The malicious fixture world exercises each forbidden call class,
+and a separate multiplayer fixture file exercises each banned multiplayer API.
+Both come from the Test Harness via Shared Test Fixtures. Assert per-class
+rejection — one test per forbidden class asserting the specific rule id — so a
+gate that stopped detecting one class cannot hide behind the others still firing.
+
+**Human review is not optional and not this tool's job.** The gate is
+pre-screening. Branch protection requiring maintainer approval is configured by
+the CI Pipeline node; never add a path that lets a green gate merge on its own.
 
 ## Implementation Tasks
 

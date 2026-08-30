@@ -16,7 +16,71 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+The antagonists are industrial machinery, never people — no gore, no humanized
+violence. Mechanically, the roster's job is to strip capabilities and undo
+restoration; only the Dredger's area-wipe touches lives at all.
+
+**Placement and shape.** This is a `shared-library` node: it lives in its own
+directory under `core/`, exposes a `class_name`-registered public surface, and is
+consumed by other systems and by world modules as a dependency. It is not an
+autoload unless it genuinely needs one global instance — prefer an explicit
+reference passed in over a singleton, because a singleton is untestable under
+GdUnit4 without process-level teardown, and this project's whole verification
+story runs through GdUnit4.
+
+**Catalog guidance that does not apply here.** The Godot technology guidance in
+this packet carries multiplayer sample code — `@rpc` annotations,
+`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
+guidance and it is forbidden in this project. REQ-030 bans the whole Godot
+multiplayer surface, the Engine Feature Policy contract records the ban
+machine-readably, and the World Static Analysis Gate fails CI on any occurrence
+anywhere in `core/`, `worlds/` or the reference template. This is single-player
+only, in every phase, with no deferral. Systems talk to each other through
+signals and direct calls on the interfaces declared in this packet.
+
+**Four enemies, four distinct pressures.** Netbots entangle and strip swim speed,
+countered by Jet Gills. Hookline Rigs snag and strip the equipped Gill Mod for
+`enemy.hookline.mod_strip_seconds`, revealed in advance by Glow Gills — the
+reveal is what makes the counter skill rather than luck, so the line must be
+detectable before the trigger volume, not simultaneously with it. Dredgers revert
+restored regions to barren and their area-wipe decrements a life. Runoff Drones
+apply a vision and gill-recharge debuff while the player is inside the toxin
+volume, at `enemy.runoff.vision_debuff_factor`,
+`enemy.runoff.gill_recharge_multiplier` and `enemy.runoff.duration_s`.
+
+**Route the effects, do not implement them.** Capability stripping goes through
+the Capability Modifier Interface to the Regeneration system; the life decrement
+goes through the Checkpoint and Life Interface with the Dredger area-wipe named as
+its catastrophic source (that system rejects unlisted sources, so the source id
+must match); region reversion goes through the Restoration Region Interface. This
+node owns behaviour and targeting, never the state its effects land in. That is
+what keeps "ordinary enemy contact never decrements lives" true by construction —
+only the Dredger has a code path to the life interface at all.
+
+**The registration interface is a deliverable.** A fixture enemy must be addable
+without modifying any file in the enemy system core. Same discipline as the Gill
+Mod framework: enemies are declared as resources discovered from a directory,
+with behaviour composed from a small set of published hooks. Write the fixture
+enemy first.
+
+**Optional by contract.** A world declaring no enemies stays contract-valid and
+fully completable — the reference template proves that path, so nothing in world
+loading or finish-condition evaluation may assume an enemy exists.
+
+**No magic numbers.** Every balance value this system uses is read from the
+Balance and Tuning Data node through the Tuning Data Interface, never declared as
+a GDScript constant. REQ-025 makes that a checked property: a cited tuning key
+that does not exist in the tuning data fails a test, and changing a value must
+alter behavior with no recompile.
+
+**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
+each test name carries the requirement id it proves (`test_req_0NN_...`) — the
+harness parses that id back out and reports it as the failing rule, which is how
+a contributor or agent locates what broke. Unit-tier tests exercise this system's
+logic as plain objects; integration-tier tests drive it against the real
+controller and the real save interface via GdUnit4's `scene_runner`, because the
+criteria explicitly reject isolation-only coverage. "Runoff Drone encounters make land routes read as the favorable path" is
+a manual, hands-on criterion.
 
 ## Implementation Tasks
 

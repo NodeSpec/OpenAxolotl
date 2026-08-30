@@ -16,7 +16,61 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+The HUD is a pure readout: it subscribes to state and renders it, and it owns no
+game state of its own. Two of its criteria are about latency and one is an
+accessibility rule that shapes every element on screen.
+
+**Placement and shape.** This is a `shared-library` node: it lives in its own
+directory under `core/`, exposes a `class_name`-registered public surface, and is
+consumed by other systems and by world modules as a dependency. It is not an
+autoload unless it genuinely needs one global instance — prefer an explicit
+reference passed in over a singleton, because a singleton is untestable under
+GdUnit4 without process-level teardown, and this project's whole verification
+story runs through GdUnit4.
+
+**Catalog guidance that does not apply here.** The Godot technology guidance in
+this packet carries multiplayer sample code — `@rpc` annotations,
+`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
+guidance and it is forbidden in this project. REQ-030 bans the whole Godot
+multiplayer surface, the Engine Feature Policy contract records the ban
+machine-readably, and the World Static Analysis Gate fails CI on any occurrence
+anywhere in `core/`, `worlds/` or the reference template. This is single-player
+only, in every phase, with no deferral. Systems talk to each other through
+signals and direct calls on the interfaces declared in this packet.
+
+**Same-frame latency.** Lives and capability changes must be reflected within the
+same frame the change is raised. That rules out polling in `_process` — subscribe
+to the change signals from the Lives and Capability systems and update on receipt,
+inside the same frame. Test it by raising a change and asserting the HUD node's
+displayed value before advancing a frame with `scene_runner`.
+
+**Never color alone.** Every HUD state is distinguishable by shape, icon or text
+in addition to color — a checked criterion, not a guideline, and it pairs with the
+same rule on hazards in REQ-019. Make it structurally verifiable: give each HUD
+state entry an explicit non-color discriminator field in its state table, and let
+a test assert every entry has one. A visual review cannot prove this; a complete
+table can.
+
+**What it reads.** Current lives; which capabilities are intact and which are
+lost; the equipped Gill Mod with its remaining charge or cooldown; the active
+region's restoration state and progress toward the next; the water-powered dash
+charge and its recharge state. Each arrives through the HUD State Interface from
+the owning system. The HUD never derives a value — if it needs "progress toward
+next restoration state", the Restoration system publishes that number rather than
+the HUD computing it from resource counts, because a second computation is a
+second source of truth that will drift.
+
+**Tone.** Capability-loss presentation reads as playful rather than alarming —
+manual, and the reason the capability display should not borrow health-bar visual
+language (no red, no depletion metaphor, no damage flash).
+
+**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
+each test name carries the requirement id it proves (`test_req_0NN_...`) — the
+harness parses that id back out and reports it as the failing rule, which is how
+a contributor or agent locates what broke. Unit-tier tests exercise this system's
+logic as plain objects; integration-tier tests drive it against the real
+controller and the real save interface via GdUnit4's `scene_runner`, because the
+criteria explicitly reject isolation-only coverage.
 
 ## Implementation Tasks
 
