@@ -16,102 +16,7 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-This is the project's security and policy gate. It answers: does this GDScript
-call anything it is not sanctioned to call? Two requirements ride on it — the
-community submission pipeline (REQ-020) and the project-wide multiplayer ban
-(REQ-030) — and both are load-bearing. This is a family game whose contribution
-pipeline explicitly welcomes AI agents; this gate plus mandatory human review is
-what stands between that pipeline and arbitrary code execution on a player's
-machine.
-
-**Catalog guidance that does not apply here.** The Python technology guidance in
-this packet describes a FastAPI web service — `fastapi`/`uvicorn`, SQLAlchemy
-async sessions, Celery workers, `src/main.py` + `src/routes/__init__.py`, CORS
-and JWT. None of it applies. This node is a short-lived, synchronous,
-filesystem-only command-line program with no HTTP surface, no database, no
-broker and no async runtime. Ignore the suggested file structure in T1 and the
-SDK/API pattern snippets entirely. What carries over from that guidance is only
-the tooling advice: `uv` for the environment with a committed lockfile, `ruff`
-for lint and format, `pytest` with fixtures, strict `mypy`, and pinned
-dependencies.
-
-**Packaging.** All four Python validators share one distribution at `tools/`
-(`tools/pyproject.toml`, package `openaxolotl_tools`), because they share the
-fixture corpus, the result-emitting code and the CI invocation convention;
-splitting them into four distributions would duplicate all three. Each tool is
-its own subpackage with its own console entry point declared in
-`[project.scripts]`. `openaxolotl_tools/common/` holds the pieces every tool
-needs: `result.py` (builds and serialises the `Validator CLI Invocation`
-result object), `cli.py` (the shared `argparse` parent parser giving every tool
-the identical `--target/--format/--fail-fast` surface), and `schemas.py`
-(loads and caches the JSON Schema files from `contracts/`).
-
-**Scope is wider than community worlds.** The multiplayer check scans core
-systems, official worlds, the reference template *and* submissions. The
-sanctioned-API check scans world modules only, since core systems legitimately
-call engine APIs a world may not. Encode that split as two rule sets over one
-walker, driven by which directory a file sits in, rather than as two tools.
-
-**Parsing GDScript.** There is no GDScript AST library to lean on, and regex over
-source text is not defensible for a security gate — it misses continuation lines
-and flags matches inside strings and comments. Implement a small tokenizer in
-`openaxolotl_tools/staticgate/gdscript.py` that strips comments and string
-literals first, then extracts identifiers, annotations and call targets with line
-numbers. Everything downstream works on that token stream. Getting the tokenizer
-right is the majority of this node's real work; budget accordingly, and test it
-against source containing forbidden identifiers inside comments and strings,
-which must NOT be flagged.
-
-**Forbidden classes.** The sanctioned-API rule set rejects filesystem
-(`FileAccess`, `DirAccess`), network (`HTTPRequest`, `HTTPClient`, `TCPServer`,
-`StreamPeer*`, `PacketPeer*`), OS execution (`OS.execute`, `OS.shell_open`) and
-dynamic evaluation (`Expression`, `GDScript.new()` + `reload`, `load` on a
-runtime-built path) — anything outside the `sanctionedApi` block of
-`contracts/level_contract.v1.json`. The multiplayer rule set rejects `@rpc`
-annotations, `rpc`/`rpc_id`/`rpc_config` calls, `is_multiplayer_authority` and
-`set_multiplayer_authority`, the `multiplayer` property and `MultiplayerAPI`,
-every `MultiplayerPeer` implementation (ENet, WebRTC, WebSocket), and the
-`MultiplayerSynchronizer` and `MultiplayerSpawner` node types in both `.gd` and
-`.tscn` files. Scene files matter: a `MultiplayerSpawner` can be added in the
-editor without any script mentioning it.
-
-**Both rule sets are data.** They load from `contracts/sanctioned_api.v1.json`
-and `contracts/engine_feature_policy.v1.json`. The multiplayer ban therefore
-exists in three enforced places — the policy file this gate reads, the Level
-Contract's forbidden list covering world modules, and `project.godot` settings —
-which is what makes "no multiplayer" a machine-checked property rather than a
-line in the README. Violation output names the specific API and the file, per the
-criterion.
-
-**project.godot check.** A dedicated rule parses `project.godot` and fails on any
-networking or multiplayer autoload, peer configuration or network-related
-setting. This is a text-format INI file; parse it with `configparser` rather than
-pattern-matching.
-
-**Emitting results.** Every run ends by constructing exactly one result object
-matching the `Validator CLI Invocation` `resultSchema` — `tool`,
-`schemaVersion`, `target`, `passed`, `violations[]` — and printing it as JSON
-when `--format json`, or as a human-readable rendering of the same object when
-`--format text` (the default). Text output is a *rendering* of the object, never
-a separate code path, so a message can never appear in one format and not the
-other. `schemaVersion` is read from the schema file actually loaded, not
-hardcoded, so a contract bump is visible in every result. Exit codes follow the
-contract exactly: `0` clean, `1` one or more `severity: "error"` violations, `2`
-invocation error — bad arguments, unreadable target, missing or unparseable
-schema file. A `warning`-severity violation is reported but never changes the
-exit code, per the contract's merge-gate rule. `violations[].rule` is a stable
-dotted id, never a message string, because that id is what an AI agent maps back
-to the contract element it broke.
-
-**Fixtures.** The malicious fixture world exercises each forbidden call class,
-and a separate multiplayer fixture file exercises each banned multiplayer API.
-Both come from the Test Harness via Shared Test Fixtures. Assert per-class
-rejection — one test per forbidden class asserting the specific rule id — so a
-gate that stopped detecting one class cannot hide behind the others still firing.
-
-**Human review is not optional and not this tool's job.** The gate is
-pre-screening. Branch protection requiring maintainer approval is configured by
-the CI Pipeline node; never add a path that lets a green gate merge on its own.
+_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
 
 ## Implementation Tasks
 
@@ -122,14 +27,6 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
   Start from the catalog's suggested structure: `src/main.py`, `src/routes/__init__.py`, `pyproject.toml`.
 - [ ] **T2 — Implement the integration with World: Coral Cove (godot) per Contract "Sanctioned World API Surface" (dependency).** <!-- t:77966695 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-020 "Static analysis rejects any community world script calling filesystem, network, OS-execution, or dynamic-evaluation APIs, or otherwise reaching outside the sanctioned world API surface defined by the Level Contract" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-020 "A deliberately malicious fixture world attempting each forbidden call class is rejected by the static-analysis gate" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-020 "Accepted community worlds are packaged and surfaced in the hub as Community Lagoon portals credited to their author" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-030 "A static check rejects any use of Godot multiplayer APIs, including @rpc annotations, rpc/rpc_id/rpc_config calls, is_multiplayer_authority and set_multiplayer_authority, the multiplayer property and MultiplayerAPI, any MultiplayerPeer implementation (ENet, WebRTC, WebSocket), and MultiplayerSynchronizer or MultiplayerSpawner nodes" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-030 "The check scans core systems, official worlds, the reference template, and community submissions — not world modules alone" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-030 "A fixture file exercising each forbidden multiplayer API class is rejected by the check, with output naming the specific API and file" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-030 "The check runs as a required CI check and a pull request introducing any forbidden multiplayer API cannot merge" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-030 "The Level Contract's sanctioned world API surface lists every multiplayer API as forbidden, so world modules are covered by the same ban as core" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T3 — Implement the integration with World: Bubble Bay (godot) per Contract "Sanctioned World API Surface" (dependency).** <!-- t:e89d6a3b -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
 - [ ] **T4 — Implement the integration with Test Harness and Fixtures (python-backend) per Contract "Shared Test Fixtures" (dependency).** <!-- t:7d12e948 -->
@@ -138,8 +35,6 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
 - [ ] **T6 — Implement the integration with OpenAxolotl Game Client (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:a43ca1c2 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-020 "Every submission passes automated contract-compliance and content-policy pre-screening before human review" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-030 "Contributor documentation states the project is single-player only and warns that general Godot multiplayer guidance and engine sample code do not apply here" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T7 — Implement the integration with Axolotl Controller (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:546745c9 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
 - [ ] **T8 — Implement the integration with Input System (godot) per Contract "Engine Feature Policy" (dependency).** <!-- t:bd31611d -->
@@ -171,25 +66,55 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T21 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).** <!-- t:a39cc42a -->
   Record the endpoint/identifiers CI Pipeline needs in this node's config artifacts — coordinate with CI Pipeline.
   Build to the contract schema EXACTLY (see Interface Contracts).
-- [ ] **T22 — Implement: "Every submission requires explicit human maintainer approval before merge, enforced by branch protection with no automated-only merge path" (REQ-020).** <!-- t:acff5839 -->
+- [ ] **T22 — Implement: "Every submission passes automated contract-compliance and content-policy pre-screening before human review" (REQ-020).** <!-- t:e8911875 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-020 "Every submission passes automated contract-compliance and content-policy pre-screening before human review" — possible coordination point: Contract "Engine Feature Policy" (dependency) to Regeneration and Capability System (keyword signal only)
+- [ ] **T23 — Implement: "Static analysis rejects any community world script calling filesystem, network, OS-execution, or dynamic-evaluation APIs, or otherwise reaching outside the sanctioned world API surface defined by the Level Contract" (REQ-020).** <!-- t:3e43b10a -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-020 "Static analysis rejects any community world script calling filesystem, network, OS-execution, or dynamic-evaluation APIs, or otherwise reaching outside the sanctioned world API surface defined by the Level Contract" — possible coordination point: Contract "Sanctioned World API Surface" (dependency) to World: Coral Cove (keyword signal only)
+- [ ] **T24 — Implement: "A deliberately malicious fixture world attempting each forbidden call class is rejected by the static-analysis gate" (REQ-020).** <!-- t:73df8c93 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-020 "A deliberately malicious fixture world attempting each forbidden call class is rejected by the static-analysis gate"
+- [ ] **T25 — Implement: "Every submission requires explicit human maintainer approval before merge, enforced by branch protection with no automated-only merge path" (REQ-020).** <!-- t:acff5839 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-020 "Every submission requires explicit human maintainer approval before merge, enforced by branch protection with no automated-only merge path"
-- [ ] **T23 — Implement: "Portal tiering distinguishes Official, Community, and Experimental Lagoons" (REQ-020).** <!-- t:ace3d125 -->
+- [ ] **T26 — Implement: "Accepted community worlds are packaged and surfaced in the hub as Community Lagoon portals credited to their author" (REQ-020).** <!-- t:98bb8640 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-020 "Portal tiering distinguishes Official, Community, and Experimental Lagoons"
-- [ ] **T24 — Implement: "Pipeline opens only after Level Contract v1 is declared frozen" (REQ-020).** <!-- t:82d1202c -->
+  ↳ serves: REQ-020 "Accepted community worlds are packaged and surfaced in the hub as Community Lagoon portals credited to their author" — possible coordination point: Contract "Sanctioned World API Surface" (dependency) to World: Coral Cove (keyword signal only)
+- [ ] **T27 — Implement: "Portal tiering distinguishes Official, Community, and Experimental Lagoons" (REQ-020).** <!-- t:ace3d125 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-020 "Pipeline opens only after Level Contract v1 is declared frozen"
-- [ ] **T25 — Implement: "Content guidelines and the maintainer review checklist are documented for a family-audience bar" (REQ-020).** <!-- t:1ef7c7b6 -->
+  ↳ serves: REQ-020 "Portal tiering distinguishes Official, Community, and Experimental Lagoons" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T28 — Implement: "Pipeline opens only after Level Contract v1 is declared frozen" (REQ-020).** <!-- t:82d1202c -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-020 "Content guidelines and the maintainer review checklist are documented for a family-audience bar"
-- [ ] **T26 — Implement: "project.godot declares no networking or multiplayer autoloads, peer configuration, or network-related project settings" (REQ-030).** <!-- t:528ceeb3 -->
+  ↳ serves: REQ-020 "Pipeline opens only after Level Contract v1 is declared frozen" — possible coordination point: Contract "Validator CLI Invocation" (ipc) from CI Pipeline (keyword signal only)
+- [ ] **T29 — Implement: "Content guidelines and the maintainer review checklist are documented for a family-audience bar" (REQ-020).** <!-- t:1ef7c7b6 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-030 "project.godot declares no networking or multiplayer autoloads, peer configuration, or network-related project settings"
-- [ ] **T27 — Implement: "No architecture node is a game server, and no networking or multiplayer service appears anywhere in the project's technology set" (REQ-030).** <!-- t:207ac8e5 -->
+  ↳ serves: REQ-020 "Content guidelines and the maintainer review checklist are documented for a family-audience bar" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T30 — Implement: "A static check rejects any use of Godot multiplayer APIs, including @rpc annotations, rpc/rpc_id/rpc_config calls, is_multiplayer_authority and set_multiplayer_authority, the multiplayer property and MultiplayerAPI, any MultiplayerPeer implementation (ENet, WebRTC, WebSocket), and MultiplayerSynchronizer or MultiplayerSpawner nodes" (REQ-030).** <!-- t:7da78021 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-030 "No architecture node is a game server, and no networking or multiplayer service appears anywhere in the project's technology set"
-- [ ] **T28 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+  ↳ serves: REQ-030 "A static check rejects any use of Godot multiplayer APIs, including @rpc annotations, rpc/rpc_id/rpc_config calls, is_multiplayer_authority and set_multiplayer_authority, the multiplayer property and MultiplayerAPI, any MultiplayerPeer implementation (ENet, WebRTC, WebSocket), and MultiplayerSynchronizer or MultiplayerSpawner nodes" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T31 — Implement: "The check scans core systems, official worlds, the reference template, and community submissions — not world modules alone" (REQ-030).** <!-- t:aef4417f -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-030 "The check scans core systems, official worlds, the reference template, and community submissions — not world modules alone" — possible coordination point: Contract "Sanctioned World API Surface" (dependency) to World: Reference Template (keyword signal only)
+- [ ] **T32 — Implement: "A fixture file exercising each forbidden multiplayer API class is rejected by the check, with output naming the specific API and file" (REQ-030).** <!-- t:29a6bb9d -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-030 "A fixture file exercising each forbidden multiplayer API class is rejected by the check, with output naming the specific API and file" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T33 — Implement: "The check runs as a required CI check and a pull request introducing any forbidden multiplayer API cannot merge" (REQ-030).** <!-- t:9275cc64 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-030 "The check runs as a required CI check and a pull request introducing any forbidden multiplayer API cannot merge" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T34 — Implement: "project.godot declares no networking or multiplayer autoloads, peer configuration, or network-related project settings" (REQ-030).** <!-- t:528ceeb3 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-030 "project.godot declares no networking or multiplayer autoloads, peer configuration, or network-related project settings" — possible coordination point: Contract "Engine Feature Policy" (dependency) to Player HUD (keyword signal only)
+- [ ] **T35 — Implement: "No architecture node is a game server, and no networking or multiplayer service appears anywhere in the project's technology set" (REQ-030).** <!-- t:207ac8e5 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-030 "No architecture node is a game server, and no networking or multiplayer service appears anywhere in the project's technology set" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T36 — Implement: "The Level Contract's sanctioned world API surface lists every multiplayer API as forbidden, so world modules are covered by the same ban as core" (REQ-030).** <!-- t:481025f1 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-030 "The Level Contract's sanctioned world API surface lists every multiplayer API as forbidden, so world modules are covered by the same ban as core" — possible coordination point: Contract "Sanctioned World API Surface" (dependency) to World: Coral Cove (keyword signal only)
+- [ ] **T37 — Implement: "Contributor documentation states the project is single-player only and warns that general Godot multiplayer guidance and engine sample code do not apply here" (REQ-030).** <!-- t:97ad73fc -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-030 "Contributor documentation states the project is single-player only and warns that general Godot multiplayer guidance and engine sample code do not apply here" — possible coordination point: Contract "Engine Feature Policy" (dependency) to Regeneration and Capability System (keyword signal only)
+- [ ] **T38 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -236,21 +161,21 @@ POST-MVP, and strictly sequenced: this opens only after Level Contract v1 is fro
 
 **Acceptance criteria — your task boxes:**
 - [ ] Every submission passes automated contract-compliance and content-policy pre-screening before human review
-  → covered by Task T6
-- [ ] Static analysis rejects any community world script calling filesystem, network, OS-execution, or dynamic-evaluation APIs, or otherwise reaching outside the sanctioned world API surface defined by the Level Contract
-  → covered by Task T2
-- [ ] A deliberately malicious fixture world attempting each forbidden call class is rejected by the static-analysis gate
-  → covered by Task T2
-- [ ] Every submission requires explicit human maintainer approval before merge, enforced by branch protection with no automated-only merge path
   → covered by Task T22
-- [ ] Accepted community worlds are packaged and surfaced in the hub as Community Lagoon portals credited to their author
-  → covered by Task T2
-- [ ] Portal tiering distinguishes Official, Community, and Experimental Lagoons
+- [ ] Static analysis rejects any community world script calling filesystem, network, OS-execution, or dynamic-evaluation APIs, or otherwise reaching outside the sanctioned world API surface defined by the Level Contract
   → covered by Task T23
-- [ ] Pipeline opens only after Level Contract v1 is declared frozen (manual)
+- [ ] A deliberately malicious fixture world attempting each forbidden call class is rejected by the static-analysis gate
   → covered by Task T24
-- [ ] Content guidelines and the maintainer review checklist are documented for a family-audience bar (manual)
+- [ ] Every submission requires explicit human maintainer approval before merge, enforced by branch protection with no automated-only merge path
   → covered by Task T25
+- [ ] Accepted community worlds are packaged and surfaced in the hub as Community Lagoon portals credited to their author
+  → covered by Task T26
+- [ ] Portal tiering distinguishes Official, Community, and Experimental Lagoons
+  → covered by Task T27
+- [ ] Pipeline opens only after Level Contract v1 is declared frozen (manual)
+  → covered by Task T28
+- [ ] Content guidelines and the maintainer review checklist are documented for a family-audience bar (manual)
+  → covered by Task T29
 
 ### REQ-030: No Multiplayer — Enforced Single-Player Constraint
 Category: technical | Status: in-progress
@@ -258,21 +183,21 @@ Category: technical | Status: in-progress
 
 **Acceptance criteria — your task boxes:**
 - [ ] A static check rejects any use of Godot multiplayer APIs, including @rpc annotations, rpc/rpc_id/rpc_config calls, is_multiplayer_authority and set_multiplayer_authority, the multiplayer property and MultiplayerAPI, any MultiplayerPeer implementation (ENet, WebRTC, WebSocket), and MultiplayerSynchronizer or MultiplayerSpawner nodes
-  → covered by Task T2
+  → covered by Task T30
 - [ ] The check scans core systems, official worlds, the reference template, and community submissions — not world modules alone
-  → covered by Task T2
+  → covered by Task T31
 - [ ] A fixture file exercising each forbidden multiplayer API class is rejected by the check, with output naming the specific API and file
-  → covered by Task T2
+  → covered by Task T32
 - [ ] The check runs as a required CI check and a pull request introducing any forbidden multiplayer API cannot merge
-  → covered by Task T2
+  → covered by Task T33
 - [ ] project.godot declares no networking or multiplayer autoloads, peer configuration, or network-related project settings
-  → covered by Task T26
+  → covered by Task T34
 - [ ] No architecture node is a game server, and no networking or multiplayer service appears anywhere in the project's technology set
-  → covered by Task T27
+  → covered by Task T35
 - [ ] The Level Contract's sanctioned world API surface lists every multiplayer API as forbidden, so world modules are covered by the same ban as core
-  → covered by Task T2
+  → covered by Task T36
 - [ ] Contributor documentation states the project is single-player only and warns that general Godot multiplayer guidance and engine sample code do not apply here (manual)
-  → covered by Task T6
+  → covered by Task T37
 
 ## Interface Contracts
 
@@ -1468,10 +1393,3 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 **Depends on THIS node being available:**
 - CI Pipeline (initiates Validator CLI Invocation against this node (ipc))
-
-## Existing Implementation
-
-| File | Kind | Language | Status |
-|------|------|----------|--------|
-| `.nodespec/tests/req-030.tests.md` - Test plan for requirement: No Multiplayer — Enforced Single-Player Constraint | test-plan | markdown | draft |
-| `.nodespec/tests/req-020.tests.md` - Test plan for requirement: Community Lagoon Submission Pipeline (Post-MVP) | test-plan | markdown | draft |

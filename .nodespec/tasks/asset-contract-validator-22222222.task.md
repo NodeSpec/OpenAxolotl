@@ -16,82 +16,7 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-This node owns both halves of the asset story: the Asset Contract itself
-(`contracts/asset_contract.v1.json` plus its prose companion) and the validator
-that enforces it. The provenance requirement is the part that makes this node
-unusual — the project accepts AI-generated art as a first-class source, and the
-contract is how that stays honest rather than becoming an untracked license
-liability.
-
-**Catalog guidance that does not apply here.** The Python technology guidance in
-this packet describes a FastAPI web service — `fastapi`/`uvicorn`, SQLAlchemy
-async sessions, Celery workers, `src/main.py` + `src/routes/__init__.py`, CORS
-and JWT. None of it applies. This node is a short-lived, synchronous,
-filesystem-only command-line program with no HTTP surface, no database, no
-broker and no async runtime. Ignore the suggested file structure in T1 and the
-SDK/API pattern snippets entirely. What carries over from that guidance is only
-the tooling advice: `uv` for the environment with a committed lockfile, `ruff`
-for lint and format, `pytest` with fixtures, strict `mypy`, and pinned
-dependencies.
-
-**Packaging.** All four Python validators share one distribution at `tools/`
-(`tools/pyproject.toml`, package `openaxolotl_tools`), because they share the
-fixture corpus, the result-emitting code and the CI invocation convention;
-splitting them into four distributions would duplicate all three. Each tool is
-its own subpackage with its own console entry point declared in
-`[project.scripts]`. `openaxolotl_tools/common/` holds the pieces every tool
-needs: `result.py` (builds and serialises the `Validator CLI Invocation`
-result object), `cli.py` (the shared `argparse` parent parser giving every tool
-the identical `--target/--format/--fail-fast` surface), and `schemas.py`
-(loads and caches the JSON Schema files from `contracts/`).
-
-**Two schema files.** `contracts/asset_contract.v1.json` declares, per asset
-category, the permitted file types, resolution and format constraints,
-alpha-channel handling, the directory layout and the naming convention.
-`contracts/provenance.schema.json` declares the per-asset `provenance.json`
-sidecar: `author`, `generationMethod` (enum `ai-generated` | `hand-authored`),
-and license terms, with a JSON Schema `if/then` making `tool` and `prompt`
-required only when `generationMethod` is `ai-generated`. Expressing that
-conditional in the schema rather than in Python is what keeps the rule visible to
-a contributor reading the contract and to an agent generating assets.
-
-**Validator.** Package `openaxolotl_tools/assetcheck/`, entry point
-`oax-asset-check`. Structural checks (path placement, naming) run against the
-filesystem; format checks read image headers with Pillow and audio headers with
-`soundfile` — read headers only, never decode whole files, because this runs on
-every asset in the repository on every pull request touching assets. A missing
-`provenance.json` and a malformed one are distinct rule ids
-(`provenance.missing`, `provenance.invalid`), because the remediation differs.
-
-**Emitting results.** Every run ends by constructing exactly one result object
-matching the `Validator CLI Invocation` `resultSchema` — `tool`,
-`schemaVersion`, `target`, `passed`, `violations[]` — and printing it as JSON
-when `--format json`, or as a human-readable rendering of the same object when
-`--format text` (the default). Text output is a *rendering* of the object, never
-a separate code path, so a message can never appear in one format and not the
-other. `schemaVersion` is read from the schema file actually loaded, not
-hardcoded, so a contract bump is visible in every result. Exit codes follow the
-contract exactly: `0` clean, `1` one or more `severity: "error"` violations, `2`
-invocation error — bad arguments, unreadable target, missing or unparseable
-schema file. A `warning`-severity violation is reported but never changes the
-exit code, per the contract's merge-gate rule. `violations[].rule` is a stable
-dotted id, never a message string, because that id is what an AI agent maps back
-to the contract element it broke.
-
-**What this node does not do.** Style and art-direction conformance is explicitly
-manual — a human maintainer reviews against the documented expectations. Do not
-attempt to automate it, and do not let a heuristic style check creep into the
-validator: a false rejection of a legitimate contribution is far more damaging
-here than a style miss that review catches. The two manual criteria on this node
-prove out by ticking their boxes in this task doc and having the user approve the
-resulting change card; `report_test_results` will refuse to bind them.
-
-**Neighbours.** The Audio System and the Game Client consume the asset contract
-rather than this validator's code — they need the directory layout and naming
-convention to resolve assets at runtime, so keep those facts in the schema file
-both sides read, not in validator-internal constants. Fixtures (one conforming
-asset, one deliberately non-conforming asset) come from the Test Harness through
-the Shared Test Fixtures contract.
+_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
 
 ## Implementation Tasks
 
@@ -102,17 +27,6 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
   Start from the catalog's suggested structure: `src/main.py`, `src/routes/__init__.py`, `pyproject.toml`.
 - [ ] **T2 — Implement the integration with OpenAxolotl Game Client (godot) per Contract "Asset Contract v1" (custom).** <!-- t:33a614a7 -->
   Build to the contract schema EXACTLY (see Interface Contracts).
-  ↳ serves (unverified match): REQ-015 "Asset Contract specifies required file types, resolution/format constraints, and alpha-channel handling per asset category" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-015 "Asset Contract specifies the asset directory layout and naming convention" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-015 "Every asset requires a provenance.json recording author, generation method, and applicable license terms" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-015 "AI-generated assets additionally record the generation tool and the prompt used; these fields are not required for hand-authored assets" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-015 "Contract documents the style and art-direction expectations a human maintainer reviews against" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-015 "A contributor can produce a conforming asset from the Asset Contract document alone" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-016 "Validator checks file type, resolution, format, and alpha-channel conformance per asset category" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-016 "Validator requires a provenance.json per asset and validates it against the defined schema, failing on a missing or malformed one" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-016 "Failure output names the specific asset and the specific violated rule" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-016 "Validator exits non-zero on failure and runs as a required CI check on every pull request touching assets" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-016 "A deliberately non-conforming fixture asset fails validation and conforming official assets pass" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T3 — Implement the integration with Audio System (godot) per Contract "Asset Contract v1" (custom).** <!-- t:1ee9a25e -->
   Build to the contract schema EXACTLY (see Interface Contracts).
 - [ ] **T4 — Implement the integration with Test Harness and Fixtures (python-backend) per Contract "Shared Test Fixtures" (dependency).** <!-- t:7d12e948 -->
@@ -120,12 +34,49 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T5 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).** <!-- t:a39cc42a -->
   Record the endpoint/identifiers CI Pipeline needs in this node's config artifacts — coordinate with CI Pipeline.
   Build to the contract schema EXACTLY (see Interface Contracts).
-  ↳ serves (unverified match): REQ-016 "Validator checks directory placement and naming convention conformance" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-016 "Validator is runnable locally with a single documented command" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T6 — Implement: "provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly" (REQ-015).** <!-- t:a4f99d10 -->
+- [ ] **T6 — Implement: "Asset Contract specifies required file types, resolution/format constraints, and alpha-channel handling per asset category" (REQ-015).** <!-- t:387fc410 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-015 "provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly"
-- [ ] **T7 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+  ↳ serves: REQ-015 "Asset Contract specifies required file types, resolution/format constraints, and alpha-channel handling per asset category" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T7 — Implement: "Asset Contract specifies the asset directory layout and naming convention" (REQ-015).** <!-- t:ad43b317 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-015 "Asset Contract specifies the asset directory layout and naming convention" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T8 — Implement: "Every asset requires a provenance.json recording author, generation method, and applicable license terms" (REQ-015).** <!-- t:82d20684 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-015 "Every asset requires a provenance.json recording author, generation method, and applicable license terms" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T9 — Implement: "AI-generated assets additionally record the generation tool and the prompt used; these fields are not required for hand-authored assets" (REQ-015).** <!-- t:cf9bda0b -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-015 "AI-generated assets additionally record the generation tool and the prompt used; these fields are not required for hand-authored assets" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T10 — Implement: "provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly" (REQ-015).** <!-- t:a4f99d10 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-015 "provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T11 — Implement: "Contract documents the style and art-direction expectations a human maintainer reviews against" (REQ-015).** <!-- t:39924a69 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-015 "Contract documents the style and art-direction expectations a human maintainer reviews against" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T12 — Implement: "A contributor can produce a conforming asset from the Asset Contract document alone" (REQ-015).** <!-- t:6566e4f2 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-015 "A contributor can produce a conforming asset from the Asset Contract document alone"
+- [ ] **T13 — Implement: "Validator checks file type, resolution, format, and alpha-channel conformance per asset category" (REQ-016).** <!-- t:719700d2 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-016 "Validator checks file type, resolution, format, and alpha-channel conformance per asset category" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T14 — Implement: "Validator checks directory placement and naming convention conformance" (REQ-016).** <!-- t:562d02b1 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-016 "Validator checks directory placement and naming convention conformance" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T15 — Implement: "Validator requires a provenance.json per asset and validates it against the defined schema, failing on a missing or malformed one" (REQ-016).** <!-- t:428f15c1 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-016 "Validator requires a provenance.json per asset and validates it against the defined schema, failing on a missing or malformed one" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T16 — Implement: "Failure output names the specific asset and the specific violated rule" (REQ-016).** <!-- t:dfa9099b -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-016 "Failure output names the specific asset and the specific violated rule" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T17 — Implement: "Validator exits non-zero on failure and runs as a required CI check on every pull request touching assets" (REQ-016).** <!-- t:cf7730dc -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-016 "Validator exits non-zero on failure and runs as a required CI check on every pull request touching assets" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T18 — Implement: "Validator is runnable locally with a single documented command" (REQ-016).** <!-- t:1aad56aa -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-016 "Validator is runnable locally with a single documented command" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T19 — Implement: "A deliberately non-conforming fixture asset fails validation and conforming official assets pass" (REQ-016).** <!-- t:58c57927 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-016 "A deliberately non-conforming fixture asset fails validation and conforming official assets pass" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T20 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -172,19 +123,19 @@ The art-side sibling of the Level Contract: a specification any character, creat
 
 **Acceptance criteria — your task boxes:**
 - [ ] Asset Contract specifies required file types, resolution/format constraints, and alpha-channel handling per asset category
-  → covered by Task T2
-- [ ] Asset Contract specifies the asset directory layout and naming convention
-  → covered by Task T2
-- [ ] Every asset requires a provenance.json recording author, generation method, and applicable license terms
-  → covered by Task T2
-- [ ] AI-generated assets additionally record the generation tool and the prompt used; these fields are not required for hand-authored assets
-  → covered by Task T2
-- [ ] provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly
   → covered by Task T6
+- [ ] Asset Contract specifies the asset directory layout and naming convention
+  → covered by Task T7
+- [ ] Every asset requires a provenance.json recording author, generation method, and applicable license terms
+  → covered by Task T8
+- [ ] AI-generated assets additionally record the generation tool and the prompt used; these fields are not required for hand-authored assets
+  → covered by Task T9
+- [ ] provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly
+  → covered by Task T10
 - [ ] Contract documents the style and art-direction expectations a human maintainer reviews against (manual)
-  → covered by Task T2
+  → covered by Task T11
 - [ ] A contributor can produce a conforming asset from the Asset Contract document alone (manual)
-  → covered by Task T2
+  → covered by Task T12
 
 ### REQ-016: Asset Contract Automated Validator
 Category: technical | Status: in-progress
@@ -192,19 +143,19 @@ The art-pipeline counterpart to the Level Contract checker, and the automated ha
 
 **Acceptance criteria — your task boxes:**
 - [ ] Validator checks file type, resolution, format, and alpha-channel conformance per asset category
-  → covered by Task T2
+  → covered by Task T13
 - [ ] Validator checks directory placement and naming convention conformance
-  → covered by Task T5
+  → covered by Task T14
 - [ ] Validator requires a provenance.json per asset and validates it against the defined schema, failing on a missing or malformed one
-  → covered by Task T2
+  → covered by Task T15
 - [ ] Failure output names the specific asset and the specific violated rule
-  → covered by Task T2
+  → covered by Task T16
 - [ ] Validator exits non-zero on failure and runs as a required CI check on every pull request touching assets
-  → covered by Task T2
+  → covered by Task T17
 - [ ] Validator is runnable locally with a single documented command
-  → covered by Task T5
+  → covered by Task T18
 - [ ] A deliberately non-conforming fixture asset fails validation and conforming official assets pass
-  → covered by Task T2
+  → covered by Task T19
 
 ## Interface Contracts
 
@@ -525,10 +476,3 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 **Depends on THIS node being available:**
 - CI Pipeline (initiates Validator CLI Invocation against this node (ipc))
-
-## Existing Implementation
-
-| File | Kind | Language | Status |
-|------|------|----------|--------|
-| `.nodespec/tests/req-015.tests.md` - Test plan for requirement: Asset Contract and AI-Art Provenance | test-plan | markdown | draft |
-| `.nodespec/tests/req-016.tests.md` - Test plan for requirement: Asset Contract Automated Validator | test-plan | markdown | draft |

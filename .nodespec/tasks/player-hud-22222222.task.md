@@ -16,61 +16,7 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-The HUD is a pure readout: it subscribes to state and renders it, and it owns no
-game state of its own. Two of its criteria are about latency and one is an
-accessibility rule that shapes every element on screen.
-
-**Placement and shape.** This is a `shared-library` node: it lives in its own
-directory under `core/`, exposes a `class_name`-registered public surface, and is
-consumed by other systems and by world modules as a dependency. It is not an
-autoload unless it genuinely needs one global instance — prefer an explicit
-reference passed in over a singleton, because a singleton is untestable under
-GdUnit4 without process-level teardown, and this project's whole verification
-story runs through GdUnit4.
-
-**Catalog guidance that does not apply here.** The Godot technology guidance in
-this packet carries multiplayer sample code — `@rpc` annotations,
-`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
-guidance and it is forbidden in this project. REQ-030 bans the whole Godot
-multiplayer surface, the Engine Feature Policy contract records the ban
-machine-readably, and the World Static Analysis Gate fails CI on any occurrence
-anywhere in `core/`, `worlds/` or the reference template. This is single-player
-only, in every phase, with no deferral. Systems talk to each other through
-signals and direct calls on the interfaces declared in this packet.
-
-**Same-frame latency.** Lives and capability changes must be reflected within the
-same frame the change is raised. That rules out polling in `_process` — subscribe
-to the change signals from the Lives and Capability systems and update on receipt,
-inside the same frame. Test it by raising a change and asserting the HUD node's
-displayed value before advancing a frame with `scene_runner`.
-
-**Never color alone.** Every HUD state is distinguishable by shape, icon or text
-in addition to color — a checked criterion, not a guideline, and it pairs with the
-same rule on hazards in REQ-019. Make it structurally verifiable: give each HUD
-state entry an explicit non-color discriminator field in its state table, and let
-a test assert every entry has one. A visual review cannot prove this; a complete
-table can.
-
-**What it reads.** Current lives; which capabilities are intact and which are
-lost; the equipped Gill Mod with its remaining charge or cooldown; the active
-region's restoration state and progress toward the next; the water-powered dash
-charge and its recharge state. Each arrives through the HUD State Interface from
-the owning system. The HUD never derives a value — if it needs "progress toward
-next restoration state", the Restoration system publishes that number rather than
-the HUD computing it from resource counts, because a second computation is a
-second source of truth that will drift.
-
-**Tone.** Capability-loss presentation reads as playful rather than alarming —
-manual, and the reason the capability display should not borrow health-bar visual
-language (no red, no depletion metaphor, no damage flash).
-
-**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
-each test name carries the requirement id it proves (`test_req_0NN_...`) — the
-harness parses that id back out and reports it as the failing rule, which is how
-a contributor or agent locates what broke. Unit-tier tests exercise this system's
-logic as plain objects; integration-tier tests drive it against the real
-controller and the real save interface via GdUnit4's `scene_runner`, because the
-criteria explicitly reject isolation-only coverage.
+_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
 
 ## Implementation Tasks
 
@@ -81,13 +27,6 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
   Start from the catalog's suggested structure: `scripts/main.gd`, `scenes/main.tscn`, `project.godot`, `export_presets.cfg`.
 - [ ] **T2 — Implement the integration with Regeneration and Capability System (godot) per Contract "HUD State Interface" (dependency).** <!-- t:907201d2 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-022 "HUD displays current lives, and the display reflects a life lost or replenished within the same frame the change is raised" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-022 "HUD displays which capabilities are currently intact and which are lost, reflecting a loss or regrowth within the same frame the change is raised" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-022 "HUD displays the equipped Gill Mod and its remaining charge or cooldown" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-022 "HUD surfaces the active region's restoration state and progress toward the next state" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-022 "All HUD state is distinguishable without relying on color alone, using shape, icon, or text in addition" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-022 "HUD reflects the water-powered dash charge and its recharge state" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-022 "Capability-loss presentation in the HUD reads as playful rather than alarming" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T3 — Implement the integration with Lives and Checkpoint System (godot) per Contract "HUD State Interface" (dependency).** <!-- t:b4e6443c -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
 - [ ] **T4 — Implement the integration with Gill Mod Ability Framework (godot) per Contract "HUD State Interface" (dependency).** <!-- t:6406e48b -->
@@ -102,7 +41,28 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T8 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T9 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T9 — Implement: "HUD displays current lives, and the display reflects a life lost or replenished within the same frame the change is raised" (REQ-022).** <!-- t:33153047 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-022 "HUD displays current lives, and the display reflects a life lost or replenished within the same frame the change is raised" — possible coordination point: Contract "HUD State Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T10 — Implement: "HUD displays which capabilities are currently intact and which are lost, reflecting a loss or regrowth within the same frame the change is raised" (REQ-022).** <!-- t:77081f64 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-022 "HUD displays which capabilities are currently intact and which are lost, reflecting a loss or regrowth within the same frame the change is raised" — possible coordination point: Contract "HUD State Interface" (dependency) to Regeneration and Capability System (keyword signal only)
+- [ ] **T11 — Implement: "HUD displays the equipped Gill Mod and its remaining charge or cooldown" (REQ-022).** <!-- t:f1a80e69 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-022 "HUD displays the equipped Gill Mod and its remaining charge or cooldown" — possible coordination point: Contract "HUD State Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
+- [ ] **T12 — Implement: "HUD surfaces the active region's restoration state and progress toward the next state" (REQ-022).** <!-- t:9f1bdb85 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-022 "HUD surfaces the active region's restoration state and progress toward the next state" — possible coordination point: Contract "HUD State Interface" (dependency) to Regeneration and Capability System (keyword signal only)
+- [ ] **T13 — Implement: "All HUD state is distinguishable without relying on color alone, using shape, icon, or text in addition" (REQ-022).** <!-- t:b36bdba0 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-022 "All HUD state is distinguishable without relying on color alone, using shape, icon, or text in addition" — possible coordination point: Contract "HUD State Interface" (dependency) from OpenAxolotl Game Client (keyword signal only)
+- [ ] **T14 — Implement: "HUD reflects the water-powered dash charge and its recharge state" (REQ-022).** <!-- t:90d10233 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-022 "HUD reflects the water-powered dash charge and its recharge state" — possible coordination point: Contract "HUD State Interface" (dependency) to Regeneration and Capability System (keyword signal only)
+- [ ] **T15 — Implement: "Capability-loss presentation in the HUD reads as playful rather than alarming" (REQ-022).** <!-- t:56a6d91b -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-022 "Capability-loss presentation in the HUD reads as playful rather than alarming" — possible coordination point: Contract "HUD State Interface" (dependency) to Regeneration and Capability System (keyword signal only)
+- [ ] **T16 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -149,19 +109,19 @@ Without a HUD the signature mechanic is invisible: the player must be able to se
 
 **Acceptance criteria — your task boxes:**
 - [ ] HUD displays current lives, and the display reflects a life lost or replenished within the same frame the change is raised
-  → covered by Task T2
+  → covered by Task T9
 - [ ] HUD displays which capabilities are currently intact and which are lost, reflecting a loss or regrowth within the same frame the change is raised
-  → covered by Task T2
+  → covered by Task T10
 - [ ] HUD displays the equipped Gill Mod and its remaining charge or cooldown
-  → covered by Task T2
+  → covered by Task T11
 - [ ] HUD surfaces the active region's restoration state and progress toward the next state
-  → covered by Task T2
+  → covered by Task T12
 - [ ] All HUD state is distinguishable without relying on color alone, using shape, icon, or text in addition
-  → covered by Task T2
+  → covered by Task T13
 - [ ] HUD reflects the water-powered dash charge and its recharge state
-  → covered by Task T2
+  → covered by Task T14
 - [ ] Capability-loss presentation in the HUD reads as playful rather than alarming (manual)
-  → covered by Task T2
+  → covered by Task T15
 
 ## Interface Contracts
 
@@ -345,9 +305,3 @@ Startup/initialization order based on edge directions and interaction patterns.
 **Depends on THIS node being available:**
 - OpenAxolotl Game Client (initiates HUD State Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
-
-## Existing Implementation
-
-| File | Kind | Language | Status |
-|------|------|----------|--------|
-| `.nodespec/tests/req-022.tests.md` - Test plan for requirement: Player HUD and Game-State Readout | test-plan | markdown | draft |

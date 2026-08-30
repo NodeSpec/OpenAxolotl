@@ -16,91 +16,7 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-This node is the project's proof mechanism. Its output is what an AI agent reads
-to decide whether the world it just wrote is actually correct, so its structure
-matters more than most: it must run headless, in one command, with output that
-maps a failure back to the requirement that broke.
-
-**Catalog guidance that does not apply here.** The Python technology guidance in
-this packet describes a FastAPI web service — `fastapi`/`uvicorn`, SQLAlchemy
-async sessions, Celery workers, `src/main.py` + `src/routes/__init__.py`, CORS
-and JWT. None of it applies. This node is a short-lived, synchronous,
-filesystem-only command-line program with no HTTP surface, no database, no
-broker and no async runtime. Ignore the suggested file structure in T1 and the
-SDK/API pattern snippets entirely. What carries over from that guidance is only
-the tooling advice: `uv` for the environment with a committed lockfile, `ruff`
-for lint and format, `pytest` with fixtures, strict `mypy`, and pinned
-dependencies.
-
-**Two test roots, one entry point.** The tests this node is responsible for run
-under two different runtimes and cannot live in one package. GDScript tests must
-sit inside the Godot project and run under GdUnit4; Python tests for the four
-validators run under pytest. So the harness *orchestrates* rather than
-*contains*: `test/` holds GdUnit4 GDScript tests mirroring `core/`, `tools/tests/`
-holds pytest tests for the validators, and `openaxolotl_tools/harness/` provides
-the single command that runs both, normalises their results, and emits one
-combined result object. T1's suggested `src/main.py` layout does not apply.
-
-**The single documented command (REQ-026-1).** `oax-test` — the console entry
-point for `openaxolotl_tools/harness/run.py`. It invokes GdUnit4 headlessly
-(`godot --headless --path . -s addons/gdUnit4/bin/GdUnitCmdTool.gd -a test`),
-runs `pytest tools/tests`, parses both result files, and emits a single
-`Validator CLI Invocation` result with `tool: "test-harness"`. Exit non-zero if
-either lane fails; exit `2` if a lane could not be started at all (Godot binary
-missing, GdUnit4 not installed) so a broken environment is never reported as a
-clean pass. This same command is what CI runs and what `docs/commands.md`
-documents — identical string, per the contract's local-parity rule.
-
-**Requirement traceability (REQ-026-6).** Every test carries the requirement id
-it proves, in its name: GdUnit4 tests as `test_req_002_capability_loss_never_kills`,
-pytest tests as `test_req_007_unsupported_version_rejected`. The harness parses
-the id back out of the test name and puts it in `violations[].rule`, with the
-test's failure message in `message` and the source location in `file`/`line`. A
-test whose name carries no parseable requirement id is itself a harness failure —
-enforce that, or the traceability guarantee erodes one untagged test at a time.
-
-**GdUnit4 over GUT.** GdUnit4's `scene_runner` gives frame-stepping
-(`simulate_frames`), input simulation and `await_signal` with timeouts, which is
-what the integration and playthrough tiers actually need. GUT has no equivalent.
-Pin the GdUnit4 version in `addons/` and commit it, so CI and a contributor's
-clone run the same framework build.
-
-**Three tiers.** Unit tests exercise capability, lives, restoration,
-ability-registration and save-interface logic as plain GDScript objects with no
-scene. Integration tests instantiate the real Axolotl Controller and the real
-save-integration interface via `scene_runner` and drive a system against them —
-the criterion explicitly rejects isolation-only coverage, so mock the neighbour
-only where a real one is impossible. The playthrough smoke test loads an official
-world, drives it from spawn to finish condition with simulated input and frame
-stepping, and asserts the finish condition fired; give it a hard frame budget so
-a world that becomes uncompletable fails by timeout instead of hanging CI.
-
-**Four criteria GdUnit4 cannot reach**, which is why the pytest lane exists
-beyond validator coverage: the multiplayer and sanctioned-API bans (REQ-030,
-REQ-020) are static properties of source text, checked by the static gate's
-tokenizer; the performance targets (REQ-027) are read from
-`Performance.get_monitor()` inside a headless Godot run and asserted against the
-documented budgets by a harness-side comparison; the color-independence criteria
-(REQ-019, REQ-022) are asserted by checking that every HUD and hazard state
-declares a non-color discriminator in its state table; and the documented-commands
-criterion (REQ-017) is a pytest test that parses `docs/commands.md` and executes
-each command it finds.
-
-**Fixtures are a deliverable, not scaffolding.** `fixtures/` holds the five named
-fixtures — `world_conforming/`, `world_nonconforming/`, `world_malicious/`,
-`asset_conforming/`, `asset_nonconforming/` — with a `.gdignore` so Godot never
-imports the deliberately broken ones. They are published to the checker,
-validator and static gate through the Shared Test Fixtures contract as
-`openaxolotl_tools.harness.fixtures`, exposing resolved paths and a manifest of
-what each fixture is *expected* to violate. That expectation manifest is what
-lets each consumer assert the specific rule id rather than merely asserting
-failure, and it is why one shared corpus beats three private ones.
-
-**Note on T3 and T4.** Five REQ-026 criteria are attributed to those work orders
-as `serves (unverified match)`. They are genuinely this node's work — the
-attribution warning reflects mapping bookkeeping, not a scope question. Verify
-the mapping before relying on the automatic criterion flip from
-`report_test_results`.
+_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
 
 ## Implementation Tasks
 
@@ -114,14 +30,9 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T3 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).** <!-- t:a39cc42a -->
   Record the endpoint/identifiers CI Pipeline needs in this node's config artifacts — coordinate with CI Pipeline.
   Build to the contract schema EXACTLY (see Interface Contracts).
-  ↳ serves (unverified match): REQ-026 "Named fixtures exist for a conforming world, a non-conforming world, a malicious world, a conforming asset, and a non-conforming asset, and are shared by the checker, validator, and static-analysis tests" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T4 — Expose the interface Level Contract Compliance Checker consumes, per Contract "Shared Test Fixtures" (dependency).** <!-- t:7575f84a -->
   Record the endpoint/identifiers Level Contract Compliance Checker needs in this node's config artifacts — coordinate with Level Contract Compliance Checker.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-026 "Unit tests cover the capability, lives, restoration, ability-registration, and save-interface logic" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-026 "Integration tests exercise each system against the controller and save-integration interfaces rather than in isolation only" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-026 "A headless playthrough smoke test drives an official world from spawn to finish condition and asserts completion" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-026 "Test output identifies the failing requirement or criterion it maps to, so a contributor or agent can locate what broke" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T5 — Expose the interface Asset Contract Validator consumes, per Contract "Shared Test Fixtures" (dependency).** <!-- t:159e5c24 -->
   Record the endpoint/identifiers Asset Contract Validator needs in this node's config artifacts — coordinate with Asset Contract Validator.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
@@ -131,10 +42,25 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T7 — Implement: "The suite runs headless with a single documented command and exits non-zero on any failure" (REQ-026).** <!-- t:4d9f8c5b -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-026 "The suite runs headless with a single documented command and exits non-zero on any failure"
-- [ ] **T8 — Implement: "The suite runs in CI on every pull request" (REQ-026).** <!-- t:2f756ac8 -->
+- [ ] **T8 — Implement: "Unit tests cover the capability, lives, restoration, ability-registration, and save-interface logic" (REQ-026).** <!-- t:c0da21fe -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-026 "Unit tests cover the capability, lives, restoration, ability-registration, and save-interface logic"
+- [ ] **T9 — Implement: "Integration tests exercise each system against the controller and save-integration interfaces rather than in isolation only" (REQ-026).** <!-- t:01904f78 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-026 "Integration tests exercise each system against the controller and save-integration interfaces rather than in isolation only"
+- [ ] **T10 — Implement: "A headless playthrough smoke test drives an official world from spawn to finish condition and asserts completion" (REQ-026).** <!-- t:96e47acd -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-026 "A headless playthrough smoke test drives an official world from spawn to finish condition and asserts completion" — possible coordination point: Contract "Shared Test Fixtures" (dependency) from World Static Analysis Gate (keyword signal only)
+- [ ] **T11 — Implement: "Named fixtures exist for a conforming world, a non-conforming world, a malicious world, a conforming asset, and a non-conforming asset, and are shared by the checker, validator, and static-analysis tests" (REQ-026).** <!-- t:412ee4cf -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-026 "Named fixtures exist for a conforming world, a non-conforming world, a malicious world, a conforming asset, and a non-conforming asset, and are shared by the checker, validator, and static-analysis tests" — possible coordination point: Contract "Shared Test Fixtures" (dependency) from World Static Analysis Gate (keyword signal only)
+- [ ] **T12 — Implement: "Test output identifies the failing requirement or criterion it maps to, so a contributor or agent can locate what broke" (REQ-026).** <!-- t:b4f55d49 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-026 "Test output identifies the failing requirement or criterion it maps to, so a contributor or agent can locate what broke"
+- [ ] **T13 — Implement: "The suite runs in CI on every pull request" (REQ-026).** <!-- t:2f756ac8 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-026 "The suite runs in CI on every pull request"
-- [ ] **T9 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -183,17 +109,17 @@ REQ-018 requires CI to run "the automated test suite" but nothing required that 
 - [ ] The suite runs headless with a single documented command and exits non-zero on any failure
   → covered by Task T7
 - [ ] Unit tests cover the capability, lives, restoration, ability-registration, and save-interface logic
-  → covered by Task T4
-- [ ] Integration tests exercise each system against the controller and save-integration interfaces rather than in isolation only
-  → covered by Task T4
-- [ ] A headless playthrough smoke test drives an official world from spawn to finish condition and asserts completion
-  → covered by Task T4
-- [ ] Named fixtures exist for a conforming world, a non-conforming world, a malicious world, a conforming asset, and a non-conforming asset, and are shared by the checker, validator, and static-analysis tests
-  → covered by Task T3
-- [ ] Test output identifies the failing requirement or criterion it maps to, so a contributor or agent can locate what broke
-  → covered by Task T4
-- [ ] The suite runs in CI on every pull request
   → covered by Task T8
+- [ ] Integration tests exercise each system against the controller and save-integration interfaces rather than in isolation only
+  → covered by Task T9
+- [ ] A headless playthrough smoke test drives an official world from spawn to finish condition and asserts completion
+  → covered by Task T10
+- [ ] Named fixtures exist for a conforming world, a non-conforming world, a malicious world, a conforming asset, and a non-conforming asset, and are shared by the checker, validator, and static-analysis tests
+  → covered by Task T11
+- [ ] Test output identifies the failing requirement or criterion it maps to, so a contributor or agent can locate what broke
+  → covered by Task T12
+- [ ] The suite runs in CI on every pull request
+  → covered by Task T13
 
 ## Interface Contracts
 
@@ -444,9 +370,3 @@ Startup/initialization order based on edge directions and interaction patterns.
 - Level Contract Compliance Checker (initiates Shared Test Fixtures against this node (dependency))
 - Asset Contract Validator (initiates Shared Test Fixtures against this node (dependency))
 - World Static Analysis Gate (initiates Shared Test Fixtures against this node (dependency))
-
-## Existing Implementation
-
-| File | Kind | Language | Status |
-|------|------|----------|--------|
-| `.nodespec/tests/req-026.tests.md` - Test plan for requirement: Automated Test Suite and Test Harness | test-plan | markdown | draft |

@@ -16,64 +16,7 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-Bubble Bay is the second official world and it carries a specific structural
-proof: it declares no boss, which is how the optional-boss path in the Level
-Contract gets exercised by something real rather than only by a fixture.
-
-**Placement and shape.** A world is a self-contained module under `worlds/`,
-discovered by the hub at runtime with no entry in any code-side list. It declares
-itself through a manifest validated against `contracts/level_contract.v1.json`,
-and it may call only the symbols in the sanctioned world API surface — the World
-Static Analysis Gate rejects anything else. Build it exactly the way an outside
-contributor would: no private back doors, no reaching into a core system's
-internals, no engine API a community world could not also use. That constraint is
-the point of the official worlds, and one of them states it as a criterion.
-
-**Catalog guidance that does not apply here.** The Godot technology guidance in
-this packet carries multiplayer sample code — `@rpc` annotations,
-`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
-guidance and it is forbidden in this project. REQ-030 bans the whole Godot
-multiplayer surface, the Engine Feature Policy contract records the ban
-machine-readably, and the World Static Analysis Gate fails CI on any occurrence
-anywhere in `core/`, `worlds/` or the reference template. This is single-player
-only, in every phase, with no deferral. Systems talk to each other through
-signals and direct calls on the interfaces declared in this packet.
-
-**The bossless proof.** Declaring no boss must leave this world contract-valid
-and fully completable. That has a consequence for the Restoration system: since
-defeating a Flagship is what normally sets a region's `unlocked` flag, a bossless
-world needs another declared means of unlocking, defined by the Level Contract's
-default for a world with no boss. Do not solve this locally with a script — if the
-contract cannot express it, that is contract feedback for the v1 freeze.
-
-**Gill Mod split.** Bubble Bay contains at least one mandatory traversal challenge
-gated on a Gill Mod that Coral Cove does not emphasize. Coordinate with Coral Cove
-so that across the two worlds all three MVP mods — Bubble, Jet, Glow — are each
-required somewhere; the criterion on the official set is a union property, and it
-fails if both worlds lean on the same mod.
-
-**Coverage this world owns.** Both movement grammars exercised, at least one
-restorable region, completable from spawn to finish condition, passing both the
-Level Contract compliance checker and the World Static Analysis Gate.
-
-**Completability is a headless test.** Same discipline as Coral Cove: the critical
-path must be drivable by simulated input in the playthrough smoke test —
-deterministic placement on the mandatory route, no frame-rate-dependent timing
-windows.
-
-**Declare, don't script.** Regions, collectibles, enemies, camera hints,
-checkpoints and audio come from Level Contract elements. Any script this world
-needs is either a sanctioned-API call or a signal that the contract is missing
-something.
-
-**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
-each test name carries the requirement id it proves (`test_req_0NN_...`) — the
-harness parses that id back out and reports it as the failing rule, which is how
-a contributor or agent locates what broke. Unit-tier tests exercise this system's
-logic as plain objects; integration-tier tests drive it against the real
-controller and the real save interface via GdUnit4's `scene_runner`, because the
-criteria explicitly reject isolation-only coverage. Frame-rate on the baseline spec is asserted by the CI performance test.
-Fun and the restoration payoff are manual.
+_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
 
 ## Implementation Tasks
 
@@ -84,12 +27,10 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
   Start from the catalog's suggested structure: `scripts/main.gd`, `scenes/main.tscn`, `project.godot`, `export_presets.cfg`.
 - [ ] **T2 — Implement the integration with Restoration State System (godot) per Contract "Restoration Region Interface" (dependency).** <!-- t:b339696f -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-028 "Bubble Bay exercises both movement grammars and contains at least one restorable region" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T3 — Implement the integration with Drift Fleet Enemy Framework (godot) per Contract "Enemy Registration Interface" (dependency).** <!-- t:091d8bdf -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
 - [ ] **T4 — Implement the integration with Gill Mod Ability Framework (godot) per Contract "Gill Mod Registration Interface" (dependency).** <!-- t:9ef5b42c -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-028 "Bubble Bay contains at least one mandatory traversal challenge gated on a Gill Mod that Coral Cove does not emphasize" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T5 — Implement the integration with Collectibles System (godot) per Contract "Collectible Registration Interface" (dependency).** <!-- t:9bc134aa -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
 - [ ] **T6 — Implement the integration with Camera System (godot) per Contract "Camera Hint Interface" (dependency).** <!-- t:e3e65073 -->
@@ -101,25 +42,37 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T9 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Level Contract v1" (dependency).** <!-- t:99890668 -->
   Record the endpoint/identifiers OpenAxolotl Game Client needs in this node's config artifacts — coordinate with OpenAxolotl Game Client.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-028 "Bubble Bay passes the Level Contract compliance checker" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-028 "Bubble Bay declares no boss and remains contract-valid and fully completable, proving the optional-boss path" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T10 — Expose the interface Level Contract Compliance Checker consumes, per Contract "Level Contract v1" (dependency).** <!-- t:87778b5e -->
   Record the endpoint/identifiers Level Contract Compliance Checker needs in this node's config artifacts — coordinate with Level Contract Compliance Checker.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
 - [ ] **T11 — Expose the interface World Static Analysis Gate consumes, per Contract "Sanctioned World API Surface" (dependency).** <!-- t:a14fa597 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-028 "Bubble Bay passes the World Static Analysis Gate, calling only the sanctioned world API surface" — requirement not mapped to that node; verify or reassign before relying on it
-- [ ] **T12 — Implement: "Bubble Bay is completable from spawn to finish condition" (REQ-028).** <!-- t:ce77b10c -->
+- [ ] **T12 — Implement: "Bubble Bay passes the Level Contract compliance checker" (REQ-028).** <!-- t:0aef207c -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-028 "Bubble Bay passes the Level Contract compliance checker" — possible coordination point: Contract "Level Contract v1" (dependency) from Level Contract Compliance Checker (keyword signal only)
+- [ ] **T13 — Implement: "Bubble Bay passes the World Static Analysis Gate, calling only the sanctioned world API surface" (REQ-028).** <!-- t:4b65a411 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-028 "Bubble Bay passes the World Static Analysis Gate, calling only the sanctioned world API surface" — possible coordination point: Contract "Sanctioned World API Surface" (dependency) from World Static Analysis Gate (keyword signal only)
+- [ ] **T14 — Implement: "Bubble Bay is completable from spawn to finish condition" (REQ-028).** <!-- t:ce77b10c -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-028 "Bubble Bay is completable from spawn to finish condition"
-- [ ] **T13 — Implement: "Bubble Bay sustains the documented frame-rate target on the baseline specification during normal traversal" (REQ-028).** <!-- t:d531be48 -->
+- [ ] **T15 — Implement: "Bubble Bay exercises both movement grammars and contains at least one restorable region" (REQ-028).** <!-- t:630850be -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-028 "Bubble Bay exercises both movement grammars and contains at least one restorable region" — possible coordination point: Contract "Restoration Region Interface" (dependency) to Restoration State System (keyword signal only)
+- [ ] **T16 — Implement: "Bubble Bay contains at least one mandatory traversal challenge gated on a Gill Mod that Coral Cove does not emphasize" (REQ-028).** <!-- t:ab38da1f -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-028 "Bubble Bay contains at least one mandatory traversal challenge gated on a Gill Mod that Coral Cove does not emphasize" — possible coordination point: Contract "Gill Mod Registration Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
+- [ ] **T17 — Implement: "Bubble Bay declares no boss and remains contract-valid and fully completable, proving the optional-boss path" (REQ-028).** <!-- t:d1083cd0 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-028 "Bubble Bay declares no boss and remains contract-valid and fully completable, proving the optional-boss path"
+- [ ] **T18 — Implement: "Bubble Bay sustains the documented frame-rate target on the baseline specification during normal traversal" (REQ-028).** <!-- t:d531be48 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-028 "Bubble Bay sustains the documented frame-rate target on the baseline specification during normal traversal"
-- [ ] **T14 — Implement: "Bubble Bay is fun to play through and delivers a satisfying broken-to-restored payoff" (REQ-028).** <!-- t:47acb3d7 -->
+- [ ] **T19 — Implement: "Bubble Bay is fun to play through and delivers a satisfying broken-to-restored payoff" (REQ-028).** <!-- t:47acb3d7 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-028 "Bubble Bay is fun to play through and delivers a satisfying broken-to-restored payoff"
-- [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T20 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -166,21 +119,21 @@ The second official MVP world, and the second half of the Level Contract battle-
 
 **Acceptance criteria — your task boxes:**
 - [ ] Bubble Bay passes the Level Contract compliance checker
-  → covered by Task T9
-- [ ] Bubble Bay passes the World Static Analysis Gate, calling only the sanctioned world API surface
-  → covered by Task T11
-- [ ] Bubble Bay is completable from spawn to finish condition
   → covered by Task T12
-- [ ] Bubble Bay exercises both movement grammars and contains at least one restorable region
-  → covered by Task T2
-- [ ] Bubble Bay contains at least one mandatory traversal challenge gated on a Gill Mod that Coral Cove does not emphasize
-  → covered by Task T4
-- [ ] Bubble Bay declares no boss and remains contract-valid and fully completable, proving the optional-boss path
-  → covered by Task T9
-- [ ] Bubble Bay sustains the documented frame-rate target on the baseline specification during normal traversal
+- [ ] Bubble Bay passes the World Static Analysis Gate, calling only the sanctioned world API surface
   → covered by Task T13
-- [ ] Bubble Bay is fun to play through and delivers a satisfying broken-to-restored payoff (manual)
+- [ ] Bubble Bay is completable from spawn to finish condition
   → covered by Task T14
+- [ ] Bubble Bay exercises both movement grammars and contains at least one restorable region
+  → covered by Task T15
+- [ ] Bubble Bay contains at least one mandatory traversal challenge gated on a Gill Mod that Coral Cove does not emphasize
+  → covered by Task T16
+- [ ] Bubble Bay declares no boss and remains contract-valid and fully completable, proving the optional-boss path
+  → covered by Task T17
+- [ ] Bubble Bay sustains the documented frame-rate target on the baseline specification during normal traversal
+  → covered by Task T18
+- [ ] Bubble Bay is fun to play through and delivers a satisfying broken-to-restored payoff (manual)
+  → covered by Task T19
 
 ## Interface Contracts
 
@@ -523,9 +476,3 @@ Startup/initialization order based on edge directions and interaction patterns.
 - OpenAxolotl Game Client (initiates Level Contract v1 against this node (dependency))
 - Level Contract Compliance Checker (initiates Level Contract v1 against this node (dependency))
 - World Static Analysis Gate (initiates Sanctioned World API Surface against this node (dependency))
-
-## Existing Implementation
-
-| File | Kind | Language | Status |
-|------|------|----------|--------|
-| `.nodespec/tests/req-028.tests.md` - Test plan for requirement: Official World: Bubble Bay | test-plan | markdown | draft |

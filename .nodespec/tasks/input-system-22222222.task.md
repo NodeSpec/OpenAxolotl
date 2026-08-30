@@ -16,63 +16,7 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-This node exists so that no other node reads raw input. The Axolotl Controller
-consumes player *intent* through the Player Input Interface, and world modules
-are forbidden from reading input at all — a rule the static gate enforces.
-
-**Placement and shape.** This is a `shared-library` node: it lives in its own
-directory under `core/`, exposes a `class_name`-registered public surface, and is
-consumed by other systems and by world modules as a dependency. It is not an
-autoload unless it genuinely needs one global instance — prefer an explicit
-reference passed in over a singleton, because a singleton is untestable under
-GdUnit4 without process-level teardown, and this project's whole verification
-story runs through GdUnit4.
-
-**Catalog guidance that does not apply here.** The Godot technology guidance in
-this packet carries multiplayer sample code — `@rpc` annotations,
-`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
-guidance and it is forbidden in this project. REQ-030 bans the whole Godot
-multiplayer surface, the Engine Feature Policy contract records the ban
-machine-readably, and the World Static Analysis Gate fails CI on any occurrence
-anywhere in `core/`, `worlds/` or the reference template. This is single-player
-only, in every phase, with no deferral. Systems talk to each other through
-signals and direct calls on the interfaces declared in this packet.
-
-**Context-sensitive bindings are the structural requirement.** Water-only and
-land-only verbs may share a physical input without conflict, which means bindings
-are scoped by movement grammar rather than living in one flat action map. Model
-context as a first-class field on a binding and resolve intent as
-(context, physical input) → verb. Godot's `InputMap` alone cannot express that,
-so keep the binding table as this node's own data and translate into `InputMap`
-actions per context, switching the active set when the controller reports a
-grammar change. Rebinding rejects a conflicting assignment *within the same
-context* — the conflict test must be context-scoped, or the water/land sharing
-that the design depends on becomes impossible to configure.
-
-**Both schemes, every verb.** Keyboard-and-mouse and gamepad schemes each bind
-every player verb. Remapping persists across sessions; persist it through the
-Save Integration Interface's settings path rather than writing a private file, so
-one profile carries everything.
-
-**Device switching.** Mid-session keyboard↔gamepad switching works without a
-restart, and on-screen prompts follow the active device. Detect the active device
-from the most recent input event and publish it as a signal the HUD subscribes
-to; do not poll `Input.get_connected_joypads()` per frame.
-
-**Testing input headlessly.** GdUnit4's `scene_runner` simulates key and joypad
-events and steps frames, which is what makes the binding, conflict-rejection and
-device-switch criteria automatable. Prefer simulating at the event level over
-calling this node's methods directly, so the `InputMap` translation is covered
-too.
-
-**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
-each test name carries the requirement id it proves (`test_req_0NN_...`) — the
-harness parses that id back out and reports it as the failing rule, which is how
-a contributor or agent locates what broke. Unit-tier tests exercise this system's
-logic as plain objects; integration-tier tests drive it against the real
-controller and the real save interface via GdUnit4's `scene_runner`, because the
-criteria explicitly reject isolation-only coverage. "Playable without modal overload or uncomfortable finger contortion" is
-manual and needs a real controller in real hands.
+_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
 
 ## Implementation Tasks
 
@@ -83,28 +27,34 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
   Start from the catalog's suggested structure: `scripts/main.gd`, `scenes/main.tscn`, `project.godot`, `export_presets.cfg`.
 - [ ] **T2 — Implement the integration with Axolotl Controller (godot) per Contract "Player Input Interface" (dependency).** <!-- t:5edd7a53 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-024 "Every player verb is bound in both a keyboard-and-mouse scheme and a gamepad scheme" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-024 "Bindings are context-sensitive by movement grammar, so water-only and land-only verbs may share a physical input without conflict" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-024 "Worlds read player intent through the controller interface and never read raw input directly" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T3 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Player Input Interface" (dependency).** <!-- t:f6257813 -->
   Record the endpoint/identifiers OpenAxolotl Game Client needs in this node's config artifacts — coordinate with OpenAxolotl Game Client.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
 - [ ] **T4 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T5 — Implement: "Every binding is remappable, and remapped bindings persist across sessions" (REQ-024).** <!-- t:c1fe8388 -->
+- [ ] **T5 — Implement: "Every player verb is bound in both a keyboard-and-mouse scheme and a gamepad scheme" (REQ-024).** <!-- t:b426b340 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-024 "Every player verb is bound in both a keyboard-and-mouse scheme and a gamepad scheme" — possible coordination point: Contract "Player Input Interface" (dependency) from OpenAxolotl Game Client (keyword signal only)
+- [ ] **T6 — Implement: "Bindings are context-sensitive by movement grammar, so water-only and land-only verbs may share a physical input without conflict" (REQ-024).** <!-- t:c6d0b56c -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-024 "Bindings are context-sensitive by movement grammar, so water-only and land-only verbs may share a physical input without conflict"
+- [ ] **T7 — Implement: "Every binding is remappable, and remapped bindings persist across sessions" (REQ-024).** <!-- t:c1fe8388 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-024 "Every binding is remappable, and remapped bindings persist across sessions"
-- [ ] **T6 — Implement: "Rebinding rejects a conflicting assignment within the same context rather than silently overriding it" (REQ-024).** <!-- t:fb4356c2 -->
+- [ ] **T8 — Implement: "Rebinding rejects a conflicting assignment within the same context rather than silently overriding it" (REQ-024).** <!-- t:fb4356c2 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-024 "Rebinding rejects a conflicting assignment within the same context rather than silently overriding it"
-- [ ] **T7 — Implement: "Switching between keyboard and gamepad mid-session is handled without requiring a restart, and on-screen prompts follow the active device" (REQ-024).** <!-- t:b5f0609a -->
+- [ ] **T9 — Implement: "Switching between keyboard and gamepad mid-session is handled without requiring a restart, and on-screen prompts follow the active device" (REQ-024).** <!-- t:b5f0609a -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-024 "Switching between keyboard and gamepad mid-session is handled without requiring a restart, and on-screen prompts follow the active device"
-- [ ] **T8 — Implement: "The full verb set is playable without modal overload or uncomfortable finger contortion" (REQ-024).** <!-- t:789ff73c -->
+  ↳ serves: REQ-024 "Switching between keyboard and gamepad mid-session is handled without requiring a restart, and on-screen prompts follow the active device" — possible coordination point: Contract "Player Input Interface" (dependency) from OpenAxolotl Game Client (keyword signal only)
+- [ ] **T10 — Implement: "Worlds read player intent through the controller interface and never read raw input directly" (REQ-024).** <!-- t:23ab5188 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-024 "Worlds read player intent through the controller interface and never read raw input directly" — possible coordination point: Contract "Player Input Interface" (dependency) to Axolotl Controller (keyword signal only)
+- [ ] **T11 — Implement: "The full verb set is playable without modal overload or uncomfortable finger contortion" (REQ-024).** <!-- t:789ff73c -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-024 "The full verb set is playable without modal overload or uncomfortable finger contortion"
-- [ ] **T9 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -151,19 +101,19 @@ The control scheme is the concern that drove the PC-only platform decision and u
 
 **Acceptance criteria — your task boxes:**
 - [ ] Every player verb is bound in both a keyboard-and-mouse scheme and a gamepad scheme
-  → covered by Task T2
-- [ ] Bindings are context-sensitive by movement grammar, so water-only and land-only verbs may share a physical input without conflict
-  → covered by Task T2
-- [ ] Every binding is remappable, and remapped bindings persist across sessions
   → covered by Task T5
-- [ ] Rebinding rejects a conflicting assignment within the same context rather than silently overriding it
+- [ ] Bindings are context-sensitive by movement grammar, so water-only and land-only verbs may share a physical input without conflict
   → covered by Task T6
-- [ ] Switching between keyboard and gamepad mid-session is handled without requiring a restart, and on-screen prompts follow the active device
+- [ ] Every binding is remappable, and remapped bindings persist across sessions
   → covered by Task T7
-- [ ] Worlds read player intent through the controller interface and never read raw input directly
-  → covered by Task T2
-- [ ] The full verb set is playable without modal overload or uncomfortable finger contortion (manual)
+- [ ] Rebinding rejects a conflicting assignment within the same context rather than silently overriding it
   → covered by Task T8
+- [ ] Switching between keyboard and gamepad mid-session is handled without requiring a restart, and on-screen prompts follow the active device
+  → covered by Task T9
+- [ ] Worlds read player intent through the controller interface and never read raw input directly
+  → covered by Task T10
+- [ ] The full verb set is playable without modal overload or uncomfortable finger contortion (manual)
+  → covered by Task T11
 
 ## Interface Contracts
 
@@ -307,9 +257,3 @@ Startup/initialization order based on edge directions and interaction patterns.
 **Depends on THIS node being available:**
 - OpenAxolotl Game Client (initiates Player Input Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
-
-## Existing Implementation
-
-| File | Kind | Language | Status |
-|------|------|----------|--------|
-| `.nodespec/tests/req-024.tests.md` - Test plan for requirement: Input and Control Scheme | test-plan | markdown | draft |

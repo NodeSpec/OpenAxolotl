@@ -16,71 +16,7 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-Audio is driven entirely by semantic events. No other system knows a file path or
-a bus name; they emit "tail lost", "entered water", "region restored", and this
-node decides what that sounds like.
-
-**Placement and shape.** This is a `shared-library` node: it lives in its own
-directory under `core/`, exposes a `class_name`-registered public surface, and is
-consumed by other systems and by world modules as a dependency. It is not an
-autoload unless it genuinely needs one global instance — prefer an explicit
-reference passed in over a singleton, because a singleton is untestable under
-GdUnit4 without process-level teardown, and this project's whole verification
-story runs through GdUnit4.
-
-**Catalog guidance that does not apply here.** The Godot technology guidance in
-this packet carries multiplayer sample code — `@rpc` annotations,
-`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
-guidance and it is forbidden in this project. REQ-030 bans the whole Godot
-multiplayer surface, the Engine Feature Policy contract records the ban
-machine-readably, and the World Static Analysis Gate fails CI on any occurrence
-anywhere in `core/`, `worlds/` or the reference template. This is single-player
-only, in every phase, with no deferral. Systems talk to each other through
-signals and direct calls on the interfaces declared in this packet.
-
-**The Audio Event Interface is an enum, not a string.** Every producer — the
-Regeneration system, the Gill Mod framework, the Restoration system, the Axolotl
-Controller, and world modules — sends a declared event identifier. Keeping the
-event set closed is what lets a test assert full coverage: every capability-loss
-and regrowth type has a distinct cue, and every Gill Mod has a per-mod distinct
-cue. Assert distinctness by mapping the event set to resolved audio resources and
-checking the mapping is total and injective where the criteria require distinct
-cues; a missing mapping is a test failure rather than silence at runtime.
-
-**Grammar and restoration soundscapes.** Water and land have distinct movement
-and ambience audio that switches with the grammar transition — subscribe to the
-controller's grammar-change signal and crossfade, rather than sampling a water
-volume independently, so audio can never disagree with the controller about which
-grammar is active. Region restoration state changes shift the ambient soundscape
-correspondingly, driven off the Restoration Region Interface's transition signal.
-
-**World-supplied audio with a real fallback.** Worlds may declare their own music
-and ambience through the Level Contract, and a world declaring none falls back to
-defaults rather than to silence — that is a checked criterion and the reference
-template, which declares no optional elements, is what exercises it. Resolve
-declared-or-default at world load and hold the resolved set, so the fallback path
-is taken once rather than tested per playback.
-
-**Mixing and settings.** Master, music and effects are separate Godot audio buses
-with independently adjustable volumes that persist across sessions — persist them
-through the Save Integration Interface's settings path, alongside input bindings,
-not in a private file.
-
-**Assets.** Every audio asset conforms to the Asset Contract including the
-provenance sidecar; the Asset Contract Validator checks them in CI. AI-generated
-audio records its tool and prompt, hand-authored audio does not — the schema's
-conditional handles that, so nothing special is needed here beyond placing files
-per the declared layout.
-
-**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
-each test name carries the requirement id it proves (`test_req_0NN_...`) — the
-harness parses that id back out and reports it as the failing rule, which is how
-a contributor or agent locates what broke. Unit-tier tests exercise this system's
-logic as plain objects; integration-tier tests drive it against the real
-controller and the real save interface via GdUnit4's `scene_runner`, because the
-criteria explicitly reject isolation-only coverage. Headless CI has no audio device; run Godot with a dummy audio driver and
-assert on the resolved playback requests rather than on sound. "Sound design
-supports the comedic tone" is manual.
+_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
 
 ## Implementation Tasks
 
@@ -92,10 +28,6 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T2 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:a3e554a0 -->
   Record the endpoint/identifiers OpenAxolotl Game Client needs in this node's config artifacts — coordinate with OpenAxolotl Game Client.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-023 "Distinct audio cues play for every capability loss and every regrowth" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-023 "Water and land movement grammars have distinct movement and ambience audio, switching with the grammar transition" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-023 "Gill Mod activation produces a per-mod distinct audio cue" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-023 "Audio assets conform to the Asset Contract including provenance requirements" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T3 — Expose the interface Regeneration and Capability System consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:438878f7 -->
   Record the endpoint/identifiers Regeneration and Capability System needs in this node's config artifacts — coordinate with Regeneration and Capability System.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
@@ -111,7 +43,6 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T7 — Expose the interface Asset Contract Validator consumes, per Contract "Asset Contract v1" (custom).** <!-- t:8c09fb30 -->
   Record the endpoint/identifiers Asset Contract Validator needs in this node's config artifacts — coordinate with Asset Contract Validator.
   Build to the contract schema EXACTLY (see Interface Contracts).
-  ↳ serves (unverified match): REQ-023 "Worlds may declare their own music and ambience through the Level Contract, and a world declaring none falls back to defaults rather than silence" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T8 — Expose the interface World: Coral Cove consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:5958d6a4 -->
   Record the endpoint/identifiers World: Coral Cove needs in this node's config artifacts — coordinate with World: Coral Cove.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
@@ -121,16 +52,31 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T10 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T11 — Implement: "Region restoration state changes are accompanied by a corresponding change in ambient soundscape" (REQ-023).** <!-- t:7240d028 -->
+- [ ] **T11 — Implement: "Distinct audio cues play for every capability loss and every regrowth" (REQ-023).** <!-- t:13e6ba2a -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-023 "Region restoration state changes are accompanied by a corresponding change in ambient soundscape"
-- [ ] **T12 — Implement: "Master, music, and effects volumes are independently adjustable and persist across sessions" (REQ-023).** <!-- t:eccb0ba5 -->
+  ↳ serves: REQ-023 "Distinct audio cues play for every capability loss and every regrowth" — possible coordination point: Contract "Audio Event Interface" (dependency) from Regeneration and Capability System (keyword signal only)
+- [ ] **T12 — Implement: "Water and land movement grammars have distinct movement and ambience audio, switching with the grammar transition" (REQ-023).** <!-- t:8b90126e -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-023 "Master, music, and effects volumes are independently adjustable and persist across sessions"
-- [ ] **T13 — Implement: "Sound design supports the comedic, family-appropriate tone rather than undercutting it" (REQ-023).** <!-- t:e3ce4c83 -->
+  ↳ serves: REQ-023 "Water and land movement grammars have distinct movement and ambience audio, switching with the grammar transition" — possible coordination point: Contract "Audio Event Interface" (dependency) from Regeneration and Capability System (keyword signal only)
+- [ ] **T13 — Implement: "Region restoration state changes are accompanied by a corresponding change in ambient soundscape" (REQ-023).** <!-- t:7240d028 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-023 "Region restoration state changes are accompanied by a corresponding change in ambient soundscape" — possible coordination point: Contract "Audio Event Interface" (dependency) from Restoration State System (keyword signal only)
+- [ ] **T14 — Implement: "Gill Mod activation produces a per-mod distinct audio cue" (REQ-023).** <!-- t:bf10fc84 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-023 "Gill Mod activation produces a per-mod distinct audio cue" — possible coordination point: Contract "Audio Event Interface" (dependency) from Gill Mod Ability Framework (keyword signal only)
+- [ ] **T15 — Implement: "Worlds may declare their own music and ambience through the Level Contract, and a world declaring none falls back to defaults rather than silence" (REQ-023).** <!-- t:8c20b73c -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-023 "Worlds may declare their own music and ambience through the Level Contract, and a world declaring none falls back to defaults rather than silence" — possible coordination point: Contract "Audio Event Interface" (dependency) from Regeneration and Capability System (keyword signal only)
+- [ ] **T16 — Implement: "Master, music, and effects volumes are independently adjustable and persist across sessions" (REQ-023).** <!-- t:eccb0ba5 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-023 "Master, music, and effects volumes are independently adjustable and persist across sessions" — possible coordination point: Contract "Audio Event Interface" (dependency) from Regeneration and Capability System (keyword signal only)
+- [ ] **T17 — Implement: "Audio assets conform to the Asset Contract including provenance requirements" (REQ-023).** <!-- t:0b27ef8e -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-023 "Audio assets conform to the Asset Contract including provenance requirements" — possible coordination point: Contract "Asset Contract v1" (custom) from Asset Contract Validator (keyword signal only)
+- [ ] **T18 — Implement: "Sound design supports the comedic, family-appropriate tone rather than undercutting it" (REQ-023).** <!-- t:e3ce4c83 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-023 "Sound design supports the comedic, family-appropriate tone rather than undercutting it"
-- [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T19 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -177,21 +123,21 @@ Audio was referenced by the tone requirement and by the licensing decision but n
 
 **Acceptance criteria — your task boxes:**
 - [ ] Distinct audio cues play for every capability loss and every regrowth
-  → covered by Task T2
-- [ ] Water and land movement grammars have distinct movement and ambience audio, switching with the grammar transition
-  → covered by Task T2
-- [ ] Region restoration state changes are accompanied by a corresponding change in ambient soundscape
   → covered by Task T11
-- [ ] Gill Mod activation produces a per-mod distinct audio cue
-  → covered by Task T2
-- [ ] Worlds may declare their own music and ambience through the Level Contract, and a world declaring none falls back to defaults rather than silence
-  → covered by Task T7
-- [ ] Master, music, and effects volumes are independently adjustable and persist across sessions
+- [ ] Water and land movement grammars have distinct movement and ambience audio, switching with the grammar transition
   → covered by Task T12
-- [ ] Audio assets conform to the Asset Contract including provenance requirements
-  → covered by Task T2
-- [ ] Sound design supports the comedic, family-appropriate tone rather than undercutting it (manual)
+- [ ] Region restoration state changes are accompanied by a corresponding change in ambient soundscape
   → covered by Task T13
+- [ ] Gill Mod activation produces a per-mod distinct audio cue
+  → covered by Task T14
+- [ ] Worlds may declare their own music and ambience through the Level Contract, and a world declaring none falls back to defaults rather than silence
+  → covered by Task T15
+- [ ] Master, music, and effects volumes are independently adjustable and persist across sessions
+  → covered by Task T16
+- [ ] Audio assets conform to the Asset Contract including provenance requirements
+  → covered by Task T17
+- [ ] Sound design supports the comedic, family-appropriate tone rather than undercutting it (manual)
+  → covered by Task T18
 
 ## Interface Contracts
 
@@ -433,9 +379,3 @@ Startup/initialization order based on edge directions and interaction patterns.
 - World: Coral Cove (initiates Audio Event Interface against this node (dependency))
 - World: Bubble Bay (initiates Audio Event Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
-
-## Existing Implementation
-
-| File | Kind | Language | Status |
-|------|------|----------|--------|
-| `.nodespec/tests/req-023.tests.md` - Test plan for requirement: Audio System, Music and Sound Design | test-plan | markdown | draft |

@@ -16,82 +16,7 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-This node is pillar one: damage strips a capability with comedic framing, and it
-never ends a run. The separation between this system and the Lives system is the
-single most important boundary in the game's design, and it is stated as a
-criterion that must hold *under any combination of losses*.
-
-**Placement and shape.** This is a `shared-library` node: it lives in its own
-directory under `core/`, exposes a `class_name`-registered public surface, and is
-consumed by other systems and by world modules as a dependency. It is not an
-autoload unless it genuinely needs one global instance — prefer an explicit
-reference passed in over a singleton, because a singleton is untestable under
-GdUnit4 without process-level teardown, and this project's whole verification
-story runs through GdUnit4.
-
-**Catalog guidance that does not apply here.** The Godot technology guidance in
-this packet carries multiplayer sample code — `@rpc` annotations,
-`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
-guidance and it is forbidden in this project. REQ-030 bans the whole Godot
-multiplayer surface, the Engine Feature Policy contract records the ban
-machine-readably, and the World Static Analysis Gate fails CI on any occurrence
-anywhere in `core/`, `worlds/` or the reference template. This is single-player
-only, in every phase, with no deferral. Systems talk to each other through
-signals and direct calls on the interfaces declared in this packet.
-
-**Capabilities, not health.** There is no health value anywhere in this node —
-not a hidden one, not a hit counter that maps to capability loss. Model
-capability state as a set of independent flags (tail, gill, leg) with a defined
-movement modifier each: tail reduces swim speed, gill reduces boost duration, leg
-reduces climb height. Modifiers publish through the Capability Modifier Interface
-as multiplicative factors the Axolotl Controller and Gill Mod framework consume;
-this node never mutates their internals. Because they are multiplicative and
-independent, "all capabilities lost" degrades movement without ever reaching
-zero — which is exactly what makes the never-fatal criterion structurally true
-rather than defended by a clamp.
-
-**Prove the boundary, don't assert it.** The criterion "capability loss alone
-never triggers a life loss, a death, or a run reset under any combination of
-losses" is best verified combinatorially: enumerate all subsets of the capability
-set, apply each, step frames, and assert no life-loss signal and no reset. Three
-capabilities is eight cases; write the loop rather than three hand-picked tests,
-because the criterion says *any* combination.
-
-**Regen stations.** A station restores all lost capabilities on use, and may
-additionally apply a temporary mutation loadout for
-`regen.mutation.duration_s`, after which the axolotl reverts to its base
-configuration. Implement the revert as a timer owned by this node, not by the
-station, so a world removing a station mid-loadout cannot strand the player in a
-mutated configuration. Checkpoint respawn fully restores capability state — that
-restoration is triggered by the Lives and Checkpoint System through its
-interface, so this node exposes a `restore_all()` entry rather than watching for
-respawns itself.
-
-**Tone is a requirement, not polish.** REQ-019 rides on this node: every
-capability-loss type triggers both a visual and an audio cue (never one alone),
-hazards and interactables are distinguishable without relying on color alone, and
-no failure state depicts blood, gore or humanized violence. The color-independence
-criterion is machine-checkable — give every hazard and capability state an
-explicit non-color discriminator (shape, icon or text) in its state table, and let
-a test assert the table is complete. Audio cues go out through the Audio Event
-Interface; this node emits semantic events ("tail lost", "gill regrown"), never
-sound file paths.
-
-**No magic numbers.** Every balance value this system uses is read from the
-Balance and Tuning Data node through the Tuning Data Interface, never declared as
-a GDScript constant. REQ-025 makes that a checked property: a cited tuning key
-that does not exist in the tuning data fails a test, and changing a value must
-alter behavior with no recompile.
-
-**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
-each test name carries the requirement id it proves (`test_req_0NN_...`) — the
-harness parses that id back out and reports it as the failing rule, which is how
-a contributor or agent locates what broke. Unit-tier tests exercise this system's
-logic as plain objects; integration-tier tests drive it against the real
-controller and the real save interface via GdUnit4's `scene_runner`, because the
-criteria explicitly reject isolation-only coverage. The tone and comedy criteria on this node are manual by nature — they
-prove out by ticking their boxes and having the user approve the change card;
-`report_test_results` refuses to bind them.
+_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
 
 ## Implementation Tasks
 
@@ -102,21 +27,12 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
   Start from the catalog's suggested structure: `scripts/main.gd`, `scenes/main.tscn`, `project.godot`, `export_presets.cfg`.
 - [ ] **T2 — Implement the integration with Axolotl Controller (godot) per Contract "Capability Modifier Interface" (dependency).** <!-- t:8756db97 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-002 "Damage from enemies and non-catastrophic hazards strips a specific capability rather than reducing a health value" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-002 "Each capability loss applies a defined, measurable movement modifier: tail reduces swim speed, gill reduces boost duration, leg reduces climb height" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-002 "Capability loss alone never triggers a life loss, a death, or a run reset under any combination of losses" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-002 "Capability state is fully restored when the player respawns at a checkpoint" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-019 "Every capability-loss type triggers both a visual and an audio feedback cue" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-019 "The game is completable using a single input device with no required simultaneous inputs beyond that device's capability" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-019 "Capability loss and regrowth are presented with comedic, non-gruesome feedback across every loss type" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-019 "Tone reads as playful and family-appropriate to a reviewer playing the capability-loss loop repeatedly" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T3 — Implement the integration with Gill Mod Ability Framework (godot) per Contract "Capability Modifier Interface" (dependency).** <!-- t:cb981af6 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
 - [ ] **T4 — Implement the integration with Audio System (godot) per Contract "Audio Event Interface" (dependency).** <!-- t:218035d2 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
 - [ ] **T5 — Implement the integration with Balance and Tuning Data (godot) per Contract "Tuning Data Interface" (dependency).** <!-- t:03c75344 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-002 "Regen stations can apply a temporary mutation loadout that alters the axolotl configuration for the duration given by tuning key regen.mutation.duration_s, after which the axolotl reverts to its base configuration" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T6 — Expose the interface Lives and Checkpoint System consumes, per Contract "Capability Modifier Interface" (dependency).** <!-- t:c3844026 -->
   Record the endpoint/identifiers Lives and Checkpoint System needs in this node's config artifacts — coordinate with Lives and Checkpoint System.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
@@ -126,18 +42,49 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T8 — Expose the interface Player HUD consumes, per Contract "HUD State Interface" (dependency).** <!-- t:3e14fc4a -->
   Record the endpoint/identifiers Player HUD needs in this node's config artifacts — coordinate with Player HUD.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-019 "Hazards, interactables, and restoration state are distinguishable without relying on color alone" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-019 "No enemy, hazard, or failure state depicts blood, gore, or humanized violence" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T10 — Implement: "Regen stations restore all lost capabilities on use" (REQ-002).** <!-- t:b6ffc0b7 -->
+- [ ] **T10 — Implement: "Damage from enemies and non-catastrophic hazards strips a specific capability rather than reducing a health value" (REQ-002).** <!-- t:4f3b4ef4 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-002 "Damage from enemies and non-catastrophic hazards strips a specific capability rather than reducing a health value" — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
+- [ ] **T11 — Implement: "Each capability loss applies a defined, measurable movement modifier: tail reduces swim speed, gill reduces boost duration, leg reduces climb height" (REQ-002).** <!-- t:d88d8aba -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-002 "Each capability loss applies a defined, measurable movement modifier: tail reduces swim speed, gill reduces boost duration, leg reduces climb height" — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
+- [ ] **T12 — Implement: "Capability loss alone never triggers a life loss, a death, or a run reset under any combination of losses" (REQ-002).** <!-- t:3f35a68b -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-002 "Capability loss alone never triggers a life loss, a death, or a run reset under any combination of losses" — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
+- [ ] **T13 — Implement: "Regen stations restore all lost capabilities on use" (REQ-002).** <!-- t:b6ffc0b7 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-002 "Regen stations restore all lost capabilities on use"
-- [ ] **T11 — Implement: "Each loss and regrowth plays comedic, non-gruesome feedback consistent with the family-appropriate tone" (REQ-002).** <!-- t:2c4f8fa3 -->
+- [ ] **T14 — Implement: "Regen stations can apply a temporary mutation loadout that alters the axolotl configuration for the duration given by tuning key regen.mutation.duration_s, after which the axolotl reverts to its base configuration" (REQ-002).** <!-- t:86f98d0f -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-002 "Regen stations can apply a temporary mutation loadout that alters the axolotl configuration for the duration given by tuning key regen.mutation.duration_s, after which the axolotl reverts to its base configuration" — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Axolotl Controller (keyword signal only)
+- [ ] **T15 — Implement: "Capability state is fully restored when the player respawns at a checkpoint" (REQ-002).** <!-- t:19544fa6 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-002 "Capability state is fully restored when the player respawns at a checkpoint" — possible coordination point: Contract "HUD State Interface" (dependency) from Player HUD (keyword signal only)
+- [ ] **T16 — Implement: "Each loss and regrowth plays comedic, non-gruesome feedback consistent with the family-appropriate tone" (REQ-002).** <!-- t:2c4f8fa3 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-002 "Each loss and regrowth plays comedic, non-gruesome feedback consistent with the family-appropriate tone"
-- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T17 — Implement: "Hazards, interactables, and restoration state are distinguishable without relying on color alone" (REQ-019).** <!-- t:6ec6fc42 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-019 "Hazards, interactables, and restoration state are distinguishable without relying on color alone" — possible coordination point: Contract "HUD State Interface" (dependency) from Player HUD (keyword signal only)
+- [ ] **T18 — Implement: "Every capability-loss type triggers both a visual and an audio feedback cue" (REQ-019).** <!-- t:5170ceae -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-019 "Every capability-loss type triggers both a visual and an audio feedback cue" — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
+- [ ] **T19 — Implement: "The game is completable using a single input device with no required simultaneous inputs beyond that device's capability" (REQ-019).** <!-- t:e01ce330 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-019 "The game is completable using a single input device with no required simultaneous inputs beyond that device's capability" — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
+- [ ] **T20 — Implement: "Capability loss and regrowth are presented with comedic, non-gruesome feedback across every loss type" (REQ-019).** <!-- t:2f756a5d -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-019 "Capability loss and regrowth are presented with comedic, non-gruesome feedback across every loss type" — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
+- [ ] **T21 — Implement: "No enemy, hazard, or failure state depicts blood, gore, or humanized violence" (REQ-019).** <!-- t:e8e0e69d -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-019 "No enemy, hazard, or failure state depicts blood, gore, or humanized violence" — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Drift Fleet Enemy Framework (keyword signal only)
+- [ ] **T22 — Implement: "Tone reads as playful and family-appropriate to a reviewer playing the capability-loss loop repeatedly" (REQ-019).** <!-- t:578a483a -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-019 "Tone reads as playful and family-appropriate to a reviewer playing the capability-loss loop repeatedly" — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
+- [ ] **T23 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -184,19 +131,19 @@ Pillar 1, soft layer — the signature mechanic and the game's constant feedback
 
 **Acceptance criteria — your task boxes:**
 - [ ] Damage from enemies and non-catastrophic hazards strips a specific capability rather than reducing a health value
-  → covered by Task T2
-- [ ] Each capability loss applies a defined, measurable movement modifier: tail reduces swim speed, gill reduces boost duration, leg reduces climb height
-  → covered by Task T2
-- [ ] Capability loss alone never triggers a life loss, a death, or a run reset under any combination of losses
-  → covered by Task T2
-- [ ] Regen stations restore all lost capabilities on use
   → covered by Task T10
-- [ ] Regen stations can apply a temporary mutation loadout that alters the axolotl configuration for the duration given by tuning key regen.mutation.duration_s, after which the axolotl reverts to its base configuration
-  → covered by Task T5
-- [ ] Capability state is fully restored when the player respawns at a checkpoint
-  → covered by Task T2
-- [ ] Each loss and regrowth plays comedic, non-gruesome feedback consistent with the family-appropriate tone (manual)
+- [ ] Each capability loss applies a defined, measurable movement modifier: tail reduces swim speed, gill reduces boost duration, leg reduces climb height
   → covered by Task T11
+- [ ] Capability loss alone never triggers a life loss, a death, or a run reset under any combination of losses
+  → covered by Task T12
+- [ ] Regen stations restore all lost capabilities on use
+  → covered by Task T13
+- [ ] Regen stations can apply a temporary mutation loadout that alters the axolotl configuration for the duration given by tuning key regen.mutation.duration_s, after which the axolotl reverts to its base configuration
+  → covered by Task T14
+- [ ] Capability state is fully restored when the player respawns at a checkpoint
+  → covered by Task T15
+- [ ] Each loss and regrowth plays comedic, non-gruesome feedback consistent with the family-appropriate tone (manual)
+  → covered by Task T16
 
 ### REQ-019: Kid-Appropriate Tone and Accessibility
 Category: non-functional | Status: in-progress
@@ -204,17 +151,17 @@ A cross-cutting constraint on every system in the game. Capability loss must rea
 
 **Acceptance criteria — your task boxes:**
 - [ ] Hazards, interactables, and restoration state are distinguishable without relying on color alone
-  → covered by Task T8
+  → covered by Task T17
 - [ ] Every capability-loss type triggers both a visual and an audio feedback cue
-  → covered by Task T2
+  → covered by Task T18
 - [ ] The game is completable using a single input device with no required simultaneous inputs beyond that device's capability
-  → covered by Task T2
+  → covered by Task T19
 - [ ] Capability loss and regrowth are presented with comedic, non-gruesome feedback across every loss type (manual)
-  → covered by Task T2
+  → covered by Task T20
 - [ ] No enemy, hazard, or failure state depicts blood, gore, or humanized violence (manual)
-  → covered by Task T8
+  → covered by Task T21
 - [ ] Tone reads as playful and family-appropriate to a reviewer playing the capability-loss loop repeatedly (manual)
-  → covered by Task T2
+  → covered by Task T22
 
 ## Interface Contracts
 
@@ -408,10 +355,3 @@ Startup/initialization order based on edge directions and interaction patterns.
 - Drift Fleet Enemy Framework (initiates Capability Modifier Interface against this node (dependency))
 - Player HUD (initiates HUD State Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
-
-## Existing Implementation
-
-| File | Kind | Language | Status |
-|------|------|----------|--------|
-| `.nodespec/tests/req-019.tests.md` - Test plan for requirement: Kid-Appropriate Tone and Accessibility | test-plan | markdown | draft |
-| `.nodespec/tests/req-002.tests.md` - Test plan for requirement: Regeneration and Capability Loss System | test-plan | markdown | draft |

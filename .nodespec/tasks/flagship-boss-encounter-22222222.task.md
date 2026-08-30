@@ -16,76 +16,7 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-The Flagship is the one encounter that gates restoration: defeating it sets its
-region's `unlocked` flag, which is what permits restoration to begin at all. It
-is also the game's proof that both movement grammars and the Gill Mod system are
-mandatory rather than optional flavour.
-
-**Placement and shape.** This is a `shared-library` node: it lives in its own
-directory under `core/`, exposes a `class_name`-registered public surface, and is
-consumed by other systems and by world modules as a dependency. It is not an
-autoload unless it genuinely needs one global instance — prefer an explicit
-reference passed in over a singleton, because a singleton is untestable under
-GdUnit4 without process-level teardown, and this project's whole verification
-story runs through GdUnit4.
-
-**Catalog guidance that does not apply here.** The Godot technology guidance in
-this packet carries multiplayer sample code — `@rpc` annotations,
-`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
-guidance and it is forbidden in this project. REQ-030 bans the whole Godot
-multiplayer surface, the Engine Feature Policy contract records the ban
-machine-readably, and the World Static Analysis Gate fails CI on any occurrence
-anywhere in `core/`, `worlds/` or the reference template. This is single-player
-only, in every phase, with no deferral. Systems talk to each other through
-signals and direct calls on the interfaces declared in this packet.
-
-**Phase structure is a requirement, not a design preference.** At least one
-mandatory phase completable only in the water grammar, at least one only in land,
-and at least one gated on the Gill Mod its host world requires. Model phases as
-explicit, ordered, queryable data — each declaring the grammar or mod it
-requires — so a test can assert the coverage rather than a designer asserting it
-in a comment. That data also drives the checkpoint behaviour below.
-
-**Two damage channels, deliberately unequal.** Ordinary attacks strip capability
-through the Capability Modifier Interface; only the designated finishing moves
-decrement a life, through the Checkpoint and Life Interface with a boss-finisher
-source id. Keep the finisher set small and explicit; every other attack must have
-no path to the life interface.
-
-**Checkpoints resume the phase, not the fight.** Checkpoints within the encounter
-restore lives and capability state and resume at the last *completed* phase. That
-requires phase progress to be checkpoint state, which means the encounter
-registers its phase index with the Lives and Checkpoint System rather than
-tracking it privately. Without that, a player losing all lives in phase three
-restarts at phase one — the exact punishing failure the lives design exists to
-avoid.
-
-**Unlocking restoration.** On defeat, set the region's `unlocked` flag through the
-Restoration Region Interface. Note the deliberate asymmetry with the Dredger: a
-Dredger reverts a restored region to `barren` but leaves `unlocked` set, so the
-Flagship is fought once and the restoration can be redone. Do not clear
-`unlocked` from this node for any reason.
-
-**Optional by contract.** A world declaring no boss stays contract-valid and
-fully completable — Bubble Bay is the world that proves it. Restoration in a
-bossless world must therefore be unlockable by some other declared means, so
-`unlocked` cannot default to false-and-only-boss-can-set-it; the Level Contract
-declares the default for a world with no boss.
-
-**No magic numbers.** Every balance value this system uses is read from the
-Balance and Tuning Data node through the Tuning Data Interface, never declared as
-a GDScript constant. REQ-025 makes that a checked property: a cited tuning key
-that does not exist in the tuning data fails a test, and changing a value must
-alter behavior with no recompile.
-
-**Verification.** GdUnit4 tests live under `test/` mirroring this directory, and
-each test name carries the requirement id it proves (`test_req_0NN_...`) — the
-harness parses that id back out and reports it as the failing rule, which is how
-a contributor or agent locates what broke. Unit-tier tests exercise this system's
-logic as plain objects; integration-tier tests drive it against the real
-controller and the real save interface via GdUnit4's `scene_runner`, because the
-criteria explicitly reject isolation-only coverage. "Reads as a climactic set piece and its restoration payoff lands" is
-manual.
+_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
 
 ## Implementation Tasks
 
@@ -98,22 +29,36 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
 - [ ] **T3 — Implement the integration with Restoration State System (godot) per Contract "Restoration Region Interface" (dependency).** <!-- t:b339696f -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-013 "Defeating the Flagship sets its region's restoration unlocked flag, permitting restoration to begin" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-013 "The encounter reads as a climactic set piece and its restoration payoff lands" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T4 — Implement the integration with Lives and Checkpoint System (godot) per Contract "Checkpoint and Life Interface" (dependency).** <!-- t:25e4d91d -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-013 "Flagship ordinary attacks strip capability, and its designated finishing moves decrement a life" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-013 "The encounter contains at least one mandatory phase completable only in the water grammar and at least one completable only in the land grammar" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-013 "The encounter contains at least one mandatory phase gated on the Gill Mod its host world requires" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-013 "Checkpoints within the encounter restore lives and capability state and resume the encounter at the last completed phase rather than from its start" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-013 "A world declaring no boss remains contract-valid and fully completable" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T5 — Expose the interface World: Coral Cove consumes, per Contract "Enemy Registration Interface" (dependency).** <!-- t:26bebacb -->
   Record the endpoint/identifiers World: Coral Cove needs in this node's config artifacts — coordinate with World: Coral Cove.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
 - [ ] **T6 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T7 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T7 — Implement: "Flagship ordinary attacks strip capability, and its designated finishing moves decrement a life" (REQ-013).** <!-- t:5b1a6591 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-013 "Flagship ordinary attacks strip capability, and its designated finishing moves decrement a life" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T8 — Implement: "Defeating the Flagship sets its region's restoration unlocked flag, permitting restoration to begin" (REQ-013).** <!-- t:2231507b -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-013 "Defeating the Flagship sets its region's restoration unlocked flag, permitting restoration to begin" — possible coordination point: Contract "Restoration Region Interface" (dependency) to Restoration State System (keyword signal only)
+- [ ] **T9 — Implement: "The encounter contains at least one mandatory phase completable only in the water grammar and at least one completable only in the land grammar" (REQ-013).** <!-- t:b8849b88 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-013 "The encounter contains at least one mandatory phase completable only in the water grammar and at least one completable only in the land grammar" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T10 — Implement: "The encounter contains at least one mandatory phase gated on the Gill Mod its host world requires" (REQ-013).** <!-- t:5aaba63c -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-013 "The encounter contains at least one mandatory phase gated on the Gill Mod its host world requires" — possible coordination point: Contract "Engine Feature Policy" (dependency) from World Static Analysis Gate (keyword signal only)
+- [ ] **T11 — Implement: "Checkpoints within the encounter restore lives and capability state and resume the encounter at the last completed phase rather than from its start" (REQ-013).** <!-- t:4c04d546 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-013 "Checkpoints within the encounter restore lives and capability state and resume the encounter at the last completed phase rather than from its start" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T12 — Implement: "A world declaring no boss remains contract-valid and fully completable" (REQ-013).** <!-- t:ad57a8df -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-013 "A world declaring no boss remains contract-valid and fully completable" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T13 — Implement: "The encounter reads as a climactic set piece and its restoration payoff lands" (REQ-013).** <!-- t:89189d9f -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-013 "The encounter reads as a climactic set piece and its restoration payoff lands" — possible coordination point: Contract "Restoration Region Interface" (dependency) to Restoration State System (keyword signal only)
+- [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -160,19 +105,19 @@ The regional set-piece encounter and the mechanic that ties boss design directly
 
 **Acceptance criteria — your task boxes:**
 - [ ] Flagship ordinary attacks strip capability, and its designated finishing moves decrement a life
-  → covered by Task T4
+  → covered by Task T7
 - [ ] Defeating the Flagship sets its region's restoration unlocked flag, permitting restoration to begin
-  → covered by Task T3
+  → covered by Task T8
 - [ ] The encounter contains at least one mandatory phase completable only in the water grammar and at least one completable only in the land grammar
-  → covered by Task T4
+  → covered by Task T9
 - [ ] The encounter contains at least one mandatory phase gated on the Gill Mod its host world requires
-  → covered by Task T4
+  → covered by Task T10
 - [ ] Checkpoints within the encounter restore lives and capability state and resume the encounter at the last completed phase rather than from its start
-  → covered by Task T4
+  → covered by Task T11
 - [ ] A world declaring no boss remains contract-valid and fully completable
-  → covered by Task T4
+  → covered by Task T12
 - [ ] The encounter reads as a climactic set piece and its restoration payoff lands (manual)
-  → covered by Task T3
+  → covered by Task T13
 
 ## Interface Contracts
 
@@ -336,9 +281,3 @@ Startup/initialization order based on edge directions and interaction patterns.
 **Depends on THIS node being available:**
 - World: Coral Cove (initiates Enemy Registration Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
-
-## Existing Implementation
-
-| File | Kind | Language | Status |
-|------|------|----------|--------|
-| `.nodespec/tests/req-013.tests.md` - Test plan for requirement: Flagship Boss Encounter | test-plan | markdown | draft |

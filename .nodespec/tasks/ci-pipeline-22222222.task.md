@@ -18,52 +18,7 @@ This component is an engine that owns its own internals (GitHub Actions). Never 
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-This node is the `.github/workflows/` directory and nothing else. It owns no
-game code and no validator logic; its whole job is to invoke the four repo
-validators exactly the way a contributor invokes them locally, and to turn a
-non-zero exit into a blocked merge.
-
-**Local/CI parity is the binding constraint.** The `Validator CLI Invocation`
-contract requires the documented local command and the CI invocation to be
-character-identical, so a contributor can never pass locally and fail here.
-Achieve that by having every workflow step call the same console entry points
-(`oax-level-check`, `oax-asset-check`, `oax-static-gate`, `oax-test`) with the
-same flags documented in `docs/commands.md`, adding only `--format json` for
-machine consumption. Do not inline `python -m ...`, do not add extra flags, and
-do not reimplement a check as a shell one-liner in a workflow file — a check
-that exists only in YAML cannot be run locally and therefore violates the
-contract.
-
-**Jobs.** One workflow (`pr.yml`) runs on every pull request with four required
-jobs — level contract, asset contract, static analysis gate, test harness — plus
-a build job. Each validator job publishes its JSON result as an artifact so a
-failure is inspectable without re-running. All four are configured as required
-status checks in branch protection; that branch-protection configuration is also
-what enforces REQ-020's rule that no community submission can reach `main`
-without explicit human maintainer approval, so it is part of this node's
-deliverable and belongs documented in `docs/branch-protection.md` even though
-the setting itself lives in repository settings rather than in a file.
-
-**Build job.** Godot export runs headless in a container pinned to the same
-Godot version as `project.godot`, using export presets committed at
-`export_presets.cfg`. The build must package the core game and every official
-world into one runnable artifact from a clean checkout via a single documented
-command — implement that command as a script (`scripts/build.sh`) invoked
-identically by CI and by a human, for the same parity reason as the validators.
-The "at most five commands from a clean clone" criterion is verified by the
-harness executing the documented sequence, not by inspection.
-
-**Godot in CI.** Use `godot --headless` with the export templates cached between
-runs; do not install a display server. The performance regression test and the
-headless playthrough smoke test both need a real Godot binary, so the test-harness
-job needs the same container image as the build job — share it rather than
-maintaining two.
-
-**Caching and pinning.** Pin the Godot version, the Python version and the
-action versions by SHA. An unpinned toolchain turns a green PR red on an
-unrelated day, which in this project is worse than usual: contributors here
-include AI agents that will treat a red check as a defect in their own world
-module and start editing code to fix a toolchain drift.
+_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
 
 ## Implementation Tasks
 
@@ -73,29 +28,33 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
   The engine's definition IS the deliverable — in whatever form this engine's definitions take (workflow/DAG, gateway config, manifest set, scrape/rule config). Author it as a code artifact bound to this node. Never reimplement the engine's internals as application code.
 - [ ] **T2 — Declare the wiring to Level Contract Compliance Checker (python-backend) per Contract "Validator CLI Invocation" (ipc).** <!-- t:7b52f757 -->
   Build to the contract schema EXACTLY (see Interface Contracts).
-  ↳ serves (unverified match): REQ-018 "CI runs the Level Contract checker, the Asset Contract validator, and the automated test suite on every pull request" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T3 — Declare the wiring to Asset Contract Validator (python-backend) per Contract "Validator CLI Invocation" (ipc).** <!-- t:3d896c0d -->
   Build to the contract schema EXACTLY (see Interface Contracts).
 - [ ] **T4 — Declare the wiring to OpenAxolotl Game Client (godot) per Contract "Core Module Dependency" (dependency).** <!-- t:bdaacefa -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-018 "The build packages the core game and all official worlds into a runnable artifact" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T5 — Declare the wiring to World Static Analysis Gate (python-backend) per Contract "Validator CLI Invocation" (ipc).** <!-- t:da0d4306 -->
   Build to the contract schema EXACTLY (see Interface Contracts).
 - [ ] **T6 — Declare the wiring to Test Harness and Fixtures (python-backend) per Contract "Validator CLI Invocation" (ipc).** <!-- t:4e18f696 -->
   Build to the contract schema EXACTLY (see Interface Contracts).
 - [ ] **T7 — Configure the service to satisfy: "A PC build is produced from a clean checkout via a single documented command" (REQ-018).** <!-- t:eaefdcbe -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-018 "A PC build is produced from a clean checkout via a single documented command"
-- [ ] **T8 — Configure the service to satisfy: "A pull request failing any contract check or test cannot merge" (REQ-018).** <!-- t:f79102ab -->
+  ↳ serves: REQ-018 "A PC build is produced from a clean checkout via a single documented command" — possible coordination point: Contract "Validator CLI Invocation" (ipc) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T8 — Configure the service to satisfy: "The build packages the core game and all official worlds into a runnable artifact" (REQ-018).** <!-- t:2f331924 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-018 "A pull request failing any contract check or test cannot merge"
-- [ ] **T9 — Configure the service to satisfy: "Building and running the game from a clean clone is documented as a reproducible sequence of at most five commands, and following that sequence verbatim produces a running game" (REQ-018).** <!-- t:eea3a388 -->
+  ↳ serves: REQ-018 "The build packages the core game and all official worlds into a runnable artifact" — possible coordination point: Contract "Core Module Dependency" (dependency) to OpenAxolotl Game Client (keyword signal only)
+- [ ] **T9 — Configure the service to satisfy: "CI runs the Level Contract checker, the Asset Contract validator, and the automated test suite on every pull request" (REQ-018).** <!-- t:d334780b -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-018 "Building and running the game from a clean clone is documented as a reproducible sequence of at most five commands, and following that sequence verbatim produces a running game"
-- [ ] **T10 — Configure the service to satisfy: "The packaged build launches and is playable end to end on a clean PC without a development environment installed" (REQ-018).** <!-- t:e6ea8c59 -->
+  ↳ serves: REQ-018 "CI runs the Level Contract checker, the Asset Contract validator, and the automated test suite on every pull request" — possible coordination point: Contract "Validator CLI Invocation" (ipc) to Level Contract Compliance Checker (keyword signal only)
+- [ ] **T10 — Configure the service to satisfy: "A pull request failing any contract check or test cannot merge" (REQ-018).** <!-- t:f79102ab -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-018 "The packaged build launches and is playable end to end on a clean PC without a development environment installed"
-- [ ] **T11 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+  ↳ serves: REQ-018 "A pull request failing any contract check or test cannot merge" — possible coordination point: Contract "Validator CLI Invocation" (ipc) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T11 — Configure the service to satisfy: "Building and running the game from a clean clone is documented as a reproducible sequence of at most five commands, and following that sequence verbatim produces a running game" (REQ-018).** <!-- t:eea3a388 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-018 "Building and running the game from a clean clone is documented as a reproducible sequence of at most five commands, and following that sequence verbatim produces a running game" — possible coordination point: Contract "Core Module Dependency" (dependency) to OpenAxolotl Game Client (keyword signal only)
+- [ ] **T12 — Configure the service to satisfy: "The packaged build launches and is playable end to end on a clean PC without a development environment installed" (REQ-018).** <!-- t:e6ea8c59 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-018 "The packaged build launches and is playable end to end on a clean PC without a development environment installed" — possible coordination point: Contract "Validator CLI Invocation" (ipc) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T13 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -144,15 +103,15 @@ A reproducible PC build of the game produced from the repository, plus the CI th
 - [ ] A PC build is produced from a clean checkout via a single documented command
   → covered by Task T7
 - [ ] The build packages the core game and all official worlds into a runnable artifact
-  → covered by Task T4
-- [ ] CI runs the Level Contract checker, the Asset Contract validator, and the automated test suite on every pull request
-  → covered by Task T2
-- [ ] A pull request failing any contract check or test cannot merge
   → covered by Task T8
-- [ ] Building and running the game from a clean clone is documented as a reproducible sequence of at most five commands, and following that sequence verbatim produces a running game
+- [ ] CI runs the Level Contract checker, the Asset Contract validator, and the automated test suite on every pull request
   → covered by Task T9
-- [ ] The packaged build launches and is playable end to end on a clean PC without a development environment installed (manual)
+- [ ] A pull request failing any contract check or test cannot merge
   → covered by Task T10
+- [ ] Building and running the game from a clean clone is documented as a reproducible sequence of at most five commands, and following that sequence verbatim produces a running game
+  → covered by Task T11
+- [ ] The packaged build launches and is playable end to end on a clean PC without a development environment installed (manual)
+  → covered by Task T12
 
 ## Interface Contracts
 
@@ -626,9 +585,3 @@ Startup/initialization order based on edge directions and interaction patterns.
 - OpenAxolotl Game Client (this node calls/depends on it via Core Module Dependency (dependency))
 - World Static Analysis Gate (this node calls/depends on it via Validator CLI Invocation (ipc))
 - Test Harness and Fixtures (this node calls/depends on it via Validator CLI Invocation (ipc))
-
-## Existing Implementation
-
-| File | Kind | Language | Status |
-|------|------|----------|--------|
-| `.nodespec/tests/req-018.tests.md` - Test plan for requirement: PC Build and Distribution | test-plan | markdown | draft |

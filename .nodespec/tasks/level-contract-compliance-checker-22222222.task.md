@@ -16,79 +16,7 @@
 ## Implementation Context
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-This tool answers one question for one world module: does it conform to
-`contracts/level_contract.v1.json`? It is the gate every world module — the two
-official worlds, the reference template, and every future community submission —
-passes through, and it is the first thing an AI agent authoring a world runs
-against its own output.
-
-**Catalog guidance that does not apply here.** The Python technology guidance in
-this packet describes a FastAPI web service — `fastapi`/`uvicorn`, SQLAlchemy
-async sessions, Celery workers, `src/main.py` + `src/routes/__init__.py`, CORS
-and JWT. None of it applies. This node is a short-lived, synchronous,
-filesystem-only command-line program with no HTTP surface, no database, no
-broker and no async runtime. Ignore the suggested file structure in T1 and the
-SDK/API pattern snippets entirely. What carries over from that guidance is only
-the tooling advice: `uv` for the environment with a committed lockfile, `ruff`
-for lint and format, `pytest` with fixtures, strict `mypy`, and pinned
-dependencies.
-
-**Packaging.** All four Python validators share one distribution at `tools/`
-(`tools/pyproject.toml`, package `openaxolotl_tools`), because they share the
-fixture corpus, the result-emitting code and the CI invocation convention;
-splitting them into four distributions would duplicate all three. Each tool is
-its own subpackage with its own console entry point declared in
-`[project.scripts]`. `openaxolotl_tools/common/` holds the pieces every tool
-needs: `result.py` (builds and serialises the `Validator CLI Invocation`
-result object), `cli.py` (the shared `argparse` parent parser giving every tool
-the identical `--target/--format/--fail-fast` surface), and `schemas.py`
-(loads and caches the JSON Schema files from `contracts/`).
-
-**The checker holds no rules of its own.** Package `openaxolotl_tools/levelcheck/`,
-entry point `oax-level-check`. It loads `contracts/level_contract.v1.json` at
-startup and validates the target module's manifest against it with `jsonschema`;
-every required element, optional-element default, and naming rule comes from that
-file. The criterion "adding a new rule to the contract schema changes checker
-behavior without any code change" is the design constraint that decides this
-node's whole shape: any time you find yourself writing an `if element ==` branch,
-that rule belongs in the schema instead. The only logic that legitimately lives
-in Python is what JSON Schema cannot express — directory-layout and file-naming
-checks against the filesystem, and the contract-version comparison that rejects a
-world targeting a version this checker does not support.
-
-**Version handling.** Read `contractVersion` from the module manifest and compare
-it against the versions the loaded schema declares support for. An unsupported
-version is a single clear violation with rule id `contract.version.unsupported`,
-not a cascade of downstream "missing element" errors — an agent reading a
-hundred violations caused by one version mismatch will fix the wrong thing.
-Detect and short-circuit.
-
-**Emitting results.** Every run ends by constructing exactly one result object
-matching the `Validator CLI Invocation` `resultSchema` — `tool`,
-`schemaVersion`, `target`, `passed`, `violations[]` — and printing it as JSON
-when `--format json`, or as a human-readable rendering of the same object when
-`--format text` (the default). Text output is a *rendering* of the object, never
-a separate code path, so a message can never appear in one format and not the
-other. `schemaVersion` is read from the schema file actually loaded, not
-hardcoded, so a contract bump is visible in every result. Exit codes follow the
-contract exactly: `0` clean, `1` one or more `severity: "error"` violations, `2`
-invocation error — bad arguments, unreadable target, missing or unparseable
-schema file. A `warning`-severity violation is reported but never changes the
-exit code, per the contract's merge-gate rule. `violations[].rule` is a stable
-dotted id, never a message string, because that id is what an AI agent maps back
-to the contract element it broke.
-
-**Fixtures.** The conforming world, the non-conforming world and the malicious
-world fixtures come from the Test Harness node via the Shared Test Fixtures
-contract — import them from `openaxolotl_tools.harness.fixtures` rather than
-keeping a private copy, because the criterion requires the checker, validator and
-static gate to share one corpus. This checker's own test asserts that the
-non-conforming fixture fails with the *specific expected* rule id, not merely
-that it fails; a checker that rejects everything would otherwise pass.
-
-**Reporting up.** Violation messages carry a `remediation` string saying what to
-change. This is the field an AI agent acts on, so write it as an instruction
-("declare `spawn_point` in `world.json`"), not as a restatement of the problem.
+_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
 
 ## Implementation Tasks
 
@@ -99,9 +27,6 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
   Start from the catalog's suggested structure: `src/main.py`, `src/routes/__init__.py`, `pyproject.toml`.
 - [ ] **T2 — Implement the integration with World: Coral Cove (godot) per Contract "Level Contract v1" (dependency).** <!-- t:bd68a2e3 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-007 "Checker loads the Level Contract schema file as its source of truth and validates presence and well-formedness of every required element it declares" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-007 "Checker validates a world's declared contract version and rejects a world targeting an unsupported version" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-007 "Adding a new rule to the contract schema changes checker behavior without any code change to the checker" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T3 — Implement the integration with World: Bubble Bay (godot) per Contract "Level Contract v1" (dependency).** <!-- t:04060a69 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
 - [ ] **T4 — Implement the integration with Test Harness and Fixtures (python-backend) per Contract "Shared Test Fixtures" (dependency).** <!-- t:7d12e948 -->
@@ -111,22 +36,31 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T6 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).** <!-- t:a39cc42a -->
   Record the endpoint/identifiers CI Pipeline needs in this node's config artifacts — coordinate with CI Pipeline.
   Build to the contract schema EXACTLY (see Interface Contracts).
-- [ ] **T7 — Implement: "Checker validates world module directory layout and naming convention" (REQ-007).** <!-- t:79b9e9b6 -->
+- [ ] **T7 — Implement: "Checker loads the Level Contract schema file as its source of truth and validates presence and well-formedness of every required element it declares" (REQ-007).** <!-- t:66047502 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-007 "Checker validates world module directory layout and naming convention"
-- [ ] **T8 — Implement: "Failure output names the specific failing element, its file location, and the violated rule, emitted as structured machine-readable output an AI coding agent can parse" (REQ-007).** <!-- t:c9ec3bbd -->
+  ↳ serves: REQ-007 "Checker loads the Level Contract schema file as its source of truth and validates presence and well-formedness of every required element it declares" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T8 — Implement: "Checker validates a world's declared contract version and rejects a world targeting an unsupported version" (REQ-007).** <!-- t:bc8dec63 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-007 "Failure output names the specific failing element, its file location, and the violated rule, emitted as structured machine-readable output an AI coding agent can parse"
-- [ ] **T9 — Implement: "Checker exits with a non-zero status on failure and zero on success" (REQ-007).** <!-- t:ef232550 -->
+  ↳ serves: REQ-007 "Checker validates a world's declared contract version and rejects a world targeting an unsupported version" — possible coordination point: Contract "Level Contract v1" (dependency) to World: Coral Cove (keyword signal only)
+- [ ] **T9 — Implement: "Checker validates world module directory layout and naming convention" (REQ-007).** <!-- t:79b9e9b6 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-007 "Checker exits with a non-zero status on failure and zero on success"
-- [ ] **T10 — Implement: "Checker is runnable locally with a single documented command" (REQ-007).** <!-- t:49f81077 -->
+  ↳ serves: REQ-007 "Checker validates world module directory layout and naming convention" — possible coordination point: Contract "Level Contract v1" (dependency) to World: Coral Cove (keyword signal only)
+- [ ] **T10 — Implement: "Failure output names the specific failing element, its file location, and the violated rule, emitted as structured machine-readable output an AI coding agent can parse" (REQ-007).** <!-- t:c9ec3bbd -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-007 "Checker is runnable locally with a single documented command"
-- [ ] **T11 — Implement: "A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it" (REQ-007).** <!-- t:d30c83d8 -->
+  ↳ serves: REQ-007 "Failure output names the specific failing element, its file location, and the violated rule, emitted as structured machine-readable output an AI coding agent can parse" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T11 — Implement: "Checker exits with a non-zero status on failure and zero on success" (REQ-007).** <!-- t:ef232550 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-007 "A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it"
-- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+  ↳ serves: REQ-007 "Checker exits with a non-zero status on failure and zero on success" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T12 — Implement: "Checker is runnable locally with a single documented command" (REQ-007).** <!-- t:49f81077 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-007 "Checker is runnable locally with a single documented command" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T13 — Implement: "A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it" (REQ-007).** <!-- t:d30c83d8 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-007 "A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it" — possible coordination point: Contract "Level Contract v1" (dependency) to World: Coral Cove (keyword signal only)
+- [ ] **T14 — Implement: "Adding a new rule to the contract schema changes checker behavior without any code change to the checker" (REQ-007).** <!-- t:d1effc90 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-007 "Adding a new rule to the contract schema changes checker behavior without any code change to the checker"
+- [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -173,21 +107,21 @@ The tool that makes "AI agents can build compliant levels" a fact rather than a 
 
 **Acceptance criteria — your task boxes:**
 - [ ] Checker loads the Level Contract schema file as its source of truth and validates presence and well-formedness of every required element it declares
-  → covered by Task T2
-- [ ] Checker validates a world's declared contract version and rejects a world targeting an unsupported version
-  → covered by Task T2
-- [ ] Checker validates world module directory layout and naming convention
   → covered by Task T7
-- [ ] Failure output names the specific failing element, its file location, and the violated rule, emitted as structured machine-readable output an AI coding agent can parse
+- [ ] Checker validates a world's declared contract version and rejects a world targeting an unsupported version
   → covered by Task T8
-- [ ] Checker exits with a non-zero status on failure and zero on success
+- [ ] Checker validates world module directory layout and naming convention
   → covered by Task T9
-- [ ] Checker is runnable locally with a single documented command
+- [ ] Failure output names the specific failing element, its file location, and the violated rule, emitted as structured machine-readable output an AI coding agent can parse
   → covered by Task T10
-- [ ] A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it
+- [ ] Checker exits with a non-zero status on failure and zero on success
   → covered by Task T11
+- [ ] Checker is runnable locally with a single documented command
+  → covered by Task T12
+- [ ] A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it
+  → covered by Task T13
 - [ ] Adding a new rule to the contract schema changes checker behavior without any code change to the checker
-  → covered by Task T2
+  → covered by Task T14
 
 ## Interface Contracts
 
@@ -711,9 +645,3 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 **Depends on THIS node being available:**
 - CI Pipeline (initiates Validator CLI Invocation against this node (ipc))
-
-## Existing Implementation
-
-| File | Kind | Language | Status |
-|------|------|----------|--------|
-| `.nodespec/tests/req-007.tests.md` - Test plan for requirement: Level Contract Automated Compliance Checker | test-plan | markdown | draft |

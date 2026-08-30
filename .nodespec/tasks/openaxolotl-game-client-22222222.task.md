@@ -15,82 +15,8 @@
 
 ## Implementation Context
 
-> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
-
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-This node is the Godot project itself plus three things that only make sense at
-project scope: the Level Contract v1 schema every other module is judged
-against, the Open Lagoon hub that discovers and loads world modules at runtime,
-and the contributor-facing documentation and performance budgets.
-
-**Repository layout (project-wide, settled here once).** The Godot project root
-IS the repository root — `project.godot` sits at the top level so every core
-system, world module and contract schema is reachable as a plain `res://` path
-with no import gymnastics. `core/` holds one directory per core system node,
-`hub/` holds the Open Lagoon hub and world loader, `worlds/` holds world
-modules discovered at runtime, `contracts/` holds the machine-readable schema
-files, `test/` holds GdUnit4 GDScript tests mirroring `core/`, and `addons/`
-holds GdUnit4 itself. The Python tooling lives under `tools/` and the shared
-test fixtures under `fixtures/`; both carry a `.gdignore` file so Godot's
-importer never scans them — this matters because the fixture set deliberately
-contains malformed and malicious world modules that would otherwise break
-editor import for everyone.
-
-**Catalog guidance that does not apply here.** The Godot technology guidance in
-this packet includes multiplayer sample code — `@rpc` annotations,
-`is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
-guidance and it is forbidden in this project. REQ-030 bans the entire Godot
-multiplayer surface, the Engine Feature Policy contract records the ban
-machine-readably, and the World Static Analysis Gate fails CI on any occurrence
-in core, worlds, the template or submissions. Cross-node communication in this
-project is signals and direct calls through the declared interfaces, never RPC.
-`project.godot` must additionally declare no networking autoloads, no peer
-configuration and no network-related project settings — that is a checked
-criterion, not a style preference.
-
-**The Level Contract is a data file, not code.** `contracts/level_contract.v1.json`
-is a JSON Schema document and it is the single source of truth: the compliance
-checker loads it and hardcodes nothing, and the hub loads the same file to
-validate a module before loading it. Adding a conformance rule means editing
-that file only. The schema declares the five required elements (spawn point,
-checkpoints, finish condition, controller compatibility, save integration), each
-optional element together with the default applied when absent, the
-`contractVersion` identifier every world module must declare, the module
-directory layout and naming convention, and a `sanctionedApi` block naming the
-symbols a world may call. Keep `contracts/sanctioned_api.v1.json` derived from
-the actual architecture edges rather than authored from intent — an allowlist
-written from memory drifts from the interfaces that really exist, and the static
-gate then rejects legitimate world code. The prose companion at
-`docs/level-contract.md` explains each element and its rationale; it is
-documentation of the schema, never a second source of truth.
-
-**Hub and loader.** `hub/world_registry.gd` scans `res://worlds/` at runtime,
-reads each module's manifest, validates it against the loaded schema, and builds
-the portal list from what survives. There is no hardcoded world list anywhere,
-including no special case for the reference template — the template must go
-through the identical path, which is what proves the path is genuinely generic.
-A module that fails to load or fails validation is recorded with its failure
-reason and surfaced as an unavailable portal; it never propagates an exception
-into the hub. Portals carry a `tier` field (`official`, `community`,
-`experimental`) coming from the manifest, and tier is distinguished by shape and
-label as well as color, because REQ-019 and REQ-022 forbid color-only encoding
-project-wide. Per-world completion and restoration progress are read through the
-Save Integration Interface — the hub never opens the save file.
-
-**Performance budgets.** State the baseline PC specification and the three
-numbers (frame-rate target, maximum permitted frame-time spike, world load-time
-budget) in `docs/performance.md` and mirror them as data in the tuning set so
-the CI regression test reads the same numbers the documentation states. Measure
-in-engine with `Performance.get_monitor()` rather than wall-clock timing around
-the frame loop. The load-time budget is measured from portal selection to the
-frame the player first has control, not to scene instantiation.
-
-**Documentation.** REQ-017's testable criterion is that the exact documented
-commands succeed as written. Keep the command strings in one place —
-`docs/commands.md` — and have the harness parse that file and execute what it
-finds, so documentation drift fails CI instead of quietly misleading a
-contributor. The remaining REQ-017 criteria are manual and prove out through
-task-doc ticks plus user approval, not through `report_test_results`.
+_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW-NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
 
 ## Implementation Tasks
 
@@ -101,52 +27,22 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
   Start from the catalog's suggested structure: `scripts/main.gd`, `scenes/main.tscn`, `project.godot`, `export_presets.cfg`.
 - [ ] **T2 — Implement the integration with Axolotl Controller (godot) per Contract "Axolotl Controller Interface" (dependency).** <!-- t:a33cf1c7 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-006 "Schema enumerates every required element (spawn point, checkpoints, finish condition, controller compatibility, save integration) with a machine-checkable conformance rule for each" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-009 "Hub reflects per-world completion and restoration progress read through the save-integration interface" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-017 "Documentation enumerates the extension interfaces for abilities, enemies, and worlds with worked examples" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T3 — Implement the integration with Camera System (godot) per Contract "Core Module Dependency" (dependency).** <!-- t:3d3effd0 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-006 "Schema carries an explicit contract version identifier, and every world module declares the contract version it targets" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-006 "Schema defines the world module directory layout and file naming convention" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-006 "Schema enumerates the sanctioned world API surface that a world module may call" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-009 "Hub discovers installed world modules at runtime from the worlds directory with no hardcoded world list" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-009 "Adding, removing, or replacing a world module changes the available portals without any edit to hub code" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-009 "A world module that fails to load or fails contract validation is surfaced as unavailable without crashing or blocking the hub" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T4 — Implement the integration with Save System (godot) per Contract "Save Integration Interface" (dependency).** <!-- t:bcbdac74 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
 - [ ] **T5 — Implement the integration with Lives and Checkpoint System (godot) per Contract "Checkpoint and Life Interface" (dependency).** <!-- t:25e4d91d -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-006 "A prose contract document explains every schema element and its rationale for human contributors" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-006 "Contract is frozen at v1 only after the official MVP worlds have been built against it and their friction fed back into it" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-009 "Entering a portal loads the corresponding world at its spawn point, and completing the finish condition returns the player to the hub" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-009 "Portals carry a tier designation (Official, Community, Experimental) and are visually distinguished by tier" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-017 "A reference example world exists, passes the compliance checker, and is documented as the canonical starting point for a new world" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-017 "Documentation states the exact commands to run the Level Contract checker, the Asset Contract validator, and the test suite locally, and a test proves those documented commands succeed as written" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-017 "Repository documents the architecture, Level Contract, Asset Contract, and Godot/GDScript conventions in a form an AI coding agent can consume directly from the repo" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-017 "An AI coding agent, given only the repository and a one-sentence world brief, produces a world that passes the compliance checker" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-027 "A baseline target PC specification is documented, and the frame-rate target, the maximum permitted frame-time spike, and the world load-time budget on that baseline are each stated as numbers" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-027 "A performance regression test runs in CI against an official world and fails when any of the three documented targets is breached" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-021 "Code license is chosen and applied to the repository" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-021 "Official art and audio asset license is chosen, documented, and distinguished from the code license" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-021 "Policy documents how AI-generated asset provenance and generator terms of service affect redistribution and relicensing" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-021 "Contributor licensing terms for submitted worlds and assets are documented in the contribution guide" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-021 "Licensing decision is resolved before the public README and contribution guide ship" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T6 — Implement the integration with World: Coral Cove (godot) per Contract "Level Contract v1" (dependency).** <!-- t:bd68a2e3 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-006 "Contract is published as a machine-readable schema file that the compliance checker loads as its single source of truth, with no conformance rules hardcoded in the checker" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-006 "A documented migration path describes how a v1 world is brought forward when the contract version increments" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-006 "A contributor unfamiliar with the codebase can produce a conforming world from the contract document alone" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T7 — Implement the integration with World: Bubble Bay (godot) per Contract "Level Contract v1" (dependency).** <!-- t:04060a69 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
 - [ ] **T8 — Implement the integration with Player HUD (godot) per Contract "HUD State Interface" (dependency).** <!-- t:c8a2f551 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-017 "README states the agent-authored contribution workflow with a concrete example prompt" — requirement not mapped to that node; verify or reassign before relying on it
-  ↳ serves (unverified match): REQ-027 "A restoration state transition completes without exceeding the documented maximum frame-time spike" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T9 — Implement the integration with Audio System (godot) per Contract "Audio Event Interface" (dependency).** <!-- t:218035d2 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
 - [ ] **T10 — Implement the integration with Input System (godot) per Contract "Player Input Interface" (dependency).** <!-- t:da38b8ef -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-  ↳ serves (unverified match): REQ-027 "World load time from selecting a hub portal to player control stays within the documented load-time budget" — requirement not mapped to that node; verify or reassign before relying on it
 - [ ] **T11 — Implement the integration with World: Reference Template (godot) per Contract "Level Contract v1" (dependency).** <!-- t:d6a167a4 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
 - [ ] **T12 — Expose the interface Asset Contract Validator consumes, per Contract "Asset Contract v1" (custom).** <!-- t:8c09fb30 -->
@@ -161,16 +57,106 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T15 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T16 — Implement: "Schema enumerates every optional element together with the defined default behavior applied when it is absent" (REQ-006).** <!-- t:516930f9 -->
+- [ ] **T16 — Implement: "Contract is published as a machine-readable schema file that the compliance checker loads as its single source of truth, with no conformance rules hardcoded in the checker" (REQ-006).** <!-- t:8a448cc0 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-006 "Contract is published as a machine-readable schema file that the compliance checker loads as its single source of truth, with no conformance rules hardcoded in the checker"
+- [ ] **T17 — Implement: "Schema enumerates every required element (spawn point, checkpoints, finish condition, controller compatibility, save integration) with a machine-checkable conformance rule for each" (REQ-006).** <!-- t:3afe4742 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-006 "Schema enumerates every required element (spawn point, checkpoints, finish condition, controller compatibility, save integration) with a machine-checkable conformance rule for each" — possible coordination point: Contract "Axolotl Controller Interface" (dependency) to Axolotl Controller (keyword signal only)
+- [ ] **T18 — Implement: "Schema enumerates every optional element together with the defined default behavior applied when it is absent" (REQ-006).** <!-- t:516930f9 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-006 "Schema enumerates every optional element together with the defined default behavior applied when it is absent"
-- [ ] **T17 — Implement: "Official worlds sustain the documented frame-rate target on the baseline specification during normal traversal" (REQ-027).** <!-- t:6305f4b4 -->
+- [ ] **T19 — Implement: "Schema carries an explicit contract version identifier, and every world module declares the contract version it targets" (REQ-006).** <!-- t:b0cd6eab -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-027 "Official worlds sustain the documented frame-rate target on the baseline specification during normal traversal"
-- [ ] **T18 — Implement: "The game remains smooth during a Flagship encounter combined with a restoration reversion, the heaviest expected load case" (REQ-027).** <!-- t:447b635f -->
+  ↳ serves: REQ-006 "Schema carries an explicit contract version identifier, and every world module declares the contract version it targets" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T20 — Implement: "Schema defines the world module directory layout and file naming convention" (REQ-006).** <!-- t:6004a15f -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-006 "Schema defines the world module directory layout and file naming convention" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T21 — Implement: "Schema enumerates the sanctioned world API surface that a world module may call" (REQ-006).** <!-- t:a05f7ba5 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-006 "Schema enumerates the sanctioned world API surface that a world module may call" — possible coordination point: Contract "Level Contract v1" (dependency) to World: Coral Cove (keyword signal only)
+- [ ] **T22 — Implement: "A prose contract document explains every schema element and its rationale for human contributors" (REQ-006).** <!-- t:f54e24ad -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-006 "A prose contract document explains every schema element and its rationale for human contributors" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T23 — Implement: "A documented migration path describes how a v1 world is brought forward when the contract version increments" (REQ-006).** <!-- t:05b606b3 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-006 "A documented migration path describes how a v1 world is brought forward when the contract version increments" — possible coordination point: Contract "Level Contract v1" (dependency) to World: Coral Cove (keyword signal only)
+- [ ] **T24 — Implement: "A contributor unfamiliar with the codebase can produce a conforming world from the contract document alone" (REQ-006).** <!-- t:92ae5f33 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-006 "A contributor unfamiliar with the codebase can produce a conforming world from the contract document alone" — possible coordination point: Contract "Level Contract v1" (dependency) to World: Coral Cove (keyword signal only)
+- [ ] **T25 — Implement: "Contract is frozen at v1 only after the official MVP worlds have been built against it and their friction fed back into it" (REQ-006).** <!-- t:a8f5e226 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-006 "Contract is frozen at v1 only after the official MVP worlds have been built against it and their friction fed back into it" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T26 — Implement: "Hub discovers installed world modules at runtime from the worlds directory with no hardcoded world list" (REQ-009).** <!-- t:fb1796f6 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-009 "Hub discovers installed world modules at runtime from the worlds directory with no hardcoded world list" — possible coordination point: Contract "Level Contract v1" (dependency) to World: Coral Cove (keyword signal only)
+- [ ] **T27 — Implement: "Entering a portal loads the corresponding world at its spawn point, and completing the finish condition returns the player to the hub" (REQ-009).** <!-- t:232d1763 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-009 "Entering a portal loads the corresponding world at its spawn point, and completing the finish condition returns the player to the hub" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T28 — Implement: "Adding, removing, or replacing a world module changes the available portals without any edit to hub code" (REQ-009).** <!-- t:3abf07a5 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-009 "Adding, removing, or replacing a world module changes the available portals without any edit to hub code" — possible coordination point: Contract "Level Contract v1" (dependency) to World: Coral Cove (keyword signal only)
+- [ ] **T29 — Implement: "A world module that fails to load or fails contract validation is surfaced as unavailable without crashing or blocking the hub" (REQ-009).** <!-- t:5801f026 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-009 "A world module that fails to load or fails contract validation is surfaced as unavailable without crashing or blocking the hub" — possible coordination point: Contract "Level Contract v1" (dependency) to World: Coral Cove (keyword signal only)
+- [ ] **T30 — Implement: "Portals carry a tier designation (Official, Community, Experimental) and are visually distinguished by tier" (REQ-009).** <!-- t:46fe597b -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-009 "Portals carry a tier designation (Official, Community, Experimental) and are visually distinguished by tier" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T31 — Implement: "Hub reflects per-world completion and restoration progress read through the save-integration interface" (REQ-009).** <!-- t:00981ae1 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-009 "Hub reflects per-world completion and restoration progress read through the save-integration interface" — possible coordination point: Contract "Save Integration Interface" (dependency) to Save System (keyword signal only)
+- [ ] **T32 — Implement: "A reference example world exists, passes the compliance checker, and is documented as the canonical starting point for a new world" (REQ-017).** <!-- t:88c0ed62 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-017 "A reference example world exists, passes the compliance checker, and is documented as the canonical starting point for a new world" — possible coordination point: Contract "Level Contract v1" (dependency) to World: Reference Template (keyword signal only)
+- [ ] **T33 — Implement: "Documentation states the exact commands to run the Level Contract checker, the Asset Contract validator, and the test suite locally, and a test proves those documented commands succeed as written" (REQ-017).** <!-- t:687cbf04 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-017 "Documentation states the exact commands to run the Level Contract checker, the Asset Contract validator, and the test suite locally, and a test proves those documented commands succeed as written" — possible coordination point: Contract "Asset Contract v1" (custom) from Asset Contract Validator (keyword signal only)
+- [ ] **T34 — Implement: "Repository documents the architecture, Level Contract, Asset Contract, and Godot/GDScript conventions in a form an AI coding agent can consume directly from the repo" (REQ-017).** <!-- t:ce3124be -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-017 "Repository documents the architecture, Level Contract, Asset Contract, and Godot/GDScript conventions in a form an AI coding agent can consume directly from the repo" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T35 — Implement: "Documentation enumerates the extension interfaces for abilities, enemies, and worlds with worked examples" (REQ-017).** <!-- t:f50808d7 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-017 "Documentation enumerates the extension interfaces for abilities, enemies, and worlds with worked examples" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T36 — Implement: "README states the agent-authored contribution workflow with a concrete example prompt" (REQ-017).** <!-- t:9d36c5b8 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-017 "README states the agent-authored contribution workflow with a concrete example prompt" — possible coordination point: Contract "HUD State Interface" (dependency) to Player HUD (keyword signal only)
+- [ ] **T37 — Implement: "An AI coding agent, given only the repository and a one-sentence world brief, produces a world that passes the compliance checker" (REQ-017).** <!-- t:0426c75f -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-017 "An AI coding agent, given only the repository and a one-sentence world brief, produces a world that passes the compliance checker" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T38 — Implement: "A baseline target PC specification is documented, and the frame-rate target, the maximum permitted frame-time spike, and the world load-time budget on that baseline are each stated as numbers" (REQ-027).** <!-- t:6e50e9a1 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-027 "A baseline target PC specification is documented, and the frame-rate target, the maximum permitted frame-time spike, and the world load-time budget on that baseline are each stated as numbers" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T39 — Implement: "Official worlds sustain the documented frame-rate target on the baseline specification during normal traversal" (REQ-027).** <!-- t:6305f4b4 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-027 "Official worlds sustain the documented frame-rate target on the baseline specification during normal traversal" — possible coordination point: Contract "Level Contract v1" (dependency) to World: Coral Cove (keyword signal only)
+- [ ] **T40 — Implement: "A restoration state transition completes without exceeding the documented maximum frame-time spike" (REQ-027).** <!-- t:4c8aa8d6 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-027 "A restoration state transition completes without exceeding the documented maximum frame-time spike" — possible coordination point: Contract "HUD State Interface" (dependency) to Player HUD (keyword signal only)
+- [ ] **T41 — Implement: "World load time from selecting a hub portal to player control stays within the documented load-time budget" (REQ-027).** <!-- t:8609e8b4 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-027 "World load time from selecting a hub portal to player control stays within the documented load-time budget" — possible coordination point: Contract "Level Contract v1" (dependency) to World: Coral Cove (keyword signal only)
+- [ ] **T42 — Implement: "A performance regression test runs in CI against an official world and fails when any of the three documented targets is breached" (REQ-027).** <!-- t:ba2d3e65 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-027 "A performance regression test runs in CI against an official world and fails when any of the three documented targets is breached" — possible coordination point: Contract "Core Module Dependency" (dependency) from Test Harness and Fixtures (keyword signal only)
+- [ ] **T43 — Implement: "The game remains smooth during a Flagship encounter combined with a restoration reversion, the heaviest expected load case" (REQ-027).** <!-- t:447b635f -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-027 "The game remains smooth during a Flagship encounter combined with a restoration reversion, the heaviest expected load case"
-- [ ] **T19 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T44 — Implement: "Code license is chosen and applied to the repository" (REQ-021).** <!-- t:281343c1 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-021 "Code license is chosen and applied to the repository" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T45 — Implement: "Official art and audio asset license is chosen, documented, and distinguished from the code license" (REQ-021).** <!-- t:f8fd989b -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-021 "Official art and audio asset license is chosen, documented, and distinguished from the code license" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T46 — Implement: "Policy documents how AI-generated asset provenance and generator terms of service affect redistribution and relicensing" (REQ-021).** <!-- t:207df9ff -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-021 "Policy documents how AI-generated asset provenance and generator terms of service affect redistribution and relicensing" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T47 — Implement: "Contributor licensing terms for submitted worlds and assets are documented in the contribution guide" (REQ-021).** <!-- t:6f240208 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-021 "Contributor licensing terms for submitted worlds and assets are documented in the contribution guide" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T48 — Implement: "Licensing decision is resolved before the public README and contribution guide ship" (REQ-021).** <!-- t:ac788e6d -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-021 "Licensing decision is resolved before the public README and contribution guide ship" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T49 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -217,25 +203,25 @@ THE ANCHOR REQUIREMENT of the entire project. A versioned specification defining
 
 **Acceptance criteria — your task boxes:**
 - [ ] Contract is published as a machine-readable schema file that the compliance checker loads as its single source of truth, with no conformance rules hardcoded in the checker
-  → covered by Task T6
-- [ ] Schema enumerates every required element (spawn point, checkpoints, finish condition, controller compatibility, save integration) with a machine-checkable conformance rule for each
-  → covered by Task T2
-- [ ] Schema enumerates every optional element together with the defined default behavior applied when it is absent
   → covered by Task T16
+- [ ] Schema enumerates every required element (spawn point, checkpoints, finish condition, controller compatibility, save integration) with a machine-checkable conformance rule for each
+  → covered by Task T17
+- [ ] Schema enumerates every optional element together with the defined default behavior applied when it is absent
+  → covered by Task T18
 - [ ] Schema carries an explicit contract version identifier, and every world module declares the contract version it targets
-  → covered by Task T3
+  → covered by Task T19
 - [ ] Schema defines the world module directory layout and file naming convention
-  → covered by Task T3
+  → covered by Task T20
 - [ ] Schema enumerates the sanctioned world API surface that a world module may call
-  → covered by Task T3
+  → covered by Task T21
 - [ ] A prose contract document explains every schema element and its rationale for human contributors (manual)
-  → covered by Task T5
+  → covered by Task T22
 - [ ] A documented migration path describes how a v1 world is brought forward when the contract version increments (manual)
-  → covered by Task T6
+  → covered by Task T23
 - [ ] A contributor unfamiliar with the codebase can produce a conforming world from the contract document alone (manual)
-  → covered by Task T6
+  → covered by Task T24
 - [ ] Contract is frozen at v1 only after the official MVP worlds have been built against it and their friction fed back into it (manual)
-  → covered by Task T5
+  → covered by Task T25
 
 ### REQ-009: Open Lagoon Hub and World Loading
 Category: functional | Status: in-progress
@@ -243,17 +229,17 @@ The hub that makes the modular architecture visible as a place. The Open Lagoon 
 
 **Acceptance criteria — your task boxes:**
 - [ ] Hub discovers installed world modules at runtime from the worlds directory with no hardcoded world list
-  → covered by Task T3
+  → covered by Task T26
 - [ ] Entering a portal loads the corresponding world at its spawn point, and completing the finish condition returns the player to the hub
-  → covered by Task T5
+  → covered by Task T27
 - [ ] Adding, removing, or replacing a world module changes the available portals without any edit to hub code
-  → covered by Task T3
+  → covered by Task T28
 - [ ] A world module that fails to load or fails contract validation is surfaced as unavailable without crashing or blocking the hub
-  → covered by Task T3
+  → covered by Task T29
 - [ ] Portals carry a tier designation (Official, Community, Experimental) and are visually distinguished by tier
-  → covered by Task T5
+  → covered by Task T30
 - [ ] Hub reflects per-world completion and restoration progress read through the save-integration interface
-  → covered by Task T2
+  → covered by Task T31
 
 ### REQ-017: AI-Agent Contributor Workflow and Documentation
 Category: technical | Status: in-progress
@@ -261,17 +247,17 @@ The requirement that produces the project's distinctive public identity: an open
 
 **Acceptance criteria — your task boxes:**
 - [ ] A reference example world exists, passes the compliance checker, and is documented as the canonical starting point for a new world
-  → covered by Task T5
+  → covered by Task T32
 - [ ] Documentation states the exact commands to run the Level Contract checker, the Asset Contract validator, and the test suite locally, and a test proves those documented commands succeed as written
-  → covered by Task T5
+  → covered by Task T33
 - [ ] Repository documents the architecture, Level Contract, Asset Contract, and Godot/GDScript conventions in a form an AI coding agent can consume directly from the repo (manual)
-  → covered by Task T5
+  → covered by Task T34
 - [ ] Documentation enumerates the extension interfaces for abilities, enemies, and worlds with worked examples (manual)
-  → covered by Task T2
+  → covered by Task T35
 - [ ] README states the agent-authored contribution workflow with a concrete example prompt (manual)
-  → covered by Task T8
+  → covered by Task T36
 - [ ] An AI coding agent, given only the repository and a one-sentence world brief, produces a world that passes the compliance checker (manual)
-  → covered by Task T5
+  → covered by Task T37
 
 ### REQ-027: Performance Targets
 Category: non-functional | Status: in-progress
@@ -279,17 +265,17 @@ A colorful 3D platformer for families on unspecified PC hardware needs stated pe
 
 **Acceptance criteria — your task boxes:**
 - [ ] A baseline target PC specification is documented, and the frame-rate target, the maximum permitted frame-time spike, and the world load-time budget on that baseline are each stated as numbers
-  → covered by Task T5
+  → covered by Task T38
 - [ ] Official worlds sustain the documented frame-rate target on the baseline specification during normal traversal
-  → covered by Task T17
+  → covered by Task T39
 - [ ] A restoration state transition completes without exceeding the documented maximum frame-time spike
-  → covered by Task T8
+  → covered by Task T40
 - [ ] World load time from selecting a hub portal to player control stays within the documented load-time budget
-  → covered by Task T10
+  → covered by Task T41
 - [ ] A performance regression test runs in CI against an official world and fails when any of the three documented targets is breached
-  → covered by Task T5
+  → covered by Task T42
 - [ ] The game remains smooth during a Flagship encounter combined with a restoration reversion, the heaviest expected load case (manual)
-  → covered by Task T18
+  → covered by Task T43
 
 ### REQ-021: Licensing Policy — Code, Assets, and AI Provenance
 Category: business | Status: pending
@@ -297,15 +283,15 @@ A NAMED OPEN ITEM that blocks the public-facing README and contribution guide. T
 
 **Acceptance criteria — your task boxes:**
 - [ ] Code license is chosen and applied to the repository (manual)
-  → covered by Task T5
+  → covered by Task T44
 - [ ] Official art and audio asset license is chosen, documented, and distinguished from the code license (manual)
-  → covered by Task T5
+  → covered by Task T45
 - [ ] Policy documents how AI-generated asset provenance and generator terms of service affect redistribution and relicensing (manual)
-  → covered by Task T5
+  → covered by Task T46
 - [ ] Contributor licensing terms for submitted worlds and assets are documented in the contribution guide (manual)
-  → covered by Task T5
+  → covered by Task T47
 - [ ] Licensing decision is resolved before the public README and contribution guide ship (manual)
-  → covered by Task T5
+  → covered by Task T48
 
 ## Interface Contracts
 
@@ -872,13 +858,3 @@ Startup/initialization order based on edge directions and interaction patterns.
 - CI Pipeline (initiates Core Module Dependency against this node (dependency))
 - Test Harness and Fixtures (initiates Core Module Dependency against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
-
-## Existing Implementation
-
-| File | Kind | Language | Status |
-|------|------|----------|--------|
-| `.nodespec/tests/req-021.tests.md` - Test plan for requirement: Licensing Policy — Code, Assets, and AI Provenance | test-plan | markdown | draft |
-| `.nodespec/tests/req-006.tests.md` - Test plan for requirement: Level Contract v1 Specification | test-plan | markdown | draft |
-| `.nodespec/tests/req-017.tests.md` - Test plan for requirement: AI-Agent Contributor Workflow and Documentation | test-plan | markdown | draft |
-| `.nodespec/tests/req-009.tests.md` - Test plan for requirement: Open Lagoon Hub and World Loading | test-plan | markdown | draft |
-| `.nodespec/tests/req-027.tests.md` - Test plan for requirement: Performance Targets | test-plan | markdown | draft |
