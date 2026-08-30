@@ -29,6 +29,21 @@ contributor would: no private back doors, no reaching into a core system's
 internals, no engine API a community world could not also use. That constraint is
 the point of the official worlds, and one of them states it as a criterion.
 
+**Language: GDScript only.** This project is written in GDScript and nothing
+else. There is no C#: no `.cs` files, no Mono/.NET assemblies, no C# build step,
+no mixed-language interop layer. Where the Godot catalog guidance in this packet
+says "use GDScript for gameplay logic and C# for complex systems", the C# half
+DOES NOT APPLY here — a "complex system" is not a reason to reach for a second
+language. One language keeps the contribution surface narrow, which is the whole
+premise: humans and AI coding agents extend the same repo from the Level Contract
+alone, and a second toolchain doubles the build, the review surface and the
+static-analysis gate's parser burden for no gameplay gain. Use *statically typed*
+GDScript throughout — typed parameters, return types and members — since the
+catalog itself lists untyped GDScript as an anti-pattern and the gate's tokenizer
+is simpler and safer against typed source. Target Godot 4.x / GDScript 2.0. (The
+four Python validator nodes and the GitHub Actions CI node are deliberately
+outside this policy; it governs game code.)
+
 **Catalog guidance that does not apply here.** The Godot technology guidance in
 this packet carries multiplayer sample code — `@rpc` annotations,
 `is_multiplayer_authority`, `MultiplayerSynchronizer`. It is generic engine
