@@ -337,3 +337,9 @@ Startup/initialization order based on edge directions and interaction patterns.
 - World: Coral Cove (initiates Camera Hint Interface against this node (dependency))
 - World: Bubble Bay (initiates Camera Hint Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-005.tests.md` - Test plan for requirement: Camera System | test-plan | markdown | draft |

@@ -1,7 +1,7 @@
 {
   "modelVersion": 1,
   "generatedBy": "nodespec",
-  "modelHash": "fa7f720be6716240e9f6a51ba493c05be8ad810fa2791ef90c3f36a39db2f6b5",
+  "modelHash": "d99e8af9727f7754a8586088ecc798aed3fc46f76a7e8b734e75667246b4046f",
   "nodes": [
     {
       "id": "22222222-0000-4000-8000-000000000001",
@@ -1426,7 +1426,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000003",
       "path": ".nodespec/tasks/camera-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000004ae1dd92"
+      "contentHash": "0000000055e95683"
     },
     {
       "id": "6e4d1eb0-9b66-46b7-8a1a-c07d7a8a2526",
