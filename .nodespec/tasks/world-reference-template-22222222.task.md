@@ -15,6 +15,8 @@
 
 ## Implementation Context
 
+> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
+
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
 The template is the canonical starting point for a new world, and it is also the
 project's minimality test. Its value comes from what it does *not* contain: it
@@ -388,11 +390,169 @@ The canonical starting point a contributor or AI coding agent copies to begin a 
 ### RECEIVES FROM: World Static Analysis Gate (cli-tool)
 - **Contract:** Sanctioned World API Surface
 - **Protocol:** dependency
+- **Spec Format:** json_schema
 - **Their Technology:** python-backend
 
-_Dependency contract — no payload schema expected. Capture the connection/config
-expectations (endpoints, identifiers, references) in this node's config artifacts;
-propose a schema only if a real payload shape exists for this interface._
+**Schema:**
+```
+{
+  "description": "The complete set of engine and project APIs a world module may call, and the classes of call it may never make. Enforced by the World Static Analysis Gate as a merge-blocking CI check against every world — official worlds, the reference template, and community submissions alike. This surface is the security boundary for community-contributed code: worlds ship GDScript like any other module, so safety comes from this allowlist plus mandatory human review, never from an automated-only merge path.",
+  "enforcement": {
+    "tool": "world-static-analysis",
+    "severity": "error",
+    "appliesTo": [
+      "worlds/<world_id>/**/*.gd",
+      "worlds/<world_id>/**/*.tscn",
+      "worlds/<world_id>/world.json"
+    ],
+    "mergeGate": "blocking",
+    "defaultPosture": "deny — a symbol absent from sanctionedInterfaces is a violation, not an omission"
+  },
+  "sourceOfTruth": "The allowlist below is derived from the interfaces the Level Contract declares. This schema is the authority the static-analysis gate loads; no rule is hardcoded in the gate. Adding a rule here changes gate behavior with no code change.",
+  "contractVersion": "1.0",
+  "violationOutput": {
+    "exitCode": "non-zero on any violation",
+    "requirement": "Failure output names the offending file, line, the specific forbidden symbol, and the call class it violates, as structured machine-readable output an AI coding agent can parse and self-correct against."
+  },
+  "guidanceOverride": "Where general Godot documentation, engine samples, or catalog technology guidance demonstrate RPC-based movement, server-authority patterns, direct file access for saves, or raw Input reads, that guidance DOES NOT APPLY to world modules in this project. Implement world logic as local single-player code against the sanctioned interfaces above.",
+  "forbiddenCallClasses": {
+    "network": {
+      "symbols": [
+        "HTTPRequest",
+        "HTTPClient",
+        "StreamPeerTCP",
+        "StreamPeerTLS",
+        "PacketPeerUDP",
+        "TCPServer",
+        "UDPServer",
+        "WebSocketPeer",
+        "IP"
+      ],
+      "rationale": "Single-player, offline game. There is no network layer of any kind."
+    },
+    "filesystem": {
+      "symbols": [
+        "FileAccess",
+        "DirAccess",
+        "ResourceSaver",
+        "ProjectSettings.globalize_path",
+        "ConfigFile"
+      ],
+      "rationale": "A world module has no legitimate reason to touch the filesystem; persistence goes through the Save Integration Interface."
+    },
+    "multiplayer": {
+      "symbols": {
+        "apis": [
+          "multiplayer",
+          "MultiplayerAPI",
+          "SceneMultiplayer"
+        ],
+        "calls": [
+          "rpc",
+          "rpc_id",
+          "rpc_config"
+        ],
+        "nodes": [
+          "MultiplayerSynchronizer",
+          "MultiplayerSpawner"
+        ],
+        "peers": [
+          "MultiplayerPeer",
+          "ENetMultiplayerPeer",
+          "WebRTCMultiplayerPeer",
+          "WebSocketMultiplayerPeer",
+          "OfflineMultiplayerPeer"
+        ],
+        "authority": [
+          "is_multiplayer_authority",
+          "set_multiplayer_authority",
+          "get_multiplayer_authority"
+        ],
+        "annotations": [
+          "@rpc"
+        ],
+        "projectSettings": [
+          "network/*"
+        ]
+      },
+      "rationale": "No multiplayer, in any phase — a firm non-goal, not a deferral. This mirrors the Engine Feature Policy applied to core systems, so world modules are covered by exactly the same ban as core (REQ-030)."
+    },
+    "osExecution": {
+      "symbols": [
+        "OS.execute",
+        "OS.create_process",
+        "OS.shell_open",
+        "OS.set_environment",
+        "OS.get_environment"
+      ],
+      "rationale": "Executing processes or shelling out from world code is arbitrary code execution on a contributor's machine."
+    },
+    "coreInternals": {
+      "symbols": [
+        "any member prefixed _ on a core system",
+        "get_node paths into core/ scene trees",
+        "direct instantiation of core system classes not exposed via a sanctioned interface"
+      ],
+      "rationale": "Reaching past a published interface into a core system's private members is the hole that makes a world unforkable. If a world can only achieve something this way, the interface is wrong — fix the interface, not the world."
+    },
+    "dynamicEvaluation": {
+      "symbols": [
+        "Expression",
+        "GDScript.new",
+        "Object.call",
+        "Object.callv",
+        "Object.set_script",
+        "ResourceLoader.load with a non-literal path",
+        "load with a non-literal path",
+        "str2var",
+        "bytes_to_var"
+      ],
+      "rationale": "Dynamic evaluation defeats static analysis entirely — it is how an allowlist gets bypassed."
+    }
+  },
+  "sanctionedInterfaces": {
+    "save": {
+      "contract": "Save Integration Interface",
+      "description": "The only permitted persistence path. Worlds never open, read, or write a save file directly."
+    },
+    "audio": {
+      "contract": "Audio Event Interface"
+    },
+    "input": {
+      "contract": "Player Input Interface",
+      "description": "Player intent only. Worlds MUST NOT read the Godot Input singleton or raw InputEvent directly."
+    },
+    "camera": {
+      "contract": "Camera Hint Interface",
+      "description": "Declarative hint volumes only; no custom camera code."
+    },
+    "tuning": {
+      "contract": "Tuning Data Interface",
+      "description": "Read-only, and overrides limited to the Level Contract's sanctionedTuningOverrides set."
+    },
+    "enemies": {
+      "contract": "Enemy Registration Interface"
+    },
+    "abilities": {
+      "contract": "Gill Mod Registration Interface"
+    },
+    "controller": {
+      "contract": "Axolotl Controller Interface",
+      "description": "Movement state (read-only), capability modifiers, and ability hooks. Worlds never touch controller internals."
+    },
+    "checkpoints": {
+      "contract": "Checkpoint and Life Interface"
+    },
+    "restoration": {
+      "contract": "Restoration Region Interface",
+      "description": "Declare restorable regions and query or advance their state."
+    },
+    "collectibles": {
+      "contract": "Collectible Registration Interface"
+    }
+  }
+}
+```
 
 ### SENDS TO: Save System (shared-library)
 - **Contract:** Save Integration Interface
@@ -464,3 +624,9 @@ Startup/initialization order based on edge directions and interaction patterns.
 - OpenAxolotl Game Client (initiates Level Contract v1 against this node (dependency))
 - Level Contract Compliance Checker (initiates Level Contract v1 against this node (dependency))
 - World Static Analysis Gate (initiates Sanctioned World API Surface against this node (dependency))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-029.tests.md` - Test plan for requirement: Reference Template World | test-plan | markdown | draft |

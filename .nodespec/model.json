@@ -1,7 +1,7 @@
 {
   "modelVersion": 1,
   "generatedBy": "nodespec",
-  "modelHash": "e91b4aa3f31a4ca20b23fd37991328991a921ee77b7120fb8f8c355d06041b1a",
+  "modelHash": "fa7f720be6716240e9f6a51ba493c05be8ad810fa2791ef90c3f36a39db2f6b5",
   "nodes": [
     {
       "id": "22222222-0000-4000-8000-000000000001",
@@ -1230,7 +1230,9 @@
       "id": "11111111-0000-4000-8000-000000000012",
       "kind": "dependency",
       "name": "Sanctioned World API Surface",
-      "contentHash": "874f878f039e4a4b42b6c0f2867be6590afc11d9b3ca47790707b34fb3970cc8"
+      "specFormat": "json_schema",
+      "schemaHash": "e9c8db074deacf986530d91a8872ec856c4eb60e3aa71c0336c49cc29866186d",
+      "contentHash": "16fc3647643081fc2c6c4d343e6024d2bb6b35093310dfc5bc755eabaef86019"
     },
     {
       "id": "11111111-0000-4000-8000-000000000013",
@@ -1437,7 +1439,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000023",
       "path": ".nodespec/tasks/world-reference-template-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000074222abe"
+      "contentHash": "000000002a9738c1"
     },
     {
       "id": "6f455603-2d7b-405b-ac67-f0b7e615539f",
@@ -1559,14 +1561,14 @@
       "nodeId": "22222222-0000-4000-8000-000000000022",
       "path": ".nodespec/tasks/world-static-analysis-gate-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000002e80e992"
+      "contentHash": "00000000444fcff9"
     },
     {
       "id": "ddf0df54-e539-43ef-8ae5-671ddb879825",
       "nodeId": "22222222-0000-4000-8000-000000000012",
       "path": ".nodespec/tasks/world-bubble-bay-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000002fa69367"
+      "contentHash": "00000000723951ef"
     },
     {
       "id": "de75de16-9828-4a76-9392-98c5f0b6a629",
@@ -1610,7 +1612,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000011",
       "path": ".nodespec/tasks/world-coral-cove-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000021b08d7c"
+      "contentHash": "0000000010678a9a"
     },
     {
       "id": "fdebb79f-5154-4384-ab57-9a7620e16274",
