@@ -15,8 +15,6 @@
 
 ## Implementation Context
 
-> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
-
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
 This is the project's security and policy gate. It answers: does this GDScript
 call anything it is not sanctioned to call? Two requirements ride on it — the
@@ -68,8 +66,13 @@ which must NOT be flagged.
 (`FileAccess`, `DirAccess`), network (`HTTPRequest`, `HTTPClient`, `TCPServer`,
 `StreamPeer*`, `PacketPeer*`), OS execution (`OS.execute`, `OS.shell_open`) and
 dynamic evaluation (`Expression`, `GDScript.new()` + `reload`, `load` on a
-runtime-built path) — anything outside the `sanctionedApi` block of
-`contracts/level_contract.v1.json`. The multiplayer rule set rejects `@rpc`
+runtime-built path) and core-internals reach-through (underscore-prefixed
+members, `get_node` paths into `core/`, direct instantiation of unexposed core
+classes) — anything outside the `sanctionedInterfaces` allowlist of the
+Sanctioned World API Surface contract, whose six `forbiddenCallClasses` keys
+(`filesystem`, `network`, `osExecution`, `dynamicEvaluation`, `multiplayer`,
+`coreInternals`) are the stable rule-id namespace. Its posture is deny by
+default: a symbol absent from the allowlist is a violation, not an omission. The multiplayer rule set rejects `@rpc`
 annotations, `rpc`/`rpc_id`/`rpc_config` calls, `is_multiplayer_authority` and
 `set_multiplayer_authority`, the `multiplayer` property and `MultiplayerAPI`,
 every `MultiplayerPeer` implementation (ENet, WebRTC, WebSocket), and the
@@ -79,8 +82,9 @@ editor without any script mentioning it.
 
 **Both rule sets are data.** They load from `contracts/sanctioned_api.v1.json`
 and `contracts/engine_feature_policy.v1.json`. The multiplayer ban therefore
-exists in three enforced places — the policy file this gate reads, the Level
-Contract's forbidden list covering world modules, and `project.godot` settings —
+exists in three enforced places — the Engine Feature Policy this gate reads for
+core, the Sanctioned World API Surface covering world modules, and
+`project.godot` settings —
 which is what makes "no multiplayer" a machine-checked property rather than a
 line in the README. Violation output names the specific API and the file, per the
 criterion.

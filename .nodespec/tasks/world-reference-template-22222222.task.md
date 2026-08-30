@@ -15,8 +15,6 @@
 
 ## Implementation Context
 
-> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
-
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
 The template is the canonical starting point for a new world, and it is also the
 project's minimality test. Its value comes from what it does *not* contain: it

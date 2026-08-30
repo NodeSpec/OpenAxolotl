@@ -15,8 +15,6 @@
 
 ## Implementation Context
 
-> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
-
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
 Coral Cove is the first official world and the one that carries the cross-world
 criteria for the official set — including the requirement that both official
