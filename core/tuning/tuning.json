@@ -1,0 +1,194 @@
+{
+  "schemaVersion": "1.0",
+  "description": "The single authoritative tuning surface for OpenAxolotl (REQ-025). Every balance value the game uses lives here, never as a constant in system code. Each entry carries a documented name, unit and permitted range; the loader validates against that range and refuses a file that violates it rather than substituting a default.",
+  "worldOverridable": [
+    "progression.default_lives_per_attempt",
+    "restoration.resourced.resource_cost",
+    "restoration.restored.resource_cost"
+  ],
+  "worldOverridableRationale": "A closed set, enumerated here so the Level Contract can reference this list rather than keeping a second one that drifts. Per-world difficulty and restoration economy are legitimately a world's business. Movement, capability, camera and enemy tuning stay global so the game stays coherent across forks.",
+  "values": {
+    "controller.transition.momentum_retention_ratio": {
+      "value": 0.85,
+      "unit": "ratio",
+      "min": 0.0,
+      "max": 1.0,
+      "description": "Fraction of speed magnitude retained when crossing a water/land boundary. Applied to magnitude, not the vector, so a surfacing swimmer keeps speed without keeping an underwater heading."
+    },
+    "controller.grapple.max_range_m": {
+      "value": 12.0,
+      "unit": "meters",
+      "min": 1.0,
+      "max": 60.0,
+      "description": "Maximum tongue-grapple anchor distance. Tested inclusively: an anchor exactly at this range attaches, one beyond it is rejected."
+    },
+    "controller.dash.max_charges": {
+      "value": 2,
+      "unit": "count",
+      "min": 1,
+      "max": 5,
+      "description": "Water-powered dash charges held at once. The dash is usable in both grammars but recharges only in water."
+    },
+    "controller.dash.recharge_seconds_per_charge": {
+      "value": 3.0,
+      "unit": "seconds",
+      "min": 0.25,
+      "max": 30.0,
+      "description": "Time submerged to regain one dash charge. Does not accrue on land."
+    },
+    "capability.tail_loss.swim_speed_multiplier": {
+      "value": 0.6,
+      "unit": "multiplier",
+      "min": 0.1,
+      "max": 1.0,
+      "description": "Swim speed while the tail is lost. Capability loss degrades traversal; it never ends a run on its own."
+    },
+    "capability.gill_loss.boost_duration_multiplier": {
+      "value": 0.5,
+      "unit": "multiplier",
+      "min": 0.1,
+      "max": 1.0,
+      "description": "Bubble-boost duration while a gill is lost."
+    },
+    "capability.leg_loss.climb_height_multiplier": {
+      "value": 0.5,
+      "unit": "multiplier",
+      "min": 0.1,
+      "max": 1.0,
+      "description": "Reachable climb height while a leg is lost."
+    },
+    "regen.mutation.duration_s": {
+      "value": 20.0,
+      "unit": "seconds",
+      "min": 1.0,
+      "max": 300.0,
+      "description": "How long a mutated regrowth loadout persists before reverting to the baseline form."
+    },
+    "progression.default_lives_per_attempt": {
+      "value": 3,
+      "unit": "count",
+      "min": 1,
+      "max": 99,
+      "description": "Lives granted at the start of an attempt. Lives are spent only on catastrophic events, never on ordinary capability loss."
+    },
+    "progression.max_retry_seconds": {
+      "value": 5.0,
+      "unit": "seconds",
+      "min": 0.5,
+      "max": 60.0,
+      "description": "Upper bound from losing a life to being playable again at the last checkpoint."
+    },
+    "gillmod.bubble.duration_s": {
+      "value": 6.0,
+      "unit": "seconds",
+      "min": 0.5,
+      "max": 120.0,
+      "description": "Active duration of the Bubble Gill mod."
+    },
+    "gillmod.bubble.cooldown_s": {
+      "value": 10.0,
+      "unit": "seconds",
+      "min": 0.0,
+      "max": 300.0,
+      "description": "Cooldown after the Bubble Gill mod deactivates."
+    },
+    "gillmod.jet.duration_s": {
+      "value": 4.0,
+      "unit": "seconds",
+      "min": 0.5,
+      "max": 120.0,
+      "description": "Active duration of the Jet Gill mod, the counter to Netbot entanglement."
+    },
+    "gillmod.jet.cooldown_s": {
+      "value": 12.0,
+      "unit": "seconds",
+      "min": 0.0,
+      "max": 300.0,
+      "description": "Cooldown after the Jet Gill mod deactivates."
+    },
+    "gillmod.glow.duration_s": {
+      "value": 15.0,
+      "unit": "seconds",
+      "min": 0.5,
+      "max": 120.0,
+      "description": "Active duration of the Glow Gill mod, which reveals Hookline Rig lines in murk."
+    },
+    "gillmod.glow.cooldown_s": {
+      "value": 8.0,
+      "unit": "seconds",
+      "min": 0.0,
+      "max": 300.0,
+      "description": "Cooldown after the Glow Gill mod deactivates."
+    },
+    "enemy.hookline.mod_strip_seconds": {
+      "value": 8.0,
+      "unit": "seconds",
+      "min": 0.5,
+      "max": 60.0,
+      "description": "Window for which a Hookline Rig snag strips the equipped Gill Mod."
+    },
+    "enemy.runoff.vision_debuff_factor": {
+      "value": 0.45,
+      "unit": "factor",
+      "min": 0.05,
+      "max": 1.0,
+      "description": "Vision range multiplier while inside a Runoff Drone toxin volume."
+    },
+    "enemy.runoff.gill_recharge_multiplier": {
+      "value": 0.3,
+      "unit": "multiplier",
+      "min": 0.0,
+      "max": 1.0,
+      "description": "Gill recharge rate multiplier while inside a Runoff Drone toxin volume."
+    },
+    "enemy.runoff.duration_s": {
+      "value": 6.0,
+      "unit": "seconds",
+      "min": 0.5,
+      "max": 60.0,
+      "description": "How long the Runoff Drone debuff persists after leaving the toxin volume."
+    },
+    "enemy.netbot.swim_speed_multiplier": {
+      "value": 0.35,
+      "unit": "multiplier",
+      "min": 0.0,
+      "max": 1.0,
+      "description": "Swim speed while entangled in a Netbot ghost net."
+    },
+    "enemy.netbot.entangle_seconds": {
+      "value": 5.0,
+      "unit": "seconds",
+      "min": 0.5,
+      "max": 60.0,
+      "description": "Entanglement duration if the player does not counter with Jet Gills."
+    },
+    "camera.smoothing.max_position_delta_m_per_frame": {
+      "value": 0.35,
+      "unit": "meters_per_frame",
+      "min": 0.01,
+      "max": 5.0,
+      "description": "Hard per-frame clamp on camera position change, including across a grammar transition. A clamp rather than a lerp factor, so the bound holds at any frame rate."
+    },
+    "camera.smoothing.max_rotation_delta_deg_per_frame": {
+      "value": 4.0,
+      "unit": "degrees_per_frame",
+      "min": 0.1,
+      "max": 45.0,
+      "description": "Hard per-frame clamp on camera rotation change, including across a grammar transition."
+    },
+    "restoration.resourced.resource_cost": {
+      "value": 5,
+      "unit": "count",
+      "min": 1,
+      "max": 999,
+      "description": "Restoration resources consumed to advance a region from barren to resourced."
+    },
+    "restoration.restored.resource_cost": {
+      "value": 8,
+      "unit": "count",
+      "min": 1,
+      "max": 999,
+      "description": "Restoration resources consumed to advance a region from resourced to restored."
+    }
+  }
+}
