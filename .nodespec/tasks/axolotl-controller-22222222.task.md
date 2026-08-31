@@ -15,6 +15,8 @@
 
 ## Implementation Context
 
+> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
+
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
 This node is pillar two of the game: two mechanically distinct movement grammars
 joined by one signature transition skill. Everything else in the project binds to
@@ -124,34 +126,34 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T10 — Implement: "Crossing a water volume boundary switches movement grammar in the same physics frame as the crossing, with no frame rendered in the previous grammar, and retains momentum magnitude per tuning key controller.transition.momentum_retention_ratio" (REQ-001).** <!-- t:20decaf3 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-001 "Crossing a water volume boundary switches movement grammar in the same physics frame as the crossing, with no frame rendered in the previous grammar, and retains momentum magnitude per tuning key controller.transition.momentum_retention_ratio" — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
-- [ ] **T11 — Implement: "Water grammar supports full 3D directional swimming, dive, and a bubble boost governed by a cooldown" (REQ-001).** <!-- t:e2760bfa -->
+- [ ] **T10 — Implement: "Water grammar supports full 3D directional swimming, dive, and a bubble boost governed by a cooldown" (REQ-001).** <!-- t:e2760bfa -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-001 "Water grammar supports full 3D directional swimming, dive, and a bubble boost governed by a cooldown" — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
-- [ ] **T12 — Implement: "Land grammar supports waddle locomotion, hop, and climbing on surfaces tagged as climbable" (REQ-001).** <!-- t:25ece100 -->
+- [ ] **T11 — Implement: "Land grammar supports waddle locomotion, hop, and climbing on surfaces tagged as climbable" (REQ-001).** <!-- t:25ece100 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-001 "Land grammar supports waddle locomotion, hop, and climbing on surfaces tagged as climbable" — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
-- [ ] **T13 — Implement: "Tongue grapple attaches to anchor points at or within tuning key controller.grapple.max_range_m, rejects anchors beyond it, and pulls the axolotl to the attached anchor" (REQ-001).** <!-- t:70f44dc6 -->
+- [ ] **T12 — Implement: "Tongue grapple attaches to anchor points at or within tuning key controller.grapple.max_range_m, rejects anchors beyond it, and pulls the axolotl to the attached anchor" (REQ-001).** <!-- t:70f44dc6 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-001 "Tongue grapple attaches to anchor points at or within tuning key controller.grapple.max_range_m, rejects anchors beyond it, and pulls the axolotl to the attached anchor" — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
-- [ ] **T14 — Implement: "Water-powered dash is usable in both grammars, consumes a charge, and recharges only while in water" (REQ-001).** <!-- t:292f2549 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-001 "Water-powered dash is usable in both grammars, consumes a charge, and recharges only while in water" — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
-- [ ] **T15 — Implement: "Controller exposes a documented public interface (movement state, capability modifiers, ability hooks) that worlds bind to without modifying controller internals" (REQ-001).** <!-- t:bcccf8f0 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-001 "Controller exposes a documented public interface (movement state, capability modifiers, ability hooks) that worlds bind to without modifying controller internals" — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
-- [ ] **T16 — Implement: "Both movement grammars feel distinct, responsive, and pleasurable in hands-on play" (REQ-001).** <!-- t:f6d9a45b -->
+- [ ] **T13 — Implement: "Both movement grammars feel distinct, responsive, and pleasurable in hands-on play" (REQ-001).** <!-- t:f6d9a45b -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-001 "Both movement grammars feel distinct, responsive, and pleasurable in hands-on play" — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
-- [ ] **T17 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
 
 **Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Technology Guidance, and node context as your references. Record the expanded list in this section via update_artifact (propose_patches) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
+
+## Configuration
+
+User-selected configuration for this component (honor these choices):
+- **csharp:** not used - no .cs files, no Mono/.NET assemblies, no C# build step. The catalog line 'use GDScript for gameplay logic and C# for complex systems' does NOT apply here.
+- **engine:** Godot 4.x, GDScript 2.0
+- **typing:** statically typed GDScript throughout (typed params, returns, members)
+- **language:** GDScript
+- **rationale:** One language keeps the contribution surface narrow for humans and AI agents alike; a second toolchain doubles build, review and static-gate parser burden for no gameplay gain.
 
 ## Project Context
 
@@ -191,20 +193,20 @@ Category: functional | Status: in-progress
 The player character controller implementing two mechanically distinct movement grammars joined by a signature transition skill. WATER: fast directional swimming, current interaction, diving, bubble boost, underwater tunnel traversal. LAND: waddle locomotion, hop, climbing on wet/climbable surfaces, tongue grapple to anchor points. TRANSITION: a water-powered dash usable in both grammars, charged in water and spent anywhere, which is the signature move binding the two grammars together. The controller exposes a stable, documented public interface that any Level Contract-conforming world binds against, so no world ever re-implements or forks movement. This is Pillar 2 and the core answer to "why is this not a cute skin on generic platformer mechanics."
 
 **Acceptance criteria — your task boxes:**
-- [ ] Crossing a water volume boundary switches movement grammar in the same physics frame as the crossing, with no frame rendered in the previous grammar, and retains momentum magnitude per tuning key controller.transition.momentum_retention_ratio
-  → covered by Task T10
+- [x] Crossing a water volume boundary switches movement grammar in the same physics frame as the crossing, with no frame rendered in the previous grammar, and retains momentum magnitude per tuning key controller.transition.momentum_retention_ratio
+  → THIS NODE: internal logic — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
 - [ ] Water grammar supports full 3D directional swimming, dive, and a bubble boost governed by a cooldown
-  → covered by Task T11
+  → covered by Task T10
 - [ ] Land grammar supports waddle locomotion, hop, and climbing on surfaces tagged as climbable
-  → covered by Task T12
+  → covered by Task T11
 - [ ] Tongue grapple attaches to anchor points at or within tuning key controller.grapple.max_range_m, rejects anchors beyond it, and pulls the axolotl to the attached anchor
-  → covered by Task T13
-- [ ] Water-powered dash is usable in both grammars, consumes a charge, and recharges only while in water
-  → covered by Task T14
-- [ ] Controller exposes a documented public interface (movement state, capability modifiers, ability hooks) that worlds bind to without modifying controller internals
-  → covered by Task T15
+  → covered by Task T12
+- [x] Water-powered dash is usable in both grammars, consumes a charge, and recharges only while in water
+  → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
+- [x] Controller exposes a documented public interface (movement state, capability modifiers, ability hooks) that worlds bind to without modifying controller internals
+  → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
 - [ ] Both movement grammars feel distinct, responsive, and pleasurable in hands-on play (manual)
-  → covered by Task T16
+  → covered by Task T13
 
 ## Interface Contracts
 
@@ -398,3 +400,16 @@ Startup/initialization order based on edge directions and interaction patterns.
 - Player HUD (initiates HUD State Interface against this node (dependency))
 - Input System (initiates Player Input Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-001.tests.md` - Test plan for requirement: Axolotl Character Controller — Dual Movement Grammars | test-plan | markdown | draft |
+| `core/controller/capability_modifiers.gd` | source | --- | draft |
+| `core/controller/water_dash.gd` | source | --- | draft |
+| `core/controller/tongue_grapple.gd` | source | --- | draft |
+| `core/controller/axolotl_controller.gd` | source | --- | draft |
+| `core/controller/movement_grammar.gd` | source | --- | draft |
+| `test/core/controller/test_axolotl_controller.gd` | source | --- | draft |
+| `core/controller/player_intent.gd` | source | --- | draft |

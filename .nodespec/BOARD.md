@@ -3,7 +3,7 @@
 
 | Requirement | Status | Criteria | Tasks | Tests P/F/S | Nodes |
 |---|---|---|---|---|---|
-| [REQ-001](#req-001--axolotl-character-controller--dual-movement-grammars) — Axolotl Character Controller — Dual Movement Grammars | 🔵 in-progress | 0/7 | 0/17 | 0/0/0 of 0 | Axolotl Controller |
+| [REQ-001](#req-001--axolotl-character-controller--dual-movement-grammars) — Axolotl Character Controller — Dual Movement Grammars | 🔵 in-progress | 3/7 | 0/14 | 3/3/0 of 6 | Axolotl Controller |
 | [REQ-002](#req-002--regeneration-and-capability-loss-system) — Regeneration and Capability Loss System | 🔵 in-progress | 0/7 | 0/23 | 0/0/0 of 0 | Regeneration and Capability System |
 | [REQ-003](#req-003--lives-checkpoints-and-hard-failure-state) — Lives, Checkpoints and Hard Failure State | 🔵 in-progress | 0/8 | 0/18 | 0/0/0 of 0 | Lives and Checkpoint System |
 | [REQ-004](#req-004--gill-mod-ability-system) — Gill Mod Ability System | 🔵 in-progress | 0/7 | 0/17 | 0/0/0 of 0 | Gill Mod Ability Framework |
@@ -16,7 +16,7 @@
 | [REQ-011](#req-011--official-mvp-worlds) — Official MVP Worlds | 🔵 in-progress | 0/7 | 0/20 | 0/0/0 of 0 | World: Coral Cove |
 | [REQ-012](#req-012--drift-fleet-enemy-roster) — Drift Fleet Enemy Roster | 🔵 in-progress | 0/7 | 0/17 | 0/0/0 of 0 | Drift Fleet Enemy Framework |
 | [REQ-013](#req-013--flagship-boss-encounter) — Flagship Boss Encounter | 🔵 in-progress | 0/7 | 0/14 | 0/0/0 of 0 | Flagship Boss Encounter |
-| [REQ-014](#req-014--save-system) — Save System | 🔵 in-progress | 0/6 | 0/16 | 0/0/0 of 0 | Save System |
+| [REQ-014](#req-014--save-system) — Save System | 🔵 in-progress | 5/6 | 0/11 | 5/0/0 of 5 | Save System |
 | [REQ-015](#req-015--asset-contract-and-ai-art-provenance) — Asset Contract and AI-Art Provenance | 🔵 in-progress | 0/7 | 0/20 | 0/0/0 of 0 | Asset Contract Validator |
 | [REQ-016](#req-016--asset-contract-automated-validator) — Asset Contract Automated Validator | 🔵 in-progress | 0/7 | 0/20 | 0/0/0 of 0 | Asset Contract Validator |
 | [REQ-017](#req-017--ai-agent-contributor-workflow-and-documentation) — AI-Agent Contributor Workflow and Documentation | 🔵 in-progress | 0/6 | 0/49 | 0/0/0 of 0 | OpenAxolotl Game Client |
@@ -25,9 +25,9 @@
 | [REQ-020](#req-020--community-lagoon-submission-pipeline-post-mvp) — Community Lagoon Submission Pipeline (Post-MVP) | 🔵 in-progress | 0/8 | 0/38 | 0/0/0 of 0 | World Static Analysis Gate |
 | [REQ-021](#req-021--licensing-policy--code-assets-and-ai-provenance) — Licensing Policy — Code, Assets, and AI Provenance | ⬜ pending | 0/5 | 0/49 | 0/0/0 of 0 | OpenAxolotl Game Client |
 | [REQ-022](#req-022--player-hud-and-game-state-readout) — Player HUD and Game-State Readout | 🔵 in-progress | 0/7 | 0/16 | 0/0/0 of 0 | Player HUD |
-| [REQ-023](#req-023--audio-system-music-and-sound-design) — Audio System, Music and Sound Design | 🔵 in-progress | 0/8 | 0/19 | 0/0/0 of 0 | Audio System |
+| [REQ-023](#req-023--audio-system-music-and-sound-design) — Audio System, Music and Sound Design | 🔵 in-progress | 5/8 | 0/14 | 5/0/0 of 5 | Audio System |
 | [REQ-024](#req-024--input-and-control-scheme) — Input and Control Scheme | 🔵 in-progress | 0/7 | 0/12 | 0/0/0 of 0 | Input System |
-| [REQ-025](#req-025--balance-and-tuning-configuration) — Balance and Tuning Configuration | 🔵 in-progress | 0/7 | 0/17 | 0/0/0 of 0 | Balance and Tuning Data |
+| [REQ-025](#req-025--balance-and-tuning-configuration) — Balance and Tuning Configuration | ✅ verified (smoke) | 7/7 | 0/10 | 7/0/0 of 7 | Balance and Tuning Data |
 | [REQ-026](#req-026--automated-test-suite-and-test-harness) — Automated Test Suite and Test Harness | 🔵 in-progress | 0/7 | 0/14 | 0/0/0 of 0 | Test Harness and Fixtures |
 | [REQ-027](#req-027--performance-targets) — Performance Targets | 🔵 in-progress | 0/6 | 0/49 | 0/0/0 of 0 | OpenAxolotl Game Client |
 | [REQ-028](#req-028--official-world-bubble-bay) — Official World: Bubble Bay | 🔵 in-progress | 0/8 | 0/20 | 0/0/0 of 0 | World: Bubble Bay |
@@ -35,22 +35,22 @@
 | [REQ-030](#req-030--no-multiplayer--enforced-single-player-constraint) — No Multiplayer — Enforced Single-Player Constraint | 🔵 in-progress | 0/8 | 0/38 | 0/0/0 of 0 | World Static Analysis Gate |
 
 ## REQ-001 — Axolotl Character Controller — Dual Movement Grammars <!-- r:REQ-001 -->
-status: in-progress · criteria 0/7 · tasks 0/17 · tests 0/0/0 of 0
+status: in-progress · criteria 3/7 · tasks 0/14 · tests 3/3/0 of 6
 ### Criteria
-- [ ] Crossing a water volume boundary switches movement grammar in the same physics frame as the crossing, with no frame rendered in the previous grammar, and retains momentum magnitude per tuning key controller.transition.momentum_retention_ratio
-  ↳ tasks: T10 ☐ (Axolotl Controller)
+- [x] Crossing a water volume boundary switches movement grammar in the same physics frame as the crossing, with no frame rendered in the previous grammar, and retains momentum magnitude per tuning key controller.transition.momentum_retention_ratio
+  ↳ tests: TC-REQ-001-1 ✅
 - [ ] Water grammar supports full 3D directional swimming, dive, and a bubble boost governed by a cooldown
-  ↳ tasks: T11 ☐ (Axolotl Controller)
+  ↳ tasks: T10 ☐ (Axolotl Controller) · tests: TC-REQ-001-2 ❌
 - [ ] Land grammar supports waddle locomotion, hop, and climbing on surfaces tagged as climbable
-  ↳ tasks: T12 ☐ (Axolotl Controller)
+  ↳ tasks: T11 ☐ (Axolotl Controller) · tests: TC-REQ-001-3 ❌
 - [ ] Tongue grapple attaches to anchor points at or within tuning key controller.grapple.max_range_m, rejects anchors beyond it, and pulls the axolotl to the attached anchor
-  ↳ tasks: T13 ☐ (Axolotl Controller)
-- [ ] Water-powered dash is usable in both grammars, consumes a charge, and recharges only while in water
-  ↳ tasks: T14 ☐ (Axolotl Controller)
-- [ ] Controller exposes a documented public interface (movement state, capability modifiers, ability hooks) that worlds bind to without modifying controller internals
-  ↳ tasks: T15 ☐ (Axolotl Controller)
+  ↳ tasks: T12 ☐ (Axolotl Controller) · tests: TC-REQ-001-4 ❌
+- [x] Water-powered dash is usable in both grammars, consumes a charge, and recharges only while in water
+  ↳ tests: TC-REQ-001-5 ✅
+- [x] Controller exposes a documented public interface (movement state, capability modifiers, ability hooks) that worlds bind to without modifying controller internals
+  ↳ tests: TC-REQ-001-6 ✅
 - [ ] Both movement grammars feel distinct, responsive, and pleasurable in hands-on play
-  ↳ tasks: T16 ☐ (Axolotl Controller)
+  ↳ tasks: T13 ☐ (Axolotl Controller)
 ### Tasks — Axolotl Controller <!-- n:22222222-0000-4000-8000-000000000002 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Implement the integration with Audio System (godot) per Contract "Audio Event Interface" (dependency).** <!-- t:218035d2 -->
@@ -61,14 +61,11 @@ status: in-progress · criteria 0/7 · tasks 0/17 · tests 0/0/0 of 0
 - [ ] **T7 — Expose the interface Player HUD consumes, per Contract "HUD State Interface" (dependency).** <!-- t:3e14fc4a -->
 - [ ] **T8 — Expose the interface Input System consumes, per Contract "Player Input Interface" (dependency).** <!-- t:39cc30a2 -->
 - [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
-- [ ] **T10 — Implement: "Crossing a water volume boundary switches movement grammar in the same physics frame as the crossing, with no frame rendered in the previous grammar, and retains momentum magnitude per tuning key controller.transition.momentum_retention_ratio" (REQ-001).** <!-- t:20decaf3 -->
-- [ ] **T11 — Implement: "Water grammar supports full 3D directional swimming, dive, and a bubble boost governed by a cooldown" (REQ-001).** <!-- t:e2760bfa -->
-- [ ] **T12 — Implement: "Land grammar supports waddle locomotion, hop, and climbing on surfaces tagged as climbable" (REQ-001).** <!-- t:25ece100 -->
-- [ ] **T13 — Implement: "Tongue grapple attaches to anchor points at or within tuning key controller.grapple.max_range_m, rejects anchors beyond it, and pulls the axolotl to the attached anchor" (REQ-001).** <!-- t:70f44dc6 -->
-- [ ] **T14 — Implement: "Water-powered dash is usable in both grammars, consumes a charge, and recharges only while in water" (REQ-001).** <!-- t:292f2549 -->
-- [ ] **T15 — Implement: "Controller exposes a documented public interface (movement state, capability modifiers, ability hooks) that worlds bind to without modifying controller internals" (REQ-001).** <!-- t:bcccf8f0 -->
-- [ ] **T16 — Implement: "Both movement grammars feel distinct, responsive, and pleasurable in hands-on play" (REQ-001).** <!-- t:f6d9a45b -->
-- [ ] **T17 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T10 — Implement: "Water grammar supports full 3D directional swimming, dive, and a bubble boost governed by a cooldown" (REQ-001).** <!-- t:e2760bfa -->
+- [ ] **T11 — Implement: "Land grammar supports waddle locomotion, hop, and climbing on surfaces tagged as climbable" (REQ-001).** <!-- t:25ece100 -->
+- [ ] **T12 — Implement: "Tongue grapple attaches to anchor points at or within tuning key controller.grapple.max_range_m, rejects anchors beyond it, and pulls the axolotl to the attached anchor" (REQ-001).** <!-- t:70f44dc6 -->
+- [ ] **T13 — Implement: "Both movement grammars feel distinct, responsive, and pleasurable in hands-on play" (REQ-001).** <!-- t:f6d9a45b -->
+- [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-001.tests.md
 
 ## REQ-002 — Regeneration and Capability Loss System <!-- r:REQ-002 -->
@@ -583,20 +580,20 @@ status: in-progress · criteria 0/7 · tasks 0/14 · tests 0/0/0 of 0
 ### Tests — .nodespec/tests/req-013.tests.md
 
 ## REQ-014 — Save System <!-- r:REQ-014 -->
-status: in-progress · criteria 0/6 · tasks 0/16 · tests 0/0/0 of 0
+status: in-progress · criteria 5/6 · tasks 0/11 · tests 5/0/0 of 5
 ### Criteria
-- [ ] Save persists world unlock/completion state, per-world restoration state and unlocked flags, collectibles, unlocked Gill Mods, and last checkpoint
-  ↳ tasks: T10 ☐ (Save System)
-- [ ] Worlds write and read save data exclusively through the defined save-integration interface, never touching the save file directly
-  ↳ tasks: T11 ☐ (Save System)
-- [ ] Loading a save that references a missing or renamed world module degrades gracefully with the profile intact and the remaining worlds playable
-  ↳ tasks: T12 ☐ (Save System)
-- [ ] Loading a save whose world module has changed its contract-visible state applies the documented save-compatibility policy and leaves the profile readable
-  ↳ tasks: T13 ☐ (Save System)
-- [ ] Save file format carries a version field and a defined upgrade path across format versions
-  ↳ tasks: T14 ☐ (Save System)
+- [x] Save persists world unlock/completion state, per-world restoration state and unlocked flags, collectibles, unlocked Gill Mods, and last checkpoint
+  ↳ tests: TC-REQ-014-1 ✅
+- [x] Worlds write and read save data exclusively through the defined save-integration interface, never touching the save file directly
+  ↳ tests: TC-REQ-014-2 ✅
+- [x] Loading a save that references a missing or renamed world module degrades gracefully with the profile intact and the remaining worlds playable
+  ↳ tests: TC-REQ-014-3 ✅
+- [x] Loading a save whose world module has changed its contract-visible state applies the documented save-compatibility policy and leaves the profile readable
+  ↳ tests: TC-REQ-014-4 ✅
+- [x] Save file format carries a version field and a defined upgrade path across format versions
+  ↳ tests: TC-REQ-014-5 ✅
 - [ ] Save-compatibility policy for forked and divergent worlds is decided and documented
-  ↳ tasks: T15 ☐ (Save System)
+  ↳ tasks: T10 ☐ (Save System)
 ### Tasks — Save System <!-- n:22222222-0000-4000-8000-000000000007 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Save Integration Interface" (dependency).** <!-- t:cb40db8d -->
@@ -607,13 +604,8 @@ status: in-progress · criteria 0/6 · tasks 0/16 · tests 0/0/0 of 0
 - [ ] **T7 — Expose the interface World: Bubble Bay consumes, per Contract "Save Integration Interface" (dependency).** <!-- t:11b748db -->
 - [ ] **T8 — Expose the interface World: Reference Template consumes, per Contract "Save Integration Interface" (dependency).** <!-- t:ee05929c -->
 - [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
-- [ ] **T10 — Implement: "Save persists world unlock/completion state, per-world restoration state and unlocked flags, collectibles, unlocked Gill Mods, and last checkpoint" (REQ-014).** <!-- t:a98cb4bd -->
-- [ ] **T11 — Implement: "Worlds write and read save data exclusively through the defined save-integration interface, never touching the save file directly" (REQ-014).** <!-- t:9bde8b4b -->
-- [ ] **T12 — Implement: "Loading a save that references a missing or renamed world module degrades gracefully with the profile intact and the remaining worlds playable" (REQ-014).** <!-- t:b75c27cb -->
-- [ ] **T13 — Implement: "Loading a save whose world module has changed its contract-visible state applies the documented save-compatibility policy and leaves the profile readable" (REQ-014).** <!-- t:fdafd9cd -->
-- [ ] **T14 — Implement: "Save file format carries a version field and a defined upgrade path across format versions" (REQ-014).** <!-- t:ab289ad0 -->
-- [ ] **T15 — Implement: "Save-compatibility policy for forked and divergent worlds is decided and documented" (REQ-014).** <!-- t:585c3fd6 -->
-- [ ] **T16 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T10 — Implement: "Save-compatibility policy for forked and divergent worlds is decided and documented" (REQ-014).** <!-- t:585c3fd6 -->
+- [ ] **T11 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-014.tests.md
 
 ## REQ-015 — Asset Contract and AI-Art Provenance <!-- r:REQ-015 -->
@@ -997,24 +989,24 @@ status: in-progress · criteria 0/7 · tasks 0/16 · tests 0/0/0 of 0
 ### Tests — .nodespec/tests/req-022.tests.md
 
 ## REQ-023 — Audio System, Music and Sound Design <!-- r:REQ-023 -->
-status: in-progress · criteria 0/8 · tasks 0/19 · tests 0/0/0 of 0
+status: in-progress · criteria 5/8 · tasks 0/14 · tests 5/0/0 of 5
 ### Criteria
-- [ ] Distinct audio cues play for every capability loss and every regrowth
-  ↳ tasks: T11 ☐ (Audio System)
+- [x] Distinct audio cues play for every capability loss and every regrowth
+  ↳ tests: TC-REQ-023-1 ✅
 - [ ] Water and land movement grammars have distinct movement and ambience audio, switching with the grammar transition
-  ↳ tasks: T12 ☐ (Audio System)
-- [ ] Region restoration state changes are accompanied by a corresponding change in ambient soundscape
-  ↳ tasks: T13 ☐ (Audio System)
-- [ ] Gill Mod activation produces a per-mod distinct audio cue
-  ↳ tasks: T14 ☐ (Audio System)
-- [ ] Worlds may declare their own music and ambience through the Level Contract, and a world declaring none falls back to defaults rather than silence
-  ↳ tasks: T15 ☐ (Audio System)
-- [ ] Master, music, and effects volumes are independently adjustable and persist across sessions
-  ↳ tasks: T16 ☐ (Audio System)
+  ↳ tasks: T11 ☐ (Audio System)
+- [x] Region restoration state changes are accompanied by a corresponding change in ambient soundscape
+  ↳ tests: TC-REQ-023-3 ✅
+- [x] Gill Mod activation produces a per-mod distinct audio cue
+  ↳ tests: TC-REQ-023-4 ✅
+- [x] Worlds may declare their own music and ambience through the Level Contract, and a world declaring none falls back to defaults rather than silence
+  ↳ tests: TC-REQ-023-5 ✅
+- [x] Master, music, and effects volumes are independently adjustable and persist across sessions
+  ↳ tests: TC-REQ-023-6 ✅
 - [ ] Audio assets conform to the Asset Contract including provenance requirements
-  ↳ tasks: T17 ☐ (Audio System)
+  ↳ tasks: T12 ☐ (Audio System)
 - [ ] Sound design supports the comedic, family-appropriate tone rather than undercutting it
-  ↳ tasks: T18 ☐ (Audio System)
+  ↳ tasks: T13 ☐ (Audio System)
 ### Tasks — Audio System <!-- n:22222222-0000-4000-8000-000000000017 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:a3e554a0 -->
@@ -1026,15 +1018,10 @@ status: in-progress · criteria 0/8 · tasks 0/19 · tests 0/0/0 of 0
 - [ ] **T8 — Expose the interface World: Coral Cove consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:5958d6a4 -->
 - [ ] **T9 — Expose the interface World: Bubble Bay consumes, per Contract "Audio Event Interface" (dependency).** <!-- t:910ebd52 -->
 - [ ] **T10 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
-- [ ] **T11 — Implement: "Distinct audio cues play for every capability loss and every regrowth" (REQ-023).** <!-- t:13e6ba2a -->
-- [ ] **T12 — Implement: "Water and land movement grammars have distinct movement and ambience audio, switching with the grammar transition" (REQ-023).** <!-- t:8b90126e -->
-- [ ] **T13 — Implement: "Region restoration state changes are accompanied by a corresponding change in ambient soundscape" (REQ-023).** <!-- t:7240d028 -->
-- [ ] **T14 — Implement: "Gill Mod activation produces a per-mod distinct audio cue" (REQ-023).** <!-- t:bf10fc84 -->
-- [ ] **T15 — Implement: "Worlds may declare their own music and ambience through the Level Contract, and a world declaring none falls back to defaults rather than silence" (REQ-023).** <!-- t:8c20b73c -->
-- [ ] **T16 — Implement: "Master, music, and effects volumes are independently adjustable and persist across sessions" (REQ-023).** <!-- t:eccb0ba5 -->
-- [ ] **T17 — Implement: "Audio assets conform to the Asset Contract including provenance requirements" (REQ-023).** <!-- t:0b27ef8e -->
-- [ ] **T18 — Implement: "Sound design supports the comedic, family-appropriate tone rather than undercutting it" (REQ-023).** <!-- t:e3ce4c83 -->
-- [ ] **T19 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T11 — Implement: "Water and land movement grammars have distinct movement and ambience audio, switching with the grammar transition" (REQ-023).** <!-- t:8b90126e -->
+- [ ] **T12 — Implement: "Audio assets conform to the Asset Contract including provenance requirements" (REQ-023).** <!-- t:0b27ef8e -->
+- [ ] **T13 — Implement: "Sound design supports the comedic, family-appropriate tone rather than undercutting it" (REQ-023).** <!-- t:e3ce4c83 -->
+- [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-023.tests.md
 
 ## REQ-024 — Input and Control Scheme <!-- r:REQ-024 -->
@@ -1070,22 +1057,22 @@ status: in-progress · criteria 0/7 · tasks 0/12 · tests 0/0/0 of 0
 ### Tests — .nodespec/tests/req-024.tests.md
 
 ## REQ-025 — Balance and Tuning Configuration <!-- r:REQ-025 -->
-status: in-progress · criteria 0/7 · tasks 0/17 · tests 0/0/0 of 0
+status: verified (smoke) · criteria 7/7 · tasks 0/10 · tests 7/0/0 of 7
 ### Criteria
-- [ ] All balance values are defined in data files rather than as constants in system code
-  ↳ tasks: T10 ☐ (Balance and Tuning Data)
-- [ ] The tuning surface covers capability-loss modifiers, default lives per attempt, dash charge and recharge, Gill Mod durations and cooldowns, enemy debuff magnitudes and windows, restoration resource costs, grapple range, camera smoothing thresholds, mutation loadout duration, momentum retention across grammar transitions, and maximum retry duration
-  ↳ tasks: T11 ☐ (Balance and Tuning Data)
-- [ ] Every value carries a documented name, unit, and permitted range
-  ↳ tasks: T12 ☐ (Balance and Tuning Data)
-- [ ] Changing a tuning value alters observable behavior with no code change and no recompile
-  ↳ tasks: T13 ☐ (Balance and Tuning Data)
-- [ ] The set of values a world may override through the Level Contract is explicitly enumerated, and an override outside that set is rejected
-  ↳ tasks: T14 ☐ (Balance and Tuning Data)
-- [ ] Loading a tuning file with a missing or out-of-range value fails with a named error rather than silently defaulting
-  ↳ tasks: T15 ☐ (Balance and Tuning Data)
-- [ ] Every tuning key cited by another requirement's acceptance criteria exists in the tuning data with a documented unit and permitted range, and a test fails when a cited key is absent
-  ↳ tasks: T16 ☐ (Balance and Tuning Data)
+- [x] All balance values are defined in data files rather than as constants in system code
+  ↳ tests: TC-REQ-025-1 ✅
+- [x] The tuning surface covers capability-loss modifiers, default lives per attempt, dash charge and recharge, Gill Mod durations and cooldowns, enemy debuff magnitudes and windows, restoration resource costs, grapple range, camera smoothing thresholds, mutation loadout duration, momentum retention across grammar transitions, and maximum retry duration
+  ↳ tests: TC-REQ-025-2 ✅
+- [x] Every value carries a documented name, unit, and permitted range
+  ↳ tests: TC-REQ-025-3 ✅
+- [x] Changing a tuning value alters observable behavior with no code change and no recompile
+  ↳ tests: TC-REQ-025-4 ✅
+- [x] The set of values a world may override through the Level Contract is explicitly enumerated, and an override outside that set is rejected
+  ↳ tests: TC-REQ-025-5 ✅
+- [x] Loading a tuning file with a missing or out-of-range value fails with a named error rather than silently defaulting
+  ↳ tests: TC-REQ-025-6 ✅
+- [x] Every tuning key cited by another requirement's acceptance criteria exists in the tuning data with a documented unit and permitted range, and a test fails when a cited key is absent
+  ↳ tests: TC-REQ-025-7 ✅
 ### Tasks — Balance and Tuning Data <!-- n:22222222-0000-4000-8000-000000000019 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Expose the interface Axolotl Controller consumes, per Contract "Tuning Data Interface" (dependency).** <!-- t:fa1448ec -->
@@ -1096,14 +1083,7 @@ status: in-progress · criteria 0/7 · tasks 0/17 · tests 0/0/0 of 0
 - [ ] **T7 — Expose the interface Restoration State System consumes, per Contract "Tuning Data Interface" (dependency).** <!-- t:ec31be4d -->
 - [ ] **T8 — Expose the interface Camera System consumes, per Contract "Tuning Data Interface" (dependency).** <!-- t:3bf082ad -->
 - [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
-- [ ] **T10 — Implement: "All balance values are defined in data files rather than as constants in system code" (REQ-025).** <!-- t:0d1396e2 -->
-- [ ] **T11 — Implement: "The tuning surface covers capability-loss modifiers, default lives per attempt, dash charge and recharge, Gill Mod durations and cooldowns, enemy debuff magnitudes and windows, restoration resource costs, grapple range, camera smoothing thresholds, mutation loadout duration, momentum retention across grammar transitions, and maximum retry duration" (REQ-025).** <!-- t:e889f448 -->
-- [ ] **T12 — Implement: "Every value carries a documented name, unit, and permitted range" (REQ-025).** <!-- t:c3732c5a -->
-- [ ] **T13 — Implement: "Changing a tuning value alters observable behavior with no code change and no recompile" (REQ-025).** <!-- t:049770f9 -->
-- [ ] **T14 — Implement: "The set of values a world may override through the Level Contract is explicitly enumerated, and an override outside that set is rejected" (REQ-025).** <!-- t:11751a2c -->
-- [ ] **T15 — Implement: "Loading a tuning file with a missing or out-of-range value fails with a named error rather than silently defaulting" (REQ-025).** <!-- t:137fc35b -->
-- [ ] **T16 — Implement: "Every tuning key cited by another requirement's acceptance criteria exists in the tuning data with a documented unit and permitted range, and a test fails when a cited key is absent" (REQ-025).** <!-- t:0e6c904b -->
-- [ ] **T17 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T10 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-025.tests.md
 
 ## REQ-026 — Automated Test Suite and Test Harness <!-- r:REQ-026 -->

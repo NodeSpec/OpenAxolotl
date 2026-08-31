@@ -15,6 +15,8 @@
 
 ## Implementation Context
 
+> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
+
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
 This node is the reason no other system holds a magic number. It is mostly data
 plus a strict loader, and its strictness is the whole value — a tuning file that
@@ -116,34 +118,22 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T10 — Implement: "All balance values are defined in data files rather than as constants in system code" (REQ-025).** <!-- t:0d1396e2 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-025 "All balance values are defined in data files rather than as constants in system code"
-- [ ] **T11 — Implement: "The tuning surface covers capability-loss modifiers, default lives per attempt, dash charge and recharge, Gill Mod durations and cooldowns, enemy debuff magnitudes and windows, restoration resource costs, grapple range, camera smoothing thresholds, mutation loadout duration, momentum retention across grammar transitions, and maximum retry duration" (REQ-025).** <!-- t:e889f448 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-025 "The tuning surface covers capability-loss modifiers, default lives per attempt, dash charge and recharge, Gill Mod durations and cooldowns, enemy debuff magnitudes and windows, restoration resource costs, grapple range, camera smoothing thresholds, mutation loadout duration, momentum retention across grammar transitions, and maximum retry duration" — possible coordination point: Contract "Tuning Data Interface" (dependency) from Gill Mod Ability Framework (keyword signal only)
-- [ ] **T12 — Implement: "Every value carries a documented name, unit, and permitted range" (REQ-025).** <!-- t:c3732c5a -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-025 "Every value carries a documented name, unit, and permitted range"
-- [ ] **T13 — Implement: "Changing a tuning value alters observable behavior with no code change and no recompile" (REQ-025).** <!-- t:049770f9 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-025 "Changing a tuning value alters observable behavior with no code change and no recompile"
-- [ ] **T14 — Implement: "The set of values a world may override through the Level Contract is explicitly enumerated, and an override outside that set is rejected" (REQ-025).** <!-- t:11751a2c -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-025 "The set of values a world may override through the Level Contract is explicitly enumerated, and an override outside that set is rejected" — possible coordination point: Contract "Engine Feature Policy" (dependency) from World Static Analysis Gate (keyword signal only)
-- [ ] **T15 — Implement: "Loading a tuning file with a missing or out-of-range value fails with a named error rather than silently defaulting" (REQ-025).** <!-- t:137fc35b -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-025 "Loading a tuning file with a missing or out-of-range value fails with a named error rather than silently defaulting"
-- [ ] **T16 — Implement: "Every tuning key cited by another requirement's acceptance criteria exists in the tuning data with a documented unit and permitted range, and a test fails when a cited key is absent" (REQ-025).** <!-- t:0e6c904b -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-025 "Every tuning key cited by another requirement's acceptance criteria exists in the tuning data with a documented unit and permitted range, and a test fails when a cited key is absent"
-- [ ] **T17 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T10 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
 
 **Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Technology Guidance, and node context as your references. Record the expanded list in this section via update_artifact (propose_patches) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
+
+## Configuration
+
+User-selected configuration for this component (honor these choices):
+- **csharp:** not used - no .cs files, no Mono/.NET assemblies, no C# build step. The catalog line 'use GDScript for gameplay logic and C# for complex systems' does NOT apply here.
+- **engine:** Godot 4.x, GDScript 2.0
+- **typing:** statically typed GDScript throughout (typed params, returns, members)
+- **language:** GDScript
+- **rationale:** One language keeps the contribution surface narrow for humans and AI agents alike; a second toolchain doubles build, review and static-gate parser burden for no gameplay gain.
 
 ## Project Context
 
@@ -183,20 +173,20 @@ Category: technical | Status: in-progress
 Many acceptance criteria across the player systems assert a "configured modifier", "bounded window", or "configured magnitude" without anywhere defining the values. Without a single named home for those numbers, tests have nothing to assert against and every system invents its own constants. This requirement establishes one authoritative, data-driven tuning surface covering capability-loss modifiers (swim speed, boost duration, climb height), default lives per attempt, dash charge and recharge rates, Gill Mod durations and cooldowns, enemy debuff magnitudes and windows, and restoration resource costs. Values live in data rather than code so they can be tuned without recompiling and so an AI agent or contributor can adjust balance without touching system logic. Worlds may override a documented subset; everything else stays global to keep the game coherent across forks.
 
 **Acceptance criteria — your task boxes:**
-- [ ] All balance values are defined in data files rather than as constants in system code
-  → covered by Task T10
-- [ ] The tuning surface covers capability-loss modifiers, default lives per attempt, dash charge and recharge, Gill Mod durations and cooldowns, enemy debuff magnitudes and windows, restoration resource costs, grapple range, camera smoothing thresholds, mutation loadout duration, momentum retention across grammar transitions, and maximum retry duration
-  → covered by Task T11
-- [ ] Every value carries a documented name, unit, and permitted range
-  → covered by Task T12
-- [ ] Changing a tuning value alters observable behavior with no code change and no recompile
-  → covered by Task T13
-- [ ] The set of values a world may override through the Level Contract is explicitly enumerated, and an override outside that set is rejected
-  → covered by Task T14
-- [ ] Loading a tuning file with a missing or out-of-range value fails with a named error rather than silently defaulting
-  → covered by Task T15
-- [ ] Every tuning key cited by another requirement's acceptance criteria exists in the tuning data with a documented unit and permitted range, and a test fails when a cited key is absent
-  → covered by Task T16
+- [x] All balance values are defined in data files rather than as constants in system code
+  → THIS NODE: internal logic
+- [x] The tuning surface covers capability-loss modifiers, default lives per attempt, dash charge and recharge, Gill Mod durations and cooldowns, enemy debuff magnitudes and windows, restoration resource costs, grapple range, camera smoothing thresholds, mutation loadout duration, momentum retention across grammar transitions, and maximum retry duration
+  → THIS NODE: internal logic — possible coordination point: Contract "Tuning Data Interface" (dependency) from Gill Mod Ability Framework (keyword signal only)
+- [x] Every value carries a documented name, unit, and permitted range
+  → THIS NODE: internal logic
+- [x] Changing a tuning value alters observable behavior with no code change and no recompile
+  → THIS NODE: internal logic
+- [x] The set of values a world may override through the Level Contract is explicitly enumerated, and an override outside that set is rejected
+  → THIS NODE: internal logic — possible coordination point: Contract "Engine Feature Policy" (dependency) from World Static Analysis Gate (keyword signal only)
+- [x] Loading a tuning file with a missing or out-of-range value fails with a named error rather than silently defaulting
+  → THIS NODE: internal logic
+- [x] Every tuning key cited by another requirement's acceptance criteria exists in the tuning data with a documented unit and permitted range, and a test fails when a cited key is absent
+  → THIS NODE: internal logic
 
 ## Interface Contracts
 
@@ -388,3 +378,13 @@ Startup/initialization order based on edge directions and interaction patterns.
 - Restoration State System (initiates Tuning Data Interface against this node (dependency))
 - Camera System (initiates Tuning Data Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `core/tuning/tuning.json` | config | --- | draft |
+| `test/core/tuning/test_tuning_data.gd` | source | --- | draft |
+| `core/tuning/tuning_error.gd` | source | --- | draft |
+| `core/tuning/tuning_data.gd` | source | --- | draft |
+| `.nodespec/tests/req-025.tests.md` - Test plan for requirement: Balance and Tuning Configuration | test-plan | markdown | draft |

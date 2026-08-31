@@ -717,3 +717,9 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 **Depends on THIS node being available:**
 - CI Pipeline (initiates Validator CLI Invocation against this node (ipc))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-007.tests.md` - Test plan for requirement: Level Contract Automated Compliance Checker | test-plan | markdown | draft |

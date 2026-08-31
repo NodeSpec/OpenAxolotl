@@ -551,3 +551,10 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 **Depends on THIS node being available:**
 - CI Pipeline (initiates Validator CLI Invocation against this node (ipc))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-015.tests.md` - Test plan for requirement: Asset Contract and AI-Art Provenance | test-plan | markdown | draft |
+| `.nodespec/tests/req-016.tests.md` - Test plan for requirement: Asset Contract Automated Validator | test-plan | markdown | draft |

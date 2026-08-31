@@ -630,3 +630,9 @@ Startup/initialization order based on edge directions and interaction patterns.
 - OpenAxolotl Game Client (this node calls/depends on it via Core Module Dependency (dependency))
 - World Static Analysis Gate (this node calls/depends on it via Validator CLI Invocation (ipc))
 - Test Harness and Fixtures (this node calls/depends on it via Validator CLI Invocation (ipc))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `.nodespec/tests/req-018.tests.md` - Test plan for requirement: PC Build and Distribution | test-plan | markdown | draft |

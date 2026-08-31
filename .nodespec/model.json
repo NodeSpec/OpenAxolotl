@@ -1,7 +1,7 @@
 {
   "modelVersion": 1,
   "generatedBy": "nodespec",
-  "modelHash": "d99e8af9727f7754a8586088ecc798aed3fc46f76a7e8b734e75667246b4046f",
+  "modelHash": "d7b045dfbc25b2eb344fcc98b3f131fcc683379ae0b3ff040420bb1c2e6858d7",
   "nodes": [
     {
       "id": "22222222-0000-4000-8000-000000000001",
@@ -1293,6 +1293,12 @@
       "kind": "test-plan"
     },
     {
+      "id": "0ccb8950-b7e2-432a-b5ff-995203293aa7",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "project.godot",
+      "kind": "config"
+    },
+    {
       "id": "0d71252d-d47c-4f5d-a12f-f0b5436e169a",
       "nodeId": "22222222-0000-4000-8000-000000000004",
       "path": ".nodespec/tests/req-019.tests.md",
@@ -1321,7 +1327,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000006",
       "path": ".nodespec/tasks/gill-mod-ability-framework-22222222.task.md",
       "kind": "task",
-      "contentHash": "00000000157bfe1d"
+      "contentHash": "0000000059eb25d0"
     },
     {
       "id": "22af523d-4f28-48e1-b28f-86bcc8841ed9",
@@ -1334,28 +1340,28 @@
       "nodeId": "22222222-0000-4000-8000-000000000009",
       "path": ".nodespec/tasks/collectibles-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "00000000526e0a88"
+      "contentHash": "000000005338d575"
     },
     {
       "id": "2f84a429-2a87-4d48-8375-cd92f1799941",
       "nodeId": "22222222-0000-4000-8000-000000000005",
       "path": ".nodespec/tasks/lives-and-checkpoint-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000058157c17"
+      "contentHash": "000000006e03f5e7"
     },
     {
       "id": "34047a64-c405-487c-a2cd-9fc538b39268",
       "nodeId": "22222222-0000-4000-8000-000000000007",
       "path": ".nodespec/tasks/save-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "00000000215bfd06"
+      "contentHash": "00000000169bf97f"
     },
     {
       "id": "37c9921e-3e3d-4c9f-9bc9-2266b0b91fe1",
       "nodeId": "22222222-0000-4000-8000-000000000008",
       "path": ".nodespec/tasks/restoration-state-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000007c0bb8bb"
+      "contentHash": "000000006d246ec9"
     },
     {
       "id": "3ce995a8-eaca-4a3e-bae0-5f4afccaf211",
@@ -1382,25 +1388,31 @@
       "kind": "test-plan"
     },
     {
+      "id": "491da33f-6402-4e6d-b552-0e152602a3db",
+      "nodeId": "22222222-0000-4000-8000-000000000019",
+      "path": "core/tuning/tuning.json",
+      "kind": "config"
+    },
+    {
       "id": "4e6ecf44-ae08-47af-a5d3-23d79e47aa8e",
       "nodeId": "22222222-0000-4000-8000-000000000015",
       "path": ".nodespec/tasks/ci-pipeline-22222222.task.md",
       "kind": "task",
-      "contentHash": "00000000745afe58"
+      "contentHash": "000000001de263d9"
     },
     {
       "id": "4f72e78d-3d9b-4d19-96c5-acfde17d6763",
       "nodeId": "22222222-0000-4000-8000-000000000020",
       "path": ".nodespec/tasks/test-harness-and-fixtures-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000004265affa"
+      "contentHash": "000000007053df01"
     },
     {
       "id": "5308bb42-3e0e-4d7b-a1c8-40928b049c99",
       "nodeId": "22222222-0000-4000-8000-000000000014",
       "path": ".nodespec/tasks/asset-contract-validator-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000067709821"
+      "contentHash": "000000006faec031"
     },
     {
       "id": "5e015b73-4285-495c-b2e2-31ea08a27f9b",
@@ -1413,7 +1425,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000016",
       "path": ".nodespec/tasks/player-hud-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000005e28beb5"
+      "contentHash": "000000004ca57c74"
     },
     {
       "id": "6942ba8d-6f22-43e8-85f4-b9226956e065",
@@ -1426,7 +1438,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000003",
       "path": ".nodespec/tasks/camera-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000055e95683"
+      "contentHash": "0000000030a560a3"
     },
     {
       "id": "6e4d1eb0-9b66-46b7-8a1a-c07d7a8a2526",
@@ -1439,7 +1451,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000023",
       "path": ".nodespec/tasks/world-reference-template-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000002a9738c1"
+      "contentHash": "000000001c6dc778"
     },
     {
       "id": "6f455603-2d7b-405b-ac67-f0b7e615539f",
@@ -1458,7 +1470,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000019",
       "path": ".nodespec/tasks/balance-and-tuning-data-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000000cc63780"
+      "contentHash": "000000001d493d01"
     },
     {
       "id": "78b9aa21-9e0e-4e09-bde9-708ba134df0a",
@@ -1477,7 +1489,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000018",
       "path": ".nodespec/tasks/input-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000067b3f8a9"
+      "contentHash": "00000000178e9426"
     },
     {
       "id": "95716407-6d02-428b-966f-2838c07e420b",
@@ -1498,31 +1510,85 @@
       "kind": "test-plan"
     },
     {
+      "id": "a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+      "nodeId": "22222222-0000-4000-8000-000000000007",
+      "path": "core/save/save_error.gd",
+      "kind": "source"
+    },
+    {
+      "id": "a3b4c5d6-7e8f-4091-0213-243546576879",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "core/controller/capability_modifiers.gd",
+      "kind": "source"
+    },
+    {
+      "id": "a7b8c9d0-1e2f-4a3b-4c5d-6e7f80910213",
+      "nodeId": "22222222-0000-4000-8000-000000000007",
+      "path": "core/save/save_system.gd",
+      "kind": "source"
+    },
+    {
+      "id": "a9d63e12-4f70-4b85-8c2d-51e9a7b04c63",
+      "nodeId": "22222222-0000-4000-8000-000000000017",
+      "path": "core/audio/godot_audio_sink.gd",
+      "kind": "source"
+    },
+    {
       "id": "b1360c57-ea6a-4f5f-98b4-03896cce4ac4",
       "nodeId": "22222222-0000-4000-8000-000000000017",
       "path": ".nodespec/tasks/audio-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "00000000174e9bea"
+      "contentHash": "000000005e975cd1"
+    },
+    {
+      "id": "b1a7c2e4-3f58-4d91-9e07-2c6a48d51f30",
+      "nodeId": "22222222-0000-4000-8000-000000000017",
+      "path": "core/audio/audio_event.gd",
+      "kind": "source"
     },
     {
       "id": "b1bcdbc6-41ce-4057-bb8e-4217acc48d2f",
       "nodeId": "22222222-0000-4000-8000-000000000004",
       "path": ".nodespec/tasks/regeneration-and-capability-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "00000000361a383b"
+      "contentHash": "000000002023b197"
+    },
+    {
+      "id": "b2c3d4e5-6f7a-4b8c-9d0e-1f2a3b4c5d6e",
+      "nodeId": "22222222-0000-4000-8000-000000000007",
+      "path": "core/save/world_contract_shape.gd",
+      "kind": "source"
     },
     {
       "id": "b43d198b-f53f-41e2-b822-2e270da6533a",
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": ".nodespec/tasks/axolotl-controller-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000064cf0a31"
+      "contentHash": "0000000000fa83e7"
+    },
+    {
+      "id": "b4c5d6e7-8f90-4102-1324-354657687980",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "core/controller/water_dash.gd",
+      "kind": "source"
     },
     {
       "id": "b617130a-da8f-4882-ad08-cebbae0c0fbb",
       "nodeId": "22222222-0000-4000-8000-000000000007",
       "path": ".nodespec/tests/req-014.tests.md",
       "kind": "test-plan"
+    },
+    {
+      "id": "b7e51f38-9a24-4c60-b3d7-8e02f6a91d57",
+      "nodeId": "22222222-0000-4000-8000-000000000017",
+      "path": "core/audio/default_bank.json",
+      "kind": "config"
+    },
+    {
+      "id": "b8c9d0e1-2f3a-4b4c-5d6e-7f8091021324",
+      "nodeId": "22222222-0000-4000-8000-000000000007",
+      "path": "test/core/save/test_save_system.gd",
+      "kind": "source"
     },
     {
       "id": "ba640347-3a8c-4a4e-b4cf-70d8588b7de4",
@@ -1535,7 +1601,31 @@
       "nodeId": "22222222-0000-4000-8000-000000000010",
       "path": ".nodespec/tasks/drift-fleet-enemy-framework-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000005a9d57af"
+      "contentHash": "000000005911ba04"
+    },
+    {
+      "id": "c3d4e5f6-7a8b-4c9d-0e1f-2a3b4c5d6e7f",
+      "nodeId": "22222222-0000-4000-8000-000000000007",
+      "path": "core/save/save_compatibility_policy.gd",
+      "kind": "source"
+    },
+    {
+      "id": "c3f81d06-5a2b-4e7c-8b19-7d40e9a3b28c",
+      "nodeId": "22222222-0000-4000-8000-000000000017",
+      "path": "core/audio/audio_sink.gd",
+      "kind": "source"
+    },
+    {
+      "id": "c4a80b96-1e57-4d23-9f8a-6b31e0c72d45",
+      "nodeId": "22222222-0000-4000-8000-000000000017",
+      "path": "core/audio/audio_system.gd",
+      "kind": "source"
+    },
+    {
+      "id": "c5d6e7f8-9001-4213-2435-465768798091",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "core/controller/tongue_grapple.gd",
+      "kind": "source"
     },
     {
       "id": "c8713284-4347-41f2-8324-62f62628d23b",
@@ -1544,17 +1634,53 @@
       "kind": "test-plan"
     },
     {
+      "id": "c9d0e1f2-3a4b-4c5d-6e7f-809102132435",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "test/run_tests.gd",
+      "kind": "source"
+    },
+    {
       "id": "ca73e94d-6488-461d-9169-b596617a4804",
       "nodeId": "22222222-0000-4000-8000-000000000022",
       "path": ".nodespec/tests/req-020.tests.md",
       "kind": "test-plan"
     },
     {
+      "id": "d0e1f2a3-4b5c-4d6e-7f80-910213243546",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "test/support/gdunit_compat.gd",
+      "kind": "source"
+    },
+    {
       "id": "d40835a5-0474-41fd-830d-50de7557ba47",
       "nodeId": "22222222-0000-4000-8000-000000000021",
       "path": ".nodespec/tasks/flagship-boss-encounter-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000007e4873f1"
+      "contentHash": "0000000008bdf51b"
+    },
+    {
+      "id": "d4e5f6a7-8b9c-4d0e-1f2a-3b4c5d6e7f80",
+      "nodeId": "22222222-0000-4000-8000-000000000007",
+      "path": "core/save/tiered_compatibility_policy.gd",
+      "kind": "source"
+    },
+    {
+      "id": "d5e29b71-8c46-4a03-b7f2-1e58c0d4a967",
+      "nodeId": "22222222-0000-4000-8000-000000000017",
+      "path": "core/audio/settings_store.gd",
+      "kind": "source"
+    },
+    {
+      "id": "d6e7f890-0112-4324-3546-576879809102",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "core/controller/axolotl_controller.gd",
+      "kind": "source"
+    },
+    {
+      "id": "d6f92a41-7b83-4e15-a029-4c7f81b3e502",
+      "nodeId": "22222222-0000-4000-8000-000000000017",
+      "path": "test/core/audio/test_audio_system.gd",
+      "kind": "source"
     },
     {
       "id": "dd831419-74c5-4bc2-98c1-4bf2153c43ce",
@@ -1568,7 +1694,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000012",
       "path": ".nodespec/tasks/world-bubble-bay-22222222.task.md",
       "kind": "task",
-      "contentHash": "00000000723951ef"
+      "contentHash": "000000003f19a2f8"
     },
     {
       "id": "de75de16-9828-4a76-9392-98c5f0b6a629",
@@ -1581,13 +1707,55 @@
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": ".nodespec/tasks/openaxolotl-game-client-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000001465b587"
+      "contentHash": "000000007511f371"
+    },
+    {
+      "id": "e1f2a3b4-5c6d-4e7f-8091-021324354657",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "core/controller/movement_grammar.gd",
+      "kind": "source"
+    },
+    {
+      "id": "e48d7693-6b42-48fd-b059-808e076c2f5c",
+      "nodeId": "22222222-0000-4000-8000-000000000019",
+      "path": "test/core/tuning/test_tuning_data.gd",
+      "kind": "source"
+    },
+    {
+      "id": "e5f6a7b8-9c0d-4e1f-2a3b-4c5d6e7f8091",
+      "nodeId": "22222222-0000-4000-8000-000000000007",
+      "path": "core/save/save_migrations.gd",
+      "kind": "source"
     },
     {
       "id": "e6f69aec-4360-425b-b4a0-84e718fe204f",
       "nodeId": "22222222-0000-4000-8000-000000000014",
       "path": ".nodespec/tests/req-016.tests.md",
       "kind": "test-plan"
+    },
+    {
+      "id": "e70215a4-cca5-492a-b5bd-42629824715e",
+      "nodeId": "22222222-0000-4000-8000-000000000019",
+      "path": "core/tuning/tuning_error.gd",
+      "kind": "source"
+    },
+    {
+      "id": "e7db76ea-c9ec-4f14-bfa2-fef0389fb566",
+      "nodeId": "22222222-0000-4000-8000-000000000019",
+      "path": "core/tuning/tuning_data.gd",
+      "kind": "source"
+    },
+    {
+      "id": "e7f89012-2334-4546-5768-798091021324",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "test/core/controller/test_axolotl_controller.gd",
+      "kind": "source"
+    },
+    {
+      "id": "e8b40c93-2d71-4f68-a5e3-9b17d6820f4a",
+      "nodeId": "22222222-0000-4000-8000-000000000017",
+      "path": "core/audio/audio_settings.gd",
+      "kind": "source"
     },
     {
       "id": "eb353cd8-0e24-4948-a55e-361df28ad0c2",
@@ -1602,17 +1770,35 @@
       "kind": "test-plan"
     },
     {
+      "id": "f2a3b4c5-6d7e-4f80-9102-132435465768",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "core/controller/player_intent.gd",
+      "kind": "source"
+    },
+    {
+      "id": "f2c17a58-6b39-4d80-91ae-3c85f70b1d24",
+      "nodeId": "22222222-0000-4000-8000-000000000017",
+      "path": "core/audio/audio_bank.gd",
+      "kind": "source"
+    },
+    {
       "id": "f5dc25a3-f44a-49f7-8bbf-f8544c6b7c57",
       "nodeId": "22222222-0000-4000-8000-000000000004",
       "path": ".nodespec/tests/req-002.tests.md",
       "kind": "test-plan"
     },
     {
+      "id": "f6a7b8c9-0d1e-4f2a-3b4c-5d6e7f809102",
+      "nodeId": "22222222-0000-4000-8000-000000000007",
+      "path": "docs/save_compatibility_policy.md",
+      "kind": "doc"
+    },
+    {
       "id": "fbb9bba9-1ca5-42d2-8828-4044823019f8",
       "nodeId": "22222222-0000-4000-8000-000000000011",
       "path": ".nodespec/tasks/world-coral-cove-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000010678a9a"
+      "contentHash": "000000004769cfe3"
     },
     {
       "id": "fdebb79f-5154-4384-ab57-9a7620e16274",
@@ -1625,7 +1811,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000013",
       "path": ".nodespec/tasks/level-contract-compliance-checker-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000002727582b"
+      "contentHash": "00000000635fd56c"
     }
   ]
 }

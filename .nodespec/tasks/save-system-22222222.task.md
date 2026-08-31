@@ -15,6 +15,8 @@
 
 ## Implementation Context
 
+> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
+
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
 Every system in the game persists through this node's interface, and no system
 touches the save file. That single rule is what makes forked and divergent worlds
@@ -111,31 +113,25 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T10 — Implement: "Save persists world unlock/completion state, per-world restoration state and unlocked flags, collectibles, unlocked Gill Mods, and last checkpoint" (REQ-014).** <!-- t:a98cb4bd -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-014 "Save persists world unlock/completion state, per-world restoration state and unlocked flags, collectibles, unlocked Gill Mods, and last checkpoint" — possible coordination point: Contract "Save Integration Interface" (dependency) from Lives and Checkpoint System (keyword signal only)
-- [ ] **T11 — Implement: "Worlds write and read save data exclusively through the defined save-integration interface, never touching the save file directly" (REQ-014).** <!-- t:9bde8b4b -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-014 "Worlds write and read save data exclusively through the defined save-integration interface, never touching the save file directly" — possible coordination point: Contract "Save Integration Interface" (dependency) from Lives and Checkpoint System (keyword signal only)
-- [ ] **T12 — Implement: "Loading a save that references a missing or renamed world module degrades gracefully with the profile intact and the remaining worlds playable" (REQ-014).** <!-- t:b75c27cb -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-014 "Loading a save that references a missing or renamed world module degrades gracefully with the profile intact and the remaining worlds playable" — possible coordination point: Contract "Save Integration Interface" (dependency) from World: Reference Template (keyword signal only)
-- [ ] **T13 — Implement: "Loading a save whose world module has changed its contract-visible state applies the documented save-compatibility policy and leaves the profile readable" (REQ-014).** <!-- t:fdafd9cd -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-014 "Loading a save whose world module has changed its contract-visible state applies the documented save-compatibility policy and leaves the profile readable" — possible coordination point: Contract "Engine Feature Policy" (dependency) from World Static Analysis Gate (keyword signal only)
-- [ ] **T14 — Implement: "Save file format carries a version field and a defined upgrade path across format versions" (REQ-014).** <!-- t:ab289ad0 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-014 "Save file format carries a version field and a defined upgrade path across format versions" — possible coordination point: Contract "Save Integration Interface" (dependency) from Lives and Checkpoint System (keyword signal only)
-- [ ] **T15 — Implement: "Save-compatibility policy for forked and divergent worlds is decided and documented" (REQ-014).** <!-- t:585c3fd6 -->
+- [ ] **T10 — Implement: "Save-compatibility policy for forked and divergent worlds is decided and documented" (REQ-014).** <!-- t:585c3fd6 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-014 "Save-compatibility policy for forked and divergent worlds is decided and documented" — possible coordination point: Contract "Engine Feature Policy" (dependency) from World Static Analysis Gate (keyword signal only)
-- [ ] **T16 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T11 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
 
 **Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Technology Guidance, and node context as your references. Record the expanded list in this section via update_artifact (propose_patches) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
+
+## Configuration
+
+User-selected configuration for this component (honor these choices):
+- **csharp:** not used - no .cs files, no Mono/.NET assemblies, no C# build step. The catalog line 'use GDScript for gameplay logic and C# for complex systems' does NOT apply here.
+- **engine:** Godot 4.x, GDScript 2.0
+- **typing:** statically typed GDScript throughout (typed params, returns, members)
+- **language:** GDScript
+- **rationale:** One language keeps the contribution surface narrow for humans and AI agents alike; a second toolchain doubles build, review and static-gate parser burden for no gameplay gain.
 
 ## Project Context
 
@@ -175,18 +171,18 @@ Category: functional | Status: in-progress
 Persistent player progress across sessions: which worlds are unlocked and completed, per-world restoration state, collectibles gathered, Gill Mods unlocked, and last checkpoint reached. Every Level Contract-conforming world integrates with this system through a defined save-integration interface rather than writing its own persistence. Because worlds are forkable and replaceable, the save format must degrade gracefully: a save referencing a world that has been modified, forked, or removed must not corrupt the profile or block loading. The exact save-compatibility policy for divergent forked worlds is a named open item to be resolved and documented as part of this requirement.
 
 **Acceptance criteria — your task boxes:**
-- [ ] Save persists world unlock/completion state, per-world restoration state and unlocked flags, collectibles, unlocked Gill Mods, and last checkpoint
-  → covered by Task T10
-- [ ] Worlds write and read save data exclusively through the defined save-integration interface, never touching the save file directly
-  → covered by Task T11
-- [ ] Loading a save that references a missing or renamed world module degrades gracefully with the profile intact and the remaining worlds playable
-  → covered by Task T12
-- [ ] Loading a save whose world module has changed its contract-visible state applies the documented save-compatibility policy and leaves the profile readable
-  → covered by Task T13
-- [ ] Save file format carries a version field and a defined upgrade path across format versions
-  → covered by Task T14
+- [x] Save persists world unlock/completion state, per-world restoration state and unlocked flags, collectibles, unlocked Gill Mods, and last checkpoint
+  → THIS NODE: internal logic — possible coordination point: Contract "Save Integration Interface" (dependency) from Lives and Checkpoint System (keyword signal only)
+- [x] Worlds write and read save data exclusively through the defined save-integration interface, never touching the save file directly
+  → THIS NODE: internal logic — possible coordination point: Contract "Save Integration Interface" (dependency) from Lives and Checkpoint System (keyword signal only)
+- [x] Loading a save that references a missing or renamed world module degrades gracefully with the profile intact and the remaining worlds playable
+  → THIS NODE: internal logic — possible coordination point: Contract "Save Integration Interface" (dependency) from World: Reference Template (keyword signal only)
+- [x] Loading a save whose world module has changed its contract-visible state applies the documented save-compatibility policy and leaves the profile readable
+  → THIS NODE: internal logic — possible coordination point: Contract "Engine Feature Policy" (dependency) from World Static Analysis Gate (keyword signal only)
+- [x] Save file format carries a version field and a defined upgrade path across format versions
+  → THIS NODE: internal logic — possible coordination point: Contract "Save Integration Interface" (dependency) from Lives and Checkpoint System (keyword signal only)
 - [ ] Save-compatibility policy for forked and divergent worlds is decided and documented (manual)
-  → covered by Task T15
+  → covered by Task T10
 
 ## Interface Contracts
 
@@ -378,3 +374,17 @@ Startup/initialization order based on edge directions and interaction patterns.
 - World: Bubble Bay (initiates Save Integration Interface against this node (dependency))
 - World: Reference Template (initiates Save Integration Interface against this node (dependency))
 - World Static Analysis Gate (initiates Engine Feature Policy against this node (dependency))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `core/save/save_error.gd` | source | --- | draft |
+| `core/save/save_system.gd` | source | --- | draft |
+| `core/save/world_contract_shape.gd` | source | --- | draft |
+| `.nodespec/tests/req-014.tests.md` - Test plan for requirement: Save System | test-plan | markdown | draft |
+| `test/core/save/test_save_system.gd` | source | --- | draft |
+| `core/save/save_compatibility_policy.gd` | source | --- | draft |
+| `core/save/tiered_compatibility_policy.gd` | source | --- | draft |
+| `core/save/save_migrations.gd` | source | --- | draft |
+| `docs/save_compatibility_policy.md` | doc | --- | draft |

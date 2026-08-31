@@ -1,0 +1,37 @@
+; OpenAxolotl — Godot project configuration
+;
+; Single-player only, in every phase (REQ-030). This file deliberately declares
+; NO networking or multiplayer autoloads, no peer configuration, and no
+; network/* settings. The World Static Analysis Gate parses this file and fails
+; CI on any such entry.
+
+config_version=5
+
+[application]
+
+config/name="OpenAxolotl"
+config/description="A colorful 3D action-platformer where an axolotl regenerates itself and its world."
+config/features=PackedStringArray("4.3", "GL Compatibility")
+run/main_scene=""
+
+[dotnet]
+
+; Intentionally empty. This project is GDScript only — no C#, no Mono/.NET
+; assemblies, no C# build step (see each node's task doc, metadata.config).
+
+[debug]
+
+; Statically typed GDScript is the project policy, so an untyped declaration is
+; a hard error. The unsafe_* family stays at warning level rather than error:
+; JSON and file parsing legitimately produce Variant at the boundary, and
+; forcing zero unsafe casts there buys type guards everywhere for no real safety.
+; They remain visible so an unsafe access in ordinary gameplay code still shows up.
+gdscript/warnings/untyped_declaration=2
+gdscript/warnings/unsafe_method_access=1
+gdscript/warnings/unsafe_property_access=1
+gdscript/warnings/unsafe_cast=1
+gdscript/warnings/unsafe_call_argument=1
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"

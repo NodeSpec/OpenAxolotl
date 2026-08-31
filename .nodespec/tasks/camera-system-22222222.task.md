@@ -15,6 +15,8 @@
 
 ## Implementation Context
 
+> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
+
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
 The camera's job is to never be noticed. Two of its criteria are numeric and
 machine-checkable; the rest are about not fighting the player in confined
@@ -125,6 +127,16 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
 
 **Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Technology Guidance, and node context as your references. Record the expanded list in this section via update_artifact (propose_patches) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
+
+## Configuration
+
+User-selected configuration for this component (honor these choices):
+- **scope:** Game-code nodes only. The four Python validator nodes and the GitHub Actions CI node are deliberately outside this policy.
+- **engine:** Godot 4.x, GDScript 2.0
+- **typing:** Statically typed GDScript throughout — typed parameters, return types and members. Untyped GDScript is a catalog anti-pattern and complicates the static-analysis gate's tokenizer.
+- **language:** GDScript
+- **rationale:** One language keeps the contribution surface narrow. Humans and AI coding agents extend the same repo from the Level Contract alone; a second toolchain doubles the build, the review surface and the gate's parser burden for no gameplay gain.
+- **languagePolicy:** GDScript only. No C#: no .cs files, no Mono/.NET assemblies, no C# build step. Where the Godot catalog guidance says 'use GDScript for gameplay logic and C# for complex systems', the C# half DOES NOT APPLY here — a 'complex system' is not a reason to reach for a second language.
 
 ## Project Context
 
