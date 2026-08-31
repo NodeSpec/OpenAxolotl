@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0",
+  "description": "The default audio bank (REQ-023 AC-5). Every cue and bed in the closed AudioEvent set has an entry here, so a world declaring no music or ambience falls back to these rather than to silence. A world may override any subset through the Level Contract; keys not overridden resolve to these paths.",
+  "assetLayout": "Audio assets live under assets/audio/<category>/ per the Asset Contract (REQ-015), each with a provenance.json sidecar recording author, generation method and license terms. AI-generated audio additionally records the tool and prompt.",
+  "cues": {
+    "capability_lost_tail": "res://assets/audio/capability/tail_lost.ogg",
+    "capability_lost_gill": "res://assets/audio/capability/gill_lost.ogg",
+    "capability_lost_leg": "res://assets/audio/capability/leg_lost.ogg",
+    "capability_regrown_tail": "res://assets/audio/capability/tail_regrown.ogg",
+    "capability_regrown_gill": "res://assets/audio/capability/gill_regrown.ogg",
+    "capability_regrown_leg": "res://assets/audio/capability/leg_regrown.ogg",
+    "gill_mod_bubble_activated": "res://assets/audio/gillmod/bubble_activate.ogg",
+    "gill_mod_jet_activated": "res://assets/audio/gillmod/jet_activate.ogg",
+    "gill_mod_glow_activated": "res://assets/audio/gillmod/glow_activate.ogg"
+  },
+  "beds": {
+    "grammar_water": "res://assets/audio/ambience/water_bed.ogg",
+    "grammar_land": "res://assets/audio/ambience/land_bed.ogg",
+    "region_barren": "res://assets/audio/ambience/region_barren.ogg",
+    "region_resourced": "res://assets/audio/ambience/region_resourced.ogg",
+    "region_restored": "res://assets/audio/ambience/region_restored.ogg"
+  }
+}
