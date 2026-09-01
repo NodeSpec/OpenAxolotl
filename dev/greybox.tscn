@@ -1,0 +1,208 @@
+[gd_scene load_steps=24 format=3]
+
+; DEVELOPMENT SCENE — not a world module, not contract-conforming, not
+; discovered by the hub. It exists so the core systems can be seen running
+; inside a real _physics_process instead of only inside the test harness.
+; The reference template (REQ-029) is the contract-conforming starting point a
+; contributor copies; this is the developers' proving ground and is superseded
+; the moment the template lands.
+;
+; LAYOUT, and what each piece is for. Spawn is the origin. Godot's forward is
+; -Z, so W walks you toward the ramp, the climb wall and the tunnel; the pool is
+; BEHIND spawn, across the ground's far edge at z=6. The camera trails the
+; direction of travel, so backing into the water turns the view around with you.
+;
+;   Ground      z -30..6,  top y=0     the land grammar
+;   Pool        z 6..30,   floor y=-12  the pit the water fills
+;   Water       z 6..30,   y -12..0     the water grammar; its surface is FLUSH
+;                                       with the ground so the transition is a
+;                                       step off the edge, not a fall through air
+;   Ramp        x -14      15 degrees   a slope the waddle has to climb
+;   ClimbWall   x 14       y 0..12      physics layer 4 AND group "climbable",
+;                                       so both routes ClimbSurface accepts are
+;                                       live; taller than climb.max_height_m
+;                                       (6 m) on purpose, so the ceiling is
+;                                       observable rather than theoretical
+;   ClimbLedge  y 12..13                what the wall gets you to
+;   Anchor      (-8, 6, 2)              inside grapple.max_range_m (12 m) of
+;                                       spawn, in group "grapple_anchor"
+;   TunnelRoof  (8, 3.5, -4)            low cover, to see the camera's collision
+;                                       pull-in fire
+
+[ext_resource type="Script" path="res://core/controller/axolotl_body.gd" id="1_body"]
+[ext_resource type="Script" path="res://core/controller/water_volume.gd" id="2_water"]
+[ext_resource type="Script" path="res://core/camera/camera_follow.gd" id="3_camera"]
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 1
+background_color = Color(0.42, 0.62, 0.72, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.62, 0.72, 0.82, 1)
+ambient_light_energy = 0.65
+
+[sub_resource type="BoxMesh" id="BoxMesh_ground"]
+size = Vector3(60, 2, 36)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(60, 2, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_poolfloor"]
+size = Vector3(60, 2, 24)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_poolfloor"]
+size = Vector3(60, 2, 24)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ramp"]
+size = Vector3(10, 1, 16)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ramp"]
+size = Vector3(10, 1, 16)
+
+[sub_resource type="StandardMaterial3D" id="Material_climb"]
+albedo_color = Color(0.85, 0.55, 0.3, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall"]
+size = Vector3(10, 12, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall"]
+size = Vector3(10, 12, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ledge"]
+size = Vector3(10, 1, 6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ledge"]
+size = Vector3(10, 1, 6)
+
+[sub_resource type="StandardMaterial3D" id="Material_water"]
+transparency = 1
+albedo_color = Color(0.25, 0.55, 0.75, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_water"]
+size = Vector3(60, 12, 24)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_water"]
+size = Vector3(60, 12, 24)
+
+[sub_resource type="StandardMaterial3D" id="Material_anchor"]
+albedo_color = Color(0.9, 0.85, 0.2, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_anchor"]
+radius = 0.6
+height = 1.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_tunnel"]
+size = Vector3(8, 1, 14)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tunnel"]
+size = Vector3(8, 1, 14)
+
+[sub_resource type="StandardMaterial3D" id="Material_axolotl"]
+albedo_color = Color(0.95, 0.6, 0.72, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_axolotl"]
+radius = 0.5
+height = 1.6
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_axolotl"]
+radius = 0.5
+height = 1.6
+
+[node name="Greybox" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.353, 0.353, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 20, 0)
+shadow_enabled = true
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -12)
+
+[node name="Mesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("BoxMesh_ground")
+
+[node name="Collision" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_ground")
+
+[node name="PoolFloor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -13, 18)
+
+[node name="Mesh" type="MeshInstance3D" parent="PoolFloor"]
+mesh = SubResource("BoxMesh_poolfloor")
+
+[node name="Collision" type="CollisionShape3D" parent="PoolFloor"]
+shape = SubResource("BoxShape3D_poolfloor")
+
+[node name="Ramp" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.966, 0.259, 0, -0.259, 0.966, -14, 1.6, -10)
+
+[node name="Mesh" type="MeshInstance3D" parent="Ramp"]
+mesh = SubResource("BoxMesh_ramp")
+
+[node name="Collision" type="CollisionShape3D" parent="Ramp"]
+shape = SubResource("BoxShape3D_ramp")
+
+[node name="ClimbWall" type="StaticBody3D" parent="." groups=["climbable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 6, -12)
+collision_layer = 9
+
+[node name="Mesh" type="MeshInstance3D" parent="ClimbWall"]
+mesh = SubResource("BoxMesh_wall")
+surface_material_override/0 = SubResource("Material_climb")
+
+[node name="Collision" type="CollisionShape3D" parent="ClimbWall"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="ClimbLedge" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 12.5, -15)
+
+[node name="Mesh" type="MeshInstance3D" parent="ClimbLedge"]
+mesh = SubResource("BoxMesh_ledge")
+
+[node name="Collision" type="CollisionShape3D" parent="ClimbLedge"]
+shape = SubResource("BoxShape3D_ledge")
+
+[node name="Water" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6, 18)
+script = ExtResource("2_water")
+
+[node name="Mesh" type="MeshInstance3D" parent="Water"]
+mesh = SubResource("BoxMesh_water")
+surface_material_override/0 = SubResource("Material_water")
+
+[node name="Collision" type="CollisionShape3D" parent="Water"]
+shape = SubResource("BoxShape3D_water")
+
+[node name="GrappleAnchor" type="Node3D" parent="." groups=["grapple_anchor"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 6, 2)
+
+[node name="Mesh" type="MeshInstance3D" parent="GrappleAnchor"]
+mesh = SubResource("SphereMesh_anchor")
+surface_material_override/0 = SubResource("Material_anchor")
+
+[node name="TunnelRoof" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 3.5, -4)
+
+[node name="Mesh" type="MeshInstance3D" parent="TunnelRoof"]
+mesh = SubResource("BoxMesh_tunnel")
+
+[node name="Collision" type="CollisionShape3D" parent="TunnelRoof"]
+shape = SubResource("BoxShape3D_tunnel")
+
+[node name="Axolotl" type="CharacterBody3D" parent="." groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+script = ExtResource("1_body")
+
+[node name="Mesh" type="MeshInstance3D" parent="Axolotl"]
+mesh = SubResource("CapsuleMesh_axolotl")
+surface_material_override/0 = SubResource("Material_axolotl")
+
+[node name="Collision" type="CollisionShape3D" parent="Axolotl"]
+shape = SubResource("CapsuleShape3D_axolotl")
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 8)
+process_physics_priority = 10
+script = ExtResource("3_camera")
+target_path = NodePath("../Axolotl")

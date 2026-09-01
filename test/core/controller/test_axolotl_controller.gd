@@ -24,6 +24,38 @@ func _intent(direction: Vector3 = Vector3.ZERO,
 	return PlayerIntent.new(direction, verbs)
 
 
+## Stands in for the live scene so AC-4's discovery order — group query, range
+## filter, then line of sight — can be asserted without a scene tree or a
+## physics server. It also COUNTS rays, which is how the test proves discovery
+## is not a proximity scan: an out-of-range anchor must never cost a ray.
+class FakeAnchorSource extends AnchorSource:
+	var anchors: Array[GrappleAnchor] = []
+	var group_queried: String = ""
+	var blocked_ids: PackedStringArray = []
+	var rays_cast: int = 0
+
+	func query_anchors_in_group(group: String) -> Array[GrappleAnchor]:
+		group_queried = group
+		var out: Array[GrappleAnchor] = []
+		# Only anchors in the queried group are visible — membership is the tag.
+		out.assign(anchors)
+		return out
+
+	func has_line_of_sight(_from: Vector3, to: Vector3) -> bool:
+		rays_cast += 1
+		for anchor: GrappleAnchor in anchors:
+			if anchor.position.is_equal_approx(to) \
+					and blocked_ids.find(anchor.id) != -1:
+				return false
+		return true
+
+
+func _source(anchors: Array[GrappleAnchor]) -> FakeAnchorSource:
+	var source := FakeAnchorSource.new()
+	source.anchors = anchors
+	return source
+
+
 # --- AC-1: same-frame grammar switch and momentum retention ----------------
 
 func test_req_001_crossing_into_water_switches_grammar_in_the_same_step() -> void:
@@ -147,7 +179,343 @@ func test_req_001_water_grammar_supports_full_3d_directional_movement() -> void:
 	).is_true()
 
 
-# --- AC-4: tongue grapple range, tested inclusively ------------------------
+func test_req_001_swimming_moves_at_the_tuned_speed_in_any_of_three_axes() -> void:
+	var tuning := _tuning()
+	var speed := tuning.get_number("controller.swim.base_speed_m_per_s")
+	var controller := AxolotlController.new(tuning)
+
+	for direction: Vector3 in [Vector3.RIGHT, Vector3.UP, Vector3.FORWARD,
+			Vector3(1.0, 1.0, 1.0)]:
+		controller.physics_step(0.016, true, _intent(direction))
+		assert_float(controller.get_velocity().length()).override_failure_message(
+			"REQ-001 AC-2: full 3D steering must reach tuned swim speed on %s"
+			% str(direction)
+		).is_equal_approx(speed, 0.0001)
+
+
+# --- AC-2: dive ------------------------------------------------------------
+
+func test_req_001_dive_descends_at_the_tuned_speed_from_a_standstill() -> void:
+	var tuning := _tuning()
+	var dive_speed := tuning.get_number("controller.dive.speed_m_per_s")
+	var controller := AxolotlController.new(tuning)
+
+	controller.physics_step(0.016, true, _intent(Vector3.ZERO,
+		[MovementGrammar.Verb.DIVE]))
+
+	assert_float(controller.get_velocity().y).override_failure_message(
+		"REQ-001 AC-2: a dive is a deliberate descent, so it must work with no steering"
+	).is_equal_approx(-dive_speed, 0.0001)
+
+
+func test_req_001_dive_overrides_upward_steering() -> void:
+	# A dive held against "up" descends: it SETS the vertical component rather
+	# than adding to it, or the verb would cancel itself out.
+	var controller := _controller()
+	controller.physics_step(0.016, true,
+		_intent(Vector3.UP, [MovementGrammar.Verb.DIVE]))
+
+	assert_bool(controller.get_velocity().y < 0.0).override_failure_message(
+		"REQ-001 AC-2: DIVE must override upward steering, not blend with it"
+	).is_true()
+
+
+func test_req_001_dive_announces_itself_and_does_nothing_on_land() -> void:
+	var controller := _controller()
+	var dives: Array[bool] = []
+	controller.dived.connect(func() -> void: dives.append(true))
+
+	controller.physics_step(0.016, true, _intent(Vector3.ZERO,
+		[MovementGrammar.Verb.DIVE]))
+	assert_int(dives.size()).is_equal(1)
+
+	# DIVE is not a land verb; a land step must not descend or re-announce.
+	controller.set_velocity(Vector3.ZERO)
+	controller.physics_step(0.016, false, _intent(Vector3.ZERO,
+		[MovementGrammar.Verb.DIVE]))
+	assert_int(dives.size()).override_failure_message(
+		"REQ-001 AC-2: DIVE belongs to the water grammar only"
+	).is_equal(1)
+	assert_float(controller.get_velocity().y).is_equal_approx(0.0, 0.0001)
+
+
+# --- AC-2: bubble boost, governed by a cooldown ----------------------------
+
+func test_req_001_bubble_boost_multiplies_swim_speed_while_active() -> void:
+	var tuning := _tuning()
+	var multiplier := tuning.get_number("controller.bubble_boost.speed_multiplier")
+	var controller := AxolotlController.new(tuning)
+
+	controller.physics_step(0.016, true, _intent(Vector3.RIGHT))
+	var unboosted := controller.get_velocity().length()
+
+	controller.physics_step(0.016, true, _intent(Vector3.RIGHT,
+		[MovementGrammar.Verb.BUBBLE_BOOST]))
+
+	assert_bool(controller.get_bubble_boost().is_active()).is_true()
+	assert_float(controller.get_velocity().length()).is_equal_approx(
+		unboosted * multiplier, 0.001)
+
+
+func test_req_001_bubble_boost_is_governed_by_a_cooldown() -> void:
+	var tuning := _tuning()
+	var duration := tuning.get_number("controller.bubble_boost.duration_s")
+	var cooldown := tuning.get_number("controller.bubble_boost.cooldown_s")
+	var boost := BubbleBoost.new(tuning)
+
+	assert_bool(boost.try_activate()).is_true()
+	# A second activation while boosting is refused, not queued.
+	assert_bool(boost.try_activate()).is_false()
+
+	# The instant the active window ends, the boost is COOLING, not READY.
+	boost.tick(duration)
+	assert_bool(boost.is_cooling()).override_failure_message(
+		"REQ-001 AC-2: the boost must enter a cooldown when it expires"
+	).is_true()
+	assert_bool(boost.try_activate()).override_failure_message(
+		"REQ-001 AC-2: an expired boost must not be immediately re-usable"
+	).is_false()
+
+	# Still cooling one tick short of the tuned cooldown.
+	boost.tick(cooldown - 0.01)
+	assert_bool(boost.is_ready()).is_false()
+
+	boost.tick(0.01)
+	assert_bool(boost.is_ready()).override_failure_message(
+		"REQ-001 AC-2: the boost must become usable again after the tuned cooldown"
+	).is_true()
+	assert_bool(boost.try_activate()).is_true()
+
+
+func test_req_001_bubble_boost_cooldown_cannot_be_tuned_away() -> void:
+	# "Governed by a cooldown" is only true if the cooldown cannot be zeroed, so
+	# the permitted range itself has to forbid it.
+	var bounds := _tuning().get_permitted_range("controller.bubble_boost.cooldown_s")
+	assert_int(bounds.size()).is_equal(2)
+	assert_bool(bounds[0] > 0.0).override_failure_message(
+		"REQ-001 AC-2: a zero-cooldown boost would be ungoverned; the tuned "
+		+ "minimum must be above zero"
+	).is_true()
+
+
+func test_req_001_long_frame_does_not_shorten_the_boost_cooldown() -> void:
+	# Overshoot must carry into the cooldown, or a low frame rate would hand the
+	# player a shorter cooldown than the tuned number.
+	var tuning := _tuning()
+	var duration := tuning.get_number("controller.bubble_boost.duration_s")
+	var cooldown := tuning.get_number("controller.bubble_boost.cooldown_s")
+	var boost := BubbleBoost.new(tuning)
+
+	boost.try_activate()
+	boost.tick(duration + cooldown * 0.5)  # one very long frame
+	assert_bool(boost.is_cooling()).is_true()
+	assert_float(boost.get_remaining()).is_equal_approx(cooldown * 0.5, 0.001)
+
+
+func test_req_001_bubble_boost_is_refused_on_land() -> void:
+	var controller := _controller()
+	controller.physics_step(0.016, false, _intent(Vector3.RIGHT,
+		[MovementGrammar.Verb.BUBBLE_BOOST]))
+
+	assert_bool(controller.get_bubble_boost().is_active()).override_failure_message(
+		"REQ-001 AC-2: BUBBLE_BOOST belongs to the water grammar only"
+	).is_false()
+
+
+func test_req_001_leaving_water_interrupts_an_active_boost() -> void:
+	var controller := _controller()
+	controller.physics_step(0.016, true, _intent(Vector3.RIGHT,
+		[MovementGrammar.Verb.BUBBLE_BOOST]))
+	assert_bool(controller.get_bubble_boost().is_active()).is_true()
+
+	controller.physics_step(0.016, false, _intent(Vector3.RIGHT))
+
+	assert_bool(controller.get_bubble_boost().is_active()).override_failure_message(
+		"a boost surviving onto land would grant a land speed burst the land "
+		+ "grammar never offers"
+	).is_false()
+
+
+func test_req_001_capability_loss_shortens_the_boost_but_not_its_cooldown() -> void:
+	var tuning := _tuning()
+	var scale := tuning.get_number("capability.gill_loss.boost_duration_multiplier")
+	var full := tuning.get_number("controller.bubble_boost.duration_s")
+	var boost := BubbleBoost.new(tuning)
+
+	boost.set_duration_scale(scale)
+	assert_float(boost.duration_seconds()).is_equal_approx(full * scale, 0.001)
+	assert_float(boost.cooldown_seconds()).override_failure_message(
+		"losing a gill shortens the payoff, not the penalty"
+	).is_equal_approx(tuning.get_number("controller.bubble_boost.cooldown_s"), 0.001)
+
+
+# --- AC-3: waddle, hop, and climbing on tagged surfaces --------------------
+
+func test_req_001_waddle_moves_at_the_tuned_land_speed_in_the_plane() -> void:
+	var tuning := _tuning()
+	var waddle := tuning.get_number("controller.waddle.base_speed_m_per_s")
+	var controller := AxolotlController.new(tuning)
+
+	controller.physics_step(0.016, false, _intent(Vector3(1.0, 0.0, 1.0)))
+
+	var velocity := controller.get_velocity()
+	assert_float(velocity.y).is_equal_approx(0.0, 0.0001)
+	assert_float(Vector2(velocity.x, velocity.z).length()).is_equal_approx(
+		waddle, 0.0001)
+
+
+func test_req_001_the_two_grammars_move_at_different_speeds() -> void:
+	# Pillar 2: if water and land moved at the same speed, "mechanically
+	# distinct" would be an animation claim rather than a mechanical one.
+	var tuning := _tuning()
+	assert_bool(tuning.get_number("controller.swim.base_speed_m_per_s")
+		> tuning.get_number("controller.waddle.base_speed_m_per_s")
+	).override_failure_message(
+		"REQ-001: water is the fast grammar; the gap is what makes them distinct"
+	).is_true()
+
+
+func test_req_001_hop_imparts_the_tuned_upward_impulse_when_grounded() -> void:
+	var tuning := _tuning()
+	var impulse := tuning.get_number("controller.hop.impulse_m_per_s")
+	var controller := AxolotlController.new(tuning)
+
+	controller.physics_step(0.016, false, _intent())
+	controller.set_grounded(true)
+	controller.physics_step(0.016, false, _intent(Vector3.ZERO,
+		[MovementGrammar.Verb.HOP]))
+
+	assert_float(controller.get_velocity().y).is_equal_approx(impulse, 0.0001)
+
+
+func test_req_001_hop_cannot_be_chained_in_mid_air() -> void:
+	var controller := _controller()
+	controller.physics_step(0.016, false, _intent())
+	controller.set_grounded(true)
+
+	var hops: Array[bool] = []
+	controller.hopped.connect(func() -> void: hops.append(true))
+
+	controller.physics_step(0.016, false, _intent(Vector3.ZERO,
+		[MovementGrammar.Verb.HOP]))
+	# Still airborne — the second hop must be refused.
+	controller.physics_step(0.016, false, _intent(Vector3.ZERO,
+		[MovementGrammar.Verb.HOP]))
+
+	assert_int(hops.size()).override_failure_message(
+		"REQ-001 AC-3: a hop is grounded-only, or it becomes a free ascent"
+	).is_equal(1)
+
+
+func test_req_001_waddling_does_not_erase_hop_momentum() -> void:
+	var controller := _controller()
+	controller.physics_step(0.016, false, _intent())
+	controller.set_grounded(true)
+	controller.physics_step(0.016, false, _intent(Vector3.ZERO,
+		[MovementGrammar.Verb.HOP]))
+	var rise := controller.get_velocity().y
+
+	# Steering mid-hop must move you horizontally without cancelling the hop.
+	controller.physics_step(0.016, false, _intent(Vector3.RIGHT))
+
+	assert_float(controller.get_velocity().y).is_equal_approx(rise, 0.0001)
+	assert_bool(controller.get_velocity().x > 0.0).is_true()
+
+
+func test_req_001_climb_attaches_to_a_surface_on_the_climbable_physics_layer() -> void:
+	var controller := _controller()
+	controller.physics_step(0.016, false, _intent())
+
+	assert_bool(controller.try_climb(ClimbSurface.CLIMBABLE_LAYER_MASK,
+		PackedStringArray())).is_true()
+	assert_bool(controller.is_climbing()).is_true()
+
+
+func test_req_001_climb_attaches_to_a_surface_in_the_climbable_group() -> void:
+	var controller := _controller()
+	controller.physics_step(0.016, false, _intent())
+
+	assert_bool(controller.try_climb(0,
+		PackedStringArray([ClimbSurface.CLIMBABLE_GROUP]))).is_true()
+	assert_bool(controller.is_climbing()).is_true()
+
+
+func test_req_001_climb_is_refused_on_an_untagged_surface() -> void:
+	var controller := _controller()
+	controller.physics_step(0.016, false, _intent())
+
+	# Some other layer, some other group: not climbable.
+	assert_bool(controller.try_climb(1 << 7,
+		PackedStringArray(["scenery", "wet"]))).is_false()
+	assert_bool(controller.is_climbing()).is_false()
+
+
+func test_req_001_climbable_is_a_tag_never_a_name_check() -> void:
+	# A world author who names a wall "climbable_rock_02" but forgets the layer
+	# and the group must get a refusal. The moment a name substring is enough,
+	# the Level Contract depends on a naming convention no schema can validate.
+	assert_bool(ClimbSurface.is_climbable(0,
+		PackedStringArray(["climbable_rock_02", "Climbable", "CLIMBABLE"]))
+	).override_failure_message(
+		"REQ-001 AC-3: the climbable tag is a physics layer or an exact group, "
+		+ "never a node name or a substring of one"
+	).is_false()
+
+	# And the exact group still works, so the check is not simply always-false.
+	assert_bool(ClimbSurface.is_climbable(0,
+		PackedStringArray([ClimbSurface.CLIMBABLE_GROUP]))).is_true()
+
+
+func test_req_001_climbing_restores_vertical_steering_on_land() -> void:
+	var tuning := _tuning()
+	var climb_speed := tuning.get_number("controller.climb.speed_m_per_s")
+	var controller := AxolotlController.new(tuning)
+
+	controller.physics_step(0.016, false, _intent())
+	controller.try_climb(ClimbSurface.CLIMBABLE_LAYER_MASK, PackedStringArray())
+
+	# The same pure-vertical intent that produces no motion on the ground.
+	controller.physics_step(0.016, false, _intent(Vector3.UP))
+
+	assert_float(controller.get_velocity().y).override_failure_message(
+		"REQ-001 AC-3: the wall IS the vertical route; climbing must restore it"
+	).is_equal_approx(climb_speed, 0.0001)
+
+
+func test_req_001_a_climber_clings_rather_than_sliding() -> void:
+	var controller := _controller()
+	controller.physics_step(0.016, false, _intent())
+	controller.try_climb(0, PackedStringArray([ClimbSurface.CLIMBABLE_GROUP]))
+	controller.physics_step(0.016, false, _intent(Vector3.UP))
+
+	controller.physics_step(0.016, false, _intent())  # let go of the stick
+
+	assert_float(controller.get_velocity().length()).is_equal_approx(0.0, 0.0001)
+
+
+func test_req_001_entering_water_ends_a_climb() -> void:
+	var controller := _controller()
+	controller.physics_step(0.016, false, _intent())
+	controller.try_climb(0, PackedStringArray([ClimbSurface.CLIMBABLE_GROUP]))
+
+	var ended: Array[bool] = []
+	controller.climb_ended.connect(func() -> void: ended.append(true))
+	controller.physics_step(0.016, true, _intent())
+
+	assert_bool(controller.is_climbing()).override_failure_message(
+		"a climb surviving into water would let the player scale a wall while swimming"
+	).is_false()
+	assert_int(ended.size()).is_equal(1)
+
+
+func test_req_001_climb_is_refused_in_water() -> void:
+	var controller := _controller()
+	controller.physics_step(0.016, true, _intent())
+	assert_bool(controller.try_climb(ClimbSurface.CLIMBABLE_LAYER_MASK,
+		PackedStringArray())).is_false()
+
+
+# --- AC-4: tongue grapple range, discovery, and the pull -------------------
 
 func test_req_001_grapple_attaches_at_exactly_max_range() -> void:
 	var tuning := _tuning()
@@ -158,6 +526,11 @@ func test_req_001_grapple_attaches_at_exactly_max_range() -> void:
 		"REQ-001 AC-4: 'at or within' means an anchor exactly at max range attaches"
 	).is_true()
 
+	var source := _source([GrappleAnchor.new("edge", Vector3(reach, 0.0, 0.0))])
+	var found := grapple.find_anchor(Vector3.ZERO, source)
+	assert_object(found).is_not_null()
+	assert_str(found.id).is_equal("edge")
+
 
 func test_req_001_grapple_rejects_an_anchor_beyond_max_range() -> void:
 	var tuning := _tuning()
@@ -165,7 +538,24 @@ func test_req_001_grapple_rejects_an_anchor_beyond_max_range() -> void:
 	var grapple := TongueGrapple.new(tuning)
 
 	assert_bool(grapple.is_in_range(reach + 0.01)).is_false()
-	assert_str(grapple.resolve_anchor({"far": reach + 5.0})).is_empty()
+
+	var source := _source([GrappleAnchor.new("far", Vector3(reach + 5.0, 0.0, 0.0))])
+	assert_object(grapple.find_anchor(Vector3.ZERO, source)).is_null()
+	assert_int(source.rays_cast).override_failure_message(
+		"REQ-001 AC-4: discovery filters by range BEFORE casting; an unreachable "
+		+ "anchor must never cost a ray"
+	).is_equal(0)
+
+
+func test_req_001_grapple_discovery_queries_the_anchor_group() -> void:
+	# Group membership is the tag: discovery asks the group index, it does not
+	# scan the scene and it does not inspect node names.
+	var grapple := TongueGrapple.new(_tuning())
+	var source := _source([GrappleAnchor.new("ledge", Vector3(4.0, 0.0, 0.0))])
+
+	grapple.find_anchor(Vector3.ZERO, source)
+
+	assert_str(source.group_queried).is_equal(TongueGrapple.ANCHOR_GROUP)
 
 
 func test_req_001_grapple_picks_the_nearest_in_range_anchor() -> void:
@@ -173,17 +563,47 @@ func test_req_001_grapple_picks_the_nearest_in_range_anchor() -> void:
 	var reach := tuning.get_number("controller.grapple.max_range_m")
 	var grapple := TongueGrapple.new(tuning)
 
-	var chosen := grapple.resolve_anchor({
-		"near": 3.0, "mid": 7.0, "out_of_reach": reach + 10.0,
-	})
-	assert_str(chosen).is_equal("near")
+	var source := _source([
+		GrappleAnchor.new("mid", Vector3(7.0, 0.0, 0.0)),
+		GrappleAnchor.new("near", Vector3(3.0, 0.0, 0.0)),
+		GrappleAnchor.new("out_of_reach", Vector3(reach + 10.0, 0.0, 0.0)),
+	])
+
+	var found := grapple.find_anchor(Vector3.ZERO, source)
+	assert_object(found).is_not_null()
+	assert_str(found.id).is_equal("near")
+
+
+func test_req_001_grapple_will_not_attach_through_an_obstruction() -> void:
+	var grapple := TongueGrapple.new(_tuning())
+	var source := _source([
+		GrappleAnchor.new("behind_wall", Vector3(3.0, 0.0, 0.0)),
+		GrappleAnchor.new("visible", Vector3(6.0, 0.0, 0.0)),
+	])
+	source.blocked_ids = PackedStringArray(["behind_wall"])
+
+	var found := grapple.find_anchor(Vector3.ZERO, source)
+
+	assert_object(found).is_not_null()
+	assert_str(found.id).override_failure_message(
+		"REQ-001 AC-4: a nearer anchor with no line of sight must be skipped, "
+		+ "not attached through the wall"
+	).is_equal("visible")
+
+
+func test_req_001_grapple_with_no_anchor_source_misses_rather_than_guessing() -> void:
+	var controller := _controller()
+	assert_bool(controller.try_grapple()).is_false()
+	assert_bool(controller.get_grapple().is_attached()).is_false()
 
 
 func test_req_001_a_missed_grapple_does_not_leave_the_controller_attached() -> void:
 	var controller := _controller()
 	var reach := controller.get_grapple().max_range()
+	controller.set_anchor_source(_source([
+		GrappleAnchor.new("far", Vector3(reach + 1.0, 0.0, 0.0))]))
 
-	assert_bool(controller.try_grapple({"far": reach + 1.0})).is_false()
+	assert_bool(controller.try_grapple()).is_false()
 	assert_bool(controller.get_grapple().is_attached()).override_failure_message(
 		"a missed grapple must not leave the controller believing it is attached"
 	).is_false()
@@ -194,9 +614,87 @@ func test_req_001_a_hit_grapple_attaches_and_announces_the_anchor() -> void:
 	var announced: Array[String] = []
 	controller.grapple_attached.connect(func(id: String) -> void: announced.append(id))
 
-	assert_bool(controller.try_grapple({"ledge": 4.0})).is_true()
+	controller.set_anchor_source(_source([
+		GrappleAnchor.new("ledge", Vector3(4.0, 0.0, 0.0))]))
+
+	assert_bool(controller.try_grapple()).is_true()
 	assert_str(controller.get_grapple().get_attached_anchor()).is_equal("ledge")
 	assert_array(announced).contains(["ledge"])
+
+
+func test_req_001_an_attached_grapple_pulls_toward_the_anchor() -> void:
+	var tuning := _tuning()
+	var pull_speed := tuning.get_number("controller.grapple.pull_speed_m_per_s")
+	var controller := AxolotlController.new(tuning)
+
+	controller.physics_step(0.016, false, _intent())
+	controller.sync_body_position(Vector3.ZERO)
+	controller.set_anchor_source(_source([
+		GrappleAnchor.new("ledge", Vector3(0.0, 8.0, 0.0))]))
+	assert_bool(controller.try_grapple()).is_true()
+
+	controller.physics_step(0.016, false, _intent())
+
+	var velocity := controller.get_velocity()
+	assert_float(velocity.length()).override_failure_message(
+		"REQ-001 AC-4: attaching is not enough; the grapple must PULL the axolotl"
+	).is_equal_approx(pull_speed, 0.0001)
+	assert_float(velocity.normalized().dot(Vector3.UP)).is_equal_approx(1.0, 0.0001)
+
+
+func test_req_001_the_pull_overrides_steering() -> void:
+	# The tongue is taut: a player who fires it commits to the arc.
+	var controller := _controller()
+	controller.physics_step(0.016, false, _intent())
+	controller.sync_body_position(Vector3.ZERO)
+	controller.set_anchor_source(_source([
+		GrappleAnchor.new("ledge", Vector3(0.0, 8.0, 0.0))]))
+	controller.try_grapple()
+
+	controller.physics_step(0.016, false, _intent(Vector3.RIGHT))
+
+	assert_float(controller.get_velocity().x).is_equal_approx(0.0, 0.0001)
+	assert_bool(controller.get_velocity().y > 0.0).is_true()
+
+
+func test_req_001_arriving_at_the_anchor_detaches_the_grapple() -> void:
+	var tuning := _tuning()
+	var radius := tuning.get_number("controller.grapple.arrival_radius_m")
+	var controller := AxolotlController.new(tuning)
+
+	var detached: Array[bool] = []
+	controller.grapple_detached.connect(func(_id: String, arrived: bool) -> void:
+		detached.append(arrived))
+
+	controller.physics_step(0.016, false, _intent())
+	controller.sync_body_position(Vector3.ZERO)
+	controller.set_anchor_source(_source([
+		GrappleAnchor.new("ledge", Vector3(0.0, 8.0, 0.0))]))
+	controller.try_grapple()
+
+	# The wrapper has carried the body to the anchor.
+	controller.sync_body_position(Vector3(0.0, 8.0 - radius * 0.5, 0.0))
+	controller.physics_step(0.016, false, _intent())
+
+	assert_bool(controller.get_grapple().is_attached()).override_failure_message(
+		"without an arrival radius the pull oscillates around the anchor forever"
+	).is_false()
+	assert_array(detached).contains([true])
+
+
+func test_req_001_the_grapple_verb_fires_the_tongue_from_intent() -> void:
+	var controller := _controller()
+	controller.physics_step(0.016, true, _intent())
+	controller.sync_body_position(Vector3.ZERO)
+	controller.set_anchor_source(_source([
+		GrappleAnchor.new("ledge", Vector3(5.0, 0.0, 0.0))]))
+
+	# GRAPPLE is universal — it works in the water grammar too.
+	assert_bool(controller.supports(MovementGrammar.Verb.GRAPPLE)).is_true()
+	controller.physics_step(0.016, true, _intent(Vector3.ZERO,
+		[MovementGrammar.Verb.GRAPPLE]))
+
+	assert_str(controller.get_grapple().get_attached_anchor()).is_equal("ledge")
 
 
 # --- AC-5: the dash is usable in both grammars, recharged only in water ----
@@ -341,6 +839,7 @@ func test_req_001_controller_declares_no_balance_constants() -> void:
 	var sources: PackedStringArray = [
 		"res://core/controller/axolotl_controller.gd",
 		"res://core/controller/water_dash.gd",
+		"res://core/controller/bubble_boost.gd",
 		"res://core/controller/tongue_grapple.gd",
 	]
 	for path: String in sources:
@@ -348,8 +847,37 @@ func test_req_001_controller_declares_no_balance_constants() -> void:
 		var text := handle.get_as_text()
 		handle.close()
 		# Every tuning value is read by key through TuningData, never inlined.
-		assert_bool(text.contains("_tuning.get_number") or text.contains("_tuning.get_count")
-			or path.ends_with("axolotl_controller.gd")).is_true()
+		assert_bool(text.contains("_tuning.get_number")
+			or text.contains("_tuning.get_count")
+		).override_failure_message(
+			"REQ-025: '%s' must read its numbers from the tuning surface" % path
+		).is_true()
+
+
+func test_req_001_every_controller_tuning_key_exists_in_the_surface() -> void:
+	# A key constant that no longer matches the tuning file would fail at runtime
+	# on the frame the verb is first used, which is the worst possible time.
+	var data := _tuning()
+	var keys: PackedStringArray = [
+		AxolotlController.MOMENTUM_RETENTION_KEY,
+		AxolotlController.SWIM_SPEED_KEY,
+		AxolotlController.WADDLE_SPEED_KEY,
+		AxolotlController.DIVE_SPEED_KEY,
+		AxolotlController.HOP_IMPULSE_KEY,
+		AxolotlController.CLIMB_SPEED_KEY,
+		WaterDash.MAX_CHARGES_KEY,
+		WaterDash.RECHARGE_SECONDS_KEY,
+		BubbleBoost.DURATION_KEY,
+		BubbleBoost.COOLDOWN_KEY,
+		BubbleBoost.SPEED_MULTIPLIER_KEY,
+		TongueGrapple.MAX_RANGE_KEY,
+		TongueGrapple.PULL_SPEED_KEY,
+		TongueGrapple.ARRIVAL_RADIUS_KEY,
+	]
+	for key: String in keys:
+		assert_bool(data.has_key(key)).override_failure_message(
+			"REQ-001: the controller reads '%s', which the tuning surface lacks" % key
+		).is_true()
 
 
 # --- REQ-030: no multiplayer surface in this node --------------------------
@@ -364,6 +892,11 @@ func test_req_030_controller_node_uses_no_multiplayer_api() -> void:
 		"res://core/controller/player_intent.gd",
 		"res://core/controller/capability_modifiers.gd",
 		"res://core/controller/water_dash.gd",
+		"res://core/controller/bubble_boost.gd",
+		"res://core/controller/climb_surface.gd",
+		"res://core/controller/grapple_anchor.gd",
+		"res://core/controller/anchor_source.gd",
+		"res://core/controller/scene_anchor_source.gd",
 		"res://core/controller/tongue_grapple.gd",
 		"res://core/controller/axolotl_controller.gd",
 	]

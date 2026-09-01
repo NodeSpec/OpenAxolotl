@@ -12,7 +12,7 @@ config_version=5
 config/name="OpenAxolotl"
 config/description="A colorful 3D action-platformer where an axolotl regenerates itself and its world."
 config/features=PackedStringArray("4.3", "GL Compatibility")
-run/main_scene=""
+run/main_scene="res://dev/greybox.tscn"
 
 [dotnet]
 

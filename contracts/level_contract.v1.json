@@ -1,0 +1,226 @@
+{
+  "contractVersion": "1.0",
+  "title": "OpenAxolotl Level Contract v1",
+  "description": "What any world module must provide to be a valid OpenAxolotl world. This file is the MACHINE-READABLE half of the contract; docs/level-contract.md is the prose half and explains the reasoning. Where the two disagree, this file wins.",
+
+  "sourceOfTruth": "The compliance checker loads this file and hardcodes no conformance rule. Adding a rule of an EXISTING ruleKind changes checker behaviour with no code change to the checker. Adding a NEW ruleKind is the one case that needs checker work, which is why the kinds below are few and deliberately general rather than one kind per element.",
+
+  "authoringPath": "Code and Godot scenes only. There is no editor GUI authoring path, in any phase — which is what keeps this surface narrow enough to check, and what lets a human and an AI coding agent build a world the same way.",
+
+  "ruleKinds": {
+    "manifest_field_present": {
+      "arguments": ["field"],
+      "description": "The dotted field path exists in world.json and is not null."
+    },
+    "manifest_field_type": {
+      "arguments": ["field", "type"],
+      "description": "The field is of the named JSON type (string, number, integer, boolean, array, object)."
+    },
+    "manifest_field_matches": {
+      "arguments": ["field", "pattern"],
+      "description": "The string field matches the given regular expression, anchored."
+    },
+    "manifest_field_in_set": {
+      "arguments": ["field", "values"],
+      "description": "The field's value is one of a closed set. A value outside it is a violation, never a warning."
+    },
+    "manifest_array_min_length": {
+      "arguments": ["field", "min"],
+      "description": "The array field has at least min entries."
+    },
+    "manifest_keys_subset_of": {
+      "arguments": ["field", "allowedFrom"],
+      "description": "Every key of the object field appears in the list named by allowedFrom, which is a path into another contract file. Used so an allowlist is referenced rather than duplicated."
+    },
+    "scene_group_count": {
+      "arguments": ["group", "min", "max"],
+      "description": "The world scene contains between min and max nodes belonging to the named Godot group. Omit max for unbounded. Group membership IS the tag: no name matching, no type sniffing, because a contributor renaming a node must not silently break conformance."
+    },
+    "file_present": {
+      "arguments": ["path"],
+      "description": "The path exists inside the module root."
+    },
+    "file_absent": {
+      "arguments": ["path"],
+      "description": "The path does NOT exist inside the module root."
+    }
+  },
+
+  "moduleLayout": {
+    "root": "worlds/<world_id>/",
+    "worldIdPattern": "^[a-z][a-z0-9_]{2,31}$",
+    "worldIdRationale": "Lowercase snake_case, 3-32 characters. It is a directory name, a save-key namespace and a portal id at once, so it must be filesystem-safe on every PC target and stable enough to key persisted data.",
+    "files": {
+      "manifest": {
+        "name": "world.json",
+        "required": true,
+        "description": "The declaration this contract validates."
+      },
+      "scene": {
+        "name": "world.tscn",
+        "required": true,
+        "description": "The world's root scene. Instanced by the hub; never auto-loaded."
+      },
+      "scripts": {
+        "pattern": "^[a-z][a-z0-9_]*\\.gd$",
+        "required": false,
+        "description": "Statically typed GDScript only. Checked against the Sanctioned World API Surface by the static-analysis gate."
+      },
+      "assets": {
+        "name": "assets/",
+        "required": false,
+        "description": "Per-world art and audio, each with the provenance record the Asset Contract requires."
+      }
+    },
+    "rules": [
+      { "kind": "file_present", "path": "world.json" },
+      { "kind": "file_present", "path": "world.tscn" },
+      { "kind": "file_absent", "path": "project.godot" },
+      { "kind": "file_absent", "path": "export_presets.cfg" }
+    ],
+    "forbiddenFileRationale": "A world module carrying its own project.godot or export preset is trying to be a game rather than a module, and would override project-wide policy — the typed-GDScript settings and the no-networking declarations REQ-030 depends on."
+  },
+
+  "required": {
+    "contractVersion": {
+      "manifestField": "contractVersion",
+      "description": "The contract version this world targets. Declared by every world so a core update can tell which worlds it may break, rather than discovering it at load.",
+      "rules": [
+        { "kind": "manifest_field_present", "field": "contractVersion" },
+        { "kind": "manifest_field_in_set", "field": "contractVersion", "values": ["1.0"] }
+      ]
+    },
+    "worldId": {
+      "manifestField": "worldId",
+      "description": "Stable identity. Must equal the module directory name, so a world cannot be renamed on disk without renaming its save namespace.",
+      "rules": [
+        { "kind": "manifest_field_present", "field": "worldId" },
+        { "kind": "manifest_field_matches", "field": "worldId", "pattern": "^[a-z][a-z0-9_]{2,31}$" }
+      ]
+    },
+    "spawnPoint": {
+      "manifestField": null,
+      "description": "Where the player begins. Declared in the SCENE rather than the manifest: it is a transform, and a transform in JSON would drift from the geometry it is meant to sit on.",
+      "rules": [
+        { "kind": "scene_group_count", "group": "spawn_point", "min": 1, "max": 1 }
+      ],
+      "rationale": "Exactly one. Two spawn points is not a richer world, it is an ambiguous one, and the hub would have to pick arbitrarily."
+    },
+    "checkpoints": {
+      "manifestField": null,
+      "description": "Checkpoint volumes. REQUIRED rather than optional because they anchor TWO systems at once: life refill and capability-state restore. A world without one has no defined answer to 'what happens when the player runs out of lives'.",
+      "rules": [
+        { "kind": "scene_group_count", "group": "checkpoint", "min": 1 }
+      ],
+      "rationale": "At least one. The spacing rule — replay time from any checkpoint to the next within progression.max_retry_seconds — is a separate check that needs a traversal model, and belongs to the world's own test rather than to structural conformance."
+    },
+    "finishCondition": {
+      "manifestField": "finishCondition",
+      "description": "How the world is completed and the player returned to the Open Lagoon hub. Declarative: a world states WHAT completes it, never scripts the return itself.",
+      "rules": [
+        { "kind": "manifest_field_present", "field": "finishCondition" },
+        { "kind": "manifest_field_present", "field": "finishCondition.kind" },
+        { "kind": "manifest_field_in_set", "field": "finishCondition.kind", "values": ["reach_volume", "defeat_boss", "restore_all_regions", "collect_all"] }
+      ],
+      "kinds": {
+        "reach_volume": "The player enters a node in group finish_volume.",
+        "defeat_boss": "The world's declared boss is defeated. Requires the optional boss element.",
+        "restore_all_regions": "Every declared restorable region reaches restored. Requires restorableRegions.",
+        "collect_all": "Every declared collectible is collected. Requires collectibles."
+      },
+      "rationale": "A closed set. An open-ended 'custom' kind would put completion logic back into world script, which is exactly what makes a world unverifiable — and it is the one thing the hub must be able to trust."
+    },
+    "controllerCompatibility": {
+      "manifestField": "controllerCompatibility",
+      "description": "The Axolotl Controller Interface version the world was built against. A DECLARATION, not a call — worlds never invoke the controller (see the Sanctioned World API Surface).",
+      "rules": [
+        { "kind": "manifest_field_present", "field": "controllerCompatibility" },
+        { "kind": "manifest_field_in_set", "field": "controllerCompatibility", "values": ["1.0"] }
+      ]
+    },
+    "saveIntegration": {
+      "manifestField": "saveIntegration",
+      "description": "The save keys this world reads and writes. Declared up front so the save system can namespace them and so a fork's divergent keys are visible rather than discovered on a corrupt load.",
+      "rules": [
+        { "kind": "manifest_field_present", "field": "saveIntegration" },
+        { "kind": "manifest_field_present", "field": "saveIntegration.keys" },
+        { "kind": "manifest_field_type", "field": "saveIntegration.keys", "type": "array" }
+      ],
+      "keyNamespaceRule": "Every key must begin with the world's own worldId followed by a dot. Two worlds cannot collide, and a removed world's data is identifiable.",
+      "rationale": "An empty array is valid and means the world persists nothing. Declaring nothing is different from omitting the declaration: the first is a decision, the second is an oversight."
+    }
+  },
+
+  "optional": {
+    "collectibles": {
+      "absentDefault": "none — the world declares no collectibles and the collectibles system is not engaged for it",
+      "manifestField": "collectibles"
+    },
+    "enemies": {
+      "absentDefault": "none — no Drift Fleet units spawn",
+      "manifestField": "enemies"
+    },
+    "boss": {
+      "absentDefault": "none — the world has no Flagship encounter and remains fully completable",
+      "manifestField": "boss"
+    },
+    "customAbility": {
+      "absentDefault": "none — only the installed Gill Mods are available",
+      "manifestField": "customAbility",
+      "description": "A Gill Mod declaration the world ships itself, registered through the Gill Mod Registration Interface. Travels the same validation a shipped mod does."
+    },
+    "secretAreas": {
+      "absentDefault": "none",
+      "manifestField": "secretAreas"
+    },
+    "npcs": {
+      "absentDefault": "none",
+      "manifestField": "npcs"
+    },
+    "music": {
+      "absentDefault": "the engine's default bed plays — never silence, because silence reads as a bug rather than as a choice",
+      "manifestField": "music"
+    },
+    "cameraHints": {
+      "absentDefault": "none — the camera uses its default framing for the active grammar",
+      "manifestField": null,
+      "description": "Camera hint volumes placed in the scene, overriding framing declaratively. No custom camera code is permitted in a world, in any circumstance."
+    },
+    "restorableRegions": {
+      "absentDefault": "none — the world has no restoration progression",
+      "manifestField": "restorableRegions",
+      "description": "Each region declares the barren/resourced/restored progression plus a SEPARATE boolean unlocked flag. The flag is not a fourth state."
+    },
+    "tuningOverrides": {
+      "absentDefault": "none — every tuning value stays at its global setting",
+      "manifestField": "tuningOverrides",
+      "rules": [
+        { "kind": "manifest_keys_subset_of", "field": "tuningOverrides", "allowedFrom": "core/tuning/tuning.json#worldOverridable" }
+      ],
+      "description": "Only keys enumerated in the tuning surface's own worldOverridable list may be overridden. That list is REFERENCED rather than copied here, so the two cannot drift apart."
+    },
+    "livesPerAttemptOverride": {
+      "absentDefault": "the global progression.default_lives_per_attempt applies",
+      "manifestField": "tuningOverrides.progression.default_lives_per_attempt",
+      "description": "Expressed through tuningOverrides rather than as a field of its own, so there is one mechanism for overriding a tuned value rather than two."
+    }
+  },
+
+  "sanctionedWorldApiSurface": {
+    "$ref": "contracts/sanctioned_api.v1.json",
+    "description": "The interfaces a world module may call, enforced by the World Static Analysis Gate. Kept in its own file because it is DERIVED from the architecture graph's world-outbound edges rather than authored from intent, and because the gate and the checker are different tools with different jobs."
+  },
+
+  "versioning": {
+    "current": "1.0",
+    "frozen": false,
+    "freezeCondition": "v1 freezes only after both official MVP worlds are built against it and their friction has been fed back in. Freezing earlier would mean the contract encodes what was imagined rather than what was needed.",
+    "compatibility": "A world declaring a contractVersion the running game does not support is refused by the hub and surfaced as an unavailable portal, never loaded partially.",
+    "migration": {
+      "policy": "A version increment ships with a written migration note naming every changed element and, for each, the mechanical edit a v1 world needs.",
+      "additiveChanges": "New OPTIONAL elements may be added within a version, because an absent optional element already has a defined default and existing worlds stay conforming by definition.",
+      "breakingChanges": "Adding a required element, removing an element, or narrowing a closed set increments the version.",
+      "support": "The previous major version stays loadable for at least one release after the increment, so a fork has a window to migrate rather than breaking on the day of."
+    }
+  }
+}

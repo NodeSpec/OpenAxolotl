@@ -1,0 +1,145 @@
+{
+  "contractVersion": "1.0",
+  "title": "Sanctioned World API Surface v1",
+  "description": "The complete set of interfaces a world module may call, and the classes of call it may never make. Enforced by the World Static Analysis Gate as a merge-blocking CI check against every world — official worlds, the reference template, and community submissions alike. This surface is the security boundary for community-contributed code: worlds ship GDScript like any other module, so safety comes from this allowlist plus MANDATORY HUMAN REVIEW, never from an automated-only merge path.",
+
+  "sourceOfTruth": "The static-analysis gate loads this file and hardcodes no rule.",
+
+  "derivation": {
+    "rule": "allowedInterfaces is DERIVED from the architecture graph: it is exactly the set of contract names on edges whose SOURCE is a world node. It is never authored from intent.",
+    "why": "An allowlist written from memory drifts from the interfaces that really exist, in both directions. Too narrow and the gate rejects legitimate world code; too broad and a world is granted reach the architecture never gave it. A drafted version of this file listed eleven interfaces where the graph gives seven — it had added the controller, input, checkpoint and tuning interfaces, none of which a world has an edge to.",
+    "source": ".nodespec/model.json",
+    "query": "{ contracts[e.contractId].name for e in edges if nodes[e.source].label starts with 'World:' }",
+    "enforcement": "test/contracts/test_level_contract.gd recomputes this set from the model on every run and fails when this file and the graph disagree. Widening the allowlist by hand is therefore not possible: add the architecture edge and this file follows."
+  },
+
+  "allowedInterfaces": [
+    {
+      "contract": "Save Integration Interface",
+      "provider": "Save System",
+      "description": "The only permitted persistence path. A world never opens, reads, or writes a save file directly, and only under the save keys it declared in its manifest."
+    },
+    {
+      "contract": "Audio Event Interface",
+      "provider": "Audio System",
+      "description": "Semantic audio event ids. Never a file path, and never a direct AudioStreamPlayer of the world's own."
+    },
+    {
+      "contract": "Camera Hint Interface",
+      "provider": "Camera System",
+      "description": "Declarative hint volumes overriding framing. No custom camera code in a world, in any circumstance."
+    },
+    {
+      "contract": "Gill Mod Registration Interface",
+      "provider": "Gill Mod Ability Framework",
+      "description": "Register a custom Gill Mod through the Level Contract's optional customAbility element. Travels the same validation a shipped mod does."
+    },
+    {
+      "contract": "Enemy Registration Interface",
+      "provider": "Drift Fleet Enemy Framework",
+      "description": "Place and configure Drift Fleet units, including the Flagship encounter."
+    },
+    {
+      "contract": "Collectible Registration Interface",
+      "provider": "Collectibles System",
+      "description": "Declare collectibles and their placement."
+    },
+    {
+      "contract": "Restoration Region Interface",
+      "provider": "World Restoration State System",
+      "description": "Declare restorable regions and query or advance their state."
+    }
+  ],
+
+  "deliberatelyExcluded": [
+    {
+      "contract": "Player Input Interface",
+      "why": "Worlds read player intent through the controller interface and never read raw input (REQ-024 AC-6). There is no world-facing input surface at all, by design.",
+      "instead": "Gate a path on the controller's published movement state, or on a Gill Mod affordance."
+    },
+    {
+      "contract": "Axolotl Controller Interface",
+      "why": "The graph gives no world an edge to the controller. Controller compatibility is DECLARED in world.json, not called.",
+      "instead": "Declare controllerCompatibility in the manifest; the Game Client owns the wiring."
+    },
+    {
+      "contract": "Checkpoint and Life Interface",
+      "why": "Checkpoints are declarative. A world places nodes in the checkpoint group and the Game Client wires them to the life and capability systems.",
+      "instead": "Place checkpoint volumes in the scene."
+    },
+    {
+      "contract": "Tuning Data Interface",
+      "why": "A world does not read the tuning surface; it declares tuningOverrides in its manifest, limited to the enumerated worldOverridable set.",
+      "instead": "Declare tuningOverrides in the manifest."
+    },
+    {
+      "contract": "HUD State Interface",
+      "why": "The HUD reads game state; a world does not write to it. A world that needs to say something to the player says it through a declared element, not by drawing.",
+      "instead": "Use the declarative elements the Level Contract provides."
+    }
+  ],
+
+  "exclusionPolicy": "If a world genuinely needs an excluded interface, the fix is to add the architecture edge and let this file follow — never to widen the allowlist by hand. A world that can only achieve something by reaching outside this surface is evidence the interface is wrong, not evidence the world is special.",
+
+  "enforcement": {
+    "tool": "world-static-analysis",
+    "severity": "error",
+    "mergeGate": "blocking",
+    "appliesTo": [
+      "worlds/<world_id>/**/*.gd",
+      "worlds/<world_id>/**/*.tscn",
+      "worlds/<world_id>/world.json"
+    ],
+    "defaultPosture": "deny — a symbol absent from allowedInterfaces is a violation, not an omission"
+  },
+
+  "forbiddenCallClasses": {
+    "filesystem": {
+      "rationale": "A world module has no legitimate reason to touch the filesystem; persistence goes through the Save Integration Interface.",
+      "symbols": ["FileAccess", "DirAccess", "ResourceSaver", "ProjectSettings.globalize_path", "ConfigFile"]
+    },
+    "network": {
+      "rationale": "Single-player, offline game. There is no network layer of any kind.",
+      "symbols": ["HTTPRequest", "HTTPClient", "StreamPeerTCP", "StreamPeerTLS", "PacketPeerUDP", "TCPServer", "UDPServer", "WebSocketPeer", "IP"]
+    },
+    "osExecution": {
+      "rationale": "Executing processes or shelling out from world code is arbitrary code execution on a contributor's machine.",
+      "symbols": ["OS.execute", "OS.create_process", "OS.shell_open", "OS.set_environment", "OS.get_environment"]
+    },
+    "dynamicEvaluation": {
+      "rationale": "Dynamic evaluation defeats static analysis entirely — it is how an allowlist gets bypassed.",
+      "symbols": ["Expression", "GDScript.new", "Object.call", "Object.callv", "Object.set_script", "ResourceLoader.load with a non-literal path", "load with a non-literal path", "str2var", "bytes_to_var"]
+    },
+    "rawInput": {
+      "rationale": "Worlds read intent, never input (REQ-024 AC-6). A world gating a path on a physical key could never be rebound, which would break the accessibility guarantee for every player of that world.",
+      "symbols": ["Input", "InputEvent", "InputMap", "Input.is_action_pressed", "Input.get_vector"]
+    },
+    "multiplayer": {
+      "rationale": "No multiplayer, in any phase — a firm non-goal, not a deferral. This mirrors the Engine Feature Policy applied to core systems, so world modules are covered by exactly the same ban as core (REQ-030 AC-7).",
+      "symbols": {
+        "apis": ["multiplayer", "MultiplayerAPI", "SceneMultiplayer"],
+        "calls": ["rpc", "rpc_id", "rpc_config"],
+        "nodes": ["MultiplayerSynchronizer", "MultiplayerSpawner"],
+        "peers": ["MultiplayerPeer", "ENetMultiplayerPeer", "WebRTCMultiplayerPeer", "WebSocketMultiplayerPeer", "OfflineMultiplayerPeer"],
+        "authority": ["is_multiplayer_authority", "set_multiplayer_authority", "get_multiplayer_authority"],
+        "annotations": ["@rpc"],
+        "projectSettings": ["network/*"]
+      }
+    },
+    "coreInternals": {
+      "rationale": "Reaching past a published interface into a core system's private members is the hole that makes a world unforkable. If a world can only achieve something this way, the interface is wrong — fix the interface, not the world.",
+      "symbols": [
+        "any member prefixed _ on a core system",
+        "get_node paths into core/ scene trees",
+        "direct instantiation of core system classes not exposed via a sanctioned interface"
+      ]
+    }
+  },
+
+  "guidanceOverride": "Where general Godot documentation, engine samples, or catalog technology guidance demonstrate RPC-based movement, server-authority patterns, direct file access for saves, or raw Input reads, that guidance DOES NOT APPLY to world modules in this project. Implement world logic as local single-player code against the sanctioned interfaces above.",
+
+  "violationOutput": {
+    "requirement": "Failure output names the offending file, line, the specific forbidden symbol, and the call class it violates, as structured machine-readable output an AI coding agent can parse and self-correct against.",
+    "exitCode": "non-zero on any violation"
+  }
+}

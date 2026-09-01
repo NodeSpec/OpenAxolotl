@@ -116,31 +116,13 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T10 — Implement: "Lives decrement only from designated catastrophic sources: pit volumes, crush hazards, boss finishers, and Dredger area-wipe attacks" (REQ-003).** <!-- t:3ccdbe80 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-003 "Lives decrement only from designated catastrophic sources: pit volumes, crush hazards, boss finishers, and Dredger area-wipe attacks" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) from Flagship Boss Encounter (keyword signal only)
-- [ ] **T11 — Implement: "Ordinary enemy and hazard contact never decrements lives" (REQ-003).** <!-- t:ab89affb -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-003 "Ordinary enemy and hazard contact never decrements lives" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) from Drift Fleet Enemy Framework (keyword signal only)
-- [ ] **T12 — Implement: "Reaching zero lives respawns the player at the last activated checkpoint with the life count replenished" (REQ-003).** <!-- t:ac5805e6 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-003 "Reaching zero lives respawns the player at the last activated checkpoint with the life count replenished" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) from OpenAxolotl Game Client (keyword signal only)
-- [ ] **T13 — Implement: "Reaching zero lives never restarts the world from the beginning and never modifies or penalizes the save file" (REQ-003).** <!-- t:bad4a681 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-003 "Reaching zero lives never restarts the world from the beginning and never modifies or penalizes the save file" — possible coordination point: Contract "Save Integration Interface" (dependency) to Save System (keyword signal only)
-- [ ] **T14 — Implement: "Activating a checkpoint records respawn position and restores both life count and capability state" (REQ-003).** <!-- t:7c444bf1 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-003 "Activating a checkpoint records respawn position and restores both life count and capability state" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) from OpenAxolotl Game Client (keyword signal only)
-- [ ] **T15 — Implement: "A world can declare a lives-per-attempt override through the Level Contract, and the global default applies when it does not" (REQ-003).** <!-- t:4ec52f09 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-003 "A world can declare a lives-per-attempt override through the Level Contract, and the global default applies when it does not" — possible coordination point: Contract "Engine Feature Policy" (dependency) from World Static Analysis Gate (keyword signal only)
-- [ ] **T16 — Implement: "Checkpoint spacing in every official world keeps the replay time from any checkpoint to the next at or below tuning key progression.max_retry_seconds" (REQ-003).** <!-- t:1d442410 -->
+- [ ] **T10 — Implement: "Checkpoint spacing in every official world keeps the replay time from any checkpoint to the next at or below tuning key progression.max_retry_seconds" (REQ-003).** <!-- t:1d442410 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-003 "Checkpoint spacing in every official world keeps the replay time from any checkpoint to the next at or below tuning key progression.max_retry_seconds" — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
-- [ ] **T17 — Implement: "Losing all lives reads as a meaningful setback without feeling punishing, across repeated play" (REQ-003).** <!-- t:f17eefd2 -->
+- [ ] **T11 — Implement: "Losing all lives reads as a meaningful setback without feeling punishing, across repeated play" (REQ-003).** <!-- t:f17eefd2 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-003 "Losing all lives reads as a meaningful setback without feeling punishing, across repeated play"
-- [ ] **T18 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -195,22 +177,22 @@ Category: functional | Status: in-progress
 Pillar 1, hard layer — the stakes that the capability layer deliberately does not provide. A limited life count per attempt. ONLY catastrophic events cost a life directly: bottomless pits, crush hazards, boss finishing moves, and Dredger area-wipe attacks. Ordinary enemy contact does not — it strips capability instead. Reaching zero lives returns the player to the last checkpoint with lives replenished; it is NOT a full level restart and NOT a save-file penalty. Checkpoints are the anchor for both systems: they refill lives AND restore capability state, which is precisely why the Level Contract lists checkpoints as required rather than optional. Worlds may override the lives-per-attempt count, otherwise a global default applies.
 
 **Acceptance criteria — your task boxes:**
-- [ ] Lives decrement only from designated catastrophic sources: pit volumes, crush hazards, boss finishers, and Dredger area-wipe attacks
-  → covered by Task T10
-- [ ] Ordinary enemy and hazard contact never decrements lives
-  → covered by Task T11
-- [ ] Reaching zero lives respawns the player at the last activated checkpoint with the life count replenished
-  → covered by Task T12
-- [ ] Reaching zero lives never restarts the world from the beginning and never modifies or penalizes the save file
-  → covered by Task T13
-- [ ] Activating a checkpoint records respawn position and restores both life count and capability state
-  → covered by Task T14
-- [ ] A world can declare a lives-per-attempt override through the Level Contract, and the global default applies when it does not
-  → covered by Task T15
+- [x] Lives decrement only from designated catastrophic sources: pit volumes, crush hazards, boss finishers, and Dredger area-wipe attacks
+  → THIS NODE: internal logic — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) from Flagship Boss Encounter (keyword signal only)
+- [x] Ordinary enemy and hazard contact never decrements lives
+  → THIS NODE: internal logic — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) from Drift Fleet Enemy Framework (keyword signal only)
+- [x] Reaching zero lives respawns the player at the last activated checkpoint with the life count replenished
+  → THIS NODE: internal logic — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) from OpenAxolotl Game Client (keyword signal only)
+- [x] Reaching zero lives never restarts the world from the beginning and never modifies or penalizes the save file
+  → THIS NODE: internal logic — possible coordination point: Contract "Save Integration Interface" (dependency) to Save System (keyword signal only)
+- [x] Activating a checkpoint records respawn position and restores both life count and capability state
+  → THIS NODE: internal logic — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) from OpenAxolotl Game Client (keyword signal only)
+- [x] A world can declare a lives-per-attempt override through the Level Contract, and the global default applies when it does not
+  → THIS NODE: internal logic — possible coordination point: Contract "Engine Feature Policy" (dependency) from World Static Analysis Gate (keyword signal only)
 - [ ] Checkpoint spacing in every official world keeps the replay time from any checkpoint to the next at or below tuning key progression.max_retry_seconds
-  → covered by Task T16
+  → covered by Task T10
 - [ ] Losing all lives reads as a meaningful setback without feeling punishing, across repeated play (manual)
-  → covered by Task T17
+  → covered by Task T11
 
 ## Interface Contracts
 
@@ -409,4 +391,12 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 | File | Kind | Language | Status |
 |------|------|----------|--------|
+| `test/core/progression/test_life_system.gd` | source | --- | draft |
 | `.nodespec/tests/req-003.tests.md` - Test plan for requirement: Lives, Checkpoints and Hard Failure State | test-plan | markdown | draft |
+| `core/progression/checkpoint_graph.gd` | source | --- | draft |
+| `core/progression/capability_restorer.gd` | source | --- | draft |
+| `core/progression/checkpoint_store.gd` | source | --- | draft |
+| `core/progression/save_checkpoint_store.gd` | source | --- | draft |
+| `core/progression/catastrophic_source.gd` | source | --- | draft |
+| `core/progression/life_system.gd` | source | --- | draft |
+| `core/progression/checkpoint.gd` | source | --- | draft |

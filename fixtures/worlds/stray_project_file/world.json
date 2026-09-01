@@ -1,0 +1,14 @@
+{
+  "contractVersion": "1.0",
+  "worldId": "stray_project_file",
+  "displayName": "Conforming Fixture",
+  "controllerCompatibility": "1.0",
+  "finishCondition": {
+    "kind": "reach_volume"
+  },
+  "saveIntegration": {
+    "keys": [
+      "stray_project_file.completed"
+    ]
+  }
+}

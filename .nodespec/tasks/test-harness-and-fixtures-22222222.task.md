@@ -15,6 +15,8 @@
 
 ## Implementation Context
 
+> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
+
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
 This node is the project's proof mechanism. Its output is what an AI agent reads
 to decide whether the world it just wrote is actually correct, so its structure
@@ -117,28 +119,22 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T6 — Expose the interface World Static Analysis Gate consumes, per Contract "Shared Test Fixtures" (dependency).** <!-- t:8b32d9ab -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T7 — Implement: "The suite runs headless with a single documented command and exits non-zero on any failure" (REQ-026).** <!-- t:4d9f8c5b -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-026 "The suite runs headless with a single documented command and exits non-zero on any failure"
-- [ ] **T8 — Implement: "Unit tests cover the capability, lives, restoration, ability-registration, and save-interface logic" (REQ-026).** <!-- t:c0da21fe -->
+- [ ] **T7 — Implement: "Unit tests cover the capability, lives, restoration, ability-registration, and save-interface logic" (REQ-026).** <!-- t:c0da21fe -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-026 "Unit tests cover the capability, lives, restoration, ability-registration, and save-interface logic"
-- [ ] **T9 — Implement: "Integration tests exercise each system against the controller and save-integration interfaces rather than in isolation only" (REQ-026).** <!-- t:01904f78 -->
+- [ ] **T8 — Implement: "Integration tests exercise each system against the controller and save-integration interfaces rather than in isolation only" (REQ-026).** <!-- t:01904f78 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-026 "Integration tests exercise each system against the controller and save-integration interfaces rather than in isolation only"
-- [ ] **T10 — Implement: "A headless playthrough smoke test drives an official world from spawn to finish condition and asserts completion" (REQ-026).** <!-- t:96e47acd -->
+- [ ] **T9 — Implement: "A headless playthrough smoke test drives an official world from spawn to finish condition and asserts completion" (REQ-026).** <!-- t:96e47acd -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-026 "A headless playthrough smoke test drives an official world from spawn to finish condition and asserts completion" — possible coordination point: Contract "Shared Test Fixtures" (dependency) from World Static Analysis Gate (keyword signal only)
-- [ ] **T11 — Implement: "Named fixtures exist for a conforming world, a non-conforming world, a malicious world, a conforming asset, and a non-conforming asset, and are shared by the checker, validator, and static-analysis tests" (REQ-026).** <!-- t:412ee4cf -->
+- [ ] **T10 — Implement: "Named fixtures exist for a conforming world, a non-conforming world, a malicious world, a conforming asset, and a non-conforming asset, and are shared by the checker, validator, and static-analysis tests" (REQ-026).** <!-- t:412ee4cf -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-026 "Named fixtures exist for a conforming world, a non-conforming world, a malicious world, a conforming asset, and a non-conforming asset, and are shared by the checker, validator, and static-analysis tests" — possible coordination point: Contract "Shared Test Fixtures" (dependency) from World Static Analysis Gate (keyword signal only)
-- [ ] **T12 — Implement: "Test output identifies the failing requirement or criterion it maps to, so a contributor or agent can locate what broke" (REQ-026).** <!-- t:b4f55d49 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-026 "Test output identifies the failing requirement or criterion it maps to, so a contributor or agent can locate what broke"
-- [ ] **T13 — Implement: "The suite runs in CI on every pull request" (REQ-026).** <!-- t:2f756ac8 -->
+- [ ] **T11 — Implement: "The suite runs in CI on every pull request" (REQ-026).** <!-- t:2f756ac8 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-026 "The suite runs in CI on every pull request"
-- [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -184,20 +180,20 @@ Category: technical | Status: in-progress
 REQ-018 requires CI to run "the automated test suite" but nothing required that suite to exist or defined its scope. For a project whose central claim is that AI agents can contribute compliant worlds, the test harness is load-bearing infrastructure: it is how an agent proves its own work before submitting, and it is what stops a contributed world from silently breaking core systems. Scope covers three tiers — unit tests for system logic, integration tests exercising a system against the controller and save interfaces, and headless playthrough smoke tests that drive an official world from spawn to finish condition to catch regressions no unit test would. Godot supports headless execution, so playthrough tests are runnable in CI without a display. Test fixtures (a conforming world, a non-conforming world, a malicious world, a conforming and non-conforming asset) are themselves deliverables, since several requirements assert against them.
 
 **Acceptance criteria — your task boxes:**
-- [ ] The suite runs headless with a single documented command and exits non-zero on any failure
-  → covered by Task T7
+- [x] The suite runs headless with a single documented command and exits non-zero on any failure
+  → THIS NODE: internal logic
 - [ ] Unit tests cover the capability, lives, restoration, ability-registration, and save-interface logic
-  → covered by Task T8
+  → covered by Task T7
 - [ ] Integration tests exercise each system against the controller and save-integration interfaces rather than in isolation only
-  → covered by Task T9
+  → covered by Task T8
 - [ ] A headless playthrough smoke test drives an official world from spawn to finish condition and asserts completion
-  → covered by Task T10
+  → covered by Task T9
 - [ ] Named fixtures exist for a conforming world, a non-conforming world, a malicious world, a conforming asset, and a non-conforming asset, and are shared by the checker, validator, and static-analysis tests
-  → covered by Task T11
-- [ ] Test output identifies the failing requirement or criterion it maps to, so a contributor or agent can locate what broke
-  → covered by Task T12
+  → covered by Task T10
+- [x] Test output identifies the failing requirement or criterion it maps to, so a contributor or agent can locate what broke
+  → THIS NODE: internal logic
 - [ ] The suite runs in CI on every pull request
-  → covered by Task T13
+  → covered by Task T11
 
 ## Interface Contracts
 
@@ -453,4 +449,25 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 | File | Kind | Language | Status |
 |------|------|----------|--------|
+| `fixtures/worlds/unsupported_version/world.tscn` | design | --- | draft |
+| `fixtures/worlds/bad_world_id/world.tscn` | design | --- | draft |
+| `fixtures/worlds/malformed_manifest/world.tscn` | design | --- | draft |
+| `fixtures/worlds/stray_project_file/world.tscn` | design | --- | draft |
+| `fixtures/worlds/unsanctioned_tuning/world.tscn` | design | --- | draft |
+| `fixtures/.gdignore` | config | --- | draft |
+| `fixtures/worlds/two_spawn_points/world.tscn` | design | --- | draft |
+| `fixtures/worlds/stray_project_file/project.godot` | config | --- | draft |
+| `fixtures/worlds/conforming_world/world.json` | config | --- | draft |
+| `fixtures/worlds/unsanctioned_tuning/world.json` | config | --- | draft |
+| `fixtures/worlds/two_spawn_points/world.json` | config | --- | draft |
+| `fixtures/worlds/conforming_world/world.tscn` | design | --- | draft |
 | `.nodespec/tests/req-026.tests.md` - Test plan for requirement: Automated Test Suite and Test Harness | test-plan | markdown | draft |
+| `fixtures/worlds/malformed_manifest/world.json` | config | --- | draft |
+| `fixtures/worlds/stray_project_file/world.json` | config | --- | draft |
+| `fixtures/worlds/missing_checkpoint/world.json` | config | --- | draft |
+| `fixtures/worlds/bad_world_id/world.json` | config | --- | draft |
+| `fixtures/worlds/missing_checkpoint/world.tscn` | design | --- | draft |
+| `fixtures/worlds/unsupported_version/world.json` | config | --- | draft |
+| `test/run_tests.gd` | source | --- | draft |
+| `test/support/gdunit_compat.gd` | source | --- | draft |
+| `test/core/harness/test_harness_integrity.gd` | source | --- | draft |

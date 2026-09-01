@@ -126,19 +126,10 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T10 — Implement: "Water grammar supports full 3D directional swimming, dive, and a bubble boost governed by a cooldown" (REQ-001).** <!-- t:e2760bfa -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-001 "Water grammar supports full 3D directional swimming, dive, and a bubble boost governed by a cooldown" — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
-- [ ] **T11 — Implement: "Land grammar supports waddle locomotion, hop, and climbing on surfaces tagged as climbable" (REQ-001).** <!-- t:25ece100 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-001 "Land grammar supports waddle locomotion, hop, and climbing on surfaces tagged as climbable" — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
-- [ ] **T12 — Implement: "Tongue grapple attaches to anchor points at or within tuning key controller.grapple.max_range_m, rejects anchors beyond it, and pulls the axolotl to the attached anchor" (REQ-001).** <!-- t:70f44dc6 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-001 "Tongue grapple attaches to anchor points at or within tuning key controller.grapple.max_range_m, rejects anchors beyond it, and pulls the axolotl to the attached anchor" — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
-- [ ] **T13 — Implement: "Both movement grammars feel distinct, responsive, and pleasurable in hands-on play" (REQ-001).** <!-- t:f6d9a45b -->
+- [ ] **T10 — Implement: "Both movement grammars feel distinct, responsive, and pleasurable in hands-on play" (REQ-001).** <!-- t:f6d9a45b -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-001 "Both movement grammars feel distinct, responsive, and pleasurable in hands-on play" — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
-- [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T11 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -195,18 +186,18 @@ The player character controller implementing two mechanically distinct movement 
 **Acceptance criteria — your task boxes:**
 - [x] Crossing a water volume boundary switches movement grammar in the same physics frame as the crossing, with no frame rendered in the previous grammar, and retains momentum magnitude per tuning key controller.transition.momentum_retention_ratio
   → THIS NODE: internal logic — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
-- [ ] Water grammar supports full 3D directional swimming, dive, and a bubble boost governed by a cooldown
-  → covered by Task T10
-- [ ] Land grammar supports waddle locomotion, hop, and climbing on surfaces tagged as climbable
-  → covered by Task T11
-- [ ] Tongue grapple attaches to anchor points at or within tuning key controller.grapple.max_range_m, rejects anchors beyond it, and pulls the axolotl to the attached anchor
-  → covered by Task T12
+- [x] Water grammar supports full 3D directional swimming, dive, and a bubble boost governed by a cooldown
+  → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
+- [x] Land grammar supports waddle locomotion, hop, and climbing on surfaces tagged as climbable
+  → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
+- [x] Tongue grapple attaches to anchor points at or within tuning key controller.grapple.max_range_m, rejects anchors beyond it, and pulls the axolotl to the attached anchor
+  → THIS NODE: internal logic — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
 - [x] Water-powered dash is usable in both grammars, consumes a charge, and recharges only while in water
   → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
 - [x] Controller exposes a documented public interface (movement state, capability modifiers, ability hooks) that worlds bind to without modifying controller internals
   → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
 - [ ] Both movement grammars feel distinct, responsive, and pleasurable in hands-on play (manual)
-  → covered by Task T13
+  → covered by Task T10
 
 ## Interface Contracts
 
@@ -405,9 +396,16 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 | File | Kind | Language | Status |
 |------|------|----------|--------|
+| `core/controller/bubble_boost.gd` | source | --- | draft |
 | `.nodespec/tests/req-001.tests.md` - Test plan for requirement: Axolotl Character Controller — Dual Movement Grammars | test-plan | markdown | draft |
+| `core/controller/climb_surface.gd` | source | --- | draft |
+| `core/controller/grapple_anchor.gd` | source | --- | draft |
+| `core/controller/anchor_source.gd` | source | --- | draft |
+| `core/controller/scene_anchor_source.gd` | source | --- | draft |
 | `core/controller/capability_modifiers.gd` | source | --- | draft |
+| `core/controller/axolotl_body.gd` | source | --- | draft |
 | `core/controller/water_dash.gd` | source | --- | draft |
+| `core/controller/water_volume.gd` | source | --- | draft |
 | `core/controller/tongue_grapple.gd` | source | --- | draft |
 | `core/controller/axolotl_controller.gd` | source | --- | draft |
 | `core/controller/movement_grammar.gd` | source | --- | draft |

@@ -1,0 +1,14 @@
+{
+  "contractVersion": "1.0",
+  "worldId": "two_spawn_points",
+  "displayName": "Conforming Fixture",
+  "controllerCompatibility": "1.0",
+  "finishCondition": {
+    "kind": "reach_volume"
+  },
+  "saveIntegration": {
+    "keys": [
+      "two_spawn_points.completed"
+    ]
+  }
+}

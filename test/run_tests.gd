@@ -83,6 +83,18 @@ func _run_suite(suite_path: String) -> void:
 		suite.call(test_name)
 		var failures := suite.get_failures()
 
+		# A GDScript runtime error — a call into a method the assertion shim does
+		# not implement, say — ABORTS the test function without raising anything
+		# this runner can catch. The failure list then comes back empty and the
+		# test scores PASS despite never having run. A test that evaluated no
+		# assertions at all is that case, or a test that asserts nothing, and
+		# neither is evidence. Fail both rather than report a green that is not.
+		if suite.get_assertion_count() == 0:
+			failures.append(
+				"no assertions were evaluated — the test either asserts nothing "
+				+ "or aborted on a script error before its first assertion "
+				+ "(check the log above for a Godot SCRIPT ERROR)")
+
 		if suite.has_method("after_test"):
 			suite.call("after_test")
 		suite.cleanup_temp_dirs()

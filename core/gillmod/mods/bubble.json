@@ -1,0 +1,11 @@
+{
+  "id": "bubble",
+  "displayName": "Bubble Gills",
+  "affordances": ["bubble_platform", "bubble_float"],
+  "durationKey": "gillmod.bubble.duration_s",
+  "cooldownKey": "gillmod.bubble.cooldown_s",
+  "audioCueId": "gill_mod_bubble_activated",
+  "visualId": "vfx.gills.bubble",
+  "hudIcon": "icon.gillmod.bubble",
+  "note": "Traversal. Produces bounceable bubbles that carry the axolotl over gaps a swim cannot cross, and slows a descent while active."
+}

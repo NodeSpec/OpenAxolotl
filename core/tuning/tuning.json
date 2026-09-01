@@ -15,12 +15,110 @@
       "max": 1.0,
       "description": "Fraction of speed magnitude retained when crossing a water/land boundary. Applied to magnitude, not the vector, so a surfacing swimmer keeps speed without keeping an underwater heading."
     },
+    "controller.swim.base_speed_m_per_s": {
+      "value": 6.0,
+      "unit": "meters_per_second",
+      "min": 0.5,
+      "max": 30.0,
+      "description": "Base swim speed under full 3D directional steering, before capability modifiers and the bubble boost multiplier."
+    },
+    "controller.waddle.base_speed_m_per_s": {
+      "value": 2.5,
+      "unit": "meters_per_second",
+      "min": 0.5,
+      "max": 20.0,
+      "description": "Base grounded waddle speed. Deliberately well below the swim speed: water is the fast grammar, and that gap is what makes the two read as distinct rather than as one speed with a different animation."
+    },
+    "controller.dive.speed_m_per_s": {
+      "value": 5.0,
+      "unit": "meters_per_second",
+      "min": 0.5,
+      "max": 30.0,
+      "description": "Descent rate of a deliberate dive. A dive sets the vertical component outright rather than adding to steering, so diving from a standstill still descends."
+    },
+    "controller.bubble_boost.duration_s": {
+      "value": 1.5,
+      "unit": "seconds",
+      "min": 0.1,
+      "max": 20.0,
+      "description": "How long a bubble boost multiplies swim speed. Scaled down by capability.gill_loss.boost_duration_multiplier while a gill is lost."
+    },
+    "controller.bubble_boost.cooldown_s": {
+      "value": 4.0,
+      "unit": "seconds",
+      "min": 0.1,
+      "max": 120.0,
+      "description": "Recovery window after a bubble boost ends, during which it cannot be re-activated. The minimum is deliberately above zero: REQ-001 AC-2 requires the boost to be GOVERNED by a cooldown, so a tuning file that zeroes it must fail to load rather than quietly producing an ungoverned boost."
+    },
+    "controller.bubble_boost.speed_multiplier": {
+      "value": 2.2,
+      "unit": "multiplier",
+      "min": 1.0,
+      "max": 10.0,
+      "description": "Swim speed multiplier while a bubble boost is active."
+    },
+    "controller.hop.impulse_m_per_s": {
+      "value": 6.0,
+      "unit": "meters_per_second",
+      "min": 0.5,
+      "max": 30.0,
+      "description": "Upward velocity a hop imparts. Only available while grounded, so a hop cannot be chained in mid-air."
+    },
+    "controller.gravity.land_m_per_s2": {
+      "value": 18.0,
+      "unit": "meters_per_second_squared",
+      "min": 1.0,
+      "max": 60.0,
+      "description": "Downward acceleration applied by the scene-tree body while the land grammar is active and the axolotl is neither climbing nor grappling. Higher than real gravity on purpose: a platformer hop that follows a 9.81 arc reads as floaty, and the hop impulse is tuned against this number rather than against physics."
+    },
+    "controller.gravity.water_m_per_s2": {
+      "value": 0.0,
+      "unit": "meters_per_second_squared",
+      "min": 0.0,
+      "max": 10.0,
+      "description": "Downward drift while swimming. 0.0 is neutral buoyancy, which is the intended feel: an axolotl holds its depth and the vertical axis belongs entirely to steering. Raise it to make water sink the player when they stop steering."
+    },
+    "controller.gravity.terminal_speed_m_per_s": {
+      "value": 30.0,
+      "unit": "meters_per_second",
+      "min": 1.0,
+      "max": 120.0,
+      "description": "Maximum downward speed gravity may accumulate. Bounds a long fall so a pit plunge stays readable and cannot tunnel through thin floor collision."
+    },
+    "controller.climb.speed_m_per_s": {
+      "value": 2.0,
+      "unit": "meters_per_second",
+      "min": 0.1,
+      "max": 20.0,
+      "description": "Movement speed while attached to a climbable surface. Deliberately NOT scaled by leg loss: a lost leg lowers how high the axolotl can reach, not how fast it climbs."
+    },
+    "controller.climb.max_height_m": {
+      "value": 6.0,
+      "unit": "meters",
+      "min": 0.5,
+      "max": 60.0,
+      "description": "How far the axolotl can rise on a single climbable surface, measured from where it attached. Multiplied by capability.leg_loss.climb_height_multiplier, which is what makes REQ-002's 'leg reduces climb height' a measurable number rather than a claim. At the ceiling the climber can still move sideways and descend."
+    },
     "controller.grapple.max_range_m": {
       "value": 12.0,
       "unit": "meters",
       "min": 1.0,
       "max": 60.0,
       "description": "Maximum tongue-grapple anchor distance. Tested inclusively: an anchor exactly at this range attaches, one beyond it is rejected."
+    },
+    "controller.grapple.pull_speed_m_per_s": {
+      "value": 14.0,
+      "unit": "meters_per_second",
+      "min": 1.0,
+      "max": 60.0,
+      "description": "Speed at which an attached grapple pulls the axolotl toward its anchor. Faster than swimming, so the grapple reads as a traversal shortcut rather than a slow winch."
+    },
+    "controller.grapple.arrival_radius_m": {
+      "value": 0.6,
+      "unit": "meters",
+      "min": 0.05,
+      "max": 5.0,
+      "description": "Distance at which an attached grapple counts as arrived and detaches. Without a radius the pull would oscillate around the anchor forever."
     },
     "controller.dash.max_charges": {
       "value": 2,
@@ -41,7 +139,7 @@
       "unit": "multiplier",
       "min": 0.1,
       "max": 1.0,
-      "description": "Swim speed while the tail is lost. Capability loss degrades traversal; it never ends a run on its own."
+      "description": "Swim speed while the tail is lost. Capability loss degrades traversal; it never ends a run on its own. The minimum is above zero on purpose: REQ-002 AC-3 rests on a product of strictly positive factors, so every capability lost still leaves the axolotl able to move."
     },
     "capability.gill_loss.boost_duration_multiplier": {
       "value": 0.5,
@@ -55,7 +153,7 @@
       "unit": "multiplier",
       "min": 0.1,
       "max": 1.0,
-      "description": "Reachable climb height while a leg is lost."
+      "description": "Reachable climb height while a leg is lost. Multiplies controller.climb.max_height_m."
     },
     "regen.mutation.duration_s": {
       "value": 20.0,
@@ -175,6 +273,62 @@
       "min": 0.1,
       "max": 45.0,
       "description": "Hard per-frame clamp on camera rotation change, including across a grammar transition."
+    },
+    "camera.smoothing.position_damping_per_second": {
+      "value": 6.0,
+      "unit": "per_second",
+      "min": 0.1,
+      "max": 60.0,
+      "description": "Exponential damping rate for the camera's follow distance. Applied as 1-exp(-rate*delta) so the tuned number means the same thing at any frame rate. The per-frame clamp above is a separate, harder bound; this only sets how briskly the camera converges within it."
+    },
+    "camera.smoothing.rotation_damping_per_second": {
+      "value": 8.0,
+      "unit": "per_second",
+      "min": 0.1,
+      "max": 60.0,
+      "description": "Exponential damping rate for camera pitch and yaw. Slightly brisker than position: a camera that lags in angle reads as unresponsive faster than one that lags in distance."
+    },
+    "camera.follow.water_distance_m": {
+      "value": 4.5,
+      "unit": "meters",
+      "min": 0.5,
+      "max": 30.0,
+      "description": "Follow distance in the water grammar. Further back than land so the axolotl can pitch and roll in full 3D without the camera chasing every reorientation."
+    },
+    "camera.follow.land_distance_m": {
+      "value": 3.0,
+      "unit": "meters",
+      "min": 0.5,
+      "max": 30.0,
+      "description": "Follow distance in the land grammar. Closer than water, which reads as a conventional third-person follow. The gap between the two is what the grammar transition interpolates across, and therefore what the per-frame clamp is measured on."
+    },
+    "camera.follow.water_pitch_deg": {
+      "value": 10.0,
+      "unit": "degrees",
+      "min": -80.0,
+      "max": 80.0,
+      "description": "Camera pitch above the axolotl in the water grammar. Near level, because underwater the interesting space is ahead rather than below."
+    },
+    "camera.follow.land_pitch_deg": {
+      "value": 20.0,
+      "unit": "degrees",
+      "min": -80.0,
+      "max": 80.0,
+      "description": "Camera pitch above the axolotl in the land grammar. Higher than water so ledges and hop targets read against the ground."
+    },
+    "camera.follow.min_distance_m": {
+      "value": 0.8,
+      "unit": "meters",
+      "min": 0.1,
+      "max": 10.0,
+      "description": "Floor on how far collision avoidance may pull the camera in. Below this the camera would be inside the axolotl; when geometry demands closer than this, the floor wins and the camera clips rather than turning the view inside out."
+    },
+    "camera.collision.margin_m": {
+      "value": 0.25,
+      "unit": "meters",
+      "min": 0.05,
+      "max": 2.0,
+      "description": "How far short of contact geometry the camera stops. The minimum is deliberately above zero: REQ-005 AC-2 requires the camera to NEVER clip into geometry, and a zero margin puts it exactly on the surface where the near plane makes clipping a floating-point coin flip."
     },
     "restoration.resourced.resource_cost": {
       "value": 5,

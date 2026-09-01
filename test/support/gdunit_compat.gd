@@ -17,17 +17,43 @@ extends RefCounted
 var _failures: PackedStringArray = []
 var _temp_dirs: PackedStringArray = []
 
+## Assertions actually evaluated during the current test.
+##
+## This exists because of a real bug this shim caused: a suite called
+## `is_less_equal`, which the shim did not implement. `override_failure_message`
+## returns Variant, so the call was resolved at RUNTIME rather than parse time —
+## it raised a script error, GDScript aborted the test function on the spot, and
+## the runner saw an empty failure list and printed PASS. A test that never ran
+## reported success, which is worse than no test at all.
+##
+## The runner fails any test that recorded zero assertions, so an abort before
+## the first assertion cannot masquerade as a pass. That is a BACKSTOP, not the
+## cure, and it has a known hole: a suite whose helper asserts first has already
+## scored one by the time a bad call lands, which is exactly how a second
+## occurrence slipped through. The cure is test/core/harness/, which reads the
+## suites and fails when they call something this file does not implement.
+var _assertions: int = 0
+
 
 func get_failures() -> PackedStringArray:
 	return _failures.duplicate()
 
 
+func get_assertion_count() -> int:
+	return _assertions
+
+
 func reset_failures() -> void:
 	_failures.clear()
+	_assertions = 0
 
 
 func _fail(message: String) -> void:
 	_failures.append(message)
+
+
+func _record_assertion() -> void:
+	_assertions += 1
 
 
 ## GdUnit4's per-test temp directory. Cleaned by the runner after each suite.
@@ -94,6 +120,7 @@ class _Base extends RefCounted:
 		return self
 
 	func _check(ok: bool, fallback: String) -> void:
+		_suite._record_assertion()
 		if ok:
 			return
 		_suite._fail(_message if not _message.is_empty() else fallback)
@@ -125,10 +152,18 @@ class _IntAssert extends _Base:
 		_v = v
 	func is_equal(expected: int) -> void:
 		_check(_v == expected, "expected %d but got %d" % [expected, _v])
+	func is_not_equal(other: int) -> void:
+		_check(_v != other, "expected something other than %d" % other)
 	func is_greater(bound: int) -> void:
 		_check(_v > bound, "expected greater than %d but got %d" % [bound, _v])
+	func is_greater_equal(bound: int) -> void:
+		_check(_v >= bound, "expected at least %d but got %d" % [bound, _v])
 	func is_less(bound: int) -> void:
 		_check(_v < bound, "expected less than %d but got %d" % [bound, _v])
+	func is_less_equal(bound: int) -> void:
+		_check(_v <= bound, "expected at most %d but got %d" % [bound, _v])
+	func is_zero() -> void:
+		_check(_v == 0, "expected 0 but got %d" % _v)
 
 
 class _BoolAssert extends _Base:
@@ -150,6 +185,17 @@ class _FloatAssert extends _Base:
 	func is_equal_approx(expected: float, tolerance: float) -> void:
 		_check(absf(_v - expected) <= tolerance,
 			"expected %s (+/- %s) but got %s" % [expected, tolerance, _v])
+	func is_less(bound: float) -> void:
+		_check(_v < bound, "expected less than %s but got %s" % [bound, _v])
+	func is_less_equal(bound: float) -> void:
+		_check(_v <= bound, "expected at most %s but got %s" % [bound, _v])
+	func is_greater(bound: float) -> void:
+		_check(_v > bound, "expected greater than %s but got %s" % [bound, _v])
+	func is_greater_equal(bound: float) -> void:
+		_check(_v >= bound, "expected at least %s but got %s" % [bound, _v])
+	func is_between(low: float, high: float) -> void:
+		_check(_v >= low and _v <= high,
+			"expected between %s and %s but got %s" % [low, high, _v])
 
 
 class _ArrayAssert extends _Base:
@@ -169,13 +215,39 @@ class _ArrayAssert extends _Base:
 		if _v is PackedStringArray:
 			return (_v as PackedStringArray).has(String(item))
 		return false
+	func _at(index: int) -> Variant:
+		if _v is Array:
+			return (_v as Array)[index]
+		if _v is PackedStringArray:
+			return (_v as PackedStringArray)[index]
+		return null
 	func is_empty() -> void:
 		_check(_size() == 0, "expected an empty array but it held %d" % _size())
 	func is_not_empty() -> void:
 		_check(_size() > 0, "expected a non-empty array")
+	func has_size(expected: int) -> void:
+		_check(_size() == expected,
+			"expected %d elements but got %d" % [expected, _size()])
 	func contains(expected: Array) -> void:
 		for item: Variant in expected:
 			_check(_has(item), "expected array to contain '%s'" % str(item))
+	func not_contains(unexpected: Array) -> void:
+		for item: Variant in unexpected:
+			_check(not _has(item), "expected array NOT to contain '%s'" % str(item))
+	## Order-sensitive equality. contains() is the subset check; this is the
+	## whole-value one, and the two are not interchangeable — a test asserting a
+	## SEQUENCE (signal order, say) needs this.
+	func is_equal(expected: Variant) -> void:
+		var other := _ArrayAssert.new(_suite, expected)
+		if _size() != other._size():
+			_check(false, "expected %d elements but got %d" % [other._size(), _size()])
+			return
+		for index: int in range(_size()):
+			if str(_at(index)) != str(other._at(index)):
+				_check(false, "element %d: expected '%s' but got '%s'"
+					% [index, str(other._at(index)), str(_at(index))])
+				return
+		_check(true, "")
 
 
 class _DictAssert extends _Base:

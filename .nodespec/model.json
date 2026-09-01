@@ -1,7 +1,7 @@
 {
   "modelVersion": 1,
   "generatedBy": "nodespec",
-  "modelHash": "d7b045dfbc25b2eb344fcc98b3f131fcc683379ae0b3ff040420bb1c2e6858d7",
+  "modelHash": "fd87a16ef8125e5e1111899d1e43f3a063556ac9b0399c4b7f28a355bca41c85",
   "nodes": [
     {
       "id": "22222222-0000-4000-8000-000000000001",
@@ -1287,6 +1287,12 @@
   ],
   "artifacts": [
     {
+      "id": "08192a3b-4c5d-46e7-8278-012345678901",
+      "nodeId": "22222222-0000-4000-8000-000000000005",
+      "path": "test/core/progression/test_life_system.gd",
+      "kind": "source"
+    },
+    {
       "id": "0993048b-c489-4793-b528-ae7b45bc7c80",
       "nodeId": "22222222-0000-4000-8000-000000000018",
       "path": ".nodespec/tests/req-024.tests.md",
@@ -1296,7 +1302,14 @@
       "id": "0ccb8950-b7e2-432a-b5ff-995203293aa7",
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": "project.godot",
-      "kind": "config"
+      "kind": "config",
+      "contentHash": "000000002af2ef95"
+    },
+    {
+      "id": "0d1e2f30-4152-4d63-9e74-f50607182934",
+      "nodeId": "22222222-0000-4000-8000-000000000003",
+      "path": "core/camera/camera_occluder_probe.gd",
+      "kind": "source"
     },
     {
       "id": "0d71252d-d47c-4f5d-a12f-f0b5436e169a",
@@ -1317,10 +1330,34 @@
       "kind": "test-plan"
     },
     {
+      "id": "17263544-5362-4718-8912-233445566778",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/worlds/unsupported_version/world.tscn",
+      "kind": "design"
+    },
+    {
       "id": "1901c180-4616-4b2e-8731-32c2e6d5c8ae",
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": ".nodespec/tests/req-006.tests.md",
       "kind": "test-plan"
+    },
+    {
+      "id": "192a3b4c-5d6e-47f8-8389-123456789012",
+      "nodeId": "22222222-0000-4000-8000-000000000006",
+      "path": "core/gillmod/gill_mod_error.gd",
+      "kind": "source"
+    },
+    {
+      "id": "1a2b3c4d-5e6f-4a70-8b91-c2d3e4f50601",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "core/controller/bubble_boost.gd",
+      "kind": "source"
+    },
+    {
+      "id": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+      "nodeId": "22222222-0000-4000-8000-000000000018",
+      "path": "core/input/input_error.gd",
+      "kind": "source"
     },
     {
       "id": "1cfbcc08-88ae-43c6-85b0-20a5889db725",
@@ -1330,10 +1367,40 @@
       "contentHash": "0000000059eb25d0"
     },
     {
+      "id": "1e2f3041-5263-4e74-8f85-060718293a45",
+      "nodeId": "22222222-0000-4000-8000-000000000003",
+      "path": "core/camera/scene_occluder_probe.gd",
+      "kind": "source"
+    },
+    {
+      "id": "1f2e3d4c-5b6a-4798-8172-635445362718",
+      "nodeId": "22222222-0000-4000-8000-000000000013",
+      "path": "tools/level_contract_checker.py",
+      "kind": "source"
+    },
+    {
       "id": "22af523d-4f28-48e1-b28f-86bcc8841ed9",
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": ".nodespec/tests/req-001.tests.md",
       "kind": "test-plan"
+    },
+    {
+      "id": "26354453-6271-4809-8223-344556677889",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/worlds/bad_world_id/world.tscn",
+      "kind": "design"
+    },
+    {
+      "id": "27180912-2334-4556-8778-899001122334",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/worlds/malformed_manifest/world.tscn",
+      "kind": "design"
+    },
+    {
+      "id": "2a3b4c5d-6e7f-4809-849a-234567890123",
+      "nodeId": "22222222-0000-4000-8000-000000000006",
+      "path": "core/gillmod/gill_mod.gd",
+      "kind": "source"
     },
     {
       "id": "2acf2e84-1b32-47e9-8b2f-f48116483dd0",
@@ -1343,11 +1410,41 @@
       "contentHash": "000000005338d575"
     },
     {
+      "id": "2b3c4d5e-6f70-4b81-9c02-d3e4f5060712",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "core/controller/climb_surface.gd",
+      "kind": "source"
+    },
+    {
+      "id": "2b3c4d5e-6f70-4b8c-9d0e-1f2a3b4c5d6e",
+      "nodeId": "22222222-0000-4000-8000-000000000018",
+      "path": "core/input/input_verb.gd",
+      "kind": "source"
+    },
+    {
+      "id": "2e3d4c5b-6a79-4871-9263-544536271809",
+      "nodeId": "22222222-0000-4000-8000-000000000013",
+      "path": "tools/.gdignore",
+      "kind": "config"
+    },
+    {
+      "id": "2f304152-6374-4f85-9096-0718293a4b56",
+      "nodeId": "22222222-0000-4000-8000-000000000003",
+      "path": "core/camera/camera_hint_volume.gd",
+      "kind": "source"
+    },
+    {
       "id": "2f84a429-2a87-4d48-8375-cd92f1799941",
       "nodeId": "22222222-0000-4000-8000-000000000005",
       "path": ".nodespec/tasks/lives-and-checkpoint-system-22222222.task.md",
       "kind": "task",
       "contentHash": "000000006e03f5e7"
+    },
+    {
+      "id": "30415263-7485-4096-8a17-18293a4b5c67",
+      "nodeId": "22222222-0000-4000-8000-000000000003",
+      "path": "core/camera/camera_rig.gd",
+      "kind": "source"
     },
     {
       "id": "34047a64-c405-487c-a2cd-9fc538b39268",
@@ -1357,6 +1454,18 @@
       "contentHash": "00000000169bf97f"
     },
     {
+      "id": "35445362-7180-4912-8334-455667788990",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/worlds/stray_project_file/world.tscn",
+      "kind": "design"
+    },
+    {
+      "id": "36271809-1223-4445-8667-788990011223",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/worlds/unsanctioned_tuning/world.tscn",
+      "kind": "design"
+    },
+    {
       "id": "37c9921e-3e3d-4c9f-9bc9-2266b0b91fe1",
       "nodeId": "22222222-0000-4000-8000-000000000008",
       "path": ".nodespec/tasks/restoration-state-system-22222222.task.md",
@@ -1364,10 +1473,40 @@
       "contentHash": "000000006d246ec9"
     },
     {
+      "id": "3b4c5d6e-7f80-491a-85ab-345678901234",
+      "nodeId": "22222222-0000-4000-8000-000000000006",
+      "path": "core/gillmod/gill_mod_registry.gd",
+      "kind": "source"
+    },
+    {
+      "id": "3c4d5e6f-7081-4c92-8d13-e4f506071823",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "core/controller/grapple_anchor.gd",
+      "kind": "source"
+    },
+    {
+      "id": "3c4d5e6f-7081-4c9d-8e1f-2a3b4c5d6e7f",
+      "nodeId": "22222222-0000-4000-8000-000000000018",
+      "path": "core/input/binding_context.gd",
+      "kind": "source"
+    },
+    {
       "id": "3ce995a8-eaca-4a3e-bae0-5f4afccaf211",
       "nodeId": "22222222-0000-4000-8000-000000000003",
       "path": ".nodespec/tests/req-005.tests.md",
       "kind": "test-plan"
+    },
+    {
+      "id": "3d4c5b6a-7981-4726-8354-453627180911",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/.gdignore",
+      "kind": "config"
+    },
+    {
+      "id": "41526374-8596-40a7-9b28-293a4b5c6d78",
+      "nodeId": "22222222-0000-4000-8000-000000000003",
+      "path": "test/core/camera/test_camera_rig.gd",
+      "kind": "source"
     },
     {
       "id": "4353cbdd-9b59-4a7d-bf94-9db038f463cb",
@@ -1388,10 +1527,40 @@
       "kind": "test-plan"
     },
     {
-      "id": "491da33f-6402-4e6d-b552-0e152602a3db",
-      "nodeId": "22222222-0000-4000-8000-000000000019",
-      "path": "core/tuning/tuning.json",
+      "id": "45362718-0912-4334-8556-677889900112",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/worlds/two_spawn_points/world.tscn",
+      "kind": "design"
+    },
+    {
+      "id": "45453627-1809-4122-8334-556677889900",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/worlds/stray_project_file/project.godot",
       "kind": "config"
+    },
+    {
+      "id": "4c5b6a79-8172-4635-8445-362718091223",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/worlds/conforming_world/world.json",
+      "kind": "config"
+    },
+    {
+      "id": "4c5d6e7f-8091-4a2b-86bc-456789012345",
+      "nodeId": "22222222-0000-4000-8000-000000000006",
+      "path": "core/gillmod/gill_mod_system.gd",
+      "kind": "source"
+    },
+    {
+      "id": "4d5e6f70-8192-4d0e-8f2a-3b4c5d6e7f80",
+      "nodeId": "22222222-0000-4000-8000-000000000018",
+      "path": "core/input/input_device.gd",
+      "kind": "source"
+    },
+    {
+      "id": "4d5e6f70-8192-4da3-8e24-f50607182934",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "core/controller/anchor_source.gd",
+      "kind": "source"
     },
     {
       "id": "4e6ecf44-ae08-47af-a5d3-23d79e47aa8e",
@@ -1408,6 +1577,12 @@
       "contentHash": "000000007053df01"
     },
     {
+      "id": "5263748a-96a7-40b8-8c39-3a4b5c6d7e89",
+      "nodeId": "22222222-0000-4000-8000-000000000004",
+      "path": "core/regen/capability.gd",
+      "kind": "source"
+    },
+    {
       "id": "5308bb42-3e0e-4d7b-a1c8-40928b049c99",
       "nodeId": "22222222-0000-4000-8000-000000000014",
       "path": ".nodespec/tasks/asset-contract-validator-22222222.task.md",
@@ -1415,10 +1590,46 @@
       "contentHash": "000000006faec031"
     },
     {
+      "id": "53627180-9122-4344-8566-778899001122",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/worlds/unsanctioned_tuning/world.json",
+      "kind": "config"
+    },
+    {
+      "id": "54536271-8091-4223-8445-566778899001",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/worlds/two_spawn_points/world.json",
+      "kind": "config"
+    },
+    {
+      "id": "5b6a7981-7263-4544-8536-271809122334",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/worlds/conforming_world/world.tscn",
+      "kind": "design"
+    },
+    {
+      "id": "5d6e7f80-91a2-4b3c-87cd-567890123456",
+      "nodeId": "22222222-0000-4000-8000-000000000006",
+      "path": "core/gillmod/mods/bubble.json",
+      "kind": "config"
+    },
+    {
       "id": "5e015b73-4285-495c-b2e2-31ea08a27f9b",
       "nodeId": "22222222-0000-4000-8000-000000000020",
       "path": ".nodespec/tests/req-026.tests.md",
       "kind": "test-plan"
+    },
+    {
+      "id": "5e6f7081-92a3-4e1f-903b-4c5d6e7f8091",
+      "nodeId": "22222222-0000-4000-8000-000000000018",
+      "path": "core/input/input_binding.gd",
+      "kind": "source"
+    },
+    {
+      "id": "5e6f7081-92a3-4eb4-8f35-060718293a45",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "core/controller/scene_anchor_source.gd",
+      "kind": "source"
     },
     {
       "id": "61411012-ca62-46ce-928e-654a06d10d5d",
@@ -1428,10 +1639,34 @@
       "contentHash": "000000004ca57c74"
     },
     {
+      "id": "62718091-2233-4455-8677-889900112233",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/worlds/malformed_manifest/world.json",
+      "kind": "config"
+    },
+    {
+      "id": "63544536-2718-4091-8233-445566778899",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/worlds/stray_project_file/world.json",
+      "kind": "config"
+    },
+    {
+      "id": "63748a9b-a7b8-40c9-8d4a-4b5c6d7e8f90",
+      "nodeId": "22222222-0000-4000-8000-000000000004",
+      "path": "core/regen/capability_state.gd",
+      "kind": "source"
+    },
+    {
       "id": "6942ba8d-6f22-43e8-85f4-b9226956e065",
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": ".nodespec/tests/req-021.tests.md",
       "kind": "test-plan"
+    },
+    {
+      "id": "6a798172-6354-4453-8627-180912233445",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/worlds/missing_checkpoint/world.json",
+      "kind": "config"
     },
     {
       "id": "6bfd1866-f2e8-485d-90e4-23ac7ca01a99",
@@ -1447,6 +1682,12 @@
       "kind": "test-plan"
     },
     {
+      "id": "6e7f8091-a2b3-4c4d-88de-678901234567",
+      "nodeId": "22222222-0000-4000-8000-000000000006",
+      "path": "core/gillmod/mods/jet.json",
+      "kind": "config"
+    },
+    {
       "id": "6f1fc3d7-2dd4-46ec-80ad-07820dd43dde",
       "nodeId": "22222222-0000-4000-8000-000000000023",
       "path": ".nodespec/tasks/world-reference-template-22222222.task.md",
@@ -1460,10 +1701,47 @@
       "kind": "test-plan"
     },
     {
+      "id": "6f708192-a3b4-4f2a-813c-5d6e7f8091a2",
+      "nodeId": "22222222-0000-4000-8000-000000000018",
+      "path": "core/input/binding_table.gd",
+      "kind": "source"
+    },
+    {
+      "id": "6f708192-a3b4-4fc5-9046-0718293a4b56",
+      "nodeId": "22222222-0000-4000-8000-000000000019",
+      "path": "core/tuning/tuning.json",
+      "kind": "config",
+      "contentHash": "0000000079dea331"
+    },
+    {
+      "id": "708192a3-b4c5-4a3b-824d-6e7f8091a2b3",
+      "nodeId": "22222222-0000-4000-8000-000000000018",
+      "path": "core/input/default_bindings.json",
+      "kind": "config"
+    },
+    {
+      "id": "71809122-3344-4556-8778-990011223344",
+      "nodeId": "22222222-0000-4000-8000-000000000013",
+      "path": "tools/test_level_contract_checker.py",
+      "kind": "source"
+    },
+    {
+      "id": "72635445-3627-4180-8912-233445566889",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/worlds/bad_world_id/world.json",
+      "kind": "config"
+    },
+    {
       "id": "738e41ec-b38b-4176-80ec-5708fe17f1e9",
       "nodeId": "22222222-0000-4000-8000-000000000011",
       "path": ".nodespec/tests/req-011.tests.md",
       "kind": "test-plan"
+    },
+    {
+      "id": "748a9bac-b8c9-40da-8e5b-5c6d7e8f9012",
+      "nodeId": "22222222-0000-4000-8000-000000000004",
+      "path": "core/regen/damage_event.gd",
+      "kind": "source"
     },
     {
       "id": "767187e4-3e43-41cf-ad03-1110dfed63ef",
@@ -1479,6 +1757,42 @@
       "kind": "test-plan"
     },
     {
+      "id": "79817263-5445-4362-8718-091223344556",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/worlds/missing_checkpoint/world.tscn",
+      "kind": "design"
+    },
+    {
+      "id": "7a8b9c0d-1e2f-4a30-8b41-c2d3e4f50701",
+      "nodeId": "22222222-0000-4000-8000-000000000003",
+      "path": "core/camera/camera_framing.gd",
+      "kind": "source"
+    },
+    {
+      "id": "7f8091a2-b3c4-4d5e-89ef-789012345678",
+      "nodeId": "22222222-0000-4000-8000-000000000006",
+      "path": "core/gillmod/mods/glow.json",
+      "kind": "config"
+    },
+    {
+      "id": "8091a2b3-c4d5-4e6f-8a01-890123456789",
+      "nodeId": "22222222-0000-4000-8000-000000000006",
+      "path": "test/core/gillmod/test_gill_mod_system.gd",
+      "kind": "source"
+    },
+    {
+      "id": "81726354-4536-4271-8091-223344556677",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/worlds/unsupported_version/world.json",
+      "kind": "config"
+    },
+    {
+      "id": "8192a3b4-c5d6-4b4c-835e-7f8091a2b3c4",
+      "nodeId": "22222222-0000-4000-8000-000000000018",
+      "path": "core/input/input_system.gd",
+      "kind": "source"
+    },
+    {
       "id": "87cf8c05-7016-44a9-9b0d-1f58eb1b3fc4",
       "nodeId": "22222222-0000-4000-8000-000000000006",
       "path": ".nodespec/tests/req-004.tests.md",
@@ -1490,6 +1804,24 @@
       "path": ".nodespec/tasks/input-system-22222222.task.md",
       "kind": "task",
       "contentHash": "00000000178e9426"
+    },
+    {
+      "id": "8a9bacbd-c9da-40eb-8f6c-6d7e8f901234",
+      "nodeId": "22222222-0000-4000-8000-000000000004",
+      "path": "core/regen/mutation_loadout.gd",
+      "kind": "source"
+    },
+    {
+      "id": "8b9c0d1e-2f30-4b41-9c52-d3e4f5060812",
+      "nodeId": "22222222-0000-4000-8000-000000000003",
+      "path": "core/camera/camera_hint.gd",
+      "kind": "source"
+    },
+    {
+      "id": "92a3b4c5-d6e7-4c5d-846f-8091a2b3c4d5",
+      "nodeId": "22222222-0000-4000-8000-000000000018",
+      "path": "test/core/input/test_input_system.gd",
+      "kind": "source"
     },
     {
       "id": "95716407-6d02-428b-966f-2838c07e420b",
@@ -1504,6 +1836,18 @@
       "kind": "test-plan"
     },
     {
+      "id": "9bacbdce-daeb-40fc-8a7d-7e8f90123456",
+      "nodeId": "22222222-0000-4000-8000-000000000004",
+      "path": "core/regen/feedback_cue.gd",
+      "kind": "source"
+    },
+    {
+      "id": "9c0d1e2f-3041-4c52-8d63-e4f506071823",
+      "nodeId": "22222222-0000-4000-8000-000000000003",
+      "path": "core/camera/camera_hint_stack.gd",
+      "kind": "source"
+    },
+    {
       "id": "9f7e0ba9-80df-4253-add3-5060fab6e2e4",
       "nodeId": "22222222-0000-4000-8000-000000000016",
       "path": ".nodespec/tests/req-022.tests.md",
@@ -1516,9 +1860,22 @@
       "kind": "source"
     },
     {
+      "id": "a2b3c4d5-e6f7-4081-8c12-456789012345",
+      "nodeId": "22222222-0000-4000-8000-000000000005",
+      "path": "core/progression/checkpoint_graph.gd",
+      "kind": "source"
+    },
+    {
       "id": "a3b4c5d6-7e8f-4091-0213-243546576879",
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": "core/controller/capability_modifiers.gd",
+      "kind": "source",
+      "contentHash": "000000003e00b318"
+    },
+    {
+      "id": "a3b4c5d6-e7f8-4d6e-857a-91a2b3c4d5e6",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "core/controller/axolotl_body.gd",
       "kind": "source"
     },
     {
@@ -1531,6 +1888,12 @@
       "id": "a9d63e12-4f70-4b85-8c2d-51e9a7b04c63",
       "nodeId": "22222222-0000-4000-8000-000000000017",
       "path": "core/audio/godot_audio_sink.gd",
+      "kind": "source"
+    },
+    {
+      "id": "acbdcedf-ebfc-400d-8b8e-8f9012345678",
+      "nodeId": "22222222-0000-4000-8000-000000000004",
+      "path": "core/regen/state_discriminator.gd",
       "kind": "source"
     },
     {
@@ -1554,9 +1917,21 @@
       "contentHash": "000000002023b197"
     },
     {
+      "id": "b1c2d3e4-f506-4172-8394-a5b6c7d8e9f0",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "contracts/level_contract.v1.json",
+      "kind": "schema"
+    },
+    {
       "id": "b2c3d4e5-6f7a-4b8c-9d0e-1f2a3b4c5d6e",
       "nodeId": "22222222-0000-4000-8000-000000000007",
       "path": "core/save/world_contract_shape.gd",
+      "kind": "source"
+    },
+    {
+      "id": "b3c4d5e6-f708-4192-8d23-567890123456",
+      "nodeId": "22222222-0000-4000-8000-000000000005",
+      "path": "core/progression/capability_restorer.gd",
       "kind": "source"
     },
     {
@@ -1570,6 +1945,12 @@
       "id": "b4c5d6e7-8f90-4102-1324-354657687980",
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": "core/controller/water_dash.gd",
+      "kind": "source"
+    },
+    {
+      "id": "b4c5d6e7-f809-4e7f-968b-a2b3c4d5e6f7",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "core/controller/water_volume.gd",
       "kind": "source"
     },
     {
@@ -1597,11 +1978,23 @@
       "kind": "test-plan"
     },
     {
+      "id": "bdcedfea-fc0d-411e-8c9f-901234567890",
+      "nodeId": "22222222-0000-4000-8000-000000000004",
+      "path": "core/regen/feedback_table.gd",
+      "kind": "source"
+    },
+    {
       "id": "bf4b5c21-b17a-4f37-a090-09f234b07919",
       "nodeId": "22222222-0000-4000-8000-000000000010",
       "path": ".nodespec/tasks/drift-fleet-enemy-framework-22222222.task.md",
       "kind": "task",
       "contentHash": "000000005911ba04"
+    },
+    {
+      "id": "c2d3e4f5-0617-4283-94a5-b6c7d8e9f001",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "contracts/sanctioned_api.v1.json",
+      "kind": "schema"
     },
     {
       "id": "c3d4e5f6-7a8b-4c9d-0e1f-2a3b4c5d6e7f",
@@ -1622,10 +2015,24 @@
       "kind": "source"
     },
     {
+      "id": "c4d5e6f7-0819-42a3-8e34-678901234567",
+      "nodeId": "22222222-0000-4000-8000-000000000005",
+      "path": "core/progression/checkpoint_store.gd",
+      "kind": "source"
+    },
+    {
+      "id": "c5d6e7f8-091a-4f80-a79c-b3c4d5e6f708",
+      "nodeId": "22222222-0000-4000-8000-000000000003",
+      "path": "core/camera/camera_follow.gd",
+      "kind": "source",
+      "contentHash": "00000000320c443a"
+    },
+    {
       "id": "c5d6e7f8-9001-4213-2435-465768798091",
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": "core/controller/tongue_grapple.gd",
-      "kind": "source"
+      "kind": "source",
+      "contentHash": "000000001326d4f6"
     },
     {
       "id": "c8713284-4347-41f2-8324-62f62628d23b",
@@ -1637,7 +2044,8 @@
       "id": "c9d0e1f2-3a4b-4c5d-6e7f-809102132435",
       "nodeId": "22222222-0000-4000-8000-000000000020",
       "path": "test/run_tests.gd",
-      "kind": "source"
+      "kind": "source",
+      "contentHash": "000000006a5fbf39"
     },
     {
       "id": "ca73e94d-6488-461d-9169-b596617a4804",
@@ -1646,9 +2054,23 @@
       "kind": "test-plan"
     },
     {
+      "id": "cedfeafb-0d1e-422f-8daa-012345678901",
+      "nodeId": "22222222-0000-4000-8000-000000000004",
+      "path": "core/regen/regen_system.gd",
+      "kind": "source",
+      "contentHash": "000000005cde9ce0"
+    },
+    {
       "id": "d0e1f2a3-4b5c-4d6e-7f80-910213243546",
       "nodeId": "22222222-0000-4000-8000-000000000020",
       "path": "test/support/gdunit_compat.gd",
+      "kind": "source",
+      "contentHash": "000000000a50a92b"
+    },
+    {
+      "id": "d3e4f506-1728-4394-a5b6-c7d8e9f00112",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "test/contracts/test_level_contract.gd",
       "kind": "source"
     },
     {
@@ -1671,10 +2093,24 @@
       "kind": "source"
     },
     {
+      "id": "d5e6f708-192a-43b4-8f45-789012345678",
+      "nodeId": "22222222-0000-4000-8000-000000000005",
+      "path": "core/progression/save_checkpoint_store.gd",
+      "kind": "source"
+    },
+    {
+      "id": "d6e7f809-1a2b-4091-b8ad-c4d5e6f70819",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "dev/greybox.tscn",
+      "kind": "design",
+      "contentHash": "0000000039a56c80"
+    },
+    {
       "id": "d6e7f890-0112-4324-3546-576879809102",
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": "core/controller/axolotl_controller.gd",
-      "kind": "source"
+      "kind": "source",
+      "contentHash": "0000000022d42733"
     },
     {
       "id": "d6f92a41-7b83-4e15-a029-4c7f81b3e502",
@@ -1710,6 +2146,18 @@
       "contentHash": "000000007511f371"
     },
     {
+      "id": "dfeafb0d-1e2f-4330-8bbb-123456789012",
+      "nodeId": "22222222-0000-4000-8000-000000000004",
+      "path": "test/core/regen/test_regen_system.gd",
+      "kind": "source"
+    },
+    {
+      "id": "e0f1a2b3-c4d5-4e6f-8a90-234567890123",
+      "nodeId": "22222222-0000-4000-8000-000000000005",
+      "path": "core/progression/catastrophic_source.gd",
+      "kind": "source"
+    },
+    {
       "id": "e1f2a3b4-5c6d-4e7f-8091-021324354657",
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": "core/controller/movement_grammar.gd",
@@ -1720,6 +2168,12 @@
       "nodeId": "22222222-0000-4000-8000-000000000019",
       "path": "test/core/tuning/test_tuning_data.gd",
       "kind": "source"
+    },
+    {
+      "id": "e4f50617-2839-44a5-b6c7-d8e9f0011223",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "docs/level-contract.md",
+      "kind": "doc"
     },
     {
       "id": "e5f6a7b8-9c0d-4e1f-2a3b-4c5d6e7f8091",
@@ -1734,6 +2188,12 @@
       "kind": "test-plan"
     },
     {
+      "id": "e6f70819-2a3b-44c5-8056-890123456789",
+      "nodeId": "22222222-0000-4000-8000-000000000005",
+      "path": "core/progression/life_system.gd",
+      "kind": "source"
+    },
+    {
       "id": "e70215a4-cca5-492a-b5bd-42629824715e",
       "nodeId": "22222222-0000-4000-8000-000000000019",
       "path": "core/tuning/tuning_error.gd",
@@ -1746,10 +2206,17 @@
       "kind": "source"
     },
     {
+      "id": "e7f8091a-2b3c-40a2-89be-d5e6f708192a",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "dev/run_smoke.gd",
+      "kind": "source"
+    },
+    {
       "id": "e7f89012-2334-4546-5768-798091021324",
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": "test/core/controller/test_axolotl_controller.gd",
-      "kind": "source"
+      "kind": "source",
+      "contentHash": "00000000736de146"
     },
     {
       "id": "e8b40c93-2d71-4f68-a5e3-9b17d6820f4a",
@@ -1768,6 +2235,12 @@
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": ".nodespec/tests/req-009.tests.md",
       "kind": "test-plan"
+    },
+    {
+      "id": "f1a2b3c4-d5e6-4f70-8b01-345678901234",
+      "nodeId": "22222222-0000-4000-8000-000000000005",
+      "path": "core/progression/checkpoint.gd",
+      "kind": "source"
     },
     {
       "id": "f2a3b4c5-6d7e-4f80-9102-132435465768",
@@ -1792,6 +2265,19 @@
       "nodeId": "22222222-0000-4000-8000-000000000007",
       "path": "docs/save_compatibility_policy.md",
       "kind": "doc"
+    },
+    {
+      "id": "f7081920-3b4c-45d6-8167-901234567890",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "test/core/harness/test_harness_integrity.gd",
+      "kind": "source"
+    },
+    {
+      "id": "f8091a2b-3c4d-41b3-9acf-e6f70819203b",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "dev/smoke_probe.gd",
+      "kind": "source",
+      "contentHash": "00000000602c51bb"
     },
     {
       "id": "fbb9bba9-1ca5-42d2-8828-4044823019f8",

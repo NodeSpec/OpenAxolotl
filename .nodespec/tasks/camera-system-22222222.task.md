@@ -105,22 +105,10 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T6 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T7 — Implement: "Camera follows the axolotl in both water and land grammars, and during a grammar transition its per-frame position and rotation deltas stay at or below tuning keys camera.smoothing.max_position_delta_m_per_frame and camera.smoothing.max_rotation_delta_deg_per_frame" (REQ-005).** <!-- t:1dc6e8e4 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-005 "Camera follows the axolotl in both water and land grammars, and during a grammar transition its per-frame position and rotation deltas stay at or below tuning keys camera.smoothing.max_position_delta_m_per_frame and camera.smoothing.max_rotation_delta_deg_per_frame" — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
-- [ ] **T8 — Implement: "Camera performs collision avoidance against level geometry, never clipping inside walls or terrain in confined tunnels" (REQ-005).** <!-- t:82975928 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-005 "Camera performs collision avoidance against level geometry, never clipping inside walls or terrain in confined tunnels"
-- [ ] **T9 — Implement: "Worlds can place camera hint volumes that override framing (distance, angle, lock axis) declaratively without custom camera code" (REQ-005).** <!-- t:b2b3c5a6 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-005 "Worlds can place camera hint volumes that override framing (distance, angle, lock axis) declaratively without custom camera code" — possible coordination point: Contract "Camera Hint Interface" (dependency) from World: Coral Cove (keyword signal only)
-- [ ] **T10 — Implement: "Camera behavior is fully driven by exported configuration values rather than hardcoded constants" (REQ-005).** <!-- t:d891c2fa -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-005 "Camera behavior is fully driven by exported configuration values rather than hardcoded constants"
-- [ ] **T11 — Implement: "Camera never induces disorientation or fights the player during underwater traversal in hands-on play" (REQ-005).** <!-- t:2c711dea -->
+- [ ] **T7 — Implement: "Camera never induces disorientation or fights the player during underwater traversal in hands-on play" (REQ-005).** <!-- t:2c711dea -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-005 "Camera never induces disorientation or fights the player during underwater traversal in hands-on play" — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
-- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T8 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -176,16 +164,16 @@ Category: functional | Status: in-progress
 A third-person camera that reads well across both movement grammars and inside confined spaces. Must handle full 3D underwater freedom (where the axolotl can pitch and roll) and grounded land traversal (where a more conventional follow camera reads better) without the player fighting it. Supports per-world camera hint volumes so a Level Contract-conforming world can direct framing for set pieces, tunnels, and boss arenas without scripting its own camera. Collision-aware so tight underwater tunnels and cave interiors never clip through geometry.
 
 **Acceptance criteria — your task boxes:**
-- [ ] Camera follows the axolotl in both water and land grammars, and during a grammar transition its per-frame position and rotation deltas stay at or below tuning keys camera.smoothing.max_position_delta_m_per_frame and camera.smoothing.max_rotation_delta_deg_per_frame
-  → covered by Task T7
-- [ ] Camera performs collision avoidance against level geometry, never clipping inside walls or terrain in confined tunnels
-  → covered by Task T8
-- [ ] Worlds can place camera hint volumes that override framing (distance, angle, lock axis) declaratively without custom camera code
-  → covered by Task T9
-- [ ] Camera behavior is fully driven by exported configuration values rather than hardcoded constants
-  → covered by Task T10
+- [x] Camera follows the axolotl in both water and land grammars, and during a grammar transition its per-frame position and rotation deltas stay at or below tuning keys camera.smoothing.max_position_delta_m_per_frame and camera.smoothing.max_rotation_delta_deg_per_frame
+  → THIS NODE: internal logic — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
+- [x] Camera performs collision avoidance against level geometry, never clipping inside walls or terrain in confined tunnels
+  → THIS NODE: internal logic
+- [x] Worlds can place camera hint volumes that override framing (distance, angle, lock axis) declaratively without custom camera code
+  → THIS NODE: internal logic — possible coordination point: Contract "Camera Hint Interface" (dependency) from World: Coral Cove (keyword signal only)
+- [x] Camera behavior is fully driven by exported configuration values rather than hardcoded constants
+  → THIS NODE: internal logic
 - [ ] Camera never induces disorientation or fights the player during underwater traversal in hands-on play (manual)
-  → covered by Task T11
+  → covered by Task T7
 
 ## Interface Contracts
 
@@ -354,4 +342,13 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 | File | Kind | Language | Status |
 |------|------|----------|--------|
+| `core/camera/camera_occluder_probe.gd` | source | --- | draft |
+| `core/camera/scene_occluder_probe.gd` | source | --- | draft |
+| `core/camera/camera_hint_volume.gd` | source | --- | draft |
+| `core/camera/camera_rig.gd` | source | --- | draft |
 | `.nodespec/tests/req-005.tests.md` - Test plan for requirement: Camera System | test-plan | markdown | draft |
+| `test/core/camera/test_camera_rig.gd` | source | --- | draft |
+| `core/camera/camera_framing.gd` | source | --- | draft |
+| `core/camera/camera_hint.gd` | source | --- | draft |
+| `core/camera/camera_hint_stack.gd` | source | --- | draft |
+| `core/camera/camera_follow.gd` | source | --- | draft |

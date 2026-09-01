@@ -1,0 +1,14 @@
+{
+  "contractVersion": "1.0",
+  "worldId": "missing_checkpoint",
+  "displayName": "Conforming Fixture",
+  "controllerCompatibility": "1.0",
+  "finishCondition": {
+    "kind": "reach_volume"
+  },
+  "saveIntegration": {
+    "keys": [
+      "missing_checkpoint.completed"
+    ]
+  }
+}

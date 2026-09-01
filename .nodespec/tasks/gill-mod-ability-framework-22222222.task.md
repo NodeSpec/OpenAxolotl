@@ -117,28 +117,10 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T10 — Implement: "Bubble, Jet, and Glow Gill Mods are implemented, and each one unlocks at least one traversal or interaction affordance that is unavailable without it" (REQ-004).** <!-- t:825886e3 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-004 "Bubble, Jet, and Glow Gill Mods are implemented, and each one unlocks at least one traversal or interaction affordance that is unavailable without it" — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
-- [ ] **T11 — Implement: "Gill Mods are registered through a documented extension interface, and a fixture mod can be added without modifying any file in the ability system core" (REQ-004).** <!-- t:0bf325d9 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-004 "Gill Mods are registered through a documented extension interface, and a fixture mod can be added without modifying any file in the ability system core" — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
-- [ ] **T12 — Implement: "A world can declare and supply a custom Gill Mod through the Level Contract optional custom-ability element" (REQ-004).** <!-- t:d4b81e11 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-004 "A world can declare and supply a custom Gill Mod through the Level Contract optional custom-ability element" — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
-- [ ] **T13 — Implement: "Equipping and switching Gill Mods is available to the player and reflected on the axolotl visually" (REQ-004).** <!-- t:44c87173 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-004 "Equipping and switching Gill Mods is available to the player and reflected on the axolotl visually" — possible coordination point: Contract "Axolotl Controller Interface" (dependency) to Axolotl Controller (keyword signal only)
-- [ ] **T14 — Implement: "Gill capability loss multiplies the equipped mod's boost duration by tuning key capability.gill_loss.boost_duration_multiplier" (REQ-004).** <!-- t:3d759213 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-004 "Gill capability loss multiplies the equipped mod's boost duration by tuning key capability.gill_loss.boost_duration_multiplier" — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
-- [ ] **T15 — Implement: "A Hookline Rig snag removes the equipped mod for the window given by tuning key enemy.hookline.mod_strip_seconds, then restores it automatically" (REQ-004).** <!-- t:b01ec144 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-004 "A Hookline Rig snag removes the equipped mod for the window given by tuning key enemy.hookline.mod_strip_seconds, then restores it automatically" — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
-- [ ] **T16 — Implement: "Each of the three MVP Gill Mods is developed to real depth rather than existing as a shallow one-note gimmick" (REQ-004).** <!-- t:79238c0a -->
+- [ ] **T10 — Implement: "Each of the three MVP Gill Mods is developed to real depth rather than existing as a shallow one-note gimmick" (REQ-004).** <!-- t:79238c0a -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-004 "Each of the three MVP Gill Mods is developed to real depth rather than existing as a shallow one-note gimmick"
-- [ ] **T17 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T11 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -193,20 +175,20 @@ Category: functional | Status: in-progress
 The collectible ability layer, built on the axolotl's visually iconic external gills. THREE Gill Mods ship at MVP — depth per power beats breadth of roster: BUBBLE GILLS produce bounceable bubbles for traversal, JET GILLS give a water dash for speed and combat, GLOW GILLS illuminate caves and activate bioluminescent objects for exploration. Electric, Frost, and Giant Gills are explicitly post-MVP and serve double duty as the first official post-launch content AND the reference example of what a well-built community-contributed Gill Mod looks like. The system must therefore be an extensible ability framework with a documented registration interface, not three hardcoded special cases — a world declaring a custom ability through the Level Contract plugs in here. Equipped Gill Mods interact with the capability layer: a lost gill shortens boost duration, and a Hookline Rig snag temporarily strips the equipped mod.
 
 **Acceptance criteria — your task boxes:**
-- [ ] Bubble, Jet, and Glow Gill Mods are implemented, and each one unlocks at least one traversal or interaction affordance that is unavailable without it
-  → covered by Task T10
-- [ ] Gill Mods are registered through a documented extension interface, and a fixture mod can be added without modifying any file in the ability system core
-  → covered by Task T11
-- [ ] A world can declare and supply a custom Gill Mod through the Level Contract optional custom-ability element
-  → covered by Task T12
-- [ ] Equipping and switching Gill Mods is available to the player and reflected on the axolotl visually
-  → covered by Task T13
-- [ ] Gill capability loss multiplies the equipped mod's boost duration by tuning key capability.gill_loss.boost_duration_multiplier
-  → covered by Task T14
-- [ ] A Hookline Rig snag removes the equipped mod for the window given by tuning key enemy.hookline.mod_strip_seconds, then restores it automatically
-  → covered by Task T15
+- [x] Bubble, Jet, and Glow Gill Mods are implemented, and each one unlocks at least one traversal or interaction affordance that is unavailable without it
+  → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
+- [x] Gill Mods are registered through a documented extension interface, and a fixture mod can be added without modifying any file in the ability system core
+  → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
+- [x] A world can declare and supply a custom Gill Mod through the Level Contract optional custom-ability element
+  → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
+- [x] Equipping and switching Gill Mods is available to the player and reflected on the axolotl visually
+  → THIS NODE: internal logic — possible coordination point: Contract "Axolotl Controller Interface" (dependency) to Axolotl Controller (keyword signal only)
+- [x] Gill capability loss multiplies the equipped mod's boost duration by tuning key capability.gill_loss.boost_duration_multiplier
+  → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
+- [x] A Hookline Rig snag removes the equipped mod for the window given by tuning key enemy.hookline.mod_strip_seconds, then restores it automatically
+  → THIS NODE: internal logic — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
 - [ ] Each of the three MVP Gill Mods is developed to real depth rather than existing as a shallow one-note gimmick (manual)
-  → covered by Task T16
+  → covered by Task T10
 
 ## Interface Contracts
 
@@ -405,4 +387,12 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 | File | Kind | Language | Status |
 |------|------|----------|--------|
+| `core/gillmod/gill_mod_error.gd` | source | --- | draft |
+| `core/gillmod/gill_mod.gd` | source | --- | draft |
+| `core/gillmod/gill_mod_registry.gd` | source | --- | draft |
+| `core/gillmod/gill_mod_system.gd` | source | --- | draft |
+| `core/gillmod/mods/bubble.json` | config | --- | draft |
+| `core/gillmod/mods/jet.json` | config | --- | draft |
+| `core/gillmod/mods/glow.json` | config | --- | draft |
+| `test/core/gillmod/test_gill_mod_system.gd` | source | --- | draft |
 | `.nodespec/tests/req-004.tests.md` - Test plan for requirement: Gill Mod Ability System | test-plan | markdown | draft |

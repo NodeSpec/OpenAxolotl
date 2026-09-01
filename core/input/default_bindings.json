@@ -1,0 +1,72 @@
+{
+  "note": "Default control schemes (REQ-024). Data, not code: a remap rewrites entries of exactly this shape and persists them through the save profile's 'input' section. Contexts are what let a physical input mean different things in water and on land -- WASD is swim in water and waddle on land, SPACE is swim-up in water and hop on land, E is bubble boost in water and climb on land. Those pairs are not conflicts because their contexts never overlap; two bindings in the SAME context sharing an input are refused with input.binding_conflict.",
+  "bindings": [
+    {
+      "verb": "swim",
+      "context": "water",
+      "device": "keyboard_mouse",
+      "directions": {
+        "forward": "key.w",
+        "back": "key.s",
+        "left": "key.a",
+        "right": "key.d",
+        "up": "key.space",
+        "down": "key.shift"
+      }
+    },
+    {
+      "verb": "waddle",
+      "context": "land",
+      "device": "keyboard_mouse",
+      "directions": {
+        "forward": "key.w",
+        "back": "key.s",
+        "left": "key.a",
+        "right": "key.d"
+      }
+    },
+    { "verb": "dive", "context": "water", "device": "keyboard_mouse", "input": "key.c" },
+    { "verb": "bubble_boost", "context": "water", "device": "keyboard_mouse", "input": "key.e" },
+    { "verb": "hop", "context": "land", "device": "keyboard_mouse", "input": "key.space" },
+    { "verb": "climb", "context": "land", "device": "keyboard_mouse", "input": "key.e" },
+    { "verb": "grapple", "context": "any", "device": "keyboard_mouse", "input": "key.q" },
+    { "verb": "dash", "context": "any", "device": "keyboard_mouse", "input": "mouse.2" },
+    { "verb": "gill_mod_activate", "context": "any", "device": "keyboard_mouse", "input": "mouse.1" },
+    { "verb": "gill_mod_next", "context": "any", "device": "keyboard_mouse", "input": "key.tab" },
+    { "verb": "gill_mod_prev", "context": "any", "device": "keyboard_mouse", "input": "key.r" },
+
+    {
+      "verb": "swim",
+      "context": "water",
+      "device": "gamepad",
+      "directions": {
+        "forward": "pad.axis.1.-",
+        "back": "pad.axis.1.+",
+        "left": "pad.axis.0.-",
+        "right": "pad.axis.0.+",
+        "up": "pad.axis.5.+",
+        "down": "pad.axis.4.+"
+      }
+    },
+    {
+      "verb": "waddle",
+      "context": "land",
+      "device": "gamepad",
+      "directions": {
+        "forward": "pad.axis.1.-",
+        "back": "pad.axis.1.+",
+        "left": "pad.axis.0.-",
+        "right": "pad.axis.0.+"
+      }
+    },
+    { "verb": "dive", "context": "water", "device": "gamepad", "input": "pad.button.1" },
+    { "verb": "bubble_boost", "context": "water", "device": "gamepad", "input": "pad.button.2" },
+    { "verb": "hop", "context": "land", "device": "gamepad", "input": "pad.button.0" },
+    { "verb": "climb", "context": "land", "device": "gamepad", "input": "pad.button.2" },
+    { "verb": "grapple", "context": "any", "device": "gamepad", "input": "pad.button.3" },
+    { "verb": "dash", "context": "any", "device": "gamepad", "input": "pad.button.10" },
+    { "verb": "gill_mod_activate", "context": "any", "device": "gamepad", "input": "pad.button.9" },
+    { "verb": "gill_mod_next", "context": "any", "device": "gamepad", "input": "pad.button.14" },
+    { "verb": "gill_mod_prev", "context": "any", "device": "gamepad", "input": "pad.button.13" }
+  ]
+}
