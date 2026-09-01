@@ -1,7 +1,7 @@
 {
   "modelVersion": 1,
   "generatedBy": "nodespec",
-  "modelHash": "fd87a16ef8125e5e1111899d1e43f3a063556ac9b0399c4b7f28a355bca41c85",
+  "modelHash": "918e9aeeb8ed600df693ed5220c27bd4256672f22a84486765219228735cea8e",
   "nodes": [
     {
       "id": "22222222-0000-4000-8000-000000000001",
@@ -1303,7 +1303,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": "project.godot",
       "kind": "config",
-      "contentHash": "000000002af2ef95"
+      "contentHash": "0000000006eeec11"
     },
     {
       "id": "0d1e2f30-4152-4d63-9e74-f50607182934",
@@ -1334,6 +1334,12 @@
       "nodeId": "22222222-0000-4000-8000-000000000020",
       "path": "fixtures/worlds/unsupported_version/world.tscn",
       "kind": "design"
+    },
+    {
+      "id": "18091223-3445-4566-8778-990011223355",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "dev/fall_guard.gd",
+      "kind": "source"
     },
     {
       "id": "1901c180-4616-4b2e-8731-32c2e6d5c8ae",
@@ -1711,7 +1717,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000019",
       "path": "core/tuning/tuning.json",
       "kind": "config",
-      "contentHash": "0000000079dea331"
+      "contentHash": "000000005c1adfe4"
     },
     {
       "id": "708192a3-b4c5-4a3b-824d-6e7f8091a2b3",
@@ -1876,7 +1882,8 @@
       "id": "a3b4c5d6-e7f8-4d6e-857a-91a2b3c4d5e6",
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": "core/controller/axolotl_body.gd",
-      "kind": "source"
+      "kind": "source",
+      "contentHash": "0000000044799f86"
     },
     {
       "id": "a7b8c9d0-1e2f-4a3b-4c5d-6e7f80910213",
@@ -1920,7 +1927,8 @@
       "id": "b1c2d3e4-f506-4172-8394-a5b6c7d8e9f0",
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": "contracts/level_contract.v1.json",
-      "kind": "schema"
+      "kind": "schema",
+      "contentHash": "0000000016203724"
     },
     {
       "id": "b2c3d4e5-6f7a-4b8c-9d0e-1f2a3b4c5d6e",
@@ -2103,14 +2111,14 @@
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": "dev/greybox.tscn",
       "kind": "design",
-      "contentHash": "0000000039a56c80"
+      "contentHash": "00000000574f69c9"
     },
     {
       "id": "d6e7f890-0112-4324-3546-576879809102",
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": "core/controller/axolotl_controller.gd",
       "kind": "source",
-      "contentHash": "0000000022d42733"
+      "contentHash": "0000000038eab0e5"
     },
     {
       "id": "d6f92a41-7b83-4e15-a029-4c7f81b3e502",
@@ -2149,7 +2157,8 @@
       "id": "dfeafb0d-1e2f-4330-8bbb-123456789012",
       "nodeId": "22222222-0000-4000-8000-000000000004",
       "path": "test/core/regen/test_regen_system.gd",
-      "kind": "source"
+      "kind": "source",
+      "contentHash": "0000000060c1d7fd"
     },
     {
       "id": "e0f1a2b3-c4d5-4e6f-8a90-234567890123",
@@ -2173,7 +2182,8 @@
       "id": "e4f50617-2839-44a5-b6c7-d8e9f0011223",
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": "docs/level-contract.md",
-      "kind": "doc"
+      "kind": "doc",
+      "contentHash": "000000001dddf2e4"
     },
     {
       "id": "e5f6a7b8-9c0d-4e1f-2a3b-4c5d6e7f8091",
@@ -2216,7 +2226,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": "test/core/controller/test_axolotl_controller.gd",
       "kind": "source",
-      "contentHash": "00000000736de146"
+      "contentHash": "0000000062adf1a0"
     },
     {
       "id": "e8b40c93-2d71-4f68-a5e3-9b17d6820f4a",
@@ -2277,7 +2287,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": "dev/smoke_probe.gd",
       "kind": "source",
-      "contentHash": "00000000602c51bb"
+      "contentHash": "0000000042b6c1a5"
     },
     {
       "id": "fbb9bba9-1ca5-42d2-8828-4044823019f8",

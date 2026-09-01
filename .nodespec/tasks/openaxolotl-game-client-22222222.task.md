@@ -933,6 +933,7 @@ Startup/initialization order based on edge directions and interaction patterns.
 |------|------|----------|--------|
 | `project.godot` | config | --- | draft |
 | `.nodespec/tests/req-017.tests.md` - Test plan for requirement: AI-Agent Contributor Workflow and Documentation | test-plan | markdown | draft |
+| `dev/fall_guard.gd` | source | --- | draft |
 | `.nodespec/tests/req-006.tests.md` - Test plan for requirement: Level Contract v1 Specification | test-plan | markdown | draft |
 | `.nodespec/tests/req-021.tests.md` - Test plan for requirement: Licensing Policy — Code, Assets, and AI Provenance | test-plan | markdown | draft |
 | `contracts/level_contract.v1.json` | schema | --- | draft |

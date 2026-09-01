@@ -22,12 +22,26 @@
       "max": 30.0,
       "description": "Base swim speed under full 3D directional steering, before capability modifiers and the bubble boost multiplier."
     },
+    "controller.swim.drag_per_second": {
+      "value": 1.1,
+      "unit": "per_second",
+      "min": 0.1,
+      "max": 60.0,
+      "description": "How briskly a swimming axolotl sheds speed when the player is not steering. An order of magnitude gentler than the land drag: water is the grammar that GLIDES, and that contrast is a large part of what makes the two read as mechanically distinct. Also bounds a fall into water, which would otherwise sink at its entry speed until it hit the floor."
+    },
     "controller.waddle.base_speed_m_per_s": {
       "value": 2.5,
       "unit": "meters_per_second",
       "min": 0.5,
       "max": 20.0,
       "description": "Base grounded waddle speed. Deliberately well below the swim speed: water is the fast grammar, and that gap is what makes the two read as distinct rather than as one speed with a different animation."
+    },
+    "controller.waddle.drag_per_second": {
+      "value": 12.0,
+      "unit": "per_second",
+      "min": 0.1,
+      "max": 60.0,
+      "description": "How briskly a grounded axolotl sheds horizontal speed when the player is not steering. Applied as exp(-rate*delta) so the tuned number means the same at any frame rate. High relative to the swim drag: land should feel planted, and releasing the key should stop you almost at once. The minimum is deliberately above zero -- at zero the axolotl would coast forever and walk off the level, which is a bug rather than a tuning choice."
     },
     "controller.dive.speed_m_per_s": {
       "value": 5.0,

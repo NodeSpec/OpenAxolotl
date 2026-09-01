@@ -475,7 +475,7 @@ func test_req_001_climbing_restores_vertical_steering_on_land() -> void:
 	controller.try_climb(ClimbSurface.CLIMBABLE_LAYER_MASK, PackedStringArray())
 
 	# The same pure-vertical intent that produces no motion on the ground.
-	controller.physics_step(0.016, false, _intent(Vector3.UP))
+	controller.physics_step(0.016, false, _intent(Vector3.FORWARD))
 
 	assert_float(controller.get_velocity().y).override_failure_message(
 		"REQ-001 AC-3: the wall IS the vertical route; climbing must restore it"
@@ -486,7 +486,7 @@ func test_req_001_a_climber_clings_rather_than_sliding() -> void:
 	var controller := _controller()
 	controller.physics_step(0.016, false, _intent())
 	controller.try_climb(0, PackedStringArray([ClimbSurface.CLIMBABLE_GROUP]))
-	controller.physics_step(0.016, false, _intent(Vector3.UP))
+	controller.physics_step(0.016, false, _intent(Vector3.FORWARD))
 
 	controller.physics_step(0.016, false, _intent())  # let go of the stick
 
@@ -908,3 +908,187 @@ func test_req_030_controller_node_uses_no_multiplayer_api() -> void:
 			assert_bool(text.contains(symbol)).override_failure_message(
 				"REQ-030: '%s' contains forbidden multiplayer symbol '%s'" % [path, symbol]
 			).is_false()
+
+
+# --- Drag: momentum is preserved, but not forever ---------------------------
+#
+# These exist because of a bug found by hand rather than by this suite. Both
+# grammars documented "absence of steering PRESERVES momentum", and nothing
+# ever took that momentum away — so releasing the key left the axolotl coasting
+# at full waddle speed until it walked off the level, and falling into water
+# sank at entry speed until it hit the floor. The suite missed it because every
+# test steered on the frame it asserted; none released and then waited.
+
+func _coast(controller: AxolotlController, in_water: bool, seconds: float) -> void:
+	var frames := int(seconds / 0.016)
+	for _i: int in range(frames):
+		controller.physics_step(0.016, in_water, _intent())
+
+
+func test_req_001_an_unsteered_waddle_comes_to_a_stop() -> void:
+	var controller := _controller()
+	controller.physics_step(0.016, false, _intent(Vector3.FORWARD))
+	var moving := controller.get_velocity()
+	assert_float(Vector2(moving.x, moving.z).length()).override_failure_message(
+		"the axolotl should be waddling before we test that it stops"
+	).is_greater(0.5)
+
+	_coast(controller, false, 1.0)
+
+	var rested := controller.get_velocity()
+	assert_float(Vector2(rested.x, rested.z).length()).override_failure_message(
+		"REQ-001: releasing the key must stop the axolotl. Coasting forever is "
+		+ "how it walks off the edge of a level.").is_equal_approx(0.0, 0.001)
+
+
+func test_req_001_an_unsteered_swim_glides_further_than_a_waddle() -> void:
+	# Not merely "both stop" — the CONTRAST is the point. Water is the grammar
+	# that glides, and that difference is a large part of what makes the two
+	# read as mechanically distinct rather than one speed with two animations.
+	var water := _controller()
+	water.physics_step(0.016, true, _intent(Vector3.FORWARD))
+	var water_start := water.get_velocity().length()
+	_coast(water, true, 0.25)
+	var water_kept := water.get_velocity().length() / water_start
+
+	var land := _controller()
+	land.physics_step(0.016, false, _intent(Vector3.FORWARD))
+	var land_moving := land.get_velocity()
+	var land_start := Vector2(land_moving.x, land_moving.z).length()
+	_coast(land, false, 0.25)
+	var land_rested := land.get_velocity()
+	var land_kept := Vector2(land_rested.x, land_rested.z).length() / land_start
+
+	assert_float(water_kept).override_failure_message(
+		"after a quarter second of no steering, water kept %.3f of its speed "
+		% water_kept + "and land kept %.3f — water must glide further"
+		% land_kept).is_greater(land_kept)
+	assert_float(water_kept).override_failure_message(
+		"water should still be gliding after a quarter second").is_greater(0.5)
+
+
+func test_req_001_an_unsteered_swim_still_comes_to_rest() -> void:
+	var controller := _controller()
+	controller.physics_step(0.016, true, _intent(Vector3.FORWARD))
+	_coast(controller, true, 12.0)
+	assert_float(controller.get_velocity().length()).override_failure_message(
+		"a gentle drag is still a drag: a fall into water must not sink at its "
+		+ "entry speed forever").is_equal_approx(0.0, 0.001)
+
+
+func test_req_001_land_drag_never_touches_the_vertical() -> void:
+	# Gravity and the hop own velocity.y on land, and the wrapper owns gravity.
+	# Dragging the vertical would make the axolotl float down.
+	var controller := _controller()
+	controller.set_grounded(true)
+	controller.physics_step(0.016, false,
+		_intent(Vector3.ZERO, [MovementGrammar.Verb.HOP] as Array[MovementGrammar.Verb]))
+	var launched := controller.get_velocity().y
+	assert_float(launched).is_greater(1.0)
+
+	controller.physics_step(0.016, false, _intent())
+	assert_float(controller.get_velocity().y).override_failure_message(
+		"the hop's rise was dragged away; only the horizontal plane may be slowed"
+	).is_equal_approx(launched, 0.001)
+
+
+func test_req_001_drag_does_not_erase_the_transition_momentum_carry() -> void:
+	# The regression guard for AC-1, and a statement of how the two rules
+	# compose. The carry is INSTANTANEOUS and the drag acts over time, so a
+	# horizontal crossing shows the retained magnitude with exactly one frame of
+	# land drag on top — momentum carries, then decays like any other momentum.
+	# (The AC-1 test above crosses with a purely vertical velocity, which land
+	# drag deliberately spares, so it still reads the ratio exactly.)
+	var tuning := _tuning()
+	var controller := AxolotlController.new(tuning)
+	controller.physics_step(0.016, true, _intent(Vector3.FORWARD))
+	var before := controller.get_velocity().length()
+
+	controller.physics_step(0.016, false, _intent())  # surfacing, unsteered
+	var after := Vector2(controller.get_velocity().x,
+		controller.get_velocity().z).length()
+
+	var ratio := tuning.get_number(AxolotlController.MOMENTUM_RETENTION_KEY)
+	var drag := tuning.get_number(AxolotlController.WADDLE_DRAG_KEY)
+	var expected := before * ratio * exp(-drag * 0.016)
+
+	assert_float(after).override_failure_message(
+		"expected %.3f (%.2f carried at %.2f, then one frame of %.1f/s drag), "
+			% [expected, before, ratio, drag] + "got %.3f" % after
+	).is_equal_approx(expected, 0.01)
+
+	# And the carry must still dominate: if drag ate most of it, the seam would
+	# read as a stop rather than as momentum crossing it.
+	assert_float(after / before).override_failure_message(
+		"only %.0f%% of the speed survived the crossing" % [(after / before) * 100.0]
+	).is_greater(0.6)
+
+
+# --- Climb steering: the land grammar is planar -----------------------------
+#
+# The anti-vacuity control for the climb tests above. They used to feed
+# Vector3.UP, which the land grammar CANNOT produce — its bindings are
+# forward/back/left/right and nothing else. So the tests were green against an
+# imaginary input while a real wall did nothing. These pin the actual mapping.
+
+func test_req_001_the_land_grammar_never_produces_a_vertical_intent() -> void:
+	# If this ever becomes false, the forward-is-up mapping below is the wrong
+	# design and should be revisited rather than quietly kept.
+	var table := BindingTable.load_from_file(BindingTable.DEFAULTS_PATH,
+		[] as Array[InputError])
+	var waddle := table.binding_for(InputVerb.Verb.WADDLE,
+		InputDevice.Kind.KEYBOARD_MOUSE)
+
+	assert_object(waddle).is_not_null()
+	for component: String in InputVerb.required_components(InputVerb.Verb.WADDLE):
+		assert_bool(InputVerb.component_vector(component).y == 0.0
+			).override_failure_message(
+				"waddle component '%s' carries a vertical" % component).is_true()
+
+
+func test_req_001_pushing_forward_on_a_wall_climbs_it() -> void:
+	var controller := _controller()
+	controller.physics_step(0.016, false, _intent())
+	controller.try_climb(0, PackedStringArray([ClimbSurface.CLIMBABLE_GROUP]))
+	controller.set_climb_surface_normal(Vector3.BACK)
+
+	controller.physics_step(0.016, false, _intent(Vector3.FORWARD))
+
+	assert_float(controller.get_velocity().y).override_failure_message(
+		"REQ-001 AC-3: forward against a wall must climb it. Before this, "
+		+ "forward drove the axolotl into the wall and it never rose."
+	).is_greater(0.1)
+
+
+func test_req_001_lateral_steering_runs_along_the_wall_not_into_it() -> void:
+	var controller := _controller()
+	controller.physics_step(0.016, false, _intent())
+	controller.try_climb(0, PackedStringArray([ClimbSurface.CLIMBABLE_GROUP]))
+	controller.set_climb_surface_normal(Vector3.BACK)  # wall face pointing +Z
+
+	controller.physics_step(0.016, false, _intent(Vector3.RIGHT))
+	var sideways := controller.get_velocity()
+
+	assert_float(absf(sideways.x)).override_failure_message(
+		"lateral steering should traverse the wall").is_greater(0.1)
+	assert_float(absf(sideways.z)).override_failure_message(
+		"lateral steering must not push into or off the wall (z=%.3f)" % sideways.z
+	).is_equal_approx(0.0, 0.001)
+
+
+func test_req_001_the_climb_basis_follows_the_surface_normal() -> void:
+	# A wall facing a different way must climb just as well — the basis comes
+	# from the normal the body reports, not from a world axis.
+	var controller := _controller()
+	controller.physics_step(0.016, false, _intent())
+	controller.try_climb(0, PackedStringArray([ClimbSurface.CLIMBABLE_GROUP]))
+	controller.set_climb_surface_normal(Vector3.RIGHT)  # wall face pointing +X
+
+	controller.physics_step(0.016, false, _intent(Vector3.FORWARD))
+	assert_float(controller.get_velocity().y).override_failure_message(
+		"forward must climb regardless of which way the wall faces").is_greater(0.1)
+
+	controller.physics_step(0.016, false, _intent(Vector3.RIGHT))
+	assert_float(absf(controller.get_velocity().x)).override_failure_message(
+		"lateral must not push into a wall whose normal is +X"
+	).is_equal_approx(0.0, 0.001)

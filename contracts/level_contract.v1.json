@@ -2,11 +2,8 @@
   "contractVersion": "1.0",
   "title": "OpenAxolotl Level Contract v1",
   "description": "What any world module must provide to be a valid OpenAxolotl world. This file is the MACHINE-READABLE half of the contract; docs/level-contract.md is the prose half and explains the reasoning. Where the two disagree, this file wins.",
-
   "sourceOfTruth": "The compliance checker loads this file and hardcodes no conformance rule. Adding a rule of an EXISTING ruleKind changes checker behaviour with no code change to the checker. Adding a NEW ruleKind is the one case that needs checker work, which is why the kinds below are few and deliberately general rather than one kind per element.",
-
   "authoringPath": "Code and Godot scenes only. There is no editor GUI authoring path, in any phase — which is what keeps this surface narrow enough to check, and what lets a human and an AI coding agent build a world the same way.",
-
   "ruleKinds": {
     "manifest_field_present": {
       "arguments": ["field"],
@@ -43,9 +40,16 @@
     "file_absent": {
       "arguments": ["path"],
       "description": "The path does NOT exist inside the module root."
+    },
+    "manifest_field_equals_directory_name": {
+      "arguments": ["field"],
+      "description": "The string field equals the module's own directory name. Used so an identity that is also a directory name and a save namespace cannot disagree with the folder it lives in."
+    },
+    "manifest_array_items_prefixed_by": {
+      "arguments": ["field", "prefixFrom"],
+      "description": "Every entry of the array field begins with the value of the field named by prefixFrom, followed by a dot. Used to namespace save keys per world."
     }
   },
-
   "moduleLayout": {
     "root": "worlds/<world_id>/",
     "worldIdPattern": "^[a-z][a-z0-9_]{2,31}$",
@@ -73,36 +77,70 @@
       }
     },
     "rules": [
-      { "kind": "file_present", "path": "world.json" },
-      { "kind": "file_present", "path": "world.tscn" },
-      { "kind": "file_absent", "path": "project.godot" },
-      { "kind": "file_absent", "path": "export_presets.cfg" }
+      {
+        "kind": "file_present",
+        "path": "world.json"
+      },
+      {
+        "kind": "file_present",
+        "path": "world.tscn"
+      },
+      {
+        "kind": "file_absent",
+        "path": "project.godot"
+      },
+      {
+        "kind": "file_absent",
+        "path": "export_presets.cfg"
+      }
     ],
     "forbiddenFileRationale": "A world module carrying its own project.godot or export preset is trying to be a game rather than a module, and would override project-wide policy — the typed-GDScript settings and the no-networking declarations REQ-030 depends on."
   },
-
   "required": {
     "contractVersion": {
       "manifestField": "contractVersion",
       "description": "The contract version this world targets. Declared by every world so a core update can tell which worlds it may break, rather than discovering it at load.",
       "rules": [
-        { "kind": "manifest_field_present", "field": "contractVersion" },
-        { "kind": "manifest_field_in_set", "field": "contractVersion", "values": ["1.0"] }
+        {
+          "kind": "manifest_field_present",
+          "field": "contractVersion"
+        },
+        {
+          "kind": "manifest_field_in_set",
+          "field": "contractVersion",
+          "values": ["1.0"]
+        }
       ]
     },
     "worldId": {
       "manifestField": "worldId",
       "description": "Stable identity. Must equal the module directory name, so a world cannot be renamed on disk without renaming its save namespace.",
       "rules": [
-        { "kind": "manifest_field_present", "field": "worldId" },
-        { "kind": "manifest_field_matches", "field": "worldId", "pattern": "^[a-z][a-z0-9_]{2,31}$" }
+        {
+          "kind": "manifest_field_present",
+          "field": "worldId"
+        },
+        {
+          "kind": "manifest_field_matches",
+          "field": "worldId",
+          "pattern": "^[a-z][a-z0-9_]{2,31}$"
+        },
+        {
+          "kind": "manifest_field_equals_directory_name",
+          "field": "worldId"
+        }
       ]
     },
     "spawnPoint": {
       "manifestField": null,
       "description": "Where the player begins. Declared in the SCENE rather than the manifest: it is a transform, and a transform in JSON would drift from the geometry it is meant to sit on.",
       "rules": [
-        { "kind": "scene_group_count", "group": "spawn_point", "min": 1, "max": 1 }
+        {
+          "kind": "scene_group_count",
+          "group": "spawn_point",
+          "min": 1,
+          "max": 1
+        }
       ],
       "rationale": "Exactly one. Two spawn points is not a richer world, it is an ambiguous one, and the hub would have to pick arbitrarily."
     },
@@ -110,7 +148,11 @@
       "manifestField": null,
       "description": "Checkpoint volumes. REQUIRED rather than optional because they anchor TWO systems at once: life refill and capability-state restore. A world without one has no defined answer to 'what happens when the player runs out of lives'.",
       "rules": [
-        { "kind": "scene_group_count", "group": "checkpoint", "min": 1 }
+        {
+          "kind": "scene_group_count",
+          "group": "checkpoint",
+          "min": 1
+        }
       ],
       "rationale": "At least one. The spacing rule — replay time from any checkpoint to the next within progression.max_retry_seconds — is a separate check that needs a traversal model, and belongs to the world's own test rather than to structural conformance."
     },
@@ -118,9 +160,19 @@
       "manifestField": "finishCondition",
       "description": "How the world is completed and the player returned to the Open Lagoon hub. Declarative: a world states WHAT completes it, never scripts the return itself.",
       "rules": [
-        { "kind": "manifest_field_present", "field": "finishCondition" },
-        { "kind": "manifest_field_present", "field": "finishCondition.kind" },
-        { "kind": "manifest_field_in_set", "field": "finishCondition.kind", "values": ["reach_volume", "defeat_boss", "restore_all_regions", "collect_all"] }
+        {
+          "kind": "manifest_field_present",
+          "field": "finishCondition"
+        },
+        {
+          "kind": "manifest_field_present",
+          "field": "finishCondition.kind"
+        },
+        {
+          "kind": "manifest_field_in_set",
+          "field": "finishCondition.kind",
+          "values": ["reach_volume", "defeat_boss", "restore_all_regions", "collect_all"]
+        }
       ],
       "kinds": {
         "reach_volume": "The player enters a node in group finish_volume.",
@@ -134,23 +186,44 @@
       "manifestField": "controllerCompatibility",
       "description": "The Axolotl Controller Interface version the world was built against. A DECLARATION, not a call — worlds never invoke the controller (see the Sanctioned World API Surface).",
       "rules": [
-        { "kind": "manifest_field_present", "field": "controllerCompatibility" },
-        { "kind": "manifest_field_in_set", "field": "controllerCompatibility", "values": ["1.0"] }
+        {
+          "kind": "manifest_field_present",
+          "field": "controllerCompatibility"
+        },
+        {
+          "kind": "manifest_field_in_set",
+          "field": "controllerCompatibility",
+          "values": ["1.0"]
+        }
       ]
     },
     "saveIntegration": {
       "manifestField": "saveIntegration",
       "description": "The save keys this world reads and writes. Declared up front so the save system can namespace them and so a fork's divergent keys are visible rather than discovered on a corrupt load.",
       "rules": [
-        { "kind": "manifest_field_present", "field": "saveIntegration" },
-        { "kind": "manifest_field_present", "field": "saveIntegration.keys" },
-        { "kind": "manifest_field_type", "field": "saveIntegration.keys", "type": "array" }
+        {
+          "kind": "manifest_field_present",
+          "field": "saveIntegration"
+        },
+        {
+          "kind": "manifest_field_present",
+          "field": "saveIntegration.keys"
+        },
+        {
+          "kind": "manifest_field_type",
+          "field": "saveIntegration.keys",
+          "type": "array"
+        },
+        {
+          "kind": "manifest_array_items_prefixed_by",
+          "field": "saveIntegration.keys",
+          "prefixFrom": "worldId"
+        }
       ],
       "keyNamespaceRule": "Every key must begin with the world's own worldId followed by a dot. Two worlds cannot collide, and a removed world's data is identifiable.",
       "rationale": "An empty array is valid and means the world persists nothing. Declaring nothing is different from omitting the declaration: the first is a decision, the second is an oversight."
     }
   },
-
   "optional": {
     "collectibles": {
       "absentDefault": "none — the world declares no collectibles and the collectibles system is not engaged for it",
@@ -195,7 +268,11 @@
       "absentDefault": "none — every tuning value stays at its global setting",
       "manifestField": "tuningOverrides",
       "rules": [
-        { "kind": "manifest_keys_subset_of", "field": "tuningOverrides", "allowedFrom": "core/tuning/tuning.json#worldOverridable" }
+        {
+          "kind": "manifest_keys_subset_of",
+          "field": "tuningOverrides",
+          "allowedFrom": "core/tuning/tuning.json#worldOverridable"
+        }
       ],
       "description": "Only keys enumerated in the tuning surface's own worldOverridable list may be overridden. That list is REFERENCED rather than copied here, so the two cannot drift apart."
     },
@@ -205,12 +282,10 @@
       "description": "Expressed through tuningOverrides rather than as a field of its own, so there is one mechanism for overriding a tuned value rather than two."
     }
   },
-
   "sanctionedWorldApiSurface": {
     "$ref": "contracts/sanctioned_api.v1.json",
     "description": "The interfaces a world module may call, enforced by the World Static Analysis Gate. Kept in its own file because it is DERIVED from the architecture graph's world-outbound edges rather than authored from intent, and because the gate and the checker are different tools with different jobs."
   },
-
   "versioning": {
     "current": "1.0",
     "frozen": false,

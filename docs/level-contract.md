@@ -158,16 +158,18 @@ When the version does increment, it ships with a migration note naming every cha
 # validate a world against this contract
 python tools/level_contract_checker.py --target worlds/<your_world> --format json
 
-# check the sanctioned API surface
-python tools/world_static_analysis.py --target worlds/<your_world> --format json
+# the checker's own tests
+python -m unittest discover -s tools -p 'test_*.py'
 
-# the full test suite
+# the full GDScript test suite
 godot --headless --audio-driver Dummy --path . --script test/run_tests.gd
 ```
 
 Both checkers exit non-zero on any violation and emit structured JSON naming the offending file, line, and the specific rule broken — so an AI coding agent can parse the output and self-correct before submitting.
 
-> **Status:** the two Python checkers are REQ-007 and REQ-020 and are not built yet. The contract and the sanctioned surface they consume are complete, and the test suite command above works today. Until the checkers land, conformance is verified by reading `contracts/level_contract.v1.json` — which is exactly the situation this contract exists to end, so they are the next tools to build.
+> **Status:** the contract checker is built and the first two commands work today. The static-analysis gate (REQ-020) is not — until it lands, the sanctioned API surface is documented and machine-readable but nothing enforces it, so keep to it on trust and expect CI to start checking later.
+
+The checker needs no dependencies — standard-library Python only. You should never have to install anything to check your own world.
 
 ---
 

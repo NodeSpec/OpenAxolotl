@@ -7,7 +7,7 @@ extends Node
 ## controller, that the velocity reaches move_and_slide, that gravity lands the
 ## body on a floor, that a water volume flips the grammar, and that the camera
 ## follows what moved. Every one of those is a scene-tree fact, and every one of
-## them is a place this could be silently dead while 289 unit tests stay green.
+## them is a place this could be silently dead while the unit suite stays green.
 ##
 ## Events go in through `Input.parse_input_event`, which pushes them along the
 ## engine's real delivery path into AxolotlBody._unhandled_input, rather than
@@ -28,6 +28,9 @@ const WALK_FRAMES := 90
 ## frames at 60 Hz — so 40 would sample the landing on the exact frame it
 ## happens. The margin is for the tuning moving, not for flakiness.
 const HOP_FRAMES := 75
+const STOP_FRAMES := 45
+const CLIMB_APPROACH := 70
+const CLIMB_FRAMES := 80
 const SWIM_FRAMES := 120
 
 var _body: AxolotlBody
@@ -46,6 +49,9 @@ var _hop_peak: float = -INF
 var _swim_start: Vector3 = Vector3.ZERO
 var _saw_water_grammar := false
 var _camera_start: Vector3 = Vector3.ZERO
+var _stop_start: Vector3 = Vector3.ZERO
+var _climb_base: float = 0.0
+var _climb_started := false
 
 
 func _ready() -> void:
@@ -61,6 +67,8 @@ func _ready() -> void:
 		if g == MovementGrammar.Grammar.WATER:
 			_saw_water_grammar = true)
 	_camera_start = _camera.global_position
+	_body.get_controller().climb_started.connect(
+		func() -> void: _climb_started = true)
 
 
 func _check(ok: bool, message: String) -> void:
@@ -101,10 +109,14 @@ func _physics_process(_delta: float) -> void:
 		1:
 			_walk()
 		2:
-			_hop()
+			_stop()
 		3:
-			_swim()
+			_hop()
 		4:
+			_climb()
+		5:
+			_swim()
+		6:
 			_report()
 
 
@@ -144,6 +156,30 @@ func _walk() -> void:
 	_advance()
 
 
+## RELEASING the key must stop the axolotl.
+##
+## This phase exists because its absence let a real bug ship: both grammars
+## documented "absence of steering preserves momentum" and nothing ever took
+## that momentum away, so the axolotl coasted at full waddle speed until it
+## walked off the level. The old walk phase released W and immediately moved on
+## without ever checking it had stopped.
+func _stop() -> void:
+	if _elapsed() == 1:
+		_stop_start = _body.global_position
+		return
+	if _elapsed() < STOP_FRAMES:
+		return
+
+	var drifted := _body.global_position.distance_to(_stop_start)
+	_check(drifted < 0.5,
+		"the axolotl drifted %.2f m in %d frames after the key was released; "
+			% [drifted, STOP_FRAMES] + "it should have stopped")
+	_check(Vector2(_body.velocity.x, _body.velocity.z).length() < 0.1,
+		"horizontal speed was still %.3f after release"
+			% Vector2(_body.velocity.x, _body.velocity.z).length())
+	_advance()
+
+
 ## The hop is grounded-gated in the controller and the fall is the wrapper's, so
 ## a rise followed by a return to rest proves both halves are connected.
 func _hop() -> void:
@@ -162,6 +198,40 @@ func _hop() -> void:
 			% [_hop_peak, _hop_peak - _rest_position.y])
 	_check(_body.is_on_floor(),
 		"the axolotl never came back down: gravity is not being applied")
+	_advance()
+
+
+## Climbing needs BOTH halves wired: the body must notice a climbable wall and
+## call try_climb, and forward steering must then run UP the wall rather than
+## into it. Both were broken while the unit tests stayed green.
+func _climb() -> void:
+	if _elapsed() == 1:
+		# In front of the climbable wall (x 9..19, face at z=-11.5), facing it.
+		_body.global_position = Vector3(14.0, 0.8, -9.0)
+		_body.velocity = Vector3.ZERO
+		_body.get_input_system().clear()
+		_key(KEY_W, true)
+		return
+
+	# Walked into the wall by now; ask to climb, still pushing forward.
+	if _elapsed() == CLIMB_APPROACH:
+		_climb_base = _body.global_position.y
+		_key(KEY_E, true)
+		return
+	if _elapsed() == CLIMB_APPROACH + 2:
+		_key(KEY_E, false)
+		return
+
+	if _elapsed() < CLIMB_APPROACH + CLIMB_FRAMES:
+		return
+
+	_key(KEY_W, false)
+	_check(_climb_started,
+		"the climb never attached: the body is not reporting the climbable "
+			+ "wall to the controller")
+	_check(_body.global_position.y > _climb_base + 0.5,
+		"attached but rose only %.2f m; forward steering is driving into the "
+			% (_body.global_position.y - _climb_base) + "wall rather than up it")
 	_advance()
 
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3]
+[gd_scene load_steps=25 format=3]
 
 ; DEVELOPMENT SCENE — not a world module, not contract-conforming, not
 ; discovered by the hub. It exists so the core systems can be seen running
@@ -32,6 +32,7 @@
 [ext_resource type="Script" path="res://core/controller/axolotl_body.gd" id="1_body"]
 [ext_resource type="Script" path="res://core/controller/water_volume.gd" id="2_water"]
 [ext_resource type="Script" path="res://core/camera/camera_follow.gd" id="3_camera"]
+[ext_resource type="Script" path="res://dev/fall_guard.gd" id="4_fallguard"]
 
 [sub_resource type="Environment" id="Environment_1"]
 background_mode = 1
@@ -205,4 +206,8 @@ shape = SubResource("CapsuleShape3D_axolotl")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 8)
 process_physics_priority = 10
 script = ExtResource("3_camera")
+target_path = NodePath("../Axolotl")
+
+[node name="FallGuard" type="Node" parent="."]
+script = ExtResource("4_fallguard")
 target_path = NodePath("../Axolotl")

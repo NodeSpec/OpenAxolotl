@@ -15,6 +15,7 @@ extends CharacterBody3D
 ##     wrapper can own the fall; integrating it inside the controller would make
 ##     a headless test responsible for simulating a floor.
 ##   * GROUNDEDNESS, from is_on_floor(). The controller gates the hop on it.
+##   * CLIMB ATTACHMENT, from the collisions a move actually reported.
 ##   * WATER STATE, counted from the volumes currently overlapping.
 ##   * The RAW EVENT FEED, forwarded to the Input System and nowhere else.
 ##
@@ -111,12 +112,15 @@ func _physics_process(delta: float) -> void:
 	_controller.sync_body_position(global_position)
 	_controller.set_grounded(is_on_floor())
 
-	_controller.physics_step(delta, is_in_water(), _input.poll_intent())
+	var intent := _input.poll_intent()
+	_controller.physics_step(delta, is_in_water(), intent)
 
 	velocity = _controller.get_velocity()
 	_apply_gravity(delta)
 
 	move_and_slide()
+
+	_update_climb(intent)
 
 	# Collision may have cancelled the motion the controller asked for — walking
 	# into a wall, or landing. Handing the resolved velocity back keeps the
@@ -124,6 +128,46 @@ func _physics_process(delta: float) -> void:
 	# geometry it never actually moved through.
 	_controller.set_velocity(velocity)
 	_controller.sync_body_position(global_position)
+
+
+## Climbing needs the physics world, which is why the controller cannot start it
+## alone: `try_climb` takes a collision layer and a group list, and only a body
+## that has actually moved knows what it is touching. Without this the climb verb
+## was inert in every real scene while its unit tests stayed green — the logic
+## was right and nothing ever fed it.
+##
+## Attachment is REQUESTED, not automatic: brushing a climbable wall while
+## waddling past must not stick the axolotl to it. The player asks by pressing
+## the climb verb, and this looks at what they are against when they do.
+func _update_climb(intent: PlayerIntent) -> void:
+	if _controller.is_climbing():
+		# Let go when the wall does. is_on_wall() goes false the moment the body
+		# stops touching it, which is the honest end condition — a climber who
+		# reaches the top and moves onto the ledge should be walking, not still
+		# clinging to air.
+		if not is_on_wall():
+			_controller.release_climb()
+			return
+		# Kept current every frame: a curved or jointed surface changes the climb
+		# basis as the axolotl traverses it, and a stale normal would send
+		# lateral steering off along the wall it started on.
+		_controller.set_climb_surface_normal(get_wall_normal())
+		return
+
+	if not intent.wants(MovementGrammar.Verb.CLIMB):
+		return
+
+	for index: int in get_slide_collision_count():
+		var collider := get_slide_collision(index).get_collider() as CollisionObject3D
+		if collider == null:
+			continue
+		var groups := PackedStringArray()
+		for group: Variant in collider.get_groups():
+			groups.append(String(group))
+		if _controller.try_climb(collider.collision_layer, groups):
+			_controller.set_climb_surface_normal(
+				get_slide_collision(index).get_normal())
+			return
 
 
 ## Gravity lives here rather than in the controller because it is a property of

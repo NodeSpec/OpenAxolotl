@@ -9,7 +9,7 @@
 | [REQ-004](#req-004--gill-mod-ability-system) — Gill Mod Ability System | 🔵 in-progress | 6/7 | 0/11 | 6/0/0 of 6 | Gill Mod Ability Framework |
 | [REQ-005](#req-005--camera-system) — Camera System | 🔵 in-progress | 4/5 | 0/8 | 4/0/0 of 4 | Camera System |
 | [REQ-006](#req-006--level-contract-v1-specification) — Level Contract v1 Specification | 🔵 in-progress | 5/10 | 0/44 | 5/0/0 of 6 | OpenAxolotl Game Client |
-| [REQ-007](#req-007--level-contract-automated-compliance-checker) — Level Contract Automated Compliance Checker | 🔵 in-progress | 0/8 | 0/15 | 0/0/0 of 0 | Level Contract Compliance Checker |
+| [REQ-007](#req-007--level-contract-automated-compliance-checker) — Level Contract Automated Compliance Checker | 🔵 in-progress | 7/8 | 0/8 | 7/0/0 of 8 | Level Contract Compliance Checker |
 | [REQ-008](#req-008--world-restoration-state-system) — World Restoration State System | 🔵 in-progress | 0/8 | 0/20 | 0/0/0 of 0 | Restoration State System |
 | [REQ-009](#req-009--open-lagoon-hub-and-world-loading) — Open Lagoon Hub and World Loading | 🔵 in-progress | 0/6 | 0/44 | 0/0/0 of 0 | OpenAxolotl Game Client |
 | [REQ-010](#req-010--collectibles-system) — Collectibles System | 🔵 in-progress | 0/6 | 0/13 | 0/0/0 of 0 | Collectibles System |
@@ -260,24 +260,24 @@ status: in-progress · criteria 5/10 · tasks 0/44 · tests 5/0/0 of 6
 ### Tests — .nodespec/tests/req-006.tests.md
 
 ## REQ-007 — Level Contract Automated Compliance Checker <!-- r:REQ-007 -->
-status: in-progress · criteria 0/8 · tasks 0/15 · tests 0/0/0 of 0
+status: in-progress · criteria 7/8 · tasks 0/8 · tests 7/0/0 of 8
 ### Criteria
-- [ ] Checker loads the Level Contract schema file as its source of truth and validates presence and well-formedness of every required element it declares
-  ↳ tasks: T7 ☐ (Level Contract Compliance Checker)
-- [ ] Checker validates a world's declared contract version and rejects a world targeting an unsupported version
-  ↳ tasks: T8 ☐ (Level Contract Compliance Checker)
-- [ ] Checker validates world module directory layout and naming convention
-  ↳ tasks: T9 ☐ (Level Contract Compliance Checker)
-- [ ] Failure output names the specific failing element, its file location, and the violated rule, emitted as structured machine-readable output an AI coding agent can parse
-  ↳ tasks: T10 ☐ (Level Contract Compliance Checker)
-- [ ] Checker exits with a non-zero status on failure and zero on success
-  ↳ tasks: T11 ☐ (Level Contract Compliance Checker)
-- [ ] Checker is runnable locally with a single documented command
-  ↳ tasks: T12 ☐ (Level Contract Compliance Checker)
+- [x] Checker loads the Level Contract schema file as its source of truth and validates presence and well-formedness of every required element it declares
+  ↳ tests: TC-REQ-007-1 ✅
+- [x] Checker validates a world's declared contract version and rejects a world targeting an unsupported version
+  ↳ tests: TC-REQ-007-2 ✅
+- [x] Checker validates world module directory layout and naming convention
+  ↳ tests: TC-REQ-007-3 ✅
+- [x] Failure output names the specific failing element, its file location, and the violated rule, emitted as structured machine-readable output an AI coding agent can parse
+  ↳ tests: TC-REQ-007-4 ✅
+- [x] Checker exits with a non-zero status on failure and zero on success
+  ↳ tests: TC-REQ-007-5 ✅
+- [x] Checker is runnable locally with a single documented command
+  ↳ tests: TC-REQ-007-6 ✅
 - [ ] A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it
-  ↳ tasks: T13 ☐ (Level Contract Compliance Checker)
-- [ ] Adding a new rule to the contract schema changes checker behavior without any code change to the checker
-  ↳ tasks: T14 ☐ (Level Contract Compliance Checker)
+  ↳ tasks: T7 ☐ (Level Contract Compliance Checker) · tests: TC-REQ-007-7 ▫️
+- [x] Adding a new rule to the contract schema changes checker behavior without any code change to the checker
+  ↳ tests: TC-REQ-007-8 ✅
 ### Tasks — Level Contract Compliance Checker <!-- n:22222222-0000-4000-8000-000000000013 -->
 - [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
 - [ ] **T2 — Implement the integration with World: Coral Cove (godot) per Contract "Level Contract v1" (dependency).** <!-- t:bd68a2e3 -->
@@ -285,15 +285,8 @@ status: in-progress · criteria 0/8 · tasks 0/15 · tests 0/0/0 of 0
 - [ ] **T4 — Implement the integration with Test Harness and Fixtures (python-backend) per Contract "Shared Test Fixtures" (dependency).** <!-- t:7d12e948 -->
 - [ ] **T5 — Implement the integration with World: Reference Template (godot) per Contract "Level Contract v1" (dependency).** <!-- t:d6a167a4 -->
 - [ ] **T6 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).** <!-- t:a39cc42a -->
-- [ ] **T7 — Implement: "Checker loads the Level Contract schema file as its source of truth and validates presence and well-formedness of every required element it declares" (REQ-007).** <!-- t:66047502 -->
-- [ ] **T8 — Implement: "Checker validates a world's declared contract version and rejects a world targeting an unsupported version" (REQ-007).** <!-- t:bc8dec63 -->
-- [ ] **T9 — Implement: "Checker validates world module directory layout and naming convention" (REQ-007).** <!-- t:79b9e9b6 -->
-- [ ] **T10 — Implement: "Failure output names the specific failing element, its file location, and the violated rule, emitted as structured machine-readable output an AI coding agent can parse" (REQ-007).** <!-- t:c9ec3bbd -->
-- [ ] **T11 — Implement: "Checker exits with a non-zero status on failure and zero on success" (REQ-007).** <!-- t:ef232550 -->
-- [ ] **T12 — Implement: "Checker is runnable locally with a single documented command" (REQ-007).** <!-- t:49f81077 -->
-- [ ] **T13 — Implement: "A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it" (REQ-007).** <!-- t:d30c83d8 -->
-- [ ] **T14 — Implement: "Adding a new rule to the contract schema changes checker behavior without any code change to the checker" (REQ-007).** <!-- t:d1effc90 -->
-- [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T7 — Implement: "A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it" (REQ-007).** <!-- t:d30c83d8 -->
+- [ ] **T8 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-007.tests.md
 
 ## REQ-008 — World Restoration State System <!-- r:REQ-008 -->

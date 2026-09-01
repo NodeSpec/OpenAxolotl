@@ -241,19 +241,20 @@ func test_req_002_the_lowered_climb_ceiling_actually_stops_the_climb() -> void:
 	controller.sync_body_position(Vector3.ZERO)
 	controller.try_climb(ClimbSurface.CLIMBABLE_LAYER_MASK, PackedStringArray())
 
-	# Below the impaired ceiling: still rising.
+	# Below the impaired ceiling: still rising. FORWARD, not UP: the land
+	# grammar is planar, and on a wall the forward axis is the vertical one.
 	controller.sync_body_position(Vector3(0.0, 1.0, 0.0))
-	controller.physics_step(FRAME, false, _intent(Vector3.UP))
+	controller.physics_step(FRAME, false, _intent(Vector3.FORWARD))
 	assert_float(controller.get_velocity().y).is_greater(0.0)
 
 	# Above it: the ascent stops, but the climber is not frozen or dropped.
 	controller.sync_body_position(Vector3(0.0, controller.max_climb_height() + 0.1, 0.0))
-	controller.physics_step(FRAME, false, _intent(Vector3.UP))
+	controller.physics_step(FRAME, false, _intent(Vector3.FORWARD))
 	assert_float(controller.get_velocity().y).override_failure_message(
 		"REQ-002 AC-2: a lost leg must lower the reachable height"
 	).is_equal_approx(0.0, 0.0001)
 
-	controller.physics_step(FRAME, false, _intent(Vector3.DOWN))
+	controller.physics_step(FRAME, false, _intent(Vector3.BACK))
 	assert_float(controller.get_velocity().y).override_failure_message(
 		"a climber at the ceiling must still be able to come back down"
 	).is_less(0.0)
