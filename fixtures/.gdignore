@@ -1,0 +1,5 @@
+# Godot must never scan this directory.
+#
+# The Python tooling is not game code, and more importantly fixtures/ contains
+# DELIBERATELY malformed and malicious world modules. Without this file the
+# editor would try to import them and break for every contributor.

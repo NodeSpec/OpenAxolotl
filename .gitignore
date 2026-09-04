@@ -6,3 +6,7 @@ export_presets.cfg
 # Build output
 build/
 bin/
+
+# Python
+__pycache__/
+*.py[cod]

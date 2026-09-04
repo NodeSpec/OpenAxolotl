@@ -1,0 +1,8 @@
+{
+  "contractVersion": "1.0",
+  "worldId": "conforming_world",
+  "displayName": "Conforming Fixture",
+  "controllerCompatibility": "1.0",
+  "finishCondition": { "kind": "reach_volume" },
+  "saveIntegration": { "keys": ["conforming_world.completed"] }
+}

@@ -1,0 +1,14 @@
+{
+  "contractVersion": "9.9",
+  "worldId": "unsupported_version",
+  "displayName": "Conforming Fixture",
+  "controllerCompatibility": "1.0",
+  "finishCondition": {
+    "kind": "reach_volume"
+  },
+  "saveIntegration": {
+    "keys": [
+      "unsupported_version.completed"
+    ]
+  }
+}

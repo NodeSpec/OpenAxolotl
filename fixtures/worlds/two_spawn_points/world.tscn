@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+; Minimal conforming world: the five required elements and nothing optional.
+
+[node name="World" type="Node3D"]
+
+[node name="Spawn" type="Marker3D" parent="." groups=["spawn_point"]]
+
+[node name="Checkpoint" type="Area3D" parent="." groups=["checkpoint"]]
+
+[node name="Finish" type="Area3D" parent="." groups=["finish_volume"]]
+
+[node name="SecondSpawn" type="Marker3D" parent="." groups=["spawn_point"]]

@@ -1,0 +1,17 @@
+{
+  "contractVersion": "1.0",
+  "worldId": "unsanctioned_tuning",
+  "displayName": "Conforming Fixture",
+  "controllerCompatibility": "1.0",
+  "finishCondition": {
+    "kind": "reach_volume"
+  },
+  "saveIntegration": {
+    "keys": [
+      "unsanctioned_tuning.completed"
+    ]
+  },
+  "tuningOverrides": {
+    "controller.swim.base_speed_m_per_s": 99.0
+  }
+}
