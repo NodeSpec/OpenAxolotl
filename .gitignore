@@ -1,12 +1,20 @@
 # Godot
 .godot/
 *.import
-export_presets.cfg
+# export_presets.cfg is COMMITTED here on purpose. The usual reason to ignore
+# it is embedded signing credentials; ours carries none, and CI cannot produce
+# the REQ-018 build without it.
 
 # Build output
 build/
 bin/
 
+# Toolchain fetched by scripts/setup.sh
+.toolchain/
+
 # Python
 __pycache__/
 *.py[cod]
+
+# Python packaging metadata from pip install -e .
+*.egg-info/

@@ -1,0 +1,108 @@
+# The merge gate (REQ-018). Four validator jobs plus the build, on every pull
+# request. Branch protection marks all of them required (docs/branch-protection.md)
+# -- that setting, not this file, is what makes a red check un-mergeable, and it
+# is also half of REQ-020's rule that no community submission lands without a
+# human maintainer's approval.
+#
+# PARITY IS THE LAW OF THIS FILE. Every validator step runs a command from
+# docs/commands.md character-identically (tools/test_ci_pipeline.py enforces
+# it); output capture is a trailing `| tee`, which GitHub's default bash
+# (-e -o pipefail) keeps exit-code-honest. No check may exist only in this
+# YAML: a check a contributor cannot run locally violates the Validator CLI
+# Invocation contract.
+#
+# Actions are pinned to full commit SHAs, the Godot toolchain to the version
+# in scripts/setup.sh. Contributors here include AI agents; an unpinned
+# toolchain going red on an unrelated day reads to them as a defect in their
+# own world module, and they will start "fixing" it.
+#
+# NOTE: an `asset-contract` job joins the required set when the Asset
+# Contract Validator node is built (oax-asset-check). It is absent rather
+# than stubbed -- a job that cannot run yet would either red-bar every PR or
+# green-bar a check that checked nothing.
+
+name: PR
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  level-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: '3.11'
+      - run: python3 -m pip install -e .
+      - run: mkdir -p reports
+      - run: oax-level-check --target . --format json | tee reports/level-contract.json
+      - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        if: always()
+        with:
+          name: level-contract-report
+          path: reports/level-contract.json
+
+  static-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: '3.11'
+      - run: python3 -m pip install -e .
+      - run: mkdir -p reports
+      - run: oax-static-gate --target . --format json | tee reports/static-gate.json
+      - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        if: always()
+        with:
+          name: static-gate-report
+          path: reports/static-gate.json
+
+  test-harness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: '3.11'
+      - uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+        with:
+          path: |
+            .toolchain
+            ~/.local/share/godot/export_templates
+          key: godot-${{ hashFiles('scripts/setup.sh') }}
+      - run: ./scripts/setup.sh
+      - run: mkdir -p reports
+      - run: oax-test --target . --format json | tee reports/test-harness.json
+      - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        if: always()
+        with:
+          name: test-harness-report
+          path: reports/test-harness.json
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+        with:
+          path: |
+            .toolchain
+            ~/.local/share/godot/export_templates
+          key: godot-${{ hashFiles('scripts/setup.sh') }}
+      - run: ./scripts/build.sh
+      # The artifact must not merely exist -- it must boot. Same check the
+      # clean-clone harness test performs locally.
+      - run: ./build/linux/OpenAxolotl.x86_64 --headless --audio-driver Dummy --quit-after 120
+      - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: linux-build
+          path: build/linux/

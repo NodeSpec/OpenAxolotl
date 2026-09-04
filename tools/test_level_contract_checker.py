@@ -227,13 +227,22 @@ class StructuredOutput(unittest.TestCase):
                          "--format", "json")
         payload = json.loads(result.stdout)
 
-        self.assertFalse(payload["conforming"])
+        self.assertFalse(payload["passed"])
+        # The Validator CLI Invocation envelope, shared by all four repo
+        # validators — CI and agents parse one shape.
+        self.assertEqual(payload["tool"], "level-contract-checker")
+        self.assertIn("schemaVersion", payload)
         for violation in payload["violations"]:
-            for key in ("element", "rule", "file", "line", "message"):
+            for key in ("rule", "severity", "file", "message",
+                        "element", "kind", "line"):
                 self.assertIn(key, violation)
             self.assertTrue(violation["element"])
-            self.assertTrue(violation["rule"])
             self.assertTrue(violation["file"])
+            self.assertEqual(violation["severity"], "error")
+            # `rule` is the stable dotted id — the SAME vocabulary the hub's
+            # runtime validator emits, so one remediation maps to both gates.
+            self.assertEqual(violation["rule"],
+                             f"{violation['element']}.{violation['kind']}")
 
     def test_req_007_a_manifest_violation_carries_a_line_number(self):
         # "Its file location" in AC-4 means a place to look, not just a filename.
