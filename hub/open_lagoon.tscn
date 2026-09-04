@@ -1,0 +1,87 @@
+[gd_scene load_steps=11 format=3]
+
+; THE OPEN LAGOON (REQ-009) — the hub, as a scene, and the game's main scene.
+;
+; Deliberately empty of portals: every pedestal is BUILT at runtime by
+; open_lagoon.gd from what the registry discovers under worlds/. A portal
+; authored into this file would be a hardcoded world list in disguise, which
+; is exactly what AC-1 forbids.
+;
+; STRUCTURE. The player and camera are SIBLINGS of the OpenLagoon node, not
+; children: the hub disables its own subtree while a world is active (hiding
+; is not enough — an invisible floor still collides), and a player parented
+; under it would freeze mid-world. Whatever survives a world transition lives
+; beside the hub, never inside it.
+
+[ext_resource type="Script" path="res://hub/open_lagoon.gd" id="1_hub"]
+[ext_resource type="Script" path="res://core/controller/axolotl_body.gd" id="2_body"]
+[ext_resource type="Script" path="res://core/camera/camera_follow.gd" id="3_camera"]
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 1
+background_color = Color(0.35, 0.55, 0.68, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.68, 0.74, 0.8, 1)
+ambient_light_energy = 0.7
+
+[sub_resource type="BoxMesh" id="BoxMesh_ground"]
+size = Vector3(48, 2, 32)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(48, 2, 32)
+
+[sub_resource type="StandardMaterial3D" id="Material_ground"]
+albedo_color = Color(0.5, 0.58, 0.52, 1)
+
+[sub_resource type="StandardMaterial3D" id="Material_axolotl"]
+albedo_color = Color(0.95, 0.6, 0.72, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_axolotl"]
+radius = 0.5
+height = 1.6
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_axolotl"]
+radius = 0.5
+height = 1.6
+
+[node name="Main" type="Node3D"]
+
+[node name="OpenLagoon" type="Node3D" parent="."]
+script = ExtResource("1_hub")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="OpenLagoon"]
+environment = SubResource("Environment_1")
+
+[node name="Sun" type="DirectionalLight3D" parent="OpenLagoon"]
+transform = Transform3D(0.866, -0.353, 0.353, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 20, 0)
+shadow_enabled = true
+
+[node name="Ground" type="StaticBody3D" parent="OpenLagoon"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="OpenLagoon/Ground"]
+mesh = SubResource("BoxMesh_ground")
+surface_material_override/0 = SubResource("Material_ground")
+
+[node name="Collision" type="CollisionShape3D" parent="OpenLagoon/Ground"]
+shape = SubResource("BoxShape3D_ground")
+
+[node name="HubSpawn" type="Marker3D" parent="OpenLagoon" groups=["hub_spawn"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 6)
+
+[node name="Axolotl" type="CharacterBody3D" parent="." groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 6)
+script = ExtResource("2_body")
+
+[node name="Mesh" type="MeshInstance3D" parent="Axolotl"]
+mesh = SubResource("CapsuleMesh_axolotl")
+surface_material_override/0 = SubResource("Material_axolotl")
+
+[node name="Collision" type="CollisionShape3D" parent="Axolotl"]
+shape = SubResource("CapsuleShape3D_axolotl")
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 14)
+process_physics_priority = 10
+script = ExtResource("3_camera")
+target_path = NodePath("../Axolotl")
