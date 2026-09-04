@@ -1,0 +1,11 @@
+{
+  "id": "jet",
+  "displayName": "Jet Gills",
+  "affordances": ["jet_dash", "net_escape"],
+  "durationKey": "gillmod.jet.duration_s",
+  "cooldownKey": "gillmod.jet.cooldown_s",
+  "audioCueId": "gill_mod_jet_activated",
+  "visualId": "vfx.gills.jet",
+  "hudIcon": "icon.gillmod.jet",
+  "note": "Speed and counterplay. A directed burst for crossing currents, and the counter to Netbot entanglement — the one way out of a ghost net before the tuned window expires."
+}

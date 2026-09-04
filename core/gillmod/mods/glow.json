@@ -1,0 +1,11 @@
+{
+  "id": "glow",
+  "displayName": "Glow Gills",
+  "affordances": ["reveal_bioluminescent", "reveal_hookline"],
+  "durationKey": "gillmod.glow.duration_s",
+  "cooldownKey": "gillmod.glow.cooldown_s",
+  "audioCueId": "gill_mod_glow_activated",
+  "visualId": "vfx.gills.glow",
+  "hudIcon": "icon.gillmod.glow",
+  "note": "Exploration. Lights caves and activates bioluminescent objects, and reveals Hookline Rig lines in murk so a snag becomes avoidable rather than unlucky."
+}
