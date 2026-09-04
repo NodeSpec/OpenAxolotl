@@ -45,7 +45,8 @@ COMMANDS_DOC = os.path.join(REPO, "docs", "commands.md")
 WORKFLOW = os.path.join(REPO, ".github", "workflows", "pr.yml")
 PROTECTION_DOC = os.path.join(REPO, "docs", "branch-protection.md")
 
-VALIDATOR_JOBS = ("level-contract", "static-gate", "test-harness", "build")
+VALIDATOR_JOBS = ("level-contract", "asset-contract", "static-gate",
+                  "test-harness", "build")
 
 # The Validator CLI Invocation result envelope, as the contract publishes it.
 ENVELOPE_KEYS = ("tool", "schemaVersion", "target", "passed", "violations")
@@ -168,7 +169,8 @@ class ValidatorEnvelopes(unittest.TestCase):
                                  f.read(), re.MULTILINE)
         self.assertEqual(
             sorted(name for name, _, _ in scripts),
-            ["oax-level-check", "oax-static-gate", "oax-test"])
+            ["oax-asset-check", "oax-level-check", "oax-static-gate",
+             "oax-test"])
         for _, module_name, attr in scripts:
             module = importlib.import_module(module_name)
             self.assertTrue(callable(getattr(module, attr)))
@@ -186,6 +188,13 @@ class ValidatorEnvelopes(unittest.TestCase):
         self.assert_envelope(payload, "level-contract-checker")
         self.assertFalse(payload["passed"])
         self.assertTrue(payload["violations"])
+
+    def test_req_018_asset_validator_emits_the_shared_envelope(self) -> None:
+        result = self.run_tool("asset_contract_validator.py",
+                               "--target", ".", "--format", "json")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assert_envelope(json.loads(result.stdout),
+                             "asset-contract-validator")
 
     def test_req_018_static_gate_emits_the_shared_envelope(self) -> None:
         result = self.run_tool("static_gate.py",

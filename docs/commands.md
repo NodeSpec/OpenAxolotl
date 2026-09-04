@@ -45,13 +45,11 @@ artifact.
 <!-- ci-commands -->
 ```sh
 oax-level-check --target . --format json
+oax-asset-check --target . --format json
 oax-static-gate --target . --format json
 oax-test --target . --format json
 ./scripts/build.sh
 ```
-
-`oax-asset-check` joins this list when the Asset Contract Validator node is
-built; its CI job lands in the same commit.
 
 Zero-install alternative (the checkers are standard-library Python on
 purpose, so a contributor — or an AI agent verifying its own world — can run
@@ -59,6 +57,7 @@ them without installing anything):
 
 ```sh
 python tools/level_contract_checker.py --target worlds/<your_world>
+python tools/asset_contract_validator.py --target .
 python tools/static_gate.py --target .
 ```
 

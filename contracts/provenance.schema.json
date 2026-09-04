@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Asset provenance (REQ-015)",
+  "description": "The per-asset provenance.json sidecar. Every asset records who made it, how, and under what terms; an AI-generated asset additionally records the generator and the prompt. The conditional lives HERE, in the schema, rather than in validator code - a contributor reading this file and an agent generating assets both see the whole rule, and the validator merely evaluates it.",
+  "type": "object",
+  "required": [
+    "author",
+    "generationMethod",
+    "licenseTerms"
+  ],
+  "properties": {
+    "author": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Who contributed this asset - a person or an agent identity, never empty."
+    },
+    "generationMethod": {
+      "enum": [
+        "ai-generated",
+        "hand-authored"
+      ],
+      "description": "The field the conditional below branches on."
+    },
+    "licenseTerms": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Applicable license terms. For ai-generated assets these are the generator's terms of service, which is why this field intersects the project licensing decision and may not be omitted."
+    },
+    "tool": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Generator name and version. Required for ai-generated assets; not required for hand-authored ones."
+    },
+    "prompt": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The prompt used. Required for ai-generated assets; not required for hand-authored ones."
+    }
+  },
+  "if": {
+    "properties": {
+      "generationMethod": {
+        "const": "ai-generated"
+      }
+    },
+    "required": [
+      "generationMethod"
+    ]
+  },
+  "then": {
+    "required": [
+      "tool",
+      "prompt"
+    ]
+  },
+  "additionalProperties": false
+}

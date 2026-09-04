@@ -1,0 +1,56 @@
+{
+  "contractVersion": "1.0",
+  "description": "The Asset Contract (REQ-015): what any art or audio asset must satisfy to enter the repository. The art-side sibling of the Level Contract, and data for BOTH sides of the pipeline: the validator (oax-asset-check) enforces every machine-checkable rule here, and the Game Client and Audio System resolve assets at runtime from the same layout and naming facts. Style and art direction are documented in docs/asset-contract.md and reviewed by a human maintainer - deliberately absent from this file, because a machine-checkable style rule would reject legitimate work.",
+  "assetsRoot": "assets",
+  "layout": {
+    "pattern": "assets/<category>/<name>/",
+    "description": "One directory per asset, holding its source files and its provenance.json. Nothing lives loose in assets/ or in a category directory.",
+    "namePattern": "^[a-z][a-z0-9_]*$",
+    "nameDescription": "Asset directory names and file stems: lower_snake_case, starting with a letter. The same convention the tuning keys and save namespaces use, so one grep finds an asset everywhere it is referenced."
+  },
+  "provenance": {
+    "file": "provenance.json",
+    "schema": "contracts/provenance.schema.json",
+    "description": "Required in EVERY asset directory. Records author, generation method and license terms; AI-generated assets additionally record the tool and prompt. This is a licensing instrument, not bookkeeping."
+  },
+  "requiredPerAsset": [
+    "at least one conforming source file",
+    "provenance.json"
+  ],
+  "categories": {
+    "character": {
+      "fileTypes": [".png"],
+      "minSize": [64, 64],
+      "maxSize": [2048, 2048],
+      "alpha": "required",
+      "why": "Characters composite over every background the game has; a character sprite or texture without an alpha channel ships a rectangle."
+    },
+    "creature": {
+      "fileTypes": [".png"],
+      "minSize": [64, 64],
+      "maxSize": [2048, 2048],
+      "alpha": "required",
+      "why": "Same compositing rule as characters."
+    },
+    "prop": {
+      "fileTypes": [".png"],
+      "minSize": [32, 32],
+      "maxSize": [2048, 2048],
+      "alpha": "required",
+      "why": "Props sit in scenes over arbitrary geometry."
+    },
+    "environment": {
+      "fileTypes": [".png"],
+      "minSize": [128, 128],
+      "maxSize": [4096, 4096],
+      "alpha": "allowed",
+      "why": "Environment textures may be opaque (ground, walls) or cut-out (foliage); both are legitimate, so alpha is neither required nor forbidden."
+    },
+    "audio": {
+      "fileTypes": [".wav", ".ogg"],
+      "maxChannels": 2,
+      "sampleRates": [44100, 48000],
+      "why": "Mono or stereo at one of the two standard rates; the Audio System's bus layout assumes nothing wider, and a 96kHz sample is repository weight with no audible payoff in this game."
+    }
+  }
+}

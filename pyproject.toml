@@ -1,10 +1,9 @@
 # Packaging for the repo validators, and nothing else (REQ-018).
 #
 # This exists so the four validator commands have STABLE NAMES -- oax-level-check,
-# oax-static-gate, oax-test (oax-asset-check joins when the Asset Contract
-# Validator node is built) -- and CI can invoke the character-identical command a
-# contributor runs locally, which is the Validator CLI Invocation contract's
-# binding parity rule. The game itself has no Python dependency; the tools stay
+# oax-asset-check, oax-static-gate, oax-test -- and CI can invoke the
+# character-identical command a contributor runs locally, which is the
+# Validator CLI Invocation contract's binding parity rule. The game itself has no Python dependency; the tools stay
 # standard-library-only on purpose, and running them directly
 # (`python tools/level_contract_checker.py ...`) remains a supported
 # zero-install path.
@@ -24,6 +23,7 @@ license = { text = "MIT" }
 
 [project.scripts]
 oax-level-check = "tools.level_contract_checker:main"
+oax-asset-check = "tools.asset_contract_validator:main"
 oax-static-gate = "tools.static_gate:main"
 oax-test = "tools.oax_test:main"
 

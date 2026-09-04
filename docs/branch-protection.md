@@ -17,7 +17,7 @@ content). A check name becomes selectable after the workflow has run once.
 | Require a pull request before merging | **on** | No direct pushes; every change goes through the gate. |
 | Required approvals | **1** (maintainer) | REQ-020: community submissions require explicit human maintainer approval. This is the load-bearing human gate — an automated-only merge path is a firm project non-goal, so no bot, auto-merge rule, or bypass may satisfy it. |
 | Require status checks to pass before merging | **on** | REQ-018 AC-4: a PR failing any contract check or test cannot merge. |
-| Required status checks | `level-contract`, `static-gate`, `test-harness`, `build` | The four jobs in `pr.yml`. Add `asset-contract` in the same PR that adds the Asset Contract Validator and its job. |
+| Required status checks | `level-contract`, `asset-contract`, `static-gate`, `test-harness`, `build` | The five jobs in `pr.yml`. |
 | Require branches to be up to date before merging | **on** | A PR green against a stale base can still break `main`; the contract checks must have run against what will actually merge. |
 | Do not allow bypassing the above settings | **on** (admins included) | The human-review rule is only real if nobody is exempt from it. |
 | Allow force pushes / deletions | **off** | History on `main` is the provenance record for every merged world. |

@@ -1,5 +1,5 @@
 # The merge gate (REQ-018). Four validator jobs plus the build, on every pull
-# request. Branch protection marks all of them required (docs/branch-protection.md)
+# request: level-contract, asset-contract, static-gate, test-harness, build. Branch protection marks all of them required (docs/branch-protection.md)
 # -- that setting, not this file, is what makes a red check un-mergeable, and it
 # is also half of REQ-020's rule that no community submission lands without a
 # human maintainer's approval.
@@ -16,11 +16,6 @@
 # toolchain going red on an unrelated day reads to them as a defect in their
 # own world module, and they will start "fixing" it.
 #
-# NOTE: an `asset-contract` job joins the required set when the Asset
-# Contract Validator node is built (oax-asset-check). It is absent rather
-# than stubbed -- a job that cannot run yet would either red-bar every PR or
-# green-bar a check that checked nothing.
-
 name: PR
 
 on:
@@ -49,6 +44,22 @@ jobs:
         with:
           name: level-contract-report
           path: reports/level-contract.json
+
+  asset-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: '3.11'
+      - run: python3 -m pip install -e .
+      - run: mkdir -p reports
+      - run: oax-asset-check --target . --format json | tee reports/asset-contract.json
+      - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        if: always()
+        with:
+          name: asset-contract-report
+          path: reports/asset-contract.json
 
   static-gate:
     runs-on: ubuntu-latest
