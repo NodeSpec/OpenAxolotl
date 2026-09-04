@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3]
+
+; FIXTURE — deliberately forbidden. REQ-030 AC-3.
+;
+; Scene files matter on their own: a MultiplayerSpawner or a
+; MultiplayerSynchronizer can be added in the editor without any script ever
+; mentioning it, so a gate that scanned only .gd would miss this entirely.
+
+[node name="NetRoot" type="Node3D"]
+
+[node name="Spawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://core/net_player.tscn")
+
+[node name="Sync" type="MultiplayerSynchronizer" parent="."]
+root_path = NodePath("..")

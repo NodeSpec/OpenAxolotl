@@ -1,0 +1,20 @@
+; FIXTURE — deliberately clean. The control for the project.godot rule.
+;
+; No networking section, no multiplayer autoload, no peer configuration. The
+; autoload that IS here exists to prove the rule inspects autoloads for what
+; they are rather than rejecting the section wholesale.
+
+config_version=5
+
+[application]
+
+config/name="Clean Fixture"
+run/main_scene="res://dev/greybox.tscn"
+
+[autoload]
+
+TuningData="*res://core/tuning/tuning_data.gd"
+
+[rendering]
+
+renderer/rendering_method="forward_plus"
