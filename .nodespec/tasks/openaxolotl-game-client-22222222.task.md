@@ -28,7 +28,13 @@ with no import gymnastics. `core/` holds one directory per core system node,
 `hub/` holds the Open Lagoon hub and world loader, `worlds/` holds world
 modules discovered at runtime, `contracts/` holds the machine-readable schema
 files, `test/` holds GdUnit4 GDScript tests mirroring `core/`, and `addons/`
-holds GdUnit4 itself. The Python tooling lives under `tools/` and the shared
+holds GdUnit4 itself. `dev/` holds the developers' proving ground — the greybox
+scene and its headless smoke driver. It is deliberately NOT under `worlds/`: it
+declares no manifest and satisfies no contract element, so the hub must never
+discover it, and putting it there would mean either a special case in the loader
+or a permanently invalid module. It is superseded by the reference template
+(REQ-029) as the thing a contributor copies, but it outlives it as the scene
+core systems are exercised in without dragging a contract along. The Python tooling lives under `tools/` and the shared
 test fixtures under `fixtures/`; both carry a `.gdignore` file so Godot's
 importer never scans them — this matters because the fixture set deliberately
 contains malformed and malicious world modules that would otherwise break
@@ -45,7 +51,7 @@ alone, and a second toolchain doubles the build, the review surface and the
 static-analysis gate's parser burden for no gameplay gain. Use *statically typed*
 GDScript throughout — typed parameters, return types and members — since the
 catalog itself lists untyped GDScript as an anti-pattern and the gate's tokenizer
-is simpler and safer against typed source. Target Godot 4.x / GDScript 2.0. (The
+is simpler and safer against typed source. Target Godot 4.7 / GDScript 2.0. (The
 four Python validator nodes and the GitHub Actions CI node are deliberately
 outside this policy; it governs game code.)
 

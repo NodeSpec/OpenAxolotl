@@ -39,7 +39,7 @@ alone, and a second toolchain doubles the build, the review surface and the
 static-analysis gate's parser burden for no gameplay gain. Use *statically typed*
 GDScript throughout — typed parameters, return types and members — since the
 catalog itself lists untyped GDScript as an anti-pattern and the gate's tokenizer
-is simpler and safer against typed source. Target Godot 4.x / GDScript 2.0. (The
+is simpler and safer against typed source. Target Godot 4.7 / GDScript 2.0. (The
 four Python validator nodes and the GitHub Actions CI node are deliberately
 outside this policy; it governs game code.)
 
