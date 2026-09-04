@@ -1,0 +1,90 @@
+[gd_scene load_steps=7 format=3]
+
+; THE REFERENCE TEMPLATE (REQ-029). Copy this directory to start a new world.
+;
+; It implements the five REQUIRED Level Contract elements and NOTHING optional.
+; That minimality is the point twice over: it is the smallest proof the contract
+; is satisfiable, and it is a live test that every optional element's absent
+; default actually works, because a world shipping in CI depends on those
+; defaults every run.
+;
+; Resist adding an element "for illustration". A template that declared extras
+; would accidentally satisfy a newly required element and stop working as the
+; tripwire REQ-029 AC-7 needs it to be.
+;
+; There is deliberately no .gd file here. A world is data and a scene; the game
+; supplies the behaviour. That is also why this template passes the World Static
+; Analysis Gate trivially — it calls nothing at all.
+;
+; WHAT A NEW WORLD AUTHOR CHANGES, and nothing else:
+;   1. the directory name (it IS the world id, and the save-key namespace)
+;   2. worldId, displayName and the saveIntegration keys in world.json
+;   3. the geometry below, and where Spawn / Checkpoint / Finish sit in it
+;
+; The three GROUPS are load-bearing and must keep their names: the hub finds
+; spawn_point, checkpoint and finish_volume by group, never by node name.
+;
+; LAYOUT. Godot's forward is -Z, so the player walks forward from spawn to
+; finish. The route is deliberately trivial: this world's job is to prove the
+; contract, not to entertain.
+;
+;   Ground     z 4..-44, a flat walkable strip
+;   Spawn      z 0       where the hub places the axolotl
+;   Checkpoint z -18     one is REQUIRED; it refills lives and capability state
+;   Finish     z -38     entering it completes the world (finishCondition)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ground"]
+size = Vector3(12, 2, 48)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(12, 2, 48)
+
+[sub_resource type="StandardMaterial3D" id="Material_ground"]
+albedo_color = Color(0.45, 0.55, 0.42, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_checkpoint"]
+size = Vector3(12, 4, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_finish"]
+size = Vector3(12, 4, 2)
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 1
+background_color = Color(0.42, 0.62, 0.72, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.7, 0.75, 0.8, 1)
+ambient_light_energy = 0.7
+
+[node name="World" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.353, 0.353, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 20, 0)
+shadow_enabled = true
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -20)
+
+[node name="Mesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("BoxMesh_ground")
+surface_material_override/0 = SubResource("Material_ground")
+
+[node name="Collision" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_ground")
+
+[node name="Spawn" type="Marker3D" parent="." groups=["spawn_point"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="Checkpoint" type="Area3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -18)
+
+[node name="Collision" type="CollisionShape3D" parent="Checkpoint"]
+shape = SubResource("BoxShape3D_checkpoint")
+
+[node name="Finish" type="Area3D" parent="." groups=["finish_volume"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -38)
+
+[node name="Collision" type="CollisionShape3D" parent="Finish"]
+shape = SubResource("BoxShape3D_finish")

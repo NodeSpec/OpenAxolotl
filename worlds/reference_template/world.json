@@ -1,0 +1,8 @@
+{
+  "contractVersion": "1.0",
+  "worldId": "reference_template",
+  "displayName": "Reference Template",
+  "controllerCompatibility": "1.0",
+  "finishCondition": { "kind": "reach_volume" },
+  "saveIntegration": { "keys": ["reference_template.completed"] }
+}
