@@ -95,6 +95,12 @@ def _suites(godot: str | None) -> list[dict]:
             "argv": [godot, *GODOT_FLAGS,
                      "--script", "test/worlds/run_bubble_walk.gd"],
         },
+        {
+            "id": "perf-gate",
+            "file": "test/perf/run_perf_gate.gd",
+            "argv": [godot, *GODOT_FLAGS,
+                     "--script", "test/perf/run_perf_gate.gd"],
+        },
     ]
 
 

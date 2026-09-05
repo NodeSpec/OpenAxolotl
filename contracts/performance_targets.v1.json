@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0",
+  "comment": "The three documented performance targets (REQ-027). docs/performance.md is the prose authority explaining them; this file is the machine-readable source the perf gate (test/perf/run_perf_gate.gd) loads, and tools/test_performance_targets.py fails if the two ever disagree.",
+  "frameRateTargetFps": 60,
+  "maxFrameTimeSpikeMs": 50,
+  "worldLoadTimeBudgetMs": 3000,
+  "headlessProtocol": {
+    "comment": "How the headless CI gate measures against the targets. CI hardware is NOT the baseline specification; the gate is a regression tripwire, not a baseline verification.",
+    "sustainedRateTolerance": 0.95,
+    "discardLargestSpikes": 1,
+    "settleFrames": 60
+  }
+}
