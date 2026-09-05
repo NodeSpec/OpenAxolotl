@@ -44,6 +44,7 @@ var _save: SaveSystem
 var _portals_root: Node3D
 var _active_world: Node3D
 var _active_world_id: String = ""
+var _hud: PlayerHud
 
 
 func _ready() -> void:
@@ -51,7 +52,18 @@ func _ready() -> void:
 	_portals_root = Node3D.new()
 	_portals_root.name = "Portals"
 	add_child(_portals_root)
+	# The game-state readout (REQ-022). Created empty here; each world entry
+	# wires the systems that world actually runs, and the return unwires
+	# them, so the HUD shows honest placeholders in the hub rather than a
+	# dead world's last numbers.
+	_hud = PlayerHud.new()
+	_hud.name = "PlayerHud"
+	add_child(_hud)
 	refresh()
+
+
+func get_hud() -> PlayerHud:
+	return _hud
 
 
 ## Attaches the save system. Progress annotations appear on the next refresh;
@@ -116,6 +128,7 @@ func enter_world(world_id: String) -> bool:
 			var systems := WorldSystems.new()
 			systems.manifest = manifest
 			world.add_child(systems)
+			_wire_hud_to(systems, manifest)
 			if _save != null:
 				_save.open_world(world_id, manifest)
 			_move_player_to(spawn)
@@ -130,6 +143,31 @@ func enter_world(world_id: String) -> bool:
 		% [world_id, portal.failure_summary()])
 	refresh()
 	return false
+
+
+## Points the readout at the world's live systems. The active region is the
+## first the manifest declares — the interim answer to friction entry F-2's
+## missing per-region activation declaration; a world declaring none shows
+## the honest "Region: none".
+func _wire_hud_to(systems: WorldSystems, manifest: Dictionary) -> void:
+	if _hud == null:
+		return
+	_hud.set_gill_mods(systems.get_mods())
+	_hud.set_tuning(systems.get_tuning())
+	var regions: Variant = manifest.get("restorableRegions", [])
+	var first_region := ""
+	if regions is Array and not (regions as Array).is_empty():
+		first_region = String(
+			((regions as Array)[0] as Dictionary).get("regionId", ""))
+	_hud.set_restoration(systems.get_restoration(), first_region)
+
+
+func _unwire_hud() -> void:
+	if _hud == null:
+		return
+	_hud.set_gill_mods(null)
+	_hud.set_restoration(null)
+	_hud.set_tuning(null)
 
 
 ## The completion hook for finish kinds owned by other systems: the boss
@@ -150,6 +188,7 @@ func _on_world_finished() -> void:
 	_active_world.queue_free()
 	_active_world = null
 	_active_world_id = ""
+	_unwire_hud()
 
 	_set_hub_active(true)
 	_move_player_to(_hub_spawn_position())
