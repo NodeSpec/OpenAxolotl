@@ -100,3 +100,21 @@ element cross-checked against the scene's `affordance_gate` metadata (the
 same rule kind F-3 needs). The checker could then verify set-level
 coverage statically, and a fork swapping worlds would learn at check time
 — not playtest time — that a mod lost its last gating world.
+
+## F-7 · The `boss` element has no schema — and now a de-facto one exists
+
+**Needed while building the Flagship encounter (REQ-013):** the contract
+declares `boss` as an optional element with a defined absent-default and no
+present-shape, exactly like `music` (F-4). The encounter framework had to
+define a shape to validate against, so one now exists de facto:
+`{regionId, phases: [{phaseId, grammar: water|land|any,
+requiresAffordance?}]}` — validated by
+`FlagshipEncounter.from_declaration`, which refuses a declaration lacking a
+water-only phase, a land-only phase, or a mod-gated phase (REQ-013
+AC-3/AC-4 enforced structurally).
+
+**Proposed contract change:** promote this shape into the schema's `boss`
+element rules before any world declares one — otherwise the first
+declaration freezes the framework's internal shape as the contract by
+accident rather than by decision. The checker gets it for free once the
+rules land (same rule kinds as the other manifest elements).
