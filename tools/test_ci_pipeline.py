@@ -218,7 +218,7 @@ class ValidatorEnvelopes(unittest.TestCase):
         self.assertEqual(
             payload["suitesRun"],
             ["python-unit", "gdunit", "smoke-greybox", "template-walk",
-             "hub-walk"])
+             "hub-walk", "coral-walk"])
 
     def test_req_018_harness_refuses_rather_than_skipping_godot(self) -> None:
         # No engine must be exit 2 (invocation error), never a hollow pass.

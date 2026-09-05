@@ -83,6 +83,12 @@ def _suites(godot: str | None) -> list[dict]:
             "argv": [godot, *GODOT_FLAGS,
                      "--script", "test/hub/run_hub_walk.gd"],
         },
+        {
+            "id": "coral-walk",
+            "file": "test/worlds/run_coral_walk.gd",
+            "argv": [godot, *GODOT_FLAGS,
+                     "--script", "test/worlds/run_coral_walk.gd"],
+        },
     ]
 
 

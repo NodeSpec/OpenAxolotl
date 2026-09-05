@@ -73,6 +73,10 @@ func refresh() -> void:
 		_registry.apply_progress(_save)
 
 	for child: Node in _portals_root.get_children():
+		# Detach before freeing: a queue_freed child keeps its name until the
+		# end of the frame, and a replacement added meanwhile would be
+		# auto-renamed — leaving pedestals unfindable by their portal name.
+		_portals_root.remove_child(child)
 		child.queue_free()
 
 	var portals := _registry.get_portals()
@@ -105,8 +109,15 @@ func enter_world(world_id: String) -> bool:
 		if errors.is_empty():
 			_active_world = world
 			_active_world_id = world_id
+			var manifest := _read_manifest(portal.module_dir)
+			# The runtime the world's declarations bind to: Gill Mods,
+			# restoration, tuning overrides. A child of the world, so it
+			# lives and dies with the world it serves.
+			var systems := WorldSystems.new()
+			systems.manifest = manifest
+			world.add_child(systems)
 			if _save != null:
-				_save.open_world(world_id, _read_manifest(portal.module_dir))
+				_save.open_world(world_id, manifest)
 			_move_player_to(spawn)
 			_set_hub_active(false)
 			world_entered.emit(world_id)

@@ -82,6 +82,7 @@ func _physics_process(_delta: float) -> void:
 
 	_frame += 1
 	if _frame == SETTLE_FRAMES:
+		_aim_at_first_pedestal()
 		_key(KEY_W, true)
 		return
 
@@ -96,6 +97,22 @@ func _physics_process(_delta: float) -> void:
 		_fail("the loop never completed (entered='%s' completed='%s' z=%.1f)"
 			% [_entered_id, _completed_id, _body.global_position.z])
 		_report()
+
+
+## With several worlds installed the pedestals spread out along x, and a body
+## walking a straight line down the middle would thread between them. Lining
+## the body up with the first available portal's pedestal is SETUP, not a
+## relocation under test — every relocation the checks assert is still the
+## hub's doing. The probe still names no world: it aims at whichever portal
+## the registry put first, so it keeps working on a fork with other worlds.
+func _aim_at_first_pedestal() -> void:
+	var available := _hub.get_registry().get_available()
+	if available.is_empty():
+		return
+	var pedestal := _hub.find_child(
+		"Portal_%s" % available[0].world_id, true, false)
+	if pedestal is Node3D:
+		_body.global_position.x = (pedestal as Node3D).global_position.x
 
 
 func _finish_checks() -> void:

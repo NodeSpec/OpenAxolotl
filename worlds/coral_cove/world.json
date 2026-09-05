@@ -1,0 +1,29 @@
+{
+  "contractVersion": "1.0",
+  "worldId": "coral_cove",
+  "displayName": "Coral Cove",
+  "controllerCompatibility": "1.0",
+  "finishCondition": {
+    "kind": "reach_volume"
+  },
+  "saveIntegration": {
+    "keys": [
+      "coral_cove.completed"
+    ]
+  },
+  "restorableRegions": [
+    {
+      "regionId": "coral_shelf",
+      "traversalGates": [
+        {
+          "gateId": "shelf_wall",
+          "opensAt": "restored"
+        }
+      ]
+    }
+  ],
+  "tuningOverrides": {
+    "restoration.resourced.resource_cost": 3,
+    "restoration.restored.resource_cost": 4
+  }
+}
