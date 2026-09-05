@@ -74,6 +74,7 @@ godot --headless --audio-driver Dummy --path . --script dev/run_smoke.gd
 godot --headless --audio-driver Dummy --path . --script test/worlds/run_template_walk.gd
 godot --headless --audio-driver Dummy --path . --script test/hub/run_hub_walk.gd
 godot --headless --audio-driver Dummy --path . --script test/worlds/run_coral_walk.gd
+godot --headless --audio-driver Dummy --path . --script test/worlds/run_bubble_walk.gd
 ```
 
 ## Toolchain pin

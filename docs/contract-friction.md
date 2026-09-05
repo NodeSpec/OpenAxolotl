@@ -81,3 +81,22 @@ the playthrough test would catch a regression.
 guidance in `docs/level-contract.md` — keep an affordance gate within its
 mod's activation window at walking speed; the completability test is the
 enforcement.
+
+## F-6 · Cross-world mod coverage is invisible to the manifest
+
+**Needed while building Bubble Bay:** REQ-011 AC-5's set-level clause —
+"across the official set all three MVP mods are each required by at least
+one world" — has no declarative footprint. Which mods a world gates on
+lives only in scene metadata, so proving coverage means traversing every
+world; adding a third official world silently changes nothing checkable.
+
+**Interim:** each world's README states its mod split (Coral Cove:
+Bubble + Glow; Bubble Bay: Jet), and the per-world playthrough probes
+assert the gates actually opened — coverage is proven by playing, and only
+by playing.
+
+**Proposed contract change:** an optional `gillModsRequired` manifest
+element cross-checked against the scene's `affordance_gate` metadata (the
+same rule kind F-3 needs). The checker could then verify set-level
+coverage statically, and a fork swapping worlds would learn at check time
+— not playtest time — that a mod lost its last gating world.
