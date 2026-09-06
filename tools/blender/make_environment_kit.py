@@ -35,15 +35,17 @@ import bpy  # type: ignore
 import bmesh  # type: ignore
 
 # The aquatic palette (docs/asset-contract.md): value contrast against the
-# seabed, no colour louder than the hero.
-ROCK_DARK = (0.36, 0.42, 0.44, 1.0)
-ROCK_LIGHT = (0.55, 0.62, 0.6, 1.0)
-CORAL_WARM = (0.93, 0.5, 0.38, 1.0)
-CORAL_TIP = (0.98, 0.72, 0.55, 1.0)
-KELP_DEEP = (0.13, 0.42, 0.3, 1.0)
-KELP_BRIGHT = (0.3, 0.68, 0.42, 1.0)
-GRASS_DEEP = (0.2, 0.55, 0.4, 1.0)
-GRASS_TIP = (0.55, 0.8, 0.5, 1.0)
+# seabed, no colour louder than the hero. Deliberately DARKER than the sand
+# and the axolotl: under the rig's sky ambient a mid-tone prop washes out to
+# near-white, and the hero must stay the brightest thing on screen.
+ROCK_DARK = (0.20, 0.26, 0.28, 1.0)
+ROCK_LIGHT = (0.36, 0.44, 0.43, 1.0)
+CORAL_WARM = (0.78, 0.28, 0.22, 1.0)
+CORAL_TIP = (0.94, 0.48, 0.34, 1.0)
+KELP_DEEP = (0.07, 0.26, 0.19, 1.0)
+KELP_BRIGHT = (0.18, 0.5, 0.3, 1.0)
+GRASS_DEEP = (0.11, 0.38, 0.28, 1.0)
+GRASS_TIP = (0.36, 0.63, 0.36, 1.0)
 
 
 def clear_scene() -> None:

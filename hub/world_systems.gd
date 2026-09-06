@@ -241,7 +241,9 @@ func _wire_collectibles() -> void:
 func _wire_pillar_one() -> void:
 	_regen = RegenSystem.new(_tuning)
 	_regen.capability_lost.connect(
-		func(_kind: Capability.Kind) -> void: _publish_modifiers())
+		func(_kind: Capability.Kind) -> void:
+			_publish_modifiers()
+			_flinch_player())
 	_regen.capability_restored.connect(
 		func(_kind: Capability.Kind) -> void: _publish_modifiers())
 	_regen.mutation_applied.connect(
@@ -537,6 +539,16 @@ func _return_player_to(position: Vector3, checkpoint_id: String) -> void:
 				body.get_controller().set_velocity(Vector3.ZERO)
 				body.get_controller().sync_body_position(position)
 	returned_to_anchor.emit(position, checkpoint_id)
+
+
+## The visual half of a capability loss. The runtime already knows the moment
+## it happens; the body owns how the axolotl reacts to it, so this only asks.
+## A world running without a rigged player (the walk probes build bare
+## bodies) simply has nothing to flinch.
+func _flinch_player() -> void:
+	var body := _player() as AxolotlBody
+	if body != null:
+		body.play_hurt()
 
 
 func _player() -> Node3D:

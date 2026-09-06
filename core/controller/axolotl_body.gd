@@ -54,6 +54,11 @@ var _squash: HeroSquash
 var _model_base_scale: Vector3 = Vector3.ONE
 var _was_grounded: bool = true
 
+## The rig's clips, chosen from the same state this wrapper already computes.
+## Visual only: a body whose model carries no AnimationPlayer simply never
+## binds, which is what the bare bodies the walk probes build do.
+var _animator: HeroAnimator
+
 ## Overlapping water volumes, counted rather than flagged: two volumes meeting at
 ## a seam must not read as "left the water" when the player crosses the join.
 var _water_volumes: int = 0
@@ -93,11 +98,13 @@ func _ready() -> void:
 
 	if not model_path.is_empty():
 		_model = get_node_or_null(model_path) as Node3D
+	_animator = HeroAnimator.new()
 	if _model != null:
 		# The look is the client's: dress the imported model in the shared
 		# hero materials, whatever the exporter wrote into the file.
 		HeroSkin.apply(_model)
 		_model_base_scale = _model.scale
+		_animator.bind(_model)
 	_squash = HeroSquash.new(_tuning)
 	_controller.hopped.connect(_squash.on_hop)
 
@@ -108,6 +115,18 @@ func get_controller() -> AxolotlController:
 
 func get_input_system() -> InputSystem:
 	return _input
+
+
+func get_animator() -> HeroAnimator:
+	return _animator
+
+
+## The visual half of losing a capability (REQ-019's comedic register): the
+## world's runtime calls this when the regeneration system announces a loss,
+## so the flinch is tied to the event rather than guessed from motion.
+func play_hurt() -> void:
+	if _animator != null:
+		_animator.play_hurt()
 
 
 func is_in_water() -> bool:
@@ -152,6 +171,8 @@ func _physics_process(delta: float) -> void:
 	if grounded and not _was_grounded and not is_in_water():
 		_squash.on_land()
 	_was_grounded = grounded
+
+	_animator.step(delta, is_in_water(), grounded, velocity)
 
 	if _model != null:
 		_model.rotation.y = _controller.get_heading_yaw()
