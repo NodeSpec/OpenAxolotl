@@ -1,0 +1,25 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+; HERO SKIN — the axolotl's body, head, legs, belly and spots.
+;
+; Toy materials: saturated albedo, real lighting (docs/asset-contract.md).
+; Colour comes from the model's vertex colours, so a regenerated model keeps
+; its own palette; this material only says how that colour takes light: a
+; smooth, slightly wet skin (low-ish roughness, a soft clearcoat sheen) that
+; lets light through at the edges (subsurface scattering, Forward+ only) so
+; the sun reads through the thinner parts instead of stopping at the surface.
+
+[resource]
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 1, 1, 1)
+metallic = 0.0
+metallic_specular = 0.5
+roughness = 0.4
+clearcoat_enabled = true
+clearcoat = 0.35
+clearcoat_roughness = 0.5
+subsurf_scatter_enabled = true
+subsurf_scatter_strength = 0.35
+rim_enabled = true
+rim = 0.2
+rim_tint = 0.5

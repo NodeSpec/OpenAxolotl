@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+; HERO EYE GLEAM — the white catchlight baked into each eye as a small sphere.
+; Unshaded, so it reads as a highlight from every angle and under every
+; light: a shaded white dot would go grey in shadow and vanish exactly when
+; the eye needs it most.
+
+[resource]
+shading_mode = 0
+vertex_color_use_as_albedo = false
+albedo_color = Color(1, 1, 1, 1)

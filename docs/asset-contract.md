@@ -68,6 +68,42 @@ wherever they appear, and gitignored.
 Vertex-coloured, textured and untextured meshes are all legitimate. Whether
 the model *looks* right is the human half below, exactly as for images.
 
+### Refining a model in Blender (headless)
+
+Blender is the one external tool the pipeline leans on, for geometry work
+an engine cannot do for itself: merging a generator's loose parts, smooth
+normals, and later rigging and animation clips. It never runs interactively
+here. The documented command (REQ-032):
+
+```sh
+python tools/refine_model.py --input assets/character/axolotl/axolotl.glb \
+                             --output assets/character/axolotl/axolotl.glb
+```
+
+It finds Blender (`$OAX_BLENDER`, then `blender` on PATH; Blender 4.0 or
+newer with `numpy` available to its Python), runs
+`tools/blender/refine_model.py` in the background, and validates what comes
+back. No Blender is an invocation error (exit 2), never a silent pass.
+
+What refinement does, and what it deliberately does not:
+
+- **Merges parts by role.** Each part is classified by its mean vertex
+  colour against the hero palette — the same thresholds
+  `core/rendering/hero_skin.gd` uses in the game — and joined into one mesh
+  per role: skin, eye, gleam, gill, detail.
+- **Names the materials** `axolotl_<role>`. That name is the contract with
+  the client: `HeroSkin` dresses a surface by material name first and falls
+  back to vertex colours only for a raw file that names nothing.
+- **Writes smooth normals** (auto-smooth at 60°, `--smooth-angle` to change).
+- **Keeps vertex colours** and **preserves geometry exactly**: the triangle
+  count must not change, so a model that met its budget still meets it and
+  the provenance sidecar's description of the geometry stays true. A step
+  that changes geometry (decimation, sculpting) is a separate, reviewed
+  change with its own provenance note.
+
+Record the refinement in `provenance.json`'s `tool` field, as the hero's
+sidecar does.
+
 ## Provenance — every asset, no exceptions
 
 Each asset directory carries a `provenance.json`:
