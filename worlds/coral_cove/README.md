@@ -49,7 +49,7 @@ completability is a headless regression test, not a hope:
 | optional: boss, enemies, music, npcs, secretAreas, customAbility | **not declared** — absent defaults apply |
 
 Scene-group conventions bound by the runtime (`gill_mod_pickup`,
-`affordance_gate`, `restoration_resource`, `restoration_gate`) are recorded
+`affordance_gate`, `collectible`, `restoration_gate`) are recorded
 in `docs/contract-friction.md` as candidates for Level Contract elements
 before the v1 freeze — they are conventions today, and pretending otherwise
 would hide exactly the friction REQ-011 exists to surface.
