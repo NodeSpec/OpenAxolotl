@@ -253,6 +253,21 @@ class CategoryConformance(Corpus):
             with self.assertRaises(validator.HeaderError):
                 validator.glb_header(junk)
 
+    def test_req_016_official_assets_pass_and_the_planted_corpus_fails(self):
+        # Both halves of the criterion, against the REAL repository: the
+        # official assets under assets/ (the hero model among them) pass,
+        # and the deliberately non-conforming corpus fails. A repo with no
+        # official asset would make the first half vacuous, so the count
+        # of checked assets is asserted too.
+        official = run_cli("--target", REPO, "--format", "json")
+        self.assertEqual(official.returncode, 0, official.stdout)
+        payload = json.loads(official.stdout)
+        self.assertTrue(payload["passed"], payload["violations"])
+        self.assertGreaterEqual(payload["assetsChecked"], 1)
+        planted = self.report_for(self.nonconforming)
+        self.assertFalse(planted["passed"])
+        self.assertEqual(planted["_returncode"], 1)
+
     def test_req_016_forbidden_alpha_policy_is_implemented(self):
         # No shipped category forbids alpha today, but the KIND must work the
         # day one does -- the engine is generic over the policy value.
