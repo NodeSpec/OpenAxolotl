@@ -110,7 +110,25 @@ Everything else. Each has a **defined default when absent**, which is what lets 
 | `tuningOverrides` | Every tuning value stays global |
 | `livesPerAttemptOverride` | The global `progression.default_lives_per_attempt` applies |
 
-Two notes worth reading before you reach for them:
+Three notes worth reading before you reach for them:
+
+**Collectibles are declared, then placed.** Declare each in `world.json`:
+
+```json
+"collectibles": [
+  { "collectibleId": "kelp_seed",    "kind": "resource",  "regionId": "coral_shelf" },
+  { "collectibleId": "hermit_snail", "kind": "discovery", "displayName": "Hermit snail" }
+]
+```
+
+then place each one in the scene as an `Area3D` in group `collectible` with metadata `collectible_id` naming a declared id. Two kinds, and only two:
+
+| Kind | Lifetime |
+|---|---|
+| `resource` | **Spent.** Delivered to its `regionId` and consumed to advance restoration. A type: place it as many times as your economy needs. Never persisted by id. |
+| `discovery` | **Kept.** A rescued creature or a secret, counted per world and written to the profile the moment it is collected. One instance per declaration, placed exactly once, and gone from the scene on re-entry. |
+
+Collection survives running out of lives: it is in the profile before the respawn happens. The `collect_all` finish condition means every declared *discovery* is collected — resources never count toward completion — and it cannot complete vacuously, so a `collect_all` world must declare at least one discovery.
 
 **Camera hints are volumes, never code.** You place a hint volume and declare the framing it wants. There is no circumstance in which a world ships custom camera code.
 

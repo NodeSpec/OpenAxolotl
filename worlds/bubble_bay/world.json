@@ -21,5 +21,13 @@
         }
       ]
     }
+  ],
+  "collectibles": [
+    {
+      "collectibleId": "pearl",
+      "kind": "resource",
+      "regionId": "kelp_nursery",
+      "displayName": "Pearl"
+    }
   ]
 }

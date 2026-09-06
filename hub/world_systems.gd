@@ -1,15 +1,15 @@
 class_name WorldSystems
 extends Node
 
-## The runtime a world's DECLARATIONS bind to (REQ-011, serving REQ-004/008).
+## The runtime a world's DECLARATIONS bind to (REQ-011, serving REQ-004/008/010).
 ##
 ## "Declare, don't script" only works if something on the game-client side
 ## turns declarations into behaviour. This node is that something: the hub
 ## attaches one to every world it loads, and it wires the world's manifest and
 ## scene-group conventions to the real core systems — Gill Mods, restoration,
-## tuning — so a world module ships NO code at all. The reference template
-## proved a world can be pure scene+manifest; this is what lets an official
-## world stay that way while having mechanics.
+## collectibles, tuning — so a world module ships NO code at all. The
+## reference template proved a world can be pure scene+manifest; this is what
+## lets an official world stay that way while having mechanics.
 ##
 ## SCENE CONVENTIONS (the world side of the sanctioned interfaces; each is a
 ## Godot group plus node metadata, because group membership is the contract's
@@ -21,8 +21,12 @@ extends Node
 ##                        opens while the equipped mod GRANTS the named
 ##                        affordance. This is how a traversal challenge is
 ##                        gated on a specific mod, declaratively.
-##   restoration_resource Area3D, meta `region_id`  — walking through delivers
-##                        one resource to the named region.
+##   collectible          Area3D, meta `collectible_id` — a placed collectible
+##                        the manifest's `collectibles` element DECLARES. A
+##                        resource kind delivers to its region; a discovery
+##                        kind is rescued once and persisted. A node naming
+##                        an undeclared id is refused (Collectible
+##                        Registration Interface, REQ-010).
 ##   restoration_gate     StaticBody3D, meta `region_id` + `gate_id` — scene
 ##                        geometry mirroring the manifest-declared traversal
 ##                        gate: opens and closes with the region's state, both
@@ -37,16 +41,27 @@ extends Node
 ## to gate on, so its regions unlock on entry; when a world declares a boss,
 ## its regions stay locked until the encounter (wired when the Flagship node
 ## exists). The friction log proposes an explicit `unlockedBy` field.
+##
+## FINISH CONDITIONS owned by systems. `reach_volume` is the loader's; the
+## `collect_all` kind is completed HERE, by the collectibles system announcing
+## that every declared discovery is collected, through the callback the hub
+## installs in [member on_finish_condition]. A `collect_all` world declaring
+## no discovery collectibles is uncompletable and is reported as such at
+## wire time rather than instantly won.
 
 signal mod_equipped(mod_id: String)
 signal gate_changed(gate_kind: String, gate_ref: String, open: bool)
 signal resource_delivered(region_id: String, resources_held: int)
+signal collectible_collected(collectible_id: String, kind: CollectibleKind.Kind)
 
 const GROUP_MOD_PICKUP := "gill_mod_pickup"
 const GROUP_AFFORDANCE_GATE := "affordance_gate"
-const GROUP_RESOURCE_PICKUP := "restoration_resource"
+const GROUP_COLLECTIBLE := "collectible"
 const GROUP_RESTORATION_GATE := "restoration_gate"
+const META_COLLECTIBLE_ID := "collectible_id"
 const PLAYER_GROUP := "player"
+
+const FINISH_COLLECT_ALL := "collect_all"
 
 const TUNING_PATH := "res://core/tuning/tuning.json"
 const MODS_DIR := "res://core/gillmod/mods"
@@ -54,9 +69,23 @@ const MODS_DIR := "res://core/gillmod/mods"
 ## Set by the hub before this node enters the tree.
 var manifest: Dictionary = {}
 
+## The world's id — the save namespace collection persists into. Empty means
+## an anonymous world (a test scene): collection counts for the session and is
+## kept nowhere.
+var world_id: String = ""
+
+## The Save Integration Interface, when a profile is attached. Null means the
+## collectibles store remembers nothing beyond this session, honestly.
+var save_system: SaveSystem = null
+
+## Installed by the hub: what to call when a system-owned finish condition is
+## met. Invalid means nothing listens (a test scene).
+var on_finish_condition: Callable = Callable()
+
 var _tuning: TuningData
 var _mods: GillModSystem
 var _restoration: RestorationSystem
+var _collectibles: CollectiblesSystem
 var _affordance_gates: Array[Node3D] = []
 var _restoration_gates: Dictionary = {}  # gate_id -> Node3D
 
@@ -115,8 +144,45 @@ func wire() -> void:
 			_restoration.unlock_region(region_id)
 	_restoration.region_traversal_changed.connect(_on_traversal_changed)
 
+	_wire_collectibles()
 	_wire_scene()
 	_apply_affordance_gates()
+
+
+## The collectibles system over the attached profile (or over nothing), the
+## restoration interface it delivers through, and the world's declaration.
+func _wire_collectibles() -> void:
+	var store := SaveCollectibleStore.new(save_system) if save_system != null \
+		else CollectibleStore.new()
+	_collectibles = CollectiblesSystem.new(_tuning, store)
+	_collectibles.set_restoration(_restoration)
+	var errors: Array[CollectibleError] = []
+	if not _collectibles.declare_from_manifest(manifest, errors):
+		push_warning("WorldSystems: collectible declaration failed: %s"
+			% str(errors.map(
+				func(e: CollectibleError) -> String: return e.to_string_id())))
+	_collectibles.open_world(world_id)
+	_collectibles.collected.connect(
+		func(collectible_id: String, kind: CollectibleKind.Kind) -> void:
+			collectible_collected.emit(collectible_id, kind))
+	_collectibles.resources_delivered.connect(
+		func(region_id: String, _count: int, _advanced: int) -> void:
+			var region := _restoration.get_region(region_id)
+			resource_delivered.emit(
+				region_id, 0 if region == null else region.get_resources()))
+
+	if _finish_kind() == FINISH_COLLECT_ALL:
+		if not _collectibles.is_completable_by_collection():
+			push_warning("WorldSystems: finishCondition is collect_all but the "
+				+ "world declares no discovery collectibles; it cannot complete")
+		_collectibles.collection_completed.connect(_on_collection_completed)
+
+
+func _finish_kind() -> String:
+	var condition: Variant = manifest.get("finishCondition", {})
+	if not (condition is Dictionary):
+		return ""
+	return String((condition as Dictionary).get("kind", ""))
 
 
 func get_mods() -> GillModSystem:
@@ -125,6 +191,10 @@ func get_mods() -> GillModSystem:
 
 func get_restoration() -> RestorationSystem:
 	return _restoration
+
+
+func get_collectibles() -> CollectiblesSystem:
+	return _collectibles
 
 
 func get_tuning() -> TuningData:
@@ -153,15 +223,25 @@ func _wire_scene() -> void:
 		if node.is_in_group(GROUP_MOD_PICKUP) and node is Area3D:
 			(node as Area3D).body_entered.connect(
 				_on_pickup_touched.bind(node, _collect_mod))
-		elif node.is_in_group(GROUP_RESOURCE_PICKUP) and node is Area3D:
-			(node as Area3D).body_entered.connect(
-				_on_pickup_touched.bind(node, _collect_resource))
+		elif node.is_in_group(GROUP_COLLECTIBLE) and node is Area3D:
+			_wire_collectible_node(node as Area3D)
 		elif node.is_in_group(GROUP_AFFORDANCE_GATE) and node is Node3D:
 			_affordance_gates.append(node as Node3D)
 		elif node.is_in_group(GROUP_RESTORATION_GATE) and node is Node3D:
 			var gate_id := String(node.get_meta("gate_id", ""))
 			if not gate_id.is_empty():
 				_restoration_gates[gate_id] = node
+
+
+## A discovery the profile already records as rescued is not in the world any
+## more — the persisted state is what the player SEES on re-entry, not just
+## a number. Everything else waits for the player.
+func _wire_collectible_node(node: Area3D) -> void:
+	var id := String(node.get_meta(META_COLLECTIBLE_ID, ""))
+	if _collectibles != null and _collectibles.is_collected(id):
+		node.queue_free()
+		return
+	node.body_entered.connect(_on_pickup_touched.bind(node, collect_node))
 
 
 func _on_pickup_touched(body: Node3D, pickup: Node, handler: Callable) -> void:
@@ -185,15 +265,21 @@ func _collect_mod(pickup: Node) -> void:
 		push_warning("WorldSystems: pickup names unknown mod '%s'" % mod_id)
 
 
-func _collect_resource(pickup: Node) -> void:
-	var region_id := String(pickup.get_meta("region_id", ""))
-	if _restoration == null or not _restoration.has_region(region_id):
-		push_warning("WorldSystems: pickup names unknown region '%s'" % region_id)
-		return
-	_restoration.deliver_resources(region_id, 1)
-	resource_delivered.emit(
-		region_id, _restoration.get_region(region_id).get_resources())
+## Collects the collectible a scene node stands for. Public so the seam can
+## be driven without physics; the pickup volume calls it deferred. Returns
+## false, leaving the node in place, for an undeclared id.
+func collect_node(pickup: Node) -> bool:
+	var id := String(pickup.get_meta(META_COLLECTIBLE_ID, ""))
+	if _collectibles == null or not _collectibles.collect(id):
+		push_warning("WorldSystems: pickup names unknown collectible '%s'" % id)
+		return false
 	pickup.queue_free()
+	return true
+
+
+func _on_collection_completed() -> void:
+	if on_finish_condition.is_valid():
+		on_finish_condition.call()
 
 
 # --- Gates ------------------------------------------------------------------

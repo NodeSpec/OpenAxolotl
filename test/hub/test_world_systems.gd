@@ -170,3 +170,149 @@ func test_req_011_wiring_is_scoped_to_its_own_world() -> void:
 	_teardown(built[0])
 	_root().remove_child(foreign_world)
 	foreign_world.free()
+
+
+# --- REQ-010: the `collectible` convention binds to the Collectibles System -
+
+const COLLECTIBLE_MANIFEST := {
+	"finishCondition": {"kind": "collect_all"},
+	"restorableRegions": [
+		{
+			"regionId": "reef",
+			"traversalGates": [{"gateId": "reef_wall", "opensAt": "restored"}],
+		},
+	],
+	"tuningOverrides": {
+		"restoration.resourced.resource_cost": 3,
+		"restoration.restored.resource_cost": 4,
+	},
+	"collectibles": [
+		{"collectibleId": "kelp_seed", "kind": "resource", "regionId": "reef"},
+		{"collectibleId": "hermit_snail", "kind": "discovery"},
+		{"collectibleId": "lantern_shrimp", "kind": "discovery"},
+	],
+}
+
+
+func _pickup(collectible_id: String) -> Area3D:
+	var area := Area3D.new()
+	area.add_to_group("collectible")
+	area.set_meta("collectible_id", collectible_id)
+	var shape := CollisionShape3D.new()
+	shape.shape = BoxShape3D.new()
+	area.add_child(shape)
+	return area
+
+
+func _build_collectible_world(pickups: Array[Area3D], save: SaveSystem = null,
+		world_id: String = "reef_world") -> Array:
+	var world := Node3D.new()
+	for pickup in pickups:
+		world.add_child(pickup)
+	_root().add_child(world)
+	var systems := WorldSystems.new()
+	systems.manifest = COLLECTIBLE_MANIFEST
+	systems.world_id = world_id
+	systems.save_system = save
+	if save != null:
+		save.open_world(world_id, COLLECTIBLE_MANIFEST)
+	world.add_child(systems)
+	systems.wire()
+	return [world, systems]
+
+
+func test_req_010_a_placed_resource_delivers_to_its_region_and_opens_the_gate() -> void:
+	# Seven scene seeds, one declared type: each pickup delivers to the reef,
+	# and the seventh restores it — the declaration, not a script, did that.
+	var wall := _barrier("restoration_gate",
+		{"region_id": "reef", "gate_id": "reef_wall"})
+	var seeds: Array[Area3D] = []
+	for _index: int in range(7):
+		seeds.append(_pickup("kelp_seed"))
+	var built := _build_collectible_world(seeds)
+	var world := built[0] as Node3D
+	world.add_child(wall)
+	var systems := built[1] as WorldSystems
+	systems._restoration_gates["reef_wall"] = wall
+	var delivered: Array[int] = []
+	systems.resource_delivered.connect(
+		func(_region: String, held: int) -> void: delivered.append(held))
+
+	for seed in seeds:
+		assert_bool(systems.collect_node(seed)).is_true()
+		assert_bool(seed.is_queued_for_deletion()).is_true()
+
+	assert_int(delivered.size()).is_equal(7)
+	assert_int(int(systems.get_restoration().get_state("reef"))).is_equal(
+		int(RegionState.State.RESTORED))
+	assert_bool(wall.visible).override_failure_message(
+		"REQ-010 AC-1: spending the seeds must open the declared gate").is_false()
+	_teardown(world)
+
+
+func test_req_010_a_placed_discovery_is_persisted_and_absent_on_re_entry() -> void:
+	var save := SaveSystem.new()
+	var snail := _pickup("hermit_snail")
+	var first := _build_collectible_world([snail], save)
+	var systems := first[1] as WorldSystems
+
+	assert_bool(systems.collect_node(snail)).is_true()
+	assert_bool(snail.is_queued_for_deletion()).is_true()
+	assert_array(save.get_world_data("reef_world")["collectibles"] as Array
+		).is_equal(["hermit_snail"])
+	# Collected once: a second touch of the same id changes nothing.
+	var twin := _pickup("hermit_snail")
+	assert_bool(systems.collect_node(twin)).is_false()
+	twin.free()
+	_teardown(first[0])
+
+	# Re-entering the world over the same profile: the snail is already
+	# rescued, so its node is gone at wire time and the shrimp remains.
+	var snail_again := _pickup("hermit_snail")
+	var shrimp := _pickup("lantern_shrimp")
+	var second := _build_collectible_world([snail_again, shrimp], save)
+	assert_bool(snail_again.is_queued_for_deletion()).override_failure_message(
+		"REQ-010 AC-2: a rescued creature must not be in the world next time"
+	).is_true()
+	assert_bool(shrimp.is_queued_for_deletion()).is_false()
+	assert_int((second[1] as WorldSystems).get_collectibles().get_collected_count()
+		).is_equal(1)
+	_teardown(second[0])
+
+
+func test_req_010_an_undeclared_collectible_id_is_refused_and_left_in_place() -> void:
+	var rogue := _pickup("golden_axolotl")
+	var built := _build_collectible_world([rogue])
+	assert_bool((built[1] as WorldSystems).collect_node(rogue)).is_false()
+	assert_bool(rogue.is_queued_for_deletion()).is_false()
+	_teardown(built[0])
+
+
+func test_req_010_collect_all_finishes_the_world_on_the_last_discovery() -> void:
+	# The finish kind owned by this system: the hub's callback fires exactly
+	# when the declared discovery set is complete — not on a resource, and
+	# not before the last creature.
+	var snail := _pickup("hermit_snail")
+	var shrimp := _pickup("lantern_shrimp")
+	var seed := _pickup("kelp_seed")
+	var built := _build_collectible_world([snail, shrimp, seed])
+	var systems := built[1] as WorldSystems
+	var finished: Array[bool] = []  # an Array: lambdas capture ints by value
+	systems.on_finish_condition = func() -> void: finished.append(true)
+
+	systems.collect_node(seed)
+	systems.collect_node(snail)
+	assert_array(finished).is_empty()
+	systems.collect_node(shrimp)
+	assert_int(finished.size()).override_failure_message(
+		"REQ-010: collect_all must complete the world on the final discovery"
+	).is_equal(1)
+	_teardown(built[0])
+
+
+func test_req_010_a_world_without_collectibles_wires_an_inert_system() -> void:
+	var built := _build_world(REGION_MANIFEST, [])
+	var systems := built[1] as WorldSystems
+	assert_bool(systems.get_collectibles().is_engaged()).is_false()
+	assert_bool(systems.get_collectibles().all_collected()).is_false()
+	_teardown(built[0])

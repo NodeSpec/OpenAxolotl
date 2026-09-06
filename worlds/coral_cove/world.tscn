@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3]
+[gd_scene load_steps=24 format=3]
 
 ; CORAL COVE — the first official world (REQ-011), and deliberately built the
 ; way an outside contributor would build one: manifest + scene, NO scripts.
@@ -11,6 +11,8 @@
 ;   z   2  spawn (land — waddle)
 ;   z  -6  the lagoon: a WaterVolume across the route — water grammar
 ;   z -18  back onto land (grammar returns)                 [checkpoint 1]
+;   z -22  HERMIT SNAIL — a discovery collectible (a rescued creature) on the
+;          route, declared in the manifest, placed here, persisted by id
 ;   z -24  Glow Gill Mod pickup
 ;   z -28  GLOW GATE — a bioluminescent false wall, open only while the
 ;          equipped mod grants `reveal_bioluminescent`. Mandatory: it spans
@@ -19,9 +21,13 @@
 ;   z -38  BUBBLE GATE — open only while the mod grants `bubble_platform`.
 ;          Coral Cove gates on Bubble and Glow; Bubble Bay takes Jet, so the
 ;          official set covers all three MVP mods.       [checkpoint 2, -40]
-;   z -42..-54  seven kelp seed pickups — restoration resources for region
-;          `coral_shelf` (costs overridden to 3+4 via sanctioned
-;          tuningOverrides, so the seventh seed completes the restoration)
+;   z -42..-54  seven kelp seed pickups — the `kelp_seed` RESOURCE
+;          collectible, declared once in the manifest and placed seven times;
+;          each delivers to region `coral_shelf` (costs overridden to 3+4 via
+;          sanctioned tuningOverrides, so the seventh seed completes it)
+;   z -45  LANTERN SHRIMP — a second discovery collectible, OFF the route
+;          (x +9): the optional branch the reward layer exists for. The
+;          straight walk never touches it, and the walk asserts that.
 ;   z -56  SHELF WALL — the region's declared traversal gate; opens when
 ;          `coral_shelf` reaches `restored`. Restoration is MANDATORY.
 ;   z -60  finish volume — reach_volume returns the player to the lagoon.
@@ -90,6 +96,15 @@ albedo_color = Color(0.4, 0.8, 0.35, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_hint"]
 size = Vector3(24, 6, 8)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_creature"]
+size = Vector3(2, 3, 2)
+
+[sub_resource type="StandardMaterial3D" id="Material_snail"]
+albedo_color = Color(0.95, 0.6, 0.3, 1)
+
+[sub_resource type="StandardMaterial3D" id="Material_shrimp"]
+albedo_color = Color(1, 0.4, 0.55, 1)
+
 [node name="CoralCove" type="Node3D"]
 
 [node name="Ground" type="StaticBody3D" parent="."]
@@ -127,6 +142,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -30)
 
 [node name="CheckpointSeedBed" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -50)
+
+[node name="HermitSnail" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -22)
+metadata/collectible_id = "hermit_snail"
+
+[node name="Mesh" type="MeshInstance3D" parent="HermitSnail"]
+mesh = SubResource("SphereMesh_pickup")
+surface_material_override/0 = SubResource("Material_snail")
+
+[node name="Collision" type="CollisionShape3D" parent="HermitSnail"]
+shape = SubResource("BoxShape3D_pickup")
 
 [node name="GlowPickup" type="Area3D" parent="." groups=["gill_mod_pickup"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -24)
@@ -184,9 +210,9 @@ shape = SubResource("BoxShape3D_gate")
 [node name="CheckpointGrotto" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -40)
 
-[node name="Seed1" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Seed1" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -42)
-metadata/region_id = "coral_shelf"
+metadata/collectible_id = "kelp_seed"
 
 [node name="Mesh" type="MeshInstance3D" parent="Seed1"]
 mesh = SubResource("SphereMesh_pickup")
@@ -195,9 +221,9 @@ surface_material_override/0 = SubResource("Material_seed")
 [node name="Collision" type="CollisionShape3D" parent="Seed1"]
 shape = SubResource("BoxShape3D_seed")
 
-[node name="Seed2" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Seed2" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -44)
-metadata/region_id = "coral_shelf"
+metadata/collectible_id = "kelp_seed"
 
 [node name="Mesh" type="MeshInstance3D" parent="Seed2"]
 mesh = SubResource("SphereMesh_pickup")
@@ -206,9 +232,9 @@ surface_material_override/0 = SubResource("Material_seed")
 [node name="Collision" type="CollisionShape3D" parent="Seed2"]
 shape = SubResource("BoxShape3D_seed")
 
-[node name="Seed3" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Seed3" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -46)
-metadata/region_id = "coral_shelf"
+metadata/collectible_id = "kelp_seed"
 
 [node name="Mesh" type="MeshInstance3D" parent="Seed3"]
 mesh = SubResource("SphereMesh_pickup")
@@ -217,9 +243,9 @@ surface_material_override/0 = SubResource("Material_seed")
 [node name="Collision" type="CollisionShape3D" parent="Seed3"]
 shape = SubResource("BoxShape3D_seed")
 
-[node name="Seed4" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Seed4" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -48)
-metadata/region_id = "coral_shelf"
+metadata/collectible_id = "kelp_seed"
 
 [node name="Mesh" type="MeshInstance3D" parent="Seed4"]
 mesh = SubResource("SphereMesh_pickup")
@@ -228,9 +254,9 @@ surface_material_override/0 = SubResource("Material_seed")
 [node name="Collision" type="CollisionShape3D" parent="Seed4"]
 shape = SubResource("BoxShape3D_seed")
 
-[node name="Seed5" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Seed5" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -50)
-metadata/region_id = "coral_shelf"
+metadata/collectible_id = "kelp_seed"
 
 [node name="Mesh" type="MeshInstance3D" parent="Seed5"]
 mesh = SubResource("SphereMesh_pickup")
@@ -239,9 +265,9 @@ surface_material_override/0 = SubResource("Material_seed")
 [node name="Collision" type="CollisionShape3D" parent="Seed5"]
 shape = SubResource("BoxShape3D_seed")
 
-[node name="Seed6" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Seed6" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -52)
-metadata/region_id = "coral_shelf"
+metadata/collectible_id = "kelp_seed"
 
 [node name="Mesh" type="MeshInstance3D" parent="Seed6"]
 mesh = SubResource("SphereMesh_pickup")
@@ -250,9 +276,9 @@ surface_material_override/0 = SubResource("Material_seed")
 [node name="Collision" type="CollisionShape3D" parent="Seed6"]
 shape = SubResource("BoxShape3D_seed")
 
-[node name="Seed7" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Seed7" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -54)
-metadata/region_id = "coral_shelf"
+metadata/collectible_id = "kelp_seed"
 
 [node name="Mesh" type="MeshInstance3D" parent="Seed7"]
 mesh = SubResource("SphereMesh_pickup")
@@ -260,6 +286,17 @@ surface_material_override/0 = SubResource("Material_seed")
 
 [node name="Collision" type="CollisionShape3D" parent="Seed7"]
 shape = SubResource("BoxShape3D_seed")
+
+[node name="LanternShrimp" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 1.2, -45)
+metadata/collectible_id = "lantern_shrimp"
+
+[node name="Mesh" type="MeshInstance3D" parent="LanternShrimp"]
+mesh = SubResource("SphereMesh_pickup")
+surface_material_override/0 = SubResource("Material_shrimp")
+
+[node name="Collision" type="CollisionShape3D" parent="LanternShrimp"]
+shape = SubResource("BoxShape3D_creature")
 
 [node name="ShelfWall" type="StaticBody3D" parent="." groups=["restoration_gate"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -56)

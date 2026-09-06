@@ -39,6 +39,9 @@ var _mods_equipped: PackedStringArray = []
 var _gates_opened: PackedStringArray = []
 var _region_restored := false
 
+## REQ-010: pearls collected as the declared `pearl` resource type.
+var _pearls := 0
+
 ## REQ-003 AC-7: checkpoint spacing, MEASURED. World-space z of every
 ## checkpoint in route order (the route runs down -z), and the second at
 ## which the walk reached each anchor — spawn, each checkpoint, finish.
@@ -163,6 +166,10 @@ func _wire_world_systems() -> void:
 				to: RegionState.State) -> void:
 			if to == RegionState.State.RESTORED:
 				_region_restored = true)
+	systems.collectible_collected.connect(
+		func(collectible_id: String, _kind: CollectibleKind.Kind) -> void:
+			if collectible_id == "pearl":
+				_pearls += 1)
 
 
 func _finish_checks() -> void:
@@ -180,6 +187,13 @@ func _finish_checks() -> void:
 		"restoring kelp_nursery opened the nursery boom")
 	_check(_region_restored,
 		"region kelp_nursery reached restored on default costs")
+	_check(_pearls == 13,
+		"all thirteen pearls were collected as the declared resource (got %d)"
+		% _pearls)
+	var recorded: Variant = _save.get_world_data(WORLD_ID).get("collectibles", [])
+	_check(recorded is Array and (recorded as Array).is_empty(),
+		"a resource-only world records no collectible ids in the profile (%s)"
+		% str(recorded))
 	_check(_returned, "the finish condition returned control to the hub")
 	_check(_body.global_position.distance_to(_hub_spawn) < 6.0,
 		"the player is back at the hub spawn (%.1f m away)"

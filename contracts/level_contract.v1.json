@@ -227,7 +227,27 @@
   "optional": {
     "collectibles": {
       "absentDefault": "none \u2014 the world declares no collectibles and the collectibles system is not engaged for it",
-      "manifestField": "collectibles"
+      "manifestField": "collectibles",
+      "description": "An array of collectible declarations. The manifest says WHAT exists; the scene says WHERE, by placing an Area3D in group `collectible` with metadata `collectible_id` naming a declared id \u2014 a transform in JSON would drift from the geometry it sits on, the same reasoning spawnPoint gives. Two kinds with two lifetimes, kept distinct because only one is spent.",
+      "entryShape": {
+        "collectibleId": "string, unique within the world (the save namespace is already per world)",
+        "kind": "one of the kinds below",
+        "regionId": "required for kind resource: the restorableRegions entry it restores",
+        "displayName": "optional string for the HUD and credits; defaults to the id",
+        "kinds": {
+          "resource": "A restoration resource. SPENT: delivered to regionId through the Restoration Region Interface and consumed to advance its state (collectibles.resource_pickup_value per pickup). A TYPE the scene may place any number of times; never persisted by id, because the region's banked count is what persists.",
+          "discovery": "A rescued creature or a secret. KEPT: counted per world, persisted to the profile by id the moment it is collected, and absent from the scene on re-entry. One instance per declaration; the scene places it exactly once."
+        }
+      },
+      "rules": [
+        {
+          "kind": "manifest_field_type",
+          "field": "collectibles",
+          "type": "array"
+        }
+      ],
+      "completion": "The `collect_all` finish condition completes when every declared DISCOVERY collectible is collected. Resources are consumables and never part of completion. It can never complete vacuously: a collect_all world declaring no discovery collectibles is uncompletable, and the runtime says so at load.",
+      "rationale": "Optional because the reward layer is exactly that \u2014 a world with no optional branches has nothing to reward. Nothing in any other finish condition may depend on a collectible existing, which is what keeps the absent default real: the reference template declares none and completes."
     },
     "enemies": {
       "absentDefault": "none \u2014 no Drift Fleet units spawn",

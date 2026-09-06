@@ -11,6 +11,7 @@ worlds are the contract's battle test: what one exercises, the other omits.
 | Boss | absent (framework unbuilt) | **absent by design** — REQ-028 AC-6 makes the optional-boss path an acceptance criterion, not a scope cut |
 | `tuningOverrides` | overrides restoration costs to 3+4 | **absent** — the restoration economy runs on the contract's default costs (5+8 = thirteen pearls) |
 | Gill Mods gated | Bubble + Glow | **Jet** — the one mod Coral Cove does not emphasize, so the official set requires all three MVP mods |
+| Collectibles | both kinds: `kelp_seed` resources plus two discovery creatures | **resources only** — the `pearl` type placed thirteen times; no discovery collectibles, so nothing here is persisted by id and `collect_all` could never be its finish |
 | Camera hints | one grotto hint volume | none — the default framing carries the whole route |
 
 Like every world, Bubble Bay is manifest + scene with **no scripts**: every
@@ -29,8 +30,10 @@ completability is a headless regression test (`test/worlds/run_bubble_walk.gd`):
 3. **Jet pickup → jet gate** — a wrecked trawl net that opens only while the
    equipped mod grants `jet_dash`. The gate spans the route: the Jet mod is
    mandatory. *(Checkpoint 2.)*
-4. **Thirteen pearls** — restoration resources for region `kelp_nursery` at
-   the default costs (5 to reach `resourced`, 8 more to reach `restored`).
+4. **Thirteen pearls** — one `resource`-kind collectible, `pearl`, declared
+   once in the manifest and placed thirteen times; each is delivered to
+   region `kelp_nursery` and spent at the default costs (5 to reach
+   `resourced`, 8 more to reach `restored`).
 5. **The nursery boom** — the region's declared traversal gate; opens only
    when `kelp_nursery` reaches `restored`. Restoration is mandatory.
 6. **Finish volume** — `reach_volume` returns the player to the Open Lagoon
@@ -45,12 +48,13 @@ completability is a headless regression test (`test/worlds/run_bubble_walk.gd`):
 | saveIntegration | `bubble_bay.completed` |
 | restorableRegions | `kelp_nursery`, traversal gate `nursery_boom` opens at `restored` |
 | checkpoints | 6, roughly every 10 m — the density REQ-003 AC-7's 5 s replay bound demands at waddle pace; the bubble walk measures every segment |
-| boss / enemies / collectibles / customAbility / music | absent — defined defaults apply |
+| collectibles | `pearl` (resource → `kelp_nursery`); no discovery kind |
+| boss / enemies / customAbility / music | absent — defined defaults apply |
 
 ## Pending integrations
 
-The Drift Fleet framework and the Collectibles system are not yet built.
-When they are, Bubble Bay is the natural home for Netbot encounters (the
+The Drift Fleet framework exists as a core node but is not yet declared
+here. When it is, Bubble Bay is the natural home for Netbot encounters (the
 Jet mod is their documented counter) — but it stays boss-free forever;
 that is its half of the battle test.
 

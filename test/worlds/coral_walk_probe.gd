@@ -36,6 +36,10 @@ var _mods_equipped: PackedStringArray = []
 var _gates_opened: PackedStringArray = []
 var _region_restored := false
 
+## REQ-010: every collectible the route collected, by id, in order — the
+## resource type once per seed, a discovery once ever.
+var _collected: PackedStringArray = []
+
 ## REQ-003 AC-7: checkpoint spacing, MEASURED. World-space z of every
 ## checkpoint in route order (the route runs down -z), and the second at
 ## which the walk reached each anchor — spawn, each checkpoint, finish.
@@ -149,6 +153,9 @@ func _wire_world_systems() -> void:
 				to: RegionState.State) -> void:
 			if to == RegionState.State.RESTORED:
 				_region_restored = true)
+	systems.collectible_collected.connect(
+		func(collectible_id: String, _kind: CollectibleKind.Kind) -> void:
+			_collected.append(collectible_id))
 
 
 func _finish_checks() -> void:
@@ -167,6 +174,7 @@ func _finish_checks() -> void:
 	_check(_gates_opened.has("restoration:shelf_wall"),
 		"restoring coral_shelf opened the shelf wall")
 	_check(_region_restored, "region coral_shelf reached restored")
+	_check_collectibles()
 	_check(_returned, "the finish condition returned control to the hub")
 	_check(_body.global_position.distance_to(_hub_spawn) < 6.0,
 		"the player is back at the hub spawn (%.1f m away)"
@@ -180,6 +188,28 @@ func _finish_checks() -> void:
 		"the coral_cove portal now shows completed")
 
 	_report()
+
+
+## REQ-010, end to end through the real runtime and the real save interface:
+## the seven seeds were collected as the ONE declared resource type and
+## spent (the shelf restored above proves the spending); the on-route
+## discovery was rescued once and is in the profile; the off-route one was
+## not — an optional branch stays optional.
+func _check_collectibles() -> void:
+	_check(_collected.count("kelp_seed") == 7,
+		"all seven kelp seeds were collected as the declared resource (got %d)"
+		% _collected.count("kelp_seed"))
+	_check(_collected.count("hermit_snail") == 1,
+		"the hermit snail was rescued exactly once (got %d)"
+		% _collected.count("hermit_snail"))
+	_check(not _collected.has("lantern_shrimp"),
+		"the off-route lantern shrimp was NOT collected by the straight walk")
+	var recorded: Variant = _save.get_world_data(WORLD_ID).get("collectibles", [])
+	_check(recorded is Array and (recorded as Array).has("hermit_snail"),
+		"the rescued snail is recorded in the profile through the save interface (%s)"
+		% str(recorded))
+	_check(recorded is Array and not (recorded as Array).has("kelp_seed"),
+		"a spent resource is never recorded by id")
 
 
 func _elapsed_seconds() -> float:

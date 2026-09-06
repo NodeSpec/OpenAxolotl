@@ -23,8 +23,11 @@
 ;          grants `jet_dash`. Mandatory: it spans the full route, and it is
 ;          the traversal challenge Coral Cove does not gate on.
 ;   z -32                                                   [checkpoint 2]
-;   z -34..-52  thirteen pearl pickups — restoration resources for region
-;          `kelp_nursery` at the contract's DEFAULT costs (no overrides)
+;   z -34..-52  thirteen pearl pickups — the `pearl` RESOURCE collectible,
+;          declared once in the manifest and placed thirteen times, each
+;          delivering to region `kelp_nursery` at the contract's DEFAULT
+;          costs (no overrides). No DISCOVERY collectibles: Bubble Bay's
+;          half of the collectibles battle test is the resource-only path.
 ;   z -55  NURSERY BOOM — the region's declared traversal gate; opens when
 ;          `kelp_nursery` reaches `restored`. Restoration is MANDATORY.
 ;   z -59  finish volume — reach_volume returns the player to the lagoon.
@@ -149,9 +152,9 @@ shape = SubResource("BoxShape3D_gate")
 [node name="CheckpointNursery" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -32)
 
-[node name="Pearl1" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Pearl1" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -34)
-metadata/region_id = "kelp_nursery"
+metadata/collectible_id = "pearl"
 
 [node name="Mesh" type="MeshInstance3D" parent="Pearl1"]
 mesh = SubResource("SphereMesh_pickup")
@@ -160,9 +163,9 @@ surface_material_override/0 = SubResource("Material_pearl")
 [node name="Collision" type="CollisionShape3D" parent="Pearl1"]
 shape = SubResource("BoxShape3D_pearl")
 
-[node name="Pearl2" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Pearl2" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -35.5)
-metadata/region_id = "kelp_nursery"
+metadata/collectible_id = "pearl"
 
 [node name="Mesh" type="MeshInstance3D" parent="Pearl2"]
 mesh = SubResource("SphereMesh_pickup")
@@ -171,9 +174,9 @@ surface_material_override/0 = SubResource("Material_pearl")
 [node name="Collision" type="CollisionShape3D" parent="Pearl2"]
 shape = SubResource("BoxShape3D_pearl")
 
-[node name="Pearl3" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Pearl3" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -37)
-metadata/region_id = "kelp_nursery"
+metadata/collectible_id = "pearl"
 
 [node name="Mesh" type="MeshInstance3D" parent="Pearl3"]
 mesh = SubResource("SphereMesh_pickup")
@@ -182,9 +185,9 @@ surface_material_override/0 = SubResource("Material_pearl")
 [node name="Collision" type="CollisionShape3D" parent="Pearl3"]
 shape = SubResource("BoxShape3D_pearl")
 
-[node name="Pearl4" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Pearl4" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -38.5)
-metadata/region_id = "kelp_nursery"
+metadata/collectible_id = "pearl"
 
 [node name="Mesh" type="MeshInstance3D" parent="Pearl4"]
 mesh = SubResource("SphereMesh_pickup")
@@ -193,9 +196,9 @@ surface_material_override/0 = SubResource("Material_pearl")
 [node name="Collision" type="CollisionShape3D" parent="Pearl4"]
 shape = SubResource("BoxShape3D_pearl")
 
-[node name="Pearl5" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Pearl5" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -40)
-metadata/region_id = "kelp_nursery"
+metadata/collectible_id = "pearl"
 
 [node name="Mesh" type="MeshInstance3D" parent="Pearl5"]
 mesh = SubResource("SphereMesh_pickup")
@@ -204,9 +207,9 @@ surface_material_override/0 = SubResource("Material_pearl")
 [node name="Collision" type="CollisionShape3D" parent="Pearl5"]
 shape = SubResource("BoxShape3D_pearl")
 
-[node name="Pearl6" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Pearl6" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -41.5)
-metadata/region_id = "kelp_nursery"
+metadata/collectible_id = "pearl"
 
 [node name="Mesh" type="MeshInstance3D" parent="Pearl6"]
 mesh = SubResource("SphereMesh_pickup")
@@ -215,9 +218,9 @@ surface_material_override/0 = SubResource("Material_pearl")
 [node name="Collision" type="CollisionShape3D" parent="Pearl6"]
 shape = SubResource("BoxShape3D_pearl")
 
-[node name="Pearl7" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Pearl7" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -43)
-metadata/region_id = "kelp_nursery"
+metadata/collectible_id = "pearl"
 
 [node name="Mesh" type="MeshInstance3D" parent="Pearl7"]
 mesh = SubResource("SphereMesh_pickup")
@@ -226,9 +229,9 @@ surface_material_override/0 = SubResource("Material_pearl")
 [node name="Collision" type="CollisionShape3D" parent="Pearl7"]
 shape = SubResource("BoxShape3D_pearl")
 
-[node name="Pearl8" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Pearl8" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -44.5)
-metadata/region_id = "kelp_nursery"
+metadata/collectible_id = "pearl"
 
 [node name="Mesh" type="MeshInstance3D" parent="Pearl8"]
 mesh = SubResource("SphereMesh_pickup")
@@ -237,9 +240,9 @@ surface_material_override/0 = SubResource("Material_pearl")
 [node name="Collision" type="CollisionShape3D" parent="Pearl8"]
 shape = SubResource("BoxShape3D_pearl")
 
-[node name="Pearl9" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Pearl9" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -46)
-metadata/region_id = "kelp_nursery"
+metadata/collectible_id = "pearl"
 
 [node name="Mesh" type="MeshInstance3D" parent="Pearl9"]
 mesh = SubResource("SphereMesh_pickup")
@@ -248,9 +251,9 @@ surface_material_override/0 = SubResource("Material_pearl")
 [node name="Collision" type="CollisionShape3D" parent="Pearl9"]
 shape = SubResource("BoxShape3D_pearl")
 
-[node name="Pearl10" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Pearl10" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -47.5)
-metadata/region_id = "kelp_nursery"
+metadata/collectible_id = "pearl"
 
 [node name="Mesh" type="MeshInstance3D" parent="Pearl10"]
 mesh = SubResource("SphereMesh_pickup")
@@ -259,9 +262,9 @@ surface_material_override/0 = SubResource("Material_pearl")
 [node name="Collision" type="CollisionShape3D" parent="Pearl10"]
 shape = SubResource("BoxShape3D_pearl")
 
-[node name="Pearl11" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Pearl11" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -49)
-metadata/region_id = "kelp_nursery"
+metadata/collectible_id = "pearl"
 
 [node name="Mesh" type="MeshInstance3D" parent="Pearl11"]
 mesh = SubResource("SphereMesh_pickup")
@@ -270,9 +273,9 @@ surface_material_override/0 = SubResource("Material_pearl")
 [node name="Collision" type="CollisionShape3D" parent="Pearl11"]
 shape = SubResource("BoxShape3D_pearl")
 
-[node name="Pearl12" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Pearl12" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -50.5)
-metadata/region_id = "kelp_nursery"
+metadata/collectible_id = "pearl"
 
 [node name="Mesh" type="MeshInstance3D" parent="Pearl12"]
 mesh = SubResource("SphereMesh_pickup")
@@ -281,9 +284,9 @@ surface_material_override/0 = SubResource("Material_pearl")
 [node name="Collision" type="CollisionShape3D" parent="Pearl12"]
 shape = SubResource("BoxShape3D_pearl")
 
-[node name="Pearl13" type="Area3D" parent="." groups=["restoration_resource"]]
+[node name="Pearl13" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -52)
-metadata/region_id = "kelp_nursery"
+metadata/collectible_id = "pearl"
 
 [node name="Mesh" type="MeshInstance3D" parent="Pearl13"]
 mesh = SubResource("SphereMesh_pickup")

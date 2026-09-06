@@ -357,6 +357,13 @@
       "min": 1,
       "max": 999,
       "description": "Restoration resources consumed to advance a region from resourced to restored."
+    },
+    "collectibles.resource_pickup_value": {
+      "value": 1,
+      "unit": "resources",
+      "min": 1,
+      "max": 10,
+      "description": "Restoration resources one resource-kind collectible delivers to its declared region when picked up. Read at pickup time by the Collectibles System, never cached. A world's restoration economy is this value times its placed pickups against the region costs, so raising it makes every world's restoration cheaper at once; per-world economy belongs in the overridable resource costs instead."
     }
   }
 }

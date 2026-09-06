@@ -25,5 +25,23 @@
   "tuningOverrides": {
     "restoration.resourced.resource_cost": 3,
     "restoration.restored.resource_cost": 4
-  }
+  },
+  "collectibles": [
+    {
+      "collectibleId": "kelp_seed",
+      "kind": "resource",
+      "regionId": "coral_shelf",
+      "displayName": "Kelp seed"
+    },
+    {
+      "collectibleId": "hermit_snail",
+      "kind": "discovery",
+      "displayName": "Hermit snail"
+    },
+    {
+      "collectibleId": "lantern_shrimp",
+      "kind": "discovery",
+      "displayName": "Lantern shrimp"
+    }
+  ]
 }

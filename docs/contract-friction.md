@@ -20,8 +20,11 @@ geometry — with no world script.
 **Interim:** four scene-group conventions bound by the game client's
 `WorldSystems` runtime (`hub/world_systems.gd`):
 `gill_mod_pickup` (+meta `mod_id`), `affordance_gate` (+meta `affordance`),
-`restoration_resource` (+meta `region_id`), `restoration_gate`
-(+meta `region_id`, `gate_id`).
+`collectible` (+meta `collectible_id`), `restoration_gate`
+(+meta `region_id`, `gate_id`). *(The original `restoration_resource`
+convention was retired when the Collectibles System landed: a resource
+pickup is now a declared `resource`-kind collectible, so the manifest names
+it and the scene only places it — see F-8.)*
 
 **Proposed contract change:** promote these to optional contract elements
 with `scene_group_count` rules and documented metadata, so the checker can
@@ -118,3 +121,26 @@ element rules before any world declares one — otherwise the first
 declaration freezes the framework's internal shape as the contract by
 accident rather than by decision. The checker gets it for free once the
 rules land (same rule kinds as the other manifest elements).
+
+## F-8 · Collectible placement is checked by a test, not by the checker
+
+**Needed while building the Collectibles System (REQ-010):** the manifest's
+`collectibles` element now has a documented present-shape (id, kind,
+region for resources) and the scene places each one by `collectible_id`
+metadata. Nothing in the contract ties the two: a scene naming an
+undeclared id, or placing a discovery twice, is refused at runtime and
+found by a test, never by `oax-level-check`.
+
+**Interim:** `test/core/collectibles/test_collectibles_system.gd` parses
+every official world's scene file and cross-checks its `collectible_id`
+metadata against the manifest — the checker's future job, done in the test
+lane so it is enforced somewhere today. The runtime refuses undeclared
+ids with a warning and leaves the node in place.
+
+**Proposed contract change:** the same metadata-vs-manifest rule kind F-3
+asks for, applied to `collectible` / `collectible_id` against
+`collectibles[].collectibleId`, plus a per-id `max: 1` for discovery kinds.
+And one more conditional rule the contract cannot express yet:
+`finishCondition.kind == collect_all` requires at least one
+`discovery`-kind collectible (the runtime already refuses to complete
+vacuously; the checker should refuse the world).

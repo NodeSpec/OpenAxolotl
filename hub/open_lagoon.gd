@@ -122,15 +122,22 @@ func enter_world(world_id: String) -> bool:
 			_active_world = world
 			_active_world_id = world_id
 			var manifest := _read_manifest(portal.module_dir)
-			# The runtime the world's declarations bind to: Gill Mods,
-			# restoration, tuning overrides. A child of the world, so it
-			# lives and dies with the world it serves.
-			var systems := WorldSystems.new()
-			systems.manifest = manifest
-			world.add_child(systems)
-			_wire_hud_to(systems, manifest)
+			# The world's save namespace must exist BEFORE its runtime wires:
+			# the collectibles system reads what the profile already records
+			# for this world at wire time, and writes into that namespace at
+			# every pickup.
 			if _save != null:
 				_save.open_world(world_id, manifest)
+			# The runtime the world's declarations bind to: Gill Mods,
+			# restoration, collectibles, tuning overrides. A child of the
+			# world, so it lives and dies with the world it serves.
+			var systems := WorldSystems.new()
+			systems.manifest = manifest
+			systems.world_id = world_id
+			systems.save_system = _save
+			systems.on_finish_condition = _on_world_finished
+			world.add_child(systems)
+			_wire_hud_to(systems, manifest)
 			_move_player_to(spawn)
 			_set_hub_active(false)
 			world_entered.emit(world_id)
