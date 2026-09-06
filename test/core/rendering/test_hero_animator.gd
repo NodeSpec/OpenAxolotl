@@ -88,7 +88,8 @@ func test_the_shipped_hero_is_skinned_to_a_skeleton() -> void:
 		"the hero must import a Skeleton3D").is_equal(1)
 	var skeleton := skeletons[0] as Skeleton3D
 	assert_int(skeleton.get_bone_count()).override_failure_message(
-		"the documented rig is eleven bones plus a root").is_greater_equal(8)
+		"the documented rig is twelve bones: root, spine, head, two gills, "
+		+ "four legs, three tail segments").is_equal(12)
 	for bone: String in ["root", "spine", "head", "tail_1"]:
 		assert_int(skeleton.find_bone(bone)).override_failure_message(
 			"the rig must carry the %s bone the clips key" % bone
