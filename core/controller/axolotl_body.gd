@@ -65,6 +65,18 @@ var _water_volumes: int = 0
 
 
 func _ready() -> void:
+	initialise()
+
+
+## Builds the controller, the input system and the visual layer. Idempotent,
+## and callable directly: a node added while the SceneTree is still
+## initialising — which the test runner does — never receives _ready, so the
+## setup has to be reachable without it. WorldSystems.wire() exists for the
+## same reason and says the same thing; before this, the body simply could
+## not be built inside a test at all.
+func initialise() -> void:
+	if _controller != null:
+		return
 	var tuning_errors: Array[TuningError] = []
 	_tuning = TuningData.load_from_file(tuning_path, tuning_errors)
 	for error: TuningError in tuning_errors:

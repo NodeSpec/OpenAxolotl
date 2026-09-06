@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3]
+[gd_scene load_steps=29 format=3]
 
 ; BUBBLE BAY — the second official world (REQ-028), and the deliberate
 ; opposite of Coral Cove wherever the Level Contract offers a choice:
@@ -47,6 +47,9 @@
 [ext_resource type="PackedScene" path="res://assets/environment/coral_branch/coral_branch.glb" id="4_kit_coral_branch"]
 [ext_resource type="PackedScene" path="res://assets/environment/kelp_strand/kelp_strand.glb" id="5_kit_kelp_strand"]
 [ext_resource type="PackedScene" path="res://assets/environment/seagrass_tuft/seagrass_tuft.glb" id="6_kit_seagrass_tuft"]
+[ext_resource type="PackedScene" path="res://assets/prop/dredger/dredger.glb" id="7_fleet_dredger"]
+[ext_resource type="PackedScene" path="res://assets/prop/hookline_rig/hookline_rig.glb" id="8_fleet_hookline_rig"]
+[ext_resource type="PackedScene" path="res://assets/prop/netbot/netbot.glb" id="9_fleet_netbot"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ground"]
 size = Vector3(24, 2, 72)
@@ -114,6 +117,9 @@ albedo_color = Color(0.85, 0.95, 1, 0.5)
 radius = 0.035
 height = 0.07
 material = SubResource("Material_bubble")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_enemy"]
+size = Vector3(2.6, 2.6, 2.6)
 
 [node name="BubbleBay" type="Node3D"]
 
@@ -435,3 +441,39 @@ preprocess = 3.0
 visibility_aabb = AABB(-12, -2, -6, 24, 5, 12)
 process_material = SubResource("Particles_bubbles")
 draw_pass_1 = SubResource("SphereMesh_bubble")
+
+; --- THE DRIFT FLEET (REQ-036) -----------------------------
+; Declared in the manifest, placed here. Deliberately OFF the
+; walked route: the walk probe measures checkpoint segments
+; against max_retry_seconds, and an entangling unit standing on
+; that line would fail a completability probe for a reason that
+; has nothing to do with completability. A player who leaves the
+; line meets them.
+
+[node name="HooklineRigBay" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0.2, -10.0)
+metadata/enemy_id = "hookline_rig"
+
+[node name="Model" parent="HooklineRigBay" instance=ExtResource("8_fleet_hookline_rig")]
+
+[node name="Collision" type="CollisionShape3D" parent="HooklineRigBay"]
+shape = SubResource("BoxShape3D_enemy")
+
+[node name="NetbotTrawl" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.6, -28.0)
+metadata/enemy_id = "netbot"
+
+[node name="Model" parent="NetbotTrawl" instance=ExtResource("9_fleet_netbot")]
+
+[node name="Collision" type="CollisionShape3D" parent="NetbotTrawl"]
+shape = SubResource("BoxShape3D_enemy")
+
+[node name="DredgerNursery" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.0, 0.6, -46.0)
+metadata/enemy_id = "dredger"
+metadata/region_id = "kelp_nursery"
+
+[node name="Model" parent="DredgerNursery" instance=ExtResource("7_fleet_dredger")]
+
+[node name="Collision" type="CollisionShape3D" parent="DredgerNursery"]
+shape = SubResource("BoxShape3D_enemy")

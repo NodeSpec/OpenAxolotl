@@ -43,5 +43,19 @@
       "kind": "discovery",
       "displayName": "Lantern shrimp"
     }
+  ],
+  "enemies": [
+    {
+      "enemyId": "hookline_rig"
+    },
+    {
+      "enemyId": "netbot"
+    },
+    {
+      "enemyId": "runoff_drone"
+    },
+    {
+      "enemyId": "dredger"
+    }
   ]
 }

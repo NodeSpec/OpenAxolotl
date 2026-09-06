@@ -29,5 +29,16 @@
       "regionId": "kelp_nursery",
       "displayName": "Pearl"
     }
+  ],
+  "enemies": [
+    {
+      "enemyId": "hookline_rig"
+    },
+    {
+      "enemyId": "netbot"
+    },
+    {
+      "enemyId": "dredger"
+    }
   ]
 }

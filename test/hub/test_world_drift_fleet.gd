@@ -179,6 +179,56 @@ func test_req_036_a_declared_boss_builds_an_encounter_and_gates_the_region() -> 
 	_teardown(built[0])
 
 
+func test_req_036_boss_phase_volumes_drive_the_encounter_to_defeat() -> void:
+	# The encounter's phase logic was complete and reachable only from a test.
+	# This is the seam that makes it drivable from a SCENE, so it is proven
+	# the same way a player would clear it: by arriving at each phase volume.
+	var manifest := REGION_MANIFEST.duplicate(true)
+	manifest["boss"] = BOSS
+	var built := _build(manifest, [])
+	var systems := built[1] as WorldSystems
+	var flagship := systems.get_flagship()
+
+	# A player is needed: the grammar is read off the controller at contact.
+	var player := (load("res://core/controller/axolotl_body.tscn")
+		as PackedScene).instantiate() as AxolotlBody
+	player.add_to_group(PLAYER_GROUP)
+	(built[0] as Node).add_child(player)
+	# The runner adds nodes before the tree's first iteration, so _ready never
+	# fires; initialise() is the same entry point, idempotent by design.
+	player.initialise()
+
+	var volume := Area3D.new()
+	volume.add_to_group("boss_phase")
+
+	# The grammar is driven the way the game drives it — a physics step told
+	# whether the body is in water — rather than through a setter added for
+	# the test. A test-only door into the controller would prove the door
+	# works, not the game.
+	var controller: AxolotlController = player.get_controller()
+	var intent := PlayerIntent.new(
+		Vector3.ZERO, [] as Array[MovementGrammar.Verb])
+
+	# Phase one is water-only. On land it must refuse, which is the gate
+	# doing its job rather than a failure.
+	controller.physics_step(1.0 / 60.0, false, intent)
+	assert_int(int(controller.get_grammar())
+		).is_equal(int(MovementGrammar.Grammar.LAND))
+	systems._on_boss_phase_touched(volume)
+	assert_int(flagship.get_current_phase_index()).override_failure_message(
+		"a water phase must not clear on land").is_equal(0)
+
+	controller.physics_step(1.0 / 60.0, true, intent)
+	assert_int(int(controller.get_grammar())
+		).is_equal(int(MovementGrammar.Grammar.WATER))
+	systems._on_boss_phase_touched(volume)
+	assert_int(flagship.get_current_phase_index()).override_failure_message(
+		"arriving in water must clear the water phase").is_equal(1)
+
+	volume.free()
+	_teardown(built[0])
+
+
 func test_req_036_a_refused_boss_declaration_leaves_the_region_locked() -> void:
 	# A boss that failed to build has not been beaten. Opening the region
 	# because the declaration was malformed would hand the player the payoff

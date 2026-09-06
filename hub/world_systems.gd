@@ -96,6 +96,7 @@ signal feedback_requested(cue: FeedbackCue)
 signal audio_cue_requested(cue_id: String)
 signal region_dredged(region_id: String)
 signal boss_phase_completed(phase_id: String, index: int)
+signal boss_phase_reached(volume_name: String)
 signal boss_defeated(region_id: String)
 
 const GROUP_SPAWN := "spawn_point"
@@ -109,6 +110,7 @@ const GROUP_AFFORDANCE_GATE := "affordance_gate"
 const GROUP_COLLECTIBLE := "collectible"
 const GROUP_RESTORATION_GATE := "restoration_gate"
 const GROUP_ENEMY := "enemy"
+const GROUP_BOSS_PHASE := "boss_phase"
 const META_COLLECTIBLE_ID := "collectible_id"
 const META_HAZARD_CAPABILITY := "capability"
 const META_HAZARD_ID := "hazard_id"
@@ -513,6 +515,9 @@ func _wire_scene() -> void:
 				_restoration_gates[gate_id] = node
 		elif node.is_in_group(GROUP_ENEMY) and node is Area3D:
 			_wire_enemy_node(node as Area3D)
+		elif node.is_in_group(GROUP_BOSS_PHASE) and node is Area3D:
+			(node as Area3D).body_entered.connect(
+				_on_pickup_touched.bind(node, _on_boss_phase_touched))
 
 
 ## A checkpoint declared as an Area3D is its own trigger. One declared as a
@@ -629,6 +634,30 @@ func _on_aura_exited(enemy_node: Node) -> void:
 	var enemy_id := _declared_unit_of(enemy_node)
 	if not enemy_id.is_empty():
 		_fleet.exit_aura(enemy_id)
+
+
+## A boss phase volume: reaching it clears the current phase, IF the player
+## arrives in the grammar that phase demands.
+##
+## The grammar is read from the player at the moment of contact rather than
+## declared on the volume, because that is the whole point of AC-3 — a
+## water-only phase must be cleared while actually swimming. The encounter
+## itself refuses a phase whose affordance is not active, so this hands over
+## the fact and lets the declaration decide.
+##
+## This is the seam that makes the Flagship DRIVABLE from a scene at all: the
+## encounter's phase logic was complete and reachable only from a test.
+func _on_boss_phase_touched(volume: Node) -> void:
+	if _flagship == null:
+		return
+	var controller := _player_controller()
+	if controller == null:
+		return
+	if not _flagship.complete_phase(controller.get_grammar()):
+		# Not a defect: arriving on land at a water phase is the gate doing
+		# its job, and the player simply has to come back the right way.
+		return
+	boss_phase_reached.emit(String(volume.name))
 
 
 func _on_pickup_touched(body: Node3D, pickup: Node, handler: Callable) -> void:
