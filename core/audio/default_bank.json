@@ -11,7 +11,11 @@
     "capability_regrown_leg": "res://assets/audio/capability/leg_regrown.ogg",
     "gill_mod_bubble_activated": "res://assets/audio/gillmod/bubble_activate.ogg",
     "gill_mod_jet_activated": "res://assets/audio/gillmod/jet_activate.ogg",
-    "gill_mod_glow_activated": "res://assets/audio/gillmod/glow_activate.ogg"
+    "gill_mod_glow_activated": "res://assets/audio/gillmod/glow_activate.ogg",
+    "movement_swim_stroke": "res://assets/audio/movement/swim_stroke.ogg",
+    "movement_dive": "res://assets/audio/movement/dive.ogg",
+    "movement_waddle_step": "res://assets/audio/movement/waddle_step.ogg",
+    "movement_hop": "res://assets/audio/movement/hop.ogg"
   },
   "beds": {
     "grammar_water": "res://assets/audio/ambience/water_bed.ogg",

@@ -1092,3 +1092,68 @@ func test_req_001_the_climb_basis_follows_the_surface_normal() -> void:
 	assert_float(absf(controller.get_velocity().x)).override_failure_message(
 		"lateral must not push into a wall whose normal is +X"
 	).is_equal_approx(0.0, 0.001)
+
+
+# --- Facing: the body turns toward its direction of travel -------------------
+
+func test_req_001_heading_turns_toward_travel_at_the_tuned_rate() -> void:
+	var controller := _controller()
+	var tuning := _tuning()
+	controller.physics_step(0.016, false, _intent())
+	# A spawned axolotl faces -Z, Godot's forward and every route's direction.
+	assert_float(controller.get_heading_yaw()).is_equal_approx(0.0, 0.0001)
+
+	# Waddle toward +X. The target heading is -90 degrees, and one step may
+	# turn at most the tuned rate's worth — never snap.
+	var max_step := deg_to_rad(tuning.get_number(AxolotlController.TURN_RATE_KEY)) * 0.016
+	controller.physics_step(0.016, false, _intent(Vector3.RIGHT))
+	var after_one := controller.get_heading_yaw()
+	assert_float(after_one).override_failure_message(
+		"the heading must turn toward +X, not away from it").is_less_equal(0.0)
+	assert_float(absf(after_one)).override_failure_message(
+		"one step may not turn further than the tuned rate allows"
+	).is_less_equal(max_step + 0.0001)
+
+	for _step: int in range(200):
+		controller.physics_step(0.016, false, _intent(Vector3.RIGHT))
+	assert_float(controller.get_heading_yaw()).override_failure_message(
+		"sustained travel toward +X must settle the heading at -90 degrees"
+	).is_equal_approx(-PI / 2.0, 0.001)
+
+
+func test_req_001_heading_holds_while_standing_still() -> void:
+	var controller := _controller()
+	for _step: int in range(200):
+		controller.physics_step(0.016, false, _intent(Vector3.RIGHT))
+	var facing := controller.get_heading_yaw()
+	# Let go: land drag brings the velocity to nothing, and a zero-length
+	# velocity has no direction to turn toward.
+	for _step: int in range(120):
+		controller.physics_step(0.016, false, _intent())
+	assert_float(controller.get_velocity().length()).is_less(
+		AxolotlController.HEADING_HOLD_SPEED)
+	assert_float(controller.get_heading_yaw()).override_failure_message(
+		"a standing axolotl must keep the way it was facing").is_equal_approx(
+		facing, 0.0001)
+
+
+func test_req_001_heading_takes_the_short_way_round() -> void:
+	# Facing 150 degrees and asked to face -150: the short turn is 60 degrees
+	# onward through 180 (and the wrap), not 300 degrees back through zero.
+	# A heading h faces (-sin h, 0, -cos h).
+	var controller := _controller()
+	var from := deg_to_rad(150.0)
+	var to := deg_to_rad(-150.0)
+	var toward_from := Vector3(-sin(from), 0.0, -cos(from))
+	var toward_to := Vector3(-sin(to), 0.0, -cos(to))
+	for _step: int in range(200):
+		controller.physics_step(0.016, false, _intent(toward_from))
+	assert_float(controller.get_heading_yaw()).is_equal_approx(from, 0.001)
+
+	controller.physics_step(0.016, false, _intent(toward_to))
+	assert_float(absf(controller.get_heading_yaw())).override_failure_message(
+		"the first step of the turn must move onward past 150 degrees, "
+		+ "never back toward zero").is_greater(from - 0.0001)
+	for _step: int in range(200):
+		controller.physics_step(0.016, false, _intent(toward_to))
+	assert_float(controller.get_heading_yaw()).is_equal_approx(to, 0.001)

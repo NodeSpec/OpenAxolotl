@@ -119,22 +119,10 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T6 — Expose the interface World Static Analysis Gate consumes, per Contract "Shared Test Fixtures" (dependency).** <!-- t:8b32d9ab -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T7 — Implement: "Unit tests cover the capability, lives, restoration, ability-registration, and save-interface logic" (REQ-026).** <!-- t:c0da21fe -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-026 "Unit tests cover the capability, lives, restoration, ability-registration, and save-interface logic"
-- [ ] **T8 — Implement: "Integration tests exercise each system against the controller and save-integration interfaces rather than in isolation only" (REQ-026).** <!-- t:01904f78 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-026 "Integration tests exercise each system against the controller and save-integration interfaces rather than in isolation only"
-- [ ] **T9 — Implement: "A headless playthrough smoke test drives an official world from spawn to finish condition and asserts completion" (REQ-026).** <!-- t:96e47acd -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-026 "A headless playthrough smoke test drives an official world from spawn to finish condition and asserts completion" — possible coordination point: Contract "Shared Test Fixtures" (dependency) from World Static Analysis Gate (keyword signal only)
-- [ ] **T10 — Implement: "Named fixtures exist for a conforming world, a non-conforming world, a malicious world, a conforming asset, and a non-conforming asset, and are shared by the checker, validator, and static-analysis tests" (REQ-026).** <!-- t:412ee4cf -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-026 "Named fixtures exist for a conforming world, a non-conforming world, a malicious world, a conforming asset, and a non-conforming asset, and are shared by the checker, validator, and static-analysis tests" — possible coordination point: Contract "Shared Test Fixtures" (dependency) from World Static Analysis Gate (keyword signal only)
-- [ ] **T11 — Implement: "The suite runs in CI on every pull request" (REQ-026).** <!-- t:2f756ac8 -->
+- [ ] **T7 — Implement: "The suite runs in CI on every pull request" (REQ-026).** <!-- t:2f756ac8 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-026 "The suite runs in CI on every pull request"
-- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T8 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -182,18 +170,18 @@ REQ-018 requires CI to run "the automated test suite" but nothing required that 
 **Acceptance criteria — your task boxes:**
 - [x] The suite runs headless with a single documented command and exits non-zero on any failure
   → THIS NODE: internal logic
-- [ ] Unit tests cover the capability, lives, restoration, ability-registration, and save-interface logic
-  → covered by Task T7
-- [ ] Integration tests exercise each system against the controller and save-integration interfaces rather than in isolation only
-  → covered by Task T8
-- [ ] A headless playthrough smoke test drives an official world from spawn to finish condition and asserts completion
-  → covered by Task T9
-- [ ] Named fixtures exist for a conforming world, a non-conforming world, a malicious world, a conforming asset, and a non-conforming asset, and are shared by the checker, validator, and static-analysis tests
-  → covered by Task T10
+- [x] Unit tests cover the capability, lives, restoration, ability-registration, and save-interface logic
+  → THIS NODE: internal logic
+- [x] Integration tests exercise each system against the controller and save-integration interfaces rather than in isolation only
+  → THIS NODE: internal logic
+- [x] A headless playthrough smoke test drives an official world from spawn to finish condition and asserts completion
+  → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) from World Static Analysis Gate (keyword signal only)
+- [x] Named fixtures exist for a conforming world, a non-conforming world, a malicious world, a conforming asset, and a non-conforming asset, and are shared by the checker, validator, and static-analysis tests
+  → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) from World Static Analysis Gate (keyword signal only)
 - [x] Test output identifies the failing requirement or criterion it maps to, so a contributor or agent can locate what broke
   → THIS NODE: internal logic
 - [ ] The suite runs in CI on every pull request
-  → covered by Task T11
+  → covered by Task T7
 
 ## Interface Contracts
 
@@ -449,9 +437,11 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 | File | Kind | Language | Status |
 |------|------|----------|--------|
+| `tools/asset_fixtures.py` | source | --- | draft |
 | `fixtures/worlds/unsupported_version/world.tscn` | design | --- | draft |
 | `fixtures/worlds/bad_world_id/world.tscn` | design | --- | draft |
 | `fixtures/worlds/malformed_manifest/world.tscn` | design | --- | draft |
+| `tools/oax_test.py` | source | --- | draft |
 | `fixtures/worlds/stray_project_file/world.tscn` | design | --- | draft |
 | `fixtures/worlds/unsanctioned_tuning/world.tscn` | design | --- | draft |
 | `fixtures/.gdignore` | config | --- | draft |
@@ -465,9 +455,15 @@ Startup/initialization order based on edge directions and interaction patterns.
 | `fixtures/worlds/malformed_manifest/world.json` | config | --- | draft |
 | `fixtures/worlds/stray_project_file/world.json` | config | --- | draft |
 | `fixtures/worlds/missing_checkpoint/world.json` | config | --- | draft |
+| `fixtures/staticgate/multiplayer_repo/core/net_player.gd` | source | --- | draft |
 | `fixtures/worlds/bad_world_id/world.json` | config | --- | draft |
 | `fixtures/worlds/missing_checkpoint/world.tscn` | design | --- | draft |
+| `fixtures/staticgate/multiplayer_repo/core/net_scene.tscn` | source | --- | draft |
+| `fixtures/staticgate/multiplayer_repo/project.godot` | config | --- | draft |
 | `fixtures/worlds/unsupported_version/world.json` | config | --- | draft |
+| `fixtures/staticgate/malicious_world/worlds/rogue_world/rogue.gd` | source | --- | draft |
+| `fixtures/staticgate/clean_repo/core/clean.gd` | source | --- | draft |
+| `fixtures/staticgate/clean_repo/project.godot` | config | --- | draft |
 | `test/run_tests.gd` | source | --- | draft |
 | `test/support/gdunit_compat.gd` | source | --- | draft |
 | `test/core/harness/test_harness_integrity.gd` | source | --- | draft |

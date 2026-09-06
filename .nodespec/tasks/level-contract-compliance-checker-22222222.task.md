@@ -110,10 +110,7 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T6 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).** <!-- t:a39cc42a -->
   Record the endpoint/identifiers CI Pipeline needs in this node's config artifacts — coordinate with CI Pipeline.
   Build to the contract schema EXACTLY (see Interface Contracts).
-- [ ] **T7 — Implement: "A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it" (REQ-007).** <!-- t:d30c83d8 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-007 "A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it" — possible coordination point: Contract "Level Contract v1" (dependency) to World: Coral Cove (keyword signal only)
-- [ ] **T8 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T7 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -171,8 +168,8 @@ The tool that makes "AI agents can build compliant levels" a fact rather than a 
   → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
 - [x] Checker is runnable locally with a single documented command
   → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
-- [ ] A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it
-  → covered by Task T7
+- [x] A deliberately non-conforming fixture world fails the checker with the expected specific violation, and each official MVP world passes it
+  → THIS NODE: internal logic — possible coordination point: Contract "Level Contract v1" (dependency) to World: Coral Cove (keyword signal only)
 - [x] Adding a new rule to the contract schema changes checker behavior without any code change to the checker
   → THIS NODE: internal logic
 

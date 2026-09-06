@@ -30,6 +30,8 @@ component inventory, connection topology, and links to per-component task docume
 | Flagship Boss Encounter | shared-library | godot | --- | [`.nodespec/tasks/flagship-boss-encounter-22222222.task.md`](./.nodespec/tasks/flagship-boss-encounter-22222222.task.md) | [`.nodespec/tests/req-013.tests.md`](./.nodespec/tests/req-013.tests.md) |
 | World Static Analysis Gate | cli-tool | python-backend | --- | [`.nodespec/tasks/world-static-analysis-gate-22222222.task.md`](./.nodespec/tasks/world-static-analysis-gate-22222222.task.md) | [`.nodespec/tests/req-020.tests.md`](./.nodespec/tests/req-020.tests.md) |
 | World: Reference Template | shared-library | godot | --- | [`.nodespec/tasks/world-reference-template-22222222.task.md`](./.nodespec/tasks/world-reference-template-22222222.task.md) | [`.nodespec/tests/req-029.tests.md`](./.nodespec/tests/req-029.tests.md) |
+| Blender (headless) | external-service | blender | --- | --- | --- |
+| Model Refinement Pipeline | cli-tool | python-backend | --- | --- | --- |
 
 ## Connection Topology
 
@@ -124,6 +126,8 @@ component inventory, connection topology, and links to per-component task docume
 | World Static Analysis Gate | Audio System | dependency | Engine Feature Policy |
 | World Static Analysis Gate | Balance and Tuning Data | dependency | Engine Feature Policy |
 | World Static Analysis Gate | Flagship Boss Encounter | dependency | Engine Feature Policy |
+| Model Refinement Pipeline | Blender (headless) | dependency | Blender Headless CLI |
+| Model Refinement Pipeline | Asset Contract Validator | dependency | GLB Header Reader |
 
 ## Task Documents
 

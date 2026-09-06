@@ -37,7 +37,11 @@ EXIT_OK = 0
 EXIT_VIOLATIONS = 1
 EXIT_INVOCATION = 2
 
+# The `tool` discriminator in the Validator CLI Invocation result schema.
+TOOL_NAME = "level-contract-checker"
+
 DEFAULT_SCHEMA = os.path.join("contracts", "level_contract.v1.json")
+WORLDS_DIR = "worlds"
 
 
 # --------------------------------------------------------------------------
@@ -74,9 +78,29 @@ class Report:
     violations: list[Violation] = field(default_factory=list)
 
     def to_json(self) -> str:
-        payload = asdict(self)
-        payload["violations"] = [asdict(v) for v in self.violations]
-        return json.dumps(payload, indent=2)
+        # The Validator CLI Invocation result shape, shared by all four repo
+        # validators so CI and agents parse ONE vocabulary. `rule` is the same
+        # stable dotted `<element>.<kind>` id the hub's runtime validator
+        # emits; `element`/`kind` stay as extra keys for consumers that group
+        # by contract element without splitting strings.
+        def encode(v: Violation) -> dict:
+            return {
+                "rule": f"{v.element}.{v.rule}",
+                "severity": "error",
+                "file": v.file,
+                "line": v.line,
+                "message": v.message,
+                "element": v.element,
+                "kind": v.rule,
+            }
+
+        return json.dumps({
+            "tool": TOOL_NAME,
+            "schemaVersion": self.contract_version,
+            "target": self.target,
+            "passed": self.conforming,
+            "violations": [encode(v) for v in self.violations],
+        }, indent=2)
 
     def to_text(self) -> str:
         if self.conforming:
@@ -485,12 +509,49 @@ def check_world(target: str, schema_path: str) -> Report:
 # CLI
 # --------------------------------------------------------------------------
 
+def check_repository(target: str, schema_path: str) -> Report:
+    """Sweep every world module under <target>/worlds into ONE report.
+
+    The Validator CLI Invocation contract says the target defaults to the
+    repository root and a module path narrows the run -- so a repo root is a
+    first-class target here, not a loop a caller has to write. Violation file
+    paths gain their module prefix so a repo-level report still locates every
+    finding, and a repo with no worlds directory conforms vacuously (a fork
+    stripped to the core is not in violation of a contract about worlds).
+    """
+    with open(schema_path, "r", encoding="utf-8") as handle:
+        schema = json.load(handle)
+
+    report = Report(target=target, schema=schema_path,
+                    contract_version=str(schema.get("contractVersion", "?")),
+                    conforming=True)
+
+    worlds_root = os.path.join(target, WORLDS_DIR)
+    modules = sorted(
+        entry for entry in (os.listdir(worlds_root) if os.path.isdir(worlds_root) else [])
+        if os.path.isdir(os.path.join(worlds_root, entry)))
+
+    for module in modules:
+        module_dir = os.path.join(worlds_root, module)
+        module_report = check_world(module_dir, schema_path)
+        for violation in module_report.violations:
+            report.violations.append(Violation(
+                element=violation.element, rule=violation.rule,
+                file=os.path.join(WORLDS_DIR, module, violation.file),
+                line=violation.line, message=violation.message))
+
+    report.conforming = not report.violations
+    return report
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="level_contract_checker",
-        description="Validate a world module against the Level Contract.")
-    parser.add_argument("--target", required=True,
-                        help="path to the world module directory")
+        prog="oax-level-check",
+        description="Validate world modules against the Level Contract.")
+    parser.add_argument("--target", default=".",
+                        help="a world module directory, or a repository root "
+                             "to sweep every module under worlds/ "
+                             "(default: .)")
     parser.add_argument("--schema", default=DEFAULT_SCHEMA,
                         help=f"contract schema (default: {DEFAULT_SCHEMA})")
     parser.add_argument("--format", choices=("text", "json"), default="text",
@@ -508,8 +569,15 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: schema {args.schema!r} not found", file=sys.stderr)
         return EXIT_INVOCATION
 
+    # A directory carrying a manifest is a module; anything else is treated as
+    # a repository root and swept. Presence, not name, decides -- the checker
+    # must work identically on a fork with a renamed root.
+    is_module = os.path.isfile(os.path.join(args.target, "world.json")) \
+        or os.path.isfile(os.path.join(args.target, "world.tscn"))
+
     try:
-        report = check_world(args.target, args.schema)
+        check = check_world if is_module else check_repository
+        report = check(args.target, args.schema)
     except (UnknownRuleKind, SchemaProblem) as problem:
         print(f"error: {problem}", file=sys.stderr)
         return EXIT_INVOCATION

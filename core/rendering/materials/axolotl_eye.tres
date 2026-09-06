@@ -1,0 +1,17 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+; HERO EYE — the two dark spheres. Big, wet, expressive eyes carry most of a
+; toy character's charm, and wetness is a material fact: near-zero roughness
+; with a full clearcoat so the sky and sun land as a sharp reflection. The
+; albedo is a deep blue-black rather than the vertex colour, so the eye stays
+; an eye under any palette a regenerated model brings.
+
+[resource]
+vertex_color_use_as_albedo = false
+albedo_color = Color(0.04, 0.05, 0.08, 1)
+metallic = 0.0
+metallic_specular = 0.9
+roughness = 0.05
+clearcoat_enabled = true
+clearcoat = 1.0
+clearcoat_roughness = 0.05

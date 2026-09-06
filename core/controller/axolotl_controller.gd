@@ -25,6 +25,12 @@ const DIVE_SPEED_KEY := "controller.dive.speed_m_per_s"
 const HOP_IMPULSE_KEY := "controller.hop.impulse_m_per_s"
 const CLIMB_SPEED_KEY := "controller.climb.speed_m_per_s"
 const MAX_CLIMB_HEIGHT_KEY := "controller.climb.max_height_m"
+const TURN_RATE_KEY := "controller.facing.turn_rate_deg_per_s"
+
+## Below this horizontal speed the heading HOLDS. A zero-length velocity has no
+## direction, and the arbitrary atan2 it would yield spins a standing axolotl
+## on the spot — the camera guards against the same thing with its own bound.
+const HEADING_HOLD_SPEED := 0.25
 
 ## Emitted on the SAME frame the grammar changes, before movement integration.
 signal grammar_changed(grammar: MovementGrammar.Grammar)
@@ -41,6 +47,11 @@ var _tuning: TuningData
 var _grammar: MovementGrammar.Grammar = MovementGrammar.Grammar.LAND
 var _velocity: Vector3 = Vector3.ZERO
 var _was_in_water: bool = false
+
+## The yaw the body should FACE, in radians about +Y, turned toward the
+## horizontal direction of travel at the tuned rate. Zero faces down -Z,
+## Godot's forward, which is also the direction every greybox route runs.
+var _heading_yaw: float = 0.0
 var _initialised: bool = false
 
 ## Published by the CharacterBody3D wrapper each step. The wrapper still OWNS the
@@ -97,6 +108,23 @@ func physics_step(delta: float, is_in_water: bool, intent: PlayerIntent) -> void
 	_dash.tick(delta, is_in_water)
 	_boost.tick(delta)
 	_integrate(delta, intent)
+	_update_heading(delta)
+
+
+## The body turns toward where it is going, never instantly: the heading chases
+## the travel direction at [constant TURN_RATE_KEY], so a reversal is a visible
+## flick rather than a teleport. Yaw only — pitch while diving is a follow-up.
+## The formula is the trailing camera's own, so the camera sits behind the
+## direction the body faces rather than behind some other axis.
+func _update_heading(delta: float) -> void:
+	var travel := Vector2(_velocity.x, _velocity.z)
+	if travel.length() < HEADING_HOLD_SPEED:
+		return
+	var target := atan2(-travel.x, -travel.y)
+	var max_step := deg_to_rad(_tuning.get_number(TURN_RATE_KEY)) * delta
+	var difference := wrapf(target - _heading_yaw, -PI, PI)
+	_heading_yaw = wrapf(
+		_heading_yaw + clampf(difference, -max_step, max_step), -PI, PI)
 
 
 func _apply_water_state(is_in_water: bool) -> void:
@@ -316,6 +344,11 @@ func is_in_water() -> bool:
 
 func get_velocity() -> Vector3:
 	return _velocity
+
+
+## Radians about +Y; zero faces -Z. Applied by the body wrapper to the model.
+func get_heading_yaw() -> float:
+	return _heading_yaw
 
 
 ## Seeds velocity for a test or a spawn. Never called during normal play — the

@@ -125,19 +125,16 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T10 — Implement: "Each loss and regrowth plays comedic, non-gruesome feedback consistent with the family-appropriate tone" (REQ-002).** <!-- t:2c4f8fa3 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-002 "Each loss and regrowth plays comedic, non-gruesome feedback consistent with the family-appropriate tone"
-- [ ] **T11 — Implement: "The game is completable using a single input device with no required simultaneous inputs beyond that device's capability" (REQ-019).** <!-- t:e01ce330 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-019 "The game is completable using a single input device with no required simultaneous inputs beyond that device's capability" — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
-- [ ] **T12 — Implement: "Capability loss and regrowth are presented with comedic, non-gruesome feedback across every loss type" (REQ-019).** <!-- t:2f756a5d -->
+- [ ] **T11 — Implement: "Capability loss and regrowth are presented with comedic, non-gruesome feedback across every loss type" (REQ-019).** <!-- t:2f756a5d -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-019 "Capability loss and regrowth are presented with comedic, non-gruesome feedback across every loss type" — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
-- [ ] **T13 — Implement: "No enemy, hazard, or failure state depicts blood, gore, or humanized violence" (REQ-019).** <!-- t:e8e0e69d -->
+- [ ] **T12 — Implement: "No enemy, hazard, or failure state depicts blood, gore, or humanized violence" (REQ-019).** <!-- t:e8e0e69d -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-019 "No enemy, hazard, or failure state depicts blood, gore, or humanized violence" — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Drift Fleet Enemy Framework (keyword signal only)
-- [ ] **T14 — Implement: "Tone reads as playful and family-appropriate to a reviewer playing the capability-loss loop repeatedly" (REQ-019).** <!-- t:578a483a -->
+- [ ] **T13 — Implement: "Tone reads as playful and family-appropriate to a reviewer playing the capability-loss loop repeatedly" (REQ-019).** <!-- t:578a483a -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-019 "Tone reads as playful and family-appropriate to a reviewer playing the capability-loss loop repeatedly" — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
-- [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -216,14 +213,14 @@ A cross-cutting constraint on every system in the game. Capability loss must rea
   → THIS NODE: internal logic — possible coordination point: Contract "HUD State Interface" (dependency) from Player HUD (keyword signal only)
 - [x] Every capability-loss type triggers both a visual and an audio feedback cue
   → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
-- [ ] The game is completable using a single input device with no required simultaneous inputs beyond that device's capability
-  → covered by Task T11
+- [x] The game is completable using a single input device with no required simultaneous inputs beyond that device's capability
+  → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
 - [ ] Capability loss and regrowth are presented with comedic, non-gruesome feedback across every loss type (manual)
-  → covered by Task T12
+  → covered by Task T11
 - [ ] No enemy, hazard, or failure state depicts blood, gore, or humanized violence (manual)
-  → covered by Task T13
+  → covered by Task T12
 - [ ] Tone reads as playful and family-appropriate to a reviewer playing the capability-loss loop repeatedly (manual)
-  → covered by Task T14
+  → covered by Task T13
 
 ## Interface Contracts
 

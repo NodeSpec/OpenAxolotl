@@ -22,19 +22,42 @@ static func from_dictionary(source: Dictionary) -> WorldContractShape:
 	return shape
 
 
+## The id field of a declaration object, by element. A manifest declares
+## objects, the save records ids; the shape must read the same id from both.
+const _ID_FIELDS: PackedStringArray = ["collectibleId", "regionId", "checkpointId"]
+
+
 ## Accepts both Array and PackedStringArray. PackedStringArray is NOT an Array
 ## in GDScript, so testing only `is Array` silently yields an empty shape — and
 ## an empty stored shape makes every later comparison look additive, including
 ## the renames that must quarantine.
+##
+## Entries may be bare ids or declaration objects straight from a manifest. A
+## resource-kind collectible is a consumable TYPE the profile never refers to,
+## so dropping one is not a destructive change and it contributes no id.
 static func _sorted_ids(raw: Variant) -> PackedStringArray:
 	var out := PackedStringArray()
 	if raw is PackedStringArray:
 		out = (raw as PackedStringArray).duplicate()
 	elif raw is Array:
 		for entry: Variant in (raw as Array):
-			out.append(String(entry))
+			if entry is Dictionary:
+				var id := _declared_id(entry as Dictionary)
+				if not id.is_empty():
+					out.append(id)
+			else:
+				out.append(String(entry))
 	out.sort()
 	return out
+
+
+static func _declared_id(row: Dictionary) -> String:
+	if String(row.get("kind", "")) == "resource":
+		return ""
+	for field: String in _ID_FIELDS:
+		if row.has(field):
+			return String(row[field])
+	return ""
 
 
 ## Emits plain Arrays rather than packed ones so the in-memory shape and the

@@ -116,13 +116,10 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T10 — Implement: "Checkpoint spacing in every official world keeps the replay time from any checkpoint to the next at or below tuning key progression.max_retry_seconds" (REQ-003).** <!-- t:1d442410 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-003 "Checkpoint spacing in every official world keeps the replay time from any checkpoint to the next at or below tuning key progression.max_retry_seconds" — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
-- [ ] **T11 — Implement: "Losing all lives reads as a meaningful setback without feeling punishing, across repeated play" (REQ-003).** <!-- t:f17eefd2 -->
+- [ ] **T10 — Implement: "Losing all lives reads as a meaningful setback without feeling punishing, across repeated play" (REQ-003).** <!-- t:f17eefd2 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-003 "Losing all lives reads as a meaningful setback without feeling punishing, across repeated play"
-- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T11 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -189,10 +186,10 @@ Pillar 1, hard layer — the stakes that the capability layer deliberately does 
   → THIS NODE: internal logic — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) from OpenAxolotl Game Client (keyword signal only)
 - [x] A world can declare a lives-per-attempt override through the Level Contract, and the global default applies when it does not
   → THIS NODE: internal logic — possible coordination point: Contract "Engine Feature Policy" (dependency) from World Static Analysis Gate (keyword signal only)
-- [ ] Checkpoint spacing in every official world keeps the replay time from any checkpoint to the next at or below tuning key progression.max_retry_seconds
-  → covered by Task T10
+- [x] Checkpoint spacing in every official world keeps the replay time from any checkpoint to the next at or below tuning key progression.max_retry_seconds
+  → THIS NODE: internal logic — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
 - [ ] Losing all lives reads as a meaningful setback without feeling punishing, across repeated play (manual)
-  → covered by Task T11
+  → covered by Task T10
 
 ## Interface Contracts
 

@@ -111,28 +111,10 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T10 — Implement: "Netbots entangle the player and strip swim-speed capability, and Jet Gills provide a functioning counter" (REQ-012).** <!-- t:244321a6 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-012 "Netbots entangle the player and strip swim-speed capability, and Jet Gills provide a functioning counter" — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Regeneration and Capability System (keyword signal only)
-- [ ] **T11 — Implement: "Hookline Rigs snag the player and strip the equipped Gill Mod for the window given by tuning key enemy.hookline.mod_strip_seconds, and Glow Gills reveal the line before it triggers" (REQ-012).** <!-- t:d3b6e7af -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-012 "Hookline Rigs snag the player and strip the equipped Gill Mod for the window given by tuning key enemy.hookline.mod_strip_seconds, and Glow Gills reveal the line before it triggers" — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
-- [ ] **T12 — Implement: "Dredgers revert restored regions to barren, and their area-wipe attack decrements a life" (REQ-012).** <!-- t:0f1bda8e -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-012 "Dredgers revert restored regions to barren, and their area-wipe attack decrements a life" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
-- [ ] **T13 — Implement: "Runoff Drones apply a vision and gill-recharge debuff while the player is inside the toxin volume, with magnitudes and duration given by tuning keys enemy.runoff.vision_debuff_factor, enemy.runoff.gill_recharge_multiplier, and enemy.runoff.duration_s" (REQ-012).** <!-- t:f877676b -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-012 "Runoff Drones apply a vision and gill-recharge debuff while the player is inside the toxin volume, with magnitudes and duration given by tuning keys enemy.runoff.vision_debuff_factor, enemy.runoff.gill_recharge_multiplier, and enemy.runoff.duration_s" — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
-- [ ] **T14 — Implement: "Enemies are registered through a documented extension interface, and a fixture enemy can be added without modifying any file in the enemy system core" (REQ-012).** <!-- t:18eba66d -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-012 "Enemies are registered through a documented extension interface, and a fixture enemy can be added without modifying any file in the enemy system core" — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Regeneration and Capability System (keyword signal only)
-- [ ] **T15 — Implement: "A world declaring no enemies remains contract-valid and fully completable" (REQ-012).** <!-- t:a2dfe7b9 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-012 "A world declaring no enemies remains contract-valid and fully completable" — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Regeneration and Capability System (keyword signal only)
-- [ ] **T16 — Implement: "Runoff Drone encounters make land routes read as the favorable path in hands-on play" (REQ-012).** <!-- t:a13cf8f3 -->
+- [ ] **T10 — Implement: "Runoff Drone encounters make land routes read as the favorable path in hands-on play" (REQ-012).** <!-- t:a13cf8f3 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-012 "Runoff Drone encounters make land routes read as the favorable path in hands-on play" — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Regeneration and Capability System (keyword signal only)
-- [ ] **T17 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T11 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -187,20 +169,20 @@ Category: functional | Status: in-progress
 The antagonist faction: faceless industrial extraction machinery, deliberately NOT human characters. This preserves every intended gameplay hook — nets, hooks, dredging, pollution — without making a real profession the villain, and it fits the restoration theme better, since the machinery that broke the habitat is exactly what the player disables to heal it. Each enemy is designed against a specific capability or system rather than being a generic damage-dealer. NETBOTS: drifting drone trawlers dragging ghost nets that entangle and strip swim-speed capability; countered with Jet Gills. HOOKLINE RIGS: patrolling barbed-lure rigs that snag and briefly strip the equipped Gill Mod; countered by spotting the line in murk with Glow Gills. DREDGERS: heavy bottom-scrapers that revert restored terrain to barren, with area-wipe attacks that cost a life. RUNOFF DRONES: toxin sprayers that cloud water, debuffing vision and gill recharge to push the player onto land routes and exercise the second movement grammar. Enemies are an optional Level Contract element and are registered extensibly so a world can supply its own.
 
 **Acceptance criteria — your task boxes:**
-- [ ] Netbots entangle the player and strip swim-speed capability, and Jet Gills provide a functioning counter
-  → covered by Task T10
-- [ ] Hookline Rigs snag the player and strip the equipped Gill Mod for the window given by tuning key enemy.hookline.mod_strip_seconds, and Glow Gills reveal the line before it triggers
-  → covered by Task T11
-- [ ] Dredgers revert restored regions to barren, and their area-wipe attack decrements a life
-  → covered by Task T12
-- [ ] Runoff Drones apply a vision and gill-recharge debuff while the player is inside the toxin volume, with magnitudes and duration given by tuning keys enemy.runoff.vision_debuff_factor, enemy.runoff.gill_recharge_multiplier, and enemy.runoff.duration_s
-  → covered by Task T13
-- [ ] Enemies are registered through a documented extension interface, and a fixture enemy can be added without modifying any file in the enemy system core
-  → covered by Task T14
-- [ ] A world declaring no enemies remains contract-valid and fully completable
-  → covered by Task T15
+- [x] Netbots entangle the player and strip swim-speed capability, and Jet Gills provide a functioning counter
+  → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Regeneration and Capability System (keyword signal only)
+- [x] Hookline Rigs snag the player and strip the equipped Gill Mod for the window given by tuning key enemy.hookline.mod_strip_seconds, and Glow Gills reveal the line before it triggers
+  → THIS NODE: internal logic — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
+- [x] Dredgers revert restored regions to barren, and their area-wipe attack decrements a life
+  → THIS NODE: internal logic — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [x] Runoff Drones apply a vision and gill-recharge debuff while the player is inside the toxin volume, with magnitudes and duration given by tuning keys enemy.runoff.vision_debuff_factor, enemy.runoff.gill_recharge_multiplier, and enemy.runoff.duration_s
+  → THIS NODE: internal logic — possible coordination point: Contract "Tuning Data Interface" (dependency) to Balance and Tuning Data (keyword signal only)
+- [x] Enemies are registered through a documented extension interface, and a fixture enemy can be added without modifying any file in the enemy system core
+  → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Regeneration and Capability System (keyword signal only)
+- [x] A world declaring no enemies remains contract-valid and fully completable
+  → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Regeneration and Capability System (keyword signal only)
 - [ ] Runoff Drone encounters make land routes read as the favorable path in hands-on play (manual)
-  → covered by Task T16
+  → covered by Task T10
 
 ## Interface Contracts
 
@@ -399,4 +381,14 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 | File | Kind | Language | Status |
 |------|------|----------|--------|
+| `core/enemies/roster/runoff_drone.json` | config | --- | draft |
+| `core/enemies/roster/netbot.json` | config | --- | draft |
+| `core/enemies/enemy_error.gd` | source | --- | draft |
+| `core/enemies/enemy_def.gd` | source | --- | draft |
 | `.nodespec/tests/req-012.tests.md` - Test plan for requirement: Drift Fleet Enemy Roster | test-plan | markdown | draft |
+| `core/enemies/enemy_registry.gd` | source | --- | draft |
+| `docs/enemies.md` | doc | --- | draft |
+| `test/core/enemies/test_drift_fleet.gd` | source | --- | draft |
+| `core/enemies/drift_fleet_system.gd` | source | --- | draft |
+| `core/enemies/roster/hookline_rig.json` | config | --- | draft |
+| `core/enemies/roster/dredger.json` | config | --- | draft |

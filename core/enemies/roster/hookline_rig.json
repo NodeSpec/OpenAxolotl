@@ -1,0 +1,9 @@
+{
+  "id": "hookline_rig",
+  "displayName": "Hookline Rig",
+  "behavior": "snag",
+  "audioCueId": "enemy_hookline_snag",
+  "snag": {
+    "revealAffordance": "reveal_hookline"
+  }
+}

@@ -118,28 +118,13 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T12 — Expose the interface World Static Analysis Gate consumes, per Contract "Sanctioned World API Surface" (dependency).** <!-- t:a14fa597 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T13 — Implement: "At least two official worlds are implemented, each passing the Level Contract compliance checker" (REQ-011).** <!-- t:0b881ecb -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-011 "At least two official worlds are implemented, each passing the Level Contract compliance checker" — possible coordination point: Contract "Level Contract v1" (dependency) from Level Contract Compliance Checker (keyword signal only)
-- [ ] **T14 — Implement: "Each official world is completable from spawn to finish condition" (REQ-011).** <!-- t:1f668d08 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-011 "Each official world is completable from spawn to finish condition"
-- [ ] **T15 — Implement: "Each official world calls only the sanctioned world API surface, using no private back doors unavailable to an outside contributor, verified by the same static analysis applied to community submissions" (REQ-011).** <!-- t:754bb993 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-011 "Each official world calls only the sanctioned world API surface, using no private back doors unavailable to an outside contributor, verified by the same static analysis applied to community submissions" — possible coordination point: Contract "Sanctioned World API Surface" (dependency) from World Static Analysis Gate (keyword signal only)
-- [ ] **T16 — Implement: "Each official world exercises both movement grammars and contains at least one restorable region" (REQ-011).** <!-- t:1955c96e -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-011 "Each official world exercises both movement grammars and contains at least one restorable region" — possible coordination point: Contract "Restoration Region Interface" (dependency) to Restoration State System (keyword signal only)
-- [ ] **T17 — Implement: "Each official world contains at least one mandatory traversal challenge gated on a specific Gill Mod, and across the official set all three MVP mods are each required by at least one world" (REQ-011).** <!-- t:0ac0c784 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-011 "Each official world contains at least one mandatory traversal challenge gated on a specific Gill Mod, and across the official set all three MVP mods are each required by at least one world" — possible coordination point: Contract "Gill Mod Registration Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
-- [ ] **T18 — Implement: "Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen" (REQ-011).** <!-- t:472ee673 -->
+- [ ] **T13 — Implement: "Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen" (REQ-011).** <!-- t:472ee673 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-011 "Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen" — possible coordination point: Contract "Level Contract v1" (dependency) from OpenAxolotl Game Client (keyword signal only)
-- [ ] **T19 — Implement: "Each world is fun to play through and delivers a satisfying broken-to-restored payoff" (REQ-011).** <!-- t:e1d96cf2 -->
+- [ ] **T14 — Implement: "Each world is fun to play through and delivers a satisfying broken-to-restored payoff" (REQ-011).** <!-- t:e1d96cf2 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-011 "Each world is fun to play through and delivers a satisfying broken-to-restored payoff"
-- [ ] **T20 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -194,20 +179,20 @@ Category: functional | Status: in-progress
 Two to three official worlds at MVP — Coral Cove, Bubble Bay, and one more — each a discrete, bounded, checkpointed playthrough space entered from the Open Lagoon. Their purpose is dual and the second purpose is the more important one: they are shipped content AND they are the battle-test of the Level Contract. They must be built as ordinary contract-conforming world modules using only the public extension interfaces, taking no shortcuts unavailable to an outside contributor — if a core team world needs a private back door, that is a contract defect to fix, not a special case to permit. Friction encountered building them feeds back into the contract, and only once that feedback is absorbed is the contract frozen at v1. Each world should exercise both movement grammars, at least one restoration region, and a distinct Gill Mod emphasis.
 
 **Acceptance criteria — your task boxes:**
-- [ ] At least two official worlds are implemented, each passing the Level Contract compliance checker
-  → covered by Task T13
-- [ ] Each official world is completable from spawn to finish condition
-  → covered by Task T14
-- [ ] Each official world calls only the sanctioned world API surface, using no private back doors unavailable to an outside contributor, verified by the same static analysis applied to community submissions
-  → covered by Task T15
-- [ ] Each official world exercises both movement grammars and contains at least one restorable region
-  → covered by Task T16
-- [ ] Each official world contains at least one mandatory traversal challenge gated on a specific Gill Mod, and across the official set all three MVP mods are each required by at least one world
-  → covered by Task T17
+- [x] At least two official worlds are implemented, each passing the Level Contract compliance checker
+  → THIS NODE: internal logic — possible coordination point: Contract "Level Contract v1" (dependency) from Level Contract Compliance Checker (keyword signal only)
+- [x] Each official world is completable from spawn to finish condition
+  → THIS NODE: internal logic
+- [x] Each official world calls only the sanctioned world API surface, using no private back doors unavailable to an outside contributor, verified by the same static analysis applied to community submissions
+  → THIS NODE: internal logic — possible coordination point: Contract "Sanctioned World API Surface" (dependency) from World Static Analysis Gate (keyword signal only)
+- [x] Each official world exercises both movement grammars and contains at least one restorable region
+  → THIS NODE: internal logic — possible coordination point: Contract "Restoration Region Interface" (dependency) to Restoration State System (keyword signal only)
+- [x] Each official world contains at least one mandatory traversal challenge gated on a specific Gill Mod, and across the official set all three MVP mods are each required by at least one world
+  → THIS NODE: internal logic — possible coordination point: Contract "Gill Mod Registration Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
 - [ ] Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen (manual)
-  → covered by Task T18
+  → covered by Task T13
 - [ ] Each world is fun to play through and delivers a satisfying broken-to-restored payoff (manual)
-  → covered by Task T19
+  → covered by Task T14
 
 ## Interface Contracts
 
@@ -723,4 +708,10 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 | File | Kind | Language | Status |
 |------|------|----------|--------|
+| `worlds/coral_cove/world.json` | config | --- | draft |
+| `test/worlds/coral_walk_probe.gd` | source | --- | draft |
+| `test/worlds/run_coral_walk.gd` | source | --- | draft |
 | `.nodespec/tests/req-011.tests.md` - Test plan for requirement: Official MVP Worlds | test-plan | markdown | draft |
+| `worlds/coral_cove/README.md` | doc | --- | draft |
+| `docs/contract-friction.md` | doc | --- | draft |
+| `worlds/coral_cove/world.tscn` | source | --- | draft |

@@ -15,7 +15,6 @@ extends CharacterBody3D
 ##     wrapper can own the fall; integrating it inside the controller would make
 ##     a headless test responsible for simulating a floor.
 ##   * GROUNDEDNESS, from is_on_floor(). The controller gates the hop on it.
-##   * CLIMB ATTACHMENT, from the collisions a move actually reported.
 ##   * WATER STATE, counted from the volumes currently overlapping.
 ##   * The RAW EVENT FEED, forwarded to the Input System and nowhere else.
 ##
@@ -31,6 +30,14 @@ const TERMINAL_SPEED_KEY := "controller.gravity.terminal_speed_m_per_s"
 @export_file("*.json") var tuning_path: String = "res://core/tuning/tuning.json"
 @export_file("*.json") var bindings_path: String = BindingTable.DEFAULTS_PATH
 
+## The visual the body carries — the character model — turned to face the
+## controller's heading each step. The BODY never rotates: its capsule is the
+## physics footprint every probe and tuning value was proven against, and a
+## capsule is round, so facing is a visual fact and nothing more. A scene
+## without a model (the template walk builds a bare body) simply has nothing
+## to turn.
+@export var model_path: NodePath = ^"Model"
+
 ## Re-emitted from the controller so the camera and HUD can follow the grammar
 ## without holding a reference to the controller itself.
 signal grammar_changed(grammar: MovementGrammar.Grammar)
@@ -39,6 +46,13 @@ signal water_state_changed(in_water: bool)
 var _tuning: TuningData
 var _controller: AxolotlController
 var _input: InputSystem
+var _model: Node3D
+
+## Squash and stretch on the model (hop and landing), multiplied onto the
+## scale the scene authored for it. Visual only, like facing.
+var _squash: HeroSquash
+var _model_base_scale: Vector3 = Vector3.ONE
+var _was_grounded: bool = true
 
 ## Overlapping water volumes, counted rather than flagged: two volumes meeting at
 ## a seam must not read as "left the water" when the player crosses the join.
@@ -76,6 +90,16 @@ func _ready() -> void:
 
 	_controller.set_anchor_source(SceneAnchorSource.new(self))
 	_controller.sync_body_position(global_position)
+
+	if not model_path.is_empty():
+		_model = get_node_or_null(model_path) as Node3D
+	if _model != null:
+		# The look is the client's: dress the imported model in the shared
+		# hero materials, whatever the exporter wrote into the file.
+		HeroSkin.apply(_model)
+		_model_base_scale = _model.scale
+	_squash = HeroSquash.new(_tuning)
+	_controller.hopped.connect(_squash.on_hop)
 
 
 func get_controller() -> AxolotlController:
@@ -121,6 +145,17 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	_update_climb(intent)
+
+	# A landing is the floor flag going false to true on land. Water has no
+	# floor to slap; brushing the seabed while swimming is not a landing.
+	var grounded := is_on_floor()
+	if grounded and not _was_grounded and not is_in_water():
+		_squash.on_land()
+	_was_grounded = grounded
+
+	if _model != null:
+		_model.rotation.y = _controller.get_heading_yaw()
+		_model.scale = _model_base_scale * _squash.step(delta)
 
 	# Collision may have cancelled the motion the controller asked for — walking
 	# into a wall, or landing. Handing the resolved velocity back keeps the

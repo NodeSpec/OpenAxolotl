@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3]
+
+; THE SHARED LIGHTING RIG — instance this once, at the main scene level.
+;
+; One WorldEnvironment carrying the shared environment (base_environment.tres:
+; sky, tonemap, GI, occlusion, glow, fog) and one sun with soft, two-cascade
+; shadows. The hub instances it beside itself so it survives the hub going
+; dormant when a world is entered; the dev greybox instances it because it
+; stands alone. Worlds do NOT instance it: they are lit by the client's rig,
+; which is how "one world, one voice" is kept without every contributor
+; re-tuning lighting.
+;
+; Sun placement matches the direction the greybox and hub always used, so
+; every framing the camera was tuned against still reads the same.
+
+[ext_resource type="Script" path="res://core/rendering/world_lighting.gd" id="1_rig"]
+[ext_resource type="Environment" path="res://core/rendering/base_environment.tres" id="2_environment"]
+
+[node name="WorldLighting" type="Node3D"]
+script = ExtResource("1_rig")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("2_environment")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.353, 0.353, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 20, 0)
+light_color = Color(1, 0.96, 0.9, 1)
+light_energy = 1.0
+light_angular_distance = 1.5
+shadow_enabled = true
+shadow_bias = 0.03
+shadow_normal_bias = 1.5
+shadow_blur = 1.5
+directional_shadow_mode = 1
+directional_shadow_split_1 = 0.15
+directional_shadow_max_distance = 80.0
+directional_shadow_fade_start = 0.85

@@ -208,6 +208,67 @@ func test_req_026_the_shim_guard_reports_a_method_that_does_not_exist() -> void:
 	).is_false()
 
 
+## AC-2's roster: the five system areas the criterion names, each of which
+## must be covered by a real suite with real tests. Existence is checked
+## HERE, as a test, so deleting a suite fails red instead of quietly
+## shrinking coverage.
+const UNIT_COVERAGE := {
+	"capability": "res://test/core/regen/test_regen_system.gd",
+	"lives": "res://test/core/progression/test_life_system.gd",
+	"restoration": "res://test/core/restoration/test_restoration_system.gd",
+	"ability-registration": "res://test/core/gillmod/test_gill_mod_system.gd",
+	"save-interface": "res://test/core/save/test_save_system.gd",
+}
+
+## AC-5's roster: the five NAMED fixtures, and for each the tool-test source
+## that must reference it — pinning not just existence but SHARING. The
+## conforming and non-conforming assets are a generated corpus
+## (tools/asset_fixtures.py, by design: no binaries in git), so their name
+## is the generator and the sharing reference is the validator suite
+## invoking it.
+const FIXTURE_ROSTER := [
+	["conforming world", "res://fixtures/worlds/conforming_world/world.json",
+		"res://tools/test_level_contract_checker.py",
+		"fixtures/worlds/conforming_world"],
+	["non-conforming world",
+		"res://fixtures/worlds/missing_checkpoint/world.json",
+		"res://tools/test_level_contract_checker.py",
+		"fixtures/worlds/missing_checkpoint"],
+	["malicious world",
+		"res://fixtures/staticgate/malicious_world/worlds/rogue_world/rogue.gd",
+		"res://tools/test_static_gate.py", "malicious_world"],
+	["conforming + non-conforming assets (generated corpus)",
+		"res://tools/asset_fixtures.py",
+		"res://tools/test_asset_contract_validator.py", "asset_fixtures"],
+]
+
+
+func test_req_026_every_named_system_area_has_a_unit_suite() -> void:
+	for area: String in UNIT_COVERAGE:
+		var path: String = UNIT_COVERAGE[area]
+		assert_bool(FileAccess.file_exists(path)).override_failure_message(
+			"REQ-026 AC-2: the '%s' area has no unit suite at %s"
+			% [area, path]).is_true()
+		assert_str(_flattened(path)).override_failure_message(
+			"REQ-026 AC-2: %s contains no test functions" % path
+		).contains("func test_")
+
+
+func test_req_026_the_named_fixtures_exist_and_are_shared() -> void:
+	for entry: Array in FIXTURE_ROSTER:
+		var label := String(entry[0])
+		var fixture := String(entry[1])
+		var consumer := String(entry[2])
+		var reference := String(entry[3])
+		assert_bool(FileAccess.file_exists(fixture)).override_failure_message(
+			"REQ-026 AC-5: the %s fixture is missing (%s)" % [label, fixture]
+		).is_true()
+		assert_str(_flattened(consumer)).override_failure_message(
+			"REQ-026 AC-5: %s no longer references the %s fixture — it "
+			% [consumer, label]
+			+ "exists but is not SHARED").contains(reference)
+
+
 func test_req_026_a_test_that_asserts_nothing_is_a_failure() -> void:
 	# The runner's other guard, asserted from inside: a suite instance that has
 	# evaluated no assertions reports zero, which is what the runner turns into a

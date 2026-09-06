@@ -118,16 +118,13 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T10 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T11 — Implement: "Water and land movement grammars have distinct movement and ambience audio, switching with the grammar transition" (REQ-023).** <!-- t:8b90126e -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-023 "Water and land movement grammars have distinct movement and ambience audio, switching with the grammar transition" — possible coordination point: Contract "Audio Event Interface" (dependency) from Regeneration and Capability System (keyword signal only)
-- [ ] **T12 — Implement: "Audio assets conform to the Asset Contract including provenance requirements" (REQ-023).** <!-- t:0b27ef8e -->
+- [ ] **T11 — Implement: "Audio assets conform to the Asset Contract including provenance requirements" (REQ-023).** <!-- t:0b27ef8e -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-023 "Audio assets conform to the Asset Contract including provenance requirements" — possible coordination point: Contract "Asset Contract v1" (custom) from Asset Contract Validator (keyword signal only)
-- [ ] **T13 — Implement: "Sound design supports the comedic, family-appropriate tone rather than undercutting it" (REQ-023).** <!-- t:e3ce4c83 -->
+- [ ] **T12 — Implement: "Sound design supports the comedic, family-appropriate tone rather than undercutting it" (REQ-023).** <!-- t:e3ce4c83 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-023 "Sound design supports the comedic, family-appropriate tone rather than undercutting it"
-- [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T13 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -184,8 +181,8 @@ Audio was referenced by the tone requirement and by the licensing decision but n
 **Acceptance criteria — your task boxes:**
 - [x] Distinct audio cues play for every capability loss and every regrowth
   → THIS NODE: internal logic — possible coordination point: Contract "Audio Event Interface" (dependency) from Regeneration and Capability System (keyword signal only)
-- [ ] Water and land movement grammars have distinct movement and ambience audio, switching with the grammar transition
-  → covered by Task T11
+- [x] Water and land movement grammars have distinct movement and ambience audio, switching with the grammar transition
+  → THIS NODE: internal logic — possible coordination point: Contract "Audio Event Interface" (dependency) from Regeneration and Capability System (keyword signal only)
 - [x] Region restoration state changes are accompanied by a corresponding change in ambient soundscape
   → THIS NODE: internal logic — possible coordination point: Contract "Audio Event Interface" (dependency) from Restoration State System (keyword signal only)
 - [x] Gill Mod activation produces a per-mod distinct audio cue
@@ -195,9 +192,9 @@ Audio was referenced by the tone requirement and by the licensing decision but n
 - [x] Master, music, and effects volumes are independently adjustable and persist across sessions
   → THIS NODE: internal logic — possible coordination point: Contract "Audio Event Interface" (dependency) from Regeneration and Capability System (keyword signal only)
 - [ ] Audio assets conform to the Asset Contract including provenance requirements
-  → covered by Task T12
+  → covered by Task T11
 - [ ] Sound design supports the comedic, family-appropriate tone rather than undercutting it (manual)
-  → covered by Task T13
+  → covered by Task T12
 
 ## Interface Contracts
 

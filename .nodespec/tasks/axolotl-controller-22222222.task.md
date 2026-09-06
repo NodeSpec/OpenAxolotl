@@ -129,7 +129,10 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T10 — Implement: "Both movement grammars feel distinct, responsive, and pleasurable in hands-on play" (REQ-001).** <!-- t:f6d9a45b -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-001 "Both movement grammars feel distinct, responsive, and pleasurable in hands-on play" — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
-- [ ] **T11 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T11 — Resolve ownership, then implement: "The axolotl reads as a glossy toy with wet eyes and glowing gills to the maintainer in a rendered capture on baseline-class hardware" (REQ-033).** <!-- t:c2d6a144 -->
+  [PLACEHOLDER: owner — this node or a sharing node (OpenAxolotl Game Client); assign via the requirement mapping, then keep this task here or move it to the owning node's doc]
+  ↳ serves: REQ-033 "The axolotl reads as a glossy toy with wet eyes and glowing gills to the maintainer in a rendered capture on baseline-class hardware" — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
+- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -198,6 +201,25 @@ The player character controller implementing two mechanically distinct movement 
   → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) from Regeneration and Capability System (keyword signal only)
 - [ ] Both movement grammars feel distinct, responsive, and pleasurable in hands-on play (manual)
   → covered by Task T10
+
+### REQ-033: Hero Character Look
+Category: functional | Status: pending
+_Shared with: OpenAxolotl Game Client — their slices live in their own task docs._
+The axolotl reads as a well-made toy: the material and eye pass on top of the Shared Look Foundation (REQ-031). The game client dresses the imported hero model in its own materials by part role, skin, eye, eye gleam, gill and fin, mouth detail, decided by the pipeline's material name first and by the model's vertex colours as a fallback, so the look survives a repainted or regenerated model. Skin is vertex-coloured, slightly wet (clearcoat) and lets light through at the edges (subsurface scattering); eyes are deep blue-black with near-zero roughness and a full clearcoat so the sky lands as a sharp reflection; the baked catchlights are unshaded so they never go grey in shadow; gills and fins carry strong subsurface scattering and backlight so they glow when lit from behind; mouth details are matte. Motion joins the look: a hop stretches the model taller and thinner and a landing squashes it shorter and wider, volume-preserving, recovering within a fraction of a second, driven by tuning keys and applied only to the Model child so physics never changes. This is the family-friendly comedic register of REQ-019 applied to the character itself.
+
+**Acceptance criteria — your task boxes:**
+- [x] The hero palette classifies skin, eye, gleam, gill and detail parts, and a refined model's material names take precedence over its colours
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client): no contract evidence; assign via the requirement mapping
+- [x] Each role wears a client material with the properties the art direction asks for: vertex-coloured translucent skin, a wet dark eye, an unshaded gleam, backlit gills, matte details
+  → THIS NODE via Contract "Axolotl Controller Interface" (dependency) from OpenAxolotl Game Client — coordinate with OpenAxolotl Game Client
+- [x] The shipped hero model is dressed by role at runtime with every surface wearing a client material
+  → THIS NODE via Contract "Axolotl Controller Interface" (dependency) from OpenAxolotl Game Client — coordinate with OpenAxolotl Game Client
+- [x] A hop stretches the model taller and thinner and a landing squashes it shorter and wider, both volume-preserving and recovering to rest within a second
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client): no contract evidence; assign via the requirement mapping
+- [x] Squash and stretch amounts and the recovery rate are tuning keys with documented units and ranges
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client): no contract evidence; assign via the requirement mapping
+- [ ] The axolotl reads as a glossy toy with wet eyes and glowing gills to the maintainer in a rendered capture on baseline-class hardware (manual)
+  → covered by Task T11
 
 ## Interface Contracts
 
@@ -402,11 +424,15 @@ Startup/initialization order based on edge directions and interaction patterns.
 | `core/controller/grapple_anchor.gd` | source | --- | draft |
 | `core/controller/anchor_source.gd` | source | --- | draft |
 | `core/controller/scene_anchor_source.gd` | source | --- | draft |
+| `test/core/controller/test_axolotl_body_scene.gd` | source | --- | draft |
 | `core/controller/capability_modifiers.gd` | source | --- | draft |
 | `core/controller/axolotl_body.gd` | source | --- | draft |
 | `core/controller/water_dash.gd` | source | --- | draft |
 | `core/controller/water_volume.gd` | source | --- | draft |
+| `core/controller/hero_squash.gd` | source | --- | draft |
+| `test/core/controller/test_hero_squash.gd` | source | --- | draft |
 | `core/controller/tongue_grapple.gd` | source | --- | draft |
+| `core/controller/axolotl_body.tscn` | source | --- | draft |
 | `core/controller/axolotl_controller.gd` | source | --- | draft |
 | `core/controller/movement_grammar.gd` | source | --- | draft |
 | `test/core/controller/test_axolotl_controller.gd` | source | --- | draft |

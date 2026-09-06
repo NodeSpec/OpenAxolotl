@@ -1,0 +1,12 @@
+{
+  "id": "netbot",
+  "displayName": "Netbot",
+  "behavior": "entangle",
+  "audioCueId": "enemy_netbot_entangle",
+  "entangle": {
+    "factorKey": "enemy.netbot.swim_speed_multiplier",
+    "durationKey": "enemy.netbot.entangle_seconds",
+    "target": "swim_speed",
+    "escapeAffordance": "net_escape"
+  }
+}

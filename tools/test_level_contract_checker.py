@@ -52,7 +52,7 @@ class SchemaIsTheSourceOfTruth(unittest.TestCase):
             source = handle.read()
         # Strip comments and docstrings: the file explains itself at length, and
         # prose about spawn points is not a hardcoded rule about spawn points.
-        source = re.sub(r'\"\"\".*?\"\"\"', "", source, flags=re.S)
+        source = re.sub(r'"""."*?"""', "", source, flags=re.S)
         source = re.sub(r"^\s*#.*$", "", source, flags=re.M)
 
         with open(SCHEMA, "r", encoding="utf-8") as handle:
@@ -63,7 +63,7 @@ class SchemaIsTheSourceOfTruth(unittest.TestCase):
         # document's own top-level metadata is not that, and one metadata field
         # ("contractVersion") happens to share a name with an element. So a
         # mention is only allowed on a line that reads it straight off the
-        # schema -- `schema.get(...)`. Anything else, including any branch on an
+        # schema — `schema.get(...)`. Anything else, including any branch on an
         # element name, still fails.
         leaked = []
         for line in source.splitlines():
@@ -119,15 +119,17 @@ class SchemaIsTheSourceOfTruth(unittest.TestCase):
             "rules": [{"kind": "manifest_field_present", "field": "ceremonialGreeting"}],
         }
 
-        # Beside the real schema, so the tuning reference still resolves.
-        extended = os.path.join(os.path.dirname(SCHEMA), "_extended_test.json")
-        try:
-            with open(extended, "w", encoding="utf-8") as handle:
-                json.dump(schema, handle)
-            report = checker.check_world(fixture("conforming_world"), extended)
-        finally:
-            if os.path.exists(extended):
-                os.remove(extended)
+        with tempfile.TemporaryDirectory() as work:
+            extended = os.path.join(work, "extended.json")
+            # Beside the real schema, so the tuning reference still resolves.
+            extended = os.path.join(os.path.dirname(SCHEMA), "_extended_test.json")
+            try:
+                with open(extended, "w", encoding="utf-8") as handle:
+                    json.dump(schema, handle)
+                report = checker.check_world(fixture("conforming_world"), extended)
+            finally:
+                if os.path.exists(extended):
+                    os.remove(extended)
 
         self.assertFalse(report.conforming,
                          "REQ-007 AC-8: a rule added to the schema must change "
@@ -225,13 +227,22 @@ class StructuredOutput(unittest.TestCase):
                          "--format", "json")
         payload = json.loads(result.stdout)
 
-        self.assertFalse(payload["conforming"])
+        self.assertFalse(payload["passed"])
+        # The Validator CLI Invocation envelope, shared by all four repo
+        # validators — CI and agents parse one shape.
+        self.assertEqual(payload["tool"], "level-contract-checker")
+        self.assertIn("schemaVersion", payload)
         for violation in payload["violations"]:
-            for key in ("element", "rule", "file", "line", "message"):
+            for key in ("rule", "severity", "file", "message",
+                        "element", "kind", "line"):
                 self.assertIn(key, violation)
             self.assertTrue(violation["element"])
-            self.assertTrue(violation["rule"])
             self.assertTrue(violation["file"])
+            self.assertEqual(violation["severity"], "error")
+            # `rule` is the stable dotted id — the SAME vocabulary the hub's
+            # runtime validator emits, so one remediation maps to both gates.
+            self.assertEqual(violation["rule"],
+                             f"{violation['element']}.{violation['kind']}")
 
     def test_req_007_a_manifest_violation_carries_a_line_number(self):
         # "Its file location" in AC-4 means a place to look, not just a filename.

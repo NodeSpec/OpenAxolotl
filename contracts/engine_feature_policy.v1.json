@@ -1,0 +1,116 @@
+{
+  "contractVersion": "1.0",
+  "title": "Engine Feature Policy v1",
+  "bannedFeature": "multiplayer and networking",
+  "description": "Engine features this project bans outright, enforced repo-wide by the World Static Analysis Gate as a merge-blocking CI check. This policy exists because ordinary Godot idiom and the technology guidance carried in this project's own node context are multiplayer-oriented; a contributor following normal engine practice would add networking without intending to. The ban is mechanical, not advisory.",
+  "rationale": "Single-player is a firm non-goal boundary in every phase. There is no network layer: no peers, no synchronizers, no authority checks, and no server-side validation scaffolding.",
+  "sourceOfTruth": "The Engine Feature Policy contract on the World Static Analysis Gate node. This file is the machine-readable copy the gate loads; the multiplayer entry in contracts/sanctioned_api.v1.json mirrors it for world modules so core and worlds are covered by one ban.",
+
+  "scope": [
+    "core systems",
+    "official worlds",
+    "reference template",
+    "community submissions"
+  ],
+
+  "scanScope": {
+    "rationale": "REQ-030 AC-2: the check scans core systems, official worlds, the reference template and community submissions — not world modules alone. A ban that covered only contributed code would leave the engine's own multiplayer idiom free to enter through core.",
+    "includeGlobs": [
+      "core/**/*.gd",
+      "core/**/*.tscn",
+      "dev/**/*.gd",
+      "dev/**/*.tscn",
+      "hub/**/*.gd",
+      "hub/**/*.tscn",
+      "worlds/**/*.gd",
+      "worlds/**/*.tscn",
+      "test/**/*.gd",
+      "addons/**/*.gd"
+    ],
+    "excludeGlobs": [
+      "fixtures/**",
+      ".godot/**",
+      "**/__pycache__/**"
+    ],
+    "projectSettingsFile": "project.godot"
+  },
+
+  "forbiddenSymbols": {
+    "apis": [
+      "multiplayer",
+      "MultiplayerAPI",
+      "SceneMultiplayer"
+    ],
+    "calls": [
+      "rpc",
+      "rpc_id",
+      "rpc_config"
+    ],
+    "nodes": [
+      "MultiplayerSynchronizer",
+      "MultiplayerSpawner"
+    ],
+    "peers": [
+      "MultiplayerPeer",
+      "ENetMultiplayerPeer",
+      "WebRTCMultiplayerPeer",
+      "WebSocketMultiplayerPeer",
+      "OfflineMultiplayerPeer"
+    ],
+    "authority": [
+      "is_multiplayer_authority",
+      "set_multiplayer_authority",
+      "get_multiplayer_authority"
+    ],
+    "annotations": [
+      "@rpc"
+    ],
+    "projectSettings": [
+      "network/*",
+      "any multiplayer autoload or peer configuration in project.godot"
+    ]
+  },
+
+  "projectSettingsPolicy": {
+    "rationale": "REQ-030 AC-5: project.godot must declare no networking or multiplayer autoloads, peer configuration, or network-related project settings. Parsed as INI rather than pattern-matched, so a setting cannot hide behind formatting.",
+    "forbiddenSectionPrefixes": [
+      "network"
+    ],
+    "forbiddenKeySubstrings": [
+      "multiplayer",
+      "rpc",
+      "enet",
+      "webrtc",
+      "websocket"
+    ],
+    "autoloadSection": "autoload"
+  },
+
+  "enforcement": {
+    "tool": "world-static-analysis",
+    "severity": "error",
+    "mergeGate": "blocking",
+    "humanReview": "This gate is a PRE-SCREEN, never a merge path. Branch protection requiring maintainer approval is configured by the CI Pipeline node; a green gate never merges on its own."
+  },
+
+  "ruleIdNamespace": {
+    "rationale": "violations[].rule is a stable dotted id, never a message string, because that id is what an AI coding agent maps back to the contract element it broke.",
+    "pattern": "multiplayer.<class>",
+    "classes": [
+      "apis",
+      "calls",
+      "nodes",
+      "peers",
+      "authority",
+      "annotations",
+      "projectSettings"
+    ]
+  },
+
+  "violationOutput": {
+    "requirement": "REQ-030 AC-3: output names the specific API and the file. Every violation carries file, line, the exact symbol, and the dotted rule id.",
+    "exitCode": "non-zero on any violation"
+  },
+
+  "guidanceOverride": "Where general Godot documentation, engine samples, or catalog technology guidance demonstrate RPC-based movement or server-authority patterns, that guidance DOES NOT APPLY to this project. Implement movement, input, and state as local single-player logic. This project's own node packets carry such a sample in their Technology Guidance section; it is catalog boilerplate and is superseded by this policy."
+}

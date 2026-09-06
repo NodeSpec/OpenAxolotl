@@ -1,0 +1,9 @@
+{
+  "id": "dredger",
+  "displayName": "Dredger",
+  "behavior": "dredge",
+  "audioCueId": "enemy_dredger_wipe",
+  "dredge": {
+    "areaWipeSource": "dredger_area_wipe"
+  }
+}

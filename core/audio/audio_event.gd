@@ -26,6 +26,20 @@ enum Cue {
 	GILL_MOD_BUBBLE_ACTIVATED,
 	GILL_MOD_JET_ACTIVATED,
 	GILL_MOD_GLOW_ACTIVATED,
+	MOVEMENT_SWIM_STROKE,
+	MOVEMENT_DIVE,
+	MOVEMENT_WADDLE_STEP,
+	MOVEMENT_HOP,
+}
+
+## The two movement gestures a producer reports WITHOUT naming a grammar: a
+## stride (a swim stroke or a waddle step) and a leap (a dive or a hop). The
+## Audio System resolves each to the cue of whichever grammar is active, so
+## movement audio switches with the grammar transition by construction
+## (AC-2) — the controller never chooses a sound, only a gesture.
+enum Movement {
+	STRIDE,
+	LEAP,
 }
 
 ## Looping beds. Exactly one grammar bed and one region bed play at a time;
@@ -68,6 +82,32 @@ const GILL_MOD_CUES: Array[Cue] = [
 	Cue.GILL_MOD_JET_ACTIVATED,
 	Cue.GILL_MOD_GLOW_ACTIVATED,
 ]
+
+## Movement cues per grammar (AC-2). The two sets must be DISJOINT and each
+## gesture must resolve distinctly in each grammar — a shared stroke sound
+## would make the grammars audibly the same thing.
+const MOVEMENT_WATER_CUES: Dictionary = {
+	Movement.STRIDE: Cue.MOVEMENT_SWIM_STROKE,
+	Movement.LEAP: Cue.MOVEMENT_DIVE,
+}
+
+const MOVEMENT_LAND_CUES: Dictionary = {
+	Movement.STRIDE: Cue.MOVEMENT_WADDLE_STEP,
+	Movement.LEAP: Cue.MOVEMENT_HOP,
+}
+
+
+## The cue for a movement gesture in a grammar.
+static func movement_cue(movement: Movement, is_water: bool) -> Cue:
+	var table := MOVEMENT_WATER_CUES if is_water else MOVEMENT_LAND_CUES
+	return table[movement] as Cue
+
+
+static func all_movements() -> Array[Movement]:
+	var out: Array[Movement] = []
+	for value: int in Movement.values():
+		out.append(value as Movement)
+	return out
 
 
 ## Stable string id for a cue, used as the bank's data key so the mapping file

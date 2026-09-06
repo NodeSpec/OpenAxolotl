@@ -310,3 +310,73 @@ func test_req_030_audio_node_uses_no_multiplayer_api() -> void:
 			assert_bool(text.contains(symbol)).override_failure_message(
 				"REQ-030: '%s' contains forbidden multiplayer symbol '%s'" % [path, symbol]
 			).is_false()
+
+
+# --- AC-2: movement audio is distinct per grammar and switches with it ------
+
+func test_req_023_movement_cues_are_distinct_between_grammars() -> void:
+	# Each gesture must sound different in water than on land, and no cue may
+	# serve both grammars — a shared stroke sound would make the two grammars
+	# audibly the same thing. Distinct cues must also resolve to distinct
+	# streams, or the distinction is nominal.
+	var water: Array[AudioEvent.Cue] = []
+	var land: Array[AudioEvent.Cue] = []
+	for movement: AudioEvent.Movement in AudioEvent.all_movements():
+		var wet := AudioEvent.movement_cue(movement, true)
+		var dry := AudioEvent.movement_cue(movement, false)
+		assert_bool(wet != dry).override_failure_message(
+			"REQ-023 AC-2: movement %d sounds the same in both grammars"
+			% movement).is_true()
+		water.append(wet)
+		land.append(dry)
+	for cue: AudioEvent.Cue in water:
+		assert_bool(land.has(cue)).override_failure_message(
+			"REQ-023 AC-2: cue '%s' serves both grammars"
+			% AudioEvent.cue_id(cue)).is_false()
+
+	var bank := _bank()
+	var paths: Array[String] = []
+	for cue: AudioEvent.Cue in water + land:
+		var path := bank.cue_path(cue)
+		assert_str(path).is_not_empty()
+		assert_bool(paths.has(path)).override_failure_message(
+			"REQ-023 AC-2: two movement cues resolve to the same stream %s"
+			% path).is_false()
+		paths.append(path)
+
+
+func test_req_023_movement_audio_switches_with_the_grammar_transition() -> void:
+	# The controller reports only a GESTURE; which grammar's sound plays is
+	# decided from the same grammar state the ambience bed follows, so one
+	# transition switches both movement audio and ambience together.
+	var parts := _system()
+	var system: AudioSystem = parts[0]
+	var sink: RecordingSink = parts[1]
+	var bank := _bank()
+
+	system.set_grammar(true)
+	system.play_movement(AudioEvent.Movement.STRIDE)
+	system.play_movement(AudioEvent.Movement.LEAP)
+	system.set_grammar(false)
+	system.play_movement(AudioEvent.Movement.STRIDE)
+	system.play_movement(AudioEvent.Movement.LEAP)
+
+	assert_int(sink.oneshots.size()).is_equal(4)
+	assert_str(String(sink.oneshots[0]["path"])).is_equal(
+		bank.cue_path(AudioEvent.Cue.MOVEMENT_SWIM_STROKE))
+	assert_str(String(sink.oneshots[1]["path"])).is_equal(
+		bank.cue_path(AudioEvent.Cue.MOVEMENT_DIVE))
+	assert_str(String(sink.oneshots[2]["path"])).is_equal(
+		bank.cue_path(AudioEvent.Cue.MOVEMENT_WADDLE_STEP))
+	assert_str(String(sink.oneshots[3]["path"])).is_equal(
+		bank.cue_path(AudioEvent.Cue.MOVEMENT_HOP))
+
+	# And the ambience moved in the same two transitions: water bed, then
+	# land bed, on the grammar channel.
+	assert_int(sink.beds.size()).is_equal(2)
+	assert_str(String(sink.beds[0]["path"])).is_equal(
+		bank.bed_path(AudioEvent.Bed.GRAMMAR_WATER))
+	assert_str(String(sink.beds[1]["path"])).is_equal(
+		bank.bed_path(AudioEvent.Bed.GRAMMAR_LAND))
+	for bed: Dictionary in sink.beds:
+		assert_int(int(bed["channel"])).is_equal(AudioEvent.Channel.GRAMMAR)

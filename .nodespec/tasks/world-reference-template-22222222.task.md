@@ -98,31 +98,10 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T5 — Expose the interface World Static Analysis Gate consumes, per Contract "Sanctioned World API Surface" (dependency).** <!-- t:a14fa597 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T6 — Implement: "The template implements all five required Level Contract elements: spawn point, checkpoints, finish condition, controller compatibility, save integration" (REQ-029).** <!-- t:762d5c98 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-029 "The template implements all five required Level Contract elements: spawn point, checkpoints, finish condition, controller compatibility, save integration" — possible coordination point: Contract "Level Contract v1" (dependency) from OpenAxolotl Game Client (keyword signal only)
-- [ ] **T7 — Implement: "The template declares no optional contract elements, exercising every optional element's absent-default path" (REQ-029).** <!-- t:6b394313 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-029 "The template declares no optional contract elements, exercising every optional element's absent-default path"
-- [ ] **T8 — Implement: "The template passes the Level Contract compliance checker as a required CI check" (REQ-029).** <!-- t:6c263346 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-029 "The template passes the Level Contract compliance checker as a required CI check" — possible coordination point: Contract "Level Contract v1" (dependency) from Level Contract Compliance Checker (keyword signal only)
-- [ ] **T9 — Implement: "The template passes the World Static Analysis Gate, calling only the sanctioned world API surface" (REQ-029).** <!-- t:a1cac4c9 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-029 "The template passes the World Static Analysis Gate, calling only the sanctioned world API surface" — possible coordination point: Contract "Sanctioned World API Surface" (dependency) from World Static Analysis Gate (keyword signal only)
-- [ ] **T10 — Implement: "The hub discovers and loads the template like any other world, with no special case in loader code" (REQ-029).** <!-- t:a8d0cd96 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-029 "The hub discovers and loads the template like any other world, with no special case in loader code"
-- [ ] **T11 — Implement: "The template is completable from spawn to finish condition" (REQ-029).** <!-- t:5542522e -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-029 "The template is completable from spawn to finish condition"
-- [ ] **T12 — Implement: "A contract change that would make the template non-conforming fails CI rather than passing silently" (REQ-029).** <!-- t:8239af3c -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-029 "A contract change that would make the template non-conforming fails CI rather than passing silently"
-- [ ] **T13 — Implement: "The template is documented as the canonical starting point for a new world, with instructions on what to copy and what to change" (REQ-029).** <!-- t:ceeee88b -->
+- [ ] **T6 — Implement: "The template is documented as the canonical starting point for a new world, with instructions on what to copy and what to change" (REQ-029).** <!-- t:ceeee88b -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-029 "The template is documented as the canonical starting point for a new world, with instructions on what to copy and what to change"
-- [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T7 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -177,22 +156,22 @@ Category: technical | Status: in-progress
 The canonical starting point a contributor or AI coding agent copies to begin a new world. Deliberately minimal: it implements the five REQUIRED Level Contract elements and nothing optional, which makes it both the smallest possible proof that the contract is satisfiable and a live test that every optional element's declared default actually works when absent. Coral Cove and Bubble Bay are full official worlds and far too large to serve this purpose. Because it is what every new contributor copies, it must never drift out of conformance: it is validated by the compliance checker and the static-analysis gate on every pull request exactly like any other world, so a contract change that would break the template fails CI rather than silently teaching the wrong pattern.
 
 **Acceptance criteria — your task boxes:**
-- [ ] The template implements all five required Level Contract elements: spawn point, checkpoints, finish condition, controller compatibility, save integration
-  → covered by Task T6
-- [ ] The template declares no optional contract elements, exercising every optional element's absent-default path
-  → covered by Task T7
-- [ ] The template passes the Level Contract compliance checker as a required CI check
-  → covered by Task T8
-- [ ] The template passes the World Static Analysis Gate, calling only the sanctioned world API surface
-  → covered by Task T9
-- [ ] The hub discovers and loads the template like any other world, with no special case in loader code
-  → covered by Task T10
-- [ ] The template is completable from spawn to finish condition
-  → covered by Task T11
-- [ ] A contract change that would make the template non-conforming fails CI rather than passing silently
-  → covered by Task T12
+- [x] The template implements all five required Level Contract elements: spawn point, checkpoints, finish condition, controller compatibility, save integration
+  → THIS NODE: internal logic — possible coordination point: Contract "Level Contract v1" (dependency) from OpenAxolotl Game Client (keyword signal only)
+- [x] The template declares no optional contract elements, exercising every optional element's absent-default path
+  → THIS NODE: internal logic
+- [x] The template passes the Level Contract compliance checker as a required CI check
+  → THIS NODE: internal logic — possible coordination point: Contract "Level Contract v1" (dependency) from Level Contract Compliance Checker (keyword signal only)
+- [x] The template passes the World Static Analysis Gate, calling only the sanctioned world API surface
+  → THIS NODE: internal logic — possible coordination point: Contract "Sanctioned World API Surface" (dependency) from World Static Analysis Gate (keyword signal only)
+- [x] The hub discovers and loads the template like any other world, with no special case in loader code
+  → THIS NODE: internal logic
+- [x] The template is completable from spawn to finish condition
+  → THIS NODE: internal logic
+- [x] A contract change that would make the template non-conforming fails CI rather than passing silently
+  → THIS NODE: internal logic
 - [ ] The template is documented as the canonical starting point for a new world, with instructions on what to copy and what to change (manual)
-  → covered by Task T13
+  → covered by Task T6
 
 ## Interface Contracts
 
@@ -638,4 +617,10 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 | File | Kind | Language | Status |
 |------|------|----------|--------|
+| `worlds/reference_template/world.json` | config | --- | draft |
+| `worlds/reference_template/world.tscn` | source | --- | draft |
+| `worlds/reference_template/README.md` | doc | --- | draft |
+| `test/worlds/run_template_walk.gd` | source | --- | draft |
+| `test/worlds/template_walk_probe.gd` | source | --- | draft |
+| `tools/test_reference_template.py` | source | --- | draft |
 | `.nodespec/tests/req-029.tests.md` - Test plan for requirement: Reference Template World | test-plan | markdown | draft |

@@ -110,7 +110,36 @@ Everything else. Each has a **defined default when absent**, which is what lets 
 | `tuningOverrides` | Every tuning value stays global |
 | `livesPerAttemptOverride` | The global `progression.default_lives_per_attempt` applies |
 
-Two notes worth reading before you reach for them:
+**Checkpoints, pits, hazards and regen stations are scene declarations.** The game client binds four more groups, all placed as nodes and none needing a script:
+
+| Group | Node | What the runtime does |
+|---|---|---|
+| `checkpoint` | any `Node3D`; an `Area3D` is its own trigger, a `Marker3D` gets one generated across it | touching it records the respawn anchor, refills lives and regrows every capability; its **id is its node name** |
+| `pit_volume` / `crush_hazard` | `Area3D` | **catastrophic**: costs a life and returns the player to the last checkpoint (at zero lives the count refills) |
+| `hazard` | `Area3D` + metadata `capability` (`tail`, `gill`, `leg`), optional `hazard_id` | **ordinary**: strips that capability with a pop, and can never cost a life |
+| `regen_station` | `Area3D` | regrows every lost capability |
+
+Put a wide `pit_volume` under your world. Without one, walking off the edge is a fall forever, and the lives layer has nothing to do.
+
+Three notes worth reading before you reach for them:
+
+**Collectibles are declared, then placed.** Declare each in `world.json`:
+
+```json
+"collectibles": [
+  { "collectibleId": "kelp_seed",    "kind": "resource",  "regionId": "coral_shelf" },
+  { "collectibleId": "hermit_snail", "kind": "discovery", "displayName": "Hermit snail" }
+]
+```
+
+then place each one in the scene as an `Area3D` in group `collectible` with metadata `collectible_id` naming a declared id. Two kinds, and only two:
+
+| Kind | Lifetime |
+|---|---|
+| `resource` | **Spent.** Delivered to its `regionId` and consumed to advance restoration. A type: place it as many times as your economy needs. Never persisted by id. |
+| `discovery` | **Kept.** A rescued creature or a secret, counted per world and written to the profile the moment it is collected. One instance per declaration, placed exactly once, and gone from the scene on re-entry. |
+
+Collection survives running out of lives: it is in the profile before the respawn happens. The `collect_all` finish condition means every declared *discovery* is collected — resources never count toward completion — and it cannot complete vacuously, so a `collect_all` world must declare at least one discovery.
 
 **Camera hints are volumes, never code.** You place a hint volume and declare the framing it wants. There is no circumstance in which a world ships custom camera code.
 

@@ -1,0 +1,33 @@
+{
+  "contractVersion": "1.0",
+  "worldId": "bubble_bay",
+  "displayName": "Bubble Bay",
+  "controllerCompatibility": "1.0",
+  "finishCondition": {
+    "kind": "reach_volume"
+  },
+  "saveIntegration": {
+    "keys": [
+      "bubble_bay.completed"
+    ]
+  },
+  "restorableRegions": [
+    {
+      "regionId": "kelp_nursery",
+      "traversalGates": [
+        {
+          "gateId": "nursery_boom",
+          "opensAt": "restored"
+        }
+      ]
+    }
+  ],
+  "collectibles": [
+    {
+      "collectibleId": "pearl",
+      "kind": "resource",
+      "regionId": "kelp_nursery",
+      "displayName": "Pearl"
+    }
+  ]
+}

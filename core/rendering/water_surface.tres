@@ -1,0 +1,20 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+; THE SHARED WATER SURFACE — the tint every WaterVolume's mesh wears.
+;
+; Unshaded on purpose. A lit translucent box under the rig's sun and sky
+; brightens to near-white at its alpha, and two of its faces stacked (the top
+; and the near wall, which is what the trailing camera sees) hide the seabed
+; and the axolotl behind them — the in-water shot became unreadable the day
+; the rig brought real lighting. Water is a TINT the player looks through, so
+; it takes no light at all; readability in water beats a lit surface until a
+; proper water shader (surface waves, caustics, foam) replaces this material
+; in ONE place rather than in every world.
+;
+; Worlds reference this resource instead of carrying their own material, so
+; the look of water is the client's, the same as every other part of the look.
+
+[resource]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.2, 0.52, 0.72, 0.32)

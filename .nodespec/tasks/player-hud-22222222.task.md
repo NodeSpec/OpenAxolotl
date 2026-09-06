@@ -97,28 +97,10 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T8 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T9 — Implement: "HUD displays current lives, and the display reflects a life lost or replenished within the same frame the change is raised" (REQ-022).** <!-- t:33153047 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-022 "HUD displays current lives, and the display reflects a life lost or replenished within the same frame the change is raised" — possible coordination point: Contract "HUD State Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
-- [ ] **T10 — Implement: "HUD displays which capabilities are currently intact and which are lost, reflecting a loss or regrowth within the same frame the change is raised" (REQ-022).** <!-- t:77081f64 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-022 "HUD displays which capabilities are currently intact and which are lost, reflecting a loss or regrowth within the same frame the change is raised" — possible coordination point: Contract "HUD State Interface" (dependency) to Regeneration and Capability System (keyword signal only)
-- [ ] **T11 — Implement: "HUD displays the equipped Gill Mod and its remaining charge or cooldown" (REQ-022).** <!-- t:f1a80e69 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-022 "HUD displays the equipped Gill Mod and its remaining charge or cooldown" — possible coordination point: Contract "HUD State Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
-- [ ] **T12 — Implement: "HUD surfaces the active region's restoration state and progress toward the next state" (REQ-022).** <!-- t:9f1bdb85 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-022 "HUD surfaces the active region's restoration state and progress toward the next state" — possible coordination point: Contract "HUD State Interface" (dependency) to Regeneration and Capability System (keyword signal only)
-- [ ] **T13 — Implement: "All HUD state is distinguishable without relying on color alone, using shape, icon, or text in addition" (REQ-022).** <!-- t:b36bdba0 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-022 "All HUD state is distinguishable without relying on color alone, using shape, icon, or text in addition" — possible coordination point: Contract "HUD State Interface" (dependency) from OpenAxolotl Game Client (keyword signal only)
-- [ ] **T14 — Implement: "HUD reflects the water-powered dash charge and its recharge state" (REQ-022).** <!-- t:90d10233 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-022 "HUD reflects the water-powered dash charge and its recharge state" — possible coordination point: Contract "HUD State Interface" (dependency) to Regeneration and Capability System (keyword signal only)
-- [ ] **T15 — Implement: "Capability-loss presentation in the HUD reads as playful rather than alarming" (REQ-022).** <!-- t:56a6d91b -->
+- [ ] **T9 — Implement: "Capability-loss presentation in the HUD reads as playful rather than alarming" (REQ-022).** <!-- t:56a6d91b -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-022 "Capability-loss presentation in the HUD reads as playful rather than alarming" — possible coordination point: Contract "HUD State Interface" (dependency) to Regeneration and Capability System (keyword signal only)
-- [ ] **T16 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T10 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -173,20 +155,20 @@ Category: functional | Status: in-progress
 Without a HUD the signature mechanic is invisible: the player must be able to see at a glance which capabilities they currently have, which they have lost, how many lives remain, which Gill Mod is equipped and its charge, and a region's restoration progress. This is the readout layer for both halves of Pillar 1 and for Pillar 3, and it carries a specific tone burden — capability loss must read as funny and legible rather than alarming, so the HUD is where the family-appropriate framing either lands or fails. It must also satisfy the accessibility constraint that state is never communicated by color alone. Kept deliberately minimal and diegetic where possible so it does not clutter a colorful 3D platformer.
 
 **Acceptance criteria — your task boxes:**
-- [ ] HUD displays current lives, and the display reflects a life lost or replenished within the same frame the change is raised
-  → covered by Task T9
-- [ ] HUD displays which capabilities are currently intact and which are lost, reflecting a loss or regrowth within the same frame the change is raised
-  → covered by Task T10
-- [ ] HUD displays the equipped Gill Mod and its remaining charge or cooldown
-  → covered by Task T11
-- [ ] HUD surfaces the active region's restoration state and progress toward the next state
-  → covered by Task T12
-- [ ] All HUD state is distinguishable without relying on color alone, using shape, icon, or text in addition
-  → covered by Task T13
-- [ ] HUD reflects the water-powered dash charge and its recharge state
-  → covered by Task T14
+- [x] HUD displays current lives, and the display reflects a life lost or replenished within the same frame the change is raised
+  → THIS NODE: internal logic — possible coordination point: Contract "HUD State Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [x] HUD displays which capabilities are currently intact and which are lost, reflecting a loss or regrowth within the same frame the change is raised
+  → THIS NODE: internal logic — possible coordination point: Contract "HUD State Interface" (dependency) to Regeneration and Capability System (keyword signal only)
+- [x] HUD displays the equipped Gill Mod and its remaining charge or cooldown
+  → THIS NODE: internal logic — possible coordination point: Contract "HUD State Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
+- [x] HUD surfaces the active region's restoration state and progress toward the next state
+  → THIS NODE: internal logic — possible coordination point: Contract "HUD State Interface" (dependency) to Regeneration and Capability System (keyword signal only)
+- [x] All HUD state is distinguishable without relying on color alone, using shape, icon, or text in addition
+  → THIS NODE: internal logic — possible coordination point: Contract "HUD State Interface" (dependency) from OpenAxolotl Game Client (keyword signal only)
+- [x] HUD reflects the water-powered dash charge and its recharge state
+  → THIS NODE: internal logic — possible coordination point: Contract "HUD State Interface" (dependency) to Regeneration and Capability System (keyword signal only)
 - [ ] Capability-loss presentation in the HUD reads as playful rather than alarming (manual)
-  → covered by Task T15
+  → covered by Task T9
 
 ## Interface Contracts
 
@@ -375,4 +357,6 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 | File | Kind | Language | Status |
 |------|------|----------|--------|
+| `hub/hud/player_hud.gd` | source | --- | draft |
 | `.nodespec/tests/req-022.tests.md` - Test plan for requirement: Player HUD and Game-State Readout | test-plan | markdown | draft |
+| `test/hub/test_player_hud.gd` | source | --- | draft |

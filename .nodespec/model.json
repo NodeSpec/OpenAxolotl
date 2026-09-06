@@ -1,7 +1,7 @@
 {
   "modelVersion": 1,
   "generatedBy": "nodespec",
-  "modelHash": "918e9aeeb8ed600df693ed5220c27bd4256672f22a84486765219228735cea8e",
+  "modelHash": "9208922719db0bdb407131c91e35f24e7029a2ae041d2ed7b520e8d8fbbfa995",
   "nodes": [
     {
       "id": "22222222-0000-4000-8000-000000000001",
@@ -439,6 +439,39 @@
         }
       ],
       "contentHash": "58f0cba575a7295800211056433bb18e82f5e94379a345deb7f016226e0fa3e9"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000024",
+      "type": "external-service",
+      "label": "Blender (headless)",
+      "technology": "blender",
+      "ports": [
+        {
+          "id": "6aa95546-148c-4c57-b467-ee9ff3c5e173",
+          "name": "API Call",
+          "direction": "out"
+        }
+      ],
+      "contentHash": "b18774123961341329c8c00c1926ae74f97bd699f47981b173d24a29bd834d39"
+    },
+    {
+      "id": "22222222-0000-4000-8000-000000000025",
+      "type": "cli-tool",
+      "label": "Model Refinement Pipeline",
+      "technology": "python-backend",
+      "ports": [
+        {
+          "id": "02285f8f-01bf-43d2-8cc8-e61d2f5d6fde",
+          "name": "api_calls",
+          "direction": "out"
+        },
+        {
+          "id": "deb85e05-6f91-4c11-9421-aba267ee2d90",
+          "name": "commands",
+          "direction": "in"
+        }
+      ],
+      "contentHash": "c79d96033a708344f2f2ed480cdd344198def46765378233050094afdabc77fa"
     }
   ],
   "edges": [
@@ -1153,6 +1186,26 @@
       "contractId": "11111111-0000-4000-8000-000000000020",
       "label": "bans multiplayer APIs",
       "contentHash": "e43077b8e7b7a95a2eaa63f766a5e8110f7db5d3692650ea0ce47937bceb8500"
+    },
+    {
+      "id": "44444444-0000-4000-8000-000000000031",
+      "source": "22222222-0000-4000-8000-000000000025",
+      "target": "22222222-0000-4000-8000-000000000024",
+      "contractId": "11111111-0000-4000-8000-000000000031",
+      "label": "runs headless refinement",
+      "direction": "unidirectional",
+      "criticality": "required",
+      "contentHash": "32b8c5902591913137efbdcef68e65ed7243960a4c86703099b0835f8c35ff36"
+    },
+    {
+      "id": "44444444-0000-4000-8000-000000000032",
+      "source": "22222222-0000-4000-8000-000000000025",
+      "target": "22222222-0000-4000-8000-000000000014",
+      "contractId": "11111111-0000-4000-8000-000000000032",
+      "label": "reads glb headers and the triangle budget",
+      "direction": "unidirectional",
+      "criticality": "required",
+      "contentHash": "e413e052244b581b4205622d3d986d5a419593398d7599f98b7aa23676fc469e"
     }
   ],
   "contracts": [
@@ -1283,14 +1336,65 @@
       "specFormat": "json_schema",
       "schemaHash": "c960ae0cea41760972f2caa1cb75e743b185c50fb6810131a9f17445b9e80482",
       "contentHash": "559c84824e9ddc65d72c9e5224f3791de647bc08afb5aa17bcda80704365c2f9"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000031",
+      "kind": "dependency",
+      "name": "Blender Headless CLI",
+      "transport": "ipc",
+      "specFormat": "custom",
+      "schemaHash": "db36d777288cb189e888844c1df55ac5ddefec9fdabfe65d4fd843badd99f6d0",
+      "contentHash": "d01d83f5d72e6a758e7d30ed89b4d701d003f984d29cd7bf7d234bf9e8f18869"
+    },
+    {
+      "id": "11111111-0000-4000-8000-000000000032",
+      "kind": "dependency",
+      "name": "GLB Header Reader",
+      "transport": "none",
+      "specFormat": "custom",
+      "schemaHash": "d507295b02db2593234a79f15af3194a4d504ddb065a6eb0c890ca72e4c12deb",
+      "contentHash": "a318020e4b36bf6527848bf35b1e6dcd1c0d52fcd8a8e92feb69e0d61293f722"
     }
   ],
   "artifacts": [
+    {
+      "id": "03e946a6-8b50-48ad-9e1b-31ff345e2324",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "docs/performance.md",
+      "kind": "doc",
+      "contentHash": "00000000654b1884"
+    },
+    {
+      "id": "047f056d-fb8f-4079-9b9d-972388b6c48b",
+      "nodeId": "22222222-0000-4000-8000-000000000010",
+      "path": "core/enemies/roster/runoff_drone.json",
+      "kind": "config"
+    },
     {
       "id": "08192a3b-4c5d-46e7-8278-012345678901",
       "nodeId": "22222222-0000-4000-8000-000000000005",
       "path": "test/core/progression/test_life_system.gd",
       "kind": "source"
+    },
+    {
+      "id": "08192a3b-4c5d-46e7-98fa-112233445567",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "hub/open_lagoon.gd",
+      "kind": "source",
+      "contentHash": "0000000020a19cb7"
+    },
+    {
+      "id": "08192a3b-4c5d-4ef6-98a1-b2c3d4e5f607",
+      "nodeId": "22222222-0000-4000-8000-000000000008",
+      "path": "core/restoration/restoration_store.gd",
+      "kind": "source"
+    },
+    {
+      "id": "08fd6c54-52de-4288-9fa8-19e853e3dcfa",
+      "nodeId": "22222222-0000-4000-8000-000000000011",
+      "path": "worlds/coral_cove/world.json",
+      "kind": "config",
+      "contentHash": "000000001e7fc0b2"
     },
     {
       "id": "0993048b-c489-4793-b528-ae7b45bc7c80",
@@ -1303,7 +1407,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": "project.godot",
       "kind": "config",
-      "contentHash": "0000000006eeec11"
+      "contentHash": "0000000028f18642"
     },
     {
       "id": "0d1e2f30-4152-4d63-9e74-f50607182934",
@@ -1318,16 +1422,61 @@
       "kind": "test-plan"
     },
     {
+      "id": "0dc780ab-ede4-4f3f-a9cb-4e914690db3b",
+      "nodeId": "22222222-0000-4000-8000-000000000010",
+      "path": "core/enemies/roster/netbot.json",
+      "kind": "config"
+    },
+    {
       "id": "0e85e81f-1a19-434d-9df7-dfa8de5c990e",
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": ".nodespec/tests/req-017.tests.md",
       "kind": "test-plan"
     },
     {
+      "id": "107bc317-aca4-4652-b57b-ca6b7b458b11",
+      "nodeId": "22222222-0000-4000-8000-000000000009",
+      "path": "core/collectibles/save_collectible_store.gd",
+      "kind": "source"
+    },
+    {
+      "id": "10bbd0b2-c10d-4ea6-98ea-1b2537bf74d5",
+      "nodeId": "22222222-0000-4000-8000-000000000010",
+      "path": "core/enemies/enemy_error.gd",
+      "kind": "source"
+    },
+    {
       "id": "11233eaf-250c-4f38-bf38-da0783b15393",
       "nodeId": "22222222-0000-4000-8000-000000000021",
       "path": ".nodespec/tests/req-013.tests.md",
       "kind": "test-plan"
+    },
+    {
+      "id": "1143f260-6ecf-4589-9a38-4ef0d9f2f73b",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "tools/asset_fixtures.py",
+      "kind": "source",
+      "contentHash": "000000003a0c1bd5"
+    },
+    {
+      "id": "147c0cc5-8f11-4da0-91a6-c61b0d0105b1",
+      "nodeId": "22222222-0000-4000-8000-000000000015",
+      "path": "pyproject.toml",
+      "kind": "config",
+      "contentHash": "0000000067b1cd78"
+    },
+    {
+      "id": "15b1cb8f-72b8-4031-be6a-4bb8f680b622",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "hub/world_systems.gd",
+      "kind": "source",
+      "contentHash": "000000002a2fa5d8"
+    },
+    {
+      "id": "170ac285-3902-42f6-af3d-f5e14b400dd8",
+      "nodeId": "22222222-0000-4000-8000-000000000021",
+      "path": "core/boss/flagship_encounter.gd",
+      "kind": "source"
     },
     {
       "id": "17263544-5362-4718-8912-233445566778",
@@ -1342,6 +1491,13 @@
       "kind": "source"
     },
     {
+      "id": "1863be2b-20a3-4378-b1b5-24df2e0ae880",
+      "nodeId": "22222222-0000-4000-8000-000000000011",
+      "path": "test/worlds/coral_walk_probe.gd",
+      "kind": "source",
+      "contentHash": "00000000185b0da4"
+    },
+    {
       "id": "1901c180-4616-4b2e-8731-32c2e6d5c8ae",
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": ".nodespec/tests/req-006.tests.md",
@@ -1351,6 +1507,31 @@
       "id": "192a3b4c-5d6e-47f8-8389-123456789012",
       "nodeId": "22222222-0000-4000-8000-000000000006",
       "path": "core/gillmod/gill_mod_error.gd",
+      "kind": "source"
+    },
+    {
+      "id": "192a3b4c-5d6e-47f8-890b-223344556678",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "hub/open_lagoon.tscn",
+      "kind": "source",
+      "contentHash": "0000000019576a28"
+    },
+    {
+      "id": "192a3b4c-5d6e-4f07-89b2-c3d4e5f60718",
+      "nodeId": "22222222-0000-4000-8000-000000000008",
+      "path": "core/restoration/restorable_region.gd",
+      "kind": "source"
+    },
+    {
+      "id": "19848929-ef68-497a-83c9-d7c1daec92b9",
+      "nodeId": "22222222-0000-4000-8000-000000000011",
+      "path": "test/worlds/run_coral_walk.gd",
+      "kind": "source"
+    },
+    {
+      "id": "19e15949-35ac-4b9f-8553-9f9e81fa84d5",
+      "nodeId": "22222222-0000-4000-8000-000000000009",
+      "path": "core/collectibles/collectible_error.gd",
       "kind": "source"
     },
     {
@@ -1370,7 +1551,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000006",
       "path": ".nodespec/tasks/gill-mod-ability-framework-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000059eb25d0"
+      "contentHash": "000000000ac6b379"
     },
     {
       "id": "1e2f3041-5263-4e74-8f85-060718293a45",
@@ -1382,7 +1563,8 @@
       "id": "1f2e3d4c-5b6a-4798-8172-635445362718",
       "nodeId": "22222222-0000-4000-8000-000000000013",
       "path": "tools/level_contract_checker.py",
-      "kind": "source"
+      "kind": "source",
+      "contentHash": "0000000033428037"
     },
     {
       "id": "22af523d-4f28-48e1-b28f-86bcc8841ed9",
@@ -1403,9 +1585,40 @@
       "kind": "design"
     },
     {
+      "id": "28097cbb-0230-4054-bfff-f73cc3ca61e1",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "tools/oax_test.py",
+      "kind": "source",
+      "contentHash": "0000000002e14609"
+    },
+    {
+      "id": "2a3b4c5d-6e7f-4018-9ac3-d4e5f6071829",
+      "nodeId": "22222222-0000-4000-8000-000000000008",
+      "path": "core/restoration/restoration_system.gd",
+      "kind": "source"
+    },
+    {
+      "id": "2a3b4c5d-6e7f-4801-9a2b-3c4d5e6f7081",
+      "nodeId": "22222222-0000-4000-8000-000000000022",
+      "path": "contracts/engine_feature_policy.v1.json",
+      "kind": "schema"
+    },
+    {
       "id": "2a3b4c5d-6e7f-4809-849a-234567890123",
       "nodeId": "22222222-0000-4000-8000-000000000006",
       "path": "core/gillmod/gill_mod.gd",
+      "kind": "source"
+    },
+    {
+      "id": "2a3b4c5d-6e7f-4809-9a1c-334455667789",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "test/hub/test_world_registry.gd",
+      "kind": "source"
+    },
+    {
+      "id": "2a9f6719-fb65-45b6-a382-8e12ec991950",
+      "nodeId": "22222222-0000-4000-8000-000000000021",
+      "path": "core/boss/flagship_error.gd",
       "kind": "source"
     },
     {
@@ -1431,7 +1644,8 @@
       "id": "2e3d4c5b-6a79-4871-9263-544536271809",
       "nodeId": "22222222-0000-4000-8000-000000000013",
       "path": "tools/.gdignore",
-      "kind": "config"
+      "kind": "config",
+      "contentHash": "00000000649039e5"
     },
     {
       "id": "2f304152-6374-4f85-9096-0718293a4b56",
@@ -1444,7 +1658,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000005",
       "path": ".nodespec/tasks/lives-and-checkpoint-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000006e03f5e7"
+      "contentHash": "0000000037cf5b6e"
     },
     {
       "id": "30415263-7485-4096-8a17-18293a4b5c67",
@@ -1453,17 +1667,47 @@
       "kind": "source"
     },
     {
+      "id": "32f8d5ef-d043-4c2d-843b-c1cb0c3f4d8e",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "assets/character/axolotl/axolotl.glb",
+      "kind": "design"
+    },
+    {
+      "id": "33bb2b25-5ea2-43bc-8262-1e9b1e1abe5d",
+      "nodeId": "22222222-0000-4000-8000-000000000021",
+      "path": "test/core/boss/test_flagship_encounter.gd",
+      "kind": "source"
+    },
+    {
       "id": "34047a64-c405-487c-a2cd-9fc538b39268",
       "nodeId": "22222222-0000-4000-8000-000000000007",
       "path": ".nodespec/tasks/save-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "00000000169bf97f"
+      "contentHash": "0000000004732653"
+    },
+    {
+      "id": "348d8a29-817a-42d4-b64a-3a322469242c",
+      "nodeId": "22222222-0000-4000-8000-000000000015",
+      "path": "tools/__init__.py",
+      "kind": "source"
     },
     {
       "id": "35445362-7180-4912-8334-455667788990",
       "nodeId": "22222222-0000-4000-8000-000000000020",
       "path": "fixtures/worlds/stray_project_file/world.tscn",
       "kind": "design"
+    },
+    {
+      "id": "35a91ab7-ee27-47da-9ae2-73aa63b07d58",
+      "nodeId": "22222222-0000-4000-8000-000000000010",
+      "path": "core/enemies/enemy_def.gd",
+      "kind": "source"
+    },
+    {
+      "id": "35f414d9-886d-4530-9448-b4e553906c47",
+      "nodeId": "22222222-0000-4000-8000-000000000014",
+      "path": "contracts/provenance.schema.json",
+      "kind": "schema"
     },
     {
       "id": "36271809-1223-4445-8667-788990011223",
@@ -1479,10 +1723,29 @@
       "contentHash": "000000006d246ec9"
     },
     {
+      "id": "3b4c5d6e-7f80-4129-8bd4-e5f607182930",
+      "nodeId": "22222222-0000-4000-8000-000000000008",
+      "path": "test/core/restoration/test_restoration_system.gd",
+      "kind": "source"
+    },
+    {
+      "id": "3b4c5d6e-7f80-4912-8b3c-4d5e6f708192",
+      "nodeId": "22222222-0000-4000-8000-000000000022",
+      "path": "tools/gdscript_scan.py",
+      "kind": "source"
+    },
+    {
       "id": "3b4c5d6e-7f80-491a-85ab-345678901234",
       "nodeId": "22222222-0000-4000-8000-000000000006",
       "path": "core/gillmod/gill_mod_registry.gd",
       "kind": "source"
+    },
+    {
+      "id": "3b4c5d6e-7f80-491a-8b2d-44556677889a",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "test/hub/hub_walk_probe.gd",
+      "kind": "source",
+      "contentHash": "0000000005bc572c"
     },
     {
       "id": "3c4d5e6f-7081-4c92-8d13-e4f506071823",
@@ -1507,6 +1770,18 @@
       "nodeId": "22222222-0000-4000-8000-000000000020",
       "path": "fixtures/.gdignore",
       "kind": "config"
+    },
+    {
+      "id": "40399914-10bd-428b-957d-c11696b936db",
+      "nodeId": "22222222-0000-4000-8000-000000000009",
+      "path": "test/core/collectibles/test_collectibles_system.gd",
+      "kind": "source"
+    },
+    {
+      "id": "4115a01f-c881-48c5-9db7-df8cbb890610",
+      "nodeId": "22222222-0000-4000-8000-000000000009",
+      "path": "core/collectibles/collectible_def.gd",
+      "kind": "source"
     },
     {
       "id": "41526374-8596-40a7-9b28-293a4b5c6d78",
@@ -1545,16 +1820,48 @@
       "kind": "config"
     },
     {
+      "id": "46f4cc5f-2afd-460a-b08c-7baef30cea6d",
+      "nodeId": "22222222-0000-4000-8000-000000000016",
+      "path": "hub/hud/player_hud.gd",
+      "kind": "source",
+      "contentHash": "000000000c16f317"
+    },
+    {
+      "id": "4b85ab7c-52d4-42ec-82df-ebc32e8cd618",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "test/hub/test_world_systems.gd",
+      "kind": "source",
+      "contentHash": "0000000066d6c410"
+    },
+    {
       "id": "4c5b6a79-8172-4635-8445-362718091223",
       "nodeId": "22222222-0000-4000-8000-000000000020",
       "path": "fixtures/worlds/conforming_world/world.json",
       "kind": "config"
     },
     {
+      "id": "4c5d6e7f-8091-4a23-9c4d-5e6f708192a3",
+      "nodeId": "22222222-0000-4000-8000-000000000022",
+      "path": "tools/static_gate.py",
+      "kind": "source"
+    },
+    {
       "id": "4c5d6e7f-8091-4a2b-86bc-456789012345",
       "nodeId": "22222222-0000-4000-8000-000000000006",
       "path": "core/gillmod/gill_mod_system.gd",
       "kind": "source"
+    },
+    {
+      "id": "4c5d6e7f-8091-4a2b-9c3e-5566778899ab",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "test/hub/run_hub_walk.gd",
+      "kind": "source"
+    },
+    {
+      "id": "4c5d6e7f-8091-4a2b-9ce5-f60718293041",
+      "nodeId": "22222222-0000-4000-8000-000000000023",
+      "path": "worlds/reference_template/world.json",
+      "kind": "config"
     },
     {
       "id": "4d5e6f70-8192-4d0e-8f2a-3b4c5d6e7f80",
@@ -1573,14 +1880,14 @@
       "nodeId": "22222222-0000-4000-8000-000000000015",
       "path": ".nodespec/tasks/ci-pipeline-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000001de263d9"
+      "contentHash": "000000002f82f1d9"
     },
     {
       "id": "4f72e78d-3d9b-4d19-96c5-acfde17d6763",
       "nodeId": "22222222-0000-4000-8000-000000000020",
       "path": ".nodespec/tasks/test-harness-and-fixtures-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000007053df01"
+      "contentHash": "000000007b07b8ac"
     },
     {
       "id": "5263748a-96a7-40b8-8c39-3a4b5c6d7e89",
@@ -1608,16 +1915,36 @@
       "kind": "config"
     },
     {
+      "id": "580e2c0a-8808-4bc9-898d-1490fabc3319",
+      "nodeId": "22222222-0000-4000-8000-000000000015",
+      "path": "docs/branch-protection.md",
+      "kind": "doc",
+      "contentHash": "000000003c6715a1"
+    },
+    {
       "id": "5b6a7981-7263-4544-8536-271809122334",
       "nodeId": "22222222-0000-4000-8000-000000000020",
       "path": "fixtures/worlds/conforming_world/world.tscn",
       "kind": "design"
     },
     {
+      "id": "5d6e7f80-91a2-4b34-8d5e-6f708192a3b4",
+      "nodeId": "22222222-0000-4000-8000-000000000022",
+      "path": "tools/test_static_gate.py",
+      "kind": "source"
+    },
+    {
       "id": "5d6e7f80-91a2-4b3c-87cd-567890123456",
       "nodeId": "22222222-0000-4000-8000-000000000006",
       "path": "core/gillmod/mods/bubble.json",
       "kind": "config"
+    },
+    {
+      "id": "5d6e7f80-91a2-4b3c-8df6-071829304152",
+      "nodeId": "22222222-0000-4000-8000-000000000023",
+      "path": "worlds/reference_template/world.tscn",
+      "kind": "source",
+      "contentHash": "000000007c2d891b"
     },
     {
       "id": "5e015b73-4285-495c-b2e2-31ea08a27f9b",
@@ -1663,6 +1990,25 @@
       "kind": "source"
     },
     {
+      "id": "652b20a4-bef0-4364-95cb-461d1b1796be",
+      "nodeId": "22222222-0000-4000-8000-000000000010",
+      "path": "core/enemies/enemy_registry.gd",
+      "kind": "source"
+    },
+    {
+      "id": "6704e38e-9f4d-43dc-a17e-e14b0b247052",
+      "nodeId": "22222222-0000-4000-8000-000000000015",
+      "path": "tools/test_ci_pipeline.py",
+      "kind": "source",
+      "contentHash": "000000002fba5686"
+    },
+    {
+      "id": "67b7bd15-db6f-4eb4-98b1-816384234a3d",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "test/core/controller/test_axolotl_body_scene.gd",
+      "kind": "source"
+    },
+    {
       "id": "6942ba8d-6f22-43e8-85f4-b9226956e065",
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": ".nodespec/tests/req-021.tests.md",
@@ -1679,7 +2025,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000003",
       "path": ".nodespec/tasks/camera-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000030a560a3"
+      "contentHash": "00000000705b8383"
     },
     {
       "id": "6e4d1eb0-9b66-46b7-8a1a-c07d7a8a2526",
@@ -1688,10 +2034,22 @@
       "kind": "test-plan"
     },
     {
+      "id": "6e7f8091-a2b3-4c45-9e6f-708192a3b4c5",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/staticgate/multiplayer_repo/core/net_player.gd",
+      "kind": "source"
+    },
+    {
       "id": "6e7f8091-a2b3-4c4d-88de-678901234567",
       "nodeId": "22222222-0000-4000-8000-000000000006",
       "path": "core/gillmod/mods/jet.json",
       "kind": "config"
+    },
+    {
+      "id": "6e7f8091-a2b3-4c4d-9e07-182930415263",
+      "nodeId": "22222222-0000-4000-8000-000000000023",
+      "path": "worlds/reference_template/README.md",
+      "kind": "doc"
     },
     {
       "id": "6f1fc3d7-2dd4-46ec-80ad-07820dd43dde",
@@ -1717,7 +2075,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000019",
       "path": "core/tuning/tuning.json",
       "kind": "config",
-      "contentHash": "000000005c1adfe4"
+      "contentHash": "000000005972b2bc"
     },
     {
       "id": "708192a3-b4c5-4a3b-824d-6e7f8091a2b3",
@@ -1729,7 +2087,8 @@
       "id": "71809122-3344-4556-8778-990011223344",
       "nodeId": "22222222-0000-4000-8000-000000000013",
       "path": "tools/test_level_contract_checker.py",
-      "kind": "source"
+      "kind": "source",
+      "contentHash": "0000000021b5298f"
     },
     {
       "id": "72635445-3627-4180-8912-233445566889",
@@ -1738,10 +2097,22 @@
       "kind": "config"
     },
     {
+      "id": "72cff520-f740-4422-ab0b-5dd01117c830",
+      "nodeId": "22222222-0000-4000-8000-000000000009",
+      "path": "core/collectibles/collectible_kind.gd",
+      "kind": "source"
+    },
+    {
       "id": "738e41ec-b38b-4176-80ec-5708fe17f1e9",
       "nodeId": "22222222-0000-4000-8000-000000000011",
       "path": ".nodespec/tests/req-011.tests.md",
       "kind": "test-plan"
+    },
+    {
+      "id": "7453a291-635a-48e3-87b1-87fc216ac291",
+      "nodeId": "22222222-0000-4000-8000-000000000010",
+      "path": "docs/enemies.md",
+      "kind": "doc"
     },
     {
       "id": "748a9bac-b8c9-40da-8e5b-5c6d7e8f9012",
@@ -1754,7 +2125,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000019",
       "path": ".nodespec/tasks/balance-and-tuning-data-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000001d493d01"
+      "contentHash": "0000000013e09991"
     },
     {
       "id": "78b9aa21-9e0e-4e09-bde9-708ba134df0a",
@@ -1769,9 +2140,21 @@
       "kind": "design"
     },
     {
+      "id": "7a1e2c3d-4b5f-4a6e-9c8d-0e1f2a3b4c5d",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "core/rendering/base_environment.tres",
+      "kind": "source"
+    },
+    {
       "id": "7a8b9c0d-1e2f-4a30-8b41-c2d3e4f50701",
       "nodeId": "22222222-0000-4000-8000-000000000003",
       "path": "core/camera/camera_framing.gd",
+      "kind": "source"
+    },
+    {
+      "id": "7f8091a2-b3c4-4d56-8f70-8192a3b4c5d6",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/staticgate/multiplayer_repo/core/net_scene.tscn",
       "kind": "source"
     },
     {
@@ -1781,9 +2164,27 @@
       "kind": "config"
     },
     {
+      "id": "7f8091a2-b3c4-4d5e-8f18-293041526374",
+      "nodeId": "22222222-0000-4000-8000-000000000023",
+      "path": "test/worlds/run_template_walk.gd",
+      "kind": "source"
+    },
+    {
+      "id": "8091a2b3-c4d5-4e67-9081-92a3b4c5d6e7",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/staticgate/multiplayer_repo/project.godot",
+      "kind": "config"
+    },
+    {
       "id": "8091a2b3-c4d5-4e6f-8a01-890123456789",
       "nodeId": "22222222-0000-4000-8000-000000000006",
       "path": "test/core/gillmod/test_gill_mod_system.gd",
+      "kind": "source"
+    },
+    {
+      "id": "8091a2b3-c4d5-4e6f-9029-304152637485",
+      "nodeId": "22222222-0000-4000-8000-000000000023",
+      "path": "test/worlds/template_walk_probe.gd",
       "kind": "source"
     },
     {
@@ -1799,6 +2200,25 @@
       "kind": "source"
     },
     {
+      "id": "839b5fdf-90fb-4639-beea-56d437f89dc5",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "test/perf/perf_gate_probe.gd",
+      "kind": "source"
+    },
+    {
+      "id": "83dc3c68-c7e5-4d72-bee9-555ab13f3dad",
+      "nodeId": "22222222-0000-4000-8000-000000000010",
+      "path": "test/core/enemies/test_drift_fleet.gd",
+      "kind": "source"
+    },
+    {
+      "id": "85c24493-9a4c-4c5d-9383-f07c98497143",
+      "nodeId": "22222222-0000-4000-8000-000000000014",
+      "path": "tools/test_asset_contract_validator.py",
+      "kind": "source",
+      "contentHash": "000000000438a2f5"
+    },
+    {
       "id": "87cf8c05-7016-44a9-9b0d-1f58eb1b3fc4",
       "nodeId": "22222222-0000-4000-8000-000000000006",
       "path": ".nodespec/tests/req-004.tests.md",
@@ -1809,12 +2229,31 @@
       "nodeId": "22222222-0000-4000-8000-000000000018",
       "path": ".nodespec/tasks/input-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "00000000178e9426"
+      "contentHash": "00000000462963bd"
+    },
+    {
+      "id": "89ce7a50-db4c-425e-89fb-4cb04be99920",
+      "nodeId": "22222222-0000-4000-8000-000000000015",
+      "path": "export_presets.cfg",
+      "kind": "config"
+    },
+    {
+      "id": "89f232a2-0471-4cdb-aaf5-0b62cfdfacc5",
+      "nodeId": "22222222-0000-4000-8000-000000000014",
+      "path": "tools/asset_contract_validator.py",
+      "kind": "source",
+      "contentHash": "0000000061c4d971"
     },
     {
       "id": "8a9bacbd-c9da-40eb-8f6c-6d7e8f901234",
       "nodeId": "22222222-0000-4000-8000-000000000004",
       "path": "core/regen/mutation_loadout.gd",
+      "kind": "source"
+    },
+    {
+      "id": "8b2f3d4e-5c60-4b7f-8d9e-1f2a3b4c5d6e",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "core/rendering/world_lighting.tscn",
       "kind": "source"
     },
     {
@@ -1824,9 +2263,41 @@
       "kind": "source"
     },
     {
+      "id": "8cb225d1-3652-45b2-b40d-4ec8d894ee87",
+      "nodeId": "22222222-0000-4000-8000-000000000012",
+      "path": "worlds/bubble_bay/world.json",
+      "kind": "config",
+      "contentHash": "0000000024475bd9"
+    },
+    {
+      "id": "9198e5a0-6f86-4a87-a912-14b0994eb25f",
+      "nodeId": "22222222-0000-4000-8000-000000000009",
+      "path": "core/collectibles/collectible_store.gd",
+      "kind": "source"
+    },
+    {
+      "id": "91a2b3c4-d5e6-4f70-8a3b-415263748596",
+      "nodeId": "22222222-0000-4000-8000-000000000023",
+      "path": "tools/test_reference_template.py",
+      "kind": "source"
+    },
+    {
+      "id": "91a2b3c4-d5e6-4f78-8192-a3b4c5d6e7f8",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/staticgate/malicious_world/worlds/rogue_world/rogue.gd",
+      "kind": "source"
+    },
+    {
       "id": "92a3b4c5-d6e7-4c5d-846f-8091a2b3c4d5",
       "nodeId": "22222222-0000-4000-8000-000000000018",
       "path": "test/core/input/test_input_system.gd",
+      "kind": "source",
+      "contentHash": "000000003892bcff"
+    },
+    {
+      "id": "954621fe-d74b-4a3a-ad07-1465f8023716",
+      "nodeId": "22222222-0000-4000-8000-000000000010",
+      "path": "core/enemies/drift_fleet_system.gd",
       "kind": "source"
     },
     {
@@ -1834,6 +2305,19 @@
       "nodeId": "22222222-0000-4000-8000-000000000015",
       "path": ".nodespec/tests/req-018.tests.md",
       "kind": "test-plan"
+    },
+    {
+      "id": "95bc904b-f2bc-4390-8749-7a450dafd819",
+      "nodeId": "22222222-0000-4000-8000-000000000012",
+      "path": "test/worlds/run_bubble_walk.gd",
+      "kind": "source"
+    },
+    {
+      "id": "98b03855-ac7f-436f-a221-7aae61066621",
+      "nodeId": "22222222-0000-4000-8000-000000000015",
+      "path": "docs/commands.md",
+      "kind": "doc",
+      "contentHash": "000000004f564147"
     },
     {
       "id": "99971a6d-2d9d-434c-b877-93cf476fe46d",
@@ -1854,10 +2338,23 @@
       "kind": "source"
     },
     {
+      "id": "9c304e5f-6d71-4c80-9eaf-2a3b4c5d6e7f",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "core/rendering/world_lighting.gd",
+      "kind": "source"
+    },
+    {
       "id": "9f7e0ba9-80df-4253-add3-5060fab6e2e4",
       "nodeId": "22222222-0000-4000-8000-000000000016",
       "path": ".nodespec/tests/req-022.tests.md",
       "kind": "test-plan"
+    },
+    {
+      "id": "a0e1853a-ad2d-4999-b3db-2b3ed1828b54",
+      "nodeId": "22222222-0000-4000-8000-000000000015",
+      "path": ".github/workflows/pr.yml",
+      "kind": "config",
+      "contentHash": "000000002798ebe7"
     },
     {
       "id": "a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
@@ -1872,6 +2369,18 @@
       "kind": "source"
     },
     {
+      "id": "a2b3c4d5-e6f7-4081-92a4-b5c6d7e8f901",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "hub/hub_error.gd",
+      "kind": "source"
+    },
+    {
+      "id": "a2b3c4d5-e6f7-4089-92a3-b4c5d6e7f809",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/staticgate/clean_repo/core/clean.gd",
+      "kind": "source"
+    },
+    {
       "id": "a3b4c5d6-7e8f-4091-0213-243546576879",
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": "core/controller/capability_modifiers.gd",
@@ -1883,7 +2392,13 @@
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": "core/controller/axolotl_body.gd",
       "kind": "source",
-      "contentHash": "0000000044799f86"
+      "contentHash": "000000003ccc730d"
+    },
+    {
+      "id": "a67cfaa0-e63a-4c52-819c-64afbfccff72",
+      "nodeId": "22222222-0000-4000-8000-000000000015",
+      "path": "scripts/build.sh",
+      "kind": "build"
     },
     {
       "id": "a7b8c9d0-1e2f-4a3b-4c5d-6e7f80910213",
@@ -1898,30 +2413,64 @@
       "kind": "source"
     },
     {
+      "id": "aa9f6550-701c-4299-b261-d4ecf3530096",
+      "nodeId": "22222222-0000-4000-8000-000000000016",
+      "path": "test/hub/test_player_hud.gd",
+      "kind": "source",
+      "contentHash": "0000000003ed0eb2"
+    },
+    {
+      "id": "aacf8a0d-c372-45e5-99bd-6459e0fed1bc",
+      "nodeId": "22222222-0000-4000-8000-000000000010",
+      "path": "core/enemies/roster/hookline_rig.json",
+      "kind": "config"
+    },
+    {
       "id": "acbdcedf-ebfc-400d-8b8e-8f9012345678",
       "nodeId": "22222222-0000-4000-8000-000000000004",
       "path": "core/regen/state_discriminator.gd",
       "kind": "source"
     },
     {
+      "id": "ad415f60-7e82-4d91-8fb0-3b4c5d6e7f80",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "core/rendering/water_surface.tres",
+      "kind": "source"
+    },
+    {
+      "id": "ae7bb89f-5151-4cbc-a6e6-e9ac60012914",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "assets/character/axolotl/provenance.json",
+      "kind": "config",
+      "contentHash": "0000000070e63098"
+    },
+    {
+      "id": "ae9330bd-d402-46df-8103-d216d722f88e",
+      "nodeId": "22222222-0000-4000-8000-000000000012",
+      "path": "test/worlds/bubble_walk_probe.gd",
+      "kind": "source",
+      "contentHash": "000000007515904b"
+    },
+    {
       "id": "b1360c57-ea6a-4f5f-98b4-03896cce4ac4",
       "nodeId": "22222222-0000-4000-8000-000000000017",
       "path": ".nodespec/tasks/audio-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000005e975cd1"
+      "contentHash": "0000000015bbd7c4"
     },
     {
       "id": "b1a7c2e4-3f58-4d91-9e07-2c6a48d51f30",
       "nodeId": "22222222-0000-4000-8000-000000000017",
       "path": "core/audio/audio_event.gd",
-      "kind": "source"
+      "kind": "source",
+      "contentHash": "0000000054674442"
     },
     {
       "id": "b1bcdbc6-41ce-4057-bb8e-4217acc48d2f",
       "nodeId": "22222222-0000-4000-8000-000000000004",
       "path": ".nodespec/tasks/regeneration-and-capability-system-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000002023b197"
+      "contentHash": "000000000988378c"
     },
     {
       "id": "b1c2d3e4-f506-4172-8394-a5b6c7d8e9f0",
@@ -1934,7 +2483,8 @@
       "id": "b2c3d4e5-6f7a-4b8c-9d0e-1f2a3b4c5d6e",
       "nodeId": "22222222-0000-4000-8000-000000000007",
       "path": "core/save/world_contract_shape.gd",
-      "kind": "source"
+      "kind": "source",
+      "contentHash": "000000002a846b4b"
     },
     {
       "id": "b3c4d5e6-f708-4192-8d23-567890123456",
@@ -1943,11 +2493,23 @@
       "kind": "source"
     },
     {
+      "id": "b3c4d5e6-f708-4192-a3b5-c6d7e8f90112",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "hub/portal_tier.gd",
+      "kind": "source"
+    },
+    {
+      "id": "b3c4d5e6-f708-419a-83b4-c5d6e7f8091a",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "path": "fixtures/staticgate/clean_repo/project.godot",
+      "kind": "config"
+    },
+    {
       "id": "b43d198b-f53f-41e2-b822-2e270da6533a",
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": ".nodespec/tasks/axolotl-controller-22222222.task.md",
       "kind": "task",
-      "contentHash": "0000000000fa83e7"
+      "contentHash": "000000007e27fd6e"
     },
     {
       "id": "b4c5d6e7-8f90-4102-1324-354657687980",
@@ -1971,12 +2533,19 @@
       "id": "b7e51f38-9a24-4c60-b3d7-8e02f6a91d57",
       "nodeId": "22222222-0000-4000-8000-000000000017",
       "path": "core/audio/default_bank.json",
-      "kind": "config"
+      "kind": "config",
+      "contentHash": "0000000065490d9e"
     },
     {
       "id": "b8c9d0e1-2f3a-4b4c-5d6e-7f8091021324",
       "nodeId": "22222222-0000-4000-8000-000000000007",
       "path": "test/core/save/test_save_system.gd",
+      "kind": "source"
+    },
+    {
+      "id": "b95c819c-c637-47cd-9f30-588ca0c09e3f",
+      "nodeId": "22222222-0000-4000-8000-000000000009",
+      "path": "core/collectibles/collectibles_system.gd",
       "kind": "source"
     },
     {
@@ -1986,10 +2555,34 @@
       "kind": "test-plan"
     },
     {
+      "id": "bba62bd5-e0bc-4756-b12d-72802983b879",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "tools/test_performance_targets.py",
+      "kind": "source"
+    },
+    {
+      "id": "bcab6a7a-f0f0-49dd-ab36-7752f748d985",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "test/perf/run_perf_gate.gd",
+      "kind": "source"
+    },
+    {
       "id": "bdcedfea-fc0d-411e-8c9f-901234567890",
       "nodeId": "22222222-0000-4000-8000-000000000004",
       "path": "core/regen/feedback_table.gd",
       "kind": "source"
+    },
+    {
+      "id": "be526071-8f93-4ea2-90c1-4c5d6e7f8091",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "test/core/rendering/test_world_lighting.gd",
+      "kind": "source"
+    },
+    {
+      "id": "bf254ea8-2132-487d-be23-c902350972f3",
+      "nodeId": "22222222-0000-4000-8000-000000000015",
+      "path": "scripts/setup.sh",
+      "kind": "build"
     },
     {
       "id": "bf4b5c21-b17a-4f37-a090-09f234b07919",
@@ -1997,6 +2590,78 @@
       "path": ".nodespec/tasks/drift-fleet-enemy-framework-22222222.task.md",
       "kind": "task",
       "contentHash": "000000005911ba04"
+    },
+    {
+      "id": "c1a2b3c4-d5e6-4f70-8a91-b2c3d4e5f601",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "core/rendering/hero_skin.gd",
+      "kind": "source"
+    },
+    {
+      "id": "c1a2b3c4-d5e6-4f70-8a91-b2c3d4e5f602",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "core/rendering/materials/axolotl_skin.tres",
+      "kind": "source"
+    },
+    {
+      "id": "c1a2b3c4-d5e6-4f70-8a91-b2c3d4e5f603",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "core/rendering/materials/axolotl_eye.tres",
+      "kind": "source"
+    },
+    {
+      "id": "c1a2b3c4-d5e6-4f70-8a91-b2c3d4e5f604",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "core/rendering/materials/axolotl_eye_gleam.tres",
+      "kind": "source"
+    },
+    {
+      "id": "c1a2b3c4-d5e6-4f70-8a91-b2c3d4e5f605",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "core/rendering/materials/axolotl_gill.tres",
+      "kind": "source"
+    },
+    {
+      "id": "c1a2b3c4-d5e6-4f70-8a91-b2c3d4e5f606",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "core/rendering/materials/axolotl_detail.tres",
+      "kind": "source"
+    },
+    {
+      "id": "c1a2b3c4-d5e6-4f70-8a91-b2c3d4e5f607",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "test/core/rendering/test_hero_skin.gd",
+      "kind": "source"
+    },
+    {
+      "id": "c1a2b3c4-d5e6-4f70-8a91-b2c3d4e5f608",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "core/controller/hero_squash.gd",
+      "kind": "source"
+    },
+    {
+      "id": "c1a2b3c4-d5e6-4f70-8a91-b2c3d4e5f609",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "test/core/controller/test_hero_squash.gd",
+      "kind": "source"
+    },
+    {
+      "id": "c1a2b3c4-d5e6-4f70-8a91-b2c3d4e5f610",
+      "nodeId": "22222222-0000-4000-8000-000000000025",
+      "path": "tools/refine_model.py",
+      "kind": "source"
+    },
+    {
+      "id": "c1a2b3c4-d5e6-4f70-8a91-b2c3d4e5f611",
+      "nodeId": "22222222-0000-4000-8000-000000000025",
+      "path": "tools/blender/refine_model.py",
+      "kind": "source"
+    },
+    {
+      "id": "c1a2b3c4-d5e6-4f70-8a91-b2c3d4e5f612",
+      "nodeId": "22222222-0000-4000-8000-000000000025",
+      "path": "tools/test_refine_model.py",
+      "kind": "source"
     },
     {
       "id": "c2d3e4f5-0617-4283-94a5-b6c7d8e9f001",
@@ -2020,12 +2685,26 @@
       "id": "c4a80b96-1e57-4d23-9f8a-6b31e0c72d45",
       "nodeId": "22222222-0000-4000-8000-000000000017",
       "path": "core/audio/audio_system.gd",
-      "kind": "source"
+      "kind": "source",
+      "contentHash": "000000005832b0c3"
     },
     {
       "id": "c4d5e6f7-0819-42a3-8e34-678901234567",
       "nodeId": "22222222-0000-4000-8000-000000000005",
       "path": "core/progression/checkpoint_store.gd",
+      "kind": "source"
+    },
+    {
+      "id": "c4d5e6f7-0819-42a3-b4c6-d7e8f9011223",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "hub/contract_validator.gd",
+      "kind": "source",
+      "contentHash": "0000000002936d83"
+    },
+    {
+      "id": "c4d5e6f7-0819-4ab2-94c5-d6e7f8091a2b",
+      "nodeId": "22222222-0000-4000-8000-000000000008",
+      "path": "core/restoration/region_state.gd",
       "kind": "source"
     },
     {
@@ -2041,6 +2720,13 @@
       "path": "core/controller/tongue_grapple.gd",
       "kind": "source",
       "contentHash": "000000001326d4f6"
+    },
+    {
+      "id": "c61ff675-04fd-448d-8977-4d9ce8c7b0c2",
+      "nodeId": "22222222-0000-4000-8000-000000000014",
+      "path": "docs/asset-contract.md",
+      "kind": "doc",
+      "contentHash": "000000005eb7c10f"
     },
     {
       "id": "c8713284-4347-41f2-8324-62f62628d23b",
@@ -2062,6 +2748,12 @@
       "kind": "test-plan"
     },
     {
+      "id": "cb2e4a68-2e34-4940-afec-fa7bcb429832",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "path": "core/controller/axolotl_body.tscn",
+      "kind": "source"
+    },
+    {
       "id": "cedfeafb-0d1e-422f-8daa-012345678901",
       "nodeId": "22222222-0000-4000-8000-000000000004",
       "path": "core/regen/regen_system.gd",
@@ -2076,10 +2768,24 @@
       "contentHash": "000000000a50a92b"
     },
     {
+      "id": "d182c0b0-0e02-4ebc-812e-9566a4984934",
+      "nodeId": "22222222-0000-4000-8000-000000000012",
+      "path": "worlds/bubble_bay/world.tscn",
+      "kind": "source",
+      "contentHash": "0000000073d6b31c"
+    },
+    {
       "id": "d3e4f506-1728-4394-a5b6-c7d8e9f00112",
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": "test/contracts/test_level_contract.gd",
       "kind": "source"
+    },
+    {
+      "id": "d403f20d-3b60-4e84-897e-1557a27af002",
+      "nodeId": "22222222-0000-4000-8000-000000000012",
+      "path": "worlds/bubble_bay/README.md",
+      "kind": "doc",
+      "contentHash": "000000007218d8d5"
     },
     {
       "id": "d40835a5-0474-41fd-830d-50de7557ba47",
@@ -2101,9 +2807,21 @@
       "kind": "source"
     },
     {
+      "id": "d5e6f708-192a-43b4-85c7-e8f901122334",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "hub/world_portal.gd",
+      "kind": "source"
+    },
+    {
       "id": "d5e6f708-192a-43b4-8f45-789012345678",
       "nodeId": "22222222-0000-4000-8000-000000000005",
       "path": "core/progression/save_checkpoint_store.gd",
+      "kind": "source"
+    },
+    {
+      "id": "d5e6f708-192a-4bc3-85d6-e7f8091a2b3c",
+      "nodeId": "22222222-0000-4000-8000-000000000008",
+      "path": "core/restoration/restoration_error.gd",
       "kind": "source"
     },
     {
@@ -2111,27 +2829,28 @@
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": "dev/greybox.tscn",
       "kind": "design",
-      "contentHash": "00000000574f69c9"
+      "contentHash": "000000003d052595"
     },
     {
       "id": "d6e7f890-0112-4324-3546-576879809102",
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": "core/controller/axolotl_controller.gd",
       "kind": "source",
-      "contentHash": "0000000038eab0e5"
+      "contentHash": "000000004d3a2488"
     },
     {
       "id": "d6f92a41-7b83-4e15-a029-4c7f81b3e502",
       "nodeId": "22222222-0000-4000-8000-000000000017",
       "path": "test/core/audio/test_audio_system.gd",
-      "kind": "source"
+      "kind": "source",
+      "contentHash": "000000000da7b4dd"
     },
     {
       "id": "dd831419-74c5-4bc2-98c1-4bf2153c43ce",
       "nodeId": "22222222-0000-4000-8000-000000000022",
       "path": ".nodespec/tasks/world-static-analysis-gate-22222222.task.md",
       "kind": "task",
-      "contentHash": "00000000444fcff9"
+      "contentHash": "000000005c212a56"
     },
     {
       "id": "ddf0df54-e539-43ef-8ae5-671ddb879825",
@@ -2139,6 +2858,13 @@
       "path": ".nodespec/tasks/world-bubble-bay-22222222.task.md",
       "kind": "task",
       "contentHash": "000000003f19a2f8"
+    },
+    {
+      "id": "de124c3c-dafd-4058-aab5-fc35b9779089",
+      "nodeId": "22222222-0000-4000-8000-000000000011",
+      "path": "worlds/coral_cove/README.md",
+      "kind": "doc",
+      "contentHash": "000000002131b3c4"
     },
     {
       "id": "de75de16-9828-4a76-9392-98c5f0b6a629",
@@ -2151,7 +2877,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": ".nodespec/tasks/openaxolotl-game-client-22222222.task.md",
       "kind": "task",
-      "contentHash": "000000007511f371"
+      "contentHash": "0000000001dedd6e"
     },
     {
       "id": "dfeafb0d-1e2f-4330-8bbb-123456789012",
@@ -2165,6 +2891,13 @@
       "nodeId": "22222222-0000-4000-8000-000000000005",
       "path": "core/progression/catastrophic_source.gd",
       "kind": "source"
+    },
+    {
+      "id": "e162ddec-e463-444d-a538-2563a52d77c5",
+      "nodeId": "22222222-0000-4000-8000-000000000011",
+      "path": "docs/contract-friction.md",
+      "kind": "doc",
+      "contentHash": "000000005330b24a"
     },
     {
       "id": "e1f2a3b4-5c6d-4e7f-8091-021324354657",
@@ -2183,13 +2916,26 @@
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": "docs/level-contract.md",
       "kind": "doc",
-      "contentHash": "000000001dddf2e4"
+      "contentHash": "000000003b18db23"
+    },
+    {
+      "id": "e5240de5-4d7f-4267-9d35-b1dbd33ea803",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "contracts/performance_targets.v1.json",
+      "kind": "config"
     },
     {
       "id": "e5f6a7b8-9c0d-4e1f-2a3b-4c5d6e7f8091",
       "nodeId": "22222222-0000-4000-8000-000000000007",
       "path": "core/save/save_migrations.gd",
       "kind": "source"
+    },
+    {
+      "id": "e66d930a-9274-4fd3-9efd-15ea693874f5",
+      "nodeId": "22222222-0000-4000-8000-000000000014",
+      "path": "contracts/asset_contract.v1.json",
+      "kind": "schema",
+      "contentHash": "000000005328df87"
     },
     {
       "id": "e6f69aec-4360-425b-b4a0-84e718fe204f",
@@ -2201,6 +2947,18 @@
       "id": "e6f70819-2a3b-44c5-8056-890123456789",
       "nodeId": "22222222-0000-4000-8000-000000000005",
       "path": "core/progression/life_system.gd",
+      "kind": "source"
+    },
+    {
+      "id": "e6f70819-2a3b-44c5-96d8-f90112233445",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "hub/world_registry.gd",
+      "kind": "source"
+    },
+    {
+      "id": "e6f70819-2a3b-4cd4-96e7-f8091a2b3c4d",
+      "nodeId": "22222222-0000-4000-8000-000000000008",
+      "path": "core/restoration/traversal_gate.gd",
       "kind": "source"
     },
     {
@@ -2226,7 +2984,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": "test/core/controller/test_axolotl_controller.gd",
       "kind": "source",
-      "contentHash": "0000000062adf1a0"
+      "contentHash": "000000000d1cbcb0"
     },
     {
       "id": "e8b40c93-2d71-4f68-a5e3-9b17d6820f4a",
@@ -2239,6 +2997,13 @@
       "nodeId": "22222222-0000-4000-8000-000000000008",
       "path": ".nodespec/tests/req-008.tests.md",
       "kind": "test-plan"
+    },
+    {
+      "id": "ed848c78-f7d1-4d13-9600-834d6d189c65",
+      "nodeId": "22222222-0000-4000-8000-000000000011",
+      "path": "worlds/coral_cove/world.tscn",
+      "kind": "source",
+      "contentHash": "000000007e34f014"
     },
     {
       "id": "f18cbad5-13d5-4537-8492-c90184dee8ac",
@@ -2277,9 +3042,22 @@
       "kind": "doc"
     },
     {
+      "id": "f7081920-3a4b-4de5-87f8-091a2b3c4d5e",
+      "nodeId": "22222222-0000-4000-8000-000000000008",
+      "path": "core/restoration/scene_traversal_gate.gd",
+      "kind": "source"
+    },
+    {
       "id": "f7081920-3b4c-45d6-8167-901234567890",
       "nodeId": "22222222-0000-4000-8000-000000000020",
       "path": "test/core/harness/test_harness_integrity.gd",
+      "kind": "source",
+      "contentHash": "000000004bfb74ee"
+    },
+    {
+      "id": "f708192a-3b4c-45d6-87e9-011223344556",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "hub/world_loader.gd",
       "kind": "source"
     },
     {
@@ -2288,6 +3066,12 @@
       "path": "dev/smoke_probe.gd",
       "kind": "source",
       "contentHash": "0000000042b6c1a5"
+    },
+    {
+      "id": "fa0d01ec-8af9-4a30-86ac-e8609aeda30e",
+      "nodeId": "22222222-0000-4000-8000-000000000010",
+      "path": "core/enemies/roster/dredger.json",
+      "kind": "config"
     },
     {
       "id": "fbb9bba9-1ca5-42d2-8828-4044823019f8",
@@ -2307,7 +3091,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000013",
       "path": ".nodespec/tasks/level-contract-compliance-checker-22222222.task.md",
       "kind": "task",
-      "contentHash": "00000000635fd56c"
+      "contentHash": "00000000393452c2"
     }
   ]
 }

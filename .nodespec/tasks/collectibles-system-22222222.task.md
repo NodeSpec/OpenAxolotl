@@ -98,25 +98,7 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T6 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T7 — Implement: "Restoration resources are collectible and are consumed to advance a region's restoration state" (REQ-010).** <!-- t:ae8d1588 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-010 "Restoration resources are collectible and are consumed to advance a region's restoration state" — possible coordination point: Contract "Restoration Region Interface" (dependency) to Restoration State System (keyword signal only)
-- [ ] **T8 — Implement: "Discovery collectibles are collectible, counted per world, and persisted to the profile" (REQ-010).** <!-- t:cebd245e -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-010 "Discovery collectibles are collectible, counted per world, and persisted to the profile" — possible coordination point: Contract "Collectible Registration Interface" (dependency) from World: Coral Cove (keyword signal only)
-- [ ] **T9 — Implement: "Collected state persists through the save-integration interface across sessions" (REQ-010).** <!-- t:4709c067 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-010 "Collected state persists through the save-integration interface across sessions" — possible coordination point: Contract "Restoration Region Interface" (dependency) to Restoration State System (keyword signal only)
-- [ ] **T10 — Implement: "Collected state survives losing all lives and respawning at a checkpoint, so collection is never lost to the life layer" (REQ-010).** <!-- t:1c6045bc -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-010 "Collected state survives losing all lives and respawning at a checkpoint, so collection is never lost to the life layer" — possible coordination point: Contract "Restoration Region Interface" (dependency) to Restoration State System (keyword signal only)
-- [ ] **T11 — Implement: "A world declaring no collectibles remains contract-valid and fully completable" (REQ-010).** <!-- t:954a5a3c -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-010 "A world declaring no collectibles remains contract-valid and fully completable" — possible coordination point: Contract "Collectible Registration Interface" (dependency) from World: Coral Cove (keyword signal only)
-- [ ] **T12 — Implement: "Worlds declare collectibles declaratively through the Level Contract optional element rather than through bespoke scripting" (REQ-010).** <!-- t:db34f4ca -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-010 "Worlds declare collectibles declaratively through the Level Contract optional element rather than through bespoke scripting" — possible coordination point: Contract "Collectible Registration Interface" (dependency) from World: Coral Cove (keyword signal only)
-- [ ] **T13 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T7 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -171,18 +153,18 @@ Category: functional | Status: in-progress
 The reward layer for optional branches off a world's critical path, and the resource economy feeding restoration. Two distinct kinds: RESTORATION RESOURCES, which are consumed to advance a region's restoration state and are therefore mechanically load-bearing, and DISCOVERY COLLECTIBLES (rescued creatures, secrets), which reward exploration and persist to the profile. Collectibles are an optional Level Contract element, so a world may ship with none and must remain fully valid and completable. Collection state persists through the save-integration interface and survives death and checkpoint respawn, so exploration is never punished by the life layer.
 
 **Acceptance criteria — your task boxes:**
-- [ ] Restoration resources are collectible and are consumed to advance a region's restoration state
-  → covered by Task T7
-- [ ] Discovery collectibles are collectible, counted per world, and persisted to the profile
-  → covered by Task T8
-- [ ] Collected state persists through the save-integration interface across sessions
-  → covered by Task T9
-- [ ] Collected state survives losing all lives and respawning at a checkpoint, so collection is never lost to the life layer
-  → covered by Task T10
-- [ ] A world declaring no collectibles remains contract-valid and fully completable
-  → covered by Task T11
-- [ ] Worlds declare collectibles declaratively through the Level Contract optional element rather than through bespoke scripting
-  → covered by Task T12
+- [x] Restoration resources are collectible and are consumed to advance a region's restoration state
+  → THIS NODE: internal logic — possible coordination point: Contract "Restoration Region Interface" (dependency) to Restoration State System (keyword signal only)
+- [x] Discovery collectibles are collectible, counted per world, and persisted to the profile
+  → THIS NODE: internal logic — possible coordination point: Contract "Collectible Registration Interface" (dependency) from World: Coral Cove (keyword signal only)
+- [x] Collected state persists through the save-integration interface across sessions
+  → THIS NODE: internal logic — possible coordination point: Contract "Restoration Region Interface" (dependency) to Restoration State System (keyword signal only)
+- [x] Collected state survives losing all lives and respawning at a checkpoint, so collection is never lost to the life layer
+  → THIS NODE: internal logic — possible coordination point: Contract "Restoration Region Interface" (dependency) to Restoration State System (keyword signal only)
+- [x] A world declaring no collectibles remains contract-valid and fully completable
+  → THIS NODE: internal logic — possible coordination point: Contract "Collectible Registration Interface" (dependency) from World: Coral Cove (keyword signal only)
+- [x] Worlds declare collectibles declaratively through the Level Contract optional element rather than through bespoke scripting
+  → THIS NODE: internal logic — possible coordination point: Contract "Collectible Registration Interface" (dependency) from World: Coral Cove (keyword signal only)
 
 ## Interface Contracts
 
@@ -351,4 +333,11 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 | File | Kind | Language | Status |
 |------|------|----------|--------|
+| `core/collectibles/save_collectible_store.gd` | source | --- | draft |
+| `core/collectibles/collectible_error.gd` | source | --- | draft |
+| `test/core/collectibles/test_collectibles_system.gd` | source | --- | draft |
+| `core/collectibles/collectible_def.gd` | source | --- | draft |
 | `.nodespec/tests/req-010.tests.md` - Test plan for requirement: Collectibles System | test-plan | markdown | draft |
+| `core/collectibles/collectible_kind.gd` | source | --- | draft |
+| `core/collectibles/collectible_store.gd` | source | --- | draft |
+| `core/collectibles/collectibles_system.gd` | source | --- | draft |

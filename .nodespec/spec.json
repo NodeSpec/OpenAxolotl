@@ -1,7 +1,7 @@
 {
   "specVersion": 1,
   "generatedBy": "nodespec",
-  "specHash": "92b704bca574fd26d31d36baa78def266e05955c690db3f58ca1855f738bb702",
+  "specHash": "bab4c337e1bdbd2d070f989fe957558c3c050576d15b6cb981a5c8650ae489d6",
   "vision": "OpenAxolotl — Play it. Fork it. Build a world.\n\nA colorful 3D action-platformer in Godot where a tiny axolotl explores strange aquatic worlds, restoring damaged habitats and rescuing creatures. Every world is a self-contained module anyone — human or AI coding agent — can fork, replace, or extend. Open source is a gameplay feature, not a line in the README.\n\nFOUR PILLARS\n\n1. Regeneration is the constant loop; lives are the hard failure state. Damage strips a capability — tail, gill, leg — with comedic pop-and-sparkle framing rather than draining a health bar, and never ends a run on its own. A separate limited life count is spent only on catastrophic events and returns the player to the last checkpoint. Regeneration stays expressive and ever-present; lives supply the stakes.\n\n2. Two movement grammars, one axolotl. Water and land are mechanically distinct, joined by a water-powered dash as the signature transition skill. This is the answer to \"why is this not a cute skin on generic platformer mechanics.\"\n\n3. The world regenerates with you. Regions progress barren, resourced, restored — opening real traversal paths rather than swapping visuals — and Drift Fleet dredgers can undo that progress. This carries the open-source metaphor mechanically, without a child ever needing to notice it.\n\n4. The repo is the game. Every world conforms to a versioned Level Contract published as a machine-readable schema. A contributor never needs to understand the whole game, only the contract. The project is effectively an open-source platformer SDK.\n\nANTAGONISTS\nThe Drift Fleet: faceless industrial extraction machinery, deliberately never human characters. Nets, hooks, dredges and pollution, with no gore and no humanized violence — the same machinery that broke the habitat is what the player disables to heal it.\n\nMVP SCOPE\nPC only. Two official worlds plus a minimal reference template. Three Gill Mods — Bubble, Jet, Glow — built to depth rather than breadth; Electric, Frost and Giant are post-MVP and double as the reference example for community-built mods. Contract compliance, asset conformance, and world static analysis are automated and merge-blocking, so an AI agent can verify its own work before submitting.\n\nCOMMUNITY (post-MVP)\nOpens only once Level Contract v1 is frozen; opening earlier means every core update breaks early contributor worlds. Community worlds ship code like any other world — safety comes from static analysis against the sanctioned world API surface plus mandatory human review, never an automated-only merge path. This is a family game with an agent-authored contribution pipeline, so that gate is load-bearing.\n\nNON-GOALS (firm, not deferrals)\nNo multiplayer, in any phase. No console certification. No level-editor GUI, ever — worlds are authored as code and Godot scenes only, so humans and AI agents build the same way and the contract surface stays narrow enough to check.\n\nOPEN ITEMS\nLicensing split between code and official art/audio, entangled with AI-generation provenance. Save-compatibility policy for forked and divergent worlds.",
   "constraints": [],
   "preferences": {},
@@ -485,6 +485,65 @@
         "Contributor documentation states the project is single-player only and warns that general Godot multiplayer guidance and engine sample code do not apply here"
       ],
       "contentHash": "58dbf9ddfab5ecbcfe3888f8876ffaa108a230478fcbcc34daf7d8d629647bf5"
+    },
+    {
+      "requirementId": "REQ-031",
+      "name": "Shared Look Foundation",
+      "description": "One rendering look for the whole game, owned by the game client and shared by every world. Worlds ship geometry; the client ships the look: a single lighting rig (core/rendering/world_lighting.tscn) carrying the shared environment (sky-lit ambient and reflections, AgX-class tonemapping so saturated albedo never clips, screen-space ambient occlusion, SDFGI bounce, restrained glow, teal depth fog and thin volumetric fog) and one sun with soft two-cascade shadows. The rig lives at the main scene level beside the hub, never inside it, because the hub disables its own subtree while a world is active and a light parented under it would go dark on entering a world (which is how official worlds were previously lit by ambient colour alone). The renderer is Forward+, with the Mobile renderer as the automatic fallback on hardware that cannot drive it. This is the foundation the art direction in docs/asset-contract.md (toy materials: saturated albedo, real lighting) and every later asset pass build on; the performance baseline in docs/performance.md is what it must fit inside.",
+      "category": "technical",
+      "acceptanceCriteria": [
+        "The project renders with Forward+ and declares the Mobile renderer as its automatic fallback",
+        "The shared environment is sky-lit, with ambient and reflections read from the sky, and has tonemapping, ambient occlusion, global illumination, glow and fog enabled",
+        "The shared lighting rig ships one WorldEnvironment carrying the shared environment and one sun with soft cascaded shadows",
+        "The main scene instances the lighting rig beside the hub, never inside the subtree the hub disables while a world is active",
+        "The reference template ships no sun of its own and is lit by the client's rig, proving a world needs no lighting to be complete",
+        "The hub and both official worlds read as the documented toy look (saturated albedo, real lighting) to the maintainer on baseline-class hardware at the documented frame rate"
+      ],
+      "contentHash": "c64c8898b05f4cb2a0fecce1a3809f40eb8b1d7b1b8a8594aa631166d59ece4c"
+    },
+    {
+      "requirementId": "REQ-032",
+      "name": "Blender Headless Refinement Pipeline",
+      "description": "Blender is the one external tool the asset pipeline leans on, for geometry work a game engine cannot do for itself: merging a generator's loose parts into role meshes, writing smooth normals, and later rigging and animation clips. It must never be needed interactively: a documented command (tools/refine_model.py) finds Blender ($OAX_BLENDER, then PATH), runs tools/blender/refine_model.py in the background, and validates what comes back against the Asset Contract, so a human or an AI agent can hand a model to Blender and prove the result without opening a window. Refinement classifies parts by the same hero palette thresholds the game client uses (core/rendering/hero_skin.gd), joins them into one mesh per role, names each material axolotl_<role> as the contract with the client, keeps vertex colours, and preserves geometry exactly, so a model that met its triangle budget still meets it and the provenance sidecar stays true. No Blender is an invocation error, never a silent pass. Blender itself is an external service on the architecture, invoked only through this command line.",
+      "category": "technical",
+      "acceptanceCriteria": [
+        "The refinement command builds the documented headless Blender command line and reports a missing Blender as an invocation error, never a silent pass",
+        "Refining the hero model produces one mesh per role with named materials, smooth normals and vertex colours, and preserves the triangle count exactly",
+        "The Blender script and the game client classify parts by the same palette thresholds",
+        "The shipped hero asset is the refined form and its provenance sidecar records the refinement as a tool in the chain",
+        "The refined axolotl reads smoother and more toy-like than the raw export in a rendered capture reviewed by the maintainer"
+      ],
+      "contentHash": "386d02f1aa5dd7e10292f084d0e712abd4aa5b8b6cd02a976185089e67398e61"
+    },
+    {
+      "requirementId": "REQ-033",
+      "name": "Hero Character Look",
+      "description": "The axolotl reads as a well-made toy: the material and eye pass on top of the Shared Look Foundation (REQ-031). The game client dresses the imported hero model in its own materials by part role, skin, eye, eye gleam, gill and fin, mouth detail, decided by the pipeline's material name first and by the model's vertex colours as a fallback, so the look survives a repainted or regenerated model. Skin is vertex-coloured, slightly wet (clearcoat) and lets light through at the edges (subsurface scattering); eyes are deep blue-black with near-zero roughness and a full clearcoat so the sky lands as a sharp reflection; the baked catchlights are unshaded so they never go grey in shadow; gills and fins carry strong subsurface scattering and backlight so they glow when lit from behind; mouth details are matte. Motion joins the look: a hop stretches the model taller and thinner and a landing squashes it shorter and wider, volume-preserving, recovering within a fraction of a second, driven by tuning keys and applied only to the Model child so physics never changes. This is the family-friendly comedic register of REQ-019 applied to the character itself.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "The hero palette classifies skin, eye, gleam, gill and detail parts, and a refined model's material names take precedence over its colours",
+        "Each role wears a client material with the properties the art direction asks for: vertex-coloured translucent skin, a wet dark eye, an unshaded gleam, backlit gills, matte details",
+        "The shipped hero model is dressed by role at runtime with every surface wearing a client material",
+        "A hop stretches the model taller and thinner and a landing squashes it shorter and wider, both volume-preserving and recovering to rest within a second",
+        "Squash and stretch amounts and the recovery rate are tuning keys with documented units and ranges",
+        "The axolotl reads as a glossy toy with wet eyes and glowing gills to the maintainer in a rendered capture on baseline-class hardware"
+      ],
+      "contentHash": "9f34dcc099c44b6f27da71cdf394543f0cc6fdd2d04a6f786feb2262d19359a6"
+    },
+    {
+      "requirementId": "REQ-034",
+      "name": "World Dressing and Living Water",
+      "description": "The step from greybox to a place: a shared, regenerable environment kit and water that moves. The kit is four vertex-coloured props in the aquatic palette (rock cluster, coral branch, kelp strand, seagrass tuft), BUILT procedurally by a deterministic headless Blender script (tools/blender/make_environment_kit.py, fixed seed) so the whole kit can be regenerated or re-paletted from source rather than depending on binaries nobody can rebuild; each prop ships as a contract-conforming asset with provenance. Scenes are dressed with kit instances under one Dressing container per scene, and dressing is VISUAL ONLY as a hard rule: no physics object and no scene group anywhere beneath the container, so decoration can never invalidate a tuned probe, collide with the player, or accidentally become a Level Contract element. The shared water surface graduates from a flat tint to an animated unshaded shader (world-space crossed-sine shimmer with caustic glints and fresnel-weighted transparency), still one client-owned material every WaterVolume references, and official worlds' water carries rising bubble particles. Walks, the perf gate and the contract checkers must stay green through all of it.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "Every kit prop loads with meshes whose palette comes from vertex colours",
+        "The kit is generated by a deterministic headless Blender script and every kit asset passes the Asset Contract with provenance recording the generator",
+        "The hub and both official worlds carry at least a dozen kit props under a Dressing container whose subtree has no physics objects and no scene groups",
+        "The shared water material carries an animated shader that stays unshaded and translucent, and official worlds' water volumes carry bubble particles",
+        "Every walk probe, the perf gate and both contract checkers pass unchanged with the dressing in place",
+        "The dressed hub and worlds read as an underwater place rather than a greybox to the maintainer in rendered captures"
+      ],
+      "contentHash": "dce39c9134c54f256d4e133fea22bf8d9b4295db6f9ac3832a088c7f9c0c2638"
     }
   ],
   "mappings": [
@@ -636,6 +695,41 @@
     {
       "requirementId": "REQ-030",
       "nodeId": "22222222-0000-4000-8000-000000000022",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-031",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-032",
+      "nodeId": "22222222-0000-4000-8000-000000000024",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-032",
+      "nodeId": "22222222-0000-4000-8000-000000000025",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-033",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-033",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-034",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-034",
+      "nodeId": "22222222-0000-4000-8000-000000000025",
       "mappingType": "implements"
     }
   ]
