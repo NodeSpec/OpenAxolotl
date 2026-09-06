@@ -1,5 +1,7 @@
 {
   "author": "OpenAxolotl maintainer (uploaded 2026-09-06)",
-  "generationMethod": "hand-authored",
-  "licenseTerms": "Apache-2.0 (the project license; confirm with the maintainer)"
+  "generationMethod": "ai-generated",
+  "tool": "trimesh (https://github.com/mikedh/trimesh), mesh built by an AI-written Python script; version not recorded in the glTF header",
+  "prompt": "Original prompt not recorded at upload. The script assembles a segmented, vertex-coloured axolotl (85 parts, ~24.7k triangles, head toward -Z, no rig, no animations) and exports it as glTF 2.0 binary.",
+  "licenseTerms": "Apache-2.0 (project license, confirmed by the maintainer 2026-09-06)"
 }
