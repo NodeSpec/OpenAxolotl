@@ -1,7 +1,7 @@
 {
   "specVersion": 1,
   "generatedBy": "nodespec",
-  "specHash": "bab4c337e1bdbd2d070f989fe957558c3c050576d15b6cb981a5c8650ae489d6",
+  "specHash": "15b9ca85e819451ae95001076feba6e1005bf8fcf271b86403dbd8cd2b349f31",
   "vision": "OpenAxolotl — Play it. Fork it. Build a world.\n\nA colorful 3D action-platformer in Godot where a tiny axolotl explores strange aquatic worlds, restoring damaged habitats and rescuing creatures. Every world is a self-contained module anyone — human or AI coding agent — can fork, replace, or extend. Open source is a gameplay feature, not a line in the README.\n\nFOUR PILLARS\n\n1. Regeneration is the constant loop; lives are the hard failure state. Damage strips a capability — tail, gill, leg — with comedic pop-and-sparkle framing rather than draining a health bar, and never ends a run on its own. A separate limited life count is spent only on catastrophic events and returns the player to the last checkpoint. Regeneration stays expressive and ever-present; lives supply the stakes.\n\n2. Two movement grammars, one axolotl. Water and land are mechanically distinct, joined by a water-powered dash as the signature transition skill. This is the answer to \"why is this not a cute skin on generic platformer mechanics.\"\n\n3. The world regenerates with you. Regions progress barren, resourced, restored — opening real traversal paths rather than swapping visuals — and Drift Fleet dredgers can undo that progress. This carries the open-source metaphor mechanically, without a child ever needing to notice it.\n\n4. The repo is the game. Every world conforms to a versioned Level Contract published as a machine-readable schema. A contributor never needs to understand the whole game, only the contract. The project is effectively an open-source platformer SDK.\n\nANTAGONISTS\nThe Drift Fleet: faceless industrial extraction machinery, deliberately never human characters. Nets, hooks, dredges and pollution, with no gore and no humanized violence — the same machinery that broke the habitat is what the player disables to heal it.\n\nMVP SCOPE\nPC only. Two official worlds plus a minimal reference template. Three Gill Mods — Bubble, Jet, Glow — built to depth rather than breadth; Electric, Frost and Giant are post-MVP and double as the reference example for community-built mods. Contract compliance, asset conformance, and world static analysis are automated and merge-blocking, so an AI agent can verify its own work before submitting.\n\nCOMMUNITY (post-MVP)\nOpens only once Level Contract v1 is frozen; opening earlier means every core update breaks early contributor worlds. Community worlds ship code like any other world — safety comes from static analysis against the sanctioned world API surface plus mandatory human review, never an automated-only merge path. This is a family game with an agent-authored contribution pipeline, so that gate is load-bearing.\n\nNON-GOALS (firm, not deferrals)\nNo multiplayer, in any phase. No console certification. No level-editor GUI, ever — worlds are authored as code and Godot scenes only, so humans and AI agents build the same way and the contract surface stays narrow enough to check.\n\nOPEN ITEMS\nLicensing split between code and official art/audio, entangled with AI-generation provenance. Save-compatibility policy for forked and divergent worlds.",
   "constraints": [],
   "preferences": {},
@@ -544,6 +544,42 @@
         "The dressed hub and worlds read as an underwater place rather than a greybox to the maintainer in rendered captures"
       ],
       "contentHash": "dce39c9134c54f256d4e133fea22bf8d9b4295db6f9ac3832a088c7f9c0c2638"
+    },
+    {
+      "requirementId": "REQ-035",
+      "name": "Hero rig and animation set",
+      "description": "The hero model must deform as it moves rather than slide as a rigid prop. The shipped axolotl carries a skeleton and an animation clip for every movement state the controller already computes, and the game client plays the matching clip from that state.\n\nTHE RIG is produced headless, through the same Blender lane as the refinement pass (REQ-032), so it is reproducible from the unrigged source and never depends on a rigging artist or a GUI session. Twelve bones: root, spine, head, two gill stalks, four legs, three tail segments. Weights are computed by inverse-square distance to the two nearest bone segments rather than heat-diffused, because Blender's automatic weights need manifold geometry and the hero is a merged pile of primitives — bone heat can fail outright and would fail differently per Blender build.\n\nThe eye and its highlight are bound WHOLE to the head bone. Under the nearest-two rule they landed 77% and 70% respectively on the gill bones — measurably different ratios — so the highlight slid off the pupil whenever the fronds swung.\n\nTHE CLIPS are the contract with the client, by name: idle, waddle, swim, hop, fall, hurt. The rigging CLI fails the build if a clip is missing, if the geometry changed, or if nothing came back skinned.\n\nTHE CLIENT chooses the clip from four facts the body already has each physics step: in water, on the floor, vertical speed, planar speed. Water wins over everything; airborne splits on direction of travel; grounded splits on whether it is moving. HURT is a one-shot that overrides the locomotion choice for its own length and is driven by the world's capability-loss signal, not guessed from motion — a flinch the player cannot see is not feedback.\n\nGeometry is never altered by rigging, so the triangle budget the Asset Contract sets (REQ-030) continues to hold.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "The rigging pipeline runs headless in Blender and produces a skinned model carrying all six named clips (idle, waddle, swim, hop, fall, hurt), failing the build if any is missing or nothing is skinned",
+        "Rigging preserves geometry exactly: the triangle count out equals the triangle count in and the model stays inside its Asset Contract budget",
+        "The shipped hero imports into Godot with a Skeleton3D carrying the documented bones, every mesh skinned, and the ongoing clips set to loop despite glTF importing them one-shot",
+        "The eye and its highlight are each driven by exactly one bone, and that bone is the head, so the highlight cannot separate from the pupil",
+        "The animator maps every movement state to its clip: water to swim regardless of other state, rising to hop, descending to fall, grounded and moving to waddle, grounded and still to idle",
+        "The hurt flinch overrides locomotion for the full length of its clip and resumes locomotion afterwards",
+        "An animator bound to a model with no AnimationPlayer is inert rather than broken, so bodies built without a model still run",
+        "The hero's provenance records the rigging step, its tool, and the bones and clips it added"
+      ],
+      "contentHash": "73ccdb5950b8e0394cc6faecab91d97b2b41cc43ae8be77a9bfbe310a8a8c04e"
+    },
+    {
+      "requirementId": "REQ-036",
+      "name": "Drift Fleet and Flagship reachable from a world",
+      "description": "The Drift Fleet runtime (REQ-012) and the Flagship encounter (REQ-013) must be reachable from a world. Both were built and tested headless, and every one of those tests passed while no world could reach either: the WorldSystems runtime had no enemy scene convention, never constructed a DriftFleetSystem, and never read the manifest's optional `boss` element. The framework's own comment says it \"owns no enemy placement and no geometry: a world places enemies, and whatever binds the scene calls the lanes below\" — nothing was that binder.\n\nTHE JOIN follows the shape every other element uses: the manifest declares, the scene places, the runtime connects the two.\n\n  * `enemies` lists the roster ids a world uses. Nodes in the `enemy` group carry an enemy_id; a dredger also carries the region_id it sits over, because which stretch of reef a dredger threatens is placement rather than roster data.\n  * Contact routes by the unit's DECLARED behaviour, never by anything the scene picks — entangle and snag through the one contact lane, dredge through strike_region, a toxin aura on both the enter and exit edges because an aura is a volume rather than a hit. A world therefore cannot invent an effect by placing a node, which is the point of the sanctioned surface.\n  * Placing a node is not a declaration: a node naming an undeclared unit stays inert, the same rule a collectible pickup naming an undeclared id follows. The check runs on every lane rather than only at wiring time, because the probes and tests drive those seams directly.\n  * `boss` builds a FlagshipEncounter wired to Regeneration, Lives, Restoration and the Gill Mods. A refused declaration leaves the region LOCKED: a boss that failed to build has not been beaten, and opening the region because the declaration was malformed would hand the player the payoff for free.\n  * The `boss_phase` scene convention makes the encounter drivable from a scene at all. A phase volume reads the player's grammar at the moment of contact rather than declaring it, because that is the point of REQ-013 AC-3 — a water-only phase must be cleared while actually swimming.\n\nTHE FLEET IS BUILT even when a world declares nothing, so the accessor never returns null and the tick loop needs no special case. That tick is load-bearing: the entanglement and aura-linger timers live in the fleet precisely so a despawned enemy cannot strand the player debuffed forever.\n\nTHE UNITS have bodies, generated through the same headless Blender lane as the environment kit. The design rule is the vision's: faceless industrial extraction machinery, never human characters, so every unit is assembled from machine primitives and none has a face, an eye or a limb. A cold oxidised-iron palette with a single amber warning accent separates them from the warm reef, and they are flat-shaded where the reef kit is smooth, because manufactured things have hard edges.\n\nUnits sit OFF the walked route in both official worlds: the walk probes measure every checkpoint segment against progression.max_retry_seconds, and an entangling unit on that line would fail a completability probe for a reason unrelated to completability.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "A world declaring no enemies still has a working DriftFleetSystem, so the absent default is a no-op rather than a null, and the reference template keeps exercising that path",
+        "The shipped enemy roster loads into a world's fleet so a manifest can name any of its units",
+        "Contact with a declared entangling unit, driven through the runtime's own scene seam, entangles the player",
+        "A scene node naming a unit the world never declared stays inert on every lane, not only at wiring time",
+        "A dredger reverts the region its node names back to barren while leaving the region's unlocked flag set",
+        "A valid boss declaration builds a Flagship encounter and its region starts locked",
+        "A refused boss declaration leaves the region locked rather than opening it",
+        "A boss phase volume clears a phase only when the player arrives in the grammar that phase demands",
+        "Both official worlds declare and place a Drift Fleet, and every walk probe, contract checker and the perf gate stay green with the units in place",
+        "Every Drift Fleet unit ships as a contract-conforming asset with provenance recording the generator"
+      ],
+      "contentHash": "80e375c8cb9b2d75a92ce7cfb7a42f964fb89124def28b17d6b5101bf1df0ac8"
     }
   ],
   "mappings": [
@@ -729,6 +765,56 @@
     },
     {
       "requirementId": "REQ-034",
+      "nodeId": "22222222-0000-4000-8000-000000000025",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-035",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-035",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-035",
+      "nodeId": "22222222-0000-4000-8000-000000000014",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-035",
+      "nodeId": "22222222-0000-4000-8000-000000000024",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-035",
+      "nodeId": "22222222-0000-4000-8000-000000000025",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-036",
+      "nodeId": "22222222-0000-4000-8000-000000000008",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-036",
+      "nodeId": "22222222-0000-4000-8000-000000000010",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-036",
+      "nodeId": "22222222-0000-4000-8000-000000000011",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-036",
+      "nodeId": "22222222-0000-4000-8000-000000000021",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-036",
       "nodeId": "22222222-0000-4000-8000-000000000025",
       "mappingType": "implements"
     }

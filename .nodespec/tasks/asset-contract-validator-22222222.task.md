@@ -204,6 +204,39 @@ The art-pipeline counterpart to the Level Contract checker, and the automated ha
 - [x] A deliberately non-conforming fixture asset fails validation and conforming official assets pass
   → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
 
+### REQ-035: Hero rig and animation set
+Category: functional | Status: pending
+_Shared with: OpenAxolotl Game Client, Axolotl Controller, Blender (headless), Model Refinement Pipeline — their slices live in their own task docs._
+The hero model must deform as it moves rather than slide as a rigid prop. The shipped axolotl carries a skeleton and an animation clip for every movement state the controller already computes, and the game client plays the matching clip from that state.
+
+THE RIG is produced headless, through the same Blender lane as the refinement pass (REQ-032), so it is reproducible from the unrigged source and never depends on a rigging artist or a GUI session. Twelve bones: root, spine, head, two gill stalks, four legs, three tail segments. Weights are computed by inverse-square distance to the two nearest bone segments rather than heat-diffused, because Blender's automatic weights need manifold geometry and the hero is a merged pile of primitives — bone heat can fail outright and would fail differently per Blender build.
+
+The eye and its highlight are bound WHOLE to the head bone. Under the nearest-two rule they landed 77% and 70% respectively on the gill bones — measurably different ratios — so the highlight slid off the pupil whenever the fronds swung.
+
+THE CLIPS are the contract with the client, by name: idle, waddle, swim, hop, fall, hurt. The rigging CLI fails the build if a clip is missing, if the geometry changed, or if nothing came back skinned.
+
+THE CLIENT chooses the clip from four facts the body already has each physics step: in water, on the floor, vertical speed, planar speed. Water wins over everything; airborne splits on direction of travel; grounded splits on whether it is moving. HURT is a one-shot that overrides the locomotion choice for its own length and is driven by the world's capability-loss signal, not guessed from motion — a flinch the player cannot see is not feedback.
+
+Geometry is never altered by rigging, so the triangle budget the Asset Contract sets (REQ-030) continues to hold.
+
+**Acceptance criteria — your task boxes:**
+- [x] The rigging pipeline runs headless in Blender and produces a skinned model carrying all six named clips (idle, waddle, swim, hop, fall, hurt), failing the build if any is missing or nothing is skinned
+  → THIS NODE via Contract "GLB Header Reader" (dependency) from Model Refinement Pipeline — coordinate with Model Refinement Pipeline
+- [x] Rigging preserves geometry exactly: the triangle count out equals the triangle count in and the model stays inside its Asset Contract budget
+  → THIS NODE via Contract "GLB Header Reader" (dependency) from Model Refinement Pipeline — coordinate with Model Refinement Pipeline
+- [x] The shipped hero imports into Godot with a Skeleton3D carrying the documented bones, every mesh skinned, and the ongoing clips set to loop despite glTF importing them one-shot
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client, Axolotl Controller, Blender (headless), Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
+- [x] The eye and its highlight are each driven by exactly one bone, and that bone is the head, so the highlight cannot separate from the pupil
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client, Axolotl Controller, Blender (headless), Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
+- [x] The animator maps every movement state to its clip: water to swim regardless of other state, rising to hop, descending to fall, grounded and moving to waddle, grounded and still to idle
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client, Axolotl Controller, Blender (headless), Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
+- [x] The hurt flinch overrides locomotion for the full length of its clip and resumes locomotion afterwards
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client, Axolotl Controller, Blender (headless), Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
+- [x] An animator bound to a model with no AnimationPlayer is inert rather than broken, so bodies built without a model still run
+  → THIS NODE via Contract "GLB Header Reader" (dependency) from Model Refinement Pipeline — coordinate with Model Refinement Pipeline
+- [x] The hero's provenance records the rigging step, its tool, and the bones and clips it added
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client, Axolotl Controller, Blender (headless), Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
+
 ## Interface Contracts
 
 ### SENDS TO: OpenAxolotl Game Client (game-client)

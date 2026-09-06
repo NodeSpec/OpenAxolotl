@@ -201,6 +201,47 @@ Pillar 3 — the mechanic that carries the open-source metaphor without a child 
 - [ ] The broken-to-restored transformation is visually dramatic and satisfying in hands-on play (manual)
   → covered by Task T12
 
+### REQ-036: Drift Fleet and Flagship reachable from a world
+Category: functional | Status: pending
+_Shared with: World: Coral Cove, Drift Fleet Enemy Framework, Flagship Boss Encounter, Model Refinement Pipeline — their slices live in their own task docs._
+The Drift Fleet runtime (REQ-012) and the Flagship encounter (REQ-013) must be reachable from a world. Both were built and tested headless, and every one of those tests passed while no world could reach either: the WorldSystems runtime had no enemy scene convention, never constructed a DriftFleetSystem, and never read the manifest's optional `boss` element. The framework's own comment says it "owns no enemy placement and no geometry: a world places enemies, and whatever binds the scene calls the lanes below" — nothing was that binder.
+
+THE JOIN follows the shape every other element uses: the manifest declares, the scene places, the runtime connects the two.
+
+  * `enemies` lists the roster ids a world uses. Nodes in the `enemy` group carry an enemy_id; a dredger also carries the region_id it sits over, because which stretch of reef a dredger threatens is placement rather than roster data.
+  * Contact routes by the unit's DECLARED behaviour, never by anything the scene picks — entangle and snag through the one contact lane, dredge through strike_region, a toxin aura on both the enter and exit edges because an aura is a volume rather than a hit. A world therefore cannot invent an effect by placing a node, which is the point of the sanctioned surface.
+  * Placing a node is not a declaration: a node naming an undeclared unit stays inert, the same rule a collectible pickup naming an undeclared id follows. The check runs on every lane rather than only at wiring time, because the probes and tests drive those seams directly.
+  * `boss` builds a FlagshipEncounter wired to Regeneration, Lives, Restoration and the Gill Mods. A refused declaration leaves the region LOCKED: a boss that failed to build has not been beaten, and opening the region because the declaration was malformed would hand the player the payoff for free.
+  * The `boss_phase` scene convention makes the encounter drivable from a scene at all. A phase volume reads the player's grammar at the moment of contact rather than declaring it, because that is the point of REQ-013 AC-3 — a water-only phase must be cleared while actually swimming.
+
+THE FLEET IS BUILT even when a world declares nothing, so the accessor never returns null and the tick loop needs no special case. That tick is load-bearing: the entanglement and aura-linger timers live in the fleet precisely so a despawned enemy cannot strand the player debuffed forever.
+
+THE UNITS have bodies, generated through the same headless Blender lane as the environment kit. The design rule is the vision's: faceless industrial extraction machinery, never human characters, so every unit is assembled from machine primitives and none has a face, an eye or a limb. A cold oxidised-iron palette with a single amber warning accent separates them from the warm reef, and they are flat-shaded where the reef kit is smooth, because manufactured things have hard edges.
+
+Units sit OFF the walked route in both official worlds: the walk probes measure every checkpoint segment against progression.max_retry_seconds, and an entangling unit on that line would fail a completability probe for a reason unrelated to completability.
+
+**Acceptance criteria — your task boxes:**
+- [x] A world declaring no enemies still has a working DriftFleetSystem, so the absent default is a no-op rather than a null, and the reference template keeps exercising that path
+  → THIS NODE via Contract "Restoration Region Interface" (dependency) from Drift Fleet Enemy Framework — coordinate with Drift Fleet Enemy Framework
+- [x] The shipped enemy roster loads into a world's fleet so a manifest can name any of its units
+  → THIS NODE via Contract "Restoration Region Interface" (dependency) from Drift Fleet Enemy Framework — coordinate with Drift Fleet Enemy Framework
+- [x] Contact with a declared entangling unit, driven through the runtime's own scene seam, entangles the player
+  → owner unresolved — this node or a sharing node (World: Coral Cove, Drift Fleet Enemy Framework, Flagship Boss Encounter, Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
+- [x] A scene node naming a unit the world never declared stays inert on every lane, not only at wiring time
+  → THIS NODE via Contract "Restoration Region Interface" (dependency) from World: Coral Cove — coordinate with World: Coral Cove
+- [x] A dredger reverts the region its node names back to barren while leaving the region's unlocked flag set
+  → THIS NODE via Contract "Restoration Region Interface" (dependency) from Drift Fleet Enemy Framework — coordinate with Drift Fleet Enemy Framework
+- [x] A valid boss declaration builds a Flagship encounter and its region starts locked
+  → THIS NODE via Contract "Restoration Region Interface" (dependency) from Flagship Boss Encounter — coordinate with Flagship Boss Encounter
+- [x] A refused boss declaration leaves the region locked rather than opening it
+  → THIS NODE via Contract "Restoration Region Interface" (dependency) from Flagship Boss Encounter — coordinate with Flagship Boss Encounter
+- [x] A boss phase volume clears a phase only when the player arrives in the grammar that phase demands
+  → THIS NODE via Contract "Restoration Region Interface" (dependency) from Flagship Boss Encounter — coordinate with Flagship Boss Encounter
+- [x] Both official worlds declare and place a Drift Fleet, and every walk probe, contract checker and the perf gate stay green with the units in place
+  → THIS NODE via Contract "Restoration Region Interface" (dependency) from Drift Fleet Enemy Framework — coordinate with Drift Fleet Enemy Framework
+- [x] Every Drift Fleet unit ships as a contract-conforming asset with provenance recording the generator
+  → THIS NODE via Contract "Restoration Region Interface" (dependency) from Drift Fleet Enemy Framework — coordinate with Drift Fleet Enemy Framework
+
 ## Interface Contracts
 
 ### SENDS TO: Save System (shared-library)

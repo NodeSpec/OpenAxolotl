@@ -1,7 +1,7 @@
 {
   "modelVersion": 1,
   "generatedBy": "nodespec",
-  "modelHash": "c474bb674b3334c5a0ef9547c4267a1a0a97782772c27dc28f068481cf778a93",
+  "modelHash": "783a959061baa52204909dddeeed83602ac38fa78cf5af6b230b7bcd2f299af8",
   "nodes": [
     {
       "id": "22222222-0000-4000-8000-000000000001",
@@ -1390,13 +1390,6 @@
       "kind": "source"
     },
     {
-      "id": "08fd6c54-52de-4288-9fa8-19e853e3dcfa",
-      "nodeId": "22222222-0000-4000-8000-000000000011",
-      "path": "worlds/coral_cove/world.json",
-      "kind": "config",
-      "contentHash": "000000001e7fc0b2"
-    },
-    {
       "id": "0993048b-c489-4793-b528-ae7b45bc7c80",
       "nodeId": "22222222-0000-4000-8000-000000000018",
       "path": ".nodespec/tests/req-024.tests.md",
@@ -2407,6 +2400,30 @@
       "kind": "source"
     },
     {
+      "id": "a7c3e5f1-2b4d-4068-8e9a-1c2d3e4f5001",
+      "nodeId": "22222222-0000-4000-8000-000000000025",
+      "path": "tools/blender/make_drift_fleet.py",
+      "kind": "source"
+    },
+    {
+      "id": "a7c3e5f1-2b4d-4068-8e9a-1c2d3e4f5002",
+      "nodeId": "22222222-0000-4000-8000-000000000011",
+      "path": "test/hub/test_world_drift_fleet.gd",
+      "kind": "test-plan"
+    },
+    {
+      "id": "a7c3e5f1-2b4d-4068-8e9a-1c2d3e4f5003",
+      "nodeId": "22222222-0000-4000-8000-000000000011",
+      "path": "worlds/coral_cove/world.json",
+      "kind": "config"
+    },
+    {
+      "id": "a7c3e5f1-2b4d-4068-8e9a-1c2d3e4f5004",
+      "nodeId": "22222222-0000-4000-8000-000000000011",
+      "path": "worlds/bubble_bay/world.json",
+      "kind": "config"
+    },
+    {
       "id": "a9d63e12-4f70-4b85-8c2d-51e9a7b04c63",
       "nodeId": "22222222-0000-4000-8000-000000000017",
       "path": "core/audio/godot_audio_sink.gd",
@@ -2443,7 +2460,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000001",
       "path": "assets/character/axolotl/provenance.json",
       "kind": "config",
-      "contentHash": "0000000070e63098"
+      "contentHash": "000000000dbd3118"
     },
     {
       "id": "ae9330bd-d402-46df-8103-d216d722f88e",
@@ -2838,7 +2855,7 @@
       "nodeId": "22222222-0000-4000-8000-000000000002",
       "path": "core/controller/axolotl_controller.gd",
       "kind": "source",
-      "contentHash": "000000004d3a2488"
+      "contentHash": "000000006c0e4761"
     },
     {
       "id": "d6f92a41-7b83-4e15-a029-4c7f81b3e502",
@@ -2917,7 +2934,8 @@
       "id": "e2b4c6d8-1111-4a2b-8c3d-4e5f6a7b8c02",
       "nodeId": "22222222-0000-4000-8000-000000000025",
       "path": "tools/blender/make_environment_kit.py",
-      "kind": "source"
+      "kind": "source",
+      "contentHash": "0000000027336095"
     },
     {
       "id": "e2b4c6d8-1111-4a2b-8c3d-4e5f6a7b8c03",
@@ -3096,6 +3114,30 @@
       "nodeId": "22222222-0000-4000-8000-000000000017",
       "path": "core/audio/audio_bank.gd",
       "kind": "source"
+    },
+    {
+      "id": "f3a1c2d4-5e6f-4708-9a1b-2c3d4e5f6001",
+      "nodeId": "22222222-0000-4000-8000-000000000025",
+      "path": "tools/blender/rig_model.py",
+      "kind": "source"
+    },
+    {
+      "id": "f3a1c2d4-5e6f-4708-9a1b-2c3d4e5f6002",
+      "nodeId": "22222222-0000-4000-8000-000000000025",
+      "path": "tools/rig_model.py",
+      "kind": "source"
+    },
+    {
+      "id": "f3a1c2d4-5e6f-4708-9a1b-2c3d4e5f6003",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "core/rendering/hero_animator.gd",
+      "kind": "source"
+    },
+    {
+      "id": "f3a1c2d4-5e6f-4708-9a1b-2c3d4e5f6004",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "path": "test/core/rendering/test_hero_animator.gd",
+      "kind": "test-plan"
     },
     {
       "id": "f5dc25a3-f44a-49f7-8bbf-f8544c6b7c57",
