@@ -17,34 +17,42 @@
     "at least one conforming source file",
     "provenance.json"
   ],
+  "models": {
+    "fileType": ".glb",
+    "description": "3D assets are binary glTF 2.0, one .glb per asset directory beside any textures it uses. Godot imports glTF natively - meshes, skeletons, materials, animation clips - so no conversion step exists to drift. Each category that carries meshes declares a triangle budget: the validator reads the file's JSON chunk (its header) and sums primitive index counts, never decoding geometry. Godot's <file>.import sidecars are engine bookkeeping, not sources, and are ignored wherever they appear."
+  },
   "categories": {
     "character": {
-      "fileTypes": [".png"],
+      "fileTypes": [".png", ".glb"],
       "minSize": [64, 64],
       "maxSize": [2048, 2048],
       "alpha": "required",
-      "why": "Characters composite over every background the game has; a character sprite or texture without an alpha channel ships a rectangle."
+      "maxTriangles": 60000,
+      "why": "Characters composite over every background the game has; a character sprite or texture without an alpha channel ships a rectangle. The hero and named characters get the largest mesh budget: they are on screen every frame and closest to the camera."
     },
     "creature": {
-      "fileTypes": [".png"],
+      "fileTypes": [".png", ".glb"],
       "minSize": [64, 64],
       "maxSize": [2048, 2048],
       "alpha": "required",
-      "why": "Same compositing rule as characters."
+      "maxTriangles": 30000,
+      "why": "Same compositing rule as characters. Creatures appear in numbers, so each carries half a hero's mesh budget."
     },
     "prop": {
-      "fileTypes": [".png"],
+      "fileTypes": [".png", ".glb"],
       "minSize": [32, 32],
       "maxSize": [2048, 2048],
       "alpha": "required",
-      "why": "Props sit in scenes over arbitrary geometry."
+      "maxTriangles": 10000,
+      "why": "Props sit in scenes over arbitrary geometry, and a world places dozens of them."
     },
     "environment": {
-      "fileTypes": [".png"],
+      "fileTypes": [".png", ".glb"],
       "minSize": [128, 128],
       "maxSize": [4096, 4096],
       "alpha": "allowed",
-      "why": "Environment textures may be opaque (ground, walls) or cut-out (foliage); both are legitimate, so alpha is neither required nor forbidden."
+      "maxTriangles": 200000,
+      "why": "Environment textures may be opaque (ground, walls) or cut-out (foliage); both are legitimate, so alpha is neither required nor forbidden. Environment meshes are a world's set dressing in one piece, hence the largest budget."
     },
     "audio": {
       "fileTypes": [".wav", ".ogg"],

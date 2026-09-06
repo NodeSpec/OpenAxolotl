@@ -70,20 +70,27 @@ class ContractDeclares(unittest.TestCase):
     def test_req_015_every_category_declares_file_types_and_constraints(self):
         categories = self.contract["categories"]
         self.assertGreaterEqual(len(categories), 5)
+        mesh_categories = 0
         for name, rules in categories.items():
-            self.assertTrue(rules.get("fileTypes"),
-                            f"category '{name}' declares no file types")
-            image_like = ".png" in rules["fileTypes"]
-            if image_like:
+            kinds = rules.get("fileTypes")
+            self.assertTrue(kinds, f"category '{name}' declares no file types")
+            if ".png" in kinds:
                 # Resolution bounds and an explicit alpha policy, per category.
                 self.assertIn("minSize", rules, name)
                 self.assertIn("maxSize", rules, name)
                 self.assertIn(rules.get("alpha"),
                               ("required", "forbidden", "allowed"), name)
-            else:
+            if ".glb" in kinds:
+                # Meshes: a triangle budget, per category.
+                mesh_categories += 1
+                self.assertGreater(rules.get("maxTriangles", 0), 0, name)
+            if ".wav" in kinds or ".ogg" in kinds:
                 # Audio: format constraints instead.
                 self.assertIn("maxChannels", rules, name)
                 self.assertTrue(rules.get("sampleRates"), name)
+        # The 3D pipeline is declared, not implied: characters at least.
+        self.assertIn(".glb", categories["character"]["fileTypes"])
+        self.assertGreaterEqual(mesh_categories, 1)
 
     def test_req_015_layout_and_naming_convention_are_specified(self):
         layout = self.contract["layout"]
@@ -218,6 +225,33 @@ class CategoryConformance(Corpus):
                 handle.write(b"definitely not ogg")
             with self.assertRaises(validator.HeaderError):
                 validator.ogg_header(junk)
+
+    def test_req_016_a_mesh_over_its_triangle_budget_is_caught(self):
+        self.assertEqual(self.rules_for("heavy_whale.glb"),
+                         ["creature.triangle_budget"])
+
+    def test_req_016_a_file_lying_about_being_a_glb_is_caught(self):
+        self.assertEqual(self.rules_for("hollow_crate.glb"),
+                         ["prop.model_format"])
+
+    def test_req_016_glb_headers_are_read_and_engine_sidecars_are_ignored(self):
+        # The conforming axo_hero holds a mesh, a texture and the .import
+        # sidecar Godot writes beside every imported file; the tree passes,
+        # so the sidecar was treated as bookkeeping rather than as a source
+        # with an illegal extension.
+        report = self.report_for(self.conforming)
+        self.assertTrue(report["passed"], report["violations"])
+        # And the header reader is proven directly on crafted bytes.
+        with tempfile.TemporaryDirectory() as work:
+            glb = os.path.join(work, "hero.glb")
+            asset_fixtures.write_glb(glb, triangles=7)
+            triangles, meshes, animations = validator.glb_header(glb)
+            self.assertEqual((triangles, meshes, animations), (7, 1, []))
+            junk = os.path.join(work, "junk.glb")
+            with open(junk, "wb") as handle:
+                handle.write(b"not a model")
+            with self.assertRaises(validator.HeaderError):
+                validator.glb_header(junk)
 
     def test_req_016_forbidden_alpha_policy_is_implemented(self):
         # No shipped category forbids alpha today, but the KIND must work the

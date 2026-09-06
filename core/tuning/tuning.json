@@ -148,6 +148,13 @@
       "max": 30.0,
       "description": "Time submerged to regain one dash charge. Does not accrue on land."
     },
+    "controller.facing.turn_rate_deg_per_s": {
+      "value": 540.0,
+      "unit": "degrees_per_second",
+      "min": 30.0,
+      "max": 3600.0,
+      "description": "How fast the axolotl's body swings to face its direction of travel. Fast enough that a reversal reads as a flick rather than a slow pivot, slow enough that the turn is visible: an instant snap makes the character look teleported."
+    },
     "capability.tail_loss.swim_speed_multiplier": {
       "value": 0.6,
       "unit": "multiplier",

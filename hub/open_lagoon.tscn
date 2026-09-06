@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=8 format=3]
 
 ; THE OPEN LAGOON (REQ-009) — the hub, as a scene, and the game's main scene.
 ;
@@ -14,7 +14,7 @@
 ; beside the hub, never inside it.
 
 [ext_resource type="Script" path="res://hub/open_lagoon.gd" id="1_hub"]
-[ext_resource type="Script" path="res://core/controller/axolotl_body.gd" id="2_body"]
+[ext_resource type="PackedScene" path="res://core/controller/axolotl_body.tscn" id="2_axolotl"]
 [ext_resource type="Script" path="res://core/camera/camera_follow.gd" id="3_camera"]
 
 [sub_resource type="Environment" id="Environment_1"]
@@ -32,17 +32,6 @@ size = Vector3(48, 2, 32)
 
 [sub_resource type="StandardMaterial3D" id="Material_ground"]
 albedo_color = Color(0.5, 0.58, 0.52, 1)
-
-[sub_resource type="StandardMaterial3D" id="Material_axolotl"]
-albedo_color = Color(0.95, 0.6, 0.72, 1)
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_axolotl"]
-radius = 0.5
-height = 1.6
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_axolotl"]
-radius = 0.5
-height = 1.6
 
 [node name="Main" type="Node3D"]
 
@@ -69,16 +58,8 @@ shape = SubResource("BoxShape3D_ground")
 [node name="HubSpawn" type="Marker3D" parent="OpenLagoon" groups=["hub_spawn"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 6)
 
-[node name="Axolotl" type="CharacterBody3D" parent="." groups=["player"]]
+[node name="Axolotl" parent="." instance=ExtResource("2_axolotl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 6)
-script = ExtResource("2_body")
-
-[node name="Mesh" type="MeshInstance3D" parent="Axolotl"]
-mesh = SubResource("CapsuleMesh_axolotl")
-surface_material_override/0 = SubResource("Material_axolotl")
-
-[node name="Collision" type="CollisionShape3D" parent="Axolotl"]
-shape = SubResource("CapsuleShape3D_axolotl")
 
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 14)

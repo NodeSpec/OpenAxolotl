@@ -30,17 +30,43 @@ assets/<category>/<name>/
 
 ## Per-category constraints
 
-| Category | File types | Resolution | Alpha |
-|---|---|---|---|
-| character | `.png` | 64×64 – 2048×2048 | **required** |
-| creature | `.png` | 64×64 – 2048×2048 | **required** |
-| prop | `.png` | 32×32 – 2048×2048 | **required** |
-| environment | `.png` | 128×128 – 4096×4096 | allowed |
-| audio | `.wav`, `.ogg` | ≤ 2 channels, 44100 or 48000 Hz | — |
+| Category | File types | Image resolution | Alpha | Mesh budget |
+|---|---|---|---|---|
+| character | `.png`, `.glb` | 64×64 – 2048×2048 | **required** | ≤ 60 000 triangles |
+| creature | `.png`, `.glb` | 64×64 – 2048×2048 | **required** | ≤ 30 000 triangles |
+| prop | `.png`, `.glb` | 32×32 – 2048×2048 | **required** | ≤ 10 000 triangles |
+| environment | `.png`, `.glb` | 128×128 – 4096×4096 | allowed | ≤ 200 000 triangles |
+| audio | `.wav`, `.ogg` | ≤ 2 channels, 44100 or 48000 Hz | — | — |
 
 Characters, creatures and props composite over arbitrary backgrounds — an
 image without an alpha channel ships a rectangle, so alpha is required.
 Environment textures may legitimately be opaque, so alpha is merely allowed.
+
+## 3D models
+
+A 3D asset is a **binary glTF 2.0** file (`.glb`), one per asset directory,
+beside any textures it uses:
+
+```
+assets/character/axolotl/
+  axolotl.glb        the mesh (and its rig, materials and clips, if any)
+  axolotl.png        optional textures, checked like any other image
+  provenance.json    required, exactly as for every other asset
+```
+
+Godot imports glTF natively — meshes, skeletons, materials, animation clips
+— so there is no conversion step to drift, and a `.glb` from Blender, a
+CC0 pack or an AI mesh generator drops straight in. Reference it from a scene
+as a `PackedScene` and instance it; the hero is
+`core/controller/axolotl_body.tscn`, which does exactly that.
+
+The validator reads the file's JSON chunk (its header) and sums the primitive
+index counts against the category's triangle budget; it never decodes
+geometry. Godot's `<file>.import` sidecars are engine bookkeeping — ignored
+wherever they appear, and gitignored.
+
+Vertex-coloured, textured and untextured meshes are all legitimate. Whether
+the model *looks* right is the human half below, exactly as for images.
 
 ## Provenance — every asset, no exceptions
 

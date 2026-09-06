@@ -20,8 +20,8 @@ subset that schema uses. The rule stays visible in the contract a contributor
 reads; nothing about generation methods is hardcoded in this file.
 
 Media files are read by HEADER only -- PNG IHDR + chunk walk, WAV fmt chunk,
-OGG id packet -- never decoded, because this runs over every asset on every
-pull request that touches art. Standard library only, like every validator in
+OGG id packet, the JSON chunk of a binary glTF -- never decoded, because this
+runs over every asset on every pull request that touches art. Standard library only, like every validator in
 this repo: a contributor (or an agent self-checking its own art) installs
 nothing.
 
@@ -49,6 +49,11 @@ EXIT_INVOCATION = 2
 TOOL_NAME = "asset-contract-validator"
 
 DEFAULT_SCHEMA = os.path.join("contracts", "asset_contract.v1.json")
+
+# Godot writes `<file>.import` beside every imported asset. The suffix is
+# gitignored, but it exists in any working tree that has run the engine, so
+# the validator must know it is engine bookkeeping and never a source file.
+IMPORT_SIDECAR_SUFFIX = ".import"
 
 
 # --------------------------------------------------------------------------
@@ -187,6 +192,60 @@ def ogg_header(path: str) -> tuple[int, int]:
     raise HeaderError("OGG file carries neither a Vorbis nor an Opus id header")
 
 
+GLB_MAGIC = 0x46546C67       # "glTF"
+GLB_JSON_CHUNK = 0x4E4F534A  # "JSON"
+GLTF_TRIANGLES = 4
+GLTF_TRIANGLE_STRIP = 5
+GLTF_TRIANGLE_FAN = 6
+
+
+def glb_header(path: str) -> tuple[int, int, list[str]]:
+    """(triangles, mesh_count, animation_names) from a binary glTF 2.0.
+
+    Only the leading JSON chunk is read -- it IS the model's header, and it
+    precedes the binary payload by specification. The triangle count comes
+    from the index accessors' declared counts (vertex counts for unindexed
+    primitives), numbers the header already carries: no geometry is decoded.
+    """
+    with open(path, "rb") as handle:
+        head = handle.read(20)
+        if len(head) < 20 or struct.unpack_from("<I", head, 0)[0] != GLB_MAGIC:
+            raise HeaderError("not a GLB file (bad magic)")
+        version = struct.unpack_from("<I", head, 4)[0]
+        if version != 2:
+            raise HeaderError(f"GLB container version {version}; "
+                              f"only glTF 2.0 is supported")
+        chunk_length, chunk_type = struct.unpack_from("<II", head, 12)
+        if chunk_type != GLB_JSON_CHUNK:
+            raise HeaderError("GLB does not start with a JSON chunk")
+        body = handle.read(chunk_length)
+    try:
+        document = json.loads(body)
+    except (json.JSONDecodeError, UnicodeDecodeError) as problem:
+        raise HeaderError(f"GLB JSON chunk is not valid JSON: {problem}")
+    if not isinstance(document, dict):
+        raise HeaderError("GLB JSON chunk is not an object")
+
+    accessors = document.get("accessors", [])
+    triangles = 0
+    for mesh in document.get("meshes", []):
+        for primitive in mesh.get("primitives", []):
+            mode = primitive.get("mode", GLTF_TRIANGLES)
+            if "indices" in primitive:
+                count = accessors[primitive["indices"]].get("count", 0)
+            else:
+                position = primitive.get("attributes", {}).get("POSITION")
+                count = 0 if position is None \
+                    else accessors[position].get("count", 0)
+            if mode == GLTF_TRIANGLES:
+                triangles += count // 3
+            elif mode in (GLTF_TRIANGLE_STRIP, GLTF_TRIANGLE_FAN):
+                triangles += max(count - 2, 0)
+    animations = [str(clip.get("name", f"animation_{index}"))
+                  for index, clip in enumerate(document.get("animations", []))]
+    return triangles, len(document.get("meshes", [])), animations
+
+
 # --------------------------------------------------------------------------
 # A JSON Schema evaluator, exactly as large as the provenance schema needs
 # --------------------------------------------------------------------------
@@ -271,6 +330,7 @@ class AssetValidator:
         entries = sorted(os.listdir(asset_dir))
         sources = [e for e in entries
                    if e != self.provenance_file
+                   and not e.endswith(IMPORT_SIDECAR_SUFFIX)
                    and os.path.isfile(os.path.join(asset_dir, e))]
 
         if not sources:
@@ -308,7 +368,34 @@ class AssetValidator:
             return self._check_image(category, rules, path, rel)
         if extension in (".wav", ".ogg"):
             return self._check_audio(category, rules, path, rel, extension)
+        if extension == ".glb":
+            return self._check_model(category, rules, path, rel)
         return []
+
+    def _check_model(self, category: str, rules: dict, path: str,
+                     rel: str) -> list[Violation]:
+        try:
+            triangles, meshes, _animations = glb_header(path)
+        except (HeaderError, IndexError, KeyError, TypeError,
+                struct.error) as problem:
+            return [Violation(
+                rule=f"{category}.model_format", file=rel,
+                message=f"unreadable GLB header: {problem}")]
+
+        violations: list[Violation] = []
+        if meshes == 0:
+            violations.append(Violation(
+                rule=f"{category}.model_format", file=rel,
+                message="the GLB declares no meshes"))
+        budget = rules.get("maxTriangles")
+        if budget is not None and triangles > budget:
+            violations.append(Violation(
+                rule=f"{category}.triangle_budget", file=rel,
+                message=f"{triangles} triangles exceeds the {category} "
+                        f"budget of {budget}",
+                remediation="decimate the mesh, or split it into several "
+                            "assets"))
+        return violations
 
     def _check_image(self, category: str, rules: dict, path: str,
                      rel: str) -> list[Violation]:

@@ -70,6 +70,50 @@ def vorbis_ogg_bytes(*, channels: int = 2, rate: int = 44100) -> bytes:
     return header + packet
 
 
+def write_glb(path: str, *, triangles: int = 12) -> None:
+    """A real, loadable binary glTF 2.0: one mesh, one indexed triangle-list
+    primitive whose index accessor declares [triangles] triangles over three
+    shared vertices. Header-true rather than pretty -- the validator reads the
+    JSON chunk and nothing else, and the geometry exists so the engine could
+    open the file too."""
+    positions = struct.pack("<9f", 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+    indices = struct.pack("<%dI" % (triangles * 3), *([0, 1, 2] * triangles))
+    binary = positions + indices
+    binary += b"\x00" * (-len(binary) % 4)
+
+    document = {
+        "asset": {"version": "2.0", "generator": "OpenAxolotl fixtures"},
+        "buffers": [{"byteLength": len(binary)}],
+        "bufferViews": [
+            {"buffer": 0, "byteOffset": 0, "byteLength": len(positions),
+             "target": 34962},
+            {"buffer": 0, "byteOffset": len(positions),
+             "byteLength": len(indices), "target": 34963},
+        ],
+        "accessors": [
+            {"bufferView": 0, "componentType": 5126, "count": 3,
+             "type": "VEC3", "min": [0.0, 0.0, 0.0], "max": [1.0, 1.0, 0.0]},
+            {"bufferView": 1, "componentType": 5125, "count": triangles * 3,
+             "type": "SCALAR"},
+        ],
+        "meshes": [{"name": "fixture", "primitives": [
+            {"attributes": {"POSITION": 0}, "indices": 1, "mode": 4}]}],
+        "nodes": [{"mesh": 0, "name": "fixture"}],
+        "scenes": [{"nodes": [0]}],
+        "scene": 0,
+    }
+    json_chunk = json.dumps(document, separators=(",", ":")).encode("utf-8")
+    json_chunk += b" " * (-len(json_chunk) % 4)
+
+    total = 12 + 8 + len(json_chunk) + 8 + len(binary)
+    with open(path, "wb") as handle:
+        handle.write(struct.pack("<III", 0x46546C67, 2, total))
+        handle.write(struct.pack("<II", len(json_chunk), 0x4E4F534A))
+        handle.write(json_chunk)
+        handle.write(struct.pack("<II", len(binary), 0x004E4942))
+        handle.write(binary)
+
+
 def write_provenance(asset_dir: str, *, method: str,
                      author: str = "OpenAxolotl Fixtures",
                      license_terms: str = "CC0-1.0",
@@ -126,6 +170,17 @@ def write_conforming(root: str) -> str:
               rgb=(90, 130, 150))
     write_provenance(reef, method="hand-authored")
 
+    # A 3D hero: its mesh AND its texture in one asset directory, plus the
+    # .import sidecar Godot leaves beside every imported file -- bookkeeping
+    # the validator must look straight past.
+    hero = _asset(root, "character", "axo_hero")
+    write_glb(os.path.join(hero, "axo_hero.glb"), triangles=12)
+    write_png(os.path.join(hero, "axo_hero.png"), 128, 128, alpha=True)
+    with open(os.path.join(hero, "axo_hero.glb.import"), "w",
+              encoding="utf-8") as handle:
+        handle.write("[remap]\nimporter=\"scene\"\ntype=\"PackedScene\"\n")
+    write_provenance(hero, method="hand-authored")
+
     return os.path.join(root, "assets")
 
 
@@ -168,6 +223,18 @@ def write_nonconforming(root: str) -> dict[str, str]:
     write_wav(os.path.join(hum, "deep_hum.wav"), rate=96000)
     write_provenance(hum, method="hand-authored")
     expect("audio.audio_format", "assets/audio/deep_hum/deep_hum.wav")
+
+    whale = _asset(root, "creature", "heavy_whale")
+    write_glb(os.path.join(whale, "heavy_whale.glb"), triangles=30001)
+    write_provenance(whale, method="hand-authored")
+    expect("creature.triangle_budget",
+           "assets/creature/heavy_whale/heavy_whale.glb")
+
+    crate = _asset(root, "prop", "hollow_crate")
+    with open(os.path.join(crate, "hollow_crate.glb"), "wb") as handle:
+        handle.write(b"glTF but not really; no chunks follow")
+    write_provenance(crate, method="hand-authored")
+    expect("prop.model_format", "assets/prop/hollow_crate/hollow_crate.glb")
 
     worm = _asset(root, "creature", "mud_worm")
     write_png(os.path.join(worm, "mud_worm.png"), 128, 128, alpha=True)

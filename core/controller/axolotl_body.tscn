@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3]
+
+; THE AXOLOTL — the player's body, as the one scene every proving ground and
+; the hub instance. The CharacterBody3D wrapper (axolotl_body.gd) drives the
+; controller; the model under it is the hero asset from
+; assets/character/axolotl (see its provenance.json).
+;
+; The COLLISION is the same vertical capsule the greybox body always had:
+; radius 0.5, height 1.6, origin at its centre, so every walk probe, the smoke
+; probe's resting-height check and every tuning value keep the physics
+; footprint they were proven against. The MODEL is visual only — its feet sit
+; on the capsule's bottom, scaled so a 4 m authoring-space axolotl becomes a
+; 2 m hero that the trailing camera (tuned for this capsule) frames whole —
+; and it turns to face the controller's heading; the body itself never
+; rotates. The model's native forward is -Z, Godot's forward, so no rotation
+; is baked in here.
+
+[ext_resource type="Script" path="res://core/controller/axolotl_body.gd" id="1_body"]
+[ext_resource type="PackedScene" path="res://assets/character/axolotl/axolotl.glb" id="2_model"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_axolotl"]
+radius = 0.5
+height = 1.6
+
+[node name="Axolotl" type="CharacterBody3D" groups=["player"]]
+script = ExtResource("1_body")
+
+[node name="Model" parent="." instance=ExtResource("2_model")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.78, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_axolotl")

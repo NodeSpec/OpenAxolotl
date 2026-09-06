@@ -215,10 +215,13 @@ class ValidatorEnvelopes(unittest.TestCase):
                          result.stdout[-2000:] + result.stderr[-2000:])
         payload = json.loads(result.stdout)
         self.assert_envelope(payload, "test-harness")
+        # "import" warms the engine cache first: a clean checkout has no
+        # .godot/ directory, and every imported asset resolves through it.
         self.assertEqual(
             payload["suitesRun"],
-            ["python-unit", "gdunit", "smoke-greybox", "template-walk",
-             "hub-walk", "coral-walk", "bubble-walk", "perf-gate"])
+            ["import", "python-unit", "gdunit", "smoke-greybox",
+             "template-walk", "hub-walk", "coral-walk", "bubble-walk",
+             "perf-gate"])
 
     def test_req_018_harness_refuses_rather_than_skipping_godot(self) -> None:
         # No engine must be exit 2 (invocation error), never a hollow pass.

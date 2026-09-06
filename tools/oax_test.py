@@ -156,7 +156,19 @@ def main(argv: list[str] | None = None) -> int:
 
     violations: list[dict] = []
     ran: list[str] = []
-    for suite in _suites(godot):
+
+    # Warm the import cache first, exactly as scripts/build.sh does. A clean
+    # checkout has no .godot/ directory: imported assets (the hero's .glb,
+    # textures, audio) resolve only through it, and so does the class-name
+    # registry the suites' scripts find each other by. Idempotent and quick
+    # on a warm cache, so it runs unconditionally rather than guessing.
+    warm = {
+        "id": "import",
+        "file": "project.godot",
+        "argv": [godot, *GODOT_FLAGS, "--import"],
+    }
+
+    for suite in [warm, *_suites(godot)]:
         ran.append(suite["id"])
         code, output = run_suite(suite)
         if code != 0:
