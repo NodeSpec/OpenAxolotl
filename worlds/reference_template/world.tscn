@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=6 format=3]
 
 ; THE REFERENCE TEMPLATE (REQ-029). Copy this directory to start a new world.
 ;
@@ -24,6 +24,11 @@
 ; The three GROUPS are load-bearing and must keep their names: the hub finds
 ; spawn_point, checkpoint and finish_volume by group, never by node name.
 ;
+; There is also no lighting here, on purpose. Worlds ship geometry; the game
+; client lights it with the shared rig (core/rendering/world_lighting.tscn),
+; which is how every world shares one look without re-tuning a sun. A world
+; that needs a mood of its own adds a WorldEnvironment; it never needs a sun.
+;
 ; LAYOUT. Godot's forward is -Z, so the player walks forward from spawn to
 ; finish. The route is deliberately trivial: this world's job is to prove the
 ; contract, not to entertain.
@@ -48,21 +53,7 @@ size = Vector3(12, 4, 2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_finish"]
 size = Vector3(12, 4, 2)
 
-[sub_resource type="Environment" id="Environment_1"]
-background_mode = 1
-background_color = Color(0.42, 0.62, 0.72, 1)
-ambient_light_source = 2
-ambient_light_color = Color(0.7, 0.75, 0.8, 1)
-ambient_light_energy = 0.7
-
 [node name="World" type="Node3D"]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_1")
-
-[node name="Sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.866, -0.353, 0.353, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 20, 0)
-shadow_enabled = true
 
 [node name="Ground" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -20)

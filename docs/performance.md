@@ -28,6 +28,14 @@ A 2020-class mid-range family PC:
 | Storage | SATA SSD |
 | Display | 1920×1080 |
 | OS | 64-bit Windows or Linux |
+| Renderer | Forward+ (Vulkan) with the shared lighting rig; Mobile as the automatic fallback |
+
+The look foundation — SDFGI, screen-space ambient occlusion, volumetric fog,
+soft cascaded shadows, TAA with 2× MSAA — is what this baseline has to carry
+at 60 FPS, and it is the first thing to scale back if a rendering run on
+baseline-class hardware shows it cannot. Those knobs live in one place,
+`core/rendering/base_environment.tres` and the `[rendering]` section of
+`project.godot`; scaling back never touches a world.
 
 ## The three targets
 

@@ -33,13 +33,8 @@
 [ext_resource type="Script" path="res://core/controller/water_volume.gd" id="2_water"]
 [ext_resource type="Script" path="res://core/camera/camera_follow.gd" id="3_camera"]
 [ext_resource type="Script" path="res://dev/fall_guard.gd" id="4_fallguard"]
-
-[sub_resource type="Environment" id="Environment_1"]
-background_mode = 1
-background_color = Color(0.42, 0.62, 0.72, 1)
-ambient_light_source = 2
-ambient_light_color = Color(0.62, 0.72, 0.82, 1)
-ambient_light_energy = 0.65
+[ext_resource type="PackedScene" path="res://core/rendering/world_lighting.tscn" id="5_lighting"]
+[ext_resource type="Material" path="res://core/rendering/water_surface.tres" id="6_watermat"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ground"]
 size = Vector3(60, 2, 36)
@@ -74,10 +69,6 @@ size = Vector3(10, 1, 6)
 [sub_resource type="BoxShape3D" id="BoxShape3D_ledge"]
 size = Vector3(10, 1, 6)
 
-[sub_resource type="StandardMaterial3D" id="Material_water"]
-transparency = 1
-albedo_color = Color(0.25, 0.55, 0.75, 0.4)
-
 [sub_resource type="BoxMesh" id="BoxMesh_water"]
 size = Vector3(60, 12, 24)
 
@@ -99,12 +90,7 @@ size = Vector3(8, 1, 14)
 
 [node name="Greybox" type="Node3D"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_1")
-
-[node name="Sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.866, -0.353, 0.353, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 20, 0)
-shadow_enabled = true
+[node name="WorldLighting" parent="." instance=ExtResource("5_lighting")]
 
 [node name="Ground" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -12)
@@ -159,7 +145,7 @@ script = ExtResource("2_water")
 
 [node name="Mesh" type="MeshInstance3D" parent="Water"]
 mesh = SubResource("BoxMesh_water")
-surface_material_override/0 = SubResource("Material_water")
+surface_material_override/0 = ExtResource("6_watermat")
 
 [node name="Collision" type="CollisionShape3D" parent="Water"]
 shape = SubResource("BoxShape3D_water")

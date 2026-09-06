@@ -42,6 +42,7 @@
 ; walk MEASURES every segment rather than trusting this comment.
 
 [ext_resource type="Script" path="res://core/controller/water_volume.gd" id="1_water"]
+[ext_resource type="Material" path="res://core/rendering/water_surface.tres" id="2_watermat"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ground"]
 size = Vector3(24, 2, 72)
@@ -57,10 +58,6 @@ size = Vector3(24, 2.4, 12)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_water"]
 size = Vector3(24, 2.4, 12)
-
-[sub_resource type="StandardMaterial3D" id="Material_water"]
-transparency = 1
-albedo_color = Color(0.3, 0.6, 0.8, 0.45)
 
 [sub_resource type="BoxMesh" id="BoxMesh_gate"]
 size = Vector3(24, 4, 1)
@@ -117,7 +114,7 @@ script = ExtResource("1_water")
 
 [node name="Mesh" type="MeshInstance3D" parent="Bay"]
 mesh = SubResource("BoxMesh_water")
-surface_material_override/0 = SubResource("Material_water")
+surface_material_override/0 = ExtResource("2_watermat")
 
 [node name="Collision" type="CollisionShape3D" parent="Bay"]
 shape = SubResource("BoxShape3D_water")

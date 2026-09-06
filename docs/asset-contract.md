@@ -125,9 +125,15 @@ review would catch. What the maintainer reviews against:
 - **Soft, rounded silhouettes.** This is a family game about a small
   axolotl; nothing ships with aggressive spikes, gore, or humanized menace.
   The Drift Fleet is machinery — nets, hooks, dredges — never people.
-- **Flat-shaded, saturated color** with readable value contrast against the
-  aquatic palettes (teals, sea-greens, warm coral accents). Characters read
-  at gameplay distance; detail that only reads in a close-up is lost.
+- **Toy materials: saturated albedo, real lighting.** The reference is a
+  well-made toy under a soft studio light, not a cel-shaded cartoon. Colour
+  lives in the albedo — clean, saturated, from the aquatic palettes (teals,
+  sea-greens, warm coral accents) with readable value contrast — and the
+  shared lighting rig does the shading: sky ambient, bounced light, contact
+  occlusion, soft shadows. Materials are smooth and slightly glossy (a wet
+  sheen on skin and coral, a matte finish on sand and rock), never noisy,
+  never photoreal. Skin, gills and fins may let light through. Characters
+  read at gameplay distance; detail that only reads in a close-up is lost.
 - **Comedic, not gruesome.** Damage framing is pop-and-sparkle; assets that
   depict injury realistically do not fit the regeneration pillar.
 - **One world, one voice.** Audio sits in a soft, watery register — no
@@ -136,3 +142,37 @@ review would catch. What the maintainer reviews against:
 A submission that passes the validator and misses these expectations gets
 art-direction feedback in review, exactly like code review — the validator
 narrows what a human must look at; it never replaces the look.
+
+### Rendering — the shared look
+
+Worlds ship geometry; the game client ships the look. One lighting rig,
+[`core/rendering/world_lighting.tscn`](../core/rendering/world_lighting.tscn),
+carries the shared environment
+([`core/rendering/base_environment.tres`](../core/rendering/base_environment.tres))
+and the sun, and the main scene instances it **beside** the hub so it keeps
+lighting whichever world the player enters. Every world — official, template,
+community — is lit by it, which is how the look above stays one look without
+each contributor re-tuning a sun.
+
+What the rig provides, and what an asset may therefore assume:
+
+| Rig feature | What it means for an asset |
+|---|---|
+| Procedural sky, ambient and reflections read from it | No baked ambient in textures; a mid-grey albedo reads mid-grey |
+| AgX tonemapping | Saturated albedo does not clip to white; author colours at full chroma |
+| Screen-space ambient occlusion + SDFGI | Contact shading and bounce come free; do not paint them in |
+| Soft two-cascade sun shadows | Geometry casts and receives; keep silhouettes clean, they are seen twice |
+| Restrained glow (highlights above white only) | Emissive materials glow; albedo never does |
+| Teal depth fog + thin volumetric fog | Distant geometry recedes into water; far detail is wasted effort |
+| Shared water surface material (`core/rendering/water_surface.tres`) | A `WaterVolume` mesh wears this, never its own tint; water is one look everywhere |
+
+The renderer is **Forward+** (`project.godot`), with the Mobile renderer as
+the automatic fallback on hardware that cannot drive it — the same scenes
+render there with the expensive effects (GI, occlusion, volumetric fog)
+silently dropped. Compatibility (OpenGL) is not a target: the toy look is
+unreachable on it. The baseline machine and the frame budget the rig has to
+respect are in [`performance.md`](performance.md).
+
+A world that needs a mood of its own — a dusk, a deep trench — adds a
+`WorldEnvironment` in its scene and it takes precedence while the world is
+active. It never needs a sun.
