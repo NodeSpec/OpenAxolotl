@@ -1,0 +1,7 @@
+{
+  "author": "OpenAxolotl maintainer via the project's Drift Fleet generator",
+  "generationMethod": "ai-generated",
+  "tool": "Blender 4.0.2 headless, tools/blender/make_drift_fleet.py (deterministic, --seed 11)",
+  "prompt": "A faceless dredging barge: a boxy hull over a toothed cutting drum, with an amber warning stripe on the cab. Earth-moving machinery, no face and no limbs; the unit that flattens restored reef.",
+  "licenseTerms": "Apache-2.0 (project license, same as the generator script)"
+}
