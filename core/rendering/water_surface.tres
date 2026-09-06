@@ -1,19 +1,17 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
 
-; THE SHARED WATER SURFACE — the tint every WaterVolume's mesh wears.
+; THE SHARED WATER SURFACE — the material every WaterVolume's mesh wears.
 ;
-; Unshaded on purpose. Water here is a TINT the player looks through, not a
-; surface that catches the sun: a lit translucent slab changes colour with the
-; sun's angle and the sky, and two stacked faces (the top and the near wall,
-; which is what the trailing camera sees) would stack that shading. Taking no
-; light keeps the tint identical in every world and under any future mood
-; environment. A proper water shader (surface waves, caustics, foam) replaces
-; this material in ONE place rather than in every world when it comes.
-;
-; Worlds reference this resource instead of carrying their own material, so
-; the look of water is the client's, the same as every other part of the look.
+; One material for all water, owned by the client like the rest of the look:
+; worlds reference this resource instead of carrying their own tint, so the
+; body of water in the greybox, Coral Cove and Bubble Bay is visibly the same
+; water. The behaviour lives in water_surface.gdshader (an unshaded, animated
+; shimmer with fresnel transparency — see the rationale there); this file
+; only binds the shader so scene references stay stable if the shader is
+; ever rewritten.
+
+[ext_resource type="Shader" path="res://core/rendering/water_surface.gdshader" id="1_shader"]
 
 [resource]
-transparency = 1
-shading_mode = 0
-albedo_color = Color(0.2, 0.52, 0.72, 0.32)
+render_priority = 0
+shader = ExtResource("1_shader")

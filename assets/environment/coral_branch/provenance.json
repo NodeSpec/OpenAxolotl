@@ -1,0 +1,7 @@
+{
+  "author": "OpenAxolotl maintainer via the project's Blender kit generator",
+  "generationMethod": "ai-generated",
+  "tool": "Blender 4.0.2 headless, tools/blender/make_environment_kit.py (deterministic, --seed 7)",
+  "prompt": "A branching warm-coral colony: a trunk and two levels of child cylinders, warm coral shading to pale tips. Vertex-coloured in the aquatic palette; no materials or textures; part of the shared environment dressing kit.",
+  "licenseTerms": "Apache-2.0 (project license, same as the generator script)"
+}

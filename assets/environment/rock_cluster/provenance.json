@@ -1,0 +1,7 @@
+{
+  "author": "OpenAxolotl maintainer via the project's Blender kit generator",
+  "generationMethod": "ai-generated",
+  "tool": "Blender 4.0.2 headless, tools/blender/make_environment_kit.py (deterministic, --seed 7)",
+  "prompt": "A rounded seabed boulder: a displaced, squashed icosphere with a dark-to-light grey-teal gradient. Vertex-coloured in the aquatic palette; no materials or textures; part of the shared environment dressing kit.",
+  "licenseTerms": "Apache-2.0 (project license, same as the generator script)"
+}

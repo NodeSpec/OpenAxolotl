@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene load_steps=25 format=3]
 
 ; BUBBLE BAY — the second official world (REQ-028), and the deliberate
 ; opposite of Coral Cove wherever the Level Contract offers a choice:
@@ -43,6 +43,10 @@
 
 [ext_resource type="Script" path="res://core/controller/water_volume.gd" id="1_water"]
 [ext_resource type="Material" path="res://core/rendering/water_surface.tres" id="2_watermat"]
+[ext_resource type="PackedScene" path="res://assets/environment/rock_cluster/rock_cluster.glb" id="3_kit_rock_cluster"]
+[ext_resource type="PackedScene" path="res://assets/environment/coral_branch/coral_branch.glb" id="4_kit_coral_branch"]
+[ext_resource type="PackedScene" path="res://assets/environment/kelp_strand/kelp_strand.glb" id="5_kit_kelp_strand"]
+[ext_resource type="PackedScene" path="res://assets/environment/seagrass_tuft/seagrass_tuft.glb" id="6_kit_seagrass_tuft"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ground"]
 size = Vector3(24, 2, 72)
@@ -89,6 +93,27 @@ albedo_color = Color(0.9, 0.9, 0.98, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pit"]
 size = Vector3(400, 4, 400)
+
+[sub_resource type="ParticleProcessMaterial" id="Particles_bubbles"]
+direction = Vector3(0, 1, 0)
+spread = 8.0
+initial_velocity_min = 0.25
+initial_velocity_max = 0.7
+gravity = Vector3(0, 0.3, 0)
+scale_min = 0.5
+scale_max = 1.0
+emission_shape = 3
+emission_box_extents = Vector3(11, 1, 5.5)
+
+[sub_resource type="StandardMaterial3D" id="Material_bubble"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.85, 0.95, 1, 0.5)
+
+[sub_resource type="SphereMesh" id="SphereMesh_bubble"]
+radius = 0.035
+height = 0.07
+material = SubResource("Material_bubble")
 
 [node name="BubbleBay" type="Node3D"]
 
@@ -322,3 +347,91 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -59)
 
 [node name="Collision" type="CollisionShape3D" parent="Finish"]
 shape = SubResource("BoxShape3D_pickup")
+
+[node name="Dressing" type="Node3D" parent="."]
+
+[node name="RockCluster1" parent="Dressing" instance=ExtResource("3_kit_rock_cluster")]
+transform = Transform3D(0.886, 0, 0.267, 0, 0.926, 0, -0.267, 0, 0.886, 8.15, 0, -45.56)
+
+[node name="RockCluster2" parent="Dressing" instance=ExtResource("3_kit_rock_cluster")]
+transform = Transform3D(-0.918, 0, 0.296, 0, 0.965, 0, -0.296, 0, -0.918, -6.87, 0, -52.87)
+
+[node name="RockCluster3" parent="Dressing" instance=ExtResource("3_kit_rock_cluster")]
+transform = Transform3D(-0.974, 0, 0.156, 0, 0.986, 0, -0.156, 0, -0.974, -8.86, 0, -1.04)
+
+[node name="RockCluster4" parent="Dressing" instance=ExtResource("3_kit_rock_cluster")]
+transform = Transform3D(-0.712, 0, -0.820, 0, 1.086, 0, 0.820, 0, -0.712, 10.35, 0, -60.60)
+
+[node name="RockCluster5" parent="Dressing" instance=ExtResource("3_kit_rock_cluster")]
+transform = Transform3D(1.012, 0, 0.518, 0, 1.137, 0, -0.518, 0, 1.012, 7.78, 0, 3.96)
+
+[node name="RockCluster6" parent="Dressing" instance=ExtResource("3_kit_rock_cluster")]
+transform = Transform3D(-0.383, 0, -1.279, 0, 1.335, 0, 1.279, 0, -0.383, -10.10, 0, -13.35)
+
+[node name="RockCluster7" parent="Dressing" instance=ExtResource("3_kit_rock_cluster")]
+transform = Transform3D(1.134, 0, -0.815, 0, 1.397, 0, 0.815, 0, 1.134, 7.91, 0, -16.78)
+
+[node name="KelpStrand1" parent="Dressing" instance=ExtResource("5_kit_kelp_strand")]
+transform = Transform3D(-0.907, 0, 0.000, 0, 0.907, 0, -0.000, 0, -0.907, 8.72, 0, -17.58)
+
+[node name="KelpStrand2" parent="Dressing" instance=ExtResource("5_kit_kelp_strand")]
+transform = Transform3D(0.850, 0, 0.415, 0, 0.945, 0, -0.415, 0, 0.850, 5.90, 0, -17.83)
+
+[node name="KelpStrand3" parent="Dressing" instance=ExtResource("5_kit_kelp_strand")]
+transform = Transform3D(-0.149, 0, -1.084, 0, 1.094, 0, 1.084, 0, -0.149, -8.97, 0, -5.68)
+
+[node name="KelpStrand4" parent="Dressing" instance=ExtResource("5_kit_kelp_strand")]
+transform = Transform3D(1.102, 0, 0.641, 0, 1.275, 0, -0.641, 0, 1.102, 6.20, 0, -6.26)
+
+[node name="KelpStrand5" parent="Dressing" instance=ExtResource("5_kit_kelp_strand")]
+transform = Transform3D(1.365, 0, 0.192, 0, 1.379, 0, -0.192, 0, 1.365, -5.55, 0, -16.77)
+
+[node name="KelpStrand6" parent="Dressing" instance=ExtResource("5_kit_kelp_strand")]
+transform = Transform3D(0.902, 0, -0.493, 0, 1.028, 0, 0.493, 0, 0.902, -6.49, 0, -9.40)
+
+[node name="KelpStrand7" parent="Dressing" instance=ExtResource("5_kit_kelp_strand")]
+transform = Transform3D(-0.885, 0, -0.749, 0, 1.159, 0, 0.749, 0, -0.885, -5.84, 0, -15.99)
+
+[node name="SeagrassTuft1" parent="Dressing" instance=ExtResource("6_kit_seagrass_tuft")]
+transform = Transform3D(0.955, 0, -0.773, 0, 1.229, 0, 0.773, 0, 0.955, 7.82, 0, -43.16)
+
+[node name="SeagrassTuft2" parent="Dressing" instance=ExtResource("6_kit_seagrass_tuft")]
+transform = Transform3D(0.565, 0, -1.540, 0, 1.640, 0, 1.540, 0, 0.565, 4.87, 0, -43.38)
+
+[node name="SeagrassTuft3" parent="Dressing" instance=ExtResource("6_kit_seagrass_tuft")]
+transform = Transform3D(-0.444, 0, 1.001, 0, 1.095, 0, -1.001, 0, -0.444, -6.06, 0, -40.34)
+
+[node name="SeagrassTuft4" parent="Dressing" instance=ExtResource("6_kit_seagrass_tuft")]
+transform = Transform3D(1.011, 0, 0.263, 0, 1.045, 0, -0.263, 0, 1.011, 5.84, 0, -34.09)
+
+[node name="SeagrassTuft5" parent="Dressing" instance=ExtResource("6_kit_seagrass_tuft")]
+transform = Transform3D(-1.621, 0, 0.295, 0, 1.648, 0, -0.295, 0, -1.621, 8.86, 0, -49.74)
+
+[node name="SeagrassTuft6" parent="Dressing" instance=ExtResource("6_kit_seagrass_tuft")]
+transform = Transform3D(-0.705, 0, -1.325, 0, 1.501, 0, 1.325, 0, -0.705, 6.05, 0, -41.60)
+
+[node name="SeagrassTuft7" parent="Dressing" instance=ExtResource("6_kit_seagrass_tuft")]
+transform = Transform3D(-0.251, 0, 1.403, 0, 1.425, 0, -1.403, 0, -0.251, 5.65, 0, -35.43)
+
+[node name="SeagrassTuft8" parent="Dressing" instance=ExtResource("6_kit_seagrass_tuft")]
+transform = Transform3D(0.261, 0, -0.979, 0, 1.013, 0, 0.979, 0, 0.261, 7.25, 0, -45.82)
+
+[node name="CoralBranch1" parent="Dressing" instance=ExtResource("4_kit_coral_branch")]
+transform = Transform3D(0.124, 0, -1.026, 0, 1.033, 0, 1.026, 0, 0.124, -5.59, 0, -28.10)
+
+[node name="CoralBranch2" parent="Dressing" instance=ExtResource("4_kit_coral_branch")]
+transform = Transform3D(0.715, 0, 0.633, 0, 0.955, 0, -0.633, 0, 0.715, -7.50, 0, -20.16)
+
+[node name="CoralBranch3" parent="Dressing" instance=ExtResource("4_kit_coral_branch")]
+transform = Transform3D(0.356, 0, 1.080, 0, 1.138, 0, -1.080, 0, 0.356, 8.30, 0, -23.16)
+
+[node name="CoralBranch4" parent="Dressing" instance=ExtResource("4_kit_coral_branch")]
+transform = Transform3D(-0.896, 0, -0.199, 0, 0.918, 0, 0.199, 0, -0.896, -7.10, 0, -22.45)
+
+[node name="Bubbles" type="GPUParticles3D" parent="Bay"]
+amount = 48
+lifetime = 4.0
+preprocess = 3.0
+visibility_aabb = AABB(-12, -2, -6, 24, 5, 12)
+process_material = SubResource("Particles_bubbles")
+draw_pass_1 = SubResource("SphereMesh_bubble")
