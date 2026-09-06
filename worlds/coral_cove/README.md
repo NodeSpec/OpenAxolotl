@@ -34,7 +34,7 @@ completability is a headless regression test, not a hope:
 
 | Contract element | Used here |
 |---|---|
-| required: spawnPoint, checkpoints (×2), finishCondition (`reach_volume`), saveIntegration, controllerCompatibility | yes |
+| required: spawnPoint, checkpoints (×5, roughly every 10 m — the density REQ-003 AC-7's 5 s replay bound demands at waddle pace; the coral walk measures every segment), finishCondition (`reach_volume`), saveIntegration, controllerCompatibility | yes |
 | optional: restorableRegions | `coral_shelf`, gate `shelf_wall` opens at `restored` |
 | optional: tuningOverrides | both restoration resource costs (sanctioned set) |
 | optional: cameraHints | one hint volume over the grotto |

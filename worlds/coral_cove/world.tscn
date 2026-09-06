@@ -25,6 +25,11 @@
 ;   z -56  SHELF WALL — the region's declared traversal gate; opens when
 ;          `coral_shelf` reaches `restored`. Restoration is MANDATORY.
 ;   z -60  finish volume — reach_volume returns the player to the lagoon.
+;
+; CHECKPOINT DENSITY follows REQ-003 AC-7: the replay from any anchor to the
+; next must fit progression.max_retry_seconds (5 s) at normal traversal, so
+; five checkpoints sit roughly every 10 m — z -10, -20, -30, -40, -50 — and
+; the coral walk MEASURES every segment rather than trusting this comment.
 
 [ext_resource type="Script" path="res://core/controller/water_volume.gd" id="1_water"]
 [ext_resource type="Script" path="res://core/camera/camera_hint_volume.gd" id="2_hint"]
@@ -113,6 +118,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 2)
 
 [node name="CheckpointShore" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -20)
+
+[node name="CheckpointLagoonEdge" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -10)
+
+[node name="CheckpointGlowPath" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -30)
+
+[node name="CheckpointSeedBed" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -50)
 
 [node name="GlowPickup" type="Area3D" parent="." groups=["gill_mod_pickup"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -24)

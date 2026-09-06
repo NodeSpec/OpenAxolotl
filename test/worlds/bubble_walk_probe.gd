@@ -39,6 +39,16 @@ var _mods_equipped: PackedStringArray = []
 var _gates_opened: PackedStringArray = []
 var _region_restored := false
 
+## REQ-003 AC-7: checkpoint spacing, MEASURED. World-space z of every
+## checkpoint in route order (the route runs down -z), and the second at
+## which the walk reached each anchor — spawn, each checkpoint, finish.
+const TUNING_PATH := "res://core/tuning/tuning.json"
+const MAX_RETRY_KEY := "progression.max_retry_seconds"
+var _checkpoint_z: PackedFloat64Array = []
+var _next_checkpoint := 0
+var _anchor_seconds: PackedFloat64Array = [0.0]
+var _walk_start_frame := 0
+
 
 func _ready() -> void:
 	var scene := get_tree().current_scene
@@ -109,10 +119,17 @@ func _physics_process(_delta: float) -> void:
 
 	if _frame == SETTLE_FRAMES + 2:
 		_wire_world_systems()
+		_collect_checkpoints()
+		_walk_start_frame = _frame
 		_key(KEY_W, true)
 		return
 
+	if not _returned:
+		_mark_checkpoints_passed()
+
 	if _returned:
+		if _anchor_seconds.size() == _checkpoint_z.size() + 1:
+			_anchor_seconds.append(_elapsed_seconds())
 		if _frame < SETTLE_FRAMES + 8:
 			return
 		_finish_checks()
@@ -170,10 +187,65 @@ func _finish_checks() -> void:
 
 	# The completion is visible through the save-integration interface.
 	var portal := _hub.get_registry().get_portal(WORLD_ID)
+	_check_checkpoint_spacing()
+
 	_check(portal != null and portal.completed,
 		"the bubble_bay portal now shows completed")
 
 	_report()
+
+
+func _elapsed_seconds() -> float:
+	return float(_frame - _walk_start_frame) \
+		/ float(Engine.physics_ticks_per_second)
+
+
+## Every node the world put in the `checkpoint` group, in route order.
+func _collect_checkpoints() -> void:
+	var zs: Array[float] = []
+	for node: Node in get_tree().get_nodes_in_group("checkpoint"):
+		if node is Node3D:
+			zs.append((node as Node3D).global_position.z)
+	zs.sort()
+	zs.reverse()  # the route runs down -z: highest z first
+	_checkpoint_z = PackedFloat64Array(zs)
+
+
+func _mark_checkpoints_passed() -> void:
+	while _next_checkpoint < _checkpoint_z.size() \
+			and _body.global_position.z <= _checkpoint_z[_next_checkpoint]:
+		_anchor_seconds.append(_elapsed_seconds())
+		_next_checkpoint += 1
+
+
+## REQ-003 AC-7: the replay from any anchor to the next — spawn to the first
+## checkpoint, checkpoint to checkpoint, last checkpoint to the finish — at
+## normal traversal speed must fit inside progression.max_retry_seconds.
+## Measured from this very walk, never estimated from geometry.
+func _check_checkpoint_spacing() -> void:
+	var errors: Array[TuningError] = []
+	var tuning := TuningData.load_from_file(TUNING_PATH, errors)
+	if tuning == null:
+		_fail("tuning failed to load for the spacing check")
+		return
+	var bound := tuning.get_number(MAX_RETRY_KEY)
+
+	_check(_checkpoint_z.size() >= 1, "the world declares at least one checkpoint")
+	_check(_anchor_seconds.size() == _checkpoint_z.size() + 2,
+		"every checkpoint was passed on the route (%d of %d anchors marked)"
+		% [_anchor_seconds.size(), _checkpoint_z.size() + 2])
+
+	var longest := 0.0
+	var segments: PackedStringArray = []
+	for index: int in range(1, _anchor_seconds.size()):
+		var segment := _anchor_seconds[index] - _anchor_seconds[index - 1]
+		longest = maxf(longest, segment)
+		segments.append("%.1f" % segment)
+	_check(longest <= bound,
+		"checkpoint spacing: longest replay segment %.1fs is within %s = %.1fs (segments: %s)"
+		% [longest, MAX_RETRY_KEY, bound, ", ".join(segments)])
+	print("%s: checkpoint segments (s): %s (bound %.1f)"
+		% ["BUBBLE WALK", ", ".join(segments), bound])
 
 
 func _key(keycode: Key, pressed: bool) -> void:

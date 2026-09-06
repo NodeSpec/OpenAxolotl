@@ -44,7 +44,7 @@ completability is a headless regression test (`test/worlds/run_bubble_walk.gd`):
 | finishCondition | `reach_volume` |
 | saveIntegration | `bubble_bay.completed` |
 | restorableRegions | `kelp_nursery`, traversal gate `nursery_boom` opens at `restored` |
-| checkpoints | 2 (shore of the bay; before the nursery) |
+| checkpoints | 6, roughly every 10 m — the density REQ-003 AC-7's 5 s replay bound demands at waddle pace; the bubble walk measures every segment |
 | boss / enemies / collectibles / customAbility / music | absent — defined defaults apply |
 
 ## Pending integrations

@@ -47,6 +47,18 @@ func play_cue(cue: AudioEvent.Cue) -> void:
 	cue_played.emit(cue, path)
 
 
+## Plays the cue for a movement gesture in the ACTIVE grammar (AC-2). The
+## producer reports only the gesture; which grammar's sound plays is decided
+## here from the same grammar state the ambience bed follows, so movement
+## audio and ambience can never disagree about which grammar is active.
+func play_movement(movement: AudioEvent.Movement) -> void:
+	play_cue(AudioEvent.movement_cue(movement, is_water_grammar()))
+
+
+func is_water_grammar() -> bool:
+	return _grammar_bed == AudioEvent.Bed.GRAMMAR_WATER
+
+
 # --- Beds -------------------------------------------------------------------
 
 ## Switches the grammar soundscape. Driven off the controller's grammar-change

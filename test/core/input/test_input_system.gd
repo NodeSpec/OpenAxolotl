@@ -715,3 +715,54 @@ func test_req_030_input_node_uses_no_multiplayer_api() -> void:
 			assert_bool(text.contains(symbol)).override_failure_message(
 				"REQ-030: '%s' contains forbidden symbol '%s'" % [path, symbol]
 			).is_false()
+
+
+# --- REQ-019 AC-3: completable on a single input device ----------------------
+
+## The input namespace each device owns. A scheme that reached outside its
+## own namespace would silently require a second device.
+const DEVICE_NAMESPACES: Dictionary = {
+	InputDevice.Kind.KEYBOARD_MOUSE: ["key.", "mouse."],
+	InputDevice.Kind.GAMEPAD: ["pad."],
+}
+
+
+func test_req_019_each_scheme_stands_alone_on_its_own_device() -> void:
+	# The playthrough probes complete every official world holding ONE key on
+	# one device; this pins the structural half of the criterion. Each scheme
+	# binds every verb using only its own device's inputs, and no verb
+	# requires a chord: a press verb is exactly one physical input, and a
+	# directional verb's components are each one physical input (a diagonal
+	# is two held directions, which is within any device's capability).
+	var table := _table()
+	for device: InputDevice.Kind in InputDevice.all():
+		assert_bool(table.is_complete(device)).override_failure_message(
+			"REQ-019 AC-3: '%s' alone cannot express every verb"
+			% InputDevice.device_id(device)).is_true()
+		var prefixes: Array = DEVICE_NAMESPACES[device]
+		var bindings := table.bindings_for_device(device)
+		assert_int(bindings.size()).is_greater_equal(InputVerb.all().size())
+		for binding: InputBinding in bindings:
+			for physical: String in binding.physical_inputs():
+				var own := false
+				for prefix: String in prefixes:
+					own = own or physical.begins_with(prefix)
+				assert_bool(own).override_failure_message(
+					"REQ-019 AC-3: '%s' on %s reaches for another device's "
+					% [InputVerb.verb_id(binding.verb),
+						InputDevice.device_id(device)]
+					+ "input '%s'" % physical).is_true()
+			if InputVerb.is_directional(binding.verb):
+				for component: String in InputVerb.required_components(
+						binding.verb):
+					assert_str(String(binding.directions.get(component, ""))
+					).override_failure_message(
+						"REQ-019 AC-3: '%s' component '%s' is unbound on %s"
+						% [InputVerb.verb_id(binding.verb), component,
+							InputDevice.device_id(device)]).is_not_empty()
+			else:
+				assert_int(binding.physical_inputs().size()
+				).override_failure_message(
+					"REQ-019 AC-3: '%s' on %s requires a chord"
+					% [InputVerb.verb_id(binding.verb),
+						InputDevice.device_id(device)]).is_equal(1)

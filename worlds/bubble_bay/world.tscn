@@ -28,6 +28,11 @@
 ;   z -55  NURSERY BOOM — the region's declared traversal gate; opens when
 ;          `kelp_nursery` reaches `restored`. Restoration is MANDATORY.
 ;   z -59  finish volume — reach_volume returns the player to the lagoon.
+;
+; CHECKPOINT DENSITY follows REQ-003 AC-7: the replay from any anchor to the
+; next must fit progression.max_retry_seconds (5 s) at normal traversal, so
+; six checkpoints sit at z -10, -20, -26, -32, -41, -50 — and the bubble
+; walk MEASURES every segment rather than trusting this comment.
 
 [ext_resource type="Script" path="res://core/controller/water_volume.gd" id="1_water"]
 
@@ -106,6 +111,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 2)
 
 [node name="CheckpointShallows" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -20)
+
+[node name="CheckpointBayEdge" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -10)
+
+[node name="CheckpointNetLine" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -26)
+
+[node name="CheckpointPearlRun" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -41)
+
+[node name="CheckpointBoom" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -50)
 
 [node name="JetPickup" type="Area3D" parent="." groups=["gill_mod_pickup"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -24)
