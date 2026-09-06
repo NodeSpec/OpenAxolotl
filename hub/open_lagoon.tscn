@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=12 format=3]
 
 ; THE OPEN LAGOON (REQ-009) — the hub, as a scene, and the game's main scene.
 ;
@@ -20,6 +20,10 @@
 [ext_resource type="PackedScene" path="res://core/controller/axolotl_body.tscn" id="2_axolotl"]
 [ext_resource type="Script" path="res://core/camera/camera_follow.gd" id="3_camera"]
 [ext_resource type="PackedScene" path="res://core/rendering/world_lighting.tscn" id="4_lighting"]
+[ext_resource type="PackedScene" path="res://assets/environment/rock_cluster/rock_cluster.glb" id="5_kit_rock_cluster"]
+[ext_resource type="PackedScene" path="res://assets/environment/coral_branch/coral_branch.glb" id="6_kit_coral_branch"]
+[ext_resource type="PackedScene" path="res://assets/environment/kelp_strand/kelp_strand.glb" id="7_kit_kelp_strand"]
+[ext_resource type="PackedScene" path="res://assets/environment/seagrass_tuft/seagrass_tuft.glb" id="8_kit_seagrass_tuft"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ground"]
 size = Vector3(48, 2, 32)
@@ -58,3 +62,71 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 14)
 process_physics_priority = 10
 script = ExtResource("3_camera")
 target_path = NodePath("../Axolotl")
+
+[node name="Dressing" type="Node3D" parent="OpenLagoon"]
+
+[node name="RockCluster1" parent="OpenLagoon/Dressing" instance=ExtResource("5_kit_rock_cluster")]
+transform = Transform3D(-0.395, 0, -1.150, 0, 1.216, 0, 1.150, 0, -0.395, -15.18, 0, -4.32)
+
+[node name="RockCluster2" parent="OpenLagoon/Dressing" instance=ExtResource("5_kit_rock_cluster")]
+transform = Transform3D(0.723, 0, -0.483, 0, 0.870, 0, 0.483, 0, 0.723, -16.15, 0, 8.17)
+
+[node name="RockCluster3" parent="OpenLagoon/Dressing" instance=ExtResource("5_kit_rock_cluster")]
+transform = Transform3D(-1.077, 0, -1.084, 0, 1.528, 0, 1.084, 0, -1.077, 14.04, 0, -1.30)
+
+[node name="RockCluster4" parent="OpenLagoon/Dressing" instance=ExtResource("5_kit_rock_cluster")]
+transform = Transform3D(-1.455, 0, -0.024, 0, 1.456, 0, 0.024, 0, -1.455, 17.40, 0, 4.27)
+
+[node name="RockCluster5" parent="OpenLagoon/Dressing" instance=ExtResource("5_kit_rock_cluster")]
+transform = Transform3D(0.385, 0, 1.323, 0, 1.378, 0, -1.323, 0, 0.385, 16.71, 0, 4.24)
+
+[node name="RockCluster6" parent="OpenLagoon/Dressing" instance=ExtResource("5_kit_rock_cluster")]
+transform = Transform3D(1.570, 0, -0.193, 0, 1.582, 0, 0.193, 0, 1.570, -14.71, 0, 11.20)
+
+[node name="KelpStrand1" parent="OpenLagoon/Dressing" instance=ExtResource("7_kit_kelp_strand")]
+transform = Transform3D(1.147, 0, 0.113, 0, 1.152, 0, -0.113, 0, 1.147, 13.36, 0, 5.24)
+
+[node name="KelpStrand2" parent="OpenLagoon/Dressing" instance=ExtResource("7_kit_kelp_strand")]
+transform = Transform3D(0.131, 0, -1.136, 0, 1.144, 0, 1.136, 0, 0.131, -14.97, 0, 1.21)
+
+[node name="KelpStrand3" parent="OpenLagoon/Dressing" instance=ExtResource("7_kit_kelp_strand")]
+transform = Transform3D(-0.828, 0, 0.396, 0, 0.918, 0, -0.396, 0, -0.828, -12.96, 0, 8.82)
+
+[node name="KelpStrand4" parent="OpenLagoon/Dressing" instance=ExtResource("7_kit_kelp_strand")]
+transform = Transform3D(-1.376, 0, 0.257, 0, 1.400, 0, -0.257, 0, -1.376, 17.18, 0, 9.98)
+
+[node name="KelpStrand5" parent="OpenLagoon/Dressing" instance=ExtResource("7_kit_kelp_strand")]
+transform = Transform3D(0.895, 0, -0.296, 0, 0.943, 0, 0.296, 0, 0.895, 19.51, 0, -0.18)
+
+[node name="CoralBranch1" parent="OpenLagoon/Dressing" instance=ExtResource("6_kit_coral_branch")]
+transform = Transform3D(0.653, 0, -1.167, 0, 1.337, 0, 1.167, 0, 0.653, -11.83, 0, -9.53)
+
+[node name="CoralBranch2" parent="OpenLagoon/Dressing" instance=ExtResource("6_kit_coral_branch")]
+transform = Transform3D(-1.104, 0, -0.437, 0, 1.187, 0, 0.437, 0, -1.104, -12.75, 0, -7.25)
+
+[node name="CoralBranch3" parent="OpenLagoon/Dressing" instance=ExtResource("6_kit_coral_branch")]
+transform = Transform3D(-0.914, 0, -0.751, 0, 1.183, 0, 0.751, 0, -0.914, 17.50, 0, -7.04)
+
+[node name="CoralBranch4" parent="OpenLagoon/Dressing" instance=ExtResource("6_kit_coral_branch")]
+transform = Transform3D(-1.005, 0, -0.496, 0, 1.121, 0, 0.496, 0, -1.005, -17.65, 0, -9.81)
+
+[node name="SeagrassTuft1" parent="OpenLagoon/Dressing" instance=ExtResource("8_kit_seagrass_tuft")]
+transform = Transform3D(1.749, 0, 0.308, 0, 1.776, 0, -0.308, 0, 1.749, -13.04, 0, 3.32)
+
+[node name="SeagrassTuft2" parent="OpenLagoon/Dressing" instance=ExtResource("8_kit_seagrass_tuft")]
+transform = Transform3D(0.774, 0, 0.745, 0, 1.075, 0, -0.745, 0, 0.774, 13.62, 0, 11.77)
+
+[node name="SeagrassTuft3" parent="OpenLagoon/Dressing" instance=ExtResource("8_kit_seagrass_tuft")]
+transform = Transform3D(-1.513, 0, 0.910, 0, 1.765, 0, -0.910, 0, -1.513, -6.92, 0, 1.85)
+
+[node name="SeagrassTuft4" parent="OpenLagoon/Dressing" instance=ExtResource("8_kit_seagrass_tuft")]
+transform = Transform3D(0.941, 0, 0.964, 0, 1.347, 0, -0.964, 0, 0.941, 9.77, 0, 0.41)
+
+[node name="SeagrassTuft5" parent="OpenLagoon/Dressing" instance=ExtResource("8_kit_seagrass_tuft")]
+transform = Transform3D(-0.895, 0, 0.496, 0, 1.024, 0, -0.496, 0, -0.895, 13.35, 0, -7.61)
+
+[node name="SeagrassTuft6" parent="OpenLagoon/Dressing" instance=ExtResource("8_kit_seagrass_tuft")]
+transform = Transform3D(1.143, 0, 0.165, 0, 1.155, 0, -0.165, 0, 1.143, 7.81, 0, 7.14)
+
+[node name="SeagrassTuft7" parent="OpenLagoon/Dressing" instance=ExtResource("8_kit_seagrass_tuft")]
+transform = Transform3D(-0.197, 0, -1.179, 0, 1.196, 0, 1.179, 0, -0.197, -6.17, 0, -3.75)

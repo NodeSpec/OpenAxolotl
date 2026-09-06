@@ -142,15 +142,20 @@ func test_the_greybox_instances_the_rig_and_worlds_ship_no_lighting() -> void:
 
 
 func test_every_water_volume_wears_the_shared_unshaded_water_surface() -> void:
-	# A lit translucent box under the rig's sun blows out to near-opaque and
-	# hides the axolotl in water. The tint is the client's, in one unshaded
-	# material every WaterVolume mesh references.
-	var material: StandardMaterial3D = load(WATER_MATERIAL_PATH)
+	# Water is a volume the player looks through, not a surface that catches
+	# the sun. The look is the client's, in one shader material every
+	# WaterVolume mesh references, so it reads the same in every world.
+	var material: ShaderMaterial = load(WATER_MATERIAL_PATH)
 	assert_object(material).is_not_null()
-	assert_int(material.shading_mode).override_failure_message(
-		"the water surface must be unshaded so lighting cannot blow it out"
-		).is_equal(BaseMaterial3D.SHADING_MODE_UNSHADED)
-	assert_int(material.transparency).is_equal(BaseMaterial3D.TRANSPARENCY_ALPHA)
+	assert_object(material.shader).override_failure_message(
+		"the water material must carry the shared water shader").is_not_null()
+	var code := material.shader.code
+	assert_bool(code.contains("unshaded")).override_failure_message(
+		"the water shader must stay unshaded so lighting cannot blow it out"
+		).is_true()
+	assert_bool(code.contains("ALPHA")).override_failure_message(
+		"the water must stay translucent; an opaque surface hides the axolotl"
+		).is_true()
 
 	for scene_path: String in WATER_SCENES:
 		var scene := (load(scene_path) as PackedScene).instantiate()

@@ -1003,6 +1003,16 @@ Startup/initialization order based on edge directions and interaction patterns.
 | `test/contracts/test_level_contract.gd` | source | --- | draft |
 | `hub/world_portal.gd` | source | --- | draft |
 | `dev/greybox.tscn` | design | --- | draft |
+| `core/rendering/water_surface.gdshader` | source | --- | draft |
+| `test/core/rendering/test_world_dressing.gd` | source | --- | draft |
+| `assets/environment/rock_cluster/rock_cluster.glb` | design | --- | draft |
+| `assets/environment/rock_cluster/provenance.json` | config | --- | draft |
+| `assets/environment/coral_branch/coral_branch.glb` | design | --- | draft |
+| `assets/environment/coral_branch/provenance.json` | config | --- | draft |
+| `assets/environment/kelp_strand/kelp_strand.glb` | design | --- | draft |
+| `assets/environment/kelp_strand/provenance.json` | config | --- | draft |
+| `assets/environment/seagrass_tuft/seagrass_tuft.glb` | design | --- | draft |
+| `assets/environment/seagrass_tuft/provenance.json` | config | --- | draft |
 | `docs/level-contract.md` | doc | --- | draft |
 | `contracts/performance_targets.v1.json` | config | --- | draft |
 | `hub/world_registry.gd` | source | --- | draft |
