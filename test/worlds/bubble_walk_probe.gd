@@ -42,6 +42,10 @@ var _region_restored := false
 ## REQ-010: pearls collected as the declared `pearl` resource type.
 var _pearls := 0
 
+## REQ-003: checkpoints activated by touch; lives never spent on this route.
+var _checkpoints_hit: PackedStringArray = []
+var _lives_spent := 0
+
 ## REQ-003 AC-7: checkpoint spacing, MEASURED. World-space z of every
 ## checkpoint in route order (the route runs down -z), and the second at
 ## which the walk reached each anchor — spawn, each checkpoint, finish.
@@ -170,6 +174,11 @@ func _wire_world_systems() -> void:
 		func(collectible_id: String, _kind: CollectibleKind.Kind) -> void:
 			if collectible_id == "pearl":
 				_pearls += 1)
+	systems.checkpoint_activated.connect(
+		func(id: String) -> void: _checkpoints_hit.append(id))
+	systems.life_lost.connect(
+		func(_remaining: int, _source: CatastrophicSource.Kind) -> void:
+			_lives_spent += 1)
 
 
 func _finish_checks() -> void:
@@ -194,6 +203,10 @@ func _finish_checks() -> void:
 	_check(recorded is Array and (recorded as Array).is_empty(),
 		"a resource-only world records no collectible ids in the profile (%s)"
 		% str(recorded))
+	_check(_checkpoints_hit.size() == _checkpoint_z.size(),
+		"every checkpoint was activated by touch (%d of %d)"
+		% [_checkpoints_hit.size(), _checkpoint_z.size()])
+	_check(_lives_spent == 0, "no life was spent on the route (spent %d)" % _lives_spent)
 	_check(_returned, "the finish condition returned control to the hub")
 	_check(_body.global_position.distance_to(_hub_spawn) < 6.0,
 		"the player is back at the hub spawn (%.1f m away)"

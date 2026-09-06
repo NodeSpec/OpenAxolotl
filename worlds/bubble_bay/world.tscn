@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=18 format=3]
 
 ; BUBBLE BAY — the second official world (REQ-028), and the deliberate
 ; opposite of Coral Cove wherever the Level Contract offers a choice:
@@ -31,6 +31,10 @@
 ;   z -55  NURSERY BOOM — the region's declared traversal gate; opens when
 ;          `kelp_nursery` reaches `restored`. Restoration is MANDATORY.
 ;   z -59  finish volume — reach_volume returns the player to the lagoon.
+;
+; Below everything: a PIT VOLUME (group `pit_volume`) — the one catastrophe
+; here. No ordinary hazards and no regen station: Bubble Bay's half of the
+; pillar-one battle test is stakes without capability loss.
 ;
 ; CHECKPOINT DENSITY follows REQ-003 AC-7: the replay from any anchor to the
 ; next must fit progression.max_retry_seconds (5 s) at normal traversal, so
@@ -86,6 +90,9 @@ albedo_color = Color(1, 0.75, 0.35, 1)
 [sub_resource type="StandardMaterial3D" id="Material_pearl"]
 albedo_color = Color(0.9, 0.9, 0.98, 1)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_pit"]
+size = Vector3(400, 4, 400)
+
 [node name="BubbleBay" type="Node3D"]
 
 [node name="Ground" type="StaticBody3D" parent="."]
@@ -97,6 +104,12 @@ surface_material_override/0 = SubResource("Material_ground")
 
 [node name="Collision" type="CollisionShape3D" parent="Ground"]
 shape = SubResource("BoxShape3D_ground")
+
+[node name="Pit" type="Area3D" parent="." groups=["pit_volume"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -30, -28)
+
+[node name="Collision" type="CollisionShape3D" parent="Pit"]
+shape = SubResource("BoxShape3D_pit")
 
 [node name="Bay" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -12)

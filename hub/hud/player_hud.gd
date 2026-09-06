@@ -85,6 +85,10 @@ func set_life_system(lives: LifeSystem) -> void:
 			func(_position: Vector3, _checkpoint: String,
 					_replenished: int) -> void:
 				_refresh_lives())
+		# A checkpoint REPLENISHES too (REQ-003 AC-5); the count it refills
+		# must show the same frame, not on the next loss.
+		_lives.checkpoint_activated.connect(
+			func(_checkpoint: String) -> void: _refresh_lives())
 	_refresh_lives()
 
 

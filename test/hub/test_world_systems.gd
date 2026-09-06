@@ -316,3 +316,245 @@ func test_req_010_a_world_without_collectibles_wires_an_inert_system() -> void:
 	assert_bool(systems.get_collectibles().is_engaged()).is_false()
 	assert_bool(systems.get_collectibles().all_collected()).is_false()
 	_teardown(built[0])
+
+
+# --- REQ-002 / REQ-003: pillar one bound to the scene and the real player ---
+
+## A player body in the tree, the way the hub ships one: beside the world,
+## never inside it. A bare CharacterBody3D is enough for position tests.
+func _player_body() -> CharacterBody3D:
+	var body := CharacterBody3D.new()
+	body.add_to_group("player")
+	_root().add_child(body)
+	return body
+
+
+func _volume(group: String, metas: Dictionary = {}) -> Area3D:
+	var area := Area3D.new()
+	area.add_to_group(group)
+	for key: String in metas:
+		area.set_meta(key, metas[key])
+	var shape := CollisionShape3D.new()
+	shape.shape = BoxShape3D.new()
+	area.add_child(shape)
+	return area
+
+
+func _marker(group: String, name: String, at: Vector3) -> Marker3D:
+	var marker := Marker3D.new()
+	marker.name = name
+	marker.add_to_group(group)
+	marker.position = at
+	return marker
+
+
+func _build_pillar_world(nodes: Array[Node3D], save: SaveSystem = null,
+		world_id: String = "reef_world") -> Array:
+	var world := Node3D.new()
+	for node in nodes:
+		world.add_child(node)
+	_root().add_child(world)
+	var systems := WorldSystems.new()
+	systems.manifest = REGION_MANIFEST
+	systems.world_id = world_id
+	systems.save_system = save
+	if save != null:
+		save.open_world(world_id, REGION_MANIFEST)
+	world.add_child(systems)
+	systems.wire()
+	return [world, systems]
+
+
+func test_req_003_a_marker_checkpoint_gets_a_trigger_and_activation_records_the_anchor() -> void:
+	var save := SaveSystem.new()
+	var spawn := _marker("spawn_point", "Spawn", Vector3(0, 1, 2))
+	var reef := _marker("checkpoint", "CheckpointReef", Vector3(0, 1, -20))
+	var built := _build_pillar_world([spawn, reef], save)
+	var systems := built[1] as WorldSystems
+
+	# A bare marker is not a volume; the runtime gave it one so the player can
+	# actually touch it. An Area3D checkpoint would be its own trigger.
+	assert_bool(reef.get_node_or_null("Trigger") is Area3D).override_failure_message(
+		"REQ-003: a Marker3D checkpoint must receive a generated trigger").is_true()
+	assert_array(Array(systems.get_lives().get_checkpoint_graph().get_checkpoint_ids())
+		).is_equal(["CheckpointReef"])
+	# Before any activation the anchor is the spawn point, never a stale one.
+	assert_bool(systems.get_lives().get_respawn_position().is_equal_approx(
+		Vector3(0, 1, 2))).is_true()
+
+	assert_bool(systems.activate_checkpoint_node(reef)).is_true()
+	assert_str(systems.get_lives().get_active_checkpoint()).is_equal("CheckpointReef")
+	assert_bool(systems.get_lives().get_respawn_position().is_equal_approx(
+		Vector3(0, 1, -20))).is_true()
+	# AC-5: the activation persisted through the real Save Integration Interface.
+	assert_str(String(save.get_world_data("reef_world").get("lastCheckpointId", ""))
+		).is_equal("CheckpointReef")
+	_teardown(built[0])
+
+
+func test_req_003_a_pit_costs_a_life_and_returns_the_player_to_the_checkpoint() -> void:
+	var player := _player_body()
+	var reef := _marker("checkpoint", "CheckpointReef", Vector3(0, 1, -20))
+	var pit := _volume("pit_volume")
+	var built := _build_pillar_world([reef, pit])
+	var systems := built[1] as WorldSystems
+	var lost: Array[int] = []
+	systems.life_lost.connect(
+		func(remaining: int, _source: CatastrophicSource.Kind) -> void:
+			lost.append(remaining))
+	var per_attempt := systems.get_lives().get_lives_per_attempt()
+
+	systems.activate_checkpoint_node(reef)
+	player.position = Vector3(5, -30, -40)  # fell off the route
+	systems._on_catastrophe_touched(pit)
+
+	assert_array(lost).override_failure_message(
+		"REQ-003 AC-1: a pit volume must cost exactly one life").is_equal(
+		[per_attempt - 1] as Array[int])
+	assert_bool(player.position.is_equal_approx(Vector3(0, 1, -20))
+		).override_failure_message(
+			"REQ-003: every spent life returns the player to the last anchor").is_true()
+
+	# The respawn lands inside the checkpoint's own trigger. Re-touching the
+	# ACTIVE checkpoint must not refill the life the pit just cost, or the
+	# stakes layer is free.
+	assert_bool(systems.activate_checkpoint_node(reef)).is_false()
+	assert_int(systems.get_lives().get_lives()).override_failure_message(
+		"REQ-003: re-touching the active checkpoint after a respawn must not refill"
+	).is_equal(per_attempt - 1)
+
+	_teardown(built[0])
+	_root().remove_child(player)
+	player.free()
+
+
+func test_req_003_zero_lives_refills_and_respawns_at_the_checkpoint_never_the_start() -> void:
+	var player := _player_body()
+	var spawn := _marker("spawn_point", "Spawn", Vector3(0, 1, 2))
+	var reef := _marker("checkpoint", "CheckpointReef", Vector3(0, 1, -20))
+	var pit := _volume("pit_volume")
+	var built := _build_pillar_world([spawn, reef, pit])
+	var systems := built[1] as WorldSystems
+	var anchors: Array[String] = []
+	systems.returned_to_anchor.connect(
+		func(_p: Vector3, checkpoint_id: String) -> void: anchors.append(checkpoint_id))
+	var per_attempt := systems.get_lives().get_lives_per_attempt()
+
+	systems.activate_checkpoint_node(reef)
+	for _fall: int in range(per_attempt):
+		player.position = Vector3(0, -30, -40)
+		systems._on_catastrophe_touched(pit)
+
+	assert_int(systems.get_lives().get_lives()).override_failure_message(
+		"REQ-003 AC-3: reaching zero refills the count").is_equal(per_attempt)
+	assert_int(anchors.size()).is_equal(per_attempt)
+	for anchor: String in anchors:
+		assert_str(anchor).is_equal("CheckpointReef")
+	assert_bool(player.position.is_equal_approx(Vector3(0, 1, -20))
+		).override_failure_message(
+			"REQ-003 AC-4: the setback lands on the checkpoint, not the world start"
+		).is_true()
+
+	_teardown(built[0])
+	_root().remove_child(player)
+	player.free()
+
+
+func test_req_003_an_ordinary_hazard_strips_a_capability_and_never_costs_a_life() -> void:
+	var player := _player_body()
+	var hook := _volume("hazard", {"capability": "leg", "hazard_id": "stray_hook"})
+	var built := _build_pillar_world([hook])
+	var systems := built[1] as WorldSystems
+	var lost_lives: Array[int] = []
+	systems.life_lost.connect(
+		func(remaining: int, _s: CatastrophicSource.Kind) -> void:
+			lost_lives.append(remaining))
+	var start := systems.get_lives().get_lives()
+
+	assert_bool(systems.apply_hazard_node(hook)).is_true()
+	assert_bool(systems.get_regen().is_lost(Capability.Kind.LEG)).override_failure_message(
+		"REQ-002 AC-1: a hazard strips the capability it names").is_true()
+	assert_bool(systems.get_regen().is_lost(Capability.Kind.TAIL)).is_false()
+	# A second touch of the same spot does not re-pop the same leg.
+	assert_bool(systems.apply_hazard_node(hook)).is_false()
+
+	assert_int(systems.get_lives().get_lives()).override_failure_message(
+		"REQ-003 AC-2: ordinary hazard contact never decrements lives").is_equal(start)
+	assert_array(lost_lives).is_empty()
+	# And a hazard cannot smuggle a catastrophe through its lane: the
+	# catastrophe lane refuses anything outside the closed set.
+	assert_bool(systems.report_catastrophe("stray_hook")).is_false()
+	assert_int(systems.get_lives().get_lives()).is_equal(start)
+
+	_teardown(built[0])
+	_root().remove_child(player)
+	player.free()
+
+
+func test_req_002_a_regen_station_and_a_checkpoint_both_regrow_everything() -> void:
+	var hook := _volume("hazard", {"capability": "tail"})
+	var gill_snag := _volume("hazard", {"capability": "gill"})
+	var station := _volume("regen_station")
+	var reef := _marker("checkpoint", "CheckpointReef", Vector3(0, 1, -20))
+	var built := _build_pillar_world([hook, gill_snag, station, reef])
+	var systems := built[1] as WorldSystems
+	var cues: Array[String] = []
+	systems.feedback_requested.connect(
+		func(cue: FeedbackCue) -> void: cues.append(cue.visual_id))
+
+	systems.apply_hazard_node(hook)
+	systems.apply_hazard_node(gill_snag)
+	assert_int(systems.get_regen().count_lost()).is_equal(2)
+	systems._on_station_touched(station)
+	assert_bool(systems.get_regen().is_fully_intact()).override_failure_message(
+		"REQ-002 AC-4: a regen station restores every lost capability").is_true()
+
+	systems.apply_hazard_node(hook)
+	systems.activate_checkpoint_node(reef)
+	assert_bool(systems.get_regen().is_fully_intact()).override_failure_message(
+		"REQ-002 AC-6 / REQ-003 AC-5: a checkpoint restores capability state").is_true()
+
+	# Every loss and regrowth asked for its feedback, both channels declared.
+	assert_array(cues).is_equal(["vfx.pop_sparkle_tail", "vfx.pop_sparkle_gill",
+		"vfx.bloom_regrow_tail", "vfx.bloom_regrow_gill",
+		"vfx.pop_sparkle_tail", "vfx.bloom_regrow_tail"] as Array[String])
+	_teardown(built[0])
+
+
+func test_req_002_a_lost_tail_slows_the_real_controller_through_the_modifier_interface() -> void:
+	# The integration the unit suite cannot prove: the world's regeneration
+	# state reaches the PLAYER'S controller, which is what makes a lost tail
+	# a slower swim in the running game rather than a flag in a test.
+	var body := AxolotlBody.new()
+	body.add_to_group("player")
+	_root().add_child(body)
+	body._ready()  # the runner adds nodes before the tree iterates
+	assert_object(body.get_controller()).is_not_null()
+	var modifiers := body.get_controller().get_capability_modifiers()
+
+	var hook := _volume("hazard", {"capability": "tail"})
+	var built := _build_pillar_world([hook])
+	var systems := built[1] as WorldSystems
+	var tuning := systems.get_tuning()
+
+	assert_float(modifiers.combined(CapabilityModifiers.Target.SWIM_SPEED)
+		).is_equal_approx(1.0, 0.0001)
+	systems.apply_hazard_node(hook)
+	assert_float(modifiers.combined(CapabilityModifiers.Target.SWIM_SPEED)
+		).override_failure_message(
+			"REQ-002 AC-2: a lost tail must reach the controller as a swim-speed factor"
+		).is_equal_approx(tuning.get_number(Capability.TAIL_MODIFIER_KEY), 0.0001)
+	assert_float(modifiers.combined(CapabilityModifiers.Target.CLIMB_HEIGHT)
+		).is_equal_approx(1.0, 0.0001)
+
+	# Leaving the world takes its factors with it: the hub is not a slower
+	# place. At runtime _exit_tree and the hub both call this; the runner never
+	# puts nodes in the tree, so the seam is driven directly here.
+	systems.release_player_factors()
+	_teardown(built[0])
+	assert_float(modifiers.combined(CapabilityModifiers.Target.SWIM_SPEED)
+		).override_failure_message(
+			"a world's capability factors must not follow the player into the hub"
+		).is_equal_approx(1.0, 0.0001)
+	_root().remove_child(body)
+	body.free()

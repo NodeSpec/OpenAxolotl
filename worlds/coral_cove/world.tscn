@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3]
+[gd_scene load_steps=28 format=3]
 
 ; CORAL COVE — the first official world (REQ-011), and deliberately built the
 ; way an outside contributor would build one: manifest + scene, NO scripts.
@@ -17,10 +17,15 @@
 ;   z -28  GLOW GATE — a bioluminescent false wall, open only while the
 ;          equipped mod grants `reveal_bioluminescent`. Mandatory: it spans
 ;          the full route. (Camera hint volume tightens framing here.)
+;   z -32  STRAY HOOK — an ORDINARY hazard (group `hazard`, capability leg):
+;          it strips a leg with a pop and NEVER costs a life. On the route
+;          on purpose, so every playthrough exercises pillar one.
 ;   z -34  Bubble Gill Mod pickup
 ;   z -38  BUBBLE GATE — open only while the mod grants `bubble_platform`.
 ;          Coral Cove gates on Bubble and Glow; Bubble Bay takes Jet, so the
 ;          official set covers all three MVP mods.       [checkpoint 2, -40]
+;   z -41  REGEN STATION — regrows every lost capability (the leg comes back
+;          before the seed bed, with a bloom).
 ;   z -42..-54  seven kelp seed pickups — the `kelp_seed` RESOURCE
 ;          collectible, declared once in the manifest and placed seven times;
 ;          each delivers to region `coral_shelf` (costs overridden to 3+4 via
@@ -31,6 +36,11 @@
 ;   z -56  SHELF WALL — the region's declared traversal gate; opens when
 ;          `coral_shelf` reaches `restored`. Restoration is MANDATORY.
 ;   z -60  finish volume — reach_volume returns the player to the lagoon.
+;
+; Below everything: a PIT VOLUME (group `pit_volume`) — CATASTROPHIC. Walking
+; off the edge of the route costs a life and returns the player to the last
+; checkpoint; at zero lives the count refills. That is the whole of the
+; stakes layer, declared as one node.
 ;
 ; CHECKPOINT DENSITY follows REQ-003 AC-7: the replay from any anchor to the
 ; next must fit progression.max_retry_seconds (5 s) at normal traversal, so
@@ -105,6 +115,18 @@ albedo_color = Color(0.95, 0.6, 0.3, 1)
 [sub_resource type="StandardMaterial3D" id="Material_shrimp"]
 albedo_color = Color(1, 0.4, 0.55, 1)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_pit"]
+size = Vector3(400, 4, 400)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hazard"]
+size = Vector3(20, 3, 1)
+
+[sub_resource type="StandardMaterial3D" id="Material_hook"]
+albedo_color = Color(0.55, 0.55, 0.6, 1)
+
+[sub_resource type="StandardMaterial3D" id="Material_station"]
+albedo_color = Color(0.85, 0.95, 0.4, 1)
+
 [node name="CoralCove" type="Node3D"]
 
 [node name="Ground" type="StaticBody3D" parent="."]
@@ -116,6 +138,12 @@ surface_material_override/0 = SubResource("Material_ground")
 
 [node name="Collision" type="CollisionShape3D" parent="Ground"]
 shape = SubResource("BoxShape3D_ground")
+
+[node name="Pit" type="Area3D" parent="." groups=["pit_volume"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -30, -28)
+
+[node name="Collision" type="CollisionShape3D" parent="Pit"]
+shape = SubResource("BoxShape3D_pit")
 
 [node name="Lagoon" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -12)
@@ -185,6 +213,18 @@ distance_m = 5.0
 [node name="Collision" type="CollisionShape3D" parent="GrottoHint"]
 shape = SubResource("BoxShape3D_hint")
 
+[node name="StrayHook" type="Area3D" parent="." groups=["hazard"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -32)
+metadata/capability = "leg"
+metadata/hazard_id = "stray_hook"
+
+[node name="Mesh" type="MeshInstance3D" parent="StrayHook"]
+mesh = SubResource("SphereMesh_pickup")
+surface_material_override/0 = SubResource("Material_hook")
+
+[node name="Collision" type="CollisionShape3D" parent="StrayHook"]
+shape = SubResource("BoxShape3D_hazard")
+
 [node name="BubblePickup" type="Area3D" parent="." groups=["gill_mod_pickup"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -34)
 metadata/mod_id = "bubble"
@@ -209,6 +249,16 @@ shape = SubResource("BoxShape3D_gate")
 
 [node name="CheckpointGrotto" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -40)
+
+[node name="RegenStation" type="Area3D" parent="." groups=["regen_station"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -41)
+
+[node name="Mesh" type="MeshInstance3D" parent="RegenStation"]
+mesh = SubResource("SphereMesh_pickup")
+surface_material_override/0 = SubResource("Material_station")
+
+[node name="Collision" type="CollisionShape3D" parent="RegenStation"]
+shape = SubResource("BoxShape3D_hazard")
 
 [node name="Seed1" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -42)

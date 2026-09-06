@@ -1,20 +1,39 @@
 class_name WorldSystems
 extends Node
 
-## The runtime a world's DECLARATIONS bind to (REQ-011, serving REQ-004/008/010).
+## The runtime a world's DECLARATIONS bind to (REQ-011, serving REQ-002/003/
+## 004/008/010).
 ##
 ## "Declare, don't script" only works if something on the game-client side
 ## turns declarations into behaviour. This node is that something: the hub
 ## attaches one to every world it loads, and it wires the world's manifest and
 ## scene-group conventions to the real core systems — Gill Mods, restoration,
-## collectibles, tuning — so a world module ships NO code at all. The
-## reference template proved a world can be pure scene+manifest; this is what
-## lets an official world stay that way while having mechanics.
+## collectibles, regeneration, lives, tuning — so a world module ships NO code
+## at all. The reference template proved a world can be pure scene+manifest;
+## this is what lets an official world stay that way while having mechanics.
 ##
 ## SCENE CONVENTIONS (the world side of the sanctioned interfaces; each is a
 ## Godot group plus node metadata, because group membership is the contract's
 ## own tagging rule — never a name, never a type):
 ##
+##   spawn_point          Node3D — where the player begins and the anchor a
+##                        respawn falls back to before any checkpoint.
+##   checkpoint           Node3D — a life-and-capability anchor. Its id is the
+##                        node name. An Area3D checkpoint is its own trigger;
+##                        a Marker3D gets a trigger slab generated across it.
+##                        Touching it records the respawn anchor, refills
+##                        lives and regrows every capability (REQ-003 AC-5).
+##   pit_volume           Area3D — a bottomless pit: CATASTROPHIC. Costs a
+##                        life and returns the player to the last checkpoint
+##                        (REQ-003 AC-1). Place one under the world so walking
+##                        off the edge means something.
+##   crush_hazard         Area3D — the other placeable catastrophe.
+##   hazard               Area3D, meta `capability` (tail|gill|leg), optional
+##                        meta `hazard_id` — ORDINARY damage: strips the named
+##                        capability and NEVER costs a life (REQ-002 AC-1,
+##                        REQ-003 AC-2). The hazard stays; a second touch of
+##                        an already-lost capability does nothing.
+##   regen_station        Area3D — regrows every lost capability (REQ-002 AC-4).
 ##   gill_mod_pickup      Area3D, meta `mod_id`     — walking through equips
 ##                        the named Gill Mod via the registration interface.
 ##   affordance_gate      StaticBody3D, meta `affordance` — a barrier that
@@ -25,8 +44,7 @@ extends Node
 ##                        the manifest's `collectibles` element DECLARES. A
 ##                        resource kind delivers to its region; a discovery
 ##                        kind is rescued once and persisted. A node naming
-##                        an undeclared id is refused (Collectible
-##                        Registration Interface, REQ-010).
+##                        an undeclared id is refused (REQ-010).
 ##   restoration_gate     StaticBody3D, meta `region_id` + `gate_id` — scene
 ##                        geometry mirroring the manifest-declared traversal
 ##                        gate: opens and closes with the region's state, both
@@ -35,6 +53,20 @@ extends Node
 ## These conventions are contract FRICTION, deliberately surfaced: they belong
 ## in the Level Contract as optional elements before v1 freezes, and they are
 ## recorded in docs/contract-friction.md rather than silently invented here.
+##
+## PILLAR ONE, WIRED. The Regeneration system publishes its capability factors
+## onto the player's controller through the Capability Modifier Interface —
+## a lost tail really does slow the swim. The Lives system takes the
+## Regeneration system as its CapabilityRestorer and the profile as its
+## CheckpointStore, and every catastrophe returns the player to the last
+## anchor: a life is spent, and at zero the count refills (a setback, never a
+## restart). Entry into a world ALWAYS starts at the spawn point even when the
+## profile remembers a later checkpoint, because restoration and pickups are
+## not yet persisted — resuming past the seeds you would need to re-collect
+## would strand you behind a wall. The anchor is still recorded (friction
+## F-10). Every loss and regrowth asks for feedback through
+## [signal feedback_requested] and gets a small sparkle burst at the player
+## — the comedic pop the tone requirement asks for, in greybox form.
 ##
 ## UNLOCK POLICY. A region cannot advance while locked — that is the
 ## Flagship's gate (REQ-008 AC-2). A world that declares NO boss has nothing
@@ -53,15 +85,32 @@ signal mod_equipped(mod_id: String)
 signal gate_changed(gate_kind: String, gate_ref: String, open: bool)
 signal resource_delivered(region_id: String, resources_held: int)
 signal collectible_collected(collectible_id: String, kind: CollectibleKind.Kind)
+signal checkpoint_activated(checkpoint_id: String)
+signal life_lost(remaining: int, source: CatastrophicSource.Kind)
+signal returned_to_anchor(position: Vector3, checkpoint_id: String)
+signal feedback_requested(cue: FeedbackCue)
 
+const GROUP_SPAWN := "spawn_point"
+const GROUP_CHECKPOINT := "checkpoint"
+const GROUP_PIT := "pit_volume"
+const GROUP_CRUSH := "crush_hazard"
+const GROUP_HAZARD := "hazard"
+const GROUP_REGEN_STATION := "regen_station"
 const GROUP_MOD_PICKUP := "gill_mod_pickup"
 const GROUP_AFFORDANCE_GATE := "affordance_gate"
 const GROUP_COLLECTIBLE := "collectible"
 const GROUP_RESTORATION_GATE := "restoration_gate"
 const META_COLLECTIBLE_ID := "collectible_id"
+const META_HAZARD_CAPABILITY := "capability"
+const META_HAZARD_ID := "hazard_id"
 const PLAYER_GROUP := "player"
 
 const FINISH_COLLECT_ALL := "collect_all"
+
+## The trigger slab generated across a checkpoint declared as a bare marker:
+## the width of the greybox routes, tall enough to catch a hop, thin along
+## the route so it fires where the marker stands. Geometry, not balance.
+const CHECKPOINT_TRIGGER_SIZE := Vector3(24.0, 4.0, 2.0)
 
 const TUNING_PATH := "res://core/tuning/tuning.json"
 const MODS_DIR := "res://core/gillmod/mods"
@@ -69,13 +118,13 @@ const MODS_DIR := "res://core/gillmod/mods"
 ## Set by the hub before this node enters the tree.
 var manifest: Dictionary = {}
 
-## The world's id — the save namespace collection persists into. Empty means
-## an anonymous world (a test scene): collection counts for the session and is
-## kept nowhere.
+## The world's id — the save namespace collection and checkpoints persist
+## into. Empty means an anonymous world (a test scene): state counts for the
+## session and is kept nowhere.
 var world_id: String = ""
 
 ## The Save Integration Interface, when a profile is attached. Null means the
-## collectibles store remembers nothing beyond this session, honestly.
+## stores remember nothing beyond this session, honestly.
 var save_system: SaveSystem = null
 
 ## Installed by the hub: what to call when a system-owned finish condition is
@@ -86,8 +135,12 @@ var _tuning: TuningData
 var _mods: GillModSystem
 var _restoration: RestorationSystem
 var _collectibles: CollectiblesSystem
+var _regen: RegenSystem
+var _lives: LifeSystem
 var _affordance_gates: Array[Node3D] = []
 var _restoration_gates: Dictionary = {}  # gate_id -> Node3D
+var _checkpoint_nodes: Array[Node3D] = []
+var _spawn_position: Vector3 = Vector3.ZERO
 
 
 var _wired := false
@@ -145,8 +198,11 @@ func wire() -> void:
 	_restoration.region_traversal_changed.connect(_on_traversal_changed)
 
 	_wire_collectibles()
+	_wire_pillar_one()
 	_wire_scene()
+	_open_lives()
 	_apply_affordance_gates()
+	_publish_modifiers()
 
 
 ## The collectibles system over the attached profile (or over nothing), the
@@ -178,6 +234,53 @@ func _wire_collectibles() -> void:
 		_collectibles.collection_completed.connect(_on_collection_completed)
 
 
+## Regeneration and Lives, joined the way the architecture declares them:
+## Lives takes Regeneration as its CapabilityRestorer, and Regeneration
+## publishes onto the controller through the modifier interface. Neither
+## reaches into the other.
+func _wire_pillar_one() -> void:
+	_regen = RegenSystem.new(_tuning)
+	_regen.capability_lost.connect(
+		func(_kind: Capability.Kind) -> void: _publish_modifiers())
+	_regen.capability_restored.connect(
+		func(_kind: Capability.Kind) -> void: _publish_modifiers())
+	_regen.mutation_applied.connect(
+		func(_id: String) -> void: _publish_modifiers())
+	_regen.mutation_expired.connect(
+		func(_id: String) -> void: _publish_modifiers())
+	_regen.feedback_requested.connect(_on_feedback_requested)
+
+	_lives = LifeSystem.new(_tuning)
+	_lives.set_capability_restorer(_regen)
+	_lives.life_lost.connect(_on_life_lost)
+	_lives.checkpoint_activated.connect(
+		func(checkpoint_id: String) -> void:
+			checkpoint_activated.emit(checkpoint_id))
+	_lives.respawned.connect(
+		func(position: Vector3, checkpoint_id: String, _replenished: int) -> void:
+			_return_player_to(position, checkpoint_id))
+
+
+## Opens the Lives system on the checkpoints the scene declared, IN SCENE
+## ORDER — a world author's declaration order is the play order, and the
+## replay-time field stays zero because spacing is MEASURED by the walk
+## probes, never estimated from geometry (REQ-003 AC-7).
+##
+## The checkpoint store is attached AFTER open_world on purpose: entry always
+## starts from the spawn point (see the class docstring), while activations
+## made during play still persist through the Save Integration Interface.
+func _open_lives() -> void:
+	var graph := CheckpointGraph.new(world_id)
+	for node: Node3D in _checkpoint_nodes:
+		if not graph.add(Checkpoint.new(node.name, _world_position_of(node), 0.0)):
+			push_warning("WorldSystems: checkpoint '%s' refused (duplicate name?)"
+				% node.name)
+	_lives.open_world(world_id, graph, {})
+	if save_system != null:
+		_lives.set_checkpoint_store(SaveCheckpointStore.new(save_system))
+	_lives.set_spawn_point(_spawn_position)
+
+
 func _finish_kind() -> String:
 	var condition: Variant = manifest.get("finishCondition", {})
 	if not (condition is Dictionary):
@@ -197,6 +300,14 @@ func get_collectibles() -> CollectiblesSystem:
 	return _collectibles
 
 
+func get_regen() -> RegenSystem:
+	return _regen
+
+
+func get_lives() -> LifeSystem:
+	return _lives
+
+
 func get_tuning() -> TuningData:
 	return _tuning
 
@@ -204,6 +315,26 @@ func get_tuning() -> TuningData:
 func _physics_process(delta: float) -> void:
 	if _mods != null:
 		_mods.tick(delta)
+	if _regen != null:
+		_regen.tick(delta)
+
+
+## The world is going away: the factors this world's regeneration published
+## onto the player's controller must not follow the player into the hub.
+## Called on tree exit, and explicitly by the hub before it frees a finished
+## world so the release never depends on teardown order.
+func release_player_factors() -> void:
+	var controller := _player_controller()
+	if controller == null:
+		return
+	var modifiers := controller.get_capability_modifiers()
+	for factor_id: String in modifiers.get_factor_ids():
+		if factor_id.begins_with(RegenSystem.FACTOR_PREFIX):
+			modifiers.clear_factor(factor_id)
+
+
+func _exit_tree() -> void:
+	release_player_factors()
 
 
 # --- Scene wiring -----------------------------------------------------------
@@ -220,7 +351,23 @@ func _wire_scene() -> void:
 	for node: Node in _world_root().find_children("*", "", true, false):
 		if node == self:
 			continue
-		if node.is_in_group(GROUP_MOD_PICKUP) and node is Area3D:
+		if node.is_in_group(GROUP_SPAWN) and node is Node3D:
+			_spawn_position = _world_position_of(node as Node3D)
+		elif node.is_in_group(GROUP_CHECKPOINT) and node is Node3D:
+			_wire_checkpoint_node(node as Node3D)
+		elif node.is_in_group(GROUP_PIT) and node is Area3D:
+			(node as Area3D).body_entered.connect(
+				_on_pickup_touched.bind(node, _on_catastrophe_touched))
+		elif node.is_in_group(GROUP_CRUSH) and node is Area3D:
+			(node as Area3D).body_entered.connect(
+				_on_pickup_touched.bind(node, _on_catastrophe_touched))
+		elif node.is_in_group(GROUP_HAZARD) and node is Area3D:
+			(node as Area3D).body_entered.connect(
+				_on_pickup_touched.bind(node, _on_hazard_touched))
+		elif node.is_in_group(GROUP_REGEN_STATION) and node is Area3D:
+			(node as Area3D).body_entered.connect(
+				_on_pickup_touched.bind(node, _on_station_touched))
+		elif node.is_in_group(GROUP_MOD_PICKUP) and node is Area3D:
 			(node as Area3D).body_entered.connect(
 				_on_pickup_touched.bind(node, _collect_mod))
 		elif node.is_in_group(GROUP_COLLECTIBLE) and node is Area3D:
@@ -231,6 +378,25 @@ func _wire_scene() -> void:
 			var gate_id := String(node.get_meta("gate_id", ""))
 			if not gate_id.is_empty():
 				_restoration_gates[gate_id] = node
+
+
+## A checkpoint declared as an Area3D is its own trigger. One declared as a
+## bare marker gets a trigger slab generated across it, so the contract's
+## "any Node3D in the checkpoint group" stays true for the player too.
+func _wire_checkpoint_node(node: Node3D) -> void:
+	_checkpoint_nodes.append(node)
+	var trigger := node as Area3D
+	if trigger == null:
+		trigger = Area3D.new()
+		trigger.name = "Trigger"
+		var shape := CollisionShape3D.new()
+		var box := BoxShape3D.new()
+		box.size = CHECKPOINT_TRIGGER_SIZE
+		shape.shape = box
+		trigger.add_child(shape)
+		node.add_child(trigger)
+	trigger.body_entered.connect(
+		_on_pickup_touched.bind(node, activate_checkpoint_node))
 
 
 ## A discovery the profile already records as rescued is not in the world any
@@ -246,8 +412,9 @@ func _wire_collectible_node(node: Area3D) -> void:
 
 func _on_pickup_touched(body: Node3D, pickup: Node, handler: Callable) -> void:
 	# body_entered fires during the physics flush; everything a pickup does —
-	# freeing itself, toggling a barrier's collision — mutates state the flush
-	# is iterating, so the whole collection is deferred out of it.
+	# freeing itself, toggling a barrier's collision, moving the player —
+	# mutates state the flush is iterating, so the whole reaction is deferred
+	# out of it.
 	if body.is_in_group(PLAYER_GROUP):
 		handler.call_deferred(pickup)
 
@@ -280,6 +447,181 @@ func collect_node(pickup: Node) -> bool:
 func _on_collection_completed() -> void:
 	if on_finish_condition.is_valid():
 		on_finish_condition.call()
+
+
+# --- Pillar one: the seams a scene node drives --------------------------------
+
+## Activates the checkpoint a scene node stands for (its id is its name).
+## Public so the seam can be driven without physics.
+##
+## The ACTIVE checkpoint does not re-activate: a respawn lands the player
+## inside its own trigger, and re-activating there would refill the life the
+## pit just cost — the stakes layer would be free. Reaching a DIFFERENT
+## checkpoint (forward, or back to an earlier one) activates as normal.
+func activate_checkpoint_node(node: Node) -> bool:
+	if _lives == null or _lives.get_active_checkpoint() == node.name:
+		return false
+	return _lives.activate_checkpoint(node.name)
+
+
+## A pit or crush volume: the closed catastrophic set decides whether a life
+## is spent, and any spent life returns the player to the last anchor.
+func _on_catastrophe_touched(volume: Node) -> void:
+	var source_id := CatastrophicSource.id(CatastrophicSource.Kind.CRUSH_HAZARD) \
+		if volume.is_in_group(GROUP_CRUSH) \
+		else CatastrophicSource.id(CatastrophicSource.Kind.PIT_VOLUME)
+	report_catastrophe(source_id)
+
+
+## Reports a catastrophe by source id. Returns false, changing nothing, for
+## any id outside CatastrophicSource's closed set — an ordinary hazard cannot
+## reach this by any spelling (REQ-003 AC-2).
+func report_catastrophe(source_id: String) -> bool:
+	return _lives != null and _lives.report_catastrophe(source_id)
+
+
+func _on_life_lost(remaining: int, source: CatastrophicSource.Kind) -> void:
+	life_lost.emit(remaining, source)
+	# At zero the Lives system respawns (and refills) on its own; any other
+	# spent life still returns the player to the anchor — a catastrophe is a
+	# setback every time, not only the last time.
+	if remaining > 0:
+		_return_player_to(_lives.get_respawn_position(),
+			_lives.get_active_checkpoint())
+
+
+## An ordinary hazard strips the capability it names. Public so the seam can
+## be driven without physics. Returns false for an unknown capability id, for
+## a capability already lost, or for a hazard trying to smuggle a catastrophe
+## through this lane.
+func apply_hazard_node(hazard: Node) -> bool:
+	var kind := _capability_from_id(
+		String(hazard.get_meta(META_HAZARD_CAPABILITY, "")))
+	if kind < 0:
+		push_warning("WorldSystems: hazard '%s' names no capability" % hazard.name)
+		return false
+	var source := String(hazard.get_meta(META_HAZARD_ID, hazard.name))
+	return _regen != null and _regen.apply_damage(
+		DamageEvent.new(source, kind as Capability.Kind, false))
+
+
+func _on_hazard_touched(hazard: Node) -> void:
+	apply_hazard_node(hazard)
+
+
+func _on_station_touched(_station: Node) -> void:
+	if _regen != null:
+		_regen.restore_all()
+
+
+static func _capability_from_id(text: String) -> int:
+	for kind: Capability.Kind in Capability.ALL:
+		if Capability.id(kind) == text:
+			return int(kind)
+	return -1
+
+
+## Moves the player to an anchor and drops the motion that carried them into
+## the catastrophe: arriving back already moving is how a respawn becomes a
+## second fall (the greybox fall guard learned this first).
+func _return_player_to(position: Vector3, checkpoint_id: String) -> void:
+	var player := _player()
+	if player != null:
+		_place_at(player, position)
+		var body := player as AxolotlBody
+		if body != null:
+			body.velocity = Vector3.ZERO
+			if body.get_input_system() != null:
+				body.get_input_system().clear()
+			if body.get_controller() != null:
+				body.get_controller().set_velocity(Vector3.ZERO)
+				body.get_controller().sync_body_position(position)
+	returned_to_anchor.emit(position, checkpoint_id)
+
+
+func _player() -> Node3D:
+	var tree := Engine.get_main_loop() as SceneTree
+	if tree == null:
+		return null
+	var player := tree.get_first_node_in_group(PLAYER_GROUP) as Node3D
+	if player != null:
+		return player
+	# Group registration happens on tree entry; before the tree iterates (the
+	# test runner) a node's own group list is still authoritative.
+	for node: Node in tree.root.find_children("*", "", true, false):
+		if node.is_in_group(PLAYER_GROUP) and node is Node3D:
+			return node as Node3D
+	return null
+
+
+## A node's position in tree space, composed up the parent chain. Equivalent
+## to global_position once the tree is running, and still correct BEFORE it
+## is (the test runner builds worlds ahead of the first iteration, when
+## global_position is not yet available).
+static func _world_position_of(node: Node3D) -> Vector3:
+	var transform := node.transform
+	var parent := node.get_parent()
+	while parent is Node3D:
+		transform = (parent as Node3D).transform * transform
+		parent = parent.get_parent()
+	return transform.origin
+
+
+## Places a node at a tree-space position through the same parent chain.
+static func _place_at(node: Node3D, world_position: Vector3) -> void:
+	var parent_transform := Transform3D.IDENTITY
+	var parent := node.get_parent()
+	while parent is Node3D:
+		parent_transform = (parent as Node3D).transform * parent_transform
+		parent = parent.get_parent()
+	node.position = parent_transform.affine_inverse() * world_position
+
+
+func _player_controller() -> AxolotlController:
+	var body := _player() as AxolotlBody
+	return null if body == null else body.get_controller()
+
+
+## The Capability Modifier Interface: this world's regeneration state, as
+## factors on the player's controller. Republished on every change.
+func _publish_modifiers() -> void:
+	var controller := _player_controller()
+	if controller != null and _regen != null:
+		_regen.publish_to(controller.get_capability_modifiers())
+
+
+## Every loss and regrowth asks for both channels (REQ-019 AC-2). The audio
+## half is the Audio System's once assets exist; the visual half gets a
+## sparkle burst at the player — comedic pop, greybox edition.
+func _on_feedback_requested(cue: FeedbackCue) -> void:
+	feedback_requested.emit(cue)
+	var player := _player()
+	if player == null:
+		return
+	var burst := CPUParticles3D.new()
+	burst.name = "FeedbackBurst"
+	burst.one_shot = true
+	burst.explosiveness = 1.0
+	burst.amount = 24
+	burst.lifetime = 0.6
+	burst.spread = 180.0
+	burst.initial_velocity_min = 2.5
+	burst.initial_velocity_max = 4.5
+	burst.gravity = Vector3(0.0, -3.0, 0.0)
+	burst.scale_amount_min = 0.08
+	burst.scale_amount_max = 0.16
+	burst.color = Color(1.0, 0.85, 0.3) if cue.visual_id.begins_with("vfx.pop") \
+		else Color(0.6, 1.0, 0.8)
+	var mesh := SphereMesh.new()
+	mesh.radius = 0.5
+	mesh.height = 1.0
+	burst.mesh = mesh
+	_world_root().add_child(burst)
+	_place_at(burst, _world_position_of(player) + Vector3(0.0, 0.8, 0.0))
+	burst.emitting = true
+	var tree := Engine.get_main_loop() as SceneTree
+	if tree != null:
+		tree.create_timer(burst.lifetime + 0.2).timeout.connect(burst.queue_free)
 
 
 # --- Gates ------------------------------------------------------------------

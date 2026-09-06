@@ -23,7 +23,10 @@ completability is a headless regression test, not a hope:
 4. **Glow Gills pickup → glow gate.** A bioluminescent false wall that opens
    only while the equipped mod grants `reveal_bioluminescent`. A camera hint
    volume tightens framing through the grotto — declaratively, as the
-   contract requires.
+   contract requires. Just past the gate, a **stray hook** — an ordinary
+   `hazard` — pops the axolotl's leg off with a sparkle. It never costs a
+   life; it makes climbing shorter until the **regen station** after the
+   grotto checkpoint regrows it. Pillar one, on the critical path, every run.
 5. **Bubble Gills pickup → bubble gate** (`bubble_platform`). Coral Cove
    gates on **Bubble and Glow**; Bubble Bay takes **Jet**, so the official
    set covers all three MVP mods (the REQ-011 cross-world split).
@@ -47,9 +50,11 @@ completability is a headless regression test, not a hope:
 | optional: cameraHints | one hint volume over the grotto |
 | optional: collectibles | `kelp_seed` (resource → `coral_shelf`), `hermit_snail` and `lantern_shrimp` (discovery) — Coral Cove is the world that exercises **both** kinds; Bubble Bay declares resources only |
 | optional: boss, enemies, music, npcs, secretAreas, customAbility | **not declared** — absent defaults apply |
+| scene conventions: `pit_volume`, `hazard`, `regen_station` | one pit under the whole world (falling off the route costs a life and returns you to the last checkpoint); one leg-stripping hook; one station |
 
 Scene-group conventions bound by the runtime (`gill_mod_pickup`,
-`affordance_gate`, `collectible`, `restoration_gate`) are recorded
+`affordance_gate`, `collectible`, `restoration_gate`, `checkpoint`,
+`pit_volume`, `hazard`, `regen_station`) are recorded
 in `docs/contract-friction.md` as candidates for Level Contract elements
 before the v1 freeze — they are conventions today, and pretending otherwise
 would hide exactly the friction REQ-011 exists to surface.
@@ -71,5 +76,7 @@ an absent optional element is a decision, not a gap.
   community submission
 - `godot --headless --audio-driver Dummy --path . --script test/worlds/run_coral_walk.gd`
   — the full playthrough: both grammars, both mod gates, seven seeds spent,
-  the snail rescued and persisted, the off-route shrimp untouched,
-  restoration, finish, return, checkpoint spacing
+  the snail rescued and persisted, the off-route shrimp untouched, the leg
+  lost to the hook and regrown at the station with no life spent, every
+  checkpoint activated by touch, restoration, finish, return, checkpoint
+  spacing

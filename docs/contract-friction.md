@@ -144,3 +144,44 @@ And one more conditional rule the contract cannot express yet:
 `finishCondition.kind == collect_all` requires at least one
 `discovery`-kind collectible (the runtime already refuses to complete
 vacuously; the checker should refuse the world).
+
+## F-9 · Pillar one binds by four more conventions
+
+**Needed while wiring lives and regeneration into the hub:** the contract
+requires `checkpoint` nodes but says nothing about how one is *touched*,
+and has no element at all for what costs a life or strips a capability.
+Four scene-group conventions now carry that (`hub/world_systems.gd`):
+`checkpoint` (a Marker3D gets a generated trigger slab; its id is its node
+name), `pit_volume` / `crush_hazard` (catastrophic, from
+`CatastrophicSource`'s closed set), `hazard` (+meta `capability`,
+`hazard_id`; ordinary), `regen_station`.
+
+**Interim:** documented in `docs/level-contract.md`; the walk probes prove
+each official world's hook, station and every checkpoint fire by touch.
+
+**Proposed contract change:** promote all four to optional elements with
+`scene_group_count` rules and documented metadata, and add a checkpoint-id
+rule (unique node names within the group) so a duplicate name fails the
+checker instead of being refused at wire time. A `hazard` whose
+`capability` is not in the closed set should fail conformance the same way
+an unknown `opensAt` does today.
+
+## F-10 · World state persists partially, so entry always starts at spawn
+
+**Noticed while wiring the checkpoint store:** the profile records the last
+activated checkpoint (REQ-003), and collectibles persist by id (REQ-010),
+but restoration state and consumed pickups do NOT persist — the runtime
+builds restoration with the in-memory store and every pickup is back on
+re-entry. Resuming at a remembered checkpoint would therefore strand the
+player past the seeds they need to re-collect, behind a wall that needs
+them.
+
+**Interim:** the runtime opens the Lives system BEFORE attaching the
+checkpoint store, so entry always starts at the spawn point while
+activations made during play still persist. The recorded anchor is data
+for a future resume feature, not a behaviour yet.
+
+**Proposed change (game client, not contract):** a `SaveRestorationStore`
+over the Save Integration Interface plus persisted pickup state, after
+which entry can honour the recorded anchor. Until then the honest answer is
+"a world restarts on entry".

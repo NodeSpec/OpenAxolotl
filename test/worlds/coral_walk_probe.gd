@@ -24,6 +24,7 @@ var _checks := 0
 var _frame := 0
 
 var _hub: OpenLagoon
+var _systems: WorldSystems
 var _save := SaveSystem.new()
 var _body: CharacterBody3D
 var _hub_spawn := Vector3.ZERO
@@ -39,6 +40,14 @@ var _region_restored := false
 ## REQ-010: every collectible the route collected, by id, in order — the
 ## resource type once per seed, a discovery once ever.
 var _collected: PackedStringArray = []
+
+## REQ-002/REQ-003: pillar one on the route — capabilities lost and regrown,
+## checkpoints activated by touch, and lives (which the route never spends).
+var _lost: PackedStringArray = []
+var _regrown: PackedStringArray = []
+var _checkpoints_hit: PackedStringArray = []
+var _lives_spent := 0
+var _lives_at_entry := -1
 
 ## REQ-003 AC-7: checkpoint spacing, MEASURED. World-space z of every
 ## checkpoint in route order (the route runs down -z), and the second at
@@ -156,6 +165,17 @@ func _wire_world_systems() -> void:
 	systems.collectible_collected.connect(
 		func(collectible_id: String, _kind: CollectibleKind.Kind) -> void:
 			_collected.append(collectible_id))
+	systems.get_regen().capability_lost.connect(
+		func(kind: Capability.Kind) -> void: _lost.append(Capability.id(kind)))
+	systems.get_regen().capability_restored.connect(
+		func(kind: Capability.Kind) -> void: _regrown.append(Capability.id(kind)))
+	systems.checkpoint_activated.connect(
+		func(id: String) -> void: _checkpoints_hit.append(id))
+	systems.life_lost.connect(
+		func(_remaining: int, _source: CatastrophicSource.Kind) -> void:
+			_lives_spent += 1)
+	_lives_at_entry = systems.get_lives().get_lives()
+	_systems = systems
 
 
 func _finish_checks() -> void:
@@ -175,6 +195,7 @@ func _finish_checks() -> void:
 		"restoring coral_shelf opened the shelf wall")
 	_check(_region_restored, "region coral_shelf reached restored")
 	_check_collectibles()
+	_check_pillar_one()
 	_check(_returned, "the finish condition returned control to the hub")
 	_check(_body.global_position.distance_to(_hub_spawn) < 6.0,
 		"the player is back at the hub spawn (%.1f m away)"
@@ -210,6 +231,26 @@ func _check_collectibles() -> void:
 		% str(recorded))
 	_check(recorded is Array and not (recorded as Array).has("kelp_seed"),
 		"a spent resource is never recorded by id")
+
+
+## REQ-002/REQ-003 on the real route: the stray hook stripped the leg once
+## and never cost a life; the regen station regrew it; every checkpoint was
+## activated by walking through it; the lives count is untouched at the end.
+func _check_pillar_one() -> void:
+	_check(_lost == PackedStringArray(["leg"]),
+		"the stray hook stripped exactly the leg (got %s)" % str(_lost))
+	_check(_regrown == PackedStringArray(["leg"]),
+		"the regen station regrew the leg (got %s)" % str(_regrown))
+	_check(_lives_spent == 0,
+		"ordinary hazard contact spent no life (spent %d)" % _lives_spent)
+	_check(_checkpoints_hit.size() == _checkpoint_z.size(),
+		"every checkpoint was activated by touch (%d of %d: %s)"
+		% [_checkpoints_hit.size(), _checkpoint_z.size(), str(_checkpoints_hit)])
+	_check(_lives_at_entry > 0,
+		"the world opened with a positive life count (%d)" % _lives_at_entry)
+	var recorded: Variant = _save.get_world_data(WORLD_ID).get("lastCheckpointId", "")
+	_check(String(recorded) != "" and _checkpoints_hit.has(String(recorded)),
+		"the last activated checkpoint is recorded in the profile (%s)" % str(recorded))
 
 
 func _elapsed_seconds() -> float:

@@ -110,6 +110,17 @@ Everything else. Each has a **defined default when absent**, which is what lets 
 | `tuningOverrides` | Every tuning value stays global |
 | `livesPerAttemptOverride` | The global `progression.default_lives_per_attempt` applies |
 
+**Checkpoints, pits, hazards and regen stations are scene declarations.** The game client binds four more groups, all placed as nodes and none needing a script:
+
+| Group | Node | What the runtime does |
+|---|---|---|
+| `checkpoint` | any `Node3D`; an `Area3D` is its own trigger, a `Marker3D` gets one generated across it | touching it records the respawn anchor, refills lives and regrows every capability; its **id is its node name** |
+| `pit_volume` / `crush_hazard` | `Area3D` | **catastrophic**: costs a life and returns the player to the last checkpoint (at zero lives the count refills) |
+| `hazard` | `Area3D` + metadata `capability` (`tail`, `gill`, `leg`), optional `hazard_id` | **ordinary**: strips that capability with a pop, and can never cost a life |
+| `regen_station` | `Area3D` | regrows every lost capability |
+
+Put a wide `pit_volume` under your world. Without one, walking off the edge is a fall forever, and the lives layer has nothing to do.
+
 Three notes worth reading before you reach for them:
 
 **Collectibles are declared, then placed.** Declare each in `world.json`:

@@ -161,6 +161,13 @@ func _wire_hud_to(systems: WorldSystems, manifest: Dictionary) -> void:
 		return
 	_hud.set_gill_mods(systems.get_mods())
 	_hud.set_tuning(systems.get_tuning())
+	# Pillar one: lives and capabilities are the world's; the dash is the
+	# player's own controller's, which lives beside the hub.
+	_hud.set_life_system(systems.get_lives())
+	_hud.set_regen(systems.get_regen())
+	var body := get_tree().get_first_node_in_group(PLAYER_GROUP) as AxolotlBody
+	if body != null and body.get_controller() != null:
+		_hud.set_dash(body.get_controller().get_dash())
 	var regions: Variant = manifest.get("restorableRegions", [])
 	var first_region := ""
 	if regions is Array and not (regions as Array).is_empty():
@@ -174,6 +181,9 @@ func _unwire_hud() -> void:
 		return
 	_hud.set_gill_mods(null)
 	_hud.set_restoration(null)
+	_hud.set_life_system(null)
+	_hud.set_regen(null)
+	_hud.set_dash(null)
 	_hud.set_tuning(null)
 
 
@@ -192,6 +202,9 @@ func _on_world_finished() -> void:
 	if _save != null:
 		_save.put_world_data(finished_id, {"completed": true})
 
+	# The world's capability factors leave with the world, not with the player.
+	for systems: Node in _active_world.find_children("*", "WorldSystems", true, false):
+		(systems as WorldSystems).release_player_factors()
 	_active_world.queue_free()
 	_active_world = null
 	_active_world_id = ""

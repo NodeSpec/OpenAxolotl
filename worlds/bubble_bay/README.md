@@ -13,6 +13,7 @@ worlds are the contract's battle test: what one exercises, the other omits.
 | Gill Mods gated | Bubble + Glow | **Jet** — the one mod Coral Cove does not emphasize, so the official set requires all three MVP mods |
 | Collectibles | both kinds: `kelp_seed` resources plus two discovery creatures | **resources only** — the `pearl` type placed thirteen times; no discovery collectibles, so nothing here is persisted by id and `collect_all` could never be its finish |
 | Camera hints | one grotto hint volume | none — the default framing carries the whole route |
+| Pillar one | a leg-stripping hook and a regen station on the route | **pit only** — falling off costs a life; no ordinary hazard and no station, so lives are the only stakes here |
 
 Like every world, Bubble Bay is manifest + scene with **no scripts**: every
 mechanic is a scene-group + metadata declaration bound at runtime by the
@@ -50,6 +51,7 @@ completability is a headless regression test (`test/worlds/run_bubble_walk.gd`):
 | checkpoints | 6, roughly every 10 m — the density REQ-003 AC-7's 5 s replay bound demands at waddle pace; the bubble walk measures every segment |
 | collectibles | `pearl` (resource → `kelp_nursery`); no discovery kind |
 | boss / enemies / customAbility / music | absent — defined defaults apply |
+| scene conventions | one `pit_volume` under the whole world; six `checkpoint` markers (each gets a generated trigger) |
 
 ## Pending integrations
 

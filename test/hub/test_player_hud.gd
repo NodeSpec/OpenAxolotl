@@ -79,6 +79,28 @@ func test_req_022_lives_display_updates_in_the_emitting_frame() -> void:
 		"Lives: %d of %d" % [total, total])
 
 
+func test_req_022_checkpoint_replenish_shows_in_the_activating_frame() -> void:
+	# The other way lives come back: touching a checkpoint (REQ-003 AC-4).
+	# The hub wires checkpoints through WorldSystems, so the HUD must redraw
+	# on the LifeSystem's own checkpoint signal, not only on a loss.
+	var tuning := _tuning()
+	var hud := _hud()
+	var lives := LifeSystem.new(tuning)
+	var graph := CheckpointGraph.new("hud_world")
+	assert_bool(graph.add(Checkpoint.new("cp_1", Vector3(0.0, 0.0, -8.0)))).is_true()
+	lives.open_world("hud_world", graph)
+	hud.set_life_system(lives)
+
+	var total := lives.get_lives_per_attempt()
+	assert_bool(lives.lose_life(CatastrophicSource.Kind.CRUSH_HAZARD)).is_true()
+	assert_str(hud.get_lives_text()).is_equal(
+		"Lives: %d of %d" % [total - 1, total])
+
+	assert_bool(lives.activate_checkpoint("cp_1")).is_true()
+	assert_str(hud.get_lives_text()).is_equal(
+		"Lives: %d of %d" % [total, total])
+
+
 # --- AC-2: capabilities, reflected in the same frame -------------------------
 
 func test_req_022_capability_display_updates_in_the_emitting_frame() -> void:
