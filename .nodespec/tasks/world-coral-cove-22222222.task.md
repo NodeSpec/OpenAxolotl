@@ -131,34 +131,28 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T12 — Expose the interface World Static Analysis Gate consumes, per Contract "Sanctioned World API Surface" (dependency).** <!-- t:a14fa597 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T13 — Implement: "At least two official worlds are implemented, each passing the Level Contract compliance checker" (REQ-011).** <!-- t:0b881ecb -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-011 "At least two official worlds are implemented, each passing the Level Contract compliance checker" — possible coordination point: Contract "Level Contract v1" (dependency) from Level Contract Compliance Checker (keyword signal only)
-- [ ] **T14 — Implement: "Each official world is completable from spawn to finish condition" (REQ-011).** <!-- t:1f668d08 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-011 "Each official world is completable from spawn to finish condition"
-- [ ] **T15 — Implement: "Each official world calls only the sanctioned world API surface, using no private back doors unavailable to an outside contributor, verified by the same static analysis applied to community submissions" (REQ-011).** <!-- t:754bb993 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-011 "Each official world calls only the sanctioned world API surface, using no private back doors unavailable to an outside contributor, verified by the same static analysis applied to community submissions" — possible coordination point: Contract "Sanctioned World API Surface" (dependency) from World Static Analysis Gate (keyword signal only)
-- [ ] **T16 — Implement: "Each official world exercises both movement grammars and contains at least one restorable region" (REQ-011).** <!-- t:1955c96e -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-011 "Each official world exercises both movement grammars and contains at least one restorable region" — possible coordination point: Contract "Restoration Region Interface" (dependency) to Restoration State System (keyword signal only)
-- [ ] **T17 — Implement: "Each official world contains at least one mandatory traversal challenge gated on a specific Gill Mod, and across the official set all three MVP mods are each required by at least one world" (REQ-011).** <!-- t:0ac0c784 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-011 "Each official world contains at least one mandatory traversal challenge gated on a specific Gill Mod, and across the official set all three MVP mods are each required by at least one world" — possible coordination point: Contract "Gill Mod Registration Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
-- [ ] **T18 — Implement: "Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen" (REQ-011).** <!-- t:472ee673 -->
+- [ ] **T13 — Implement: "Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen" (REQ-011).** <!-- t:472ee673 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-011 "Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen" — possible coordination point: Contract "Level Contract v1" (dependency) from OpenAxolotl Game Client (keyword signal only)
-- [ ] **T19 — Implement: "Each world is fun to play through and delivers a satisfying broken-to-restored payoff" (REQ-011).** <!-- t:e1d96cf2 -->
+- [ ] **T14 — Implement: "Each world is fun to play through and delivers a satisfying broken-to-restored payoff" (REQ-011).** <!-- t:e1d96cf2 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-011 "Each world is fun to play through and delivers a satisfying broken-to-restored payoff"
-- [ ] **T20 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
 
 **Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Technology Guidance, and node context as your references. Record the expanded list in this section via update_artifact (propose_patches) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
+
+## Configuration
+
+User-selected configuration for this component (honor these choices):
+- **csharp:** not used - no .cs files, no Mono/.NET assemblies, no C# build step. The catalog line 'use GDScript for gameplay logic and C# for complex systems' does NOT apply here.
+- **engine:** Godot 4.x, GDScript 2.0
+- **typing:** statically typed GDScript throughout (typed params, returns, members)
+- **language:** GDScript
+- **rationale:** One language keeps the contribution surface narrow for humans and AI agents alike; a second toolchain doubles build, review and static-gate parser burden for no gameplay gain.
 
 ## Project Context
 
@@ -198,20 +192,61 @@ Category: functional | Status: in-progress
 Two to three official worlds at MVP — Coral Cove, Bubble Bay, and one more — each a discrete, bounded, checkpointed playthrough space entered from the Open Lagoon. Their purpose is dual and the second purpose is the more important one: they are shipped content AND they are the battle-test of the Level Contract. They must be built as ordinary contract-conforming world modules using only the public extension interfaces, taking no shortcuts unavailable to an outside contributor — if a core team world needs a private back door, that is a contract defect to fix, not a special case to permit. Friction encountered building them feeds back into the contract, and only once that feedback is absorbed is the contract frozen at v1. Each world should exercise both movement grammars, at least one restoration region, and a distinct Gill Mod emphasis.
 
 **Acceptance criteria — your task boxes:**
-- [ ] At least two official worlds are implemented, each passing the Level Contract compliance checker
-  → covered by Task T13
-- [ ] Each official world is completable from spawn to finish condition
-  → covered by Task T14
-- [ ] Each official world calls only the sanctioned world API surface, using no private back doors unavailable to an outside contributor, verified by the same static analysis applied to community submissions
-  → covered by Task T15
-- [ ] Each official world exercises both movement grammars and contains at least one restorable region
-  → covered by Task T16
-- [ ] Each official world contains at least one mandatory traversal challenge gated on a specific Gill Mod, and across the official set all three MVP mods are each required by at least one world
-  → covered by Task T17
+- [x] At least two official worlds are implemented, each passing the Level Contract compliance checker
+  → THIS NODE: internal logic — possible coordination point: Contract "Level Contract v1" (dependency) from Level Contract Compliance Checker (keyword signal only)
+- [x] Each official world is completable from spawn to finish condition
+  → THIS NODE: internal logic
+- [x] Each official world calls only the sanctioned world API surface, using no private back doors unavailable to an outside contributor, verified by the same static analysis applied to community submissions
+  → THIS NODE: internal logic — possible coordination point: Contract "Sanctioned World API Surface" (dependency) from World Static Analysis Gate (keyword signal only)
+- [x] Each official world exercises both movement grammars and contains at least one restorable region
+  → THIS NODE: internal logic — possible coordination point: Contract "Restoration Region Interface" (dependency) to Restoration State System (keyword signal only)
+- [x] Each official world contains at least one mandatory traversal challenge gated on a specific Gill Mod, and across the official set all three MVP mods are each required by at least one world
+  → THIS NODE: internal logic — possible coordination point: Contract "Gill Mod Registration Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
 - [ ] Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen (manual)
-  → covered by Task T18
+  → covered by Task T13
 - [ ] Each world is fun to play through and delivers a satisfying broken-to-restored payoff (manual)
-  → covered by Task T19
+  → covered by Task T14
+
+### REQ-036: Drift Fleet and Flagship reachable from a world
+Category: functional | Status: pending
+_Shared with: Drift Fleet Enemy Framework, Flagship Boss Encounter, Model Refinement Pipeline, Restoration State System — their slices live in their own task docs._
+The Drift Fleet runtime (REQ-012) and the Flagship encounter (REQ-013) must be reachable from a world. Both were built and tested headless, and every one of those tests passed while no world could reach either: the WorldSystems runtime had no enemy scene convention, never constructed a DriftFleetSystem, and never read the manifest's optional `boss` element. The framework's own comment says it "owns no enemy placement and no geometry: a world places enemies, and whatever binds the scene calls the lanes below" — nothing was that binder.
+
+THE JOIN follows the shape every other element uses: the manifest declares, the scene places, the runtime connects the two.
+
+  * `enemies` lists the roster ids a world uses. Nodes in the `enemy` group carry an enemy_id; a dredger also carries the region_id it sits over, because which stretch of reef a dredger threatens is placement rather than roster data.
+  * Contact routes by the unit's DECLARED behaviour, never by anything the scene picks — entangle and snag through the one contact lane, dredge through strike_region, a toxin aura on both the enter and exit edges because an aura is a volume rather than a hit. A world therefore cannot invent an effect by placing a node, which is the point of the sanctioned surface.
+  * Placing a node is not a declaration: a node naming an undeclared unit stays inert, the same rule a collectible pickup naming an undeclared id follows. The check runs on every lane rather than only at wiring time, because the probes and tests drive those seams directly.
+  * `boss` builds a FlagshipEncounter wired to Regeneration, Lives, Restoration and the Gill Mods. A refused declaration leaves the region LOCKED: a boss that failed to build has not been beaten, and opening the region because the declaration was malformed would hand the player the payoff for free.
+  * The `boss_phase` scene convention makes the encounter drivable from a scene at all. A phase volume reads the player's grammar at the moment of contact rather than declaring it, because that is the point of REQ-013 AC-3 — a water-only phase must be cleared while actually swimming.
+
+THE FLEET IS BUILT even when a world declares nothing, so the accessor never returns null and the tick loop needs no special case. That tick is load-bearing: the entanglement and aura-linger timers live in the fleet precisely so a despawned enemy cannot strand the player debuffed forever.
+
+THE UNITS have bodies, generated through the same headless Blender lane as the environment kit. The design rule is the vision's: faceless industrial extraction machinery, never human characters, so every unit is assembled from machine primitives and none has a face, an eye or a limb. A cold oxidised-iron palette with a single amber warning accent separates them from the warm reef, and they are flat-shaded where the reef kit is smooth, because manufactured things have hard edges.
+
+Units sit OFF the walked route in both official worlds: the walk probes measure every checkpoint segment against progression.max_retry_seconds, and an entangling unit on that line would fail a completability probe for a reason unrelated to completability.
+
+**Acceptance criteria — your task boxes:**
+- [x] A world declaring no enemies still has a working DriftFleetSystem, so the absent default is a no-op rather than a null, and the reference template keeps exercising that path
+  → THIS NODE via Contract "Enemy Registration Interface" (dependency) to Drift Fleet Enemy Framework — coordinate with Drift Fleet Enemy Framework
+- [x] The shipped enemy roster loads into a world's fleet so a manifest can name any of its units
+  → THIS NODE via Contract "Enemy Registration Interface" (dependency) to Drift Fleet Enemy Framework — coordinate with Drift Fleet Enemy Framework
+- [x] Contact with a declared entangling unit, driven through the runtime's own scene seam, entangles the player
+  → owner unresolved — this node or a sharing node (Drift Fleet Enemy Framework, Flagship Boss Encounter, Model Refinement Pipeline, Restoration State System): no contract evidence; assign via the requirement mapping
+- [x] A scene node naming a unit the world never declared stays inert on every lane, not only at wiring time
+  → owner unresolved — this node or a sharing node (Drift Fleet Enemy Framework, Flagship Boss Encounter, Model Refinement Pipeline, Restoration State System): no contract evidence; assign via the requirement mapping
+- [x] A dredger reverts the region its node names back to barren while leaving the region's unlocked flag set
+  → THIS NODE via Contract "Restoration Region Interface" (dependency) to Restoration State System — coordinate with Restoration State System
+- [x] A valid boss declaration builds a Flagship encounter and its region starts locked
+  → THIS NODE via Contract "Enemy Registration Interface" (dependency) to Flagship Boss Encounter — coordinate with Flagship Boss Encounter
+- [x] A refused boss declaration leaves the region locked rather than opening it
+  → THIS NODE via Contract "Restoration Region Interface" (dependency) to Restoration State System — coordinate with Restoration State System
+- [x] A boss phase volume clears a phase only when the player arrives in the grammar that phase demands
+  → THIS NODE via Contract "Enemy Registration Interface" (dependency) to Flagship Boss Encounter — coordinate with Flagship Boss Encounter
+- [x] Both official worlds declare and place a Drift Fleet, and every walk probe, contract checker and the perf gate stay green with the units in place
+  → THIS NODE via Contract "Enemy Registration Interface" (dependency) to Drift Fleet Enemy Framework — coordinate with Drift Fleet Enemy Framework
+- [x] Every Drift Fleet unit ships as a contract-conforming asset with provenance recording the generator
+  → THIS NODE via Contract "Enemy Registration Interface" (dependency) to Drift Fleet Enemy Framework — coordinate with Drift Fleet Enemy Framework
 
 ## Interface Contracts
 
@@ -727,4 +762,12 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 | File | Kind | Language | Status |
 |------|------|----------|--------|
+| `test/worlds/coral_walk_probe.gd` | source | --- | draft |
+| `test/worlds/run_coral_walk.gd` | source | --- | draft |
 | `.nodespec/tests/req-011.tests.md` - Test plan for requirement: Official MVP Worlds | test-plan | markdown | draft |
+| `test/hub/test_world_drift_fleet.gd` | test-plan | --- | draft |
+| `worlds/coral_cove/world.json` | config | --- | draft |
+| `worlds/bubble_bay/world.json` | config | --- | draft |
+| `worlds/coral_cove/README.md` | doc | --- | draft |
+| `docs/contract-friction.md` | doc | --- | draft |
+| `worlds/coral_cove/world.tscn` | source | --- | draft |

@@ -30,6 +30,8 @@ component inventory, connection topology, and links to per-component task docume
 | Flagship Boss Encounter | shared-library | godot | --- | [`.nodespec/tasks/flagship-boss-encounter-22222222.task.md`](./.nodespec/tasks/flagship-boss-encounter-22222222.task.md) | [`.nodespec/tests/req-013.tests.md`](./.nodespec/tests/req-013.tests.md) |
 | World Static Analysis Gate | cli-tool | python-backend | --- | [`.nodespec/tasks/world-static-analysis-gate-22222222.task.md`](./.nodespec/tasks/world-static-analysis-gate-22222222.task.md) | [`.nodespec/tests/req-020.tests.md`](./.nodespec/tests/req-020.tests.md) |
 | World: Reference Template | shared-library | godot | --- | [`.nodespec/tasks/world-reference-template-22222222.task.md`](./.nodespec/tasks/world-reference-template-22222222.task.md) | [`.nodespec/tests/req-029.tests.md`](./.nodespec/tests/req-029.tests.md) |
+| Blender (headless) | external-service | blender | --- | --- | --- |
+| Model Refinement Pipeline | cli-tool | python-backend | --- | --- | --- |
 
 ## Connection Topology
 
@@ -124,6 +126,8 @@ component inventory, connection topology, and links to per-component task docume
 | World Static Analysis Gate | Audio System | dependency | Engine Feature Policy |
 | World Static Analysis Gate | Balance and Tuning Data | dependency | Engine Feature Policy |
 | World Static Analysis Gate | Flagship Boss Encounter | dependency | Engine Feature Policy |
+| Model Refinement Pipeline | Blender (headless) | dependency | Blender Headless CLI |
+| Model Refinement Pipeline | Asset Contract Validator | dependency | GLB Header Reader |
 
 ## Task Documents
 
@@ -180,6 +184,7 @@ recommended test types, framework suggestions, and test scenarios.
 - **CI Pipeline**: [`.nodespec/tests/req-018.tests.md`](./.nodespec/tests/req-018.tests.md)
 - **Audio System**: [`.nodespec/tests/req-023.tests.md`](./.nodespec/tests/req-023.tests.md)
 - **Player HUD**: [`.nodespec/tests/req-022.tests.md`](./.nodespec/tests/req-022.tests.md)
+- **World: Coral Cove**: [`test/hub/test_world_drift_fleet.gd`](./test/hub/test_world_drift_fleet.gd)
 - **Save System**: [`.nodespec/tests/req-014.tests.md`](./.nodespec/tests/req-014.tests.md)
 - **OpenAxolotl Game Client**: [`.nodespec/tests/req-027.tests.md`](./.nodespec/tests/req-027.tests.md)
 - **World: Reference Template**: [`.nodespec/tests/req-029.tests.md`](./.nodespec/tests/req-029.tests.md)
@@ -188,5 +193,6 @@ recommended test types, framework suggestions, and test scenarios.
 - **Asset Contract Validator**: [`.nodespec/tests/req-016.tests.md`](./.nodespec/tests/req-016.tests.md)
 - **Restoration State System**: [`.nodespec/tests/req-008.tests.md`](./.nodespec/tests/req-008.tests.md)
 - **OpenAxolotl Game Client**: [`.nodespec/tests/req-009.tests.md`](./.nodespec/tests/req-009.tests.md)
+- **OpenAxolotl Game Client**: [`test/core/rendering/test_hero_animator.gd`](./test/core/rendering/test_hero_animator.gd)
 - **Regeneration and Capability System**: [`.nodespec/tests/req-002.tests.md`](./.nodespec/tests/req-002.tests.md)
 - **Balance and Tuning Data**: [`.nodespec/tests/req-025.tests.md`](./.nodespec/tests/req-025.tests.md)

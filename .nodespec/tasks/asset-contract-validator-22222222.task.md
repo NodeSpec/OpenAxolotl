@@ -15,6 +15,8 @@
 
 ## Implementation Context
 
+> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
+
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
 This node owns both halves of the asset story: the Asset Contract itself
 (`contracts/asset_contract.v1.json` plus its prose companion) and the validator
@@ -109,49 +111,19 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T5 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).** <!-- t:a39cc42a -->
   Record the endpoint/identifiers CI Pipeline needs in this node's config artifacts — coordinate with CI Pipeline.
   Build to the contract schema EXACTLY (see Interface Contracts).
-- [ ] **T6 — Implement: "Asset Contract specifies required file types, resolution/format constraints, and alpha-channel handling per asset category" (REQ-015).** <!-- t:387fc410 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-015 "Asset Contract specifies required file types, resolution/format constraints, and alpha-channel handling per asset category" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
-- [ ] **T7 — Implement: "Asset Contract specifies the asset directory layout and naming convention" (REQ-015).** <!-- t:ad43b317 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-015 "Asset Contract specifies the asset directory layout and naming convention" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
-- [ ] **T8 — Implement: "Every asset requires a provenance.json recording author, generation method, and applicable license terms" (REQ-015).** <!-- t:82d20684 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-015 "Every asset requires a provenance.json recording author, generation method, and applicable license terms" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
-- [ ] **T9 — Implement: "AI-generated assets additionally record the generation tool and the prompt used; these fields are not required for hand-authored assets" (REQ-015).** <!-- t:cf9bda0b -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-015 "AI-generated assets additionally record the generation tool and the prompt used; these fields are not required for hand-authored assets" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
-- [ ] **T10 — Implement: "provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly" (REQ-015).** <!-- t:a4f99d10 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-015 "provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
-- [ ] **T11 — Implement: "Contract documents the style and art-direction expectations a human maintainer reviews against" (REQ-015).** <!-- t:39924a69 -->
+- [ ] **T6 — Expose the interface Model Refinement Pipeline consumes, per Contract "GLB Header Reader" (dependency).** <!-- t:3e2f9ddc -->
+  Record the endpoint/identifiers Model Refinement Pipeline needs in this node's config artifacts — coordinate with Model Refinement Pipeline.
+  Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
+- [ ] **T7 — Implement: "Contract documents the style and art-direction expectations a human maintainer reviews against" (REQ-015).** <!-- t:39924a69 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-015 "Contract documents the style and art-direction expectations a human maintainer reviews against" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
-- [ ] **T12 — Implement: "A contributor can produce a conforming asset from the Asset Contract document alone" (REQ-015).** <!-- t:6566e4f2 -->
+- [ ] **T8 — Implement: "A contributor can produce a conforming asset from the Asset Contract document alone" (REQ-015).** <!-- t:6566e4f2 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-015 "A contributor can produce a conforming asset from the Asset Contract document alone"
-- [ ] **T13 — Implement: "Validator checks file type, resolution, format, and alpha-channel conformance per asset category" (REQ-016).** <!-- t:719700d2 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-016 "Validator checks file type, resolution, format, and alpha-channel conformance per asset category" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
-- [ ] **T14 — Implement: "Validator checks directory placement and naming convention conformance" (REQ-016).** <!-- t:562d02b1 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-016 "Validator checks directory placement and naming convention conformance" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
-- [ ] **T15 — Implement: "Validator requires a provenance.json per asset and validates it against the defined schema, failing on a missing or malformed one" (REQ-016).** <!-- t:428f15c1 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-016 "Validator requires a provenance.json per asset and validates it against the defined schema, failing on a missing or malformed one" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
-- [ ] **T16 — Implement: "Failure output names the specific asset and the specific violated rule" (REQ-016).** <!-- t:dfa9099b -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-016 "Failure output names the specific asset and the specific violated rule" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
-- [ ] **T17 — Implement: "Validator exits non-zero on failure and runs as a required CI check on every pull request touching assets" (REQ-016).** <!-- t:cf7730dc -->
+- [ ] **T9 — Implement: "Validator exits non-zero on failure and runs as a required CI check on every pull request touching assets" (REQ-016).** <!-- t:cf7730dc -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-016 "Validator exits non-zero on failure and runs as a required CI check on every pull request touching assets" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
-- [ ] **T18 — Implement: "Validator is runnable locally with a single documented command" (REQ-016).** <!-- t:1aad56aa -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-016 "Validator is runnable locally with a single documented command" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
-- [ ] **T19 — Implement: "A deliberately non-conforming fixture asset fails validation and conforming official assets pass" (REQ-016).** <!-- t:58c57927 -->
-  No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-016 "A deliberately non-conforming fixture asset fails validation and conforming official assets pass" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
-- [ ] **T20 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T10 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
@@ -197,40 +169,73 @@ Category: technical | Status: in-progress
 The art-side sibling of the Level Contract: a specification any character, creature, or prop asset must conform to in order to enter the repo. Contributors generate art with whatever external AI tool they choose (offline authoring — no in-editor generation plugin at MVP), then drop conforming output into the repo. The contract defines required file types, directory layout and naming convention, resolution and format specs, alpha-channel handling, and a required provenance.json per asset. Provenance records author, generation method, and applicable license terms for EVERY asset; AI-generated assets additionally record the generation tool and prompt, which do not apply to hand-authored work. Provenance capture is not bookkeeping: AI-generated art may carry different rights and attribution obligations depending on generator terms of service, which is why it intersects directly with the project licensing decision.
 
 **Acceptance criteria — your task boxes:**
-- [ ] Asset Contract specifies required file types, resolution/format constraints, and alpha-channel handling per asset category
-  → covered by Task T6
-- [ ] Asset Contract specifies the asset directory layout and naming convention
-  → covered by Task T7
-- [ ] Every asset requires a provenance.json recording author, generation method, and applicable license terms
-  → covered by Task T8
-- [ ] AI-generated assets additionally record the generation tool and the prompt used; these fields are not required for hand-authored assets
-  → covered by Task T9
-- [ ] provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly
-  → covered by Task T10
+- [x] Asset Contract specifies required file types, resolution/format constraints, and alpha-channel handling per asset category
+  → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [x] Asset Contract specifies the asset directory layout and naming convention
+  → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [x] Every asset requires a provenance.json recording author, generation method, and applicable license terms
+  → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [x] AI-generated assets additionally record the generation tool and the prompt used; these fields are not required for hand-authored assets
+  → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [x] provenance.json has a defined schema whose generation-method field distinguishes ai-generated from hand-authored, and which conditionally requires the tool and prompt fields accordingly
+  → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
 - [ ] Contract documents the style and art-direction expectations a human maintainer reviews against (manual)
-  → covered by Task T11
+  → covered by Task T7
 - [ ] A contributor can produce a conforming asset from the Asset Contract document alone (manual)
-  → covered by Task T12
+  → covered by Task T8
 
 ### REQ-016: Asset Contract Automated Validator
 Category: technical | Status: in-progress
 The art-pipeline counterpart to the Level Contract checker, and the automated half of the two-stage art gate. Validates submitted assets against the Asset Contract on every pull request BEFORE a human maintainer spends time on art-direction review: correct file types, conforming resolution and format, valid alpha handling, correct directory placement and naming, and a present, schema-valid provenance.json. Structural conformance is machine-checked; style and art-direction judgment remains explicitly human. Like the level checker, it must be locally runnable and produce failures specific enough for a contributor or an AI agent to correct without guesswork.
 
 **Acceptance criteria — your task boxes:**
-- [ ] Validator checks file type, resolution, format, and alpha-channel conformance per asset category
-  → covered by Task T13
-- [ ] Validator checks directory placement and naming convention conformance
-  → covered by Task T14
-- [ ] Validator requires a provenance.json per asset and validates it against the defined schema, failing on a missing or malformed one
-  → covered by Task T15
-- [ ] Failure output names the specific asset and the specific violated rule
-  → covered by Task T16
+- [x] Validator checks file type, resolution, format, and alpha-channel conformance per asset category
+  → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [x] Validator checks directory placement and naming convention conformance
+  → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [x] Validator requires a provenance.json per asset and validates it against the defined schema, failing on a missing or malformed one
+  → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [x] Failure output names the specific asset and the specific violated rule
+  → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
 - [ ] Validator exits non-zero on failure and runs as a required CI check on every pull request touching assets
-  → covered by Task T17
-- [ ] Validator is runnable locally with a single documented command
-  → covered by Task T18
-- [ ] A deliberately non-conforming fixture asset fails validation and conforming official assets pass
-  → covered by Task T19
+  → covered by Task T9
+- [x] Validator is runnable locally with a single documented command
+  → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [x] A deliberately non-conforming fixture asset fails validation and conforming official assets pass
+  → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+
+### REQ-035: Hero rig and animation set
+Category: functional | Status: pending
+_Shared with: OpenAxolotl Game Client, Axolotl Controller, Blender (headless), Model Refinement Pipeline — their slices live in their own task docs._
+The hero model must deform as it moves rather than slide as a rigid prop. The shipped axolotl carries a skeleton and an animation clip for every movement state the controller already computes, and the game client plays the matching clip from that state.
+
+THE RIG is produced headless, through the same Blender lane as the refinement pass (REQ-032), so it is reproducible from the unrigged source and never depends on a rigging artist or a GUI session. Twelve bones: root, spine, head, two gill stalks, four legs, three tail segments. Weights are computed by inverse-square distance to the two nearest bone segments rather than heat-diffused, because Blender's automatic weights need manifold geometry and the hero is a merged pile of primitives — bone heat can fail outright and would fail differently per Blender build.
+
+The eye and its highlight are bound WHOLE to the head bone. Under the nearest-two rule they landed 77% and 70% respectively on the gill bones — measurably different ratios — so the highlight slid off the pupil whenever the fronds swung.
+
+THE CLIPS are the contract with the client, by name: idle, waddle, swim, hop, fall, hurt. The rigging CLI fails the build if a clip is missing, if the geometry changed, or if nothing came back skinned.
+
+THE CLIENT chooses the clip from four facts the body already has each physics step: in water, on the floor, vertical speed, planar speed. Water wins over everything; airborne splits on direction of travel; grounded splits on whether it is moving. HURT is a one-shot that overrides the locomotion choice for its own length and is driven by the world's capability-loss signal, not guessed from motion — a flinch the player cannot see is not feedback.
+
+Geometry is never altered by rigging, so the triangle budget the Asset Contract sets (REQ-030) continues to hold.
+
+**Acceptance criteria — your task boxes:**
+- [x] The rigging pipeline runs headless in Blender and produces a skinned model carrying all six named clips (idle, waddle, swim, hop, fall, hurt), failing the build if any is missing or nothing is skinned
+  → THIS NODE via Contract "GLB Header Reader" (dependency) from Model Refinement Pipeline — coordinate with Model Refinement Pipeline
+- [x] Rigging preserves geometry exactly: the triangle count out equals the triangle count in and the model stays inside its Asset Contract budget
+  → THIS NODE via Contract "GLB Header Reader" (dependency) from Model Refinement Pipeline — coordinate with Model Refinement Pipeline
+- [x] The shipped hero imports into Godot with a Skeleton3D carrying the documented bones, every mesh skinned, and the ongoing clips set to loop despite glTF importing them one-shot
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client, Axolotl Controller, Blender (headless), Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
+- [x] The eye and its highlight are each driven by exactly one bone, and that bone is the head, so the highlight cannot separate from the pupil
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client, Axolotl Controller, Blender (headless), Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
+- [x] The animator maps every movement state to its clip: water to swim regardless of other state, rising to hop, descending to fall, grounded and moving to waddle, grounded and still to idle
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client, Axolotl Controller, Blender (headless), Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
+- [x] The hurt flinch overrides locomotion for the full length of its clip and resumes locomotion afterwards
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client, Axolotl Controller, Blender (headless), Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
+- [x] An animator bound to a model with no AnimationPlayer is inert rather than broken, so bodies built without a model still run
+  → THIS NODE via Contract "GLB Header Reader" (dependency) from Model Refinement Pipeline — coordinate with Model Refinement Pipeline
+- [x] The hero's provenance records the rigging step, its tool, and the bones and clips it added
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client, Axolotl Controller, Blender (headless), Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
 
 ## Interface Contracts
 
@@ -435,6 +440,23 @@ _Dependency contract — no payload schema expected. Capture the connection/conf
 expectations (endpoints, identifiers, references) in this node's config artifacts;
 propose a schema only if a real payload shape exists for this interface._
 
+### RECEIVES FROM: Model Refinement Pipeline (cli-tool)
+- **Contract:** GLB Header Reader
+- **Protocol:** dependency
+- **Transport:** none
+- **Spec Format:** custom
+- **Their Technology:** python-backend
+
+**Schema:**
+```
+{
+  "raises": "HeaderError on a malformed file",
+  "function": "glb_header(path: str) -> tuple[int, int, list[str]]",
+  "description": "The pipeline imports the Asset Contract Validator's glb_header(path) -> (triangles, mesh_count, animation_names) and DEFAULT_SCHEMA to hold the refined output to the same triangle budget the validator enforces, reading only the JSON chunk and never decoding geometry.",
+  "budgetSource": "contracts/asset_contract.v1.json categories.<category>.maxTriangles"
+}
+```
+
 ## Technology Guidance
 
 _Reference for executing the Implementation Tasks above — apply where relevant. The task list stands even where this guidance is thin._
@@ -551,3 +573,16 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 **Depends on THIS node being available:**
 - CI Pipeline (initiates Validator CLI Invocation against this node (ipc))
+- Model Refinement Pipeline (initiates GLB Header Reader against this node (dependency))
+
+## Existing Implementation
+
+| File | Kind | Language | Status |
+|------|------|----------|--------|
+| `contracts/provenance.schema.json` | schema | --- | draft |
+| `.nodespec/tests/req-015.tests.md` - Test plan for requirement: Asset Contract and AI-Art Provenance | test-plan | markdown | draft |
+| `tools/test_asset_contract_validator.py` | source | --- | draft |
+| `tools/asset_contract_validator.py` | source | --- | draft |
+| `docs/asset-contract.md` | doc | --- | draft |
+| `contracts/asset_contract.v1.json` | schema | --- | draft |
+| `.nodespec/tests/req-016.tests.md` - Test plan for requirement: Asset Contract Automated Validator | test-plan | markdown | draft |
