@@ -55,6 +55,26 @@ DEFAULT_SCHEMA = os.path.join("contracts", "asset_contract.v1.json")
 # the validator must know it is engine bookkeeping and never a source file.
 IMPORT_SIDECAR_SUFFIX = ".import"
 
+# Godot also UNPACKS the textures embedded in a .glb, writing them beside the
+# model under the exporter's own names. Like the sidecars these are engine
+# bookkeeping: they are regenerated from the model on any fresh checkout,
+# they are gitignored for exactly that reason, and they are not sources any
+# more than the .import files are.
+#
+# They appeared the moment the hero became a TEXTURED export rather than
+# vertex-coloured geometry, and the validator rejected the character asset for
+# shipping .jpg files nobody had added. Treating a generated file as a
+# contributed one is the bug; the suffixes below mirror .gitignore.
+EXTRACTED_TEXTURE_SUFFIXES = ("_base_color.jpg", "_metallic_roughness.jpg",
+                              "_normal.jpg", "_emissive.jpg",
+                              "_occlusion.jpg")
+
+
+def is_engine_artifact(name: str) -> bool:
+    """Written by Godot on import, not contributed by anyone."""
+    return (name.endswith(IMPORT_SIDECAR_SUFFIX)
+            or name.endswith(EXTRACTED_TEXTURE_SUFFIXES))
+
 
 # --------------------------------------------------------------------------
 # Findings -- the shared Validator CLI envelope
@@ -330,7 +350,7 @@ class AssetValidator:
         entries = sorted(os.listdir(asset_dir))
         sources = [e for e in entries
                    if e != self.provenance_file
-                   and not e.endswith(IMPORT_SIDECAR_SUFFIX)
+                   and not is_engine_artifact(e)
                    and os.path.isfile(os.path.join(asset_dir, e))]
 
         if not sources:

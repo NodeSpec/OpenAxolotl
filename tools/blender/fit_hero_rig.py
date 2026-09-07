@@ -48,7 +48,17 @@ WHAT IS KEPT AND WHAT IS FITTED, and the split is the whole design:
 
 NORMALISATION comes first and is not cosmetic. The mesh is flipped to put the
 head at +Y (the Meshy export has it at -Y), scaled to the reference's body
-length, and dropped so its lowest point sits on the reference's ground plane.
+length, and dropped so its lowest point sits on the FLOOR the caller names.
+
+THE FLOOR IS AN ARGUMENT BECAUSE THE REFERENCE'S OWN IS A TRAP. Defaulting it
+to the reference model's bounding-box minimum looks obviously right and buried
+the first hero half a metre under the sand: the previous hero's bounding box
+reached down to -1.0 in authoring space while its BODY sat at about -0.09, so
+matching bounding boxes matched two different things. The number that matters
+is where the collision capsule's bottom lands once the game scene has applied
+its own scale and offset, and for core/controller/axolotl_body.tscn that is
+-0.04. Measured in Godot, not derived on paper -- the hero was placed, its
+world AABB read back, and the difference taken.
 Doing that here rather than in the game scene means core/controller/
 axolotl_body.tscn keeps its transform unchanged — the model arrives already
 in the authoring frame the scene was built around, so the collision capsule,
@@ -135,7 +145,8 @@ def head_is_at_plus_y(points: np.ndarray) -> bool:
     return np.ptp(front[:, 0]) > np.ptp(back[:, 0])
 
 
-def normalise(points: np.ndarray, reference: np.ndarray) -> tuple:
+def normalise(points: np.ndarray, reference: np.ndarray,
+              floor: float | None = None) -> tuple:
     """Put the target in the reference's authoring frame.
 
     Returns the transformed points and the (flip, scale, offset) that did it,
@@ -176,7 +187,7 @@ def normalise(points: np.ndarray, reference: np.ndarray) -> tuple:
     offset = np.array([
         -0.5 * (moved[:, 0].min() + moved[:, 0].max()),
         reference[:, 1].min() - moved[:, 1].min(),
-        reference[:, 2].min() - moved[:, 2].min(),
+        (reference[:, 2].min() if floor is None else floor) - moved[:, 2].min(),
     ])
     return moved + offset, (flip, float(scale), offset.tolist(),
                             float(yaw), centre.tolist())
@@ -486,6 +497,11 @@ def parse_args(argv: list) -> argparse.Namespace:
                         help="the glb whose authoring frame to match")
     parser.add_argument("--output", default="",
                         help="write the normalised mesh here (optional)")
+    parser.add_argument("--floor", type=float, default=None,
+                        help="authoring-space height the model's lowest point "
+                             "is placed at; defaults to the reference's, "
+                             "which is only right if the reference's bounding "
+                             "box floor is where its FEET are")
     return parser.parse_args(argv)
 
 
@@ -499,7 +515,8 @@ def main() -> int:
     bpy.ops.wm.read_factory_settings(use_empty=True)
     bpy.ops.import_scene.gltf(filepath=args.input)
     raw = mesh_points()
-    points, (flip, scale, offset, yaw, centre) = normalise(raw, reference)
+    points, (flip, scale, offset, yaw, centre) = normalise(
+        raw, reference, args.floor)
 
     fitted: dict = {}
     fitted.update(fit_spine(points, table))

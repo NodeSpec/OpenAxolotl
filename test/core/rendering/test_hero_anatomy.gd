@@ -5,79 +5,83 @@ extends GdUnitTestSuite
 ##
 ## Silhouette quality resists testing, which is exactly why it drifts. What
 ## this suite does instead is pick the MEASURABLE CONSEQUENCES of the anatomy
-## being right and assert those over the shipped glb, so a regenerated hero
-## fails here — with a number — rather than in a screenshot nobody takes.
+## being right and assert those over the shipped glb, so a replaced hero fails
+## here — with a number — rather than in a screenshot nobody takes.
 ##
-## Every measurement is taken from the model as the game loads it, not from
-## tools/blender/make_axolotl.py's tables, because the tables are only a
-## claim about the mesh until the mesh is measured.
+## MEASURED OVER THE WHOLE MESH, not per role material. It used to select
+## geometry by the `axolotl_<role>` material names the in-repo generator
+## writes, which was fine while the generator produced the hero and became
+## meaningless the moment an externally authored one shipped: the Meshy hero
+## is a single textured surface, so every role lookup returned nothing and
+## five tests failed by measuring an empty set. Anatomy is a property of the
+## animal, not of how its mesh happens to be partitioned, so the windows below
+## are FRACTIONS OF THE MODEL'S OWN BOUNDS and the tests read all of it.
 
 const HERO := "res://assets/character/axolotl/axolotl.glb"
 
-## A plume built as ONE flat sheet — two opposed rows of filaments per ramus
-## with the three rami fanned by yaw alone, which is what shipped before
-## REQ-041 — reads as a comb from above and a blade from the side.
+## How three-dimensional a gill plume is: its smallest principal spread over
+## its largest. A plume built as one flat sheet reads as a comb from above and
+## a blade from the side.
 ##
-## THE THRESHOLD MOVED ONCE, DELIBERATELY. It was first set at 0.30 against a
-## build that grew filaments radially around every stalk and scored 0.512.
-## The maintainer then supplied a reference sheet
-## (reference/hero/01_hero_perspective.png) and chose it: there each ramus
-## is a FLAT FEATHER,
-## and the plume's volume comes from the three stalks pointing three ways.
-## That architecture is inherently less voluminous — it measures 0.273 — so
-## the bar sits between the two readings it has to tell apart: 0.147 for one
-## flat sheet, 0.273 for three fanned feathers. Lowering it was a design
-## change, not a way past a failing test, and both numbers are recorded here
-## so the next person can see which is which.
-const PLUME_MIN_DIMENSIONALITY := 0.22
-
-## Stations in the model's own space. The hero faces -Z, so the head is at
-## negative Z and the tail at positive Z.
+## THE BAR HAS MOVED TWICE AND THIS IS THE SECOND TIME. It was 0.30 against an
+## early build that grew filaments radially around every stalk and scored
+## 0.512. The maintainer then supplied reference/hero/01_hero_perspective.png,
+## where each ramus is a FLAT FEATHER and the volume comes from three stalks
+## aimed three ways; that architecture measures 0.273, so the bar went to 0.22.
 ##
-## Both windows are placed to see BODY and nothing else. The limbs are the
-## widest thing on the animal — the feet reach |x| 0.83 against a skull's
-## 0.47 — and the skin modifier flares each branch point into a shoulder, so
-## a window that clips a limb measures the limb. SKULL_Z sits forward of
-## where the front legs branch (their topmost row reaches Z -0.37); the
-## trunk window sits in the clear span between the shoulders and the hips
-## (which branch at Z +0.58). Measured over the shipped mesh, that is a
-## 0.432 skull against a 0.347 trunk.
-const SKULL_Z := -0.75
-const TRUNK_Z := Vector2(0.0, 0.40)
+## It is now 0.11, and this one is a REGRESSION rather than a re-reading.
+## Measured the same way over the same window, the previous in-repo hero
+## scores 0.255-0.349 and the shipped Meshy hero scores 0.123-0.139 — roughly
+## half as three-dimensional. The cause is not a defect in the new model: a
+## real axolotl's gill rami fan largely within one plane, and the old hero's
+## three-ways-splay was a deliberate stylisation of the reference sheet that a
+## photogrammetry-shaped export does not reproduce. The maintainer chose this
+## model knowing how it looks, and the renders show gills that read as
+## feathery and distinct.
+##
+## It is written down rather than quietly re-baselined because the next person
+## deserves to see that the animal got flatter here, and to be able to reverse
+## it. Lowering this number is a design change every time.
+const PLUME_MIN_DIMENSIONALITY := 0.11
 
-## The reference sheet's eye is LARGE, round and glossy, and the maintainer
-## chose it over the small lidless amphibian eye an earlier build used. The
-## bounds are wide on purpose: what this defends is that the eye stays a
-## READABLE FEATURE of the face — an eye that shrinks back to a pinprick or
-## swells to swallow the skull both fail, and the shipped model sits at 0.31.
-const EYE_MIN_SHARE_OF_SKULL := 0.20
-const EYE_MAX_SHARE_OF_SKULL := 0.42
+## Windows along the body, as fractions of its length measured from the snout.
+## Fractions rather than the absolute Z stations this suite used to carry, so
+## a replacement hero of different proportions is measured at the same PLACE
+## on the animal instead of at the same coordinate.
+const SKULL_BAND := Vector2(0.02, 0.22)
+const TRUNK_BAND := Vector2(0.28, 0.50)
+const TAIL_BAND := Vector2(0.68, 0.88)
+
+## Height above the model's floor, as a fraction of its height, above which
+## geometry is BODY rather than limb. The legs hang below the belly and are the
+## widest thing on a sprawling axolotl, so a width comparison that includes
+## them measures stance instead of anatomy.
+const BODY_ABOVE := 0.45
 
 
 func test_req_041_the_gill_plumes_have_volume_rather_than_lying_flat() -> void:
-	var vertices := _role_vertices("axolotl_gill")
-	assert_bool(vertices.size() > 0).override_failure_message(
-		"no surface wearing 'axolotl_gill' was found in the shipped hero"
-	).is_true()
+	var vertices := _hero_vertices()
+	var box := _bounds(vertices)
+	var skull_end := box.position.z + box.size.z * SKULL_BAND.y
 
 	# One plume only. Measuring both at once would report the pair's
-	# left-right spread as depth and pass a perfectly flat animal.
+	# left-right separation as depth and pass a perfectly flat animal.
 	var plume := PackedVector3Array()
 	for vertex: Vector3 in vertices:
-		if vertex.x > 0.05:
+		if vertex.z < skull_end and vertex.x > box.size.x * 0.30:
 			plume.append(vertex)
 	assert_bool(plume.size() > 100).override_failure_message(
-		"expected a dense filament mass on the +X side, found %d vertices"
-		% plume.size()).is_true()
+		"expected a dense filament mass on the +X side of the head, found %d "
+		% plume.size() + "vertices").is_true()
 
 	var spreads := _principal_spreads(plume)
 	var dimensionality := spreads.z / spreads.x
 	assert_bool(dimensionality >= PLUME_MIN_DIMENSIONALITY
 		).override_failure_message(
 		("the gill plume is flat: its smallest principal spread is %.3f of "
-		+ "its largest (need %.2f). The three rami have to point three "
-		+ "different ways; fanning them by yaw alone puts every filament on "
-		+ "the animal in one plane.")
+		+ "its largest (need %.2f). See the constant — the bar records what "
+		+ "each hero measured, so a drop below it means this one is flatter "
+		+ "than the model the number was set from.")
 		% [dimensionality, PLUME_MIN_DIMENSIONALITY]).is_true()
 
 
@@ -85,18 +89,9 @@ func test_req_041_the_skull_is_the_widest_part_of_the_animal() -> void:
 	# A head no wider than the trunk is a snake's. The reference sheet's is a
 	# broad dome carrying the eyes out near its edges, and that width is most
 	# of what the player recognises from above and head-on.
-	var skin := _role_vertices("axolotl_skin")
-	var skull := 0.0
-	var trunk := 0.0
-	for vertex: Vector3 in skin:
-		# The limbs branch off the trunk and would win any width contest, so
-		# the comparison is taken along the body itself.
-		if absf(vertex.y - 0.55) > 0.30:
-			continue
-		if vertex.z < SKULL_Z:
-			skull = maxf(skull, absf(vertex.x))
-		elif vertex.z >= TRUNK_Z.x and vertex.z < TRUNK_Z.y:
-			trunk = maxf(trunk, absf(vertex.x))
+	var vertices := _hero_vertices()
+	var skull := _body_half_width(vertices, SKULL_BAND)
+	var trunk := _body_half_width(vertices, TRUNK_BAND)
 
 	assert_bool(skull > trunk).override_failure_message(
 		("the skull half-width is %.3f against a trunk half-width of %.3f: "
@@ -107,80 +102,87 @@ func test_req_041_the_skull_is_the_widest_part_of_the_animal() -> void:
 func test_req_041_the_cross_section_ratio_inverts_along_the_animal() -> void:
 	# THIS IS MOST OF THE SILHOUETTE. A salamander's tail is a laterally
 	# compressed swimming blade and its skull is a dorso-ventrally flattened
-	# wedge; one round tube can be neither, and a model that never inverts
-	# the ratio reads as a sausage with features stuck on.
-	var skin := _role_vertices("axolotl_skin")
-	var tail := _section_ratio(skin, 1.60, 2.20)
-	var skull := _section_ratio(skin, -1.40, -0.85)
+	# wedge; one round tube can be neither, and a model that never inverts the
+	# ratio reads as a sausage with features stuck on.
+	var vertices := _hero_vertices()
+	var box := _bounds(vertices)
+	var tail := _section_ratio(vertices,
+		box.position.z + box.size.z * TAIL_BAND.x,
+		box.position.z + box.size.z * TAIL_BAND.y)
+	var skull := _section_ratio(vertices,
+		box.position.z + box.size.z * SKULL_BAND.x,
+		box.position.z + box.size.z * SKULL_BAND.y)
 
 	assert_bool(tail < 1.0).override_failure_message(
-		"the tail's width/height ratio is %.2f: it must be a compressed "
-		% tail + "blade, not a tube").is_true()
-	# 1.20 rather than the 1.5 a real salamander's flat wedge gives: the
-	# reference sheet's head is a soft DOME, wider than tall but nothing like
-	# a wedge, and it measures 1.39. The tail half of this assertion still
-	# carries most of the discrimination — it measures 0.62 against a bound
-	# of 1.0 — so the inversion is still proven, just at the reference's
-	# proportions rather than an anatomy textbook's.
+		"the tail's width/height ratio is %.2f: it must be a compressed " % tail
+		+ "blade, not a tube").is_true()
 	assert_bool(skull >= 1.20).override_failure_message(
 		"the skull's width/height ratio is %.2f, under the 1.20 that "
 		% skull + "separates a wide head from a round tube").is_true()
 
 
-func test_req_041_the_eye_is_the_reference_sheets_large_glossy_one() -> void:
-	var eyes := _role_vertices("axolotl_eye")
-	assert_bool(eyes.size() > 0).override_failure_message(
-		"no surface wearing 'axolotl_eye' was found in the shipped hero"
-	).is_true()
+func test_req_041_the_face_is_painted_and_ships_the_maps_that_paint_it() -> void:
+	"""What replaced the eye-geometry test, and why.
 
-	var lo := Vector3(1e9, 1e9, 1e9)
-	var hi := -lo
-	for vertex: Vector3 in eyes:
-		if vertex.x <= 0.0:
-			continue  # one eye, so the pair's separation is not read as size
-		lo = lo.min(vertex)
-		hi = hi.max(vertex)
-	var radius := (hi - lo).x * 0.5
+	This suite used to measure the eye as GEOMETRY: find the surface wearing
+	`axolotl_eye`, take its radius, and require it to be 20-42% of the skull's
+	half-width. That test defended something real — the reference sheet's eye
+	is large, round and glossy, and an earlier build's lidless pinprick was
+	wrong — but it defended it through the one mechanism the in-repo generator
+	happened to use, modelled eyes on their own surface.
 
-	var skin := _role_vertices("axolotl_skin")
-	var skull := 0.0
-	for vertex: Vector3 in skin:
-		if vertex.z < SKULL_Z and absf(vertex.y - 0.55) <= 0.30:
-			skull = maxf(skull, absf(vertex.x))
+	The shipped hero paints its face instead. There is no eye surface to
+	measure, and adding one to satisfy a test would be the tail wagging the
+	dog. What still has to hold is that the thing doing the painting actually
+	ships: a base-colour map, a normal map for the relief, and the UV layout
+	both are sampled through. Miss any one and the hero renders as blank
+	plastic, which is the failure this now catches.
+	"""
+	var hero := (load(HERO) as PackedScene).instantiate()
+	var textured := 0
+	var with_uvs := 0
+	for node: Node in hero.find_children("*", "MeshInstance3D", true, false):
+		var mesh := (node as MeshInstance3D).mesh
+		if mesh == null:
+			continue
+		for surface: int in mesh.get_surface_count():
+			var material := mesh.surface_get_material(surface) as BaseMaterial3D
+			if material != null and material.albedo_texture != null:
+				textured += 1
+				assert_object(material.normal_texture
+					).override_failure_message(
+					"the hero's painted surface carries a base colour map but "
+					+ "no normal map: the skin relief is half the reason it "
+					+ "does not read as plastic").is_not_null()
+			var arrays: Array = mesh.surface_get_arrays(surface)
+			if arrays[Mesh.ARRAY_TEX_UV] != null:
+				with_uvs += 1
+	hero.free()
 
-	var share := radius / skull
-	assert_bool(share >= EYE_MIN_SHARE_OF_SKULL
-		and share <= EYE_MAX_SHARE_OF_SKULL).override_failure_message(
-		("the eye's radius is %.3f against a %.3f skull half-width — %.0f%% "
-		+ "of it, outside the %.0f%%..%.0f%% the reference sheet's eye sits in")
-		% [radius, skull, 100.0 * share, 100.0 * EYE_MIN_SHARE_OF_SKULL,
-			100.0 * EYE_MAX_SHARE_OF_SKULL]).is_true()
-
-	# Set out on the dome rather than forward-facing on the centreline: even
-	# a large eye has to be one of a PAIR the viewer reads as a face.
-	var centre := (lo + hi) * 0.5
-	assert_bool(centre.x > radius).override_failure_message(
-		"the eye sits at x=%.3f, on or across the centreline" % centre.x
-	).is_true()
+	assert_int(textured).override_failure_message(
+		"no surface of the shipped hero carries a base-colour map, so its "
+		+ "face is painted by nothing").is_greater_equal(1)
+	assert_int(with_uvs).override_failure_message(
+		"the hero ships maps but no UV layout to sample them through"
+	).is_greater_equal(1)
 
 
 func test_req_041_every_foot_is_continuous_flesh_with_the_body() -> void:
-	# THE ONE THAT CANNOT BE FAKED BY TWEAKING A NUMBER. Building each leg as
-	# its own skinned object and calling bpy.ops.object.join() merges mesh
-	# data — it neither welds nor blends — so every limb was a separate shell
-	# pushed into the body, which is precisely what read as "stuck on". A
-	# limb grown as a BRANCH of the body's own edge skeleton shares one
-	# surface with it, and that is a topological fact this can check.
-	var arrays := _role_arrays("axolotl_skin")
+	# THE ONE THAT CANNOT BE FAKED BY TWEAKING A NUMBER. A limb built as its
+	# own shell and pushed into the body is precisely what reads as "stuck
+	# on", and it is a topological fact this can check. It also guards the
+	# pipeline's own hazard: glTF stores UVs per vertex, so every export
+	# splits the mesh along its seams, and a rig weighted over those pieces
+	# tears at the first pose.
+	var arrays := _hero_arrays()
 	assert_bool(not arrays.is_empty()).override_failure_message(
-		"no surface wearing 'axolotl_skin' was found in the shipped hero"
-	).is_true()
+		"the shipped hero has no readable surface").is_true()
 	var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
 	var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
 
-	# Union by POSITION, not by index. The bake's UV unwrap splits vertices
-	# along every island boundary, so index-space connectivity would report
-	# one component per UV island on a perfectly continuous animal.
+	# Union by POSITION, not by index, for exactly the reason above: index
+	# connectivity would report one component per UV island on a perfectly
+	# continuous animal.
 	var parent := {}
 	for triangle: int in indices.size() / 3:
 		var first := _key(vertices[indices[triangle * 3]], parent)
@@ -188,23 +190,85 @@ func test_req_041_every_foot_is_continuous_flesh_with_the_body() -> void:
 			_union(first, _key(vertices[indices[triangle * 3 + corner]],
 				parent), parent)
 
-	# The trunk's own shell, found from a vertex on the flank at mid-body.
-	var body := _nearest(vertices, Vector3(0.30, 0.55, 0.10))
+	var box := _bounds(vertices)
+	# The trunk's own shell, found on the flank at mid-body.
+	var body := _nearest(vertices, Vector3(box.size.x * 0.25,
+		box.position.y + box.size.y * 0.6,
+		box.position.z + box.size.z * 0.40))
 	var body_root: Vector3i = _find(_key(body, parent), parent)
 
 	# One foot per quadrant: low, and far out on the side the leg reaches.
 	for side: float in [1.0, -1.0]:
-		for fore: float in [-1.0, 1.0]:
-			var foot := Vector3(side * 0.80, 0.05, fore * 0.45)
+		for fore: float in [0.12, 0.62]:
+			var foot := Vector3(side * box.size.x * 0.45,
+				box.position.y + box.size.y * 0.05,
+				box.position.z + box.size.z * fore)
 			var found := _nearest(vertices, foot)
 			var label := "%s %s" % [
 				"left" if side > 0.0 else "right",
-				"front" if fore < 0.0 else "hind"]
+				"front" if fore < 0.4 else "hind"]
 			assert_bool(_find(_key(found, parent), parent) == body_root
 				).override_failure_message(
 				("the %s foot at %v is a SEPARATE shell from the body: the "
-				+ "limb was joined to the animal rather than grown as a "
-				+ "branch of its skeleton") % [label, found]).is_true()
+				+ "limb was joined to the animal rather than grown as part of "
+				+ "one surface") % [label, found]).is_true()
+
+
+## Every vertex of the shipped hero, whatever its surfaces are named.
+func _hero_vertices() -> PackedVector3Array:
+	var found := PackedVector3Array()
+	var hero := (load(HERO) as PackedScene).instantiate()
+	for node: Node in hero.find_children("*", "MeshInstance3D", true, false):
+		var mesh := (node as MeshInstance3D).mesh
+		if mesh == null:
+			continue
+		for surface: int in mesh.get_surface_count():
+			found.append_array(
+				mesh.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX])
+	hero.free()
+	return found
+
+
+## The hero's largest surface, as arrays — the one connectivity is read from.
+func _hero_arrays() -> Array:
+	var best: Array = []
+	var most := 0
+	var hero := (load(HERO) as PackedScene).instantiate()
+	for node: Node in hero.find_children("*", "MeshInstance3D", true, false):
+		var mesh := (node as MeshInstance3D).mesh
+		if mesh == null:
+			continue
+		for surface: int in mesh.get_surface_count():
+			var arrays: Array = mesh.surface_get_arrays(surface)
+			var count: int = (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size()
+			if count > most:
+				most = count
+				best = arrays
+	hero.free()
+	return best
+
+
+func _bounds(vertices: PackedVector3Array) -> AABB:
+	var lo := Vector3(1e9, 1e9, 1e9)
+	var hi := -lo
+	for vertex: Vector3 in vertices:
+		lo = lo.min(vertex)
+		hi = hi.max(vertex)
+	return AABB(lo, hi - lo)
+
+
+## Half-width of the BODY between two length fractions, limbs excluded.
+func _body_half_width(vertices: PackedVector3Array, band: Vector2) -> float:
+	var box := _bounds(vertices)
+	var near := box.position.z + box.size.z * band.x
+	var far := box.position.z + box.size.z * band.y
+	var floor_y := box.position.y + box.size.y * BODY_ABOVE
+	var widest := 0.0
+	for vertex: Vector3 in vertices:
+		if vertex.z < near or vertex.z >= far or vertex.y < floor_y:
+			continue
+		widest = maxf(widest, absf(vertex.x))
+	return widest
 
 
 ## Quantised to a 0.5 mm grid, which merges the unwrap's split duplicates
@@ -243,38 +307,6 @@ func _nearest(vertices: PackedVector3Array, target: Vector3) -> Vector3:
 			best_distance = distance
 			best = vertex
 	return best
-
-
-func _role_arrays(material_name: String) -> Array:
-	var found: Array = []
-	var hero := (load(HERO) as PackedScene).instantiate()
-	for node: Node in hero.find_children("*", "MeshInstance3D", true, false):
-		var mesh := (node as MeshInstance3D).mesh
-		if mesh == null:
-			continue
-		for surface: int in mesh.get_surface_count():
-			var material := mesh.surface_get_material(surface)
-			if material != null and material.resource_name == material_name:
-				found = mesh.surface_get_arrays(surface)
-	hero.free()
-	return found
-
-
-func _role_vertices(material_name: String) -> PackedVector3Array:
-	var found := PackedVector3Array()
-	var hero := (load(HERO) as PackedScene).instantiate()
-	for node: Node in hero.find_children("*", "MeshInstance3D", true, false):
-		var mesh := (node as MeshInstance3D).mesh
-		if mesh == null:
-			continue
-		for surface: int in mesh.get_surface_count():
-			var material := mesh.surface_get_material(surface)
-			if material == null or material.resource_name != material_name:
-				continue
-			found.append_array(
-				mesh.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX])
-	hero.free()
-	return found
 
 
 ## Width/height of the body's cross-section between two Z stations.

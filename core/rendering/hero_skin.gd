@@ -49,6 +49,9 @@ const DETAIL_MAX_LUMINANCE := 0.4
 const GLEAM_MIN_CHANNEL := 0.97
 const GILL_MAX_GREEN := 0.5
 
+## Key under which apply() reports surfaces it deliberately left alone.
+const AUTHORED := "authored"
+
 static var _cache: Dictionary = {}
 
 
@@ -103,12 +106,35 @@ static func apply(model: Node3D) -> Dictionary:
 	var counts := {}
 	for name: String in Role.keys():
 		counts[name.to_lower()] = 0
+	counts[AUTHORED] = 0
 	for node: Node in model.find_children("*", "MeshInstance3D", true, false):
 		var instance := node as MeshInstance3D
 		if instance.mesh == null:
 			continue
 		for surface: int in instance.mesh.get_surface_count():
+			if brings_its_own_surface(instance.mesh, surface):
+				counts[AUTHORED] += 1
+				continue
 			var role := role_for_surface(instance.mesh, surface)
 			instance.set_surface_override_material(surface, material_for(role))
 			counts[role_name(role)] += 1
 	return counts
+
+
+## Does this surface already carry authored art the client must not replace?
+##
+## THE ROLE MATERIALS ARE A FALLBACK, NOT A POLICY. They exist because the
+## generated hero ships vertex-coloured geometry with no maps: without them
+## it renders as flat untextured plastic, so the client dresses it. A model
+## that arrives with a base-colour map is the opposite case — the mottling,
+## the gill gradient and the pore relief ARE the asset, they are what was paid
+## for, and overriding them with a flat toy material throws all of it away and
+## leaves the hero looking worse than the greybox it replaced.
+##
+## Detected from the surface rather than declared per model, because the test
+## is exactly the condition that matters: is there an albedo texture here to
+## lose? A file with maps keeps them; a file without gets dressed. Nothing has
+## to be configured, and a future asset behaves correctly on arrival.
+static func brings_its_own_surface(mesh: Mesh, surface: int) -> bool:
+	var material := mesh.surface_get_material(surface) as BaseMaterial3D
+	return material != null and material.albedo_texture != null

@@ -453,6 +453,12 @@ def main() -> int:
         filepath=args.output, export_format="GLB", export_apply=False,
         export_normals=True, export_colors=True, export_materials="EXPORT",
         export_animations=True, export_skins=True, export_morph=False,
+        # TANGENTS SHIP, they are not a per-machine import step. Godot can
+        # generate them when a normal map is present, but then the basis the
+        # relief is lit through depends on which engine version imported the
+        # file rather than on what was exported, and the hero carries a
+        # normal map.
+        export_tangents=True,
         export_yup=True, export_animation_mode="ACTIONS",
         export_bake_animation=True, export_optimize_animation_size=False)
 
