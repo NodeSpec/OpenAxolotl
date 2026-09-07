@@ -24,12 +24,11 @@ extends Node
 
 const SETTLE_FRAMES := 30
 const WALK_FRAMES := 90
-## A 6 m/s hop against 18 m/s^2 gravity is airborne for ~0.67 s, which is 40
-## frames at 60 Hz — so 40 would sample the landing on the exact frame it
+## A 9 m/s hop against 20 m/s^2 gravity is airborne for 0.90 s, which is 54
+## frames at 60 Hz — so 54 would sample the landing on the exact frame it
 ## happens. The margin is for the tuning moving, not for flakiness.
 const HOP_FRAMES := 75
 const STOP_FRAMES := 45
-const CLIMB_APPROACH := 70
 const CLIMB_FRAMES := 80
 const SWIM_FRAMES := 120
 
@@ -51,6 +50,10 @@ var _saw_water_grammar := false
 var _camera_start: Vector3 = Vector3.ZERO
 var _stop_start: Vector3 = Vector3.ZERO
 var _climb_base: float = 0.0
+
+## Frame the climb key was pressed, set when the body first touches the wall.
+## Negative until then.
+var _climb_press_frame: int = -1
 var _climb_started := false
 
 
@@ -192,16 +195,22 @@ func _climb() -> void:
 		_key(KEY_W, true)
 		return
 
-	# Walked into the wall by now; ask to climb, still pushing forward.
-	if _elapsed() == CLIMB_APPROACH:
-		_climb_base = _body.global_position.y
-		_key(KEY_E, true)
+	# Ask to climb once the body is ACTUALLY against the wall, rather than at
+	# a frame number. The frame count here used to be calibrated against the
+	# waddle speed, so raising that speed for platforming made the probe press
+	# the key at the wrong moment and report a climb bug that did not exist.
+	# Reacting to the contact keeps this correct at any tuning.
+	if _climb_press_frame < 0:
+		if _body.is_on_wall():
+			_climb_press_frame = _elapsed()
+			_climb_base = _body.global_position.y
+			_key(KEY_E, true)
 		return
-	if _elapsed() == CLIMB_APPROACH + 2:
+	if _elapsed() == _climb_press_frame + 2:
 		_key(KEY_E, false)
 		return
 
-	if _elapsed() < CLIMB_APPROACH + CLIMB_FRAMES:
+	if _elapsed() < _climb_press_frame + CLIMB_FRAMES:
 		return
 
 	_key(KEY_W, false)
@@ -220,7 +229,9 @@ func _hop() -> void:
 	if _elapsed() == 1:
 		_key(KEY_SPACE, true)
 		return
-	if _elapsed() == 3:
+	# Held through the climb: releasing early now CUTS the rise on purpose
+	# (REQ-037), so a 2-frame tap would measure the short jump, not the arc.
+	if _elapsed() == 30:
 		_key(KEY_SPACE, false)
 	_hop_peak = maxf(_hop_peak, _body.global_position.y)
 

@@ -30,11 +30,11 @@
       "description": "How briskly a swimming axolotl sheds speed when the player is not steering. An order of magnitude gentler than the land drag: water is the grammar that GLIDES, and that contrast is a large part of what makes the two read as mechanically distinct. Also bounds a fall into water, which would otherwise sink at its entry speed until it hit the floor."
     },
     "controller.waddle.base_speed_m_per_s": {
-      "value": 2.5,
+      "value": 4.2,
       "unit": "meters_per_second",
       "min": 0.5,
       "max": 20.0,
-      "description": "Base grounded waddle speed. Deliberately well below the swim speed: water is the fast grammar, and that gap is what makes the two read as distinct rather than as one speed with a different animation."
+      "description": "Base grounded waddle speed. Still well below the swim speed -- water is the fast grammar and that gap is what makes the two read as distinct -- but fast enough that a jump covers useful ground: at the tuned arc it yields 3.78 m of horizontal reach, which is what makes gap jumping a real verb rather than a hop in place."
     },
     "controller.waddle.drag_per_second": {
       "value": 12.0,
@@ -72,14 +72,35 @@
       "description": "Swim speed multiplier while a bubble boost is active."
     },
     "controller.hop.impulse_m_per_s": {
-      "value": 6.0,
+      "value": 9.0,
       "unit": "meters_per_second",
       "min": 0.5,
       "max": 30.0,
-      "description": "Upward velocity a hop imparts. Only available while grounded, so a hop cannot be chained in mid-air."
+      "description": "Upward velocity a hop imparts. Only available while grounded (or inside the coyote window), so a hop cannot be chained in mid-air. With the land gravity of 20 m/s^2 this gives a 2.03 m peak and 0.90 s of airtime, which is the arc every gap and ledge height in the official worlds is measured against -- changing it invalidates those clearances, so the reachability probe re-derives them from this value rather than hard-coding distances."
+    },
+    "controller.hop.coyote_seconds": {
+      "value": 0.12,
+      "unit": "seconds",
+      "min": 0.0,
+      "max": 0.5,
+      "description": "How long after walking off a ledge a hop still fires. Players press jump a few frames LATE far more often than early, and without this those presses vanish silently. 0.0 disables coyote time and restores the strict grounded-only hop."
+    },
+    "controller.hop.buffer_seconds": {
+      "value": 0.14,
+      "unit": "seconds",
+      "min": 0.0,
+      "max": 0.5,
+      "description": "How long a hop pressed in mid-air is remembered and fired on landing. Without it, chaining a jump immediately on touchdown requires hitting the exact landing frame. Remembered on the rising edge only, so holding the button does not refill it."
+    },
+    "controller.hop.release_cut_ratio": {
+      "value": 0.45,
+      "unit": "ratio",
+      "min": 0.0,
+      "max": 1.0,
+      "description": "Fraction of the RISING vertical speed kept when the player releases the hop button mid-climb. This is what makes one button express a range of heights, so a level can ask for a small hop onto a low ledge and a full leap across a gap without a second verb. 1.0 disables the cut and every jump reaches full height."
     },
     "controller.gravity.land_m_per_s2": {
-      "value": 18.0,
+      "value": 20.0,
       "unit": "meters_per_second_squared",
       "min": 1.0,
       "max": 60.0,
@@ -105,6 +126,13 @@
       "min": 0.1,
       "max": 20.0,
       "description": "Movement speed while attached to a climbable surface. Deliberately NOT scaled by leg loss: a lost leg lowers how high the axolotl can reach, not how fast it climbs."
+    },
+    "controller.climb.adhesion_m_per_s": {
+      "value": 1.0,
+      "unit": "meters_per_second",
+      "min": 0.0,
+      "max": 10.0,
+      "description": "Speed pushed INTO the climbable surface every frame while attached. The body ends a climb the moment it stops touching the wall, and a climber moving purely along the surface generates no contact -- so without this the climb detaches on its second frame. move_and_slide absorbs the component against the wall, so it costs no movement. Raise it if a climber pops off a bumpy or curved surface; 0.0 disables it and restores the detaching behaviour."
     },
     "controller.climb.max_height_m": {
       "value": 6.0,

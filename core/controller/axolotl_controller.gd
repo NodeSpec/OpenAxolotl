@@ -24,6 +24,7 @@ const SWIM_DRAG_KEY := "controller.swim.drag_per_second"
 const DIVE_SPEED_KEY := "controller.dive.speed_m_per_s"
 const HOP_IMPULSE_KEY := "controller.hop.impulse_m_per_s"
 const CLIMB_SPEED_KEY := "controller.climb.speed_m_per_s"
+const CLIMB_ADHESION_KEY := "controller.climb.adhesion_m_per_s"
 const MAX_CLIMB_HEIGHT_KEY := "controller.climb.max_height_m"
 const TURN_RATE_KEY := "controller.facing.turn_rate_deg_per_s"
 
@@ -81,6 +82,7 @@ var _modifiers: CapabilityModifiers
 var _dash: WaterDash
 var _boost: BubbleBoost
 var _grapple: TongueGrapple
+var _jump_feel: JumpFeel
 var _anchor_source: AnchorSource = null
 var _ability_hooks: Dictionary = {}
 
@@ -91,6 +93,7 @@ func _init(tuning: TuningData) -> void:
 	_dash = WaterDash.new(tuning)
 	_boost = BubbleBoost.new(tuning)
 	_grapple = TongueGrapple.new(tuning)
+	_jump_feel = JumpFeel.new(tuning)
 
 
 # --- The physics step -------------------------------------------------------
@@ -255,20 +258,51 @@ func _integrate_land(delta: float, intent: PlayerIntent) -> void:
 			_tuning.get_number(WADDLE_DRAG_KEY), delta)
 		_velocity = Vector3(slowed.x, _velocity.y, slowed.z)
 
-	# Grounded-only, so a hop cannot be chained in mid-air into a free ascent.
-	# The wrapper clears the flag again from is_on_floor() on landing.
-	if intent.wants(MovementGrammar.Verb.HOP) and _is_grounded:
+	# The hop, with its forgiveness windows (REQ-037). JumpFeel owns the
+	# timers; this owns the impulse. A hop still cannot be chained in mid-air
+	# into a free ascent — `should_hop` requires footing that is either the
+	# real floor or an unspent coyote window, and firing spends both.
+	#
+	# The press and the hold are read from DIFFERENT halves of the intent. The
+	# press is edge-triggered and fires the impulse; the hold is what the cut
+	# reads, and taking the cut from the press instead would cut every jump on
+	# the frame after launch, because an edge verb is by definition gone by
+	# then. That is not a hypothetical — it is the bug this split fixes.
+	var pressed_hop := intent.wants(MovementGrammar.Verb.HOP)
+	var holds_hop := intent.sustains(MovementGrammar.Verb.HOP)
+	_jump_feel.step(delta, _is_grounded, pressed_hop)
+	if _jump_feel.should_hop(_is_grounded, pressed_hop):
 		_velocity.y = _tuning.get_number(HOP_IMPULSE_KEY)
 		_is_grounded = false
+		_jump_feel.consume()
 		hopped.emit()
+	else:
+		# Variable height: releasing the button mid-climb cuts the rise, so
+		# one button expresses a range of heights.
+		_velocity.y = _jump_feel.cut_rise(_velocity.y, holds_hop)
+
+
+## The velocity that holds the climber against the wall.
+##
+## The body ends a climb when it stops touching the wall, which is the honest
+## end condition — but a climber moving purely ALONG the surface (straight up,
+## or sideways) generates no contact, so without this the climb detached on its
+## second frame, every time. It rose 0.12 m ballistically and fell back down,
+## and no unit test could see it because detachment is a scene-tree fact.
+##
+## move_and_slide absorbs this component against the wall, so it costs no
+## motion; it only guarantees the collision that keeps `is_on_wall()` true.
+func _climb_adhesion() -> Vector3:
+	return -_climb_normal * _tuning.get_number(CLIMB_ADHESION_KEY)
 
 
 func _integrate_climb(intent: PlayerIntent) -> void:
 	var steer := intent.direction
 	if steer.is_zero_approx():
-		# A climber clings rather than sliding: no steering means no motion,
-		# not the retained momentum the grounded grammar keeps.
-		_velocity = Vector3.ZERO
+		# A climber clings rather than sliding: no steering means no motion
+		# along the wall, not the retained momentum the grounded grammar keeps.
+		# The adhesion is not motion — it is what keeps the cling attached.
+		_velocity = _climb_adhesion()
 		return
 
 	# The land grammar's intent is PLANAR — it never carries a vertical
@@ -287,7 +321,7 @@ func _integrate_climb(intent: PlayerIntent) -> void:
 		else lateral.normalized()
 
 	var direction := (Vector3.UP * -steer.z + lateral * steer.x).normalized()
-	_velocity = direction * _tuning.get_number(CLIMB_SPEED_KEY)
+	_velocity = direction * _tuning.get_number(CLIMB_SPEED_KEY) + _climb_adhesion()
 
 	# The reach ceiling. A lost leg lowers it (REQ-002), and a climber at the
 	# ceiling can still traverse sideways and descend — it is a limit on how high
