@@ -80,13 +80,22 @@ func load_from_file(path: String, out_errors: Array[SaveError] = []) -> bool:
 
 
 func save_to_file(path: String) -> bool:
-	var handle := FileAccess.open(path, FileAccess.WRITE)
+	# Replace only after a complete write, so an interrupted save leaves the
+	# previous profile intact. The temporary file is on the same filesystem.
+	var temporary := path + ".tmp"
+	var handle := FileAccess.open(temporary, FileAccess.WRITE)
 	if handle == null:
 		push_error("[%s] could not write '%s'" % [SaveError.FILE_UNREADABLE, path])
 		return false
 	handle.store_string(JSON.stringify(_profile, "  "))
+	handle.flush()
+	var write_error := handle.get_error()
 	handle.close()
-	return true
+	if write_error != OK:
+		return false
+	return DirAccess.rename_absolute(
+		ProjectSettings.globalize_path(temporary),
+		ProjectSettings.globalize_path(path)) == OK
 
 
 func _ensure_shape() -> void:
