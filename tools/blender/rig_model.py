@@ -69,13 +69,17 @@ from mathutils import Vector  # type: ignore
 # fatter body) and swung the gills from a near-vertical crown to a swept
 # plume, so every row here moved with it. Bones belong where the mass
 # actually is, and since both the mesh and this table are generated from the
-# repo, they can be kept in step.
+# repo, they can be kept in step. The gill bones moved furthest when the
+# plumes were rebuilt to the maintainer's reference sheet: they had run
+# outward and BACKWARD along a swept plume, and the reference holds the
+# fronds up and clear of the head, so they now run up and out along the
+# middle ramus GILL_RAMI builds.
 BONES = [
     ("root", None, (0.0, -1.05, 0.460), (0.0, -0.45, 0.518)),
     ("spine", "root", (0.0, -0.45, 0.518), (0.0, 0.62, 0.575)),
-    ("head", "spine", (0.0, 0.62, 0.575), (0.0, 1.66, 0.545)),
-    ("gill_l", "head", (0.34, 0.84, 0.700), (0.85, 0.55, 0.760)),
-    ("gill_r", "head", (-0.34, 0.84, 0.700), (-0.85, 0.55, 0.760)),
+    ("head", "spine", (0.0, 0.62, 0.578), (0.0, 1.66, 0.556)),
+    ("gill_l", "head", (0.32, 1.04, 0.630), (0.80, 1.08, 1.270)),
+    ("gill_r", "head", (-0.32, 1.04, 0.630), (-0.80, 1.08, 1.270)),
     ("leg_fl", "spine", (0.30, 0.27, 0.440), (0.74, 0.37, 0.060)),
     ("leg_fr", "spine", (-0.30, 0.27, 0.440), (-0.74, 0.37, 0.060)),
     ("leg_bl", "root", (0.30, -0.58, 0.440), (0.74, -0.73, 0.060)),

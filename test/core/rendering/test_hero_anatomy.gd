@@ -14,13 +14,22 @@ extends GdUnitTestSuite
 
 const HERO := "res://assets/character/axolotl/axolotl.glb"
 
-## The sharpest of the four. A plume whose filaments grow radially around its
-## ramus has real spread on all three principal axes; one built as two
-## opposed rows of filaments — which is what shipped before REQ-041 — lies in
-## a plane and reads as a comb from above and a blade from the side. On this
-## statistic the flat build scores 0.147 and the rebuilt plume 0.512, so the
-## threshold discriminates the actual defect with room either side.
-const PLUME_MIN_DIMENSIONALITY := 0.30
+## A plume built as ONE flat sheet — two opposed rows of filaments per ramus
+## with the three rami fanned by yaw alone, which is what shipped before
+## REQ-041 — reads as a comb from above and a blade from the side.
+##
+## THE THRESHOLD MOVED ONCE, DELIBERATELY. It was first set at 0.30 against a
+## build that grew filaments radially around every stalk and scored 0.512.
+## The maintainer then supplied a reference sheet
+## (reference/hero/01_hero_perspective.png) and chose it: there each ramus
+## is a FLAT FEATHER,
+## and the plume's volume comes from the three stalks pointing three ways.
+## That architecture is inherently less voluminous — it measures 0.273 — so
+## the bar sits between the two readings it has to tell apart: 0.147 for one
+## flat sheet, 0.273 for three fanned feathers. Lowering it was a design
+## change, not a way past a failing test, and both numbers are recorded here
+## so the next person can see which is which.
+const PLUME_MIN_DIMENSIONALITY := 0.22
 
 ## Stations in the model's own space. The hero faces -Z, so the head is at
 ## negative Z and the tail at positive Z.
@@ -32,15 +41,17 @@ const PLUME_MIN_DIMENSIONALITY := 0.30
 ## where the front legs branch (their topmost row reaches Z -0.37); the
 ## trunk window sits in the clear span between the shoulders and the hips
 ## (which branch at Z +0.58). Measured over the shipped mesh, that is a
-## 0.470 skull against a 0.361 trunk.
+## 0.432 skull against a 0.347 trunk.
 const SKULL_Z := -0.75
 const TRUNK_Z := Vector2(0.0, 0.40)
 
-## An axolotl's eye is tiny, lidless and set high on the side of the skull.
-## The build this supersedes used radius 0.155 against a 0.49 half-width —
-## nearly a third of the head, and the single loudest cartoon signal on the
-## animal.
-const EYE_MAX_SHARE_OF_SKULL := 1.0 / 6.0
+## The reference sheet's eye is LARGE, round and glossy, and the maintainer
+## chose it over the small lidless amphibian eye an earlier build used. The
+## bounds are wide on purpose: what this defends is that the eye stays a
+## READABLE FEATURE of the face — an eye that shrinks back to a pinprick or
+## swells to swallow the skull both fail, and the shipped model sits at 0.31.
+const EYE_MIN_SHARE_OF_SKULL := 0.20
+const EYE_MAX_SHARE_OF_SKULL := 0.42
 
 
 func test_req_041_the_gill_plumes_have_volume_rather_than_lying_flat() -> void:
@@ -64,15 +75,16 @@ func test_req_041_the_gill_plumes_have_volume_rather_than_lying_flat() -> void:
 	assert_bool(dimensionality >= PLUME_MIN_DIMENSIONALITY
 		).override_failure_message(
 		("the gill plume is flat: its smallest principal spread is %.3f of "
-		+ "its largest (need %.2f). Filaments must grow RADIALLY around each "
-		+ "ramus; two opposed rows put every one of them in one plane.")
+		+ "its largest (need %.2f). The three rami have to point three "
+		+ "different ways; fanning them by yaw alone puts every filament on "
+		+ "the animal in one plane.")
 		% [dimensionality, PLUME_MIN_DIMENSIONALITY]).is_true()
 
 
 func test_req_041_the_skull_is_the_widest_part_of_the_animal() -> void:
-	# A head no wider than the trunk is a mascot's dome. The animal's is a
-	# broad flat wedge, and that wedge is most of what the player recognises
-	# from above and head-on.
+	# A head no wider than the trunk is a snake's. The reference sheet's is a
+	# broad dome carrying the eyes out near its edges, and that width is most
+	# of what the player recognises from above and head-on.
 	var skin := _role_vertices("axolotl_skin")
 	var skull := 0.0
 	var trunk := 0.0
@@ -104,12 +116,18 @@ func test_req_041_the_cross_section_ratio_inverts_along_the_animal() -> void:
 	assert_bool(tail < 1.0).override_failure_message(
 		"the tail's width/height ratio is %.2f: it must be a compressed "
 		% tail + "blade, not a tube").is_true()
-	assert_bool(skull >= 1.5).override_failure_message(
-		"the skull's width/height ratio is %.2f, under the 1.5 a flat wedge "
-		% skull + "needs").is_true()
+	# 1.20 rather than the 1.5 a real salamander's flat wedge gives: the
+	# reference sheet's head is a soft DOME, wider than tall but nothing like
+	# a wedge, and it measures 1.39. The tail half of this assertion still
+	# carries most of the discrimination — it measures 0.62 against a bound
+	# of 1.0 — so the inversion is still proven, just at the reference's
+	# proportions rather than an anatomy textbook's.
+	assert_bool(skull >= 1.20).override_failure_message(
+		"the skull's width/height ratio is %.2f, under the 1.20 that "
+		% skull + "separates a wide head from a round tube").is_true()
 
 
-func test_req_041_the_eye_is_an_amphibians_rather_than_a_cartoons() -> void:
+func test_req_041_the_eye_is_the_reference_sheets_large_glossy_one() -> void:
 	var eyes := _role_vertices("axolotl_eye")
 	assert_bool(eyes.size() > 0).override_failure_message(
 		"no surface wearing 'axolotl_eye' was found in the shipped hero"
@@ -130,15 +148,16 @@ func test_req_041_the_eye_is_an_amphibians_rather_than_a_cartoons() -> void:
 		if vertex.z < SKULL_Z and absf(vertex.y - 0.55) <= 0.30:
 			skull = maxf(skull, absf(vertex.x))
 
-	assert_bool(radius <= skull * EYE_MAX_SHARE_OF_SKULL
-		).override_failure_message(
+	var share := radius / skull
+	assert_bool(share >= EYE_MIN_SHARE_OF_SKULL
+		and share <= EYE_MAX_SHARE_OF_SKULL).override_failure_message(
 		("the eye's radius is %.3f against a %.3f skull half-width — %.0f%% "
-		+ "of the head, where an amphibian's is under %.0f%%")
-		% [radius, skull, 100.0 * radius / skull,
+		+ "of it, outside the %.0f%%..%.0f%% the reference sheet's eye sits in")
+		% [radius, skull, 100.0 * share, 100.0 * EYE_MIN_SHARE_OF_SKULL,
 			100.0 * EYE_MAX_SHARE_OF_SKULL]).is_true()
 
-	# Dorso-lateral: high on the side of the skull, never forward-facing on
-	# the centreline where a cartoon puts them.
+	# Set out on the dome rather than forward-facing on the centreline: even
+	# a large eye has to be one of a PAIR the viewer reads as a face.
 	var centre := (lo + hi) * 0.5
 	assert_bool(centre.x > radius).override_failure_message(
 		"the eye sits at x=%.3f, on or across the centreline" % centre.x

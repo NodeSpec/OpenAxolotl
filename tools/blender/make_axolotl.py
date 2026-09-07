@@ -72,15 +72,26 @@ import bmesh  # type: ignore
 # --- Palette ----------------------------------------------------------------
 # Kept inside the thresholds tools/blender/refine_model.py and hero_skin.gd
 # both classify by, so a model that lost its material names still resolves.
-SKIN_BACK = (0.93, 0.72, 0.74, 1.0)
-SKIN_BELLY = (0.99, 0.88, 0.87, 1.0)
-SKIN_BLUSH = (0.93, 0.55, 0.58, 1.0)
+# WARM. The shared lighting rig's sky ambient is blue, so a vertex colour
+# whose blue channel matches its green renders lavender rather than the
+# reference sheet's warm pink -- the palette has to lean against the cast it
+# will be lit under, not look right in isolation.
+SKIN_BACK = (0.96, 0.66, 0.60, 1.0)
+SKIN_BELLY = (0.99, 0.85, 0.78, 1.0)
+SKIN_BLUSH = (0.93, 0.46, 0.43, 1.0)
+# The tail and dorsal membranes. They wear the GILL material rather than the
+# skin's, because the reference sheet's fins are translucent with the light
+# behind them and that is what the gill material already does (subsurface
+# scattering at 0.7 plus a backlight). Kept inside the gill role's own colour
+# range so the combined mean green stays under GILL_MAX_GREEN.
+FIN_BASE = (0.90, 0.46, 0.44, 1.0)
+FIN_EDGE = (0.98, 0.63, 0.61, 1.0)
 # Coral rather than magenta. The gill material adds a strong backlight and
 # rim on top of these, so a vertex colour saturated enough to look right in
 # Blender renders hot in engine. The mean green over the mesh still has to
 # stay under hero_skin.GILL_MAX_GREEN (0.5) for the colour-only fallback.
-GILL_STALK = (0.84, 0.32, 0.35, 1.0)
-GILL_TIP = (0.96, 0.52, 0.54, 1.0)
+GILL_STALK = (0.84, 0.30, 0.31, 1.0)
+GILL_TIP = (0.96, 0.47, 0.46, 1.0)
 EYE_COLOUR = (0.03, 0.03, 0.05, 1.0)
 GLEAM_COLOUR = (1.0, 1.0, 1.0, 1.0)
 DETAIL_COLOUR = (0.34, 0.19, 0.25, 1.0)
@@ -110,12 +121,12 @@ BODY = [
     (-0.55, 0.51, 0.310, 0.330),   # hips
     (-0.15, 0.54, 0.348, 0.345),   # belly, widest of the trunk
     (0.25, 0.56, 0.362, 0.348),    # chest
-    (0.60, 0.575, 0.352, 0.318),   # neck, where the gill arches sit
-    (0.92, 0.572, 0.510, 0.278),   # skull: the ratio inverts, broad and flat
-    (1.24, 0.566, 0.552, 0.256),   # widest across the cheeks
-    (1.52, 0.556, 0.487, 0.218),   # the width is HELD, not tapered away
-    (1.66, 0.545, 0.318, 0.168),
-    (1.74, 0.540, 0.120, 0.095),   # a short rounded cap, not a point
+    (0.60, 0.578, 0.352, 0.330),   # neck, where the gill arches sit
+    (0.92, 0.588, 0.478, 0.348),   # skull: still wider than tall, but DOMED
+    (1.24, 0.586, 0.505, 0.362),   # widest across the cheeks
+    (1.52, 0.572, 0.432, 0.292),   # the width is HELD, not tapered away
+    (1.66, 0.556, 0.300, 0.196),
+    (1.74, 0.546, 0.120, 0.104),   # a short rounded cap, not a point
 ]
 
 # Body row indices the limbs branch from, so the flare sits over the chest
@@ -138,20 +149,22 @@ BACK_ROOT = 6
 # crest over the tail, so the numbers below are chosen for how far each row
 # stands ABOVE the back at its station: 1cm, 4, 11, 20, 22, 13, 3.
 DORSAL_FIN = [
-    (0.00, 0.895, 0.016, 0.022),   # a ridge you can barely see, mid-back
-    (-0.55, 0.845, 0.019, 0.040),
-    (-1.10, 0.760, 0.022, 0.090),
-    (-1.65, 0.700, 0.022, 0.140),  # the crest, over the tail base
-    (-2.20, 0.610, 0.019, 0.135),
-    (-2.65, 0.480, 0.014, 0.085),
-    (-2.93, 0.345, 0.008, 0.026),
+    (-0.30, 0.870, 0.014, 0.022),  # a ridge you can barely see, mid-back
+    (-0.90, 0.800, 0.017, 0.070),
+    (-1.50, 0.720, 0.018, 0.130),
+    (-2.05, 0.635, 0.017, 0.145),  # the crest, over the tail
+    (-2.55, 0.515, 0.013, 0.105),
+    (-2.95, 0.368, 0.007, 0.036),
 ]
+# The lower lobe. Every row is placed so the membrane's BOTTOM stays above
+# Z 0.02: the feet plant at 0.03, and a tail fin that dips below them drags
+# through the floor on every frame the animal is grounded.
 VENTRAL_FIN = [
-    (-1.30, 0.153, 0.012, 0.055),
-    (-1.75, 0.120, 0.013, 0.085),
-    (-2.20, 0.132, 0.013, 0.085),
-    (-2.60, 0.197, 0.011, 0.055),
-    (-2.90, 0.258, 0.007, 0.022),
+    (-1.15, 0.188, 0.014, 0.046),
+    (-1.65, 0.150, 0.016, 0.080),
+    (-2.15, 0.145, 0.016, 0.086),
+    (-2.60, 0.200, 0.012, 0.070),
+    (-2.93, 0.305, 0.007, 0.032),
 ]
 
 # (label, root row, side, splay, toe count). Front feet carry four toes and
@@ -164,26 +177,50 @@ LEGS = [
     ("br", BACK_ROOT, -1.0, -0.18, 5),
 ]
 
-# Three gill rami a side, as (yaw, rise, length scale). The fan opens in
-# ELEVATION as well as plan: one ramus sweeps up and back, one straight out
-# and back, one down and back. Three rami separated only by yaw -- which is
-# what the first build had -- lie in a single horizontal plane, and a plane
-# of filaments is a comb.
+# Three gill rami a side, as (fore/aft yaw, rise, length scale), following
+# the maintainer's reference sheet (reference/hero/01_hero_perspective.png):
+# LONG BARE STALKS carrying a feathered blade on
+# their outer half only, held up and clear of the head. The fan splays
+# forward, out and back, so the three blades face three different ways and
+# the plume has volume even though each blade is itself a flat feather --
+# which is exactly how the reference is built, and why massing filaments
+# radially around every stalk (the previous build) reads as a bottlebrush
+# next to it.
 GILL_RAMI = [
-    (0.16, 0.86, 0.90),
-    (0.00, 0.16, 1.00),
-    (-0.14, -0.52, 0.92),
+    (0.42, 0.56, 0.94),
+    (0.06, 0.92, 1.00),
+    (-0.54, 0.56, 0.92),
 ]
+GILL_BASE = (0.32, 1.04, 0.63)
+GILL_SPAN = 0.80
 
-# Filament stations along a ramus, and how many grow radially at each. The
-# product is the plume's density; the radial placement is its volume.
-GILL_STATIONS = 12
-FILAMENTS_PER_STATION = 6
+# Where the feather starts along the stalk. The bare lower half is most of
+# what makes the reference read as gills rather than as a brush.
+GILL_FEATHER_START = 0.42
+FILAMENTS_PER_ROW = 18
 
-# How wide an arc, in radians, the filaments at a station cover. Centred on
-# the direction pointing away from the body, so a 264-degree fan leaves the
-# medial quadrant empty and no thread grows back into the neck.
-GILL_ARC = 2.30
+
+def body_at(y: float) -> tuple:
+    """The body's (centre z, half-width, half-height) at station `y`.
+
+    Linear between the BODY rows. Anything that has to sit ON the animal --
+    the mouth seam most of all -- has to be placed against the surface rather
+    than at coordinates typed by eye: the seam whose corners were authored at
+    a flat z sank INSIDE the skull as soon as the skull was domed, and a
+    mouth buried in the head renders as no mouth at all.
+    """
+    rows = sorted(BODY, key=lambda row: row[0])
+    if y <= rows[0][0]:
+        return rows[0][1], rows[0][2], rows[0][3]
+    if y >= rows[-1][0]:
+        return rows[-1][1], rows[-1][2], rows[-1][3]
+    for lower, upper in zip(rows, rows[1:]):
+        if lower[0] <= y <= upper[0]:
+            span = (upper[0] - lower[0]) or 1.0
+            t = (y - lower[0]) / span
+            return tuple(lower[i] + (upper[i] - lower[i]) * t
+                         for i in (1, 2, 3))
+    return rows[-1][1], rows[-1][2], rows[-1][3]
 
 
 def clear_scene() -> None:
@@ -408,9 +445,11 @@ def join_as(name: str, pieces: list, role: str) -> bpy.types.Object:
 def mottle(obj: bpy.types.Object) -> None:
     """Blush patches over the painted gradient — the sheet's mottled skin.
 
-    Deterministic low-frequency noise from the vertex position itself, so
-    the patches are coarse blotches rather than salt-and-pepper, and the
-    same run always paints the same animal.
+    Deterministic noise from the vertex position itself, so the same run
+    always paints the same animal. The reference sheet's marks are DISCRETE
+    round blotches over the head and back rather than a soft wash, so the
+    threshold is high and the ramp steep: a gentle blend spread the colour
+    into a smear that just read as dirty skin.
     """
     mesh = obj.data
     layer = mesh.color_attributes.get("Col")
@@ -418,11 +457,11 @@ def mottle(obj: bpy.types.Object) -> None:
         return
     for loop_index, loop in enumerate(mesh.loops):
         p = mesh.vertices[loop.vertex_index].co
-        wave = (math.sin(p.x * 3.3 + 1.7) * math.sin(p.y * 2.1 + 0.4)
-                * math.sin(p.z * 2.7 + 2.9))
-        if wave <= 0.28 or p.z < 0.50:
+        wave = (math.sin(p.x * 5.1 + 1.7) * math.sin(p.y * 3.4 + 0.4)
+                * math.sin(p.z * 4.3 + 2.9))
+        if wave <= 0.22 or p.z < 0.54:
             continue  # belly stays clean, as counter-shading wants
-        blend = min((wave - 0.28) * 1.5, 0.80)
+        blend = min((wave - 0.22) * 2.6, 0.95)
         colour = layer.data[loop_index].color
         layer.data[loop_index].color = tuple(
             colour[i] + (SKIN_BLUSH[i] - colour[i]) * blend for i in range(4))
@@ -465,109 +504,111 @@ def build_skin() -> bpy.types.Object:
     # single-colour creature reading as a toy.
     paint(obj, SKIN_BELLY, SKIN_BACK, axis=2)
     mottle(obj)
-    pieces = [obj]
+    return join_as("axolotl_skin", [obj], "skin")
 
+
+def build_fins() -> list:
+    """The dorsal and ventral tail membranes, as GILL-role pieces.
+
+    They used to be joined into the skin, which made them opaque slabs the
+    same colour as the back. The reference sheet's tail is a broad
+    TRANSLUCENT fin with the light coming through it, and the gill material
+    already does exactly that -- subsurface scattering at 0.7 plus a
+    backlight -- so the membranes belong to that role rather than to skin.
+    Their colours stay inside the gill range so the combined mean green of
+    the gill object keeps classifying under GILL_MAX_GREEN for a model that
+    ships without material names.
+    """
+    fins = []
     for name, rows in (("dorsal_fin", DORSAL_FIN), ("ventral_fin", VENTRAL_FIN)):
-        fin = skinned("%s" % name,
-                      [(0.0, y, z, rx, rz) for y, z, rx, rz in rows],
+        fin = skinned(name, [(0.0, y, z, rx, rz) for y, z, rx, rz in rows],
                       subdivisions=2)
-        # Pale at the root, blushed at the free edge. Running it the other
-        # way lit the fin's top edge brighter than the back it grows out of,
-        # which is the opposite of a thin membrane and made the blade pop
-        # off the animal instead of belonging to it.
-        paint(fin, SKIN_BELLY, SKIN_BLUSH, axis=2)
-        pieces.append(fin)
-
-    return join_as("axolotl_skin", pieces, "skin")
+        # Deeper coral at the root, paler at the free edge, which is the way
+        # a thin membrane actually thins out.
+        paint(fin, FIN_BASE, FIN_EDGE, axis=2)
+        fins.append(fin)
+    return fins
 
 
 def build_gills() -> bpy.types.Object:
-    """Three rami a side, each wearing a radial sleeve of fine filaments.
+    """Three feathered rami a side, plus the tail membranes.
 
-    A PLUME HAS VOLUME. The previous build put two opposed rows of filaments
-    on each ramus and fanned the three rami by yaw alone, which left every
-    thread on the animal in one horizontal plane: from above it was a comb,
-    from the side a blade, and no amount of finer threads fixes a shape that
-    is flat. Here the fan opens in elevation too, and each station grows
-    filaments around a 264-degree arc of the stalk, turned away from the
-    neck so nothing grows back into the flesh.
+    THE REFERENCE SHEET IS A FEATHER, NOT A BOTTLEBRUSH. Each ramus is a long
+    bare stalk carrying filaments only on its outer half, and those filaments
+    lie in ONE plane per ramus -- a feather. What gives the plume its volume
+    is that the three stalks point three different ways: forward-and-up,
+    out-and-up, back-and-up, so the three blades face three different
+    directions. Massing filaments radially around every stalk (the build this
+    supersedes) produces more geometry and reads as a brush beside it.
 
-    The rami are also SHORT -- half a unit against the old five-sixths, which
-    reached past the shoulders. On the animal the stalk is barely longer than
-    the head is wide; the mass is filaments, not stalk.
+    The bare inner half matters as much as the feathered outer one: it is
+    what holds the plume clear of the head instead of packing it against the
+    neck, and it is the first thing the eye uses to read these as gills.
 
-    Filaments are longest around the middle of a ramus and shorten toward
-    both ends, and each curls back and down under its own weight, so the mass
-    has a silhouette instead of a fringe.
+    Filaments are longest through the middle of the blade and shorten to both
+    of its ends, and each sweeps toward the stalk's tip as it grows, so the
+    blade has a leaf's outline rather than a rectangle's.
     """
     from mathutils import Vector
 
     bm = bmesh.new()
     for side in (1.0, -1.0):
         for yaw, rise, scale in GILL_RAMI:
-            # The rami leave the flank of the neck behind the jaw. Direction
-            # carries the whole fan: outward always, back always, and up or
-            # down by the ramus's rise.
-            # Rooted right behind the skull and thrown OUT rather than back:
-            # a 0.78-against-0.58 sweep laid the plumes along the shoulders
-            # and over the front feet, which is where a gill never sits.
-            base = Vector((side * 0.34, 0.84, 0.70))
-            direction = Vector((side * 0.88, -0.50 + yaw, rise * 0.60))
+            base = Vector((side * GILL_BASE[0], GILL_BASE[1], GILL_BASE[2]))
+            direction = Vector((side * 0.70, yaw, rise))
             direction.normalize()
-            span = 0.46 * scale
+            span = GILL_SPAN * scale
             tip = base + direction * span
 
-            # A frame perpendicular to the ramus whose first axis points
-            # away from the body. Centring the filament arc on it is what
-            # keeps the medial quadrant clear.
+            # A frame perpendicular to the stalk. `outward` points away from
+            # the body; `row_axis` is what the feather spreads along, and
+            # because it is derived from the stalk's own direction it turns
+            # with the fan -- which is the whole reason three flat blades
+            # make a three-dimensional plume.
             lateral = Vector((side, 0.0, 0.0))
             outward = lateral - direction * lateral.dot(direction)
             if outward.length < 1e-4:
                 outward = Vector((0.0, 0.0, 1.0))
             outward.normalize()
-            binormal = direction.cross(outward)
-            binormal.normalize()
+            row_axis = direction.cross(outward)
+            row_axis.normalize()
 
             def along(t: float, _b=base, _t=tip, _o=outward,
                       _s=span) -> Vector:
                 # A shallow bow, so the stalk arcs out of the neck rather
                 # than leaving it as a straight spike.
-                return _b.lerp(_t, t) + _o * (0.09 * _s * math.sin(t * math.pi))
+                return _b.lerp(_t, t) + _o * (0.07 * _s * math.sin(t * math.pi))
 
             stalk = [along(t) for t in (0.0, 0.25, 0.5, 0.75, 1.0)]
             tube(bm, [tuple(p) for p in stalk],
-                 [0.052, 0.044, 0.034, 0.024, 0.012], radial=6)
+                 [0.058, 0.050, 0.042, 0.030, 0.016], radial=6)
 
-            for station in range(GILL_STATIONS):
-                t = 0.26 + 0.70 * station / max(GILL_STATIONS - 1, 1)
+            for step in range(FILAMENTS_PER_ROW):
+                blade = step / max(FILAMENTS_PER_ROW - 1, 1)
+                t = GILL_FEATHER_START + (0.99 - GILL_FEATHER_START) * blade
                 root = along(t)
-                # Longest around the middle, tapering to both ends.
-                profile = math.sin(math.pi * min(max((t - 0.10) / 0.95, 0.0), 1.0))
-                # Rolling each station's arc keeps consecutive rings from
-                # lining up into ridges. Deterministic in the index, so the
-                # animal is identical every build while no two threads match.
-                phase = ((station * 5 + 2) % 7) / 7.0 - 0.5
+                # Full through the middle of the blade and soft at both ends;
+                # the fractional power keeps the outline a leaf rather than
+                # the lens a plain sine would draw.
+                profile = math.sin(math.pi * blade) ** 0.6
+                # Deterministic in the index, so the animal is identical every
+                # build while no two filaments match.
+                wobble = 0.84 + 0.30 * (((step * 7 + 3) % 11) / 10.0)
+                length = (0.044 + 0.132 * profile) * scale * wobble
 
-                for slot in range(FILAMENTS_PER_STATION):
-                    fraction = slot / max(FILAMENTS_PER_STATION - 1, 1) - 0.5
-                    theta = fraction * GILL_ARC + phase * 0.44
-                    wobble = 0.82 + 0.34 * (
-                        ((station * 7 + slot * 3) % 11) / 10.0)
-                    length = (0.085 + 0.140 * profile) * scale * wobble
-                    grow = outward * math.cos(theta) + binormal * math.sin(theta)
-
+                for row in (1.0, -1.0):
                     points, radii = [], []
                     for segment in range(4):
                         u = segment / 3.0
-                        # Three things a real filament does: reach out of its
-                        # stalk, trail back along the animal, and droop under
-                        # its own weight. The last two are quadratic in u, so
-                        # the thread curls instead of kinking at the root.
-                        offset = (grow * (length * math.sin(u * 1.45))
-                                  + Vector((0.0, -0.62 * length * u * u,
-                                            -0.46 * length * u * u)))
+                        # Out along the blade, swept toward the stalk's tip,
+                        # and lifted a little out of the feather's plane so
+                        # the blade is a soft surface rather than a card.
+                        offset = (row_axis * (row * length
+                                              * math.sin(u * 1.50))
+                                  + direction * (0.42 * length * u * u)
+                                  + outward * (row * 0.16 * length * u * u))
                         points.append(tuple(root + offset))
-                        radii.append(0.0135 * (1.0 - u) + 0.0030)
+                        radii.append(0.0130 * (1.0 - u) + 0.0030)
                     tube(bm, points, radii, radial=4)
 
     mesh = bpy.data.meshes.new("gill")
@@ -578,20 +619,21 @@ def build_gills() -> bpy.types.Object:
     bpy.context.view_layer.objects.active = obj
     bpy.ops.object.shade_smooth()
     paint(obj, GILL_STALK, GILL_TIP, axis=2)
-    return join_as("axolotl_gill", [obj], "gill")
+    return join_as("axolotl_gill", [obj] + build_fins(), "gill")
 
 
 def build_eyes() -> bpy.types.Object:
-    """Small, lidless and dorso-lateral -- an amphibian's eye.
+    """Large, round and glossy -- the reference sheet's eye.
 
-    Radius 0.062 against a skull half-height of 0.256, set out at 0.355
-    on a 0.552 half-width so it rides the upper edge of the wedge. The old 0.155 made
-    the eye a third of the head, which is the single loudest reason the face
-    read as a cartoon rather than an animal.
+    The maintainer's reference (reference/hero/01_hero_perspective.png)
+    carries a big dark eye with a bright catchlight,
+    and it was chosen over the small lidless amphibian eye an earlier build
+    used. Radius 0.135 against a 0.505 skull half-width, set forward on the
+    dome where the reference puts it rather than back on the flank.
     """
     pieces = []
     for side in (1.0, -1.0):
-        eye = sphere(f"eye_{side:.0f}", (side * 0.355, 1.215, 0.752), 0.062)
+        eye = sphere(f"eye_{side:.0f}", (side * 0.335, 1.340, 0.720), 0.135)
         paint(eye, EYE_COLOUR, EYE_COLOUR)
         pieces.append(eye)
     return join_as("axolotl_eye", pieces, "eye")
@@ -601,14 +643,14 @@ def build_gleams() -> bpy.types.Object:
     """A specular pinpoint, not a cartoon catchlight.
 
     Kept as geometry rather than left to the material because a highlight
-    the environment happens not to supply is a dead eye; kept TINY (0.016
-    against the old 0.052) because a wet eye glints, it does not wear a
-    white dot.
+    the environment happens not to supply is a dead eye. Sized to the eye it
+    rides on -- 0.030 against a 0.135 pupil, the proportion the reference
+    sheet's catchlight has.
     """
     pieces = []
     for side in (1.0, -1.0):
         gleam = sphere(f"gleam_{side:.0f}",
-                       (side * 0.372, 1.236, 0.791), 0.016)
+                       (side * 0.372, 1.398, 0.805), 0.030)
         paint(gleam, GLEAM_COLOUR, GLEAM_COLOUR)
         pieces.append(gleam)
     return join_as("axolotl_gleam", pieces, "gleam")
@@ -617,29 +659,37 @@ def build_gleams() -> bpy.types.Object:
 def build_detail() -> bpy.types.Object:
     """The mouth line and nostrils.
 
-    A real axolotl's mouth is a WIDE, nearly straight seam that follows the
-    front of the broad skull and lifts only slightly at its corners. The
-    previous build lifted the ends hard and called it a smile, which is a
-    mascot's mouth; the animal's read comes from width, not from curve.
+    A wide seam following the front of the skull, lifting at the corners
+    into the soft smile the reference sheet has. Width still does most of the
+    work -- a narrow mouth curved hard is a mascot's -- but the reference is
+    plainly smiling, and a dead-straight seam under those eyes reads glum.
     """
     pieces = []
     seam = []
-    for step in range(9):
-        t = step / 8.0
+    for step in range(11):
+        t = step / 10.0
         offset = 2.0 * abs(t - 0.5)
-        x = (t - 0.5) * 0.94
-        # Only a slight corner lift: enough to look alive, far short of a grin.
-        z = 0.462 + 0.032 * offset ** 1.8
-        # Follows the wedge of the skull so the seam hugs the surface.
-        y = 1.640 - 0.42 * offset ** 1.9
-        seam.append((x, y, z, 0.019, 0.014))
+        # Each point is placed against the skull's OWN cross-section at its
+        # station, on a latitude below the equator: that is what keeps the
+        # seam on the surface as the head's proportions change.
+        y = 1.700 - 0.42 * offset ** 1.6
+        centre, half_width, half_height = body_at(y)
+        # The corners ride higher than the middle, which is the reference's
+        # soft smile once the line is wrapped around a muzzle.
+        drop = 0.55 - 0.22 * offset ** 2
+        z = centre - drop * half_height
+        # Half-width of the cross-section AT that latitude, pushed a hair
+        # proud so the seam reads as a groove rather than vanishing.
+        lateral = half_width * math.sqrt(max(1.0 - drop * drop, 0.0))
+        x = (1.0 if t > 0.5 else -1.0) * offset * lateral * 1.015
+        seam.append((x, y, z, 0.024, 0.017))
     mouth = skinned("mouth", seam, subdivisions=1)
     paint(mouth, DETAIL_COLOUR, DETAIL_COLOUR)
     pieces.append(mouth)
 
     for side in (1.0, -1.0):
         nostril = sphere(f"nostril_{side:.0f}",
-                         (side * 0.098, 1.690, 0.596), 0.016)
+                         (side * 0.108, 1.700, 0.612), 0.018)
         paint(nostril, DETAIL_COLOUR, DETAIL_COLOUR)
         pieces.append(nostril)
     return join_as("axolotl_detail", pieces, "detail")
