@@ -58,6 +58,9 @@ func _ready() -> void:
 	# dead world's last numbers.
 	_hud = PlayerHud.new()
 	_hud.name = "PlayerHud"
+	# The hub disables its own processing while a world runs. Countdown and
+	# recharge readouts must keep updating during that world.
+	_hud.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(_hud)
 	refresh()
 
@@ -204,6 +207,7 @@ func _on_world_finished() -> void:
 
 	# The world's capability factors leave with the world, not with the player.
 	for systems: Node in _active_world.find_children("*", "WorldSystems", true, false):
+		(systems as WorldSystems).persist_progress()
 		(systems as WorldSystems).release_player_factors()
 	_active_world.queue_free()
 	_active_world = null
