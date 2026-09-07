@@ -55,21 +55,30 @@ import sys
 import bpy  # type: ignore
 from mathutils import Vector  # type: ignore
 
-# (name, parent, head, tail) in Blender space. Values follow the hero's
-# measured bounds: head at +Y 1.3, tail tip at -Y 2.9, body around Z 0.5.
+# (name, parent, head, tail) in Blender space, following the proportions
+# tools/blender/make_axolotl.py builds: head mass from +Y 0.6 to 1.5, the
+# torso between -1.1 and +0.6, the tail narrowing from -1.1 to the tip at
+# -2.9, everything centred around Z 0.6.
+#
+# THESE MUST TRACK THE MESH. An earlier layout put tail_1's head at Y -0.2,
+# which sat INSIDE the torso once the body was rebuilt thicker — the tail
+# chain then owned a third of the belly and the hurt clip folded the whole
+# rear of the animal through itself. Bones belong where the mass actually
+# narrows, and since both the mesh and this table are now generated from
+# the repo, they can be kept in step.
 BONES = [
-    ("root", None, (0.0, -0.2, 0.5), (0.0, 0.2, 0.5)),
-    ("spine", "root", (0.0, 0.2, 0.5), (0.0, 0.75, 0.55)),
-    ("head", "spine", (0.0, 0.75, 0.55), (0.0, 1.35, 0.5)),
-    ("gill_l", "head", (0.35, 0.85, 0.7), (1.05, 1.0, 0.85)),
-    ("gill_r", "head", (-0.35, 0.85, 0.7), (-1.05, 1.0, 0.85)),
-    ("leg_fl", "spine", (0.3, 0.55, 0.3), (0.8, 0.7, 0.05)),
-    ("leg_fr", "spine", (-0.3, 0.55, 0.3), (-0.8, 0.7, 0.05)),
-    ("leg_bl", "root", (0.3, -0.5, 0.3), (0.8, -0.75, 0.05)),
-    ("leg_br", "root", (-0.3, -0.5, 0.3), (-0.8, -0.75, 0.05)),
-    ("tail_1", "root", (0.0, -0.2, 0.5), (0.0, -1.1, 0.5)),
-    ("tail_2", "tail_1", (0.0, -1.1, 0.5), (0.0, -2.0, 0.5)),
-    ("tail_3", "tail_2", (0.0, -2.0, 0.5), (0.0, -2.9, 0.45)),
+    ("root", None, (0.0, -1.05, 0.6), (0.0, -0.45, 0.6)),
+    ("spine", "root", (0.0, -0.45, 0.6), (0.0, 0.35, 0.6)),
+    ("head", "spine", (0.0, 0.35, 0.6), (0.0, 1.35, 0.6)),
+    ("gill_l", "head", (0.45, 0.72, 0.66), (1.30, 0.30, 0.70)),
+    ("gill_r", "head", (-0.45, 0.72, 0.66), (-1.30, 0.30, 0.70)),
+    ("leg_fl", "spine", (0.30, 0.45, 0.40), (0.95, 0.53, 0.05)),
+    ("leg_fr", "spine", (-0.30, 0.45, 0.40), (-0.95, 0.53, 0.05)),
+    ("leg_bl", "root", (0.30, -0.70, 0.40), (0.95, -0.85, 0.05)),
+    ("leg_br", "root", (-0.30, -0.70, 0.40), (-0.95, -0.85, 0.05)),
+    ("tail_1", "root", (0.0, -1.05, 0.6), (0.0, -1.70, 0.6)),
+    ("tail_2", "tail_1", (0.0, -1.70, 0.6), (0.0, -2.30, 0.6)),
+    ("tail_3", "tail_2", (0.0, -2.30, 0.6), (0.0, -2.90, 0.58)),
 ]
 
 # Bones a walk/swim cycle drives, and the axis each swings on.
@@ -250,20 +259,28 @@ def clip_fall(armature: bpy.types.Object, length: int) -> None:
 
 
 def clip_hurt(armature: bpy.types.Object, length: int) -> None:
-    """The flinch: a fast recoil that settles back — comedic, never limp."""
+    """The flinch: a fast recoil that settles back — comedic, never limp.
+
+    THE TORSO BARELY MOVES. The readable part of a flinch is the head
+    snapping back and the gills flaring, and those are cheap; bending the
+    spine hard adds nothing a viewer can name. It also cannot be afforded:
+    at the amplitudes this clip first used, the rebuilt body — far thicker
+    than the one they were tuned against — folded through itself. The head
+    and gills carry the beat, the trunk only leans into it.
+    """
     pose = armature.pose.bones
     beats = [(1, 0.0), (max(2, length // 5), 1.0),
              (max(3, length // 2), -0.35), (length, 0.0)]
     for frame, amount in beats:
-        key_rotation(pose["root"], frame, (-amount * 0.3, 0.0, 0.0))
-        key_rotation(pose["spine"], frame, (amount * 0.4, 0.0, amount * 0.25))
-        key_rotation(pose["head"], frame, (amount * 0.45, 0.0, 0.0))
+        key_rotation(pose["root"], frame, (-amount * 0.16, 0.0, 0.0))
+        key_rotation(pose["spine"], frame, (amount * 0.20, 0.0, amount * 0.12))
+        key_rotation(pose["head"], frame, (amount * 0.42, 0.0, 0.0))
         for index, name in enumerate(GILLS):
             side = 1.0 if index == 0 else -1.0
-            key_rotation(pose[name], frame, (0.0, 0.0, side * amount * 0.6))
+            key_rotation(pose[name], frame, (0.0, 0.0, side * amount * 0.7))
         for index, name in enumerate(TAIL):
             key_rotation(pose[name], frame,
-                         (0.0, 0.0, amount * 0.3 * (index + 1)))
+                         (0.0, 0.0, amount * 0.15 * (index + 1)))
 
 
 # (clip name, frame length, builder). Names are the CONTRACT with the game
