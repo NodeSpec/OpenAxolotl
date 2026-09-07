@@ -18,3 +18,11 @@ __pycache__/
 
 # Python packaging metadata from pip install -e .
 *.egg-info/
+
+# Textures Godot extracts from an embedded-texture .glb on import. They are
+# regenerated from the model on any fresh checkout, and they arrive with the
+# exporter's own capitalised names, which the Asset Contract's lower_snake_case
+# rule rejects. Generated files, so: ignored, not renamed.
+*_base_color.jpg
+*_metallic_roughness.jpg
+*_normal.jpg

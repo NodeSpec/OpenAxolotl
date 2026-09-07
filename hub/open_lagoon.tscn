@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=14 format=3]
 
 ; THE OPEN LAGOON (REQ-009) — the hub, as a scene, and the game's main scene.
 ;
@@ -24,6 +24,8 @@
 [ext_resource type="PackedScene" path="res://assets/environment/coral_branch/coral_branch.glb" id="6_kit_coral_branch"]
 [ext_resource type="PackedScene" path="res://assets/environment/kelp_strand/kelp_strand.glb" id="7_kit_kelp_strand"]
 [ext_resource type="PackedScene" path="res://assets/environment/seagrass_tuft/seagrass_tuft.glb" id="8_kit_seagrass_tuft"]
+[ext_resource type="Script" path="res://core/rendering/terrain_shell.gd" id="terrain_shell_script"]
+[ext_resource type="Material" path="res://core/rendering/terrain/river_sand.tres" id="terrain_river_sand"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ground"]
 size = Vector3(48, 2, 32)
@@ -45,11 +47,17 @@ script = ExtResource("1_hub")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
 [node name="Mesh" type="MeshInstance3D" parent="OpenLagoon/Ground"]
+visible = false
 mesh = SubResource("BoxMesh_ground")
 surface_material_override/0 = SubResource("Material_ground")
 
 [node name="Collision" type="CollisionShape3D" parent="OpenLagoon/Ground"]
 shape = SubResource("BoxShape3D_ground")
+
+[node name="Shell" type="Node3D" parent="OpenLagoon/Ground"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_sand")
+shell_seed = 3578
 
 [node name="HubSpawn" type="Marker3D" parent="OpenLagoon" groups=["hub_spawn"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 6)
