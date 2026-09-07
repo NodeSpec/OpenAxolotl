@@ -1,0 +1,7 @@
+{
+  "author": "OpenAxolotl maintainer via the project's Blender kit generator",
+  "generationMethod": "ai-generated",
+  "tool": "Blender 4.0.2 headless, tools/blender/make_forest_kit.py (deterministic, --seed 11)",
+  "prompt": "A tall forest tree: a five-segment leaning trunk rising 14-18 m with three overlapping crown lobes, sized so one planted on the forest floor rises past a route eight metres above it. Vertex-coloured bark-to-leaf in the blue-shifted forest palette; no materials or textures; part of the shared forest dressing kit.",
+  "licenseTerms": "Apache-2.0 (project license, same as the generator script)"
+}

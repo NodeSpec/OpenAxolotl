@@ -1,0 +1,30 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+; CORAL SHELF STONE — the warm reef rock the cove is named for.
+;
+; One of the shared terrain surfaces (core/rendering/terrain_surface.gdshader).
+; The one surface that keeps the old coral palette, because the
+; climbable wall and the shelf gate are the world's landmarks and a
+; player navigates by their colour. Strata are strong: this is the
+; wall they read a climb off.
+;
+; Owned by the CLIENT, not by a world: a world references this resource by
+; path instead of carrying its own albedo_color, so a rock in the greybox, in
+; Coral Cove and in a community world is visibly the same rock. Retuning the
+; family is one edit here rather than a sweep through every scene.
+
+[ext_resource type="Shader" path="res://core/rendering/terrain_surface.gdshader" id="1_shader"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/low_tint = Color(0.42, 0.24, 0.24, 1)
+shader_parameter/high_tint = Color(0.72, 0.46, 0.42, 1)
+shader_parameter/top_tint = Color(0, 0, 0, 1)
+shader_parameter/top_weight = 0
+shader_parameter/top_sharpness = 4.0
+shader_parameter/grain_scale = 1.5
+shader_parameter/strata_scale = 3.6
+shader_parameter/strata_strength = 0.66
+shader_parameter/roughness_value = 0.8
+shader_parameter/specular_value = 0.22

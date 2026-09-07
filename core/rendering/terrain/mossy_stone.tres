@@ -1,0 +1,30 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+; MOSSY STONE — the same rock, out of the water long enough to grow.
+;
+; One of the shared terrain surfaces (core/rendering/terrain_surface.gdshader).
+; The stone below and moss on every upward face, weighted by the
+; pattern so the moss line is ragged. This is the ordinary platform
+; surface of a forest route: the top you land on reads different
+; from the side you see across a gap.
+;
+; Owned by the CLIENT, not by a world: a world references this resource by
+; path instead of carrying its own albedo_color, so a rock in the greybox, in
+; Coral Cove and in a community world is visibly the same rock. Retuning the
+; family is one edit here rather than a sweep through every scene.
+
+[ext_resource type="Shader" path="res://core/rendering/terrain_surface.gdshader" id="1_shader"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/low_tint = Color(0.2, 0.22, 0.23, 1)
+shader_parameter/high_tint = Color(0.42, 0.44, 0.42, 1)
+shader_parameter/top_tint = Color(0.2, 0.34, 0.18, 1)
+shader_parameter/top_weight = 0.72
+shader_parameter/top_sharpness = 4.0
+shader_parameter/grain_scale = 1.8
+shader_parameter/strata_scale = 2.6
+shader_parameter/strata_strength = 0.45
+shader_parameter/roughness_value = 0.86
+shader_parameter/specular_value = 0.16

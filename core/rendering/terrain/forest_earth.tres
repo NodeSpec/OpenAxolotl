@@ -1,0 +1,29 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+; FOREST EARTH — the dark floor of the valley, seen from far above.
+;
+; One of the shared terrain surfaces (core/rendering/terrain_surface.gdshader).
+; Coarse and low-contrast on purpose. It is thirty metres below the
+; route and its whole job is to be somewhere rather than nowhere;
+; anything busier reads as noise at that distance.
+;
+; Owned by the CLIENT, not by a world: a world references this resource by
+; path instead of carrying its own albedo_color, so a rock in the greybox, in
+; Coral Cove and in a community world is visibly the same rock. Retuning the
+; family is one edit here rather than a sweep through every scene.
+
+[ext_resource type="Shader" path="res://core/rendering/terrain_surface.gdshader" id="1_shader"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/low_tint = Color(0.14, 0.12, 0.09, 1)
+shader_parameter/high_tint = Color(0.28, 0.24, 0.17, 1)
+shader_parameter/top_tint = Color(0.16, 0.24, 0.13, 1)
+shader_parameter/top_weight = 0.55
+shader_parameter/top_sharpness = 4.0
+shader_parameter/grain_scale = 0.7
+shader_parameter/strata_scale = 1.4
+shader_parameter/strata_strength = 0.22
+shader_parameter/roughness_value = 0.96
+shader_parameter/specular_value = 0.04

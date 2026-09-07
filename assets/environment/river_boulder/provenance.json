@@ -1,0 +1,7 @@
+{
+  "author": "OpenAxolotl maintainer via the project's Blender kit generator",
+  "generationMethod": "ai-generated",
+  "tool": "Blender 4.0.2 headless, tools/blender/make_forest_kit.py (deterministic, --seed 11)",
+  "prompt": "A wet river stone: a displaced icosphere flattened so it reads as sitting AT the water surface rather than floating on it. Vertex-coloured dark-to-light grey; no materials or textures; part of the shared forest dressing kit.",
+  "licenseTerms": "Apache-2.0 (project license, same as the generator script)"
+}

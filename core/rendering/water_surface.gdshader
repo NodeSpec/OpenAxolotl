@@ -20,11 +20,16 @@
 shader_type spatial;
 render_mode unshaded, blend_mix, cull_back, depth_draw_never;
 
-uniform vec3 deep_tint: source_color = vec3(0.13, 0.42, 0.62);
+uniform vec3 deep_tint: source_color = vec3(0.19, 0.49, 0.66);
 uniform vec3 shallow_tint: source_color = vec3(0.35, 0.72, 0.78);
 uniform vec3 sparkle_tint: source_color = vec3(0.9, 0.98, 1.0);
-uniform float alpha_facing: hint_range(0.0, 1.0) = 0.26;
-uniform float alpha_grazing: hint_range(0.0, 1.0) = 0.55;
+// Both lowered when the gorge river went in. The fresnel term is what makes
+// a surface exist when you look ACROSS it, and at the old grazing value a
+// narrow channel seen from the bank was an opaque slab that hid the swim
+// inside it. A wide lagoon looked fine at either value; the channel is what
+// the numbers now have to satisfy.
+uniform float alpha_facing: hint_range(0.0, 1.0) = 0.20;
+uniform float alpha_grazing: hint_range(0.0, 1.0) = 0.33;
 uniform float ripple_scale: hint_range(0.05, 4.0) = 0.55;
 uniform float ripple_speed: hint_range(0.0, 4.0) = 0.8;
 
