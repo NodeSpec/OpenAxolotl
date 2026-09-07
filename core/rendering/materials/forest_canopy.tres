@@ -1,0 +1,28 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+; VEGETATION — anything that should move in wind: canopy trees, ferns, reeds,
+; seagrass, kelp. Rocks, boulders and fallen logs deliberately do NOT wear
+; this: a swaying boulder is worse than a still one, and the scatter fields for
+; those leave surface_material null so the mesh keeps its own kit material.
+;
+; Albedo comes from the mesh's vertex paint (COLOR_0); the kit ships no
+; textures, per the surface doctrine in docs/asset-contract.md. The numbers
+; here match the forest_kit material the .glb files carry, so turning wind on
+; changes how a plant MOVES and nothing about how it is shaded.
+
+[ext_resource type="Shader" path="res://core/rendering/vegetation_wind.gdshader" id="1_wind"]
+
+[resource]
+shader = ExtResource("1_wind")
+shader_parameter/roughness_value = 0.82
+shader_parameter/specular_value = 0.35
+shader_parameter/wind_direction = Vector2(0.82, 0.57)
+shader_parameter/sway_fraction = 0.035
+shader_parameter/sway_hz = 0.3
+shader_parameter/flutter_fraction = 0.008
+shader_parameter/flutter_hz = 1.7
+shader_parameter/model_height = 2.2
+shader_parameter/anchor_fraction = 0.06
+shader_parameter/stiffness = 1.6
+shader_parameter/tint_toward = Color(0.72, 0.83, 0.55, 1)
+shader_parameter/tint_amount = 0.35

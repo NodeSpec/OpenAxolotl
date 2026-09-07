@@ -101,14 +101,35 @@ func test_req_040_the_dressed_valley_stays_inside_the_triangle_budget() -> void:
 func _count_triangles(scene: Node) -> int:
 	var total := 0
 	for node: Node in scene.find_children("*", "MeshInstance3D", true, false):
-		var mesh := (node as MeshInstance3D).mesh
-		if mesh == null:
+		total += _mesh_triangles((node as MeshInstance3D).mesh)
+
+	# SCATTERED DRESSING COUNTS TOO, and counting it needs its own branch: a
+	# ScatterField draws through a MultiMeshInstance3D, which is not a
+	# MeshInstance3D, so the loop above walks straight past it. When the
+	# valley's 183 props became 9 fields this counter silently stopped seeing
+	# 43,320 triangles — the budget assertion would have kept passing while
+	# measuring almost nothing, which is the most dangerous way for a gate to
+	# break. One mesh times its instance count is the real cost.
+	for node: Node in scene.find_children("*", "Node3D", true, false):
+		var field := node as ScatterField
+		if field == null:
 			continue
-		for surface: int in mesh.get_surface_count():
-			var arrays: Array = mesh.surface_get_arrays(surface)
-			var indices: Variant = arrays[Mesh.ARRAY_INDEX]
-			if indices != null:
-				total += (indices as PackedInt32Array).size() / 3
-			elif arrays[Mesh.ARRAY_VERTEX] != null:
-				total += (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size() / 3
+		# Read what the field DECLARES rather than what it has built: this
+		# suite instantiates the world without adding it to a tree, so no
+		# _ready has run and there is no MultiMesh to interrogate yet.
+		total += _mesh_triangles(field.get_source_mesh()) * field.instance_count()
+	return total
+
+
+func _mesh_triangles(mesh: Mesh) -> int:
+	if mesh == null:
+		return 0
+	var total := 0
+	for surface: int in mesh.get_surface_count():
+		var arrays: Array = mesh.surface_get_arrays(surface)
+		var indices: Variant = arrays[Mesh.ARRAY_INDEX]
+		if indices != null:
+			total += (indices as PackedInt32Array).size() / 3
+		elif arrays[Mesh.ARRAY_VERTEX] != null:
+			total += (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size() / 3
 	return total
