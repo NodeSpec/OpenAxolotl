@@ -1,100 +1,23 @@
-[gd_scene load_steps=111 format=3]
+[gd_scene load_steps=128 format=3]
 
-; CORAL COVE — the first official world (REQ-011), and a full platforming
-; playthrough: run, jump, swim, dive, boost and climb, with the difficulty
-; rising across seven acts, in a forested river valley.
+; CORAL COVE — composed vertical slice for REQ-011.
 ;
-; Built the way an outside contributor would build one: manifest + scene, NO
-; scripts. Every mechanic below is a DECLARATION the game client's
-; WorldSystems runtime binds — group membership plus node metadata, never
-; code. The Sanctioned World API Surface is not called here because nothing
-; here calls anything.
+; GAMEPLAY AUTHORITY IS STILL THE GREYBOX. Every mandatory platform, checkpoint,
+; water volume, gate, hazard and collectible below keeps the measured route that
+; the CoralRoute probe flies. This pass changes presentation, not the controller
+; contract: the route remains run -> swim/dive/boost -> climb -> precision jumps
+; -> gorge swim -> restoration -> finish.
 ;
-; GEOMETRY IS DERIVED FROM MEASUREMENT, not from taste. The controller was
-; driven headlessly through the greybox against the shipped tuning and
-; reported:
+; The earlier dressing pass proved the asset pipeline but scattered scenery
+; uniformly across a 140 m corridor. Uniform density makes every metre equally
+; important, which is the opposite of platformer composition. Dressing is now
+; clustered around six authored beats: the opening frame, cove plunge, coral
+; wall reveal, glow grotto compression, gorge release, and seed-bed payoff.
 ;
-;     run 4.20 m/s | standing jump 1.81 m | running jump 3.15 m of gap
-;     climb 2.0 m/s to a 6.0 m ceiling | swim 6.0 m/s | bubble boost x2.2
-;
-; Every mandatory gap on the route is 2.6 m or less against that 3.15 m, and
-; every mandatory rise 1.2 m or less against that 1.81 m — comfortable, but
-; not free. The one jump built to the edge of the envelope (1.6 m of rise
-; across 3.0 m) is the OPTIONAL one, onto ShrimpLedge. If the arc is ever
-; retuned smaller, this level stops being completable, and the coral walk is
-; what says so.
-;
-; THE ROUTE, in seven acts down -Z:
-;
-;   ACT 1  z   4 → -29   THE TIDE SHELF. Land. A rising staircase of four
-;                        gaps, teaching run-and-jump on wide, forgiving
-;                        platforms. The hermit snail (a discovery
-;                        collectible) sits on the third.
-;   ACT 2  z -30 → -50   THE COVE. The river widens and deepens, and the
-;                        grammar flipped on entry back in act 1. Two
-;                        obstacles that cannot be swum straight through: a
-;                        rock brow passable only UNDERNEATH, then a shelf
-;                        passable only OVER — down, then up, in one
-;                        crossing. The bubble boost is what makes it quick.
-;   ACT 3  z -50 → -67   THE CORAL WALL. Climb. Four metres of climbable
-;                        face inside the 6 m ceiling. The block is both the
-;                        wall and the platform above it, so clearing the lip
-;                        ends the climb by running out of wall.
-;   ACT 4  z -67 → -95   THE GLOW GROTTO. The hard section. The Glow gate
-;                        first, then four narrow pillars over open water,
-;                        two of them offset sideways so the jump has to be
-;                        aimed and not merely timed. The stray hook waits on
-;                        the third and strips a leg — an ORDINARY hazard,
-;                        which never costs a life. Then the Bubble gate.
-;   ACT 5  z -95 → -119  THE SEED BEDS. Three descending terraces carrying
-;                        the seven kelp seeds; two of them out on side
-;                        pillars that cost a jump each way. The regen
-;                        station regrows the leg on the way in.
-;   ACT 6  z-119 → -126  THE SHELF. The restoration gate opens only when
-;                        coral_shelf reaches `restored`, so restoration is
-;                        MANDATORY, then the finish volume returns the
-;                        player to the Open Lagoon.
-;
-;   ACT 4b z -98 → -108  THE GORGE RIVER. A swim dropped into the middle of
-;                        the jumping, so the grammar switch lands while the
-;                        player is still in a jumping rhythm. A rock rib
-;                        across the slot has to be dived under, and the slot
-;                        walls stand six metres back from the landing — twice
-;                        the jump — so there is no bank to hop along instead.
-;
-; THE VALLEY. The route hangs in a forested river valley rather than over
-; open water, and that is gameplay rather than scenery: a jump over nothing
-; gives the player no way to judge height or distance. A forest floor 24 m
-; below carries ferns and fallen logs, canopy trees rise past the route and
-; close overhead, and the valley's sides show in the haze.
-;
-; WATER IS THE FORGIVING HALF, and it is placed on purpose. A river runs
-; under the whole tide shelf, so a missed jump in act 1 is a swim downstream
-; and never a life; reeds mark that waterline. The glow grotto's four pillars
-; have no water under them at all. That contrast is the difficulty curve
-; stated in geometry rather than in a comment.
-;
-; UNDER EVERYTHING: one pit volume, BETWEEN the route and the forest floor.
-; Every gap the waterway does not run under is a real one — falling costs a
-; life and returns the player to the last checkpoint (REQ-003) — and the
-; floor below is scenery with no collider, so the player watches the valley
-; come up at them rather than landing in it.
-;
-; SURFACES. Nothing here carries a colour of its own: platforms wear the
-; client's shared procedural terrain materials (triplanar world-space noise
-; over a stratum term, so no surface needs UVs and the grain runs ACROSS the
-; seam where two boxes meet). The two mod gates are the deliberate exception
-; and keep a flat colour, because a gate is a rule and not geology.
-;
-; CHECKPOINTS follow REQ-003 AC-7: the replay from any anchor to the next
-; must fit progression.max_retry_seconds. A platforming route is slower per
-; metre than a walk, so they are DENSER than the old corridor's — thirteen
-; of them — and the coral walk MEASURES every segment rather than trusting
-; this comment.
-;
-; This file is generated geometry: the coordinates were emitted from the
-; measured envelope above rather than typed, which is why the gaps are exact
-; numbers and not round ones.
+; Camera hints are declarative CameraHintVolume nodes from the shared client.
+; They alter only framing, never input or physics. Visual motion is likewise a
+; shared PresentationMotion helper attached only to meshes / decoration, so the
+; collision proxy remains the one source of truth for traversal.
 
 [ext_resource type="Script" path="res://core/controller/water_volume.gd" id="1_water"]
 [ext_resource type="Script" path="res://core/camera/camera_hint_volume.gd" id="2_hint"]
@@ -109,7 +32,6 @@
 [ext_resource type="PackedScene" path="res://assets/environment/kelp_strand/kelp_strand.glb" id="11_kit_kelp_strand"]
 [ext_resource type="PackedScene" path="res://assets/environment/seagrass_tuft/seagrass_tuft.glb" id="12_kit_seagrass_tuft"]
 [ext_resource type="PackedScene" path="res://assets/environment/canopy_tree/canopy_tree.glb" id="13_kit_canopy_tree"]
-[ext_resource type="PackedScene" path="res://assets/environment/understory_fern/understory_fern.glb" id="14_kit_understory_fern"]
 [ext_resource type="PackedScene" path="res://assets/environment/fallen_log/fallen_log.glb" id="15_kit_fallen_log"]
 [ext_resource type="PackedScene" path="res://assets/environment/river_reed/river_reed.glb" id="16_kit_river_reed"]
 [ext_resource type="PackedScene" path="res://assets/environment/river_boulder/river_boulder.glb" id="17_kit_river_boulder"]
@@ -117,15 +39,8 @@
 [ext_resource type="PackedScene" path="res://assets/prop/hookline_rig/hookline_rig.glb" id="19_fleet_hookline_rig"]
 [ext_resource type="PackedScene" path="res://assets/prop/netbot/netbot.glb" id="20_fleet_netbot"]
 [ext_resource type="PackedScene" path="res://assets/prop/runoff_drone/runoff_drone.glb" id="21_fleet_runoff_drone"]
-[ext_resource type="Script" path="res://core/rendering/scatter_field.gd" id="scatter_field_script"]
-[ext_resource type="Material" path="res://core/rendering/materials/forest_canopy.tres" id="forest_canopy_material"]
 [ext_resource type="Script" path="res://core/rendering/terrain_shell.gd" id="terrain_shell_script"]
-[ext_resource type="Material" path="res://core/rendering/terrain/coral_shelf_stone.tres" id="terrain_coral_shelf_stone"]
-[ext_resource type="Material" path="res://core/rendering/terrain/forest_earth.tres" id="terrain_forest_earth"]
-[ext_resource type="Material" path="res://core/rendering/terrain/mossy_stone.tres" id="terrain_mossy_stone"]
-[ext_resource type="Material" path="res://core/rendering/terrain/river_sand.tres" id="terrain_river_sand"]
-[ext_resource type="Material" path="res://core/rendering/terrain/river_stone.tres" id="terrain_river_stone"]
-
+[ext_resource type="Script" path="res://core/rendering/presentation_motion.gd" id="presentation_motion_script"]
 [sub_resource type="BoxMesh" id="BoxMesh_0"]
 size = Vector3(420, 2, 420)
 
@@ -390,18 +305,58 @@ size = Vector3(600, 4, 600)
 [sub_resource type="BoxShape3D" id="BoxShape3D_80"]
 size = Vector3(2.6, 2.6, 2.6)
 
+; Framing volumes for the six authored composition beats.
+[sub_resource type="BoxShape3D" id="HintOpening"]
+size = Vector3(14, 10, 18)
+
+[sub_resource type="BoxShape3D" id="HintCove"]
+size = Vector3(18, 18, 14)
+
+[sub_resource type="BoxShape3D" id="HintWall"]
+size = Vector3(16, 12, 16)
+
+[sub_resource type="BoxShape3D" id="HintGorge"]
+size = Vector3(22, 10, 15)
+
+[sub_resource type="BoxShape3D" id="HintSeeds"]
+size = Vector3(24, 12, 24)
+
+[sub_resource type="BoxShape3D" id="HintFinish"]
+size = Vector3(18, 12, 12)
+
+; Floating motes make the grotto and restored shelf feel alive without adding
+; collision or authoring a bespoke animation system.
+[sub_resource type="ParticleProcessMaterial" id="MoteProcess"]
+direction = Vector3(0, 1, 0)
+spread = 35.0
+initial_velocity_min = 0.05
+initial_velocity_max = 0.18
+gravity = Vector3(0, 0.02, 0)
+scale_min = 0.45
+scale_max = 1.0
+emission_shape = 3
+emission_box_extents = Vector3(7, 2.5, 10)
+
+[sub_resource type="StandardMaterial3D" id="MoteMaterial"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.55, 1, 0.84, 0.72)
+emission_enabled = true
+emission = Color(0.28, 0.95, 0.66, 1)
+emission_energy_multiplier = 1.8
+
+[sub_resource type="SphereMesh" id="MoteMesh"]
+radius = 0.025
+height = 0.05
+material = SubResource("MoteMaterial")
 [node name="CoralCove" type="Node3D"]
 
 [node name="Scenery" type="Node3D" parent="."]
-
-; === THE VALLEY FLOOR === Scenery, with no collider on purpose. The pit volume sits ABOVE it, so a fall ends as a death at the last checkpoint rather than as a long walk home from the bottom of the valley -- but the player sees what they are falling towards, which is the whole point of putting a forest down there.
 
 [node name="ForestFloor" type="MeshInstance3D" parent="Scenery"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -24, -60)
 mesh = SubResource("BoxMesh_0")
 surface_material_override/0 = ExtResource("7_surface_forest_earth")
-
-; The valley's sides. Without them the forest floor runs out into haze and the player is standing over an endless plain rather than inside somewhere.
 
 [node name="RidgeWest" type="MeshInstance3D" parent="Scenery"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -96, -6, -60)
@@ -413,7 +368,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 96, -6, -60)
 mesh = SubResource("BoxMesh_1")
 surface_material_override/0 = ExtResource("7_surface_forest_earth")
 
-; === THE WATERWAY: river under act 1, lagoon in act 2 ===
+; === WATERWAY / SAFETY NET ===
 
 [node name="RiverBed" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, -11.75)
@@ -426,12 +381,10 @@ surface_material_override/0 = ExtResource("6_surface_river_sand")
 [node name="Collision" type="CollisionShape3D" parent="RiverBed"]
 shape = SubResource("BoxShape3D_3")
 
-[node name="Shell" type="Node3D" parent="./RiverBed"]
+[node name="Shell" type="Node3D" parent="RiverBed"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_river_sand")
+surface_material = ExtResource("6_surface_river_sand")
 shell_seed = 4420
-
-; Land on BOTH sides of the water. Without it the player sees the edge of the water volume itself -- a transparent slab ending in mid-air -- and a river that ends is not a river. Seven metres of open water separate the banks from the route's platforms, which is twice the jump, so this is scenery the player can look at and never reach.
 
 [node name="BankWest" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 4.6, -21.75)
@@ -444,9 +397,9 @@ surface_material_override/0 = ExtResource("7_surface_forest_earth")
 [node name="Collision" type="CollisionShape3D" parent="BankWest"]
 shape = SubResource("BoxShape3D_5")
 
-[node name="Shell" type="Node3D" parent="./BankWest"]
+[node name="Shell" type="Node3D" parent="BankWest"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_river_stone")
+surface_material = ExtResource("5_surface_river_stone")
 shell_seed = 8658
 
 [node name="BankEast" type="StaticBody3D" parent="."]
@@ -460,9 +413,9 @@ surface_material_override/0 = ExtResource("7_surface_forest_earth")
 [node name="Collision" type="CollisionShape3D" parent="BankEast"]
 shape = SubResource("BoxShape3D_5")
 
-[node name="Shell" type="Node3D" parent="./BankEast"]
+[node name="Shell" type="Node3D" parent="BankEast"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_river_stone")
+surface_material = ExtResource("5_surface_river_stone")
 shell_seed = 4648
 
 [node name="LagoonFloor" type="StaticBody3D" parent="."]
@@ -476,9 +429,9 @@ surface_material_override/0 = ExtResource("6_surface_river_sand")
 [node name="Collision" type="CollisionShape3D" parent="LagoonFloor"]
 shape = SubResource("BoxShape3D_7")
 
-[node name="Shell" type="Node3D" parent="./LagoonFloor"]
+[node name="Shell" type="Node3D" parent="LagoonFloor"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_forest_earth")
+surface_material = ExtResource("7_surface_forest_earth")
 shell_seed = 4330
 
 [node name="Waterway" type="Area3D" parent="."]
@@ -499,8 +452,21 @@ preprocess = 4.0
 visibility_aabb = AABB(-13, -8.5, -28.75, 26, 17, 57.5)
 process_material = SubResource("ParticleProcessMaterial_10")
 draw_pass_1 = SubResource("SphereMesh_12")
+[node name="OpeningHint" type="Area3D" parent="."]
+position = Vector3(0, 7, -5)
+script = ExtResource("2_hint")
+hint_priority = 8
+override_distance = true
+distance_m = 7.4
+override_pitch = true
+pitch_deg = 18.0
+[node name="Collision" type="CollisionShape3D" parent="OpeningHint"]
+shape = SubResource("HintOpening")
 
-; === ACT 1: THE TIDE SHELF -- run and jump, over water ===
+; === ACT 1: TIDE SHELF ===
+; Wide landings and water underneath keep the first jump chain readable and
+; recoverable. The camera is a little wider here so the player sees all four
+; beats before committing to the first one.
 
 [node name="StartLedge" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, -1)
@@ -513,9 +479,9 @@ surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 [node name="Collision" type="CollisionShape3D" parent="StartLedge"]
 shape = SubResource("BoxShape3D_14")
 
-[node name="Shell" type="Node3D" parent="./StartLedge"]
+[node name="Shell" type="Node3D" parent="StartLedge"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_mossy_stone")
+surface_material = ExtResource("4_surface_mossy_stone")
 shell_seed = 5902
 
 [node name="Spawn" type="Marker3D" parent="." groups=["spawn_point"]]
@@ -532,9 +498,9 @@ surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 [node name="Collision" type="CollisionShape3D" parent="ShelfStep1"]
 shape = SubResource("BoxShape3D_16")
 
-[node name="Shell" type="Node3D" parent="./ShelfStep1"]
+[node name="Shell" type="Node3D" parent="ShelfStep1"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_mossy_stone")
+surface_material = ExtResource("4_surface_mossy_stone")
 shell_seed = 9326
 
 [node name="CheckpointTideStep" type="Marker3D" parent="." groups=["checkpoint"]]
@@ -551,9 +517,9 @@ surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 [node name="Collision" type="CollisionShape3D" parent="ShelfStep2"]
 shape = SubResource("BoxShape3D_18")
 
-[node name="Shell" type="Node3D" parent="./ShelfStep2"]
+[node name="Shell" type="Node3D" parent="ShelfStep2"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_mossy_stone")
+surface_material = ExtResource("4_surface_mossy_stone")
 shell_seed = 9327
 
 [node name="CheckpointTideRise" type="Marker3D" parent="." groups=["checkpoint"]]
@@ -570,9 +536,9 @@ surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 [node name="Collision" type="CollisionShape3D" parent="ShelfStep3"]
 shape = SubResource("BoxShape3D_20")
 
-[node name="Shell" type="Node3D" parent="./ShelfStep3"]
+[node name="Shell" type="Node3D" parent="ShelfStep3"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_mossy_stone")
+surface_material = ExtResource("4_surface_mossy_stone")
 shell_seed = 9328
 
 [node name="CheckpointTideShelf" type="Marker3D" parent="." groups=["checkpoint"]]
@@ -585,6 +551,12 @@ metadata/collectible_id = "hermit_snail"
 [node name="Mesh" type="MeshInstance3D" parent="HermitSnail"]
 mesh = SubResource("SphereMesh_21")
 surface_material_override/0 = SubResource("StandardMaterial3D_22")
+script = ExtResource("presentation_motion_script")
+bob_height_m = 0.14
+bob_speed_hz = 0.7
+yaw_speed_deg_per_s = 55.0
+scale_pulse_ratio = 0.04
+phase = 0.12
 
 [node name="Collision" type="CollisionShape3D" parent="HermitSnail"]
 shape = SubResource("BoxShape3D_23")
@@ -600,20 +572,31 @@ surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 [node name="Collision" type="CollisionShape3D" parent="ShelfLip"]
 shape = SubResource("BoxShape3D_25")
 
-[node name="Shell" type="Node3D" parent="./ShelfLip"]
+[node name="Shell" type="Node3D" parent="ShelfLip"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_coral_shelf_stone")
+surface_material = ExtResource("8_surface_coral_shelf_stone")
 shell_seed = 1308
 
 [node name="CheckpointShelfLip" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.1, -27.4)
+[node name="CoveRevealHint" type="Area3D" parent="."]
+position = Vector3(0, 3, -31)
+script = ExtResource("2_hint")
+hint_priority = 12
+override_distance = true
+distance_m = 8.2
+override_pitch = true
+pitch_deg = 27.0
+[node name="Collision" type="CollisionShape3D" parent="CoveRevealHint"]
+shape = SubResource("HintCove")
 
-; === ACT 2: THE COVE -- swim, dive, boost ===
+; === ACT 2: THE COVE ===
+; The wide framing on entry shows both the surface and the DiveBar. The two
+; obstacles then alternate DOWN / UP, a complete swim phrase rather than a
+; straight tunnel.
 
 [node name="CheckpointLagoonEntry" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -32)
-
-; A brow of rock spanning the whole channel: the only way past is UNDER it, below y=-2.
 
 [node name="DiveBar" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -35)
@@ -626,15 +609,13 @@ surface_material_override/0 = ExtResource("5_surface_river_stone")
 [node name="Collision" type="CollisionShape3D" parent="DiveBar"]
 shape = SubResource("BoxShape3D_27")
 
-[node name="Shell" type="Node3D" parent="./DiveBar"]
+[node name="Shell" type="Node3D" parent="DiveBar"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_river_stone")
+surface_material = ExtResource("5_surface_river_stone")
 shell_seed = 4913
 
 [node name="CheckpointLagoonDeep" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, -38)
-
-; And the mirror of it: a shelf rising off the bed, passable only OVER the top, above y=-1.
 
 [node name="RiseWall" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7, -41)
@@ -647,9 +628,9 @@ surface_material_override/0 = ExtResource("5_surface_river_stone")
 [node name="Collision" type="CollisionShape3D" parent="RiseWall"]
 shape = SubResource("BoxShape3D_29")
 
-[node name="Shell" type="Node3D" parent="./RiseWall"]
+[node name="Shell" type="Node3D" parent="RiseWall"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_river_stone")
+surface_material = ExtResource("5_surface_river_stone")
 shell_seed = 7148
 
 [node name="CheckpointLagoonRise" type="Marker3D" parent="." groups=["checkpoint"]]
@@ -666,9 +647,9 @@ surface_material_override/0 = ExtResource("6_surface_river_sand")
 [node name="Collision" type="CollisionShape3D" parent="ShoreStep1"]
 shape = SubResource("BoxShape3D_31")
 
-[node name="Shell" type="Node3D" parent="./ShoreStep1"]
+[node name="Shell" type="Node3D" parent="ShoreStep1"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_river_sand")
+surface_material = ExtResource("6_surface_river_sand")
 shell_seed = 9458
 
 [node name="ShoreStep2" type="StaticBody3D" parent="."]
@@ -682,9 +663,9 @@ surface_material_override/0 = ExtResource("6_surface_river_sand")
 [node name="Collision" type="CollisionShape3D" parent="ShoreStep2"]
 shape = SubResource("BoxShape3D_33")
 
-[node name="Shell" type="Node3D" parent="./ShoreStep2"]
+[node name="Shell" type="Node3D" parent="ShoreStep2"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_river_sand")
+surface_material = ExtResource("6_surface_river_sand")
 shell_seed = 9459
 
 [node name="CoveShore" type="StaticBody3D" parent="."]
@@ -698,20 +679,28 @@ surface_material_override/0 = ExtResource("6_surface_river_sand")
 [node name="Collision" type="CollisionShape3D" parent="CoveShore"]
 shape = SubResource("BoxShape3D_35")
 
-[node name="Shell" type="Node3D" parent="./CoveShore"]
+[node name="Shell" type="Node3D" parent="CoveShore"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_river_sand")
+surface_material = ExtResource("6_surface_river_sand")
 shell_seed = 6302
 
 [node name="CheckpointCoveShore" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -52)
+[node name="WallRevealHint" type="Area3D" parent="."]
+position = Vector3(0, 6, -58)
+script = ExtResource("2_hint")
+hint_priority = 14
+override_distance = true
+distance_m = 7.2
+override_pitch = true
+pitch_deg = 8.0
+[node name="Collision" type="CollisionShape3D" parent="WallRevealHint"]
+shape = SubResource("HintWall")
 
-; === ACT 3: THE CORAL WALL -- climb ===
+; === ACT 3: CORAL WALL ===
 
 [node name="CheckpointWallBase" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -60)
-
-; Climbable: the `climbable` group is the tag (a physics layer would do as well). One solid block from the shore at y=3.0 to its lip at 7.4, so it is BOTH the face and the platform above it -- clearing the lip ends the climb by running out of wall.
 
 [node name="CoralWall" type="StaticBody3D" parent="." groups=["climbable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.2, -66)
@@ -724,9 +713,9 @@ surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 [node name="Collision" type="CollisionShape3D" parent="CoralWall"]
 shape = SubResource("BoxShape3D_37")
 
-[node name="Shell" type="Node3D" parent="./CoralWall"]
+[node name="Shell" type="Node3D" parent="CoralWall"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_river_stone")
+surface_material = ExtResource("5_surface_river_stone")
 shell_seed = 8896
 
 [node name="CheckpointWallTop" type="Marker3D" parent="." groups=["checkpoint"]]
@@ -739,11 +728,15 @@ metadata/mod_id = "glow"
 [node name="Mesh" type="MeshInstance3D" parent="GlowPickup"]
 mesh = SubResource("SphereMesh_21")
 surface_material_override/0 = SubResource("StandardMaterial3D_38")
+script = ExtResource("presentation_motion_script")
+bob_height_m = 0.26
+bob_speed_hz = 0.8
+yaw_speed_deg_per_s = 85.0
+scale_pulse_ratio = 0.08
+phase = 0.25
 
 [node name="Collision" type="CollisionShape3D" parent="GlowPickup"]
 shape = SubResource("BoxShape3D_23")
-
-; A bioluminescent false wall. Open only while the equipped mod grants reveal_bioluminescent, and it spans the route.
 
 [node name="GlowGate" type="StaticBody3D" parent="." groups=["affordance_gate"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, -68.5)
@@ -759,13 +752,17 @@ shape = SubResource("BoxShape3D_41")
 [node name="GrottoHint" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -73)
 script = ExtResource("2_hint")
+hint_priority = 18
 override_distance = true
-distance_m = 6.5
+distance_m = 6.25
+override_pitch = true
+pitch_deg = 18.0
 
 [node name="Collision" type="CollisionShape3D" parent="GrottoHint"]
 shape = SubResource("BoxShape3D_42")
-
-; === ACT 4: THE GLOW GROTTO -- the hard pillars, over nothing ===
+; === ACT 4: GLOW GROTTO ===
+; The camera compresses here and the valley dressing drops away. Four clean
+; silhouettes over the pit make this the deliberate precision spike.
 
 [node name="GrottoPillar1" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, -74.1)
@@ -778,9 +775,9 @@ surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 [node name="Collision" type="CollisionShape3D" parent="GrottoPillar1"]
 shape = SubResource("BoxShape3D_44")
 
-[node name="Shell" type="Node3D" parent="./GrottoPillar1"]
+[node name="Shell" type="Node3D" parent="GrottoPillar1"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_coral_shelf_stone")
+surface_material = ExtResource("8_surface_coral_shelf_stone")
 shell_seed = 9895
 
 [node name="CheckpointGrottoOne" type="Marker3D" parent="." groups=["checkpoint"]]
@@ -797,9 +794,9 @@ surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 [node name="Collision" type="CollisionShape3D" parent="GrottoPillar2"]
 shape = SubResource("BoxShape3D_46")
 
-[node name="Shell" type="Node3D" parent="./GrottoPillar2"]
+[node name="Shell" type="Node3D" parent="GrottoPillar2"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_coral_shelf_stone")
+surface_material = ExtResource("8_surface_coral_shelf_stone")
 shell_seed = 9896
 
 [node name="GrottoPillar3" type="StaticBody3D" parent="."]
@@ -813,9 +810,9 @@ surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 [node name="Collision" type="CollisionShape3D" parent="GrottoPillar3"]
 shape = SubResource("BoxShape3D_46")
 
-[node name="Shell" type="Node3D" parent="./GrottoPillar3"]
+[node name="Shell" type="Node3D" parent="GrottoPillar3"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_coral_shelf_stone")
+surface_material = ExtResource("8_surface_coral_shelf_stone")
 shell_seed = 9897
 
 [node name="StrayHook" type="Area3D" parent="." groups=["hazard"]]
@@ -826,6 +823,11 @@ metadata/hazard_id = "stray_hook"
 [node name="Mesh" type="MeshInstance3D" parent="StrayHook"]
 mesh = SubResource("SphereMesh_21")
 surface_material_override/0 = SubResource("StandardMaterial3D_47")
+script = ExtResource("presentation_motion_script")
+bob_height_m = 0.08
+bob_speed_hz = 0.45
+yaw_speed_deg_per_s = -35.0
+phase = 0.7
 
 [node name="Collision" type="CollisionShape3D" parent="StrayHook"]
 shape = SubResource("BoxShape3D_48")
@@ -844,9 +846,9 @@ surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 [node name="Collision" type="CollisionShape3D" parent="GrottoPillar4"]
 shape = SubResource("BoxShape3D_46")
 
-[node name="Shell" type="Node3D" parent="./GrottoPillar4"]
+[node name="Shell" type="Node3D" parent="GrottoPillar4"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_coral_shelf_stone")
+surface_material = ExtResource("8_surface_coral_shelf_stone")
 shell_seed = 9898
 
 [node name="GrottoLanding" type="StaticBody3D" parent="."]
@@ -860,15 +862,13 @@ surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 [node name="Collision" type="CollisionShape3D" parent="GrottoLanding"]
 shape = SubResource("BoxShape3D_50")
 
-[node name="Shell" type="Node3D" parent="./GrottoLanding"]
+[node name="Shell" type="Node3D" parent="GrottoLanding"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_mossy_stone")
+surface_material = ExtResource("4_surface_mossy_stone")
 shell_seed = 7715
 
 [node name="CheckpointGrottoLanding" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -94)
-
-; OFF THE ROUTE, on purpose. Reachable only by a full-height jump from the edge of pillar 2: 1.6 m of rise across 2.5 m, inside the measured 1.81 m / 3.15 m envelope with nothing to spare, and over open valley the whole way.
 
 [node name="ShrimpLedge" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 8, -80)
@@ -881,9 +881,9 @@ surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 [node name="Collision" type="CollisionShape3D" parent="ShrimpLedge"]
 shape = SubResource("BoxShape3D_52")
 
-[node name="Shell" type="Node3D" parent="./ShrimpLedge"]
+[node name="Shell" type="Node3D" parent="ShrimpLedge"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_mossy_stone")
+surface_material = ExtResource("4_surface_mossy_stone")
 shell_seed = 2860
 
 [node name="LanternShrimp" type="Area3D" parent="." groups=["collectible"]]
@@ -893,6 +893,12 @@ metadata/collectible_id = "lantern_shrimp"
 [node name="Mesh" type="MeshInstance3D" parent="LanternShrimp"]
 mesh = SubResource("SphereMesh_21")
 surface_material_override/0 = SubResource("StandardMaterial3D_53")
+script = ExtResource("presentation_motion_script")
+bob_height_m = 0.2
+bob_speed_hz = 0.75
+yaw_speed_deg_per_s = 65.0
+scale_pulse_ratio = 0.05
+phase = 0.52
 
 [node name="Collision" type="CollisionShape3D" parent="LanternShrimp"]
 shape = SubResource("BoxShape3D_54")
@@ -904,11 +910,15 @@ metadata/mod_id = "bubble"
 [node name="Mesh" type="MeshInstance3D" parent="BubblePickup"]
 mesh = SubResource("SphereMesh_21")
 surface_material_override/0 = SubResource("StandardMaterial3D_55")
+script = ExtResource("presentation_motion_script")
+bob_height_m = 0.28
+bob_speed_hz = 0.82
+yaw_speed_deg_per_s = 90.0
+scale_pulse_ratio = 0.08
+phase = 0.64
 
 [node name="Collision" type="CollisionShape3D" parent="BubblePickup"]
 shape = SubResource("BoxShape3D_23")
-
-; The second mod gate. Coral Cove gates on Glow and Bubble; Bubble Bay takes Jet, so the official pair covers all three.
 
 [node name="BubbleGate" type="StaticBody3D" parent="." groups=["affordance_gate"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -97.2)
@@ -920,8 +930,20 @@ surface_material_override/0 = SubResource("StandardMaterial3D_56")
 
 [node name="Collision" type="CollisionShape3D" parent="BubbleGate"]
 shape = SubResource("BoxShape3D_41")
+[node name="GorgeHint" type="Area3D" parent="."]
+position = Vector3(0, 6, -102.5)
+script = ExtResource("2_hint")
+hint_priority = 16
+override_distance = true
+distance_m = 5.6
+override_pitch = true
+pitch_deg = 14.0
+[node name="Collision" type="CollisionShape3D" parent="GorgeHint"]
+shape = SubResource("HintGorge")
 
-; === ACT 4b: THE GORGE RIVER -- a swim between the jumps ===
+; === ACT 4B: GORGE RIVER ===
+; Tight framing after the exposed pillars deliberately changes cadence. The
+; swim is short, fast and readable, then the camera opens again into the beds.
 
 [node name="GorgeBed" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -103.25)
@@ -934,12 +956,10 @@ surface_material_override/0 = ExtResource("5_surface_river_stone")
 [node name="Collision" type="CollisionShape3D" parent="GorgeBed"]
 shape = SubResource("BoxShape3D_58")
 
-[node name="Shell" type="Node3D" parent="./GorgeBed"]
+[node name="Shell" type="Node3D" parent="GorgeBed"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_river_sand")
+surface_material = ExtResource("6_surface_river_sand")
 shell_seed = 445
-
-; The slot walls, set SIX metres back from the landing's edge rather than two. Close in they were a bank a good jump could reach, which is a bypass around the whole swim; out here they are unreachable and, being unreachable, no longer need to be so tall that they hide the water from the camera.
 
 [node name="GorgeWest" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.5, 5.8, -103.2)
@@ -952,9 +972,9 @@ surface_material_override/0 = ExtResource("5_surface_river_stone")
 [node name="Collision" type="CollisionShape3D" parent="GorgeWest"]
 shape = SubResource("BoxShape3D_60")
 
-[node name="Shell" type="Node3D" parent="./GorgeWest"]
+[node name="Shell" type="Node3D" parent="GorgeWest"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_river_stone")
+surface_material = ExtResource("5_surface_river_stone")
 shell_seed = 8240
 
 [node name="GorgeEast" type="StaticBody3D" parent="."]
@@ -968,12 +988,10 @@ surface_material_override/0 = ExtResource("5_surface_river_stone")
 [node name="Collision" type="CollisionShape3D" parent="GorgeEast"]
 shape = SubResource("BoxShape3D_60")
 
-[node name="Shell" type="Node3D" parent="./GorgeEast"]
+[node name="Shell" type="Node3D" parent="GorgeEast"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_river_stone")
+surface_material = ExtResource("5_surface_river_stone")
 shell_seed = 4230
-
-; Surface at 7.6, half a metre below the landing the player steps off: they WADE in rather than plunge, so the grammar switch is a decision and not an accident. It spans the whole slot, so stepping off the landing sideways is a swim and not a death -- this is the forgiving half of the level.
 
 [node name="GorgeRiver" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.8, -103)
@@ -994,8 +1012,6 @@ visibility_aabb = AABB(-11, -2.8, -5.1, 22, 5.6, 10.2)
 process_material = SubResource("ParticleProcessMaterial_63")
 draw_pass_1 = SubResource("SphereMesh_12")
 
-; A rock rib across the slot, its underside at y=5.0 and its back only a metre above the water. The only way through is a dive -- the same verb act 2 taught, asked for again in a channel a quarter the width. It stops at 8.6 rather than carrying on to the gorge top on purpose: a rib the camera can see over reads as an obstacle, and a lid does not.
-
 [node name="GorgeArch" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.8, -103)
 
@@ -1007,9 +1023,9 @@ surface_material_override/0 = ExtResource("5_surface_river_stone")
 [node name="Collision" type="CollisionShape3D" parent="GorgeArch"]
 shape = SubResource("BoxShape3D_65")
 
-[node name="Shell" type="Node3D" parent="./GorgeArch"]
+[node name="Shell" type="Node3D" parent="GorgeArch"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_river_stone")
+surface_material = ExtResource("5_surface_river_stone")
 shell_seed = 7924
 
 [node name="CheckpointGorgeEntry" type="Marker3D" parent="." groups=["checkpoint"]]
@@ -1017,8 +1033,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, -99.5)
 
 [node name="CheckpointGorgeArch" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -104.5)
+[node name="SeedBedHint" type="Area3D" parent="."]
+position = Vector3(0, 7, -117)
+script = ExtResource("2_hint")
+hint_priority = 13
+override_distance = true
+distance_m = 8.1
+override_pitch = true
+pitch_deg = 27.0
+[node name="Collision" type="CollisionShape3D" parent="SeedBedHint"]
+shape = SubResource("HintSeeds")
 
-; === ACT 5: THE SEED BEDS -- restoration ===
+; === ACT 5: SEED BEDS ===
+; Camera pulls back so both side pillars are readable before the player commits.
+; The route itself is unchanged; what changes is that the optional lateral
+; movement reads as a deliberate choice instead of scenery off screen.
 
 [node name="SeedTerrace1" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.2, -110.6)
@@ -1031,9 +1060,9 @@ surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 [node name="Collision" type="CollisionShape3D" parent="SeedTerrace1"]
 shape = SubResource("BoxShape3D_67")
 
-[node name="Shell" type="Node3D" parent="./SeedTerrace1"]
+[node name="Shell" type="Node3D" parent="SeedTerrace1"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_mossy_stone")
+surface_material = ExtResource("4_surface_mossy_stone")
 shell_seed = 7459
 
 [node name="RegenStation" type="Area3D" parent="." groups=["regen_station"]]
@@ -1042,6 +1071,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -109.2)
 [node name="Mesh" type="MeshInstance3D" parent="RegenStation"]
 mesh = SubResource("SphereMesh_21")
 surface_material_override/0 = SubResource("StandardMaterial3D_68")
+script = ExtResource("presentation_motion_script")
+bob_height_m = 0.2
+bob_speed_hz = 0.6
+yaw_speed_deg_per_s = 42.0
+scale_pulse_ratio = 0.06
+phase = 0.3
 
 [node name="Collision" type="CollisionShape3D" parent="RegenStation"]
 shape = SubResource("BoxShape3D_23")
@@ -1056,6 +1091,12 @@ metadata/collectible_id = "kelp_seed"
 [node name="Mesh" type="MeshInstance3D" parent="Seed1"]
 mesh = SubResource("SphereMesh_21")
 surface_material_override/0 = SubResource("StandardMaterial3D_69")
+script = ExtResource("presentation_motion_script")
+bob_height_m = 0.16
+bob_speed_hz = 0.76
+yaw_speed_deg_per_s = 70.0
+scale_pulse_ratio = 0.045
+phase = 0.05
 
 [node name="Collision" type="CollisionShape3D" parent="Seed1"]
 shape = SubResource("BoxShape3D_23")
@@ -1067,11 +1108,15 @@ metadata/collectible_id = "kelp_seed"
 [node name="Mesh" type="MeshInstance3D" parent="Seed2"]
 mesh = SubResource("SphereMesh_21")
 surface_material_override/0 = SubResource("StandardMaterial3D_69")
+script = ExtResource("presentation_motion_script")
+bob_height_m = 0.16
+bob_speed_hz = 0.74
+yaw_speed_deg_per_s = -68.0
+scale_pulse_ratio = 0.045
+phase = 0.22
 
 [node name="Collision" type="CollisionShape3D" parent="Seed2"]
 shape = SubResource("BoxShape3D_23")
-
-; A seed out over the drop: one jump each way, and nothing below but the valley.
 
 [node name="SeedPillarA" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 5.6, -111.75)
@@ -1084,9 +1129,9 @@ surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 [node name="Collision" type="CollisionShape3D" parent="SeedPillarA"]
 shape = SubResource("BoxShape3D_71")
 
-[node name="Shell" type="Node3D" parent="./SeedPillarA"]
+[node name="Shell" type="Node3D" parent="SeedPillarA"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_coral_shelf_stone")
+surface_material = ExtResource("8_surface_coral_shelf_stone")
 shell_seed = 3483
 
 [node name="Seed3" type="Area3D" parent="." groups=["collectible"]]
@@ -1096,6 +1141,12 @@ metadata/collectible_id = "kelp_seed"
 [node name="Mesh" type="MeshInstance3D" parent="Seed3"]
 mesh = SubResource("SphereMesh_21")
 surface_material_override/0 = SubResource("StandardMaterial3D_69")
+script = ExtResource("presentation_motion_script")
+bob_height_m = 0.18
+bob_speed_hz = 0.8
+yaw_speed_deg_per_s = 76.0
+scale_pulse_ratio = 0.05
+phase = 0.42
 
 [node name="Collision" type="CollisionShape3D" parent="Seed3"]
 shape = SubResource("BoxShape3D_23")
@@ -1111,9 +1162,9 @@ surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 [node name="Collision" type="CollisionShape3D" parent="SeedTerrace2"]
 shape = SubResource("BoxShape3D_67")
 
-[node name="Shell" type="Node3D" parent="./SeedTerrace2"]
+[node name="Shell" type="Node3D" parent="SeedTerrace2"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_mossy_stone")
+surface_material = ExtResource("4_surface_mossy_stone")
 shell_seed = 7460
 
 [node name="CheckpointSeedTwo" type="Marker3D" parent="." groups=["checkpoint"]]
@@ -1126,6 +1177,12 @@ metadata/collectible_id = "kelp_seed"
 [node name="Mesh" type="MeshInstance3D" parent="Seed4"]
 mesh = SubResource("SphereMesh_21")
 surface_material_override/0 = SubResource("StandardMaterial3D_69")
+script = ExtResource("presentation_motion_script")
+bob_height_m = 0.16
+bob_speed_hz = 0.72
+yaw_speed_deg_per_s = -72.0
+scale_pulse_ratio = 0.045
+phase = 0.55
 
 [node name="Collision" type="CollisionShape3D" parent="Seed4"]
 shape = SubResource("BoxShape3D_23")
@@ -1141,9 +1198,9 @@ surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 [node name="Collision" type="CollisionShape3D" parent="SeedPillarB"]
 shape = SubResource("BoxShape3D_71")
 
-[node name="Shell" type="Node3D" parent="./SeedPillarB"]
+[node name="Shell" type="Node3D" parent="SeedPillarB"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_coral_shelf_stone")
+surface_material = ExtResource("8_surface_coral_shelf_stone")
 shell_seed = 3484
 
 [node name="Seed6" type="Area3D" parent="." groups=["collectible"]]
@@ -1153,6 +1210,12 @@ metadata/collectible_id = "kelp_seed"
 [node name="Mesh" type="MeshInstance3D" parent="Seed6"]
 mesh = SubResource("SphereMesh_21")
 surface_material_override/0 = SubResource("StandardMaterial3D_69")
+script = ExtResource("presentation_motion_script")
+bob_height_m = 0.18
+bob_speed_hz = 0.79
+yaw_speed_deg_per_s = 78.0
+scale_pulse_ratio = 0.05
+phase = 0.68
 
 [node name="Collision" type="CollisionShape3D" parent="Seed6"]
 shape = SubResource("BoxShape3D_23")
@@ -1164,6 +1227,12 @@ metadata/collectible_id = "kelp_seed"
 [node name="Mesh" type="MeshInstance3D" parent="Seed5"]
 mesh = SubResource("SphereMesh_21")
 surface_material_override/0 = SubResource("StandardMaterial3D_69")
+script = ExtResource("presentation_motion_script")
+bob_height_m = 0.16
+bob_speed_hz = 0.73
+yaw_speed_deg_per_s = -66.0
+scale_pulse_ratio = 0.045
+phase = 0.8
 
 [node name="Collision" type="CollisionShape3D" parent="Seed5"]
 shape = SubResource("BoxShape3D_23")
@@ -1182,9 +1251,9 @@ surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 [node name="Collision" type="CollisionShape3D" parent="SeedTerrace3"]
 shape = SubResource("BoxShape3D_73")
 
-[node name="Shell" type="Node3D" parent="./SeedTerrace3"]
+[node name="Shell" type="Node3D" parent="SeedTerrace3"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_mossy_stone")
+surface_material = ExtResource("4_surface_mossy_stone")
 shell_seed = 7461
 
 [node name="CheckpointSeedThree" type="Marker3D" parent="." groups=["checkpoint"]]
@@ -1197,13 +1266,27 @@ metadata/collectible_id = "kelp_seed"
 [node name="Mesh" type="MeshInstance3D" parent="Seed7"]
 mesh = SubResource("SphereMesh_21")
 surface_material_override/0 = SubResource("StandardMaterial3D_69")
+script = ExtResource("presentation_motion_script")
+bob_height_m = 0.2
+bob_speed_hz = 0.84
+yaw_speed_deg_per_s = 82.0
+scale_pulse_ratio = 0.055
+phase = 0.93
 
 [node name="Collision" type="CollisionShape3D" parent="Seed7"]
 shape = SubResource("BoxShape3D_23")
+[node name="FinishHint" type="Area3D" parent="."]
+position = Vector3(0, 6, -129.5)
+script = ExtResource("2_hint")
+hint_priority = 20
+override_distance = true
+distance_m = 7.4
+override_pitch = true
+pitch_deg = 14.0
+[node name="Collision" type="CollisionShape3D" parent="FinishHint"]
+shape = SubResource("HintFinish")
 
-; === ACT 6: THE SHELF -- the restoration gate and the finish ===
-
-; The region's declared traversal gate. It opens when coral_shelf reaches `restored`, so restoration is MANDATORY: there is no route past this wall that does not plant seeds.
+; === ACT 6: RESTORED SHELF / FINISH ===
 
 [node name="ShelfWall" type="StaticBody3D" parent="." groups=["restoration_gate"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, -127.5)
@@ -1218,9 +1301,9 @@ surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 [node name="Collision" type="CollisionShape3D" parent="ShelfWall"]
 shape = SubResource("BoxShape3D_75")
 
-[node name="Shell" type="Node3D" parent="./ShelfWall"]
+[node name="Shell" type="Node3D" parent="ShelfWall"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_river_stone")
+surface_material = ExtResource("5_surface_river_stone")
 shell_seed = 9659
 
 [node name="FinishLedge" type="StaticBody3D" parent="."]
@@ -1234,9 +1317,9 @@ surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 [node name="Collision" type="CollisionShape3D" parent="FinishLedge"]
 shape = SubResource("BoxShape3D_77")
 
-[node name="Shell" type="Node3D" parent="./FinishLedge"]
+[node name="Shell" type="Node3D" parent="FinishLedge"]
 script = ExtResource("terrain_shell_script")
-surface_material = ExtResource("terrain_mossy_stone")
+surface_material = ExtResource("4_surface_mossy_stone")
 shell_seed = 4522
 
 [node name="Finish" type="Area3D" parent="." groups=["finish_volume"]]
@@ -1245,15 +1328,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.2, -133)
 [node name="Collision" type="CollisionShape3D" parent="Finish"]
 shape = SubResource("BoxShape3D_78")
 
-; The pit sits BETWEEN the route and the forest floor, so a fall from the grotto pillars ends at the last checkpoint while the player still watches the valley come up at them. Every gap the waterway does not run under is a real one (REQ-003).
-
 [node name="Pit" type="Area3D" parent="." groups=["pit_volume"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -18, -60)
 
 [node name="Collision" type="CollisionShape3D" parent="Pit"]
 shape = SubResource("BoxShape3D_79")
 
-; === THE DRIFT FLEET ===
+; === DRIFT FLEET ===
+; Their positions still match the declared enemy ids. Dressing around them now
+; frames them as silhouettes rather than burying them in uniform scatter.
 
 [node name="HooklineRigCove" type="Area3D" parent="." groups=["enemy"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, -6, -37)
@@ -1292,239 +1375,201 @@ metadata/region_id = "coral_shelf"
 [node name="Collision" type="CollisionShape3D" parent="DredgerSeedBed"]
 shape = SubResource("BoxShape3D_80")
 
+; === DELIBERATE DRESSING ===
 [node name="Dressing" type="Node3D" parent="."]
-
-[node name="CanopyTreeField" type="Node3D" parent="Dressing"]
-script = ExtResource("scatter_field_script")
-prop_scene = ExtResource("13_kit_canopy_tree")
-transforms = PackedFloat32Array(2.604, 0, 1.26, 0, 2.893, 0, -1.26, 0, 2.604, -40.5, -24, -20.03, -1.606, 0, 1.348, 0, 2.097, 0, -1.348, 0, -1.606, -44.79, -24, -15.61, 1.472, 0, -1.47, 0, 2.08, 0, 1.47, 0, 1.472, -47.37, -24, -4.46, 0.908, 0, 2.617, 0, 2.77, 0, -2.617, 0, 0.908, -36.1, -24, -137.83, -1.838, 0, -1.907, 0, 2.649, 0, 1.907, 0, -1.838, -25.17, -24, -29.94, 1.363, 0, -1.283, 0, 1.872, 0, 1.283, 0, 1.363, -51.83, -24, -123.98, -1.304, 0, -1.293, 0, 1.836, 0, 1.293, 0, -1.304, -44.75, -24, -50.56, -1.924, 0, 0.728, 0, 2.057, 0, -0.728, 0, -1.924, -42.57, -24, 7.14, 0.348, 0, -1.822, 0, 1.855, 0, 1.822, 0, 0.348, -38.26, -24, -125.37, -2.524, 0, -1.01, 0, 2.719, 0, 1.01, 0, -2.524, -24.91, -24, -29.65, 0.362, 0, -1.769, 0, 1.805, 0, 1.769, 0, 0.362, -44.43, -24, -87.81, -2.233, 0, 0.221, 0, 2.244, 0, -0.221, 0, -2.233, -41.94, -24, -40.2, 2.333, 0, 0.046, 0, 2.334, 0, -0.046, 0, 2.333, -50.19, -24, -18.21, -2.579, 0, -0.026, 0, 2.579, 0, 0.026, 0, -2.579, -46.88, -24, -116.41, 1.553, 0, -2.363, 0, 2.828, 0, 2.363, 0, 1.553, 33.53, -24, -135.01, 1.903, 0, -0.289, 0, 1.925, 0, 0.289, 0, 1.903, 51.82, -24, -45.32, 0.716, 0, -2.535, 0, 2.634, 0, 2.535, 0, 0.716, 32.84, -24, -61.87, -1.253, 0, -2.624, 0, 2.908, 0, 2.624, 0, -1.253, 26.21, -24, -97.07, -1.776, 0, 1.168, 0, 2.126, 0, -1.168, 0, -1.776, 33.91, -24, -12.89, -0.282, 0, -2.294, 0, 2.312, 0, 2.294, 0, -0.282, 24.39, -24, -85.02, -1.727, 0, 0.908, 0, 1.951, 0, -0.908, 0, -1.727, 34.05, -24, -49.71, -0.032, 0, -2.31, 0, 2.31, 0, 2.31, 0, -0.032, 37.95, -24, -139.25, 1.071, 0, -2.694, 0, 2.899, 0, 2.694, 0, 1.071, 47.12, -24, -4.35, -2.864, 0, 0.831, 0, 2.982, 0, -0.831, 0, -2.864, 48.86, -24, -82.43, 0.96, 0, -1.667, 0, 1.923, 0, 1.667, 0, 0.96, 48.23, -24, 9.29, -0.76, 0, -2.536, 0, 2.647, 0, 2.536, 0, -0.76, 41.23, -24, -12.21, 2.838, 0, -0.693, 0, 2.921, 0, 0.693, 0, 2.838, 47.08, -24, -41.46, 0.872, 0, 2.641, 0, 2.781, 0, -2.641, 0, 0.872, 43.54, -24, -130.87, -1.207, 0, -2.508, 0, 2.784, 0, 2.508, 0, -1.207, -72.88, -24, -58.34, -0.654, 0, -2.553, 0, 2.636, 0, 2.553, 0, -0.654, -57.68, -24, -47.02, -2.997, 0, -0.305, 0, 3.013, 0, 0.305, 0, -2.997, -64.46, -24, -0.7, -2.817, 0, -1.38, 0, 3.137, 0, 1.38, 0, -2.817, -74.72, -24, -106.87, 0.687, 0, 2.815, 0, 2.897, 0, -2.815, 0, 0.687, -61.92, -24, -40.16, 1.188, 0, -2.247, 0, 2.542, 0, 2.247, 0, 1.188, -68.62, -24, -108.48, 2.724, 0, 1.528, 0, 3.123, 0, -1.528, 0, 2.724, 66.43, -24, -119.83, -1.601, 0, 2.866, 0, 3.283, 0, -2.866, 0, -1.601, 67.17, -24, -32.05, -1.787, 0, -2.696, 0, 3.235, 0, 2.696, 0, -1.787, 65.35, -24, -9, -2.233, 0, 1.02, 0, 2.455, 0, -1.02, 0, -2.233, 72.53, -24, -67.96, -2.686, 0, -0.993, 0, 2.863, 0, 0.993, 0, -2.686, 66.62, -24, -57.71, -1.624, 0, 2.973, 0, 3.387, 0, -2.973, 0, -1.624, 63.51, -24, -82.4, 0.49, 0, -0.963, 0, 1.08, 0, 0.963, 0, 0.49, -24.81, 5.6, 2.42, 1.149, 0, -0.794, 0, 1.397, 0, 0.794, 0, 1.149, -29.73, 5.6, -13.25, 1.374, 0, 0.275, 0, 1.401, 0, -0.275, 0, 1.374, -23.37, 5.6, -38.67, 0.64, 0, 1.278, 0, 1.43, 0, -1.278, 0, 0.64, -24.29, 5.6, -21.18, 0.725, 0, 0.881, 0, 1.14, 0, -0.881, 0, 0.725, 16.29, 5.6, -14.91, 1.21, 0, -0.339, 0, 1.256, 0, 0.339, 0, 1.21, 19.03, 5.6, -45.45, -1.129, 0, -0.074, 0, 1.131, 0, 0.074, 0, -1.129, 27.3, 5.6, -21.62, 0.281, 0, -1.029, 0, 1.067, 0, 1.029, 0, 0.281, 19, 5.6, -38.54)
-surface_material = ExtResource("forest_canopy_material")
-
-[node name="CoralBranchField" type="Node3D" parent="Dressing"]
-script = ExtResource("scatter_field_script")
-prop_scene = ExtResource("10_kit_coral_branch")
-transforms = PackedFloat32Array(0.463, 0, 1.384, 0, 1.459, 0, -1.384, 0, 0.463, -3.79, 3, -51.83, -0.294, 0, 0.892, 0, 0.939, 0, -0.892, 0, -0.294, 2.67, 3, -57.06, 0.754, 0, -1.018, 0, 1.267, 0, 1.018, 0, 0.754, 4.63, 3, -54.39, -0.928, 0, -0.329, 0, 0.984, 0, 0.329, 0, -0.928, -1.13, 3, -57.32, 1.417, 0, -0.392, 0, 1.47, 0, 0.392, 0, 1.417, -2.12, 3, -59.69, 0.584, 0, 0.78, 0, 0.975, 0, -0.78, 0, 0.584, -3.2, 3, -57.91, 0.892, 0, 0.032, 0, 0.893, 0, -0.032, 0, 0.892, -0.18, 7.4, -63.95, -1.015, 0, -0.346, 0, 1.072, 0, 0.346, 0, -1.015, -0.73, 7.4, -65.53, -1.063, 0, -0.311, 0, 1.108, 0, 0.311, 0, -1.063, 4.07, 7.4, -65.42, 0.804, 0, 0.214, 0, 0.832, 0, -0.214, 0, 0.804, -0.05, 7.4, -68.44)
-surface_material = ExtResource("forest_canopy_material")
-
-[node name="FallenLogField" type="Node3D" parent="Dressing"]
-script = ExtResource("scatter_field_script")
-prop_scene = ExtResource("15_kit_fallen_log")
-transforms = PackedFloat32Array(-0.034, 0, -0.987, 0, 0.987, 0, 0.987, 0, -0.034, -25.86, 5.6, 3.43, 1.165, 0, 0.207, 0, 1.183, 0, -0.207, 0, 1.165, -21.78, 5.6, -36.3, -1.186, 0, -0.111, 0, 1.191, 0, 0.111, 0, -1.186, -26.48, 5.6, -27.39, 0.79, 0, 0.469, 0, 0.919, 0, -0.469, 0, 0.79, 21.23, 5.6, -47.84, -0.85, 0, 0.412, 0, 0.945, 0, -0.412, 0, -0.85, 25.58, 5.6, -0.89, 0.897, 0, 0.738, 0, 1.161, 0, -0.738, 0, 0.897, 28.81, 5.6, -38.22, -0.872, 0, 0.892, 0, 1.247, 0, -0.892, 0, -0.872, -33.78, -24, -100.63, 0.742, 0, -1.385, 0, 1.572, 0, 1.385, 0, 0.742, 40.03, -24, -93.43, -1.104, 0, -0.962, 0, 1.465, 0, 0.962, 0, -1.104, -51.21, -24, -77.44, 0.786, 0, 1.238, 0, 1.466, 0, -1.238, 0, 0.786, 20.8, -24, -118.07, 1.355, 0, 0.989, 0, 1.678, 0, -0.989, 0, 1.355, 31.4, -24, -82.93, -0.782, 0, -1.145, 0, 1.386, 0, 1.145, 0, -0.782, -35.41, -24, -28.53, 1.164, 0, 0.049, 0, 1.165, 0, -0.049, 0, 1.164, -12.78, -24, 0.01, -1.26, 0, -0.305, 0, 1.296, 0, 0.305, 0, -1.26, -42.78, -24, -135.61, 0.054, 0, 1.443, 0, 1.444, 0, -1.443, 0, 0.054, 0.1, -24, -11.75, 1.644, 0, -0.017, 0, 1.644, 0, 0.017, 0, 1.644, 47.1, -24, -12.53, 0.64, 0, -1.368, 0, 1.51, 0, 1.368, 0, 0.64, -4.72, -24, -49.99)
-
-[node name="KelpStrandField" type="Node3D" parent="Dressing"]
-script = ExtResource("scatter_field_script")
-prop_scene = ExtResource("11_kit_kelp_strand")
-transforms = PackedFloat32Array(1, 0, -0.715, 0, 1.23, 0, 0.715, 0, 1, 6.96, -13, -44.01, -0.569, 0, -0.974, 0, 1.128, 0, 0.974, 0, -0.569, 2.66, -13, -33.53, -0.27, 0, -1.06, 0, 1.094, 0, 1.06, 0, -0.27, 1.98, -13, -35.08, -0.176, 0, 1.5, 0, 1.51, 0, -1.5, 0, -0.176, 10.52, -13, -46.32, -0.835, 0, 0.877, 0, 1.211, 0, -0.877, 0, -0.835, -3.11, -13, -43.62, 0.147, 0, -1.286, 0, 1.294, 0, 1.286, 0, 0.147, 2, -13, -34.77, -1.136, 0, -0.403, 0, 1.205, 0, 0.403, 0, -1.136, -9.41, -13, -32.46, 0.797, 0, -0.822, 0, 1.146, 0, 0.822, 0, 0.797, -3.85, -13, -32.15, -0.065, 0, 1.346, 0, 1.347, 0, -1.346, 0, -0.065, -3.19, -13, -44.78, -1.209, 0, -0.188, 0, 1.224, 0, 0.188, 0, -1.209, 10.72, -13, -42.96)
-surface_material = ExtResource("forest_canopy_material")
-
-[node name="RiverBoulderField" type="Node3D" parent="Dressing"]
-script = ExtResource("scatter_field_script")
-prop_scene = ExtResource("17_kit_river_boulder")
-transforms = PackedFloat32Array(-0.108, 0, -0.892, 0, 0.899, 0, 0.892, 0, -0.108, 2.78, -4, -19.93, 0.649, 0, -0.782, 0, 1.016, 0, 0.782, 0, 0.649, 8.04, -4, 2.62, -1.114, 0, 0.223, 0, 1.136, 0, -0.223, 0, -1.114, -9.73, -4, -21.02, 1.032, 0, -1.035, 0, 1.462, 0, 1.035, 0, 1.032, 10.83, -4, -8.84, 0.827, 0, 0.411, 0, 0.924, 0, -0.411, 0, 0.827, -7.57, -4, -24.15, 0.642, 0, 1.175, 0, 1.339, 0, -1.175, 0, 0.642, 3.87, -4, -17.8, -0.205, 0, 1.021, 0, 1.042, 0, -1.021, 0, -0.205, -6.93, -4, -27.81, 0.822, 0, -0.026, 0, 0.822, 0, 0.026, 0, 0.822, -5.33, 2, -100.67, 0.159, 0, -0.85, 0, 0.865, 0, 0.85, 0, 0.159, 4.38, 2, -107.62, -0.511, 0, 0.707, 0, 0.872, 0, -0.707, 0, -0.511, -5.34, 2, -103.97, -0.531, 0, -0.569, 0, 0.778, 0, 0.569, 0, -0.531, -1.92, 2, -105.3)
-
-[node name="RiverReedField" type="Node3D" parent="Dressing"]
-script = ExtResource("scatter_field_script")
-prop_scene = ExtResource("16_kit_river_reed")
-transforms = PackedFloat32Array(-0.588, 0, -1.333, 0, 1.457, 0, 1.333, 0, -0.588, -6.21, -4, -16.81, -1.316, 0, 0.228, 0, 1.336, 0, -0.228, 0, -1.316, -8.9, -4, -8.95, 1.494, 0, 0.37, 0, 1.539, 0, -0.37, 0, 1.494, 0.98, -4, -13.2, 0.131, 0, -1.622, 0, 1.628, 0, 1.622, 0, 0.131, 2, -4, -17.82, -0.006, 0, 1.28, 0, 1.28, 0, -1.28, 0, -0.006, -3.7, -4, -9.72, 0.348, 0, 0.983, 0, 1.043, 0, -0.983, 0, 0.348, -5.26, -4, -29.14, 1.015, 0, 0.075, 0, 1.018, 0, -0.075, 0, 1.015, -10.03, -4, -5.96, 0.456, 0, 1.118, 0, 1.207, 0, -1.118, 0, 0.456, -2.3, -4, -9.79, -1.636, 0, -0.323, 0, 1.667, 0, 0.323, 0, -1.636, 11.89, -4, -3.77, 0.03, 0, -1.068, 0, 1.069, 0, 1.068, 0, 0.03, 11.16, -4, 1.48, 0.322, 0, 1.372, 0, 1.409, 0, -1.372, 0, 0.322, -1.34, -4, -19.71, 0.1, 0, 1.173, 0, 1.177, 0, -1.173, 0, 0.1, 0.32, -4, 1.32, -0.516, 0, 1.105, 0, 1.219, 0, -1.105, 0, -0.516, -1.57, 2, -102.64, 1.165, 0, 0.022, 0, 1.165, 0, -0.022, 0, 1.165, -0.55, 2, -98.6, 0.682, 0, -1.191, 0, 1.372, 0, 1.191, 0, 0.682, -3.12, 2, -105.11, 1.347, 0, 0.023, 0, 1.348, 0, -0.023, 0, 1.347, -5.6, 2, -99.72, 0.86, 0, 0.412, 0, 0.953, 0, -0.412, 0, 0.86, 1.31, 2, -106.5, 1.085, 0, 0.424, 0, 1.165, 0, -0.424, 0, 1.085, -0.2, 2, -99, -0.352, 0, -0.954, 0, 1.017, 0, 0.954, 0, -0.352, 2.88, 2, -107.19, -1.175, 0, 0.104, 0, 1.18, 0, -0.104, 0, -1.175, -2.98, 2, -103.97)
-surface_material = ExtResource("forest_canopy_material")
-
-[node name="RockClusterField" type="Node3D" parent="Dressing"]
-script = ExtResource("scatter_field_script")
-prop_scene = ExtResource("9_kit_rock_cluster")
-transforms = PackedFloat32Array(1.033, 0, 0.83, 0, 1.325, 0, -0.83, 0, 1.033, 1.68, -13, -42.57, 0.193, 0, -0.882, 0, 0.903, 0, 0.882, 0, 0.193, -4.2, -13, -36.11, 0.173, 0, 1.073, 0, 1.086, 0, -1.073, 0, 0.173, 4.91, -13, -43.13, -0.242, 0, -1.113, 0, 1.139, 0, 1.113, 0, -0.242, -3.75, -13, -42.26, 1.067, 0, -0.123, 0, 1.074, 0, 0.123, 0, 1.067, 7.9, -13, -39.57, -0.733, 0, 0.699, 0, 1.013, 0, -0.699, 0, -0.733, -4.76, -13, -32.51)
-
-[node name="SeagrassTuftField" type="Node3D" parent="Dressing"]
-script = ExtResource("scatter_field_script")
-prop_scene = ExtResource("12_kit_seagrass_tuft")
-transforms = PackedFloat32Array(0.515, 0, 0.936, 0, 1.069, 0, -0.936, 0, 0.515, -3.63, 6.2, -112.27, 0.017, 0, 1.006, 0, 1.006, 0, -1.006, 0, 0.017, 3.11, 6.2, -109.79, 0.35, 0, 1.171, 0, 1.222, 0, -1.171, 0, 0.35, -1.33, 6.2, -112.34, 0.108, 0, -0.972, 0, 0.978, 0, 0.972, 0, 0.108, -0.29, 6.2, -111.35, -0.766, 0, 0.611, 0, 0.979, 0, -0.611, 0, -0.766, -2.57, 6.2, -112.21, -0.747, 0, -0.724, 0, 1.041, 0, 0.724, 0, -0.747, 0.2, 6.2, -110.72, 0.863, 0, -1, 0, 1.321, 0, 1, 0, 0.863, -3.51, 4.2, -127.33, 0.046, 0, 1.24, 0, 1.241, 0, -1.24, 0, 0.046, 1.26, 4.2, -125.45, 0.657, 0, -1.207, 0, 1.374, 0, 1.207, 0, 0.657, 0.1, 4.2, -127.18, 0.435, 0, 0.891, 0, 0.991, 0, -0.891, 0, 0.435, 2.23, 4.2, -126.04, -0.022, 0, -0.962, 0, 0.962, 0, 0.962, 0, -0.022, 0.52, 4.2, -123.29)
-surface_material = ExtResource("forest_canopy_material")
-
-[node name="UnderstoryFernField" type="Node3D" parent="Dressing"]
-script = ExtResource("scatter_field_script")
-prop_scene = ExtResource("14_kit_understory_fern")
-transforms = PackedFloat32Array(-2.212, 0, -0.691, 0, 2.317, 0, 0.691, 0, -2.212, -17.92, -24, -41.45, -2.21, 0, 0.06, 0, 2.211, 0, -0.06, 0, -2.21, -31.15, -24, -45.28, 1.875, 0, 1.213, 0, 2.234, 0, -1.213, 0, 1.875, -26.03, -24, -20.3, 0.852, 0, -2.252, 0, 2.408, 0, 2.252, 0, 0.852, -10.99, -24, -107.23, 1.659, 0, 0.553, 0, 1.748, 0, -0.553, 0, 1.659, -52.44, -24, -83.85, 1.497, 0, -1.221, 0, 1.932, 0, 1.221, 0, 1.497, 1.14, -24, -53.14, 2.147, 0, -1.423, 0, 2.576, 0, 1.423, 0, 2.147, -47.85, -24, 4.28, -0.358, 0, -1.743, 0, 1.779, 0, 1.743, 0, -0.358, 28.47, -24, -40.09, 1.736, 0, -0.952, 0, 1.98, 0, 0.952, 0, 1.736, 48.28, -24, -97.22, -1.486, 0, -0.085, 0, 1.488, 0, 0.085, 0, -1.486, -33.99, -24, -107.18, -0.774, 0, -1.618, 0, 1.793, 0, 1.618, 0, -0.774, 5.23, -24, -120.37, 1.875, 0, 1.542, 0, 2.428, 0, -1.542, 0, 1.875, -26.5, -24, -109.13, 1.743, 0, -0.397, 0, 1.787, 0, 0.397, 0, 1.743, -49.27, -24, 6.77, 0.407, 0, 1.671, 0, 1.72, 0, -1.671, 0, 0.407, 18.98, -24, -106.97, 1.899, 0, 0.747, 0, 2.041, 0, -0.747, 0, 1.899, -16.32, -24, 1.38, 0.489, 0, 1.609, 0, 1.682, 0, -1.609, 0, 0.489, -19.18, -24, -134.83, 0.772, 0, -1.196, 0, 1.424, 0, 1.196, 0, 0.772, 35.44, -24, -65.37, -0.668, 0, -1.251, 0, 1.419, 0, 1.251, 0, -0.668, 19.18, -24, -22.87, 2.532, 0, 0.457, 0, 2.573, 0, -0.457, 0, 2.532, 55.81, -24, -99.55, 1.954, 0, -1.29, 0, 2.341, 0, 1.29, 0, 1.954, 51.53, -24, -49.36, -1.945, 0, -0.545, 0, 2.02, 0, 0.545, 0, -1.945, 43.29, -24, -52.59, -1.369, 0, -0.583, 0, 1.488, 0, 0.583, 0, -1.369, 25.26, -24, -2.3, -1.62, 0, 1.33, 0, 2.096, 0, -1.33, 0, -1.62, -2.95, -24, -27.96, -2.178, 0, -1.123, 0, 2.45, 0, 1.123, 0, -2.178, 20.89, -24, -108.87, -2.54, 0, -0.037, 0, 2.54, 0, 0.037, 0, -2.54, -1.49, -24, -32.69, 1.371, 0, 0.503, 0, 1.46, 0, -0.503, 0, 1.371, 28.42, -24, -76.36, -0.227, 0, 1.189, 0, 1.211, 0, -1.189, 0, -0.227, -27.88, 5.6, -28.24, -0.387, 0, -1.149, 0, 1.213, 0, 1.149, 0, -0.387, -19.12, 5.6, 1.63, -0.207, 0, 1.14, 0, 1.159, 0, -1.14, 0, -0.207, -23.18, 5.6, 1.97, 1.479, 0, -0.88, 0, 1.721, 0, 0.88, 0, 1.479, -26.14, 5.6, -44.93, -1.431, 0, -0.531, 0, 1.526, 0, 0.531, 0, -1.431, -29.44, 5.6, -7.51, -1.212, 0, -0.824, 0, 1.465, 0, 0.824, 0, -1.212, -17.16, 5.6, -18.13, -0.561, 0, 1.195, 0, 1.32, 0, -1.195, 0, -0.561, -27.2, 5.6, -23.69, 0.989, 0, 0.365, 0, 1.054, 0, -0.365, 0, 0.989, -26.75, 5.6, -22.27, -0.112, 0, -1.165, 0, 1.17, 0, 1.165, 0, -0.112, -29.2, 5.6, -19.4, 1.537, 0, 0.106, 0, 1.541, 0, -0.106, 0, 1.537, -16.32, 5.6, -4.5, -1.128, 0, 0.589, 0, 1.273, 0, -0.589, 0, -1.128, 17.58, 5.6, -10.83, -1.007, 0, -0.094, 0, 1.011, 0, 0.094, 0, -1.007, 23.21, 5.6, -29.74, 0.178, 0, 1.653, 0, 1.663, 0, -1.653, 0, 0.178, 18.38, 5.6, -22.05, 1.4, 0, 0.842, 0, 1.633, 0, -0.842, 0, 1.4, 25.75, 5.6, -47.59, 0.021, 0, 1.271, 0, 1.271, 0, -1.271, 0, 0.021, 19.67, 5.6, -40.16, 1.327, 0, 0.859, 0, 1.58, 0, -0.859, 0, 1.327, 19.81, 5.6, -36.22, -1.207, 0, -0.229, 0, 1.228, 0, 0.229, 0, -1.207, 24.11, 5.6, -3.23, 0.594, 0, -0.944, 0, 1.115, 0, 0.944, 0, 0.594, 24.79, 5.6, -14.92, 1.158, 0, 1.233, 0, 1.692, 0, -1.233, 0, 1.158, 16.08, 5.6, -39.98, 1.389, 0, -0.75, 0, 1.578, 0, 0.75, 0, 1.389, 27.62, 5.6, -4.23, 0.11, 0, -1.522, 0, 1.525, 0, 1.522, 0, 0.11, -0.59, 4.2, -131.31, 1.221, 0, 0.322, 0, 1.263, 0, -0.322, 0, 1.221, 1.88, 4.2, -134.44, -0.512, 0, -1.464, 0, 1.551, 0, 1.464, 0, -0.512, -2.31, 4.2, -135.54, 1.365, 0, 0.819, 0, 1.592, 0, -0.819, 0, 1.365, 1.71, 4.2, -136.23)
-surface_material = ExtResource("forest_canopy_material")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+[node name="OpeningTreeLeft" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
+position = Vector3(-12, 5.6, -4)
+rotation = Vector3(0, 0.45, 0)
+scale = Vector3(1.25, 1.25, 1.25)
+
+[node name="OpeningTreeRight" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
+position = Vector3(13, 5.6, -9)
+rotation = Vector3(0, -0.55, 0)
+scale = Vector3(1.15, 1.15, 1.15)
+
+[node name="OpeningReedsLeft" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
+position = Vector3(-6.8, 4, -8)
+rotation = Vector3(0, 0.1, 0)
+scale = Vector3(1.15, 1.15, 1.15)
+
+[node name="OpeningReedsRight" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
+position = Vector3(6.4, 4, -13)
+rotation = Vector3(0, -0.3, 0)
+scale = Vector3(1.05, 1.05, 1.05)
+
+[node name="OpeningLog" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
+position = Vector3(-10, 5.6, -18)
+rotation = Vector3(0, 1.05, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+
+[node name="CoveBoulderLeft" parent="Dressing" instance=ExtResource("17_kit_river_boulder")]
+position = Vector3(-5.6, -13, -34)
+rotation = Vector3(0, 0.4, 0)
+scale = Vector3(1.25, 1.25, 1.25)
+
+[node name="CoveBoulderRight" parent="Dressing" instance=ExtResource("17_kit_river_boulder")]
+position = Vector3(5.2, -13, -42)
+rotation = Vector3(0, -0.6, 0)
+
+[node name="CoveKelpLeft" parent="Dressing" instance=ExtResource("11_kit_kelp_strand")]
+position = Vector3(-7.0, -13, -38)
+scale = Vector3(1.15, 1.15, 1.15)
+
+[node name="CoveKelpRight" parent="Dressing" instance=ExtResource("11_kit_kelp_strand")]
+position = Vector3(7.2, -13, -45)
+rotation = Vector3(0, 0.5, 0)
+scale = Vector3(1.25, 1.25, 1.25)
+
+[node name="WallTreeLeft" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
+position = Vector3(-12, 3, -57)
+rotation = Vector3(0, 0.2, 0)
+scale = Vector3(1.3, 1.3, 1.3)
+
+[node name="WallTreeRight" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
+position = Vector3(12, 3, -60)
+rotation = Vector3(0, -0.4, 0)
+scale = Vector3(1.15, 1.15, 1.15)
+
+[node name="WallCoralLeft" parent="Dressing" instance=ExtResource("10_kit_coral_branch")]
+position = Vector3(-4.8, 3.1, -62)
+rotation = Vector3(0, 0.3, 0)
+scale = Vector3(1.25, 1.25, 1.25)
+
+[node name="WallCoralRight" parent="Dressing" instance=ExtResource("10_kit_coral_branch")]
+position = Vector3(4.7, 3.1, -62.3)
+rotation = Vector3(0, -0.3, 0)
+scale = Vector3(1.2, 1.2, 1.2)
+
+[node name="GrottoCoralLeft" parent="Dressing" instance=ExtResource("10_kit_coral_branch")]
+position = Vector3(-4.2, 7.0, -78)
+rotation = Vector3(0, 0.8, 0)
+scale = Vector3(0.95, 0.95, 0.95)
+
+[node name="GrottoCoralRight" parent="Dressing" instance=ExtResource("10_kit_coral_branch")]
+position = Vector3(4.0, 7.0, -87)
+rotation = Vector3(0, -0.7, 0)
+scale = Vector3(1.05, 1.05, 1.05)
+
+[node name="GrottoRockFrameLeft" parent="Dressing" instance=ExtResource("9_kit_rock_cluster")]
+position = Vector3(-5.6, 7.0, -91)
+rotation = Vector3(0, 0.1, 0)
+scale = Vector3(1.15, 1.15, 1.15)
+
+[node name="GrottoRockFrameRight" parent="Dressing" instance=ExtResource("9_kit_rock_cluster")]
+position = Vector3(5.5, 7.0, -92)
+rotation = Vector3(0, -0.2, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+
+[node name="GorgeReedsLeft" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
+position = Vector3(-5.7, 2, -99.5)
+rotation = Vector3(0, 0.2, 0)
+scale = Vector3(1.05, 1.05, 1.05)
+
+[node name="GorgeReedsRight" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
+position = Vector3(5.6, 2, -106.5)
+rotation = Vector3(0, -0.3, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+
+[node name="SeedGrassLeft" parent="Dressing" instance=ExtResource("12_kit_seagrass_tuft")]
+position = Vector3(-4.2, 6.2, -111.8)
+rotation = Vector3(0, 0.5, 0)
+scale = Vector3(1.2, 1.2, 1.2)
+
+[node name="SeedGrassRight" parent="Dressing" instance=ExtResource("12_kit_seagrass_tuft")]
+position = Vector3(4.0, 6.2, -116.0)
+rotation = Vector3(0, -0.4, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+
+[node name="FinishCoralLeft" parent="Dressing" instance=ExtResource("10_kit_coral_branch")]
+position = Vector3(-4.5, 4.2, -132.2)
+rotation = Vector3(0, 0.45, 0)
+scale = Vector3(1.3, 1.3, 1.3)
+
+[node name="FinishCoralRight" parent="Dressing" instance=ExtResource("10_kit_coral_branch")]
+position = Vector3(4.6, 4.2, -134.2)
+rotation = Vector3(0, -0.5, 0)
+scale = Vector3(1.25, 1.25, 1.25)
+
+[node name="FinishGrass" parent="Dressing" instance=ExtResource("12_kit_seagrass_tuft")]
+position = Vector3(0, 4.2, -136.0)
+rotation = Vector3(0, 0.1, 0)
+scale = Vector3(1.4, 1.4, 1.4)
+
+[node name="HeroKelpLeft" type="Node3D" parent="Dressing"]
+position = Vector3(-4.5, -13, -40)
+rotation = Vector3(0, 0.2, 0)
+scale = Vector3(1.45, 1.45, 1.45)
+script = ExtResource("presentation_motion_script")
+bob_height_m = 0.04
+bob_speed_hz = 0.35
+sway_degrees = 4.0
+sway_speed_hz = 0.28
+phase = 0.15
+[node name="Model" parent="Dressing/HeroKelpLeft" instance=ExtResource("11_kit_kelp_strand")]
+
+[node name="HeroKelpRight" type="Node3D" parent="Dressing"]
+position = Vector3(4.6, -13, -43)
+rotation = Vector3(0, -0.35, 0)
+scale = Vector3(1.35, 1.35, 1.35)
+script = ExtResource("presentation_motion_script")
+bob_height_m = 0.035
+bob_speed_hz = 0.32
+sway_degrees = 4.5
+sway_speed_hz = 0.3
+phase = 0.55
+[node name="Model" parent="Dressing/HeroKelpRight" instance=ExtResource("11_kit_kelp_strand")]
+
+[node name="GlowCoralPulse" type="Node3D" parent="Dressing"]
+position = Vector3(-3.1, 7.4, -67.2)
+rotation = Vector3(0, 0.4, 0)
+script = ExtResource("presentation_motion_script")
+bob_height_m = 0.025
+bob_speed_hz = 0.45
+sway_degrees = 2.0
+sway_speed_hz = 0.33
+phase = 0.3
+[node name="Model" parent="Dressing/GlowCoralPulse" instance=ExtResource("10_kit_coral_branch")]
+
+[node name="SeedGrassSway" type="Node3D" parent="Dressing"]
+position = Vector3(-1.8, 4.2, -124.0)
+rotation = Vector3(0, -0.2, 0)
+scale = Vector3(1.35, 1.35, 1.35)
+script = ExtResource("presentation_motion_script")
+bob_height_m = 0.02
+bob_speed_hz = 0.3
+sway_degrees = 5.0
+sway_speed_hz = 0.26
+phase = 0.7
+[node name="Model" parent="Dressing/SeedGrassSway" instance=ExtResource("12_kit_seagrass_tuft")]
+
+[node name="GrottoMotes" type="GPUParticles3D" parent="Dressing"]
+position = Vector3(0, 10, -84)
+amount = 36
+lifetime = 6.0
+preprocess = 5.0
+visibility_aabb = AABB(-8, -4, -12, 16, 8, 24)
+process_material = SubResource("MoteProcess")
+draw_pass_1 = SubResource("MoteMesh")
+
+[node name="FinishMotes" type="GPUParticles3D" parent="Dressing"]
+position = Vector3(0, 7, -130)
+amount = 28
+lifetime = 6.5
+preprocess = 5.0
+visibility_aabb = AABB(-8, -4, -8, 16, 8, 16)
+process_material = SubResource("MoteProcess")
+draw_pass_1 = SubResource("MoteMesh")
+
+[node name="GlowKeyLight" type="OmniLight3D" parent="Dressing"]
+position = Vector3(0, 10.5, -70)
+light_color = Color(0.42, 1, 0.78, 1)
+light_energy = 0.65
+omni_range = 8.0
+shadow_enabled = false
+
+[node name="FinishKeyLight" type="OmniLight3D" parent="Dressing"]
+position = Vector3(0, 8, -132)
+light_color = Color(0.68, 1, 0.72, 1)
+light_energy = 0.5
+omni_range = 7.0
+shadow_enabled = false
