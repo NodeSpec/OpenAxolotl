@@ -55,30 +55,34 @@ import sys
 import bpy  # type: ignore
 from mathutils import Vector  # type: ignore
 
-# (name, parent, head, tail) in Blender space, following the proportions
-# tools/blender/make_axolotl.py builds: head mass from +Y 0.6 to 1.5, the
-# torso between -1.1 and +0.6, the tail narrowing from -1.1 to the tip at
-# -2.9, everything centred around Z 0.6.
+# (name, parent, head, tail) in Blender space, EVERY COORDINATE READ OFF
+# tools/blender/make_axolotl.py's own tables rather than guessed: each spine
+# and tail joint sits on the BODY row's centreline at that station, each limb
+# bone runs from the row LEGS branches at to the foot that chain ends on, and
+# each gill bone follows the middle ramus GILL_RAMI builds.
 #
 # THESE MUST TRACK THE MESH. An earlier layout put tail_1's head at Y -0.2,
 # which sat INSIDE the torso once the body was rebuilt thicker — the tail
 # chain then owned a third of the belly and the hurt clip folded the whole
-# rear of the animal through itself. Bones belong where the mass actually
-# narrows, and since both the mesh and this table are now generated from
-# the repo, they can be kept in step.
+# rear of the animal through itself. The rebuild that gave the animal real
+# anatomy moved the spine down by about 0.16 (the old table floated above a
+# fatter body) and swung the gills from a near-vertical crown to a swept
+# plume, so every row here moved with it. Bones belong where the mass
+# actually is, and since both the mesh and this table are generated from the
+# repo, they can be kept in step.
 BONES = [
-    ("root", None, (0.0, -1.05, 0.64), (0.0, -0.45, 0.68)),
-    ("spine", "root", (0.0, -0.45, 0.68), (0.0, 0.35, 0.72)),
-    ("head", "spine", (0.0, 0.35, 0.72), (0.0, 1.35, 0.76)),
-    ("gill_l", "head", (0.46, 0.72, 0.90), (1.10, 0.56, 1.52)),
-    ("gill_r", "head", (-0.46, 0.72, 0.90), (-1.10, 0.56, 1.52)),
-    ("leg_fl", "spine", (0.28, 0.42, 0.42), (0.72, 0.52, 0.06)),
-    ("leg_fr", "spine", (-0.28, 0.42, 0.42), (-0.72, 0.52, 0.06)),
-    ("leg_bl", "root", (0.28, -0.80, 0.42), (0.72, -0.96, 0.06)),
-    ("leg_br", "root", (-0.28, -0.80, 0.42), (-0.72, -0.96, 0.06)),
-    ("tail_1", "root", (0.0, -1.05, 0.62), (0.0, -1.70, 0.50)),
-    ("tail_2", "tail_1", (0.0, -1.70, 0.50), (0.0, -2.30, 0.40)),
-    ("tail_3", "tail_2", (0.0, -2.30, 0.40), (0.0, -2.90, 0.28)),
+    ("root", None, (0.0, -1.05, 0.460), (0.0, -0.45, 0.518)),
+    ("spine", "root", (0.0, -0.45, 0.518), (0.0, 0.62, 0.575)),
+    ("head", "spine", (0.0, 0.62, 0.575), (0.0, 1.66, 0.545)),
+    ("gill_l", "head", (0.34, 0.84, 0.700), (0.85, 0.55, 0.760)),
+    ("gill_r", "head", (-0.34, 0.84, 0.700), (-0.85, 0.55, 0.760)),
+    ("leg_fl", "spine", (0.30, 0.27, 0.440), (0.74, 0.37, 0.060)),
+    ("leg_fr", "spine", (-0.30, 0.27, 0.440), (-0.74, 0.37, 0.060)),
+    ("leg_bl", "root", (0.30, -0.58, 0.440), (0.74, -0.73, 0.060)),
+    ("leg_br", "root", (-0.30, -0.58, 0.440), (-0.74, -0.73, 0.060)),
+    ("tail_1", "root", (0.0, -1.05, 0.460), (0.0, -1.70, 0.395)),
+    ("tail_2", "tail_1", (0.0, -1.70, 0.395), (0.0, -2.30, 0.339)),
+    ("tail_3", "tail_2", (0.0, -2.30, 0.339), (0.0, -2.92, 0.302)),
 ]
 
 # Bones a walk/swim cycle drives, and the axis each swings on.

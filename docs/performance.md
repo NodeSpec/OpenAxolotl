@@ -96,12 +96,17 @@ the heaviest world plus the hero:
 | Coral Cove (forested river valley, fully dressed) | 239 | 99,416 |
 | Bubble Bay | 47 | 68,800 |
 | Open Lagoon hub | 28 | 36,912 |
-| hero (all five role meshes) | 5 | 29,632 |
+| hero (all five role meshes) | 5 | 41,464 |
 
-Heaviest playable frame ≈ 129k triangles — an order of magnitude under
+Heaviest playable frame ≈ 141k triangles — still an order of magnitude under
 where a desktop GPU starts to care, which is the intent: the look comes
 from silhouettes, shared procedural surfaces and two 1024² hero maps, not
-from polygon counts. The perf gate now runs **twice** per chain — bubble_bay
+from polygon counts. The hero grew by 11,832 triangles when the gill
+plumes were rebuilt with filaments growing radially around each ramus
+rather than in two coplanar rows; that is where nearly all of a
+character's silhouette lives, so it is the right place to spend them,
+and the 150,000 assertion is what proves the spend still fits. The perf
+gate now runs **twice** per chain — bubble_bay
 and, via `OAX_PERF_WORLD=coral_cove`, the valley — flying the same waypoint
 route the coral walk proves completability with, so the measured traversal
 is the route that actually ships.
