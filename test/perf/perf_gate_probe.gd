@@ -25,23 +25,10 @@ extends Node
 ## Exit 0 when every measurable target holds; exit 1 with the measured
 ## numbers when any is breached.
 
-## The world under measurement. bubble_bay stays the default, and the
-## harness runs the gate AGAIN with OAX_PERF_WORLD=coral_cove: the valley is
-## the heaviest official scene (forest, two rivers, the flown route's
-## geometry), and a perf gate that never loads the heaviest world is a gate
-## on the wrong door.
-const DEFAULT_WORLD_ID := "bubble_bay"
-
-var _world_id := DEFAULT_WORLD_ID
+const WORLD_ID := "bubble_bay"
 const TARGETS_PATH := "res://contracts/performance_targets.v1.json"
 const SETTLE_FRAMES := 30
-
-## Frame budget for the traversal. The piloted route through the valley is
-## several times longer than bubble_bay's corridor, and slower per metre —
-## climbs, dives and pillar detours — so it gets the same budget the coral
-## walk itself runs under.
 const JOURNEY_FRAMES := 4200
-const PILOTED_JOURNEY_FRAMES := 14000
 
 var _failures: PackedStringArray = []
 var _frame := 0
@@ -50,19 +37,7 @@ var _hub: OpenLagoon
 var _save := SaveSystem.new()
 var _body: CharacterBody3D
 
-## Coral Cove is flown rather than walked: it is a platforming route, and a
-## held forward key stalls at the first gap. The SAME waypoints the coral
-## walk proves completability with drive the measurement here — the perf
-## gate must measure the route that exists, not the corridor that used to.
-var _pilot: RoutePilot
-
 var _fps_target := 0.0
-
-
-func _resolve_world_id() -> void:
-	var requested := OS.get_environment("OAX_PERF_WORLD")
-	if not requested.is_empty():
-		_world_id = requested
 var _spike_budget_ms := 0.0
 var _load_budget_ms := 0.0
 var _rate_tolerance := 1.0
@@ -82,7 +57,6 @@ var _restore_delta_ms := -1.0
 
 
 func _ready() -> void:
-	_resolve_world_id()
 	var scene := get_tree().current_scene
 	_hub = scene as OpenLagoon
 	if _hub == null and scene != null:
@@ -99,9 +73,9 @@ func _ready() -> void:
 
 	_hub.set_save_system(_save)
 
-	var portal := _hub.get_registry().get_portal(_world_id)
+	var portal := _hub.get_registry().get_portal(WORLD_ID)
 	if portal == null or not portal.available:
-		_fail_now("world '%s' is not an available portal" % _world_id)
+		_fail_now("world '%s' is not an available portal" % WORLD_ID)
 		return
 
 	_body = get_tree().get_first_node_in_group("player") as CharacterBody3D
@@ -144,27 +118,19 @@ func _physics_process(_delta: float) -> void:
 	_frame += 1
 	if _frame == SETTLE_FRAMES:
 		_enter_started_usec = Time.get_ticks_usec()
-		_entered = _hub.enter_world(_world_id)
+		_entered = _hub.enter_world(WORLD_ID)
 		if not _entered:
-			_fail_now("enter_world(%s) failed" % _world_id)
+			_fail_now("enter_world(%s) failed" % WORLD_ID)
 		return
 
 	if _entered and _load_ms < 0.0:
 		# First physics frame with the player in the world: the load claim.
 		_load_ms = float(Time.get_ticks_usec() - _enter_started_usec) / 1000.0
 		_wire_restoration()
-		if _world_id == "coral_cove":
-			_pilot = RoutePilot.new(CoralRoute.waypoints(), _world_origin())
-		else:
-			_key(KEY_W, true)
+		_key(KEY_W, true)
 		return
 
 	if _entered and not _returned:
-		if _pilot != null:
-			_pilot.step(_body)
-			if not _pilot.stuck_reason().is_empty():
-				_fail_now("the route stalled: %s" % _pilot.stuck_reason())
-				return
 		_record_frame_delta()
 
 	if _returned:
@@ -173,8 +139,7 @@ func _physics_process(_delta: float) -> void:
 		_evaluate()
 		return
 
-	var journey := PILOTED_JOURNEY_FRAMES if _pilot != null else JOURNEY_FRAMES
-	if _frame > SETTLE_FRAMES + journey:
+	if _frame > SETTLE_FRAMES + JOURNEY_FRAMES:
 		_fail_now("the traversal never completed (z=%.1f)"
 			% _body.global_position.z)
 
@@ -257,7 +222,7 @@ func _evaluate() -> void:
 
 	print("==================================================================")
 	print("PERF GATE (%s): load %.1f ms (budget %.0f) | restore frame %.1f ms"
-		% [_world_id, _load_ms, _load_budget_ms, _restore_delta_ms])
+		% [WORLD_ID, _load_ms, _load_budget_ms, _restore_delta_ms])
 	if _deltas_ms.size() >= 100:
 		var sorted := _deltas_ms.duplicate()
 		sorted.sort()
@@ -289,14 +254,3 @@ func _key(keycode: Key, pressed: bool) -> void:
 	event.physical_keycode = keycode
 	event.pressed = pressed
 	Input.parse_input_event(event)
-
-
-## The active world's placement offset: the spawn marker is a direct child
-## of the world root, so its parent's global position is the offset the
-## route's level-space waypoints need (the same resolution the walk uses).
-func _world_origin() -> Vector3:
-	var spawn := get_tree().get_first_node_in_group("spawn_point")
-	if spawn == null:
-		return Vector3.ZERO
-	var world_root := (spawn as Node).get_parent() as Node3D
-	return world_root.global_position if world_root != null else Vector3.ZERO

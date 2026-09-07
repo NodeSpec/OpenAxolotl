@@ -26,10 +26,12 @@ var _temp_dirs: PackedStringArray = []
 ## the runner saw an empty failure list and printed PASS. A test that never ran
 ## reported success, which is worse than no test at all.
 ##
-## The runner now fails any test that recorded zero assertions, so an abort
-## before the first assertion can never again masquerade as a pass. The wider
-## fix is that every comparison the suites use is implemented below; this counter
-## is the backstop for the next gap rather than the cure for that one.
+## The runner fails any test that recorded zero assertions, so an abort before
+## the first assertion cannot masquerade as a pass. That is a BACKSTOP, not the
+## cure, and it has a known hole: a suite whose helper asserts first has already
+## scored one by the time a bad call lands, which is exactly how a second
+## occurrence slipped through. The cure is test/core/harness/, which reads the
+## suites and fails when they call something this file does not implement.
 var _assertions: int = 0
 
 

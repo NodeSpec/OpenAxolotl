@@ -38,13 +38,8 @@ var _bindings: BindingTable
 var _grammar: MovementGrammar.Grammar = MovementGrammar.Grammar.WATER
 var _device: InputDevice.Kind = InputDevice.Kind.KEYBOARD_MOUSE
 
-## Physical input ids currently down that steer, for the active device only.
+## Physical input ids currently down, for the active device only.
 var _held: Dictionary = {}
-
-## Physical input ids currently down that resolve to a PRESS verb. Kept apart
-## from `_held` because the two are read for different questions: `_held` is
-## summed into a direction, this is projected into the sustained verb set.
-var _down: Dictionary = {}
 
 ## Movement verbs pressed since the last poll_intent().
 var _pressed: Array[MovementGrammar.Verb] = []
@@ -94,7 +89,6 @@ func _switch_device(device: InputDevice.Kind) -> void:
 		return
 	_device = device
 	_held.clear()
-	_down.clear()
 	device_changed.emit(InputDevice.device_id(device),
 		InputDevice.prompt_set(device))
 
@@ -169,11 +163,6 @@ func _press(physical: String) -> bool:
 
 	var typed := verb as InputVerb.Verb
 	if InputVerb.is_movement(typed):
-		# Remembered as down as well as pressed. The press is what fires the
-		# verb; the down state is what a verb reading the RELEASE needs, and it
-		# is recorded here rather than derived later because by the time the
-		# key comes back up the binding may have been remapped.
-		_down[physical] = true
 		var movement := InputVerb.movement_equivalent(typed)
 		if not _pressed.has(movement):
 			_pressed.append(movement)
@@ -184,10 +173,8 @@ func _press(physical: String) -> bool:
 
 
 func _release(physical: String) -> bool:
-	var was_down := _down.has(physical)
-	_down.erase(physical)
 	if not _held.has(physical):
-		return was_down
+		return false
 	_held.erase(physical)
 	return true
 
@@ -215,22 +202,7 @@ func poll_intent() -> PlayerIntent:
 		if direction.length_squared() > 0.0:
 			direction = direction.normalized()
 
-	# Resolved fresh every frame rather than cached at press time, so a key held
-	# across the water/land seam sustains whatever it means NOW — the same rule
-	# the held direction set already follows.
-	var sustained: Array[MovementGrammar.Verb] = []
-	for physical: String in _down:
-		var verb := _bindings.resolve_press(_device, _grammar, physical)
-		if verb == InputVerb.UNKNOWN:
-			continue
-		var typed := verb as InputVerb.Verb
-		if not InputVerb.is_movement(typed):
-			continue
-		var movement := InputVerb.movement_equivalent(typed)
-		if not sustained.has(movement):
-			sustained.append(movement)
-
-	var intent := PlayerIntent.new(direction, _pressed, sustained)
+	var intent := PlayerIntent.new(direction, _pressed)
 	_pressed.clear()
 	return intent
 
@@ -240,7 +212,6 @@ func poll_intent() -> PlayerIntent:
 ## frame they regain control.
 func clear() -> void:
 	_held.clear()
-	_down.clear()
 	_pressed.clear()
 
 

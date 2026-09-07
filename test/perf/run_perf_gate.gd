@@ -16,10 +16,7 @@ const PROBE_PATH := "res://test/perf/perf_gate_probe.gd"
 
 ## A frame ceiling, so a probe that never completes fails the run instead of
 ## hanging a CI job.
-## Sized for the piloted valley route, which is several times bubble_bay's
-## corridor (the probe's own per-world journey budgets do the fine policing;
-## this is the wall-clock backstop).
-const FRAME_BUDGET := 16000
+const FRAME_BUDGET := 4800
 
 
 func _initialize() -> void:
@@ -30,7 +27,6 @@ func _initialize() -> void:
 		return
 
 	var hub := packed.instantiate()
-	hub.set("profile_path", "")
 	root.add_child(hub)
 	current_scene = hub
 

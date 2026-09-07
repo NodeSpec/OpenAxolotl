@@ -54,29 +54,12 @@ var _squash: HeroSquash
 var _model_base_scale: Vector3 = Vector3.ONE
 var _was_grounded: bool = true
 
-## The rig's clips, chosen from the same state this wrapper already computes.
-## Visual only: a body whose model carries no AnimationPlayer simply never
-## binds, which is what the bare bodies the walk probes build do.
-var _animator: HeroAnimator
-
 ## Overlapping water volumes, counted rather than flagged: two volumes meeting at
 ## a seam must not read as "left the water" when the player crosses the join.
 var _water_volumes: int = 0
 
 
 func _ready() -> void:
-	initialise()
-
-
-## Builds the controller, the input system and the visual layer. Idempotent,
-## and callable directly: a node added while the SceneTree is still
-## initialising — which the test runner does — never receives _ready, so the
-## setup has to be reachable without it. WorldSystems.wire() exists for the
-## same reason and says the same thing; before this, the body simply could
-## not be built inside a test at all.
-func initialise() -> void:
-	if _controller != null:
-		return
 	var tuning_errors: Array[TuningError] = []
 	_tuning = TuningData.load_from_file(tuning_path, tuning_errors)
 	for error: TuningError in tuning_errors:
@@ -110,13 +93,11 @@ func initialise() -> void:
 
 	if not model_path.is_empty():
 		_model = get_node_or_null(model_path) as Node3D
-	_animator = HeroAnimator.new()
 	if _model != null:
 		# The look is the client's: dress the imported model in the shared
 		# hero materials, whatever the exporter wrote into the file.
 		HeroSkin.apply(_model)
 		_model_base_scale = _model.scale
-		_animator.bind(_model)
 	_squash = HeroSquash.new(_tuning)
 	_controller.hopped.connect(_squash.on_hop)
 
@@ -125,61 +106,8 @@ func get_controller() -> AxolotlController:
 	return _controller
 
 
-## The camera whose yaw defines "forward". Optional: with none bound the
-## directions stay world-space, which is what every headless probe and unit
-## test wants and what this always used to do.
-var _camera: CameraFollow = null
-
-
-## Bind the camera that defines forward. Called by whatever assembles the
-## player scene; a body with no camera keeps world-relative movement.
-func set_camera(camera: CameraFollow) -> void:
-	_camera = camera
-
-
-## The camera that defines forward, or null. The route probes read it so they
-## can aim before pressing forward, which is the same order a player does it in.
-func get_camera() -> CameraFollow:
-	return _camera
-
-
-## Rotate a movement direction out of screen space into world space.
-##
-## THIS IS THE OTHER HALF OF A LOOK AXIS, and shipping one without the other
-## would be worse than shipping neither: a camera the player can swing while W
-## still means world -Z means that after any turn, forward is some direction
-## they have to work out. Camera-relative movement is what makes "push the
-## stick where you want to go" true.
-##
-## The VERTICAL component is left alone. In the water grammar it comes from
-## SPACE and SHIFT, which mean up and down in the world and not relative to
-## wherever the camera is pitched — a swimmer pressing "up" while looking at
-## the floor wants to rise, not to swim into it.
-func _camera_relative(direction: Vector3) -> Vector3:
-	if _camera == null or direction.is_zero_approx():
-		return direction
-	var horizontal := Vector3(direction.x, 0.0, direction.z)
-	if horizontal.is_zero_approx():
-		return direction
-	var rotated := horizontal.rotated(
-		Vector3.UP, deg_to_rad(_camera.get_yaw_deg()))
-	return Vector3(rotated.x, direction.y, rotated.z)
-
-
 func get_input_system() -> InputSystem:
 	return _input
-
-
-func get_animator() -> HeroAnimator:
-	return _animator
-
-
-## The visual half of losing a capability (REQ-019's comedic register): the
-## world's runtime calls this when the regeneration system announces a loss,
-## so the flinch is tied to the event rather than guessed from motion.
-func play_hurt() -> void:
-	if _animator != null:
-		_animator.play_hurt()
 
 
 func is_in_water() -> bool:
@@ -209,7 +137,6 @@ func _physics_process(delta: float) -> void:
 	_controller.set_grounded(is_on_floor())
 
 	var intent := _input.poll_intent()
-	intent.direction = _camera_relative(intent.direction)
 	_controller.physics_step(delta, is_in_water(), intent)
 
 	velocity = _controller.get_velocity()
@@ -217,7 +144,7 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-	_update_climb(intent, delta)
+	_update_climb(intent)
 
 	# A landing is the floor flag going false to true on land. Water has no
 	# floor to slap; brushing the seabed while swimming is not a landing.
@@ -225,8 +152,6 @@ func _physics_process(delta: float) -> void:
 	if grounded and not _was_grounded and not is_in_water():
 		_squash.on_land()
 	_was_grounded = grounded
-
-	_animator.step(delta, is_in_water(), grounded, velocity)
 
 	if _model != null:
 		_model.rotation.y = _controller.get_heading_yaw()
@@ -249,17 +174,14 @@ func _physics_process(delta: float) -> void:
 ## Attachment is REQUESTED, not automatic: brushing a climbable wall while
 ## waddling past must not stick the axolotl to it. The player asks by pressing
 ## the climb verb, and this looks at what they are against when they do.
-func _update_climb(intent: PlayerIntent, delta: float) -> void:
+func _update_climb(intent: PlayerIntent) -> void:
 	if _controller.is_climbing():
-		# Let go when the wall does — but not on the FIRST frame without it.
-		# The contact fact is the body's to report; how long a climber may
-		# keep it after losing the wall is the controller's to decide, and it
-		# gives a brief grace so a seam in the surface, or the moment of
-		# cresting a lip, does not drop a climber four metres.
-		_controller.report_wall_contact(is_on_wall(), delta)
-		if not _controller.is_climbing():
-			return
+		# Let go when the wall does. is_on_wall() goes false the moment the body
+		# stops touching it, which is the honest end condition — a climber who
+		# reaches the top and moves onto the ledge should be walking, not still
+		# clinging to air.
 		if not is_on_wall():
+			_controller.release_climb()
 			return
 		# Kept current every frame: a curved or jointed surface changes the climb
 		# basis as the axolotl traverses it, and a stale normal would send

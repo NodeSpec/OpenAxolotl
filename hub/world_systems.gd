@@ -61,9 +61,9 @@ extends Node
 ## CheckpointStore, and every catastrophe returns the player to the last
 ## anchor: a life is spent, and at zero the count refills (a setback, never a
 ## restart). Entry into a world ALWAYS starts at the spawn point even when the
-## profile remembers a later checkpoint. Restoration and discoveries persist,
-## but temporary Gill Mods and resource pickup placement reset on entry, so
-## checkpoint-based session resume remains a separate task (friction
+## profile remembers a later checkpoint, because restoration and pickups are
+## not yet persisted — resuming past the seeds you would need to re-collect
+## would strand you behind a wall. The anchor is still recorded (friction
 ## F-10). Every loss and regrowth asks for feedback through
 ## [signal feedback_requested] and gets a small sparkle burst at the player
 ## — the comedic pop the tone requirement asks for, in greybox form.
@@ -90,15 +90,6 @@ signal life_lost(remaining: int, source: CatastrophicSource.Kind)
 signal returned_to_anchor(position: Vector3, checkpoint_id: String)
 signal feedback_requested(cue: FeedbackCue)
 
-## The Drift Fleet's world-facing events. The semantic audio id is re-emitted
-## rather than resolved here: this node names what happened, the Audio System
-## alone decides what it sounds like (REQ-023).
-signal audio_cue_requested(cue_id: String)
-signal region_dredged(region_id: String)
-signal boss_phase_completed(phase_id: String, index: int)
-signal boss_phase_reached(volume_name: String)
-signal boss_defeated(region_id: String)
-
 const GROUP_SPAWN := "spawn_point"
 const GROUP_CHECKPOINT := "checkpoint"
 const GROUP_PIT := "pit_volume"
@@ -109,22 +100,10 @@ const GROUP_MOD_PICKUP := "gill_mod_pickup"
 const GROUP_AFFORDANCE_GATE := "affordance_gate"
 const GROUP_COLLECTIBLE := "collectible"
 const GROUP_RESTORATION_GATE := "restoration_gate"
-const GROUP_ENEMY := "enemy"
-const GROUP_BOSS_PHASE := "boss_phase"
 const META_COLLECTIBLE_ID := "collectible_id"
 const META_HAZARD_CAPABILITY := "capability"
 const META_HAZARD_ID := "hazard_id"
-const META_ENEMY_ID := "enemy_id"
-const META_REGION_ID := "region_id"
 const PLAYER_GROUP := "player"
-
-## The optional Level Contract elements this runtime binds. `enemies` is a
-## list of {"enemyId": "<roster id>"} — the world DECLARING which Drift Fleet
-## units it uses; a scene node naming an undeclared unit is refused, the same
-## way a collectible pickup naming an undeclared id is.
-const MANIFEST_ENEMIES := "enemies"
-const MANIFEST_BOSS := "boss"
-const FIELD_ENEMY_ID := "enemyId"
 
 const FINISH_COLLECT_ALL := "collect_all"
 
@@ -158,13 +137,6 @@ var _restoration: RestorationSystem
 var _collectibles: CollectiblesSystem
 var _regen: RegenSystem
 var _lives: LifeSystem
-var _fleet: DriftFleetSystem
-var _flagship: FlagshipEncounter
-
-## Roster ids this world declared. Empty means the world declares no Drift
-## Fleet at all, which is the contract's absent default and what the
-## reference template ships.
-var _declared_enemies: PackedStringArray = PackedStringArray()
 var _affordance_gates: Array[Node3D] = []
 var _restoration_gates: Dictionary = {}  # gate_id -> Node3D
 var _checkpoint_nodes: Array[Node3D] = []
@@ -213,9 +185,7 @@ func wire() -> void:
 	_mods.expired.connect(
 		func(_mod_id: String) -> void: _apply_affordance_gates())
 
-	var restoration_store := SaveRestorationStore.new(save_system, world_id) \
-		if save_system != null else RestorationStore.new()
-	_restoration = RestorationSystem.new(_tuning, restoration_store)
+	_restoration = RestorationSystem.new(_tuning)
 	var errors: Array[RestorationError] = []
 	if not _restoration.declare_from_manifest(manifest, errors):
 		# Contract validation runs before load, so this is a defect worth
@@ -229,14 +199,7 @@ func wire() -> void:
 
 	_wire_collectibles()
 	_wire_pillar_one()
-	# After pillar one: the fleet and the Flagship both reach through Lives
-	# and Regeneration, which _wire_pillar_one builds. Before _wire_scene:
-	# the scene scan binds enemy nodes to the fleet those two create.
-	_wire_drift_fleet()
-	_wire_flagship()
 	_wire_scene()
-	# Scene gates must be bound before loading can emit traversal changes.
-	_restoration.load_saved()
 	_open_lives()
 	_apply_affordance_gates()
 	_publish_modifiers()
@@ -271,101 +234,6 @@ func _wire_collectibles() -> void:
 		_collectibles.collection_completed.connect(_on_collection_completed)
 
 
-## The Drift Fleet (REQ-012), which had no way into a world at all until now.
-##
-## DriftFleetSystem's own comment says it "owns no enemy placement and no
-## geometry: a world places enemies, and whatever binds the scene calls the
-## lanes below". This node IS that binder, and it was the missing half: the
-## framework, its roster and its tests were complete while no world could
-## reach any of it. Same shape as every other element here — the manifest
-## declares, the scene places, this joins the two.
-##
-## The system is built even when the world declares no enemies, so the
-## accessor never hands back null and the tick loop needs no special case;
-## with nothing declared it simply has nothing to do.
-func _wire_drift_fleet() -> void:
-	var registry := EnemyRegistry.new(_tuning)
-	var roster_errors: Array[EnemyError] = []
-	registry.load_directory(EnemyRegistry.ROSTER_DIRECTORY, roster_errors)
-	for error: EnemyError in roster_errors:
-		push_warning("WorldSystems: enemy roster: %s" % str(error))
-
-	_fleet = DriftFleetSystem.new(_tuning, registry)
-	_fleet.set_gill_mods(_mods)
-	_fleet.set_restoration(_restoration)
-	_fleet.set_life_system(_lives)
-	_fleet.audio_cue_requested.connect(
-		func(cue_id: String) -> void: audio_cue_requested.emit(cue_id))
-	# A dredger reverting a region is a world event the hub and HUD follow,
-	# not something they should have to poll the restoration system for.
-	_fleet.region_dredged.connect(
-		func(_enemy_id: String, region_id: String) -> void:
-			region_dredged.emit(region_id))
-
-	var declared: Variant = manifest.get(MANIFEST_ENEMIES, [])
-	if not (declared is Array):
-		push_warning("WorldSystems: 'enemies' must be a list; ignoring it")
-		return
-	for entry: Variant in declared as Array:
-		if not (entry is Dictionary):
-			push_warning("WorldSystems: each 'enemies' entry must be an object")
-			continue
-		var enemy_id := String((entry as Dictionary).get(FIELD_ENEMY_ID, ""))
-		if not registry.has(enemy_id):
-			push_warning("WorldSystems: world declares unknown enemy '%s'"
-				% enemy_id)
-			continue
-		if not (enemy_id in _declared_enemies):
-			_declared_enemies.append(enemy_id)
-
-
-## The Flagship (REQ-013), read from the world's optional `boss` element.
-##
-## Defeat is the ONLY thing this joins that the encounter cannot do alone:
-## the encounter calls RestorationSystem.unlock_region itself, so what is
-## added here is the world-facing signal and the phase anchor. A world with
-## no boss keeps the auto-unlock above, which is why the reference template
-## completes with no encounter at all.
-func _wire_flagship() -> void:
-	if not manifest.has(MANIFEST_BOSS):
-		return
-	var declaration: Variant = manifest.get(MANIFEST_BOSS)
-	if not (declaration is Dictionary):
-		push_warning("WorldSystems: 'boss' must be an object; ignoring it")
-		return
-
-	var errors: Array[FlagshipError] = []
-	_flagship = FlagshipEncounter.from_declaration(
-		declaration as Dictionary, errors)
-	if _flagship == null:
-		# Contract validation runs before load, so a refusal here is a defect
-		# worth hearing about — but it must not take the world down, and the
-		# region stays LOCKED rather than silently opening: a boss that failed
-		# to build has not been beaten.
-		push_warning("WorldSystems: boss declaration refused: %s"
-			% str(errors.map(func(e: FlagshipError) -> String: return str(e))))
-		return
-
-	_flagship.set_regen(_regen)
-	_flagship.set_life_system(_lives)
-	_flagship.set_restoration(_restoration)
-	_flagship.set_gill_mods(_mods)
-	_flagship.phase_completed.connect(
-		func(phase_id: String, index: int) -> void:
-			boss_phase_completed.emit(phase_id, index))
-	_flagship.encounter_defeated.connect(
-		func(region_id: String) -> void:
-			boss_defeated.emit(region_id))
-
-
-func get_drift_fleet() -> DriftFleetSystem:
-	return _fleet
-
-
-func get_flagship() -> FlagshipEncounter:
-	return _flagship
-
-
 ## Regeneration and Lives, joined the way the architecture declares them:
 ## Lives takes Regeneration as its CapabilityRestorer, and Regeneration
 ## publishes onto the controller through the modifier interface. Neither
@@ -373,9 +241,7 @@ func get_flagship() -> FlagshipEncounter:
 func _wire_pillar_one() -> void:
 	_regen = RegenSystem.new(_tuning)
 	_regen.capability_lost.connect(
-		func(_kind: Capability.Kind) -> void:
-			_publish_modifiers()
-			_flinch_player())
+		func(_kind: Capability.Kind) -> void: _publish_modifiers())
 	_regen.capability_restored.connect(
 		func(_kind: Capability.Kind) -> void: _publish_modifiers())
 	_regen.mutation_applied.connect(
@@ -451,11 +317,6 @@ func _physics_process(delta: float) -> void:
 		_mods.tick(delta)
 	if _regen != null:
 		_regen.tick(delta)
-	if _fleet != null:
-		# The entanglement and aura-linger timers live in the fleet precisely
-		# so a despawned enemy cannot strand the player debuffed forever —
-		# which only holds if something ticks it.
-		_fleet.tick(delta)
 
 
 ## The world is going away: the factors this world's regeneration published
@@ -517,11 +378,6 @@ func _wire_scene() -> void:
 			var gate_id := String(node.get_meta("gate_id", ""))
 			if not gate_id.is_empty():
 				_restoration_gates[gate_id] = node
-		elif node.is_in_group(GROUP_ENEMY) and node is Area3D:
-			_wire_enemy_node(node as Area3D)
-		elif node.is_in_group(GROUP_BOSS_PHASE) and node is Area3D:
-			(node as Area3D).body_entered.connect(
-				_on_pickup_touched.bind(node, _on_boss_phase_touched))
 
 
 ## A checkpoint declared as an Area3D is its own trigger. One declared as a
@@ -552,116 +408,6 @@ func _wire_collectible_node(node: Area3D) -> void:
 		node.queue_free()
 		return
 	node.body_entered.connect(_on_pickup_touched.bind(node, collect_node))
-
-
-## An enemy volume, bound to the lane its ROSTER ENTRY names rather than to
-## anything the scene chooses. A scene node carries an id and a position; the
-## behaviour is the registry's, so a world cannot invent an effect by placing
-## a node — which is the whole point of the sanctioned surface.
-##
-## An enemy the world never declared is left inert with a warning, exactly
-## like a collectible pickup naming an undeclared id. Placing a node is not a
-## declaration.
-func _wire_enemy_node(node: Area3D) -> void:
-	var enemy_id := String(node.get_meta(META_ENEMY_ID, ""))
-	if _fleet == null or not (enemy_id in _declared_enemies):
-		push_warning("WorldSystems: enemy node '%s' names undeclared unit '%s'"
-			% [node.name, enemy_id])
-		return
-	var enemy := _fleet.get_registry().get_enemy(enemy_id)
-	if enemy == null:
-		return
-
-	match enemy.behavior:
-		EnemyDef.Behavior.TOXIN_AURA:
-			# An aura is a VOLUME, not a hit: it applies while the player is
-			# inside and lingers after. Both edges matter, so both are bound.
-			node.body_entered.connect(
-				_on_pickup_touched.bind(node, _on_aura_entered))
-			node.body_exited.connect(
-				_on_pickup_touched.bind(node, _on_aura_exited))
-		EnemyDef.Behavior.DREDGE:
-			node.body_entered.connect(
-				_on_pickup_touched.bind(node, _on_dredger_touched))
-		_:
-			# Entangle and snag both land through the one contact lane; the
-			# registry decides which, and the affordance counters live there.
-			node.body_entered.connect(
-				_on_pickup_touched.bind(node, _on_enemy_contact))
-
-
-## The declared unit a scene node stands for, or "" if the node names one the
-## world never declared.
-##
-## Checked on every lane rather than only at wiring time. The wiring check
-## alone left the rule resting on "nothing else ever calls these" — and the
-## probes and tests DO drive these seams directly, which is exactly how an
-## undeclared unit would have slipped through with full effect.
-func _declared_unit_of(enemy_node: Node) -> String:
-	var enemy_id := String(enemy_node.get_meta(META_ENEMY_ID, ""))
-	if _fleet == null or not (enemy_id in _declared_enemies):
-		return ""
-	return enemy_id
-
-
-## Contact with an entangling or snagging unit. Driven through the same
-## deferred seam every other volume uses, so a probe can drive it without
-## physics.
-func _on_enemy_contact(enemy_node: Node) -> void:
-	var enemy_id := _declared_unit_of(enemy_node)
-	if not enemy_id.is_empty():
-		_fleet.contact(enemy_id)
-
-
-## A Dredger strikes the region its node names, reverting restored terrain
-## (REQ-008 AC-5). The region is the SCENE's to name because which stretch of
-## reef a dredger sits over is placement, not roster data.
-func _on_dredger_touched(enemy_node: Node) -> void:
-	var enemy_id := _declared_unit_of(enemy_node)
-	if enemy_id.is_empty():
-		return
-	var region_id := String(enemy_node.get_meta(META_REGION_ID, ""))
-	if region_id.is_empty():
-		push_warning("WorldSystems: dredger '%s' names no region"
-			% enemy_node.name)
-		return
-	_fleet.strike_region(enemy_id, region_id)
-
-
-func _on_aura_entered(enemy_node: Node) -> void:
-	var enemy_id := _declared_unit_of(enemy_node)
-	if not enemy_id.is_empty():
-		_fleet.enter_aura(enemy_id)
-
-
-func _on_aura_exited(enemy_node: Node) -> void:
-	var enemy_id := _declared_unit_of(enemy_node)
-	if not enemy_id.is_empty():
-		_fleet.exit_aura(enemy_id)
-
-
-## A boss phase volume: reaching it clears the current phase, IF the player
-## arrives in the grammar that phase demands.
-##
-## The grammar is read from the player at the moment of contact rather than
-## declared on the volume, because that is the whole point of AC-3 — a
-## water-only phase must be cleared while actually swimming. The encounter
-## itself refuses a phase whose affordance is not active, so this hands over
-## the fact and lets the declaration decide.
-##
-## This is the seam that makes the Flagship DRIVABLE from a scene at all: the
-## encounter's phase logic was complete and reachable only from a test.
-func _on_boss_phase_touched(volume: Node) -> void:
-	if _flagship == null:
-		return
-	var controller := _player_controller()
-	if controller == null:
-		return
-	if not _flagship.complete_phase(controller.get_grammar()):
-		# Not a defect: arriving on land at a water phase is the gate doing
-		# its job, and the player simply has to come back the right way.
-		return
-	boss_phase_reached.emit(String(volume.name))
 
 
 func _on_pickup_touched(body: Node3D, pickup: Node, handler: Callable) -> void:
@@ -793,16 +539,6 @@ func _return_player_to(position: Vector3, checkpoint_id: String) -> void:
 	returned_to_anchor.emit(position, checkpoint_id)
 
 
-## The visual half of a capability loss. The runtime already knows the moment
-## it happens; the body owns how the axolotl reacts to it, so this only asks.
-## A world running without a rigged player (the walk probes build bare
-## bodies) simply has nothing to flinch.
-func _flinch_player() -> void:
-	var body := _player() as AxolotlBody
-	if body != null:
-		body.play_hurt()
-
-
 func _player() -> Node3D:
 	var tree := Engine.get_main_loop() as SceneTree
 	if tree == null:
@@ -850,17 +586,8 @@ func _player_controller() -> AxolotlController:
 ## factors on the player's controller. Republished on every change.
 func _publish_modifiers() -> void:
 	var controller := _player_controller()
-	if controller == null:
-		return
-	var modifiers := controller.get_capability_modifiers()
-	if _regen != null:
-		_regen.publish_to(modifiers)
-	if _fleet != null:
-		# Handed over HERE rather than at wire time because the player may not
-		# exist yet when a world is built (the walk probes construct the world
-		# first). This runs at the end of wiring and again on every change, so
-		# the fleet gets the modifier interface as soon as there is one.
-		_fleet.set_capability_modifiers(modifiers)
+	if controller != null and _regen != null:
+		_regen.publish_to(controller.get_capability_modifiers())
 
 
 ## Every loss and regrowth asks for both channels (REQ-019 AC-2). The audio
@@ -900,16 +627,8 @@ func _on_feedback_requested(cue: FeedbackCue) -> void:
 # --- Gates ------------------------------------------------------------------
 
 func _on_mod_equipped(mod_id: String) -> void:
-	if save_system != null and not mod_id.is_empty():
-		save_system.set_gill_mod_unlocked(mod_id)
 	_apply_affordance_gates()
 	mod_equipped.emit(mod_id)
-
-
-## Snapshot through the same save interface used by pickups and checkpoints.
-func persist_progress() -> void:
-	if _restoration != null:
-		_restoration.save()
 
 
 ## An affordance gate is open exactly while the equipped mod grants its named

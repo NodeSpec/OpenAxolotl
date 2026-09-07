@@ -183,6 +183,35 @@ REQ-018 requires CI to run "the automated test suite" but nothing required that 
 - [ ] The suite runs in CI on every pull request
   → covered by Task T7
 
+### REQ-038: Coral Cove full platforming playthrough, proven by a flown route
+Category: functional | Status: pending
+_Shared with: World: Coral Cove — their slices live in their own task docs._
+Coral Cove must be a full platforming playthrough — run, jump, swim, dive, boost and climb, with difficulty rising across its acts — and its completability must remain a headless regression test rather than a hope.
+
+THE OLD PROBE SHAPED THE OLD LEVEL. The walk held one forward key from spawn to finish, which was honest for a corridor and quietly became the level's design: a route a held key can finish has no gaps, no climbs and no reason to leave the ground. Probe and level therefore change together.
+
+GEOMETRY COMES FROM MEASUREMENT. The controller is driven headlessly through the greybox against the shipped tuning and reports its envelope (run 4.20 m/s, standing jump 1.81 m, running gap 3.15 m edge to edge, climb 2.0 m/s under a 6.0 m ceiling, swim 6.0 m/s, boost ×2.2). Every mandatory gap and rise on the route sits inside documented design bounds under that envelope; exactly one jump is built to the envelope's edge and it is the OPTIONAL one, onto the lantern shrimp's ledge, so the hard reach is a choice and never a wall.
+
+THE ROUTE IS FLOWN, NOT HELD. A RoutePilot drives a declared waypoint list by pressing the same keys a player would press, through Input.parse_input_event, so bindings, grammar context, the Input System, PlayerIntent, the controller and move_and_slide are all under test on every run. Jumps commit by LOOKING — a short ray ahead along the direction of travel asks whether the floor stops there, and the hop fires on the last stride before it does — because the takeoff edge is the gap plus half the landing platform away from a waypoint, and no fixed distance is right for a 3 m pillar and a 12 m terrace at once. A waypoint that stops being reachable fails naming itself and where the body got to, which makes a broken route a bug report rather than a mystery.
+
+Building the pilot surfaced and fixed real bugs unit tests could not see (the climb dropping four metres at the lip, the second jump of a pair lost to a never-released edge-triggered key), which is the point of it: the probe is the one consumer that exercises the whole platforming surface every run.
+
+Checkpoint density follows REQ-003 AC-7 measured on the flown run, and the walk still proves every prior claim of the world — both grammars, both mod gates, the restorable region, collectibles, pillar one, completion and return.
+
+**Acceptance criteria — your task boxes:**
+- [x] The coral walk completes the world end to end by flying the designed waypoint route with real key presses — every jump, the dive under the brow, the rise over the shelf, the boost, the climb and both rivers — and still proves every prior claim: both grammars, both mod gates, seven seeds spent, the region restored, discoveries persisted, no life lost, completion and return
+  → owner unresolved — this node or a sharing node (World: Coral Cove): no contract evidence; assign via the requirement mapping
+- [x] The pilot commits each jump from an edge probe (a ray ahead along travel), not from a fixed distance, and a leg that cannot be completed fails naming the waypoint and the position reached
+  → owner unresolved — this node or a sharing node (World: Coral Cove): no contract evidence; assign via the requirement mapping
+- [x] Every mandatory gap is at most 2.7 m and every mandatory rise at most 1.3 m against the measured 3.15 m / 1.81 m envelope, verified edge to edge between platform footprints at generation time and enforced at run time by the flown route
+  → owner unresolved — this node or a sharing node (World: Coral Cove): no contract evidence; assign via the requirement mapping
+- [x] The optional lantern shrimp demands an envelope-edge jump off the route, and the flown route never collects it — the optional branch stays optional
+  → owner unresolved — this node or a sharing node (World: Coral Cove): no contract evidence; assign via the requirement mapping
+- [x] Checkpoint replay segments are measured on the flown run and every segment fits progression.max_retry_seconds
+  → owner unresolved — this node or a sharing node (World: Coral Cove): no contract evidence; assign via the requirement mapping
+- [x] The route exercises the climb contact grace and the sustained-verb cut on real geometry: the coral wall is crested without a fall and a held jump clears gaps a tapped one cannot
+  → owner unresolved — this node or a sharing node (World: Coral Cove): no contract evidence; assign via the requirement mapping
+
 ## Interface Contracts
 
 ### RECEIVES FROM: CI Pipeline (ci-cd-pipeline)

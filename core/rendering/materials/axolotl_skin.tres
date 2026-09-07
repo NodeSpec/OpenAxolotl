@@ -1,44 +1,23 @@
-[gd_resource type="StandardMaterial3D" load_steps=3 format=3]
+[gd_resource type="StandardMaterial3D" format=3]
 
 ; HERO SKIN — the axolotl's body, head, legs, belly and spots.
 ;
 ; Toy materials: saturated albedo, real lighting (docs/asset-contract.md).
 ; Colour comes from the model's vertex colours, so a regenerated model keeps
-; its own palette; this material says how that colour takes light — and, as
-; of REQ-040, what the surface is like up close.
-;
-; TWO BAKED MAPS ride on top of the vertex colour (the character is the one
-; asset the surface doctrine lets pay for image maps):
-;
-;   * the DETAIL map is a neutral mottle MULTIPLIED over the vertex colour
-;     (StandardMaterial3D multiplies albedo_texture, albedo_color and vertex
-;     colour together), so it shades the palette without ever changing it —
-;     a re-palette of the hero keeps its bake;
-;   * the NORMAL map carries pore-scale relief over soft mottle bumps, which
-;     is what reads as SKIN in a close-up and folds politely into the
-;     silhouette at gameplay distance.
-;
-; Both are computed by tools/blender/bake_hero_maps.py against the shipped
-; mesh's own tangents, so map and mesh cannot drift apart. The rest is the
-; vinyl-toy finish: a wet sheen (clearcoat), light entering rather than
-; bouncing (subsurface scattering, Forward+ only), and a soft rim.
-
-[ext_resource type="Texture2D" path="res://assets/character/axolotl/axolotl_skin_detail.png" id="1_detail"]
-[ext_resource type="Texture2D" path="res://assets/character/axolotl/axolotl_skin_normal.png" id="2_normal"]
+; its own palette; this material only says how that colour takes light: a
+; smooth, slightly wet skin (low-ish roughness, a soft clearcoat sheen) that
+; lets light through at the edges (subsurface scattering, Forward+ only) so
+; the sun reads through the thinner parts instead of stopping at the surface.
 
 [resource]
 vertex_color_use_as_albedo = true
 albedo_color = Color(1, 1, 1, 1)
-albedo_texture = ExtResource("1_detail")
 metallic = 0.0
 metallic_specular = 0.5
-roughness = 0.35
-normal_enabled = true
-normal_texture = ExtResource("2_normal")
-normal_scale = 1.3
+roughness = 0.4
 clearcoat_enabled = true
-clearcoat = 0.45
-clearcoat_roughness = 0.45
+clearcoat = 0.35
+clearcoat_roughness = 0.5
 subsurf_scatter_enabled = true
 subsurf_scatter_strength = 0.35
 rim_enabled = true

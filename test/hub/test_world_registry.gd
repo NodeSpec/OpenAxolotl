@@ -26,13 +26,13 @@ const HUB_SOURCES: PackedStringArray = [
 const CONFORMING_SCENE := """
 [gd_scene format=3]
 
-[node name="World" type="Node3D"]
+[node name=\"World\" type=\"Node3D\"]
 
-[node name="Spawn" type="Marker3D" parent="." groups=["spawn_point"]]
+[node name=\"Spawn\" type=\"Marker3D\" parent=\".\" groups=[\"spawn_point\"]]
 
-[node name="Checkpoint" type="Area3D" parent="." groups=["checkpoint"]]
+[node name=\"Checkpoint\" type=\"Area3D\" parent=\".\" groups=[\"checkpoint\"]]
 
-[node name="Finish" type="Area3D" parent="." groups=["finish_volume"]]
+[node name=\"Finish\" type=\"Area3D\" parent=\".\" groups=[\"finish_volume\"]]
 """
 
 
@@ -206,7 +206,7 @@ func test_req_009_a_contract_violation_is_named_on_the_portal() -> void:
 	var module := SCRATCH.path_join("no_checkpoints")
 	var scene := FileAccess.open(module.path_join("world.tscn"), FileAccess.WRITE)
 	scene.store_string(CONFORMING_SCENE.replace(
-		'groups=["checkpoint"]', 'groups=["decor"]'))
+		'groups=[\"checkpoint\"]', 'groups=[\"decor\"]'))
 	scene.close()
 
 	var registry := _registry()

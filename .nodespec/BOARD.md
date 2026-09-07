@@ -34,11 +34,16 @@
 | [REQ-029](#req-029--reference-template-world) — Reference Template World | 🔵 in-progress | 7/8 | 0/7 | 7/0/0 of 7 | World: Reference Template |
 | [REQ-030](#req-030--no-multiplayer--enforced-single-player-constraint) — No Multiplayer — Enforced Single-Player Constraint | 🔵 in-progress | 6/8 | 0/30 | 6/0/0 of 7 | World Static Analysis Gate |
 | [REQ-031](#req-031--shared-look-foundation) — Shared Look Foundation | 🔵 in-progress | 5/6 | 0/36 | 6/0/0 of 6 | OpenAxolotl Game Client |
-| [REQ-032](#req-032--blender-headless-refinement-pipeline) — Blender Headless Refinement Pipeline | 🔵 in-progress | 4/5 | 0/0 | 4/0/4 of 4 | Blender (headless), Model Refinement Pipeline |
+| [REQ-032](#req-032--blender-headless-refinement-pipeline) — Blender Headless Refinement Pipeline | 🔵 in-progress | 4/5 | 0/10 | 4/0/4 of 4 | Blender (headless), Model Refinement Pipeline |
 | [REQ-033](#req-033--hero-character-look) — Hero Character Look | 🔵 in-progress | 5/6 | 0/48 | 5/0/0 of 5 | Axolotl Controller, OpenAxolotl Game Client |
-| [REQ-034](#req-034--world-dressing-and-living-water) — World Dressing and Living Water | 🔵 in-progress | 5/6 | 0/36 | 5/0/0 of 5 | Model Refinement Pipeline, OpenAxolotl Game Client |
-| [REQ-035](#req-035--hero-rig-and-animation-set) — Hero rig and animation set | ✅ verified (smoke) | 8/8 | 0/58 | 8/0/0 of 8 | Asset Contract Validator, Axolotl Controller, Blender (headless), Model Refinement Pipeline, OpenAxolotl Game Client |
-| [REQ-036](#req-036--drift-fleet-and-flagship-reachable-from-a-world) — Drift Fleet and Flagship reachable from a world | ✅ verified (smoke) | 10/10 | 0/47 | 10/0/0 of 10 | Drift Fleet Enemy Framework, Flagship Boss Encounter, Model Refinement Pipeline, Restoration State System, World: Coral Cove |
+| [REQ-034](#req-034--world-dressing-and-living-water) — World Dressing and Living Water | 🔵 in-progress | 5/6 | 0/42 | 5/0/0 of 5 | Model Refinement Pipeline, OpenAxolotl Game Client |
+| [REQ-035](#req-035--hero-rig-and-animation-set) — Hero rig and animation set | ✅ verified (smoke) | 8/8 | 0/68 | 8/0/0 of 8 | Asset Contract Validator, Axolotl Controller, Blender (headless), Model Refinement Pipeline, OpenAxolotl Game Client |
+| [REQ-036](#req-036--drift-fleet-and-flagship-reachable-from-a-world) — Drift Fleet and Flagship reachable from a world | ✅ verified (smoke) | 10/10 | 0/53 | 10/0/0 of 10 | Drift Fleet Enemy Framework, Flagship Boss Encounter, Model Refinement Pipeline, Restoration State System, World: Coral Cove |
+| [REQ-037](#req-037--platformer-jump-feel-and-climb-robustness) — Platformer jump feel and climb robustness | ✅ verified (smoke) | 7/7 | 0/28 | 7/0/0 of 7 | Axolotl Controller, Balance and Tuning Data, Input System |
+| [REQ-038](#req-038--coral-cove-full-platforming-playthrough-proven-by-a-flown-route) — Coral Cove full platforming playthrough, proven by a flown route | ✅ verified (smoke) | 6/6 | 0/23 | 6/0/0 of 6 | Test Harness and Fixtures, World: Coral Cove |
+| [REQ-039](#req-039--forested-river-valley-procedural-surfaces-and-water-placed-as-difficulty) — Forested river valley: procedural surfaces and water placed as difficulty | ✅ verified (smoke) | 6/6 | 0/55 | 6/0/0 of 6 | Blender (headless), OpenAxolotl Game Client, World: Coral Cove |
+| [REQ-040](#req-040--hero-surface-quality-baked-character-maps-at-toy-grade-finish) — Hero surface quality: baked character maps at toy-grade finish | ✅ verified (smoke) | 6/6 | 0/46 | 6/0/0 of 6 | Blender (headless), Model Refinement Pipeline, OpenAxolotl Game Client |
+| [REQ-041](#req-041--hero-anatomy-fidelity-the-maintainers-reference-sheet-built) — Hero anatomy fidelity: the maintainer's reference sheet, built | 🔵 in-progress | 2/6 | 0/0 | 6/0/0 of 6 | — |
 
 ## REQ-001 — Axolotl Character Controller — Dual Movement Grammars <!-- r:REQ-001 -->
 status: in-progress · criteria 6/7 · tasks 0/12 · tests 6/0/0 of 6
@@ -1176,7 +1181,7 @@ status: in-progress · criteria 5/6 · tasks 0/36 · tests 6/0/0 of 6
 - ✅ TC-6 — test_every_water_volume_wears_the_shared_unshaded_water_surface
 
 ## REQ-032 — Blender Headless Refinement Pipeline <!-- r:REQ-032 -->
-status: in-progress · criteria 4/5 · tasks 0/0 · tests 4/0/4 of 4
+status: in-progress · criteria 4/5 · tasks 0/10 · tests 4/0/4 of 4
 ### Criteria
 - [x] The refinement command builds the documented headless Blender command line and reports a missing Blender as an invocation error, never a silent pass
   ↳ tests: TC-1 ✅ (stale)
@@ -1187,6 +1192,19 @@ status: in-progress · criteria 4/5 · tasks 0/0 · tests 4/0/4 of 4
 - [x] The shipped hero asset is the refined form and its provenance sidecar records the refinement as a tool in the chain
   ↳ tests: TC-4 ✅ (stale)
 - [ ] The refined axolotl reads smoother and more toy-like than the raw export in a rendered capture reviewed by the maintainer
+  ↳ tasks: T3 ☐ (Blender (headless)), T4 ☐ (Model Refinement Pipeline)
+### Tasks — Blender (headless) <!-- n:22222222-0000-4000-8000-000000000024 -->
+- [ ] **T1 — Author the binding configuration for External Service.** <!-- t:c714c44f -->
+- [ ] **T2 — Expose the interface Model Refinement Pipeline consumes, per Contract "Blender Headless CLI" (dependency).** <!-- t:0fef59fc -->
+- [ ] **T3 — Resolve ownership, then implement: "The refined axolotl reads smoother and more toy-like than the raw export in a rendered capture reviewed by the maintainer" (REQ-032).** <!-- t:147c1192 -->
+- [ ] **T4 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tasks — Model Refinement Pipeline <!-- n:22222222-0000-4000-8000-000000000025 -->
+- [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
+- [ ] **T2 — Implement the integration with Blender (headless) (blender) per Contract "Blender Headless CLI" (dependency).** <!-- t:65b6ef7e -->
+- [ ] **T3 — Implement the integration with Asset Contract Validator (python-backend) per Contract "GLB Header Reader" (dependency).** <!-- t:1cf0e1e9 -->
+- [ ] **T4 — Resolve ownership, then implement: "The refined axolotl reads smoother and more toy-like than the raw export in a rendered capture reviewed by the maintainer" (REQ-032).** <!-- t:147c1192 -->
+- [ ] **T5 — Resolve ownership, then implement: "The dressed hub and worlds read as an underwater place rather than a greybox to the maintainer in rendered captures" (REQ-034).** <!-- t:869fddb7 -->
+- [ ] **T6 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 
 ## REQ-033 — Hero Character Look <!-- r:REQ-033 -->
 status: in-progress · criteria 5/6 · tasks 0/48 · tests 5/0/0 of 5
@@ -1255,7 +1273,7 @@ status: in-progress · criteria 5/6 · tasks 0/48 · tests 5/0/0 of 5
 - [ ] **T36 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 
 ## REQ-034 — World Dressing and Living Water <!-- r:REQ-034 -->
-status: in-progress · criteria 5/6 · tasks 0/36 · tests 5/0/0 of 5
+status: in-progress · criteria 5/6 · tasks 0/42 · tests 5/0/0 of 5
 ### Criteria
 - [x] Every kit prop loads with meshes whose palette comes from vertex colours
   ↳ tests: TC-1 ✅
@@ -1268,7 +1286,14 @@ status: in-progress · criteria 5/6 · tasks 0/36 · tests 5/0/0 of 5
 - [x] Every walk probe, the perf gate and both contract checkers pass unchanged with the dressing in place
   ↳ tests: TC-5 ✅
 - [ ] The dressed hub and worlds read as an underwater place rather than a greybox to the maintainer in rendered captures
-  ↳ tasks: T35 ☐ (OpenAxolotl Game Client)
+  ↳ tasks: T5 ☐ (Model Refinement Pipeline), T35 ☐ (OpenAxolotl Game Client)
+### Tasks — Model Refinement Pipeline <!-- n:22222222-0000-4000-8000-000000000025 -->
+- [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
+- [ ] **T2 — Implement the integration with Blender (headless) (blender) per Contract "Blender Headless CLI" (dependency).** <!-- t:65b6ef7e -->
+- [ ] **T3 — Implement the integration with Asset Contract Validator (python-backend) per Contract "GLB Header Reader" (dependency).** <!-- t:1cf0e1e9 -->
+- [ ] **T4 — Resolve ownership, then implement: "The refined axolotl reads smoother and more toy-like than the raw export in a rendered capture reviewed by the maintainer" (REQ-032).** <!-- t:147c1192 -->
+- [ ] **T5 — Resolve ownership, then implement: "The dressed hub and worlds read as an underwater place rather than a greybox to the maintainer in rendered captures" (REQ-034).** <!-- t:869fddb7 -->
+- [ ] **T6 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tasks — OpenAxolotl Game Client <!-- n:22222222-0000-4000-8000-000000000001 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Implement the integration with Axolotl Controller (godot) per Contract "Axolotl Controller Interface" (dependency).** <!-- t:a33cf1c7 -->
@@ -1308,7 +1333,7 @@ status: in-progress · criteria 5/6 · tasks 0/36 · tests 5/0/0 of 5
 - [ ] **T36 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 
 ## REQ-035 — Hero rig and animation set <!-- r:REQ-035 -->
-status: verified (smoke) · criteria 8/8 · tasks 0/58 · tests 8/0/0 of 8
+status: verified (smoke) · criteria 8/8 · tasks 0/68 · tests 8/0/0 of 8
 ### Criteria
 - [x] The rigging pipeline runs headless in Blender and produces a skinned model carrying all six named clips (idle, waddle, swim, hop, fall, hurt), failing the build if any is missing or nothing is skinned
   ↳ tests: TC-035-01 ✅
@@ -1350,6 +1375,18 @@ status: verified (smoke) · criteria 8/8 · tasks 0/58 · tests 8/0/0 of 8
 - [ ] **T10 — Implement: "Both movement grammars feel distinct, responsive, and pleasurable in hands-on play" (REQ-001).** <!-- t:f6d9a45b -->
 - [ ] **T11 — Resolve ownership, then implement: "The axolotl reads as a glossy toy with wet eyes and glowing gills to the maintainer in a rendered capture on baseline-class hardware" (REQ-033).** <!-- t:c2d6a144 -->
 - [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tasks — Blender (headless) <!-- n:22222222-0000-4000-8000-000000000024 -->
+- [ ] **T1 — Author the binding configuration for External Service.** <!-- t:c714c44f -->
+- [ ] **T2 — Expose the interface Model Refinement Pipeline consumes, per Contract "Blender Headless CLI" (dependency).** <!-- t:0fef59fc -->
+- [ ] **T3 — Resolve ownership, then implement: "The refined axolotl reads smoother and more toy-like than the raw export in a rendered capture reviewed by the maintainer" (REQ-032).** <!-- t:147c1192 -->
+- [ ] **T4 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tasks — Model Refinement Pipeline <!-- n:22222222-0000-4000-8000-000000000025 -->
+- [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
+- [ ] **T2 — Implement the integration with Blender (headless) (blender) per Contract "Blender Headless CLI" (dependency).** <!-- t:65b6ef7e -->
+- [ ] **T3 — Implement the integration with Asset Contract Validator (python-backend) per Contract "GLB Header Reader" (dependency).** <!-- t:1cf0e1e9 -->
+- [ ] **T4 — Resolve ownership, then implement: "The refined axolotl reads smoother and more toy-like than the raw export in a rendered capture reviewed by the maintainer" (REQ-032).** <!-- t:147c1192 -->
+- [ ] **T5 — Resolve ownership, then implement: "The dressed hub and worlds read as an underwater place rather than a greybox to the maintainer in rendered captures" (REQ-034).** <!-- t:869fddb7 -->
+- [ ] **T6 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tasks — OpenAxolotl Game Client <!-- n:22222222-0000-4000-8000-000000000001 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Implement the integration with Axolotl Controller (godot) per Contract "Axolotl Controller Interface" (dependency).** <!-- t:a33cf1c7 -->
@@ -1389,7 +1426,7 @@ status: verified (smoke) · criteria 8/8 · tasks 0/58 · tests 8/0/0 of 8
 - [ ] **T36 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 
 ## REQ-036 — Drift Fleet and Flagship reachable from a world <!-- r:REQ-036 -->
-status: verified (smoke) · criteria 10/10 · tasks 0/47 · tests 10/0/0 of 10
+status: verified (smoke) · criteria 10/10 · tasks 0/53 · tests 10/0/0 of 10
 ### Criteria
 - [x] A world declaring no enemies still has a working DriftFleetSystem, so the absent default is a no-op rather than a null, and the reference template keeps exercising that path
   ↳ tests: TC-036-01 ✅
@@ -1432,6 +1469,13 @@ status: verified (smoke) · criteria 10/10 · tasks 0/47 · tests 10/0/0 of 10
 - [ ] **T6 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
 - [ ] **T7 — Implement: "The encounter reads as a climactic set piece and its restoration payoff lands" (REQ-013).** <!-- t:89189d9f -->
 - [ ] **T8 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tasks — Model Refinement Pipeline <!-- n:22222222-0000-4000-8000-000000000025 -->
+- [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
+- [ ] **T2 — Implement the integration with Blender (headless) (blender) per Contract "Blender Headless CLI" (dependency).** <!-- t:65b6ef7e -->
+- [ ] **T3 — Implement the integration with Asset Contract Validator (python-backend) per Contract "GLB Header Reader" (dependency).** <!-- t:1cf0e1e9 -->
+- [ ] **T4 — Resolve ownership, then implement: "The refined axolotl reads smoother and more toy-like than the raw export in a rendered capture reviewed by the maintainer" (REQ-032).** <!-- t:147c1192 -->
+- [ ] **T5 — Resolve ownership, then implement: "The dressed hub and worlds read as an underwater place rather than a greybox to the maintainer in rendered captures" (REQ-034).** <!-- t:869fddb7 -->
+- [ ] **T6 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tasks — Restoration State System <!-- n:22222222-0000-4000-8000-000000000008 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Implement the integration with Save System (godot) per Contract "Save Integration Interface" (dependency).** <!-- t:bcbdac74 -->
@@ -1462,3 +1506,253 @@ status: verified (smoke) · criteria 10/10 · tasks 0/47 · tests 10/0/0 of 10
 - [ ] **T13 — Implement: "Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen" (REQ-011).** <!-- t:472ee673 -->
 - [ ] **T14 — Implement: "Each world is fun to play through and delivers a satisfying broken-to-restored payoff" (REQ-011).** <!-- t:e1d96cf2 -->
 - [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+
+## REQ-037 — Platformer jump feel and climb robustness <!-- r:REQ-037 -->
+status: verified (smoke) · criteria 7/7 · tasks 0/28 · tests 7/0/0 of 7
+### Criteria
+- [x] Coyote time forgives a hop pressed just after leaving a ledge, expires after the tuned window, and is spent by firing so a hop can never chain into a mid-air ascent
+  ↳ tests: TC-REQ-037-1 ✅
+- [x] A hop pressed in mid-air is buffered on the rising edge only and fires on touchdown; the buffer expires rather than firing late, and holding the button does not refill it
+  ↳ tests: TC-REQ-037-2 ✅
+- [x] Releasing the hop mid-rise cuts the vertical speed by the tuned ratio; the cut never touches a descent, a rise the hop did not start, or a rise whose button is still held — proven through the real controller, where a tapped jump measurably rises less than a held one
+  ↳ tests: TC-REQ-037-3 ✅
+- [x] PlayerIntent carries a sustained verb set alongside the edge-triggered one: a held key sustains its verb until release, re-resolves under the live grammar (SPACE held through the water/land seam sustains what it means now), and is dropped on a device switch and on clear()
+  ↳ tests: TC-REQ-037-4 ✅
+- [x] A climber presses into the wall at the tuned adhesion on every frame — steering up, sideways, and clinging still — so motion along the surface cannot end the climb by starving it of contact, and the greybox smoke proves the climb rises in a real scene
+  ↳ tests: TC-REQ-037-5 ✅
+- [x] Losing wall contact for less than the tuned grace does not end a climb and regaining the wall resets the window; contact lost past the grace releases exactly once
+  ↳ tests: TC-REQ-037-6 ✅
+- [x] Every window, ratio and speed above is a tuning key with documented unit and range, and the greybox smoke and coral walk complete against the retuned arc
+  ↳ tests: TC-REQ-037-7 ✅
+### Tasks — Axolotl Controller <!-- n:22222222-0000-4000-8000-000000000002 -->
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
+- [ ] **T2 — Implement the integration with Audio System (godot) per Contract "Audio Event Interface" (dependency).** <!-- t:218035d2 -->
+- [ ] **T3 — Implement the integration with Balance and Tuning Data (godot) per Contract "Tuning Data Interface" (dependency).** <!-- t:03c75344 -->
+- [ ] **T4 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Axolotl Controller Interface" (dependency).** <!-- t:68abdd87 -->
+- [ ] **T5 — Expose the interface Regeneration and Capability System consumes, per Contract "Capability Modifier Interface" (dependency).** <!-- t:a57b3f8c -->
+- [ ] **T6 — Expose the interface Gill Mod Ability Framework consumes, per Contract "Axolotl Controller Interface" (dependency).** <!-- t:2ab653c5 -->
+- [ ] **T7 — Expose the interface Player HUD consumes, per Contract "HUD State Interface" (dependency).** <!-- t:3e14fc4a -->
+- [ ] **T8 — Expose the interface Input System consumes, per Contract "Player Input Interface" (dependency).** <!-- t:39cc30a2 -->
+- [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
+- [ ] **T10 — Implement: "Both movement grammars feel distinct, responsive, and pleasurable in hands-on play" (REQ-001).** <!-- t:f6d9a45b -->
+- [ ] **T11 — Resolve ownership, then implement: "The axolotl reads as a glossy toy with wet eyes and glowing gills to the maintainer in a rendered capture on baseline-class hardware" (REQ-033).** <!-- t:c2d6a144 -->
+- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tasks — Balance and Tuning Data <!-- n:22222222-0000-4000-8000-000000000019 -->
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
+- [ ] **T2 — Expose the interface Axolotl Controller consumes, per Contract "Tuning Data Interface" (dependency).** <!-- t:fa1448ec -->
+- [ ] **T3 — Expose the interface Regeneration and Capability System consumes, per Contract "Tuning Data Interface" (dependency).** <!-- t:6122b508 -->
+- [ ] **T4 — Expose the interface Lives and Checkpoint System consumes, per Contract "Tuning Data Interface" (dependency).** <!-- t:a6c293b2 -->
+- [ ] **T5 — Expose the interface Gill Mod Ability Framework consumes, per Contract "Tuning Data Interface" (dependency).** <!-- t:d3771261 -->
+- [ ] **T6 — Expose the interface Drift Fleet Enemy Framework consumes, per Contract "Tuning Data Interface" (dependency).** <!-- t:6d3c67ec -->
+- [ ] **T7 — Expose the interface Restoration State System consumes, per Contract "Tuning Data Interface" (dependency).** <!-- t:ec31be4d -->
+- [ ] **T8 — Expose the interface Camera System consumes, per Contract "Tuning Data Interface" (dependency).** <!-- t:3bf082ad -->
+- [ ] **T9 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
+- [ ] **T10 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tasks — Input System <!-- n:22222222-0000-4000-8000-000000000018 -->
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
+- [ ] **T2 — Implement the integration with Axolotl Controller (godot) per Contract "Player Input Interface" (dependency).** <!-- t:5edd7a53 -->
+- [ ] **T3 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Player Input Interface" (dependency).** <!-- t:f6257813 -->
+- [ ] **T4 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
+- [ ] **T5 — Implement: "The full verb set is playable without modal overload or uncomfortable finger contortion" (REQ-024).** <!-- t:789ff73c -->
+- [ ] **T6 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-037.tests.md
+
+## REQ-038 — Coral Cove full platforming playthrough, proven by a flown route <!-- r:REQ-038 -->
+status: verified (smoke) · criteria 6/6 · tasks 0/23 · tests 6/0/0 of 6
+### Criteria
+- [x] The coral walk completes the world end to end by flying the designed waypoint route with real key presses — every jump, the dive under the brow, the rise over the shelf, the boost, the climb and both rivers — and still proves every prior claim: both grammars, both mod gates, seven seeds spent, the region restored, discoveries persisted, no life lost, completion and return
+  ↳ tests: TC-REQ-038-1 ✅
+- [x] The pilot commits each jump from an edge probe (a ray ahead along travel), not from a fixed distance, and a leg that cannot be completed fails naming the waypoint and the position reached
+  ↳ tests: TC-REQ-038-2 ✅
+- [x] Every mandatory gap is at most 2.7 m and every mandatory rise at most 1.3 m against the measured 3.15 m / 1.81 m envelope, verified edge to edge between platform footprints at generation time and enforced at run time by the flown route
+  ↳ tests: TC-REQ-038-3 ✅
+- [x] The optional lantern shrimp demands an envelope-edge jump off the route, and the flown route never collects it — the optional branch stays optional
+  ↳ tests: TC-REQ-038-4 ✅
+- [x] Checkpoint replay segments are measured on the flown run and every segment fits progression.max_retry_seconds
+  ↳ tests: TC-REQ-038-5 ✅
+- [x] The route exercises the climb contact grace and the sustained-verb cut on real geometry: the coral wall is crested without a fall and a held jump clears gaps a tapped one cannot
+  ↳ tests: TC-REQ-038-6 ✅
+### Tasks — Test Harness and Fixtures <!-- n:22222222-0000-4000-8000-000000000020 -->
+- [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
+- [ ] **T2 — Implement the integration with OpenAxolotl Game Client (godot) per Contract "Core Module Dependency" (dependency).** <!-- t:06ec8f9a -->
+- [ ] **T3 — Expose the interface CI Pipeline consumes, per Contract "Validator CLI Invocation" (ipc).** <!-- t:a39cc42a -->
+- [ ] **T4 — Expose the interface Level Contract Compliance Checker consumes, per Contract "Shared Test Fixtures" (dependency).** <!-- t:7575f84a -->
+- [ ] **T5 — Expose the interface Asset Contract Validator consumes, per Contract "Shared Test Fixtures" (dependency).** <!-- t:159e5c24 -->
+- [ ] **T6 — Expose the interface World Static Analysis Gate consumes, per Contract "Shared Test Fixtures" (dependency).** <!-- t:8b32d9ab -->
+- [ ] **T7 — Implement: "The suite runs in CI on every pull request" (REQ-026).** <!-- t:2f756ac8 -->
+- [ ] **T8 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tasks — World: Coral Cove <!-- n:22222222-0000-4000-8000-000000000011 -->
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
+- [ ] **T2 — Implement the integration with Restoration State System (godot) per Contract "Restoration Region Interface" (dependency).** <!-- t:b339696f -->
+- [ ] **T3 — Implement the integration with Drift Fleet Enemy Framework (godot) per Contract "Enemy Registration Interface" (dependency).** <!-- t:091d8bdf -->
+- [ ] **T4 — Implement the integration with Gill Mod Ability Framework (godot) per Contract "Gill Mod Registration Interface" (dependency).** <!-- t:9ef5b42c -->
+- [ ] **T5 — Implement the integration with Collectibles System (godot) per Contract "Collectible Registration Interface" (dependency).** <!-- t:9bc134aa -->
+- [ ] **T6 — Implement the integration with Flagship Boss Encounter (godot) per Contract "Enemy Registration Interface" (dependency).** <!-- t:1f8b6190 -->
+- [ ] **T7 — Implement the integration with Camera System (godot) per Contract "Camera Hint Interface" (dependency).** <!-- t:e3e65073 -->
+- [ ] **T8 — Implement the integration with Save System (godot) per Contract "Save Integration Interface" (dependency).** <!-- t:bcbdac74 -->
+- [ ] **T9 — Implement the integration with Audio System (godot) per Contract "Audio Event Interface" (dependency).** <!-- t:218035d2 -->
+- [ ] **T10 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Level Contract v1" (dependency).** <!-- t:99890668 -->
+- [ ] **T11 — Expose the interface Level Contract Compliance Checker consumes, per Contract "Level Contract v1" (dependency).** <!-- t:87778b5e -->
+- [ ] **T12 — Expose the interface World Static Analysis Gate consumes, per Contract "Sanctioned World API Surface" (dependency).** <!-- t:a14fa597 -->
+- [ ] **T13 — Implement: "Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen" (REQ-011).** <!-- t:472ee673 -->
+- [ ] **T14 — Implement: "Each world is fun to play through and delivers a satisfying broken-to-restored payoff" (REQ-011).** <!-- t:e1d96cf2 -->
+- [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-038.tests.md
+
+## REQ-039 — Forested river valley: procedural surfaces and water placed as difficulty <!-- r:REQ-039 -->
+status: verified (smoke) · criteria 6/6 · tasks 0/55 · tests 6/0/0 of 6
+### Criteria
+- [x] A shared triplanar world-space terrain shader exists with a small set of client-owned material resources, and Coral Cove's platforms, walls, beds and banks wear them rather than per-node flat colours — with the two mod gates keeping flat colour as the deliberate exception
+  ↳ tests: TC-REQ-039-1 ✅
+- [x] The forest kit's five props are generated headless in Blender, deterministic under a seed, carry provenance records, and pass the Asset Contract validator inside the environment budget
+  ↳ tests: TC-REQ-039-2 ✅
+- [x] A missed jump anywhere over the act-1 river costs a swim and never a life, while a fall in the glow grotto still costs a life at the last checkpoint: the pit volume sits between the route and the scenery forest floor and the waterway spans exactly the forgiving stretch
+  ↳ tests: TC-REQ-039-3 ✅
+- [x] The gorge river is a mandatory swim between jump sections — entered from the landing, dived under the rib, exited onto the first terrace — and its slot walls stand at least twice the measured jump from any standable edge so the swim cannot be bypassed on a bank
+  ↳ tests: TC-REQ-039-4 ✅
+- [x] Every water volume in the world carries bubble particles (the REQ-034 dressing rule), emitted by the same construction that makes the volume so a new river cannot ship without them
+  ↳ tests: TC-REQ-039-5 ✅
+- [x] The retuned haze keeps distant geometry legible: rendered captures show the forest floor, trees and valley sides reading at route distance in every act, and the full verification chain stays green
+  ↳ tests: TC-REQ-039-6 ✅
+### Tasks — Blender (headless) <!-- n:22222222-0000-4000-8000-000000000024 -->
+- [ ] **T1 — Author the binding configuration for External Service.** <!-- t:c714c44f -->
+- [ ] **T2 — Expose the interface Model Refinement Pipeline consumes, per Contract "Blender Headless CLI" (dependency).** <!-- t:0fef59fc -->
+- [ ] **T3 — Resolve ownership, then implement: "The refined axolotl reads smoother and more toy-like than the raw export in a rendered capture reviewed by the maintainer" (REQ-032).** <!-- t:147c1192 -->
+- [ ] **T4 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tasks — OpenAxolotl Game Client <!-- n:22222222-0000-4000-8000-000000000001 -->
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
+- [ ] **T2 — Implement the integration with Axolotl Controller (godot) per Contract "Axolotl Controller Interface" (dependency).** <!-- t:a33cf1c7 -->
+- [ ] **T3 — Implement the integration with Camera System (godot) per Contract "Core Module Dependency" (dependency).** <!-- t:3d3effd0 -->
+- [ ] **T4 — Implement the integration with Save System (godot) per Contract "Save Integration Interface" (dependency).** <!-- t:bcbdac74 -->
+- [ ] **T5 — Implement the integration with Lives and Checkpoint System (godot) per Contract "Checkpoint and Life Interface" (dependency).** <!-- t:25e4d91d -->
+- [ ] **T6 — Implement the integration with World: Coral Cove (godot) per Contract "Level Contract v1" (dependency).** <!-- t:bd68a2e3 -->
+- [ ] **T7 — Implement the integration with World: Bubble Bay (godot) per Contract "Level Contract v1" (dependency).** <!-- t:04060a69 -->
+- [ ] **T8 — Implement the integration with Player HUD (godot) per Contract "HUD State Interface" (dependency).** <!-- t:c8a2f551 -->
+- [ ] **T9 — Implement the integration with Audio System (godot) per Contract "Audio Event Interface" (dependency).** <!-- t:218035d2 -->
+- [ ] **T10 — Implement the integration with Input System (godot) per Contract "Player Input Interface" (dependency).** <!-- t:da38b8ef -->
+- [ ] **T11 — Implement the integration with World: Reference Template (godot) per Contract "Level Contract v1" (dependency).** <!-- t:d6a167a4 -->
+- [ ] **T12 — Expose the interface Asset Contract Validator consumes, per Contract "Asset Contract v1" (custom).** <!-- t:8c09fb30 -->
+- [ ] **T13 — Expose the interface CI Pipeline consumes, per Contract "Core Module Dependency" (dependency).** <!-- t:8c23999f -->
+- [ ] **T14 — Expose the interface Test Harness and Fixtures consumes, per Contract "Core Module Dependency" (dependency).** <!-- t:61c95f0c -->
+- [ ] **T15 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
+- [ ] **T16 — Implement: "A prose contract document explains every schema element and its rationale for human contributors" (REQ-006).** <!-- t:f54e24ad -->
+- [ ] **T17 — Implement: "A documented migration path describes how a v1 world is brought forward when the contract version increments" (REQ-006).** <!-- t:05b606b3 -->
+- [ ] **T18 — Implement: "A contributor unfamiliar with the codebase can produce a conforming world from the contract document alone" (REQ-006).** <!-- t:92ae5f33 -->
+- [ ] **T19 — Implement: "Contract is frozen at v1 only after the official MVP worlds have been built against it and their friction fed back into it" (REQ-006).** <!-- t:a8f5e226 -->
+- [ ] **T20 — Implement: "A reference example world exists, passes the compliance checker, and is documented as the canonical starting point for a new world" (REQ-017).** <!-- t:88c0ed62 -->
+- [ ] **T21 — Implement: "Documentation states the exact commands to run the Level Contract checker, the Asset Contract validator, and the test suite locally, and a test proves those documented commands succeed as written" (REQ-017).** <!-- t:687cbf04 -->
+- [ ] **T22 — Implement: "Repository documents the architecture, Level Contract, Asset Contract, and Godot/GDScript conventions in a form an AI coding agent can consume directly from the repo" (REQ-017).** <!-- t:ce3124be -->
+- [ ] **T23 — Implement: "Documentation enumerates the extension interfaces for abilities, enemies, and worlds with worked examples" (REQ-017).** <!-- t:f50808d7 -->
+- [ ] **T24 — Implement: "README states the agent-authored contribution workflow with a concrete example prompt" (REQ-017).** <!-- t:9d36c5b8 -->
+- [ ] **T25 — Implement: "An AI coding agent, given only the repository and a one-sentence world brief, produces a world that passes the compliance checker" (REQ-017).** <!-- t:0426c75f -->
+- [ ] **T26 — Implement: "Official worlds sustain the documented frame-rate target on the baseline specification during normal traversal" (REQ-027).** <!-- t:6305f4b4 -->
+- [ ] **T27 — Implement: "A performance regression test runs in CI against an official world and fails when any of the three documented targets is breached" (REQ-027).** <!-- t:ba2d3e65 -->
+- [ ] **T28 — Implement: "The game remains smooth during a Flagship encounter combined with a restoration reversion, the heaviest expected load case" (REQ-027).** <!-- t:447b635f -->
+- [ ] **T29 — Implement: "The hub and both official worlds read as the documented toy look (saturated albedo, real lighting) to the maintainer on baseline-class hardware at the documented frame rate" (REQ-031).** <!-- t:08ad7205 -->
+- [ ] **T30 — Implement: "Code license is chosen and applied to the repository" (REQ-021).** <!-- t:281343c1 -->
+- [ ] **T31 — Implement: "Official art and audio asset license is chosen, documented, and distinguished from the code license" (REQ-021).** <!-- t:f8fd989b -->
+- [ ] **T32 — Implement: "Policy documents how AI-generated asset provenance and generator terms of service affect redistribution and relicensing" (REQ-021).** <!-- t:207df9ff -->
+- [ ] **T33 — Implement: "Contributor licensing terms for submitted worlds and assets are documented in the contribution guide" (REQ-021).** <!-- t:6f240208 -->
+- [ ] **T34 — Implement: "Licensing decision is resolved before the public README and contribution guide ship" (REQ-021).** <!-- t:ac788e6d -->
+- [ ] **T35 — Resolve ownership, then implement: "The dressed hub and worlds read as an underwater place rather than a greybox to the maintainer in rendered captures" (REQ-034).** <!-- t:869fddb7 -->
+- [ ] **T36 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tasks — World: Coral Cove <!-- n:22222222-0000-4000-8000-000000000011 -->
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
+- [ ] **T2 — Implement the integration with Restoration State System (godot) per Contract "Restoration Region Interface" (dependency).** <!-- t:b339696f -->
+- [ ] **T3 — Implement the integration with Drift Fleet Enemy Framework (godot) per Contract "Enemy Registration Interface" (dependency).** <!-- t:091d8bdf -->
+- [ ] **T4 — Implement the integration with Gill Mod Ability Framework (godot) per Contract "Gill Mod Registration Interface" (dependency).** <!-- t:9ef5b42c -->
+- [ ] **T5 — Implement the integration with Collectibles System (godot) per Contract "Collectible Registration Interface" (dependency).** <!-- t:9bc134aa -->
+- [ ] **T6 — Implement the integration with Flagship Boss Encounter (godot) per Contract "Enemy Registration Interface" (dependency).** <!-- t:1f8b6190 -->
+- [ ] **T7 — Implement the integration with Camera System (godot) per Contract "Camera Hint Interface" (dependency).** <!-- t:e3e65073 -->
+- [ ] **T8 — Implement the integration with Save System (godot) per Contract "Save Integration Interface" (dependency).** <!-- t:bcbdac74 -->
+- [ ] **T9 — Implement the integration with Audio System (godot) per Contract "Audio Event Interface" (dependency).** <!-- t:218035d2 -->
+- [ ] **T10 — Expose the interface OpenAxolotl Game Client consumes, per Contract "Level Contract v1" (dependency).** <!-- t:99890668 -->
+- [ ] **T11 — Expose the interface Level Contract Compliance Checker consumes, per Contract "Level Contract v1" (dependency).** <!-- t:87778b5e -->
+- [ ] **T12 — Expose the interface World Static Analysis Gate consumes, per Contract "Sanctioned World API Surface" (dependency).** <!-- t:a14fa597 -->
+- [ ] **T13 — Implement: "Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen" (REQ-011).** <!-- t:472ee673 -->
+- [ ] **T14 — Implement: "Each world is fun to play through and delivers a satisfying broken-to-restored payoff" (REQ-011).** <!-- t:e1d96cf2 -->
+- [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-039.tests.md
+
+## REQ-040 — Hero surface quality: baked character maps at toy-grade finish <!-- r:REQ-040 -->
+status: verified (smoke) · criteria 6/6 · tasks 0/46 · tests 6/0/0 of 6
+### Criteria
+- [x] The Blender lane bakes hero maps headless and reproducibly: the generated axolotl is UV-unwrapped and fine-detail albedo and normal maps are baked from procedural sources in one CLI invocation, recorded in the asset's provenance
+  ↳ tests: TC-REQ-040-1 ✅
+- [x] Baked maps conform to the Asset Contract character category: PNG, within the documented size bounds, living in the asset's own directory, and the validator passes
+  ↳ tests: TC-REQ-040-2 ✅
+- [x] The bake adds no geometry: the shipped hero's triangle count is unchanged and remains inside its Asset Contract budget
+  ↳ tests: TC-REQ-040-3 ✅
+- [x] The skin role material carries the baked normal and detail maps with subsurface scattering and a clearcoat sheen; the eye is high-gloss with its highlight guaranteed by the gleam geometry; gills glow when backlit — all applied by the existing role classification at runtime
+  ↳ tests: TC-REQ-040-4 ✅
+- [x] Rendered close-up and gameplay-distance captures on the shared rig show the finish: visible skin relief in close-up that vanishes into a clean silhouette at distance, no shading seam at any UV boundary
+  ↳ tests: TC-REQ-040-5 ✅
+- [x] The dressed Coral Cove scene's total triangle count is measured headlessly and stays under 150,000, and the performance gate runs the valley world within the documented budgets
+  ↳ tests: TC-REQ-040-6 ✅
+### Tasks — Blender (headless) <!-- n:22222222-0000-4000-8000-000000000024 -->
+- [ ] **T1 — Author the binding configuration for External Service.** <!-- t:c714c44f -->
+- [ ] **T2 — Expose the interface Model Refinement Pipeline consumes, per Contract "Blender Headless CLI" (dependency).** <!-- t:0fef59fc -->
+- [ ] **T3 — Resolve ownership, then implement: "The refined axolotl reads smoother and more toy-like than the raw export in a rendered capture reviewed by the maintainer" (REQ-032).** <!-- t:147c1192 -->
+- [ ] **T4 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tasks — Model Refinement Pipeline <!-- n:22222222-0000-4000-8000-000000000025 -->
+- [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
+- [ ] **T2 — Implement the integration with Blender (headless) (blender) per Contract "Blender Headless CLI" (dependency).** <!-- t:65b6ef7e -->
+- [ ] **T3 — Implement the integration with Asset Contract Validator (python-backend) per Contract "GLB Header Reader" (dependency).** <!-- t:1cf0e1e9 -->
+- [ ] **T4 — Resolve ownership, then implement: "The refined axolotl reads smoother and more toy-like than the raw export in a rendered capture reviewed by the maintainer" (REQ-032).** <!-- t:147c1192 -->
+- [ ] **T5 — Resolve ownership, then implement: "The dressed hub and worlds read as an underwater place rather than a greybox to the maintainer in rendered captures" (REQ-034).** <!-- t:869fddb7 -->
+- [ ] **T6 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tasks — OpenAxolotl Game Client <!-- n:22222222-0000-4000-8000-000000000001 -->
+- [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
+- [ ] **T2 — Implement the integration with Axolotl Controller (godot) per Contract "Axolotl Controller Interface" (dependency).** <!-- t:a33cf1c7 -->
+- [ ] **T3 — Implement the integration with Camera System (godot) per Contract "Core Module Dependency" (dependency).** <!-- t:3d3effd0 -->
+- [ ] **T4 — Implement the integration with Save System (godot) per Contract "Save Integration Interface" (dependency).** <!-- t:bcbdac74 -->
+- [ ] **T5 — Implement the integration with Lives and Checkpoint System (godot) per Contract "Checkpoint and Life Interface" (dependency).** <!-- t:25e4d91d -->
+- [ ] **T6 — Implement the integration with World: Coral Cove (godot) per Contract "Level Contract v1" (dependency).** <!-- t:bd68a2e3 -->
+- [ ] **T7 — Implement the integration with World: Bubble Bay (godot) per Contract "Level Contract v1" (dependency).** <!-- t:04060a69 -->
+- [ ] **T8 — Implement the integration with Player HUD (godot) per Contract "HUD State Interface" (dependency).** <!-- t:c8a2f551 -->
+- [ ] **T9 — Implement the integration with Audio System (godot) per Contract "Audio Event Interface" (dependency).** <!-- t:218035d2 -->
+- [ ] **T10 — Implement the integration with Input System (godot) per Contract "Player Input Interface" (dependency).** <!-- t:da38b8ef -->
+- [ ] **T11 — Implement the integration with World: Reference Template (godot) per Contract "Level Contract v1" (dependency).** <!-- t:d6a167a4 -->
+- [ ] **T12 — Expose the interface Asset Contract Validator consumes, per Contract "Asset Contract v1" (custom).** <!-- t:8c09fb30 -->
+- [ ] **T13 — Expose the interface CI Pipeline consumes, per Contract "Core Module Dependency" (dependency).** <!-- t:8c23999f -->
+- [ ] **T14 — Expose the interface Test Harness and Fixtures consumes, per Contract "Core Module Dependency" (dependency).** <!-- t:61c95f0c -->
+- [ ] **T15 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
+- [ ] **T16 — Implement: "A prose contract document explains every schema element and its rationale for human contributors" (REQ-006).** <!-- t:f54e24ad -->
+- [ ] **T17 — Implement: "A documented migration path describes how a v1 world is brought forward when the contract version increments" (REQ-006).** <!-- t:05b606b3 -->
+- [ ] **T18 — Implement: "A contributor unfamiliar with the codebase can produce a conforming world from the contract document alone" (REQ-006).** <!-- t:92ae5f33 -->
+- [ ] **T19 — Implement: "Contract is frozen at v1 only after the official MVP worlds have been built against it and their friction fed back into it" (REQ-006).** <!-- t:a8f5e226 -->
+- [ ] **T20 — Implement: "A reference example world exists, passes the compliance checker, and is documented as the canonical starting point for a new world" (REQ-017).** <!-- t:88c0ed62 -->
+- [ ] **T21 — Implement: "Documentation states the exact commands to run the Level Contract checker, the Asset Contract validator, and the test suite locally, and a test proves those documented commands succeed as written" (REQ-017).** <!-- t:687cbf04 -->
+- [ ] **T22 — Implement: "Repository documents the architecture, Level Contract, Asset Contract, and Godot/GDScript conventions in a form an AI coding agent can consume directly from the repo" (REQ-017).** <!-- t:ce3124be -->
+- [ ] **T23 — Implement: "Documentation enumerates the extension interfaces for abilities, enemies, and worlds with worked examples" (REQ-017).** <!-- t:f50808d7 -->
+- [ ] **T24 — Implement: "README states the agent-authored contribution workflow with a concrete example prompt" (REQ-017).** <!-- t:9d36c5b8 -->
+- [ ] **T25 — Implement: "An AI coding agent, given only the repository and a one-sentence world brief, produces a world that passes the compliance checker" (REQ-017).** <!-- t:0426c75f -->
+- [ ] **T26 — Implement: "Official worlds sustain the documented frame-rate target on the baseline specification during normal traversal" (REQ-027).** <!-- t:6305f4b4 -->
+- [ ] **T27 — Implement: "A performance regression test runs in CI against an official world and fails when any of the three documented targets is breached" (REQ-027).** <!-- t:ba2d3e65 -->
+- [ ] **T28 — Implement: "The game remains smooth during a Flagship encounter combined with a restoration reversion, the heaviest expected load case" (REQ-027).** <!-- t:447b635f -->
+- [ ] **T29 — Implement: "The hub and both official worlds read as the documented toy look (saturated albedo, real lighting) to the maintainer on baseline-class hardware at the documented frame rate" (REQ-031).** <!-- t:08ad7205 -->
+- [ ] **T30 — Implement: "Code license is chosen and applied to the repository" (REQ-021).** <!-- t:281343c1 -->
+- [ ] **T31 — Implement: "Official art and audio asset license is chosen, documented, and distinguished from the code license" (REQ-021).** <!-- t:f8fd989b -->
+- [ ] **T32 — Implement: "Policy documents how AI-generated asset provenance and generator terms of service affect redistribution and relicensing" (REQ-021).** <!-- t:207df9ff -->
+- [ ] **T33 — Implement: "Contributor licensing terms for submitted worlds and assets are documented in the contribution guide" (REQ-021).** <!-- t:6f240208 -->
+- [ ] **T34 — Implement: "Licensing decision is resolved before the public README and contribution guide ship" (REQ-021).** <!-- t:ac788e6d -->
+- [ ] **T35 — Resolve ownership, then implement: "The dressed hub and worlds read as an underwater place rather than a greybox to the maintainer in rendered captures" (REQ-034).** <!-- t:869fddb7 -->
+- [ ] **T36 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-040.tests.md
+
+## REQ-041 — Hero anatomy fidelity: the maintainer's reference sheet, built <!-- r:REQ-041 -->
+status: in-progress · criteria 2/6 · tasks 0/0 · tests 6/0/0 of 6
+### Criteria
+- [ ] The gill plumes have volume rather than lying in a plane: measured over one side's plume in the shipped model, the smallest principal spread of the filament mass is at least 0.22 of the largest. THE BAR MOVED WITH THE DESIGN: it was 0.30 against a build that massed filaments radially around every stalk and scored 0.512; the reference sheet's three flat feathers are inherently less voluminous and score 0.273, so the bar now sits between the two readings it must tell apart — 0.147 for one flat sheet, 0.273 for three fanned feathers
+  ↳ tests: test_hero_anatomy::gill_plumes_have_volume ✅
+- [x] The skull is the widest part of the animal: the shipped mesh's maximum half-width forward of the shoulders exceeds its maximum half-width through the trunk behind them
+  ↳ tests: test_hero_anatomy::skull_is_widest ✅
+- [ ] The cross-section ratio inverts along the animal: the tail is laterally compressed (width below height) while the skull is wider than tall by at least 1.20. NOT the 1.5 a real salamander's flat wedge gives — the reference sheet's head is a soft dome and measures 1.39 — and the tail half still carries most of the discrimination at 0.62 against a bound of 1.0
+  ↳ tests: test_hero_anatomy::cross_section_ratio_inverts ✅
+- [ ] The eye is the reference sheet's large glossy one rather than the small lidless amphibian eye an earlier build shipped: its radius is between a fifth and two fifths of the skull's half-width, and it sits off the centreline as one of a readable pair. THIS CRITERION WAS REWRITTEN, not relaxed — the maintainer chose the reference's eye over the realistic one, so the old "under a sixth" bound was describing a design that is no longer wanted
+  ↳ tests: test_hero_anatomy::eye_is_amphibian ✅
+- [x] The generator builds limbs and toes as branches of one edge skeleton per role rather than as separate objects joined afterwards, so the shipped skin is continuous flesh at every limb join
+  ↳ tests: test_hero_anatomy::feet_continuous_with_body ✅
+- [ ] The maintainer accepts rendered portraits of the shipped hero as matching their reference sheet at professional game-character craft
+### Tests
+- ✅ test_hero_anatomy::eye_is_the_reference_sheets_large_glossy_one — The eye is the reference sheet's large glossy one

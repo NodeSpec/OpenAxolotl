@@ -3,7 +3,7 @@
   "title": "OpenAxolotl Level Contract v1",
   "description": "What any world module must provide to be a valid OpenAxolotl world. This file is the MACHINE-READABLE half of the contract; docs/level-contract.md is the prose half and explains the reasoning. Where the two disagree, this file wins.",
   "sourceOfTruth": "The compliance checker loads this file and hardcodes no conformance rule. Adding a rule of an EXISTING ruleKind changes checker behaviour with no code change to the checker. Adding a NEW ruleKind is the one case that needs checker work, which is why the kinds below are few and deliberately general rather than one kind per element.",
-  "authoringPath": "Code and Godot scenes only. There is no editor GUI authoring path, in any phase \u2014 which is what keeps this surface narrow enough to check, and what lets a human and an AI coding agent build a world the same way.",
+  "authoringPath": "Code and Godot scenes only. There is no editor GUI authoring path, in any phase — which is what keeps this surface narrow enough to check, and what lets a human and an AI coding agent build a world the same way.",
   "ruleKinds": {
     "manifest_field_present": {
       "arguments": ["field"],
@@ -94,7 +94,7 @@
         "path": "export_presets.cfg"
       }
     ],
-    "forbiddenFileRationale": "A world module carrying its own project.godot or export preset is trying to be a game rather than a module, and would override project-wide policy \u2014 the typed-GDScript settings and the no-networking declarations REQ-030 depends on."
+    "forbiddenFileRationale": "A world module carrying its own project.godot or export preset is trying to be a game rather than a module, and would override project-wide policy — the typed-GDScript settings and the no-networking declarations REQ-030 depends on."
   },
   "required": {
     "contractVersion": {
@@ -154,7 +154,7 @@
           "min": 1
         }
       ],
-      "rationale": "At least one. The spacing rule \u2014 replay time from any checkpoint to the next within progression.max_retry_seconds \u2014 is a separate check that needs a traversal model, and belongs to the world's own test rather than to structural conformance."
+      "rationale": "At least one. The spacing rule — replay time from any checkpoint to the next within progression.max_retry_seconds — is a separate check that needs a traversal model, and belongs to the world's own test rather than to structural conformance."
     },
     "finishCondition": {
       "manifestField": "finishCondition",
@@ -180,11 +180,11 @@
         "restore_all_regions": "Every declared restorable region reaches restored. Requires restorableRegions.",
         "collect_all": "Every declared collectible is collected. Requires collectibles."
       },
-      "rationale": "A closed set. An open-ended 'custom' kind would put completion logic back into world script, which is exactly what makes a world unverifiable \u2014 and it is the one thing the hub must be able to trust."
+      "rationale": "A closed set. An open-ended 'custom' kind would put completion logic back into world script, which is exactly what makes a world unverifiable — and it is the one thing the hub must be able to trust."
     },
     "controllerCompatibility": {
       "manifestField": "controllerCompatibility",
-      "description": "The Axolotl Controller Interface version the world was built against. A DECLARATION, not a call \u2014 worlds never invoke the controller (see the Sanctioned World API Surface).",
+      "description": "The Axolotl Controller Interface version the world was built against. A DECLARATION, not a call — worlds never invoke the controller (see the Sanctioned World API Surface).",
       "rules": [
         {
           "kind": "manifest_field_present",
@@ -226,39 +226,19 @@
   },
   "optional": {
     "collectibles": {
-      "absentDefault": "none \u2014 the world declares no collectibles and the collectibles system is not engaged for it",
-      "manifestField": "collectibles",
-      "description": "An array of collectible declarations. The manifest says WHAT exists; the scene says WHERE, by placing an Area3D in group `collectible` with metadata `collectible_id` naming a declared id \u2014 a transform in JSON would drift from the geometry it sits on, the same reasoning spawnPoint gives. Two kinds with two lifetimes, kept distinct because only one is spent.",
-      "entryShape": {
-        "collectibleId": "string, unique within the world (the save namespace is already per world)",
-        "kind": "one of the kinds below",
-        "regionId": "required for kind resource: the restorableRegions entry it restores",
-        "displayName": "optional string for the HUD and credits; defaults to the id",
-        "kinds": {
-          "resource": "A restoration resource. SPENT: delivered to regionId through the Restoration Region Interface and consumed to advance its state (collectibles.resource_pickup_value per pickup). A TYPE the scene may place any number of times; never persisted by id, because the region's banked count is what persists.",
-          "discovery": "A rescued creature or a secret. KEPT: counted per world, persisted to the profile by id the moment it is collected, and absent from the scene on re-entry. One instance per declaration; the scene places it exactly once."
-        }
-      },
-      "rules": [
-        {
-          "kind": "manifest_field_type",
-          "field": "collectibles",
-          "type": "array"
-        }
-      ],
-      "completion": "The `collect_all` finish condition completes when every declared DISCOVERY collectible is collected. Resources are consumables and never part of completion. It can never complete vacuously: a collect_all world declaring no discovery collectibles is uncompletable, and the runtime says so at load.",
-      "rationale": "Optional because the reward layer is exactly that \u2014 a world with no optional branches has nothing to reward. Nothing in any other finish condition may depend on a collectible existing, which is what keeps the absent default real: the reference template declares none and completes."
+      "absentDefault": "none — the world declares no collectibles and the collectibles system is not engaged for it",
+      "manifestField": "collectibles"
     },
     "enemies": {
-      "absentDefault": "none \u2014 no Drift Fleet units spawn",
+      "absentDefault": "none — no Drift Fleet units spawn",
       "manifestField": "enemies"
     },
     "boss": {
-      "absentDefault": "none \u2014 the world has no Flagship encounter and remains fully completable",
+      "absentDefault": "none — the world has no Flagship encounter and remains fully completable",
       "manifestField": "boss"
     },
     "customAbility": {
-      "absentDefault": "none \u2014 only the installed Gill Mods are available",
+      "absentDefault": "none — only the installed Gill Mods are available",
       "manifestField": "customAbility",
       "description": "A Gill Mod declaration the world ships itself, registered through the Gill Mod Registration Interface. Travels the same validation a shipped mod does."
     },
@@ -271,21 +251,21 @@
       "manifestField": "npcs"
     },
     "music": {
-      "absentDefault": "the engine's default bed plays \u2014 never silence, because silence reads as a bug rather than as a choice",
+      "absentDefault": "the engine's default bed plays — never silence, because silence reads as a bug rather than as a choice",
       "manifestField": "music"
     },
     "cameraHints": {
-      "absentDefault": "none \u2014 the camera uses its default framing for the active grammar",
+      "absentDefault": "none — the camera uses its default framing for the active grammar",
       "manifestField": null,
       "description": "Camera hint volumes placed in the scene, overriding framing declaratively. No custom camera code is permitted in a world, in any circumstance."
     },
     "restorableRegions": {
-      "absentDefault": "none \u2014 the world has no restoration progression",
+      "absentDefault": "none — the world has no restoration progression",
       "manifestField": "restorableRegions",
       "description": "Each region declares the barren/resourced/restored progression plus a SEPARATE boolean unlocked flag. The flag is not a fourth state."
     },
     "tuningOverrides": {
-      "absentDefault": "none \u2014 every tuning value stays at its global setting",
+      "absentDefault": "none — every tuning value stays at its global setting",
       "manifestField": "tuningOverrides",
       "rules": [
         {

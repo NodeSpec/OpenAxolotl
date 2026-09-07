@@ -320,16 +320,3 @@ func test_req_030_save_node_uses_no_multiplayer_api() -> void:
 			assert_bool(text.contains(symbol)).override_failure_message(
 				"REQ-030: '%s' contains forbidden multiplayer symbol '%s'" % [path, symbol]
 			).is_false()
-
-
-func test_req_014_repeated_disk_save_replaces_previous_profile() -> void:
-	var path := _path("replace")
-	var save := SaveSystem.new()
-	save.open_world("reef", {})
-	assert_bool(save.save_to_file(path)).is_true()
-	save.put_world_data("reef", {"completed": true})
-	assert_bool(save.save_to_file(path)).is_true()
-	var reloaded := SaveSystem.new()
-	assert_bool(reloaded.load_from_file(path)).is_true()
-	assert_bool(bool(reloaded.get_world_data("reef")["completed"])).is_true()
-	assert_bool(FileAccess.file_exists(path + ".tmp")).is_false()

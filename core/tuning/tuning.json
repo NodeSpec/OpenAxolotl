@@ -8,103 +8,299 @@
   ],
   "worldOverridableRationale": "A closed set, enumerated here so the Level Contract can reference this list rather than keeping a second one that drifts. Per-world difficulty and restoration economy are legitimately a world's business. Movement, capability, camera and enemy tuning stay global so the game stays coherent across forks.",
   "values": {
-    "camera.collision.margin_m": {
-      "value": 0.25,
-      "unit": "meters",
-      "min": 0.05,
-      "max": 2.0,
-      "description": "How far short of contact geometry the camera stops. The minimum is deliberately above zero: REQ-005 AC-2 requires the camera to NEVER clip into geometry, and a zero margin puts it exactly on the surface where the near plane makes clipping a floating-point coin flip."
-    },
-    "camera.follow.land_distance_m": {
-      "value": 3.0,
-      "unit": "meters",
-      "min": 0.5,
-      "max": 30.0,
-      "description": "Follow distance in the land grammar. Closer than water, which reads as a conventional third-person follow. The gap between the two is what the grammar transition interpolates across, and therefore what the per-frame clamp is measured on."
-    },
-    "camera.follow.land_pitch_deg": {
-      "value": 20.0,
-      "unit": "degrees",
-      "min": -80.0,
-      "max": 80.0,
-      "description": "Camera pitch above the axolotl in the land grammar. Higher than water so ledges and hop targets read against the ground."
-    },
-    "camera.follow.min_distance_m": {
-      "value": 0.8,
-      "unit": "meters",
-      "min": 0.1,
-      "max": 10.0,
-      "description": "Floor on how far collision avoidance may pull the camera in. Below this the camera would be inside the axolotl; when geometry demands closer than this, the floor wins and the camera clips rather than turning the view inside out."
-    },
-    "camera.follow.water_distance_m": {
-      "value": 4.5,
-      "unit": "meters",
-      "min": 0.5,
-      "max": 30.0,
-      "description": "Follow distance in the water grammar. Further back than land so the axolotl can pitch and roll in full 3D without the camera chasing every reorientation."
-    },
-    "camera.follow.water_pitch_deg": {
-      "value": 10.0,
-      "unit": "degrees",
-      "min": -80.0,
-      "max": 80.0,
-      "description": "Camera pitch above the axolotl in the water grammar. Near level, because underwater the interesting space is ahead rather than below."
-    },
-    "camera.look.assist_deg_per_second": {
-      "value": 55.0,
-      "unit": "degrees_per_second",
-      "min": 0.0,
-      "max": 360.0,
-      "description": "How fast the idle assist eases the camera back behind travel. Deliberately slower than the player's own turn rate so the assist never feels like it is wrestling the stick. 0.0 disables the assist entirely, leaving the camera wherever the player left it."
-    },
-    "camera.look.assist_delay_seconds": {
-      "value": 1.1,
-      "unit": "seconds",
-      "min": 0.0,
-      "max": 10.0,
-      "description": "How long after the player stops touching the look axis before the camera begins easing back behind the direction of travel. Long enough that aiming a jump and then taking it does not have the camera swing mid-air; 0.0 makes the assist immediate, which reintroduces the feedback loop that made a trailing camera and camera-relative movement chase each other."
-    },
-    "camera.look.invert_pitch": {
-      "value": 0.0,
-      "unit": "boolean",
+    "controller.transition.momentum_retention_ratio": {
+      "value": 0.85,
+      "unit": "ratio",
       "min": 0.0,
       "max": 1.0,
-      "description": "Non-zero inverts the pitch axis, so pushing the stick or mouse forward looks up. A preference rather than a tuning value, and it lives here because there is no options screen yet; when one exists it writes this through the save profile's settings section."
+      "description": "Fraction of speed magnitude retained when crossing a water/land boundary. Applied to magnitude, not the vector, so a surfacing swimmer keeps speed without keeping an underwater heading."
     },
-    "camera.look.max_pitch_deg": {
-      "value": 62.0,
-      "unit": "degrees",
+    "controller.swim.base_speed_m_per_s": {
+      "value": 6.0,
+      "unit": "meters_per_second",
+      "min": 0.5,
+      "max": 30.0,
+      "description": "Base swim speed under full 3D directional steering, before capability modifiers and the bubble boost multiplier."
+    },
+    "controller.swim.drag_per_second": {
+      "value": 1.1,
+      "unit": "per_second",
+      "min": 0.1,
+      "max": 60.0,
+      "description": "How briskly a swimming axolotl sheds speed when the player is not steering. An order of magnitude gentler than the land drag: water is the grammar that GLIDES, and that contrast is a large part of what makes the two read as mechanically distinct. Also bounds a fall into water, which would otherwise sink at its entry speed until it hit the floor."
+    },
+    "controller.waddle.base_speed_m_per_s": {
+      "value": 2.5,
+      "unit": "meters_per_second",
+      "min": 0.5,
+      "max": 20.0,
+      "description": "Base grounded waddle speed. Deliberately well below the swim speed: water is the fast grammar, and that gap is what makes the two read as distinct rather than as one speed with a different animation."
+    },
+    "controller.waddle.drag_per_second": {
+      "value": 12.0,
+      "unit": "per_second",
+      "min": 0.1,
+      "max": 60.0,
+      "description": "How briskly a grounded axolotl sheds horizontal speed when the player is not steering. Applied as exp(-rate*delta) so the tuned number means the same at any frame rate. High relative to the swim drag: land should feel planted, and releasing the key should stop you almost at once. The minimum is deliberately above zero -- at zero the axolotl would coast forever and walk off the level, which is a bug rather than a tuning choice."
+    },
+    "controller.dive.speed_m_per_s": {
+      "value": 5.0,
+      "unit": "meters_per_second",
+      "min": 0.5,
+      "max": 30.0,
+      "description": "Descent rate of a deliberate dive. A dive sets the vertical component outright rather than adding to steering, so diving from a standstill still descends."
+    },
+    "controller.bubble_boost.duration_s": {
+      "value": 1.5,
+      "unit": "seconds",
+      "min": 0.1,
+      "max": 20.0,
+      "description": "How long a bubble boost multiplies swim speed. Scaled down by capability.gill_loss.boost_duration_multiplier while a gill is lost."
+    },
+    "controller.bubble_boost.cooldown_s": {
+      "value": 4.0,
+      "unit": "seconds",
+      "min": 0.1,
+      "max": 120.0,
+      "description": "Recovery window after a bubble boost ends, during which it cannot be re-activated. The minimum is deliberately above zero: REQ-001 AC-2 requires the boost to be GOVERNED by a cooldown, so a tuning file that zeroes it must fail to load rather than quietly producing an ungoverned boost."
+    },
+    "controller.bubble_boost.speed_multiplier": {
+      "value": 2.2,
+      "unit": "multiplier",
+      "min": 1.0,
+      "max": 10.0,
+      "description": "Swim speed multiplier while a bubble boost is active."
+    },
+    "controller.hop.impulse_m_per_s": {
+      "value": 6.0,
+      "unit": "meters_per_second",
+      "min": 0.5,
+      "max": 30.0,
+      "description": "Upward velocity a hop imparts. Only available while grounded, so a hop cannot be chained in mid-air."
+    },
+    "controller.gravity.land_m_per_s2": {
+      "value": 18.0,
+      "unit": "meters_per_second_squared",
+      "min": 1.0,
+      "max": 60.0,
+      "description": "Downward acceleration applied by the scene-tree body while the land grammar is active and the axolotl is neither climbing nor grappling. Higher than real gravity on purpose: a platformer hop that follows a 9.81 arc reads as floaty, and the hop impulse is tuned against this number rather than against physics."
+    },
+    "controller.gravity.water_m_per_s2": {
+      "value": 0.0,
+      "unit": "meters_per_second_squared",
       "min": 0.0,
-      "max": 89.0,
-      "description": "How far above the axolotl the player may pitch the camera. Generous on purpose: looking down at the level is how a platformer player reads a drop before taking it, and that is the single most useful thing a look axis buys."
+      "max": 10.0,
+      "description": "Downward drift while swimming. 0.0 is neutral buoyancy, which is the intended feel: an axolotl holds its depth and the vertical axis belongs entirely to steering. Raise it to make water sink the player when they stop steering."
     },
-    "camera.look.min_pitch_deg": {
-      "value": -25.0,
-      "unit": "degrees",
-      "min": -89.0,
-      "max": 0.0,
-      "description": "How far below level the player may pitch the camera. Not -89: looking straight up from under the axolotl frames nothing the player can act on, and the orbit would pass through the floor."
+    "controller.gravity.terminal_speed_m_per_s": {
+      "value": 30.0,
+      "unit": "meters_per_second",
+      "min": 1.0,
+      "max": 120.0,
+      "description": "Maximum downward speed gravity may accumulate. Bounds a long fall so a pit plunge stays readable and cannot tunnel through thin floor collision."
     },
-    "camera.look.mouse_deg_per_pixel": {
-      "value": 0.14,
-      "unit": "degrees",
-      "min": 0.01,
-      "max": 2.0,
-      "description": "How far the view turns per pixel of mouse motion. The whole look axis: without it the camera only trailed the direction of travel and a jump could not be aimed. Sensitivity is per-pixel rather than per-frame so a flick means the same at any frame rate."
+    "controller.climb.speed_m_per_s": {
+      "value": 2.0,
+      "unit": "meters_per_second",
+      "min": 0.1,
+      "max": 20.0,
+      "description": "Movement speed while attached to a climbable surface. Deliberately NOT scaled by leg loss: a lost leg lowers how high the axolotl can reach, not how fast it climbs."
     },
-    "camera.look.stick_deadzone": {
-      "value": 0.18,
+    "controller.climb.max_height_m": {
+      "value": 6.0,
+      "unit": "meters",
+      "min": 0.5,
+      "max": 60.0,
+      "description": "How far the axolotl can rise on a single climbable surface, measured from where it attached. Multiplied by capability.leg_loss.climb_height_multiplier, which is what makes REQ-002's 'leg reduces climb height' a measurable number rather than a claim. At the ceiling the climber can still move sideways and descend."
+    },
+    "controller.grapple.max_range_m": {
+      "value": 12.0,
+      "unit": "meters",
+      "min": 1.0,
+      "max": 60.0,
+      "description": "Maximum tongue-grapple anchor distance. Tested inclusively: an anchor exactly at this range attaches, one beyond it is rejected."
+    },
+    "controller.grapple.pull_speed_m_per_s": {
+      "value": 14.0,
+      "unit": "meters_per_second",
+      "min": 1.0,
+      "max": 60.0,
+      "description": "Speed at which an attached grapple pulls the axolotl toward its anchor. Faster than swimming, so the grapple reads as a traversal shortcut rather than a slow winch."
+    },
+    "controller.grapple.arrival_radius_m": {
+      "value": 0.6,
+      "unit": "meters",
+      "min": 0.05,
+      "max": 5.0,
+      "description": "Distance at which an attached grapple counts as arrived and detaches. Without a radius the pull would oscillate around the anchor forever."
+    },
+    "controller.dash.max_charges": {
+      "value": 2,
+      "unit": "count",
+      "min": 1,
+      "max": 5,
+      "description": "Water-powered dash charges held at once. The dash is usable in both grammars but recharges only in water."
+    },
+    "controller.dash.recharge_seconds_per_charge": {
+      "value": 3.0,
+      "unit": "seconds",
+      "min": 0.25,
+      "max": 30.0,
+      "description": "Time submerged to regain one dash charge. Does not accrue on land."
+    },
+    "controller.facing.turn_rate_deg_per_s": {
+      "value": 540.0,
+      "unit": "degrees_per_second",
+      "min": 30.0,
+      "max": 3600.0,
+      "description": "How fast the axolotl's body swings to face its direction of travel. Fast enough that a reversal reads as a flick rather than a slow pivot, slow enough that the turn is visible: an instant snap makes the character look teleported."
+    },
+    "controller.squash.hop_stretch": {
+      "value": 0.25,
+      "unit": "ratio",
+      "min": 0.0,
+      "max": 1.0,
+      "description": "How much taller the model stretches at the start of a hop, as a fraction of its rest height; width shrinks to keep the volume. Visual only. 0.0 disables the stretch."
+    },
+    "controller.squash.land_squash": {
+      "value": 0.3,
       "unit": "ratio",
       "min": 0.0,
       "max": 0.9,
-      "description": "Stick magnitude below which look input is ignored, applied to the vector's LENGTH rather than per axis so a diagonal push does not have to clear the threshold twice. Past it the rate is rescaled from the edge, so the first movement is slow rather than a jump to full speed."
+      "description": "How much shorter the model squashes on landing, as a fraction of its rest height; width grows to keep the volume. Visual only. 0.0 disables the squash."
     },
-    "camera.look.stick_deg_per_second": {
-      "value": 180.0,
-      "unit": "degrees_per_second",
-      "min": 10.0,
-      "max": 720.0,
-      "description": "Turn rate at full stick deflection. Rate-based rather than displacement-based, because that is what a stick means: held over, it keeps turning. A full 180-degree turn takes a second, which is quick enough to catch a gap behind you and slow enough to aim."
+    "controller.squash.recover_rate_per_s": {
+      "value": 10.0,
+      "unit": "per_second",
+      "min": 1.0,
+      "max": 60.0,
+      "description": "Exponential rate at which a squash or stretch returns to rest. 10.0 recovers most of the way in a quarter of a second: quick enough to read as rubber, slow enough that a hop visibly stretches before the arc."
+    },
+    "capability.tail_loss.swim_speed_multiplier": {
+      "value": 0.6,
+      "unit": "multiplier",
+      "min": 0.1,
+      "max": 1.0,
+      "description": "Swim speed while the tail is lost. Capability loss degrades traversal; it never ends a run on its own. The minimum is above zero on purpose: REQ-002 AC-3 rests on a product of strictly positive factors, so every capability lost still leaves the axolotl able to move."
+    },
+    "capability.gill_loss.boost_duration_multiplier": {
+      "value": 0.5,
+      "unit": "multiplier",
+      "min": 0.1,
+      "max": 1.0,
+      "description": "Bubble-boost duration while a gill is lost."
+    },
+    "capability.leg_loss.climb_height_multiplier": {
+      "value": 0.5,
+      "unit": "multiplier",
+      "min": 0.1,
+      "max": 1.0,
+      "description": "Reachable climb height while a leg is lost. Multiplies controller.climb.max_height_m."
+    },
+    "regen.mutation.duration_s": {
+      "value": 20.0,
+      "unit": "seconds",
+      "min": 1.0,
+      "max": 300.0,
+      "description": "How long a mutated regrowth loadout persists before reverting to the baseline form."
+    },
+    "progression.default_lives_per_attempt": {
+      "value": 3,
+      "unit": "count",
+      "min": 1,
+      "max": 99,
+      "description": "Lives granted at the start of an attempt. Lives are spent only on catastrophic events, never on ordinary capability loss."
+    },
+    "progression.max_retry_seconds": {
+      "value": 5.0,
+      "unit": "seconds",
+      "min": 0.5,
+      "max": 60.0,
+      "description": "Upper bound from losing a life to being playable again at the last checkpoint."
+    },
+    "gillmod.bubble.duration_s": {
+      "value": 6.0,
+      "unit": "seconds",
+      "min": 0.5,
+      "max": 120.0,
+      "description": "Active duration of the Bubble Gill mod."
+    },
+    "gillmod.bubble.cooldown_s": {
+      "value": 10.0,
+      "unit": "seconds",
+      "min": 0.0,
+      "max": 300.0,
+      "description": "Cooldown after the Bubble Gill mod deactivates."
+    },
+    "gillmod.jet.duration_s": {
+      "value": 4.0,
+      "unit": "seconds",
+      "min": 0.5,
+      "max": 120.0,
+      "description": "Active duration of the Jet Gill mod, the counter to Netbot entanglement."
+    },
+    "gillmod.jet.cooldown_s": {
+      "value": 12.0,
+      "unit": "seconds",
+      "min": 0.0,
+      "max": 300.0,
+      "description": "Cooldown after the Jet Gill mod deactivates."
+    },
+    "gillmod.glow.duration_s": {
+      "value": 15.0,
+      "unit": "seconds",
+      "min": 0.5,
+      "max": 120.0,
+      "description": "Active duration of the Glow Gill mod, which reveals Hookline Rig lines in murk."
+    },
+    "gillmod.glow.cooldown_s": {
+      "value": 8.0,
+      "unit": "seconds",
+      "min": 0.0,
+      "max": 300.0,
+      "description": "Cooldown after the Glow Gill mod deactivates."
+    },
+    "enemy.hookline.mod_strip_seconds": {
+      "value": 8.0,
+      "unit": "seconds",
+      "min": 0.5,
+      "max": 60.0,
+      "description": "Window for which a Hookline Rig snag strips the equipped Gill Mod."
+    },
+    "enemy.runoff.vision_debuff_factor": {
+      "value": 0.45,
+      "unit": "factor",
+      "min": 0.05,
+      "max": 1.0,
+      "description": "Vision range multiplier while inside a Runoff Drone toxin volume."
+    },
+    "enemy.runoff.gill_recharge_multiplier": {
+      "value": 0.3,
+      "unit": "multiplier",
+      "min": 0.0,
+      "max": 1.0,
+      "description": "Gill recharge rate multiplier while inside a Runoff Drone toxin volume."
+    },
+    "enemy.runoff.duration_s": {
+      "value": 6.0,
+      "unit": "seconds",
+      "min": 0.5,
+      "max": 60.0,
+      "description": "How long the Runoff Drone debuff persists after leaving the toxin volume."
+    },
+    "enemy.netbot.swim_speed_multiplier": {
+      "value": 0.35,
+      "unit": "multiplier",
+      "min": 0.0,
+      "max": 1.0,
+      "description": "Swim speed while entangled in a Netbot ghost net."
+    },
+    "enemy.netbot.entangle_seconds": {
+      "value": 5.0,
+      "unit": "seconds",
+      "min": 0.5,
+      "max": 60.0,
+      "description": "Entanglement duration if the player does not counter with Jet Gills."
     },
     "camera.smoothing.max_position_delta_m_per_frame": {
       "value": 0.35,
@@ -134,341 +330,47 @@
       "max": 60.0,
       "description": "Exponential damping rate for camera pitch and yaw. Slightly brisker than position: a camera that lags in angle reads as unresponsive faster than one that lags in distance."
     },
-    "capability.gill_loss.boost_duration_multiplier": {
-      "value": 0.5,
-      "unit": "multiplier",
-      "min": 0.1,
-      "max": 1.0,
-      "description": "Bubble-boost duration while a gill is lost."
-    },
-    "capability.leg_loss.climb_height_multiplier": {
-      "value": 0.5,
-      "unit": "multiplier",
-      "min": 0.1,
-      "max": 1.0,
-      "description": "Reachable climb height while a leg is lost. Multiplies controller.climb.max_height_m."
-    },
-    "capability.tail_loss.swim_speed_multiplier": {
-      "value": 0.6,
-      "unit": "multiplier",
-      "min": 0.1,
-      "max": 1.0,
-      "description": "Swim speed while the tail is lost. Capability loss degrades traversal; it never ends a run on its own. The minimum is above zero on purpose: REQ-002 AC-3 rests on a product of strictly positive factors, so every capability lost still leaves the axolotl able to move."
-    },
-    "collectibles.resource_pickup_value": {
-      "value": 1,
-      "unit": "resources",
-      "min": 1,
-      "max": 10,
-      "description": "Restoration resources one resource-kind collectible delivers to its declared region when picked up. Read at pickup time by the Collectibles System, never cached. A world's restoration economy is this value times its placed pickups against the region costs, so raising it makes every world's restoration cheaper at once; per-world economy belongs in the overridable resource costs instead."
-    },
-    "controller.bubble_boost.cooldown_s": {
-      "value": 4.0,
-      "unit": "seconds",
-      "min": 0.1,
-      "max": 120.0,
-      "description": "Recovery window after a bubble boost ends, during which it cannot be re-activated. The minimum is deliberately above zero: REQ-001 AC-2 requires the boost to be GOVERNED by a cooldown, so a tuning file that zeroes it must fail to load rather than quietly producing an ungoverned boost."
-    },
-    "controller.bubble_boost.duration_s": {
-      "value": 1.5,
-      "unit": "seconds",
-      "min": 0.1,
-      "max": 20.0,
-      "description": "How long a bubble boost multiplies swim speed. Scaled down by capability.gill_loss.boost_duration_multiplier while a gill is lost."
-    },
-    "controller.bubble_boost.speed_multiplier": {
-      "value": 2.2,
-      "unit": "multiplier",
-      "min": 1.0,
-      "max": 10.0,
-      "description": "Swim speed multiplier while a bubble boost is active."
-    },
-    "controller.climb.adhesion_m_per_s": {
-      "value": 1.0,
-      "unit": "meters_per_second",
-      "min": 0.0,
-      "max": 10.0,
-      "description": "Speed pushed INTO the climbable surface every frame while attached. The body ends a climb the moment it stops touching the wall, and a climber moving purely along the surface generates no contact -- so without this the climb detaches on its second frame. move_and_slide absorbs the component against the wall, so it costs no movement. Raise it if a climber pops off a bumpy or curved surface; 0.0 disables it and restores the detaching behaviour."
-    },
-    "controller.climb.contact_grace_seconds": {
-      "value": 0.3,
-      "unit": "seconds",
-      "min": 0.0,
-      "max": 2.0,
-      "description": "How long a climber may keep the wall after the body stops touching it. A seam or a curve in a surface drops the capsule clear for a frame or two, and cresting a lip loses contact while the feet are still below it -- without this grace both end the climb and drop the player the whole way back down. Like coyote time it changes no reachable height, only how much precision the geometry demands. 0.0 restores the strict frame-by-frame release."
-    },
-    "controller.climb.max_height_m": {
-      "value": 6.0,
+    "camera.follow.water_distance_m": {
+      "value": 4.5,
       "unit": "meters",
       "min": 0.5,
-      "max": 60.0,
-      "description": "How far the axolotl can rise on a single climbable surface, measured from where it attached. Multiplied by capability.leg_loss.climb_height_multiplier, which is what makes REQ-002's 'leg reduces climb height' a measurable number rather than a claim. At the ceiling the climber can still move sideways and descend."
+      "max": 30.0,
+      "description": "Follow distance in the water grammar. Further back than land so the axolotl can pitch and roll in full 3D without the camera chasing every reorientation."
     },
-    "controller.climb.speed_m_per_s": {
-      "value": 2.0,
-      "unit": "meters_per_second",
-      "min": 0.1,
-      "max": 20.0,
-      "description": "Movement speed while attached to a climbable surface. Deliberately NOT scaled by leg loss: a lost leg lowers how high the axolotl can reach, not how fast it climbs."
-    },
-    "controller.dash.max_charges": {
-      "value": 2,
-      "unit": "count",
-      "min": 1,
-      "max": 5,
-      "description": "Water-powered dash charges held at once. The dash is usable in both grammars but recharges only in water."
-    },
-    "controller.dash.recharge_seconds_per_charge": {
+    "camera.follow.land_distance_m": {
       "value": 3.0,
-      "unit": "seconds",
-      "min": 0.25,
-      "max": 30.0,
-      "description": "Time submerged to regain one dash charge. Does not accrue on land."
-    },
-    "controller.dive.speed_m_per_s": {
-      "value": 5.0,
-      "unit": "meters_per_second",
+      "unit": "meters",
       "min": 0.5,
       "max": 30.0,
-      "description": "Descent rate of a deliberate dive. A dive sets the vertical component outright rather than adding to steering, so diving from a standstill still descends."
+      "description": "Follow distance in the land grammar. Closer than water, which reads as a conventional third-person follow. The gap between the two is what the grammar transition interpolates across, and therefore what the per-frame clamp is measured on."
     },
-    "controller.facing.turn_rate_deg_per_s": {
-      "value": 540.0,
-      "unit": "degrees_per_second",
-      "min": 30.0,
-      "max": 3600.0,
-      "description": "How fast the axolotl's body swings to face its direction of travel. Fast enough that a reversal reads as a flick rather than a slow pivot, slow enough that the turn is visible: an instant snap makes the character look teleported."
+    "camera.follow.water_pitch_deg": {
+      "value": 10.0,
+      "unit": "degrees",
+      "min": -80.0,
+      "max": 80.0,
+      "description": "Camera pitch above the axolotl in the water grammar. Near level, because underwater the interesting space is ahead rather than below."
     },
-    "controller.grapple.arrival_radius_m": {
-      "value": 0.6,
-      "unit": "meters",
-      "min": 0.05,
-      "max": 5.0,
-      "description": "Distance at which an attached grapple counts as arrived and detaches. Without a radius the pull would oscillate around the anchor forever."
-    },
-    "controller.grapple.max_range_m": {
-      "value": 12.0,
-      "unit": "meters",
-      "min": 1.0,
-      "max": 60.0,
-      "description": "Maximum tongue-grapple anchor distance. Tested inclusively: an anchor exactly at this range attaches, one beyond it is rejected."
-    },
-    "controller.grapple.pull_speed_m_per_s": {
-      "value": 14.0,
-      "unit": "meters_per_second",
-      "min": 1.0,
-      "max": 60.0,
-      "description": "Speed at which an attached grapple pulls the axolotl toward its anchor. Faster than swimming, so the grapple reads as a traversal shortcut rather than a slow winch."
-    },
-    "controller.gravity.land_m_per_s2": {
+    "camera.follow.land_pitch_deg": {
       "value": 20.0,
-      "unit": "meters_per_second_squared",
-      "min": 1.0,
-      "max": 60.0,
-      "description": "Downward acceleration applied by the scene-tree body while the land grammar is active and the axolotl is neither climbing nor grappling. Higher than real gravity on purpose: a platformer hop that follows a 9.81 arc reads as floaty, and the hop impulse is tuned against this number rather than against physics."
+      "unit": "degrees",
+      "min": -80.0,
+      "max": 80.0,
+      "description": "Camera pitch above the axolotl in the land grammar. Higher than water so ledges and hop targets read against the ground."
     },
-    "controller.gravity.terminal_speed_m_per_s": {
-      "value": 30.0,
-      "unit": "meters_per_second",
-      "min": 1.0,
-      "max": 120.0,
-      "description": "Maximum downward speed gravity may accumulate. Bounds a long fall so a pit plunge stays readable and cannot tunnel through thin floor collision."
-    },
-    "controller.gravity.water_m_per_s2": {
-      "value": 0.0,
-      "unit": "meters_per_second_squared",
-      "min": 0.0,
+    "camera.follow.min_distance_m": {
+      "value": 0.8,
+      "unit": "meters",
+      "min": 0.1,
       "max": 10.0,
-      "description": "Downward drift while swimming. 0.0 is neutral buoyancy, which is the intended feel: an axolotl holds its depth and the vertical axis belongs entirely to steering. Raise it to make water sink the player when they stop steering."
+      "description": "Floor on how far collision avoidance may pull the camera in. Below this the camera would be inside the axolotl; when geometry demands closer than this, the floor wins and the camera clips rather than turning the view inside out."
     },
-    "controller.hop.buffer_seconds": {
-      "value": 0.14,
-      "unit": "seconds",
-      "min": 0.0,
-      "max": 0.5,
-      "description": "How long a hop pressed in mid-air is remembered and fired on landing. Without it, chaining a jump immediately on touchdown requires hitting the exact landing frame. Remembered on the rising edge only, so holding the button does not refill it."
-    },
-    "controller.hop.coyote_seconds": {
-      "value": 0.12,
-      "unit": "seconds",
-      "min": 0.0,
-      "max": 0.5,
-      "description": "How long after walking off a ledge a hop still fires. Players press jump a few frames LATE far more often than early, and without this those presses vanish silently. 0.0 disables coyote time and restores the strict grounded-only hop."
-    },
-    "controller.hop.impulse_m_per_s": {
-      "value": 9.0,
-      "unit": "meters_per_second",
-      "min": 0.5,
-      "max": 30.0,
-      "description": "Upward velocity a hop imparts. Only available while grounded (or inside the coyote window), so a hop cannot be chained in mid-air. With the land gravity of 20 m/s^2 this gives a 2.03 m peak and 0.90 s of airtime, which is the arc every gap and ledge height in the official worlds is measured against -- changing it invalidates those clearances, so the reachability probe re-derives them from this value rather than hard-coding distances."
-    },
-    "controller.hop.release_cut_ratio": {
-      "value": 0.45,
-      "unit": "ratio",
-      "min": 0.0,
-      "max": 1.0,
-      "description": "Fraction of the RISING vertical speed kept when the player releases the hop button mid-climb. This is what makes one button express a range of heights, so a level can ask for a small hop onto a low ledge and a full leap across a gap without a second verb. 1.0 disables the cut and every jump reaches full height."
-    },
-    "controller.squash.hop_stretch": {
+    "camera.collision.margin_m": {
       "value": 0.25,
-      "unit": "ratio",
-      "min": 0.0,
-      "max": 1.0,
-      "description": "How much taller the model stretches at the start of a hop, as a fraction of its rest height; width shrinks to keep the volume. Visual only. 0.0 disables the stretch."
-    },
-    "controller.squash.land_squash": {
-      "value": 0.3,
-      "unit": "ratio",
-      "min": 0.0,
-      "max": 0.9,
-      "description": "How much shorter the model squashes on landing, as a fraction of its rest height; width grows to keep the volume. Visual only. 0.0 disables the squash."
-    },
-    "controller.squash.recover_rate_per_s": {
-      "value": 10.0,
-      "unit": "per_second",
-      "min": 1.0,
-      "max": 60.0,
-      "description": "Exponential rate at which a squash or stretch returns to rest. 10.0 recovers most of the way in a quarter of a second: quick enough to read as rubber, slow enough that a hop visibly stretches before the arc."
-    },
-    "controller.swim.base_speed_m_per_s": {
-      "value": 6.0,
-      "unit": "meters_per_second",
-      "min": 0.5,
-      "max": 30.0,
-      "description": "Base swim speed under full 3D directional steering, before capability modifiers and the bubble boost multiplier."
-    },
-    "controller.swim.drag_per_second": {
-      "value": 1.1,
-      "unit": "per_second",
-      "min": 0.1,
-      "max": 60.0,
-      "description": "How briskly a swimming axolotl sheds speed when the player is not steering. An order of magnitude gentler than the land drag: water is the grammar that GLIDES, and that contrast is a large part of what makes the two read as mechanically distinct. Also bounds a fall into water, which would otherwise sink at its entry speed until it hit the floor."
-    },
-    "controller.transition.momentum_retention_ratio": {
-      "value": 0.85,
-      "unit": "ratio",
-      "min": 0.0,
-      "max": 1.0,
-      "description": "Fraction of speed magnitude retained when crossing a water/land boundary. Applied to magnitude, not the vector, so a surfacing swimmer keeps speed without keeping an underwater heading."
-    },
-    "controller.waddle.base_speed_m_per_s": {
-      "value": 4.2,
-      "unit": "meters_per_second",
-      "min": 0.5,
-      "max": 20.0,
-      "description": "Base grounded waddle speed. Still well below the swim speed -- water is the fast grammar and that gap is what makes the two read as distinct -- but fast enough that a jump covers useful ground: at the tuned arc it yields 3.78 m of horizontal reach, which is what makes gap jumping a real verb rather than a hop in place."
-    },
-    "controller.waddle.drag_per_second": {
-      "value": 12.0,
-      "unit": "per_second",
-      "min": 0.1,
-      "max": 60.0,
-      "description": "How briskly a grounded axolotl sheds horizontal speed when the player is not steering. Applied as exp(-rate*delta) so the tuned number means the same at any frame rate. High relative to the swim drag: land should feel planted, and releasing the key should stop you almost at once. The minimum is deliberately above zero -- at zero the axolotl would coast forever and walk off the level, which is a bug rather than a tuning choice."
-    },
-    "enemy.hookline.mod_strip_seconds": {
-      "value": 8.0,
-      "unit": "seconds",
-      "min": 0.5,
-      "max": 60.0,
-      "description": "Window for which a Hookline Rig snag strips the equipped Gill Mod."
-    },
-    "enemy.netbot.entangle_seconds": {
-      "value": 5.0,
-      "unit": "seconds",
-      "min": 0.5,
-      "max": 60.0,
-      "description": "Entanglement duration if the player does not counter with Jet Gills."
-    },
-    "enemy.netbot.swim_speed_multiplier": {
-      "value": 0.35,
-      "unit": "multiplier",
-      "min": 0.0,
-      "max": 1.0,
-      "description": "Swim speed while entangled in a Netbot ghost net."
-    },
-    "enemy.runoff.duration_s": {
-      "value": 6.0,
-      "unit": "seconds",
-      "min": 0.5,
-      "max": 60.0,
-      "description": "How long the Runoff Drone debuff persists after leaving the toxin volume."
-    },
-    "enemy.runoff.gill_recharge_multiplier": {
-      "value": 0.3,
-      "unit": "multiplier",
-      "min": 0.0,
-      "max": 1.0,
-      "description": "Gill recharge rate multiplier while inside a Runoff Drone toxin volume."
-    },
-    "enemy.runoff.vision_debuff_factor": {
-      "value": 0.45,
-      "unit": "factor",
+      "unit": "meters",
       "min": 0.05,
-      "max": 1.0,
-      "description": "Vision range multiplier while inside a Runoff Drone toxin volume."
-    },
-    "gillmod.bubble.cooldown_s": {
-      "value": 10.0,
-      "unit": "seconds",
-      "min": 0.0,
-      "max": 300.0,
-      "description": "Cooldown after the Bubble Gill mod deactivates."
-    },
-    "gillmod.bubble.duration_s": {
-      "value": 6.0,
-      "unit": "seconds",
-      "min": 0.5,
-      "max": 120.0,
-      "description": "Active duration of the Bubble Gill mod."
-    },
-    "gillmod.glow.cooldown_s": {
-      "value": 8.0,
-      "unit": "seconds",
-      "min": 0.0,
-      "max": 300.0,
-      "description": "Cooldown after the Glow Gill mod deactivates."
-    },
-    "gillmod.glow.duration_s": {
-      "value": 15.0,
-      "unit": "seconds",
-      "min": 0.5,
-      "max": 120.0,
-      "description": "Active duration of the Glow Gill mod, which reveals Hookline Rig lines in murk."
-    },
-    "gillmod.jet.cooldown_s": {
-      "value": 12.0,
-      "unit": "seconds",
-      "min": 0.0,
-      "max": 300.0,
-      "description": "Cooldown after the Jet Gill mod deactivates."
-    },
-    "gillmod.jet.duration_s": {
-      "value": 4.0,
-      "unit": "seconds",
-      "min": 0.5,
-      "max": 120.0,
-      "description": "Active duration of the Jet Gill mod, the counter to Netbot entanglement."
-    },
-    "progression.default_lives_per_attempt": {
-      "value": 3,
-      "unit": "count",
-      "min": 1,
-      "max": 99,
-      "description": "Lives granted at the start of an attempt. Lives are spent only on catastrophic events, never on ordinary capability loss."
-    },
-    "progression.max_retry_seconds": {
-      "value": 5.0,
-      "unit": "seconds",
-      "min": 0.5,
-      "max": 60.0,
-      "description": "Upper bound from losing a life to being playable again at the last checkpoint."
-    },
-    "regen.mutation.duration_s": {
-      "value": 20.0,
-      "unit": "seconds",
-      "min": 1.0,
-      "max": 300.0,
-      "description": "How long a mutated regrowth loadout persists before reverting to the baseline form."
+      "max": 2.0,
+      "description": "How far short of contact geometry the camera stops. The minimum is deliberately above zero: REQ-005 AC-2 requires the camera to NEVER clip into geometry, and a zero margin puts it exactly on the surface where the near plane makes clipping a floating-point coin flip."
     },
     "restoration.resourced.resource_cost": {
       "value": 5,
@@ -483,6 +385,13 @@
       "min": 1,
       "max": 999,
       "description": "Restoration resources consumed to advance a region from resourced to restored."
+    },
+    "collectibles.resource_pickup_value": {
+      "value": 1,
+      "unit": "resources",
+      "min": 1,
+      "max": 10,
+      "description": "Restoration resources one resource-kind collectible delivers to its declared region when picked up. Read at pickup time by the Collectibles System, never cached. A world's restoration economy is this value times its placed pickups against the region costs, so raising it makes every world's restoration cheaper at once; per-world economy belongs in the overridable resource costs instead."
     }
   }
 }

@@ -86,32 +86,3 @@ The project targets Godot 4.7 (`project.godot` `config/features`); advancing
 the pin is a deliberate act — rerun the full suite on the new engine, then
 change that one line. CI caches the engine and export templates keyed on the
 pin, so a version bump automatically invalidates the cache.
-
-
-## Controls
-
-Movement is CAMERA-RELATIVE: forward is wherever the camera is looking, not
-world -Z. That is the other half of the look axis — a camera you can turn
-while W still meant a fixed world direction would be worse than no camera
-control at all.
-
-| input | does |
-|---|---|
-| W A S D | move, relative to the camera |
-| mouse / right stick | look — turn and pitch the camera |
-| click | capture the mouse (Escape releases it) |
-| Space | hop on land, swim up in water (hold for height) |
-| Shift | swim down |
-| E | climb on land, bubble boost in water |
-| C | dive |
-| Q | tongue grapple |
-| right mouse | dash |
-| left mouse / Tab / R | gill mod activate / next / previous |
-
-The camera holds where you put it while you are moving. It eases back behind
-your direction of travel only after `camera.look.assist_delay_seconds` of no
-look input — if it followed travel continuously it would close a loop with
-camera-relative movement and the two would spiral.
-
-Sensitivity, pitch limits, invert and the assist are all `camera.look.*` keys
-in `core/tuning/tuning.json`.

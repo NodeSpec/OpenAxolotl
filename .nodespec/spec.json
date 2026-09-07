@@ -1,7 +1,7 @@
 {
   "specVersion": 1,
   "generatedBy": "nodespec",
-  "specHash": "15b9ca85e819451ae95001076feba6e1005bf8fcf271b86403dbd8cd2b349f31",
+  "specHash": "542afe85f2d4ed37a495288c72a5580342e7fa0a6b0394894510bf336838f717",
   "vision": "OpenAxolotl — Play it. Fork it. Build a world.\n\nA colorful 3D action-platformer in Godot where a tiny axolotl explores strange aquatic worlds, restoring damaged habitats and rescuing creatures. Every world is a self-contained module anyone — human or AI coding agent — can fork, replace, or extend. Open source is a gameplay feature, not a line in the README.\n\nFOUR PILLARS\n\n1. Regeneration is the constant loop; lives are the hard failure state. Damage strips a capability — tail, gill, leg — with comedic pop-and-sparkle framing rather than draining a health bar, and never ends a run on its own. A separate limited life count is spent only on catastrophic events and returns the player to the last checkpoint. Regeneration stays expressive and ever-present; lives supply the stakes.\n\n2. Two movement grammars, one axolotl. Water and land are mechanically distinct, joined by a water-powered dash as the signature transition skill. This is the answer to \"why is this not a cute skin on generic platformer mechanics.\"\n\n3. The world regenerates with you. Regions progress barren, resourced, restored — opening real traversal paths rather than swapping visuals — and Drift Fleet dredgers can undo that progress. This carries the open-source metaphor mechanically, without a child ever needing to notice it.\n\n4. The repo is the game. Every world conforms to a versioned Level Contract published as a machine-readable schema. A contributor never needs to understand the whole game, only the contract. The project is effectively an open-source platformer SDK.\n\nANTAGONISTS\nThe Drift Fleet: faceless industrial extraction machinery, deliberately never human characters. Nets, hooks, dredges and pollution, with no gore and no humanized violence — the same machinery that broke the habitat is what the player disables to heal it.\n\nMVP SCOPE\nPC only. Two official worlds plus a minimal reference template. Three Gill Mods — Bubble, Jet, Glow — built to depth rather than breadth; Electric, Frost and Giant are post-MVP and double as the reference example for community-built mods. Contract compliance, asset conformance, and world static analysis are automated and merge-blocking, so an AI agent can verify its own work before submitting.\n\nCOMMUNITY (post-MVP)\nOpens only once Level Contract v1 is frozen; opening earlier means every core update breaks early contributor worlds. Community worlds ship code like any other world — safety comes from static analysis against the sanctioned world API surface plus mandatory human review, never an automated-only merge path. This is a family game with an agent-authored contribution pipeline, so that gate is load-bearing.\n\nNON-GOALS (firm, not deferrals)\nNo multiplayer, in any phase. No console certification. No level-editor GUI, ever — worlds are authored as code and Godot scenes only, so humans and AI agents build the same way and the contract surface stays narrow enough to check.\n\nOPEN ITEMS\nLicensing split between code and official art/audio, entangled with AI-generation provenance. Save-compatibility policy for forked and divergent worlds.",
   "constraints": [],
   "preferences": {},
@@ -580,6 +580,82 @@
         "Every Drift Fleet unit ships as a contract-conforming asset with provenance recording the generator"
       ],
       "contentHash": "80e375c8cb9b2d75a92ce7cfb7a42f964fb89124def28b17d6b5101bf1df0ac8"
+    },
+    {
+      "requirementId": "REQ-037",
+      "name": "Platformer jump feel and climb robustness",
+      "description": "The jump must feel fair and the climb must survive contact noise, because a platforming level is only as good as the forgiveness under it. None of these rules change where the axolotl CAN go on a perfectly-timed input; they change how much timing precision the player is asked for.\n\nTHREE FORGIVENESS RULES live in a JumpFeel class apart from the controller, pure arithmetic over time provable frame by frame with no scene: COYOTE TIME (a press just after the ledge still hops, the window expires, and firing spends it so it cannot chain into a double jump), JUMP BUFFERING (a press while falling is remembered on the rising edge only and fires on landing), and VARIABLE HEIGHT (releasing the button mid-rise cuts the climb, so one button expresses a range of arcs).\n\nVARIABLE HEIGHT NEEDED A NEW INPUT FACT. Verbs are edge-triggered, so the hop verb is gone by the frame after launch, and a cut reading it would cut EVERY jump — measured in the greybox as a 2.02 m arc landing at 0.23 m. PlayerIntent therefore carries a second set, `sustained`, holding the verbs whose physical input is still down. It is re-resolved against the live grammar every frame, dropped on a device switch, and cleared on respawn, the same rules the held direction set follows.\n\nTHE CLIMB had two scene-tree bugs no unit test could see. Moving purely ALONG a wall generates no contact, so the climb detached on its second frame; the climber now presses into the wall at a tuned adhesion that move_and_slide absorbs. And losing the wall for a single frame — a seam, or the moment of cresting a lip — dropped the climber the whole way down; the controller now keeps the wall for a tuned contact grace after the body reports losing it.\n\nTHE ARC is retuned for platforming (impulse 9 m/s against 20 m/s² gravity, waddle 4.2 m/s) and measured in the live greybox: 1.81 m standing jump, 3.15 m running gap, the envelope every official level's geometry is derived from. Every window, the cut ratio, the adhesion and the grace are tuning keys with documented units and ranges (REQ-025); at zero each rule disables itself and the strict behaviour returns.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "Coyote time forgives a hop pressed just after leaving a ledge, expires after the tuned window, and is spent by firing so a hop can never chain into a mid-air ascent",
+        "A hop pressed in mid-air is buffered on the rising edge only and fires on touchdown; the buffer expires rather than firing late, and holding the button does not refill it",
+        "Releasing the hop mid-rise cuts the vertical speed by the tuned ratio; the cut never touches a descent, a rise the hop did not start, or a rise whose button is still held — proven through the real controller, where a tapped jump measurably rises less than a held one",
+        "PlayerIntent carries a sustained verb set alongside the edge-triggered one: a held key sustains its verb until release, re-resolves under the live grammar (SPACE held through the water/land seam sustains what it means now), and is dropped on a device switch and on clear()",
+        "A climber presses into the wall at the tuned adhesion on every frame — steering up, sideways, and clinging still — so motion along the surface cannot end the climb by starving it of contact, and the greybox smoke proves the climb rises in a real scene",
+        "Losing wall contact for less than the tuned grace does not end a climb and regaining the wall resets the window; contact lost past the grace releases exactly once",
+        "Every window, ratio and speed above is a tuning key with documented unit and range, and the greybox smoke and coral walk complete against the retuned arc"
+      ],
+      "contentHash": "bb3189212ab1d8475b16de33c5a21f7887659efeb5be7017272955f58efa020c"
+    },
+    {
+      "requirementId": "REQ-038",
+      "name": "Coral Cove full platforming playthrough, proven by a flown route",
+      "description": "Coral Cove must be a full platforming playthrough — run, jump, swim, dive, boost and climb, with difficulty rising across its acts — and its completability must remain a headless regression test rather than a hope.\n\nTHE OLD PROBE SHAPED THE OLD LEVEL. The walk held one forward key from spawn to finish, which was honest for a corridor and quietly became the level's design: a route a held key can finish has no gaps, no climbs and no reason to leave the ground. Probe and level therefore change together.\n\nGEOMETRY COMES FROM MEASUREMENT. The controller is driven headlessly through the greybox against the shipped tuning and reports its envelope (run 4.20 m/s, standing jump 1.81 m, running gap 3.15 m edge to edge, climb 2.0 m/s under a 6.0 m ceiling, swim 6.0 m/s, boost ×2.2). Every mandatory gap and rise on the route sits inside documented design bounds under that envelope; exactly one jump is built to the envelope's edge and it is the OPTIONAL one, onto the lantern shrimp's ledge, so the hard reach is a choice and never a wall.\n\nTHE ROUTE IS FLOWN, NOT HELD. A RoutePilot drives a declared waypoint list by pressing the same keys a player would press, through Input.parse_input_event, so bindings, grammar context, the Input System, PlayerIntent, the controller and move_and_slide are all under test on every run. Jumps commit by LOOKING — a short ray ahead along the direction of travel asks whether the floor stops there, and the hop fires on the last stride before it does — because the takeoff edge is the gap plus half the landing platform away from a waypoint, and no fixed distance is right for a 3 m pillar and a 12 m terrace at once. A waypoint that stops being reachable fails naming itself and where the body got to, which makes a broken route a bug report rather than a mystery.\n\nBuilding the pilot surfaced and fixed real bugs unit tests could not see (the climb dropping four metres at the lip, the second jump of a pair lost to a never-released edge-triggered key), which is the point of it: the probe is the one consumer that exercises the whole platforming surface every run.\n\nCheckpoint density follows REQ-003 AC-7 measured on the flown run, and the walk still proves every prior claim of the world — both grammars, both mod gates, the restorable region, collectibles, pillar one, completion and return.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "The coral walk completes the world end to end by flying the designed waypoint route with real key presses — every jump, the dive under the brow, the rise over the shelf, the boost, the climb and both rivers — and still proves every prior claim: both grammars, both mod gates, seven seeds spent, the region restored, discoveries persisted, no life lost, completion and return",
+        "The pilot commits each jump from an edge probe (a ray ahead along travel), not from a fixed distance, and a leg that cannot be completed fails naming the waypoint and the position reached",
+        "Every mandatory gap is at most 2.7 m and every mandatory rise at most 1.3 m against the measured 3.15 m / 1.81 m envelope, verified edge to edge between platform footprints at generation time and enforced at run time by the flown route",
+        "The optional lantern shrimp demands an envelope-edge jump off the route, and the flown route never collects it — the optional branch stays optional",
+        "Checkpoint replay segments are measured on the flown run and every segment fits progression.max_retry_seconds",
+        "The route exercises the climb contact grace and the sustained-verb cut on real geometry: the coral wall is crested without a fall and a held jump clears gaps a tapped one cannot"
+      ],
+      "contentHash": "c83358e991caffbd197d5a9c52c92f88c62620205c831c774751be5fcb25baef"
+    },
+    {
+      "requirementId": "REQ-039",
+      "name": "Forested river valley: procedural surfaces and water placed as difficulty",
+      "description": "The space around and below a platforming route is gameplay, not garnish: a jump over nothing gives the player no way to judge height or distance, and a surface with no variation across it has no scale. Coral Cove therefore sits inside a forested river valley, and every terrain surface in the game wears a material instead of a flat colour.\n\nSURFACES WITHOUT TEXTURE FILES. Platforms and terrain wear one shared triplanar shader — three octaves of value noise over a warped stratum term, sampled from world position on all three axes and blended by the normal, with a third colour on upward faces only for moss. A material is a handful of uniform values in a client-owned .tres. Triplanar and world-space for this project's specific reasons: level geometry is BoxMesh primitives and props are generated with no UV layout, so a texture path would mean unwrapping everything and keeping the unwrap in step with generators that change; and the grain runs ACROSS the seam where two boxes butt, which tiling cannot do. The two mod gates deliberately keep a flat colour — a gate is a rule, not geology. The whole decision, including when a baked PNG is the right tool instead, is documented in the Asset Contract's prose.\n\nTHE VALLEY: a scenery forest floor 24 m below the route (no collider — the pit volume sits BETWEEN route and floor, so a fall still dies at the last checkpoint while the player watches the forest come up at them), canopy trees planted on it that rise past the route and close overhead, ridges for sides, and banks enclosing the water so no volume's edge is ever visible. A five-prop forest kit (canopy tree, understory fern, fallen log, river reed, river boulder) is generated headless in Blender, deterministic under one seed, vertex-coloured, with provenance, the whole set well under a thousand triangles because it is placed by the dozen.\n\nWATER IS PLACED AS DIFFICULTY. A river runs the full length of the act-1 staircase, so a missed jump there is a swim downstream and never a life — reeds mark that waterline, making the forgiveness legible. The glow grotto's pillars have no water under them at all. And the gorge river drops a MANDATORY swim into the middle of the jumping, with a rock rib to dive under and slot walls set twice-the-jump back from the landing so no bank bypasses it. The difficulty curve is thereby stated in geometry.\n\nThe shared haze is retuned from dense teal to thin grey-green air, because every scene in this game is above water and the underwater feel belongs to the water volumes, which tint it themselves; at the old density anything past thirty metres flattened into one plane and the valley rendered as an empty sea.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "A shared triplanar world-space terrain shader exists with a small set of client-owned material resources, and Coral Cove's platforms, walls, beds and banks wear them rather than per-node flat colours — with the two mod gates keeping flat colour as the deliberate exception",
+        "The forest kit's five props are generated headless in Blender, deterministic under a seed, carry provenance records, and pass the Asset Contract validator inside the environment budget",
+        "A missed jump anywhere over the act-1 river costs a swim and never a life, while a fall in the glow grotto still costs a life at the last checkpoint: the pit volume sits between the route and the scenery forest floor and the waterway spans exactly the forgiving stretch",
+        "The gorge river is a mandatory swim between jump sections — entered from the landing, dived under the rib, exited onto the first terrace — and its slot walls stand at least twice the measured jump from any standable edge so the swim cannot be bypassed on a bank",
+        "Every water volume in the world carries bubble particles (the REQ-034 dressing rule), emitted by the same construction that makes the volume so a new river cannot ship without them",
+        "The retuned haze keeps distant geometry legible: rendered captures show the forest floor, trees and valley sides reading at route distance in every act, and the full verification chain stays green"
+      ],
+      "contentHash": "4fcdd37695bd636281e603821402369d00c2caad38a6f408d5cf5d86abf218ce"
+    },
+    {
+      "requirementId": "REQ-040",
+      "name": "Hero surface quality: baked character maps at toy-grade finish",
+      "description": "The hero must read as a finished toy at gameplay distance AND in a close-up: the reference is a well-made vinyl figure under studio light — pristine gloss, soft translucent skin, deep wet eyes — not a vertex-tinted mesh. This extends REQ-035 (Hero Character Look), whose final criterion (the maintainer sign-off render) has stayed unmet precisely because flat vertex colour under real lighting still reads as unfinished.\n\nTHE CHARACTER IS THE ONE ASSET THAT EARNS TEXTURES. The Asset Contract's surface doctrine says baked maps are the last resort, paid for only where a pattern must be AUTHORED rather than DESCRIBED — and the hero's skin is that case: mottling that follows anatomy, a belly-to-back gradient, pore-scale relief. So the Blender lane gains a bake stage: UV-unwrap the generated hero headless, bake fine-detail maps (albedo detail and normal) from procedural node trees in Cycles, and ship them beside the glb under the character category's documented size bounds, with the bake recorded in provenance like every other generation step.\n\nTHE ROLE MATERIALS finish the job in Godot, because most of the Astro Bot read is MATERIAL rather than map: subsurface scattering and a clearcoat sheen on skin so light enters rather than bounces; a high-gloss dark eye whose highlight is geometry (the gleam) and therefore never lost to environment reflections; gill fronds lit from behind through backlight so they glow when the sun crosses them; the baked normal map giving the skin its fine relief only at close range.\n\nPERFORMANCE IS A CONSTRAINT, NOT A HOPE: the hero stays inside its existing Asset Contract triangle budget (the bake adds maps, never geometry), texture memory stays within the category's size bounds, and the whole dressed Coral Cove scene is measured — total triangles counted headlessly and the perf gate extended to run the valley — so desktop testing meets a scene in the tens of thousands of triangles, not hundreds.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "The Blender lane bakes hero maps headless and reproducibly: the generated axolotl is UV-unwrapped and fine-detail albedo and normal maps are baked from procedural sources in one CLI invocation, recorded in the asset's provenance",
+        "Baked maps conform to the Asset Contract character category: PNG, within the documented size bounds, living in the asset's own directory, and the validator passes",
+        "The bake adds no geometry: the shipped hero's triangle count is unchanged and remains inside its Asset Contract budget",
+        "The skin role material carries the baked normal and detail maps with subsurface scattering and a clearcoat sheen; the eye is high-gloss with its highlight guaranteed by the gleam geometry; gills glow when backlit — all applied by the existing role classification at runtime",
+        "Rendered close-up and gameplay-distance captures on the shared rig show the finish: visible skin relief in close-up that vanishes into a clean silhouette at distance, no shading seam at any UV boundary",
+        "The dressed Coral Cove scene's total triangle count is measured headlessly and stays under 150,000, and the performance gate runs the valley world within the documented budgets"
+      ],
+      "contentHash": "f5f4cabfc1d2783f368231a9b1c5e352fdd5f6f4feb883ff11de7a77d39f2926"
+    },
+    {
+      "requirementId": "REQ-041",
+      "name": "Hero anatomy fidelity: the maintainer's reference sheet, built",
+      "description": "The hero must match the maintainer's own reference sheet, reference/hero/01_hero_perspective.png, at professional game-character craft. This is the mesh half of the hero's look; REQ-033 owns its materials and REQ-040 its baked surface maps, and both were already met while the animal underneath still read as amateur.\n\nTHE TARGET CHANGED ONCE, ON THE MAINTAINER'S CALL, AND THE HISTORY MATTERS. This requirement was first written against \"flush, detailed limbs, face doesn't look cartoonish, and the gills flow and look real\", and built a realistic salamander: tiny lidless dorso-lateral eyes, a flat skull wedge, filaments massed radially around every gill stalk. The maintainer then supplied the reference sheet — which has LARGE round glossy eyes, a soft domed skull and a gentle smile — and chose it explicitly, knowing it pulls against \"not cartoonish\". Two criteria here were rewritten for that decision rather than the mesh being bent to keep them, and one threshold was lowered; each says so in its own text, because a criterion quietly relaxed to match what was built proves nothing.\n\nWHAT THE REFERENCE ASKED FOR, AND WHAT WAS BUILT TO IT:\n  * GILLS ARE FEATHERS ON LONG BARE STALKS. Each ramus is a stalk whose outer half only carries filaments, in ONE plane — a feather. The plume's volume comes from the three stalks pointing three ways (forward-up, out-up, back-up), not from massing filaments around each stalk. The bare inner half is what holds the fronds clear of the head instead of packing them against the neck.\n  * THE TAIL FIN IS TRANSLUCENT. The dorsal and ventral membranes moved out of the skin role and into the gill role, because the gill material already does what the reference's tail does — subsurface scattering with a backlight through it. Their colours stay inside the gill range so the role's combined mean green keeps clearing GILL_MAX_GREEN with margin (0.428 against a 0.5 bound; an earlier paler fin left only 0.011).\n  * THE FACE IS THE REFERENCE'S. Large glossy eyes with a geometry catchlight, a domed skull, a mouth seam placed against the skull's OWN cross-section — authored at a flat height it sank inside the head as soon as the head was domed, and a buried mouth renders as no mouth at all.\n\nWHAT SURVIVED FROM THE REALISTIC PASS, because it was never in tension with the reference: limbs and toes grown as branches of one edge skeleton rather than joined afterwards (bpy.ops.object.join() merges mesh data and neither welds nor blends, so every limb had been a separate shell pushed into the body), four toes in front and five behind, a laterally compressed tail blade, and a dorsal crest that swells over the tail rather than running flat along the spine.\n\nWHAT IS ASSERTED RATHER THAN HOPED. Silhouette quality resists testing, which is exactly why it drifts; these criteria pick the measurable consequences of the anatomy being right and measure them over the SHIPPED glb, so a regenerated hero fails with a number rather than in a screenshot nobody takes. The two sharpest were checked against the superseded mesh before being trusted: plume planarity separates one flat sheet (0.147) from three fanned feathers (0.273), and foot-to-body continuity separates 0 of 4 from 4 of 4.",
+      "category": "functional",
+      "acceptanceCriteria": [
+        "The gill plumes have volume rather than lying in a plane: measured over one side's plume in the shipped model, the smallest principal spread of the filament mass is at least 0.22 of the largest. THE BAR MOVED WITH THE DESIGN: it was 0.30 against a build that massed filaments radially around every stalk and scored 0.512; the reference sheet's three flat feathers are inherently less voluminous and score 0.273, so the bar now sits between the two readings it must tell apart — 0.147 for one flat sheet, 0.273 for three fanned feathers",
+        "The skull is the widest part of the animal: the shipped mesh's maximum half-width forward of the shoulders exceeds its maximum half-width through the trunk behind them",
+        "The cross-section ratio inverts along the animal: the tail is laterally compressed (width below height) while the skull is wider than tall by at least 1.20. NOT the 1.5 a real salamander's flat wedge gives — the reference sheet's head is a soft dome and measures 1.39 — and the tail half still carries most of the discrimination at 0.62 against a bound of 1.0",
+        "The eye is the reference sheet's large glossy one rather than the small lidless amphibian eye an earlier build shipped: its radius is between a fifth and two fifths of the skull's half-width, and it sits off the centreline as one of a readable pair. THIS CRITERION WAS REWRITTEN, not relaxed — the maintainer chose the reference's eye over the realistic one, so the old \"under a sixth\" bound was describing a design that is no longer wanted",
+        "The generator builds limbs and toes as branches of one edge skeleton per role rather than as separate objects joined afterwards, so the shipped skin is continuous flesh at every limb join",
+        "The maintainer accepts rendered portraits of the shipped hero as matching their reference sheet at professional game-character craft"
+      ],
+      "contentHash": "a7bc59c798729d93777e93ff2e8cb8d64c755060c68098578a28feeef24b25d0"
     }
   ],
   "mappings": [
@@ -815,6 +891,61 @@
     },
     {
       "requirementId": "REQ-036",
+      "nodeId": "22222222-0000-4000-8000-000000000025",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-037",
+      "nodeId": "22222222-0000-4000-8000-000000000002",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-037",
+      "nodeId": "22222222-0000-4000-8000-000000000018",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-037",
+      "nodeId": "22222222-0000-4000-8000-000000000019",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-038",
+      "nodeId": "22222222-0000-4000-8000-000000000011",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-038",
+      "nodeId": "22222222-0000-4000-8000-000000000020",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-039",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-039",
+      "nodeId": "22222222-0000-4000-8000-000000000011",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-039",
+      "nodeId": "22222222-0000-4000-8000-000000000024",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-040",
+      "nodeId": "22222222-0000-4000-8000-000000000001",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-040",
+      "nodeId": "22222222-0000-4000-8000-000000000024",
+      "mappingType": "implements"
+    },
+    {
+      "requirementId": "REQ-040",
       "nodeId": "22222222-0000-4000-8000-000000000025",
       "mappingType": "implements"
     }

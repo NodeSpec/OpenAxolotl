@@ -5,23 +5,13 @@
 ; Worlds ship GEOMETRY; the game client ships the LOOK. This resource is the
 ; whole of it: a procedural sky the ambient and reflections are read from, AgX
 ; tonemapping so saturated albedo never clips to white, screen-space ambient
-; occlusion for contact shading, SDFGI so light bounces off the ground onto
+; occlusion for contact shading, SDFGI so light bounces off the seabed onto
 ; the underside of the axolotl, a soft glow that only the brightest highlights
-; reach, a haze with aerial perspective, and a thin volumetric fog that turns
-; the sun into visible shafts.
-;
-; THE HAZE WAS RETUNED WHEN CORAL COVE BECAME A FOREST VALLEY, and the reason
-; is worth keeping: it was a dense teal, which is what an underwater scene
-; wants — but every scene in this game is ABOVE water, and the underwater
-; feel belongs to the water volumes, which tint it themselves. At the old
-; density anything past about thirty metres flattened into one teal plane, so
-; a valley full of trees read as an empty sea. It is now a thin grey-green
-; air haze: distance still recedes, and what is out there is still there.
-;
-; Every number here is tuned for the art direction in docs/asset-contract.md
-; ("Style and art direction"): toy-like materials, readable value contrast, no
-; effect loud enough to notice on its own. Exposure sits below 1 and
-; saturation above it because AgX, left
+; reach, a teal depth fog with aerial perspective, and a thin volumetric fog
+; that turns the sun into visible shafts. Every number here is tuned for the
+; art direction in docs/asset-contract.md ("Style and art direction"): toy-like
+; materials, readable value contrast, no effect loud enough to notice on its
+; own. Exposure sits below 1 and saturation above it because AgX, left
 ; alone, pushes a sunlit pastel toward white: six variants were rendered side
 ; by side and this is the one where the axolotl's pink survived the sun.
 ;
@@ -31,11 +21,11 @@
 ; WorldEnvironment for a mood without touching the client.
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lagoon"]
-sky_top_color = Color(0.29, 0.5, 0.76, 1)
-sky_horizon_color = Color(0.77, 0.86, 0.87, 1)
+sky_top_color = Color(0.2, 0.46, 0.72, 1)
+sky_horizon_color = Color(0.64, 0.84, 0.9, 1)
 sky_curve = 0.12
-ground_bottom_color = Color(0.11, 0.17, 0.12, 1)
-ground_horizon_color = Color(0.44, 0.56, 0.46, 1)
+ground_bottom_color = Color(0.09, 0.22, 0.29, 1)
+ground_horizon_color = Color(0.48, 0.72, 0.76, 1)
 sun_angle_max = 20.0
 sun_curve = 0.2
 
@@ -70,19 +60,19 @@ glow_blend_mode = 2
 glow_hdr_threshold = 1.0
 glow_hdr_scale = 2.0
 fog_enabled = true
-fog_light_color = Color(0.68, 0.77, 0.74, 1)
+fog_light_color = Color(0.55, 0.78, 0.82, 1)
 fog_light_energy = 1.0
 fog_sun_scatter = 0.1
-fog_density = 0.0016
-fog_aerial_perspective = 0.28
+fog_density = 0.004
+fog_aerial_perspective = 0.4
 fog_sky_affect = 0.3
 volumetric_fog_enabled = true
-volumetric_fog_density = 0.006
-volumetric_fog_albedo = Color(0.85, 0.92, 0.88, 1)
+volumetric_fog_density = 0.01
+volumetric_fog_albedo = Color(0.75, 0.9, 0.95, 1)
 volumetric_fog_gi_inject = 0.5
 volumetric_fog_anisotropy = 0.5
 volumetric_fog_length = 48.0
 volumetric_fog_ambient_inject = 0.3
 adjustment_enabled = true
 adjustment_contrast = 1.1
-adjustment_saturation = 1.22
+adjustment_saturation = 1.4

@@ -30,8 +30,8 @@ component inventory, connection topology, and links to per-component task docume
 | Flagship Boss Encounter | shared-library | godot | --- | [`.nodespec/tasks/flagship-boss-encounter-22222222.task.md`](./.nodespec/tasks/flagship-boss-encounter-22222222.task.md) | [`.nodespec/tests/req-013.tests.md`](./.nodespec/tests/req-013.tests.md) |
 | World Static Analysis Gate | cli-tool | python-backend | --- | [`.nodespec/tasks/world-static-analysis-gate-22222222.task.md`](./.nodespec/tasks/world-static-analysis-gate-22222222.task.md) | [`.nodespec/tests/req-020.tests.md`](./.nodespec/tests/req-020.tests.md) |
 | World: Reference Template | shared-library | godot | --- | [`.nodespec/tasks/world-reference-template-22222222.task.md`](./.nodespec/tasks/world-reference-template-22222222.task.md) | [`.nodespec/tests/req-029.tests.md`](./.nodespec/tests/req-029.tests.md) |
-| Blender (headless) | external-service | blender | --- | --- | --- |
-| Model Refinement Pipeline | cli-tool | python-backend | --- | --- | --- |
+| Blender (headless) | external-service | blender | --- | [`.nodespec/tasks/blender-headless-22222222.task.md`](./.nodespec/tasks/blender-headless-22222222.task.md) | --- |
+| Model Refinement Pipeline | cli-tool | python-backend | --- | [`.nodespec/tasks/model-refinement-pipeline-22222222.task.md`](./.nodespec/tasks/model-refinement-pipeline-22222222.task.md) | --- |
 
 ## Connection Topology
 
@@ -139,6 +139,7 @@ Use these as the primary brief when implementing or modifying a component.
 - **Collectibles System**: [`.nodespec/tasks/collectibles-system-22222222.task.md`](./.nodespec/tasks/collectibles-system-22222222.task.md)
 - **Lives and Checkpoint System**: [`.nodespec/tasks/lives-and-checkpoint-system-22222222.task.md`](./.nodespec/tasks/lives-and-checkpoint-system-22222222.task.md)
 - **Save System**: [`.nodespec/tasks/save-system-22222222.task.md`](./.nodespec/tasks/save-system-22222222.task.md)
+- **Blender (headless)**: [`.nodespec/tasks/blender-headless-22222222.task.md`](./.nodespec/tasks/blender-headless-22222222.task.md)
 - **Restoration State System**: [`.nodespec/tasks/restoration-state-system-22222222.task.md`](./.nodespec/tasks/restoration-state-system-22222222.task.md)
 - **CI Pipeline**: [`.nodespec/tasks/ci-pipeline-22222222.task.md`](./.nodespec/tasks/ci-pipeline-22222222.task.md)
 - **Test Harness and Fixtures**: [`.nodespec/tasks/test-harness-and-fixtures-22222222.task.md`](./.nodespec/tasks/test-harness-and-fixtures-22222222.task.md)
@@ -148,6 +149,7 @@ Use these as the primary brief when implementing or modifying a component.
 - **World: Reference Template**: [`.nodespec/tasks/world-reference-template-22222222.task.md`](./.nodespec/tasks/world-reference-template-22222222.task.md)
 - **Balance and Tuning Data**: [`.nodespec/tasks/balance-and-tuning-data-22222222.task.md`](./.nodespec/tasks/balance-and-tuning-data-22222222.task.md)
 - **Input System**: [`.nodespec/tasks/input-system-22222222.task.md`](./.nodespec/tasks/input-system-22222222.task.md)
+- **Model Refinement Pipeline**: [`.nodespec/tasks/model-refinement-pipeline-22222222.task.md`](./.nodespec/tasks/model-refinement-pipeline-22222222.task.md)
 - **Audio System**: [`.nodespec/tasks/audio-system-22222222.task.md`](./.nodespec/tasks/audio-system-22222222.task.md)
 - **Regeneration and Capability System**: [`.nodespec/tasks/regeneration-and-capability-system-22222222.task.md`](./.nodespec/tasks/regeneration-and-capability-system-22222222.task.md)
 - **Axolotl Controller**: [`.nodespec/tasks/axolotl-controller-22222222.task.md`](./.nodespec/tasks/axolotl-controller-22222222.task.md)
@@ -170,11 +172,13 @@ recommended test types, framework suggestions, and test scenarios.
 - **Flagship Boss Encounter**: [`.nodespec/tests/req-013.tests.md`](./.nodespec/tests/req-013.tests.md)
 - **OpenAxolotl Game Client**: [`.nodespec/tests/req-006.tests.md`](./.nodespec/tests/req-006.tests.md)
 - **Axolotl Controller**: [`.nodespec/tests/req-001.tests.md`](./.nodespec/tests/req-001.tests.md)
+- **OpenAxolotl Game Client**: [`.nodespec/tests/req-039.tests.md`](./.nodespec/tests/req-039.tests.md)
 - **Camera System**: [`.nodespec/tests/req-005.tests.md`](./.nodespec/tests/req-005.tests.md)
 - **Asset Contract Validator**: [`.nodespec/tests/req-015.tests.md`](./.nodespec/tests/req-015.tests.md)
 - **Drift Fleet Enemy Framework**: [`.nodespec/tests/req-012.tests.md`](./.nodespec/tests/req-012.tests.md)
 - **Lives and Checkpoint System**: [`.nodespec/tests/req-003.tests.md`](./.nodespec/tests/req-003.tests.md)
 - **Test Harness and Fixtures**: [`.nodespec/tests/req-026.tests.md`](./.nodespec/tests/req-026.tests.md)
+- **OpenAxolotl Game Client**: [`.nodespec/tests/req-040.tests.md`](./.nodespec/tests/req-040.tests.md)
 - **OpenAxolotl Game Client**: [`.nodespec/tests/req-021.tests.md`](./.nodespec/tests/req-021.tests.md)
 - **Level Contract Compliance Checker**: [`.nodespec/tests/req-007.tests.md`](./.nodespec/tests/req-007.tests.md)
 - **Collectibles System**: [`.nodespec/tests/req-010.tests.md`](./.nodespec/tests/req-010.tests.md)
@@ -185,6 +189,7 @@ recommended test types, framework suggestions, and test scenarios.
 - **Audio System**: [`.nodespec/tests/req-023.tests.md`](./.nodespec/tests/req-023.tests.md)
 - **Player HUD**: [`.nodespec/tests/req-022.tests.md`](./.nodespec/tests/req-022.tests.md)
 - **World: Coral Cove**: [`test/hub/test_world_drift_fleet.gd`](./test/hub/test_world_drift_fleet.gd)
+- **World: Coral Cove**: [`.nodespec/tests/req-038.tests.md`](./.nodespec/tests/req-038.tests.md)
 - **Save System**: [`.nodespec/tests/req-014.tests.md`](./.nodespec/tests/req-014.tests.md)
 - **OpenAxolotl Game Client**: [`.nodespec/tests/req-027.tests.md`](./.nodespec/tests/req-027.tests.md)
 - **World: Reference Template**: [`.nodespec/tests/req-029.tests.md`](./.nodespec/tests/req-029.tests.md)
@@ -192,6 +197,7 @@ recommended test types, framework suggestions, and test scenarios.
 - **World Static Analysis Gate**: [`.nodespec/tests/req-030.tests.md`](./.nodespec/tests/req-030.tests.md)
 - **Asset Contract Validator**: [`.nodespec/tests/req-016.tests.md`](./.nodespec/tests/req-016.tests.md)
 - **Restoration State System**: [`.nodespec/tests/req-008.tests.md`](./.nodespec/tests/req-008.tests.md)
+- **Axolotl Controller**: [`.nodespec/tests/req-037.tests.md`](./.nodespec/tests/req-037.tests.md)
 - **OpenAxolotl Game Client**: [`.nodespec/tests/req-009.tests.md`](./.nodespec/tests/req-009.tests.md)
 - **OpenAxolotl Game Client**: [`test/core/rendering/test_hero_animator.gd`](./test/core/rendering/test_hero_animator.gd)
 - **Regeneration and Capability System**: [`.nodespec/tests/req-002.tests.md`](./.nodespec/tests/req-002.tests.md)
