@@ -29,6 +29,25 @@
 ; Mobile fallback renderer drops those silently and keeps the rest. Nothing
 ; in gameplay reads this resource, so a world may override it with its own
 ; WorldEnvironment for a mood without touching the client.
+;
+; WHAT IS AUTHORED HERE IS THE *MEDIUM* BASELINE, NOT THE FULL LOOK, and the
+; distinction cost someone a crash. RenderQuality.apply() owns sdfgi_enabled
+; and volumetric_fog_enabled: it sets both to (level == HIGH), in BOTH
+; directions, every time a level is applied. So their value in this file is
+; overwritten the moment the game runs and reaches nobody who is playing.
+;
+; Where it DOES reach is the editor, which renders this resource exactly as
+; saved and never runs RenderQuality at all. With those two flags on, opening
+; any 3D scene put the machine through SDFGI at four cascades and volumetric
+; fog with GI injection — the most expensive configuration the project has,
+; strictly heavier than anything the running game shows at its default level.
+; That is backwards: authoring was punishing hardware the game itself would
+; have been kind to, and on a 2 GB mobile GPU it is not a slow viewport, it
+; is a dead one.
+;
+; So both flags are off here and the TUNING for both stays, because HIGH needs
+; something to switch on. Turning them on is RenderQuality's job, not this
+; file's. Changing them here changes only what the editor costs.
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lagoon"]
 sky_top_color = Color(0.29, 0.5, 0.76, 1)
@@ -56,7 +75,7 @@ ssao_radius = 1.0
 ssao_intensity = 2.0
 ssao_power = 1.5
 ssao_detail = 0.5
-sdfgi_enabled = true
+sdfgi_enabled = false
 sdfgi_cascades = 4
 sdfgi_min_cell_size = 0.2
 sdfgi_bounce_feedback = 0.5
@@ -76,7 +95,7 @@ fog_sun_scatter = 0.1
 fog_density = 0.0016
 fog_aerial_perspective = 0.28
 fog_sky_affect = 0.3
-volumetric_fog_enabled = true
+volumetric_fog_enabled = false
 volumetric_fog_density = 0.006
 volumetric_fog_albedo = Color(0.85, 0.92, 0.88, 1)
 volumetric_fog_gi_inject = 0.5
