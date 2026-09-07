@@ -83,3 +83,25 @@ godot --headless --audio-driver Dummy --path . --script test/perf/run_perf_gate.
 Change the number in `contracts/performance_targets.v1.json` **and** in the
 table above (the parity test insists), in one commit, with the reasoning in
 the commit message. The gate picks the new number up with no code change.
+
+
+## Measured scene weight (2026-09-07)
+
+Counted headlessly over the instanced scenes (indexed triangles), asserted
+in `test/core/rendering/test_hero_surface.gd` against a 150,000 budget for
+the heaviest world plus the hero:
+
+| scene | mesh instances | triangles |
+|---|---|---|
+| Coral Cove (forested river valley, fully dressed) | 239 | 99,416 |
+| Bubble Bay | 47 | 68,800 |
+| Open Lagoon hub | 28 | 36,912 |
+| hero (all five role meshes) | 5 | 29,632 |
+
+Heaviest playable frame ≈ 129k triangles — an order of magnitude under
+where a desktop GPU starts to care, which is the intent: the look comes
+from silhouettes, shared procedural surfaces and two 1024² hero maps, not
+from polygon counts. The perf gate now runs **twice** per chain — bubble_bay
+and, via `OAX_PERF_WORLD=coral_cove`, the valley — flying the same waypoint
+route the coral walk proves completability with, so the measured traversal
+is the route that actually ships.

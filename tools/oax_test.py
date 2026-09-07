@@ -101,6 +101,16 @@ def _suites(godot: str | None) -> list[dict]:
             "argv": [godot, *GODOT_FLAGS,
                      "--script", "test/perf/run_perf_gate.gd"],
         },
+        {
+            # The same gate pointed at the heaviest official scene. A perf
+            # gate that never loads the heaviest world is a gate on the
+            # wrong door; the probe reads OAX_PERF_WORLD.
+            "id": "perf-gate-coral",
+            "file": "test/perf/run_perf_gate.gd",
+            "argv": [godot, *GODOT_FLAGS,
+                     "--script", "test/perf/run_perf_gate.gd"],
+            "env": {"OAX_PERF_WORLD": "coral_cove"},
+        },
     ]
 
 
@@ -117,6 +127,7 @@ def find_godot() -> str | None:
 def run_suite(suite: dict) -> tuple[int, str]:
     env = dict(os.environ)
     env[NESTED_ENV] = "1"
+    env.update(suite.get("env", {}))
     completed = subprocess.run(
         suite["argv"], capture_output=True, text=True, env=env)
     output = (completed.stdout or "") + (completed.stderr or "")

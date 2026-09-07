@@ -192,6 +192,19 @@ class ShippedAssetTests(unittest.TestCase):
         self.assertGreater(triangles, 0)
         self.assertTrue(glb_has_attribute(HERO, "NORMAL"))
         self.assertIn("axolotl_eye", glb_materials(HERO))
+
+        # REQ-040: the bake pass added a UV layout and tangents (Godot needs
+        # both the moment a normal map exists) and shipped the two maps
+        # beside the model. Geometry itself is untouched -- the bake script
+        # fails its own run if the triangle count moves.
+        self.assertTrue(glb_has_attribute(HERO, "TEXCOORD_0"),
+                        "the skin's UV layout must ship in the glb")
+        self.assertTrue(glb_has_attribute(HERO, "TANGENT"),
+                        "tangents must ship, not be a per-machine import step")
+        for map_name in ("axolotl_skin_normal.png", "axolotl_skin_detail.png"):
+            self.assertTrue(
+                os.path.exists(os.path.join(os.path.dirname(HERO), map_name)),
+                "%s must ship beside the model" % map_name)
         sidecar = os.path.join(os.path.dirname(HERO), "provenance.json")
         with open(sidecar, encoding="utf-8") as handle:
             provenance = json.load(handle)

@@ -216,13 +216,17 @@ path for this project specifically:
 Vertex colour does the same job for meshes: the kits paint a gradient into
 `COLOR_0` and the shared material reads it as albedo.
 
-**3. Baked PBR textures, last and not yet.** `.png` is a conforming file type
-in every model category, so baked albedo/normal/roughness maps are permitted
-whenever an asset genuinely needs them — a hero face, a piece of signage,
-anything where the pattern has to be *authored* rather than *described*.
-Nothing has needed it yet. When something does, it pays for UVs, a bake step,
-and a binary in the repository, and the provenance record has to say how the
-map was generated.
+**3. Baked maps, last — and exactly one asset has earned them.** `.png` is a
+conforming file type in every model category, so baked maps are permitted
+whenever an asset genuinely needs them — anything where the pattern has to be
+*authored* rather than *described*. The **hero is that asset** (REQ-040): its
+skin carries a computed normal map (pore relief over mottle bumps) and a
+neutral detail map multiplied over the vertex colour, both produced by
+`tools/blender/bake_hero_maps.py` from a deterministic procedural height
+field, rasterised against the shipped mesh's own tangents. The price was paid
+in full: the mesh ships its UV layout and tangents, the provenance records
+the bake, and the script fails its own run if the geometry changes. Everything
+else still describes its pattern instead of authoring one.
 
 **Flat colour is still a tool, not a failure.** The two mod gates in Coral
 Cove keep a single flat albedo on purpose: a gate is a rule, not geology, and
