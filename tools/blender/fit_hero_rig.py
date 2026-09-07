@@ -153,7 +153,8 @@ def normalise(points: np.ndarray, reference: np.ndarray) -> tuple:
     # view, which for a creature four times longer than it is wide is not a
     # close call.
     moved = points.copy()
-    plan = moved[:, :2] - moved[:, :2].mean(axis=0)
+    centre = moved[:, :2].mean(axis=0)
+    plan = moved[:, :2] - centre
     _values, vectors = np.linalg.eigh(np.cov(plan.T))
     longest = vectors[:, -1]
     yaw = math.atan2(longest[1], longest[0]) - 0.5 * math.pi
@@ -177,7 +178,8 @@ def normalise(points: np.ndarray, reference: np.ndarray) -> tuple:
         reference[:, 1].min() - moved[:, 1].min(),
         reference[:, 2].min() - moved[:, 2].min(),
     ])
-    return moved + offset, (flip, float(scale), offset.tolist(), float(yaw))
+    return moved + offset, (flip, float(scale), offset.tolist(),
+                            float(yaw), centre.tolist())
 
 
 def centreline(points: np.ndarray, station: float, reach: float) -> float:
@@ -264,7 +266,7 @@ def silhouette(points: np.ndarray, side: float, low: float,
 
 
 def widest_in(points: np.ndarray, side: float, low: float,
-              high: float) -> tuple:
+              high: float, lower_only: bool = False) -> tuple:
     """The outermost point of one side between two stations, as a 3-vector.
 
     Taken as a median over the outer decile rather than the single furthest
@@ -273,6 +275,15 @@ def widest_in(points: np.ndarray, side: float, low: float,
     """
     band = points[(points[:, 1] >= low) & (points[:, 1] <= high)]
     flank = band[band[:, 0] * side > 0]
+    if lower_only and len(flank):
+        # The station was chosen from the lower silhouette; the point must
+        # come from there too. Without this the search returns the widest
+        # vertex at that station at ANY height, which is the shoulder -- the
+        # front feet came out at z=-0.21 while the rear feet, found the same
+        # way but on a part of the body with no shoulder above them, sat
+        # correctly at z=-0.97.
+        floor = flank[:, 2].min()
+        flank = flank[flank[:, 2] <= floor + 0.40 * np.ptp(flank[:, 2])]
     if len(flank) < 8:
         return None
     outer = flank[np.abs(flank[:, 0])
@@ -311,7 +322,7 @@ def fit_limbs(points: np.ndarray, table: list) -> dict:
         # opened a window that reached past the shoulders into the gills, and
         # the front leg was fitted to the gill tip.
         foot = widest_in(points, side, max(low, peak - width),
-                         min(high, peak + width))
+                         min(high, peak + width), lower_only=True)
         if foot is None:
             fitted[name] = (parent, head, tail)
             continue
@@ -356,6 +367,80 @@ def fit_gills(points: np.ndarray, table: list) -> dict:
         fitted[name] = (parent,
                         (side * 0.30 * abs(tip[0]), tip[1], skull), tip)
     return fitted
+
+
+def mirror_pairs(fitted: dict) -> tuple:
+    """Make each left/right pair an exact mirror, and say what it cost.
+
+    WHY MIRROR RATHER THAN FIT BOTH SIDES. An axolotl is bilaterally
+    symmetric. That is not something to be rediscovered per side from a
+    decimated, AI-generated mesh whose two flanks carry different vertex
+    densities (20,895 against 17,007 here) — it is a fact about the animal
+    that the rig should assert. Fitting both sides independently means the
+    rig is only as good as the WORSE side, and a limb bone that lands
+    differently left and right deforms visibly wrong on one side only, which
+    is precisely the defect that survives review and shows up in a cutscene.
+
+    The side kept is the one that reaches further, because these features are
+    protrusions: a side that under-reads has missed the limb and found the
+    torso beside it, while a side cannot invent reach it does not have.
+
+    The disagreement is not discarded. It is reported, because a genuinely
+    lopsided mesh is worth knowing about even once the rig has been made
+    symmetric over the top of it.
+    """
+    pairs = (("leg_fl", "leg_fr"), ("leg_bl", "leg_br"), ("gill_l", "gill_r"))
+    disagreement = []
+    for left, right in pairs:
+        if left not in fitted or right not in fitted:
+            continue
+        keep, drop = (left, right) if abs(fitted[left][2][0]) >= \
+            abs(fitted[right][2][0]) else (right, left)
+        disagreement.append({
+            "pair": "%s/%s" % (left, right),
+            "kept": keep,
+            "lateralDisagreement": round(
+                abs(abs(fitted[left][2][0]) - abs(fitted[right][2][0])), 4),
+            "lengthwiseDisagreement": round(
+                abs(fitted[left][2][1] - fitted[right][2][1]), 4),
+        })
+        parent, root, tip = fitted[keep]
+        sign = -1.0 if drop.endswith(("r", "_r")) or drop == "gill_r" else 1.0
+        # The dropped side becomes the kept side reflected through x = 0.
+        fitted[drop] = (fitted[drop][0],
+                        (-root[0], root[1], root[2]),
+                        (-tip[0], tip[1], tip[2]))
+    return fitted, disagreement
+
+
+def check_protrusions(fitted: dict, points: np.ndarray) -> list:
+    """Every limb and gill tip must be OUTSIDE the torso at its own station.
+
+    This replaces the symmetry gate, which mirroring made vacuous. It asks
+    the question that still has an answer: did the fit find a protrusion, or
+    did it find the side of the body? A bone whose tip sits inside the torso
+    is not a limb, however symmetric it is — and automatic weights bound to
+    it would drag the flank around instead of the leg.
+    """
+    reach = 0.04 * np.ptp(points[:, 1])
+    half_width = MIDLINE_FRACTION * 0.5 * np.ptp(points[:, 0])
+    broken = []
+    for name, (_parent, _root, tip) in sorted(fitted.items()):
+        if not (name.startswith("leg_") or name.startswith("gill_")):
+            continue
+        slab = points[np.abs(points[:, 1] - tip[1]) < reach]
+        torso = slab[np.abs(slab[:, 0]) < half_width]
+        if len(torso) == 0:
+            continue
+        if abs(tip[0]) <= half_width:
+            broken.append({
+                "bone": name,
+                "tipLateral": round(abs(tip[0]), 4),
+                "torsoHalfWidth": round(float(half_width), 4),
+                "why": "the tip sits inside the torso, so this bone is not "
+                       "on a limb",
+            })
+    return broken
 
 
 def check_symmetry(fitted: dict, length: float) -> list:
@@ -414,13 +499,14 @@ def main() -> int:
     bpy.ops.wm.read_factory_settings(use_empty=True)
     bpy.ops.import_scene.gltf(filepath=args.input)
     raw = mesh_points()
-    points, (flip, scale, offset, yaw) = normalise(raw, reference)
+    points, (flip, scale, offset, yaw, centre) = normalise(raw, reference)
 
     fitted: dict = {}
     fitted.update(fit_spine(points, table))
     fitted.update(fit_limbs(points, table))
     fitted.update(fit_gills(points, table))
-    broken = check_symmetry(fitted, float(np.ptp(points[:, 1])))
+    fitted, disagreement = mirror_pairs(fitted)
+    broken = check_protrusions(fitted, points)
 
     bones = []
     for name, parent, head, tail in table:
@@ -433,18 +519,25 @@ def main() -> int:
                       [round(float(v), 4) for v in got[2]]])
 
     if args.output:
-        # Replay the same transform on the real datablocks, so the exported
-        # mesh and the fitted table live in one frame.
+        # THE EXPORT MUST REPLAY THE EXACT TRANSFORM THE TABLE WAS FITTED IN,
+        # and building it piecemeal from scale and location got that wrong:
+        # the yaw was applied to the points the bones were fitted to but not
+        # to the mesh that was written, so the exported model lay diagonally
+        # across a skeleton that ran straight down its axis. One matrix,
+        # composed in the same order normalise() works in, cannot drift from
+        # it that way.
+        from mathutils import Matrix  # type: ignore
+        recentre = Matrix.Translation((-centre[0], -centre[1], 0.0))
+        spin = Matrix.Rotation(-yaw, 4, "Z")
+        mirror = Matrix.Diagonal((-1.0, -1.0, 1.0, 1.0)) if flip \
+            else Matrix.Identity(4)
+        resize = Matrix.Diagonal((scale, scale, scale, 1.0))
+        shift = Matrix.Translation(offset)
+        frame = shift @ resize @ mirror @ spin @ recentre
+
         for obj in bpy.data.objects:
-            if obj.type != "MESH":
-                continue
-            if flip:
-                obj.scale = (-obj.scale.x, -obj.scale.y, obj.scale.z)
-            obj.scale = (obj.scale.x * scale, obj.scale.y * scale,
-                         obj.scale.z * scale)
-            obj.location = (obj.location.x * scale + offset[0],
-                            obj.location.y * scale + offset[1],
-                            obj.location.z * scale + offset[2])
+            if obj.type == "MESH":
+                obj.matrix_world = frame @ obj.matrix_world
         bpy.ops.object.select_all(action="DESELECT")
         bpy.ops.export_scene.gltf(
             filepath=args.output, export_format="GLB", export_apply=True,
@@ -465,7 +558,8 @@ def main() -> int:
             "min": [round(float(v), 4) for v in reference.min(axis=0)],
             "max": [round(float(v), 4) for v in reference.max(axis=0)]},
         "bones": bones,
-        "symmetryFailures": broken,
+        "mirrorDisagreement": disagreement,
+        "protrusionFailures": broken,
         "blender": bpy.app.version_string,
     }))
     # A lopsided fit is a FAILED fit, not a warning. Exiting non-zero stops

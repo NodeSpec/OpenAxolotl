@@ -52,6 +52,7 @@ import json
 import math
 import sys
 
+import bmesh  # type: ignore
 import bpy  # type: ignore
 from mathutils import Vector  # type: ignore
 
@@ -157,6 +158,78 @@ def weight_mesh(mesh_object: bpy.types.Object,
     modifier = mesh_object.modifiers.new("Armature", "ARMATURE")
     modifier.object = armature
     mesh_object.parent = armature
+
+
+def heat_weight(mesh_object: bpy.types.Object,
+                armature: bpy.types.Object) -> bool:
+    """Blender's bone-heat weighting. True if it took, False to fall back.
+
+    WHY THIS IS TRIED FIRST. weight_mesh below gives every vertex its two
+    nearest bones by segment distance, inverse-square. That is fine on the
+    generated hero, which arrives as five separate role meshes whose seams are
+    already there — but on a single watertight shell it tears. Two vertices a
+    millimetre apart either side of a weighting boundary get different bone
+    pairs, so a pose pulls them in different directions and the surface splits
+    along a visible crack. The Meshy hero is exactly that: one welded shell of
+    55,000 triangles, and the first rig of it cracked down the flank and
+    through the gill roots.
+
+    Bone heat solves the same problem the way a character artist would, by
+    diffusing weights over the surface so neighbours always agree. It needs
+    manifold geometry and bones inside the volume, which is what the weld in
+    decimate_model.py and the fit in fit_hero_rig.py respectively provide.
+    It can still fail (Blender raises when it cannot find a solution), and a
+    silent fallback to a tearing rig would be worse than a loud one, so the
+    caller is told which path ran.
+    """
+    bpy.ops.object.select_all(action="DESELECT")
+    mesh_object.select_set(True)
+    armature.select_set(True)
+    bpy.context.view_layer.objects.active = armature
+    try:
+        bpy.ops.object.parent_set(type="ARMATURE_AUTO")
+    except RuntimeError:
+        return False
+    # parent_set is reported as succeeding even when it assigns nothing, so
+    # the result is checked rather than trusted.
+    if not any(group.name in {name for name, _, _, _ in BONES}
+               for group in mesh_object.vertex_groups):
+        return False
+    adopt_orphans(mesh_object)
+    return True
+
+
+def adopt_orphans(mesh_object: bpy.types.Object) -> int:
+    """Give every unweighted vertex its nearest bone, and say how many.
+
+    Bone heat leaves gaps. On this hero they are the gill filament tips —
+    slivers far enough from every bone that the solver assigns them nothing —
+    and an unweighted vertex is two bugs at once. It stays in rest pose while
+    the surface around it moves, which spikes the mesh, and it breaks the glTF
+    exporter outright: Blender 4.0 tries to invent a neutral bone for it and
+    dies on `skin.joints` being None, which is how this was found.
+
+    Nearest-bone at weight one is crude, and it is the right crudeness here:
+    these are isolated tips with nothing to blend against, and the alternative
+    is leaving them behind.
+    """
+    segments = [(name, Vector(head), Vector(tail))
+                for name, _, head, tail in BONES]
+    groups = {group.name: group for group in mesh_object.vertex_groups}
+    for name, _head, _tail in segments:
+        if name not in groups:
+            groups[name] = mesh_object.vertex_groups.new(name=name)
+    matrix = mesh_object.matrix_world
+    adopted = 0
+    for vertex in mesh_object.data.vertices:
+        if any(entry.weight > 0.0 for entry in vertex.groups):
+            continue
+        point = matrix @ vertex.co
+        nearest = min(segments,
+                      key=lambda s: segment_distance(point, s[1], s[2]))
+        groups[nearest[0]].add([vertex.index], 1.0, "REPLACE")
+        adopted += 1
+    return adopted
 
 
 def new_action(armature: bpy.types.Object, name: str) -> bpy.types.Action:
@@ -308,7 +381,31 @@ def main() -> int:
     parser = argparse.ArgumentParser(prog="rig_model (bpy)")
     parser.add_argument("--input", required=True)
     parser.add_argument("--output", required=True)
+    parser.add_argument("--bones", default="",
+                        help="a fitted bone table from fit_hero_rig.py; "
+                             "without it the hand-authored BONES are used")
     args = parser.parse_args(argv)
+
+    if args.bones:
+        # A FITTED TABLE REPLACES THE HAND-AUTHORED ONE WHOLESALE. The table
+        # below was measured off the generated axolotl and does not transfer
+        # to a differently proportioned model -- see fit_hero_rig.py. The
+        # bone NAMES are what the six clips key on, so a fitted table keeps
+        # them and every clip below still applies unchanged.
+        global BONES
+        with open(args.bones, encoding="utf-8") as handle:
+            loaded = json.load(handle)
+        rows = loaded["bones"] if isinstance(loaded, dict) else loaded
+        BONES = [(name, parent, tuple(head), tuple(tail))
+                 for name, parent, head, tail in rows]
+        missing = {name for name, _, _, _ in BONES} ^ {
+            "root", "spine", "head", "gill_l", "gill_r", "leg_fl", "leg_fr",
+            "leg_bl", "leg_br", "tail_1", "tail_2", "tail_3"}
+        if missing:
+            print("RIG " + json.dumps({
+                "error": "fitted table changes the bone names the clips key "
+                         "on: %s" % sorted(missing)}))
+            return 1
 
     clear_scene()
     bpy.ops.import_scene.gltf(filepath=args.input)
@@ -317,9 +414,31 @@ def main() -> int:
         print("RIG " + json.dumps({"error": "no mesh objects in input"}))
         return 1
 
+    # WELD BEFORE WEIGHTING. glTF stores UVs per vertex, so every export
+    # SPLITS the mesh along its UV seams and every import hands back that
+    # split. A shell welded watertight in decimate_model.py therefore arrives
+    # here in pieces again, and weighting pieces separately is what tears a
+    # character: the two lips of a seam get different weights, a pose pulls
+    # them apart, and the surface opens along a visible crack. The first
+    # heat-weighted rig cracked down the flank and flattened a gill for
+    # exactly this reason.
+    welded = 0
+    for mesh_object in meshes:
+        span = max(mesh_object.dimensions)
+        shell = bmesh.new()
+        shell.from_mesh(mesh_object.data)
+        before = len(shell.verts)
+        bmesh.ops.remove_doubles(shell, verts=shell.verts[:],
+                                 dist=span * 1e-5)
+        welded += before - len(shell.verts)
+        shell.to_mesh(mesh_object.data)
+        shell.free()
+        mesh_object.data.update()
+
     armature = build_armature()
     for mesh_object in meshes:
-        weight_mesh(mesh_object, armature)
+        if not heat_weight(mesh_object, armature):
+            weight_mesh(mesh_object, armature)
 
     bpy.context.view_layer.objects.active = armature
     armature.animation_data_create()
@@ -342,6 +461,9 @@ def main() -> int:
         "output": args.output,
         "bones": len(BONES),
         "meshesSkinned": len(meshes),
+        "verticesWelded": welded,
+        "weighting": "bone-heat" if any(
+            obj.vertex_groups for obj in meshes) else "nearest-bone",
         "clips": [name for name, _, _ in CLIPS],
         "polygons": sum(len(obj.data.polygons) for obj in bpy.data.objects
                         if obj.type == "MESH"),
