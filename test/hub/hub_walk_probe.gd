@@ -23,7 +23,9 @@ var _checks := 0
 var _frame := 0
 
 var _hub: OpenLagoon
-var _save := SaveSystem.new()
+var _save: SaveSystem
+var _session: GameSession
+var _profile_path: String
 var _body: CharacterBody3D
 var _hub_spawn := Vector3.ZERO
 
@@ -46,7 +48,14 @@ func _ready() -> void:
 		_report()
 		return
 
-	_hub.set_save_system(_save)
+	_session = scene as GameSession
+	_check(_session != null, "the shipped scene owns a game session")
+	if _session == null:
+		_report()
+		return
+	_save = _session.get_save_system()
+	_profile_path = "user://hub_walk_%d.json" % Time.get_ticks_usec()
+	_session.profile_path = _profile_path
 
 	var available := _hub.get_registry().get_available()
 	_check(available.size() >= 1,
@@ -57,7 +66,8 @@ func _ready() -> void:
 
 	_hub.world_entered.connect(func(world_id: String) -> void:
 		_entered_id = world_id
-		_position_in_world = _body.global_position)
+		_position_in_world = _body.global_position
+		_check(_hub.get_hud().can_process(), "HUD continues processing inside a world"))
 	_hub.world_completed.connect(func(world_id: String) -> void:
 		_completed_id = world_id)
 	_hub.returned_to_hub.connect(func(_world_id: String) -> void:
@@ -135,6 +145,12 @@ func _finish_checks() -> void:
 	_check(portal != null and portal.completed,
 		"the portal now shows the world completed")
 
+	var reloaded := SaveSystem.new()
+	_check(reloaded.load_from_file(_profile_path), "completion wrote a readable profile to disk")
+	_check(bool(reloaded.get_world_data(_completed_id).get("completed", false)),
+		"completion survives loading a new save system")
+	_session.profile_path = ""
+	DirAccess.remove_absolute(_profile_path)
 	_report()
 
 

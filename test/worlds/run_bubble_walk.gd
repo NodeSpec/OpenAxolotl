@@ -26,6 +26,7 @@ func _initialize() -> void:
 		return
 
 	var hub := packed.instantiate()
+	hub.set("profile_path", "")
 	root.add_child(hub)
 	current_scene = hub
 
