@@ -125,6 +125,47 @@ func get_controller() -> AxolotlController:
 	return _controller
 
 
+## The camera whose yaw defines "forward". Optional: with none bound the
+## directions stay world-space, which is what every headless probe and unit
+## test wants and what this always used to do.
+var _camera: CameraFollow = null
+
+
+## Bind the camera that defines forward. Called by whatever assembles the
+## player scene; a body with no camera keeps world-relative movement.
+func set_camera(camera: CameraFollow) -> void:
+	_camera = camera
+
+
+## The camera that defines forward, or null. The route probes read it so they
+## can aim before pressing forward, which is the same order a player does it in.
+func get_camera() -> CameraFollow:
+	return _camera
+
+
+## Rotate a movement direction out of screen space into world space.
+##
+## THIS IS THE OTHER HALF OF A LOOK AXIS, and shipping one without the other
+## would be worse than shipping neither: a camera the player can swing while W
+## still means world -Z means that after any turn, forward is some direction
+## they have to work out. Camera-relative movement is what makes "push the
+## stick where you want to go" true.
+##
+## The VERTICAL component is left alone. In the water grammar it comes from
+## SPACE and SHIFT, which mean up and down in the world and not relative to
+## wherever the camera is pitched — a swimmer pressing "up" while looking at
+## the floor wants to rise, not to swim into it.
+func _camera_relative(direction: Vector3) -> Vector3:
+	if _camera == null or direction.is_zero_approx():
+		return direction
+	var horizontal := Vector3(direction.x, 0.0, direction.z)
+	if horizontal.is_zero_approx():
+		return direction
+	var rotated := horizontal.rotated(
+		Vector3.UP, deg_to_rad(_camera.get_yaw_deg()))
+	return Vector3(rotated.x, direction.y, rotated.z)
+
+
 func get_input_system() -> InputSystem:
 	return _input
 
@@ -168,6 +209,7 @@ func _physics_process(delta: float) -> void:
 	_controller.set_grounded(is_on_floor())
 
 	var intent := _input.poll_intent()
+	intent.direction = _camera_relative(intent.direction)
 	_controller.physics_step(delta, is_in_water(), intent)
 
 	velocity = _controller.get_velocity()

@@ -92,6 +92,10 @@ class Waypoint:
 
 var _route: Array[Waypoint] = []
 var _leg := 0
+
+## The camera that defines forward. Optional: a scene without one keeps
+## world-relative movement, and then aiming is a no-op rather than a crash.
+var _camera: CameraFollow = null
 var _leg_frames := 0
 var _held: Dictionary = {}
 
@@ -154,6 +158,12 @@ func step(body: CharacterBody3D) -> void:
 	if is_done() or not _stuck.is_empty():
 		return
 
+	# Resolved from the body rather than passed in, so every existing caller
+	# keeps its signature. Looked up once: the camera is bound at _ready and
+	# does not change for the life of a run.
+	if _camera == null and body.has_method("get_camera"):
+		_camera = body.call("get_camera") as CameraFollow
+
 	var wp := _route[_leg]
 	var here := body.global_position
 	var delta := wp.target + _origin - here
@@ -181,15 +191,41 @@ func step(body: CharacterBody3D) -> void:
 		_advance()
 
 
-## Directional keys only. The vertical pair is pressed in water alone: on land
-## the grammar drops the component anyway, and holding SPACE there would be a
-## hop request rather than a steer.
+## AIM THE CAMERA, THEN PUSH FORWARD — which is what a player does, and what
+## the pilot has to do now that movement is camera-relative.
+##
+## It used to press W/A/S/D against WORLD axes, which worked only while
+## forward meant world -Z. With a look axis that is no longer true: the body
+## rotates its intent by the camera's yaw, so the same four keys pressed under
+## a turned camera go somewhere else entirely. Leg 34 — the only leg on the
+## coral route that asks for a purely lateral move — is where that first showed
+## up, eight metres wide of a pillar.
+##
+## Pointing the camera at the target and holding W is both simpler and more
+## faithful than solving for which keys happen to compose the right world
+## vector: it exercises the same camera-relative path a player's hands do,
+## rather than a world-space path nothing in the shipped game uses any more.
+##
+## The vertical pair is pressed in water alone: on land the grammar drops the
+## component anyway, and holding SPACE there would be a hop request rather
+## than a steer.
 func _steer(delta: Vector3, in_water: bool) -> void:
-	_hold(KEY_W, delta.z < -DEADBAND)
-	_hold(KEY_S, delta.z > DEADBAND)
-	_hold(KEY_A, delta.x < -DEADBAND)
-	_hold(KEY_D, delta.x > DEADBAND)
+	var flat := Vector3(delta.x, 0.0, delta.z)
+	if flat.length() > DEADBAND:
+		# Godot's -Z forward: the yaw that points the camera along `flat`.
+		_aim(rad_to_deg(atan2(-flat.x, -flat.z)))
+	_hold(KEY_W, flat.length() > DEADBAND)
 	_hold(KEY_SHIFT, in_water and delta.y < -DEADBAND)
+
+
+## Point the camera, if this scene has one. Set outright rather than eased:
+## the pilot is proving the ROUTE is flyable, not that a human can swing a
+## camera smoothly, and easing would make every leg's timeout depend on the
+## camera's turn rate.
+func _aim(yaw_deg: float) -> void:
+	if _camera == null:
+		return
+	_camera.set_yaw_deg(yaw_deg)
 
 
 func _act(body: CharacterBody3D, wp: Waypoint, flat: float, delta: Vector3,

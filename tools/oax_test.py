@@ -111,7 +111,42 @@ def _suites(godot: str | None) -> list[dict]:
                      "--script", "test/perf/run_perf_gate.gd"],
             "env": {"OAX_PERF_WORLD": "coral_cove"},
         },
+        *_gpu_suite(godot),
     ]
+
+
+def _gpu_suite(godot: str | None) -> list[dict]:
+    """The GPU gate, which is OPT-IN via OAX_GPU_GATE=1.
+
+    NOTE THE ABSENT --headless: this one rasterises, which is the whole point.
+    Both gates above run headless, which selects Godot's DUMMY rendering
+    server -- they measure script and physics and never draw a pixel, so the
+    entire GPU cost of the shared environment was invisible to CI until this
+    existed.
+
+    It is opt-in rather than default for two honest reasons, not to hide it:
+
+      * IT NEEDS A DISPLAY. On a headless runner it has to be wrapped in
+        xvfb-run, which not every environment has, and a suite that fails for
+        want of an X server teaches contributors to ignore the harness.
+      * IT IS SLOW. Three quality levels over the valley is minutes, not
+        seconds, because SDFGI needs dozens of frames to settle before a
+        sample means anything.
+
+    The cheap half of the same contract IS in the default chain:
+    test/core/rendering/test_render_quality.gd asserts the levels differ in
+    the ways that make them cheaper. This suite is what proves they actually
+    ARE cheaper, by measuring.
+    """
+    if os.environ.get("OAX_GPU_GATE", "") not in ("1", "true", "yes"):
+        return []
+    return [{
+        "id": "gpu-gate",
+        "file": "test/perf/run_gpu_gate.gd",
+        "argv": [godot, "--audio-driver", "Dummy",
+                 "--rendering-driver", "vulkan", "--resolution", "1280x720",
+                 "--path", ".", "--script", "test/perf/run_gpu_gate.gd"],
+    }]
 
 
 def find_godot() -> str | None:

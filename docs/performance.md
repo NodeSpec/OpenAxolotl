@@ -96,12 +96,107 @@ the heaviest world plus the hero:
 | Coral Cove (forested river valley, fully dressed) | 239 | 99,416 |
 | Bubble Bay | 47 | 68,800 |
 | Open Lagoon hub | 28 | 36,912 |
-| hero (all five role meshes) | 5 | 29,632 |
+| hero (all five role meshes) | 5 | 34,392 |
 
-Heaviest playable frame ≈ 129k triangles — an order of magnitude under
-where a desktop GPU starts to care, which is the intent: the look comes
+Heaviest playable frame ≈ 134k triangles. **Triangle count is not what makes
+this game slow, and an earlier version of this paragraph claimed otherwise.**
+It said the scene was "an order of magnitude under where a desktop GPU starts
+to care" — true about geometry, and irrelevant, because the cost is in the
+per-pixel effect stack, not the vertex count. The honest statement is that
+geometry is cheap here and the frame budget is spent almost entirely on
+SDFGI, volumetric fog, SSAO, TAA and soft shadows. See **Graphics quality**
+below. The look still comes
 from silhouettes, shared procedural surfaces and two 1024² hero maps, not
-from polygon counts. The perf gate now runs **twice** per chain — bubble_bay
+from polygon counts. The hero grew by 4,760 triangles when it was
+rebuilt against the maintainer's reference sheet — nearly all of it the
+feathered gill blades, which is where a character's silhouette actually
+lives and so the right place to spend them. The 150,000 assertion in
+`test/core/rendering/test_hero_surface.gd` is what proves the spend
+still fits, at every regeneration rather than at review time. The perf
+gate now runs **twice** per chain — bubble_bay
 and, via `OAX_PERF_WORLD=coral_cove`, the valley — flying the same waypoint
 route the coral walk proves completability with, so the measured traversal
 is the route that actually ships.
+
+
+## Graphics quality (REQ-027)
+
+### Why this section exists
+
+The shared environment was tuned for a screenshot and shipped as the only
+option: SDFGI at four cascades, volumetric fog with GI injection, SSAO, TAA
+layered over 2× MSAA, and a 4096 directional shadow at the highest soft-filter
+quality with a 1.5° sun. That is a stack a mid-range desktop cannot hold at
+60 fps — and **no gate in the repo could see it**, because both perf gates run
+`--headless`, which selects Godot's dummy rendering server. They measure
+script and physics time and never rasterise a pixel. Their own docstrings say
+so; the mistake was reading their "60 fps" as a statement about the frame rate
+a player would get.
+
+### The levels
+
+`core/rendering/render_quality.gd`, applied by the shared rig
+(`WorldLighting.set_quality`). **MEDIUM is the default** — a default a
+mid-range machine cannot hold means the first thing a new player meets is
+stutter, and most will never find the setting that fixes it.
+
+| | LOW | MEDIUM (default) | HIGH (authored look) |
+|---|---|---|---|
+| SDFGI | off | off | 4 cascades |
+| Volumetric fog | off | off | on |
+| SSAO | off | radius 0.5, no detail | radius 1.0, detail 0.5 |
+| Glow | off | on | on |
+| Sun | point, 1 cascade, 45 m | point, 2 cascades, 80 m | 1.5° area, 2 cascades, 80 m |
+| Shadow filter / atlas | hard / 2048 | soft-low / 2048 | soft-high / 4096 |
+| AA | FXAA | 2× MSAA | 2× MSAA + TAA |
+| 3D scale | 75% | 100% | 100% |
+
+**Every level removes effects; none of them re-grades the picture.** Sky,
+tonemap, exposure, fog colour and the sun's direction and energy are identical
+at all three, because those carry "one world, one voice" — a quality level
+that shifted them would make the game a *different game* on a slower machine
+rather than the same game rendered more cheaply. `test_render_quality.gd`
+asserts this.
+
+SDFGI is off below HIGH rather than half-resolution because the expensive part
+is **re-voxelisation**, not resolution: the cascades rebuild as the camera
+travels, so a 128 m level pays continuously rather than once. That is also the
+most likely source of stutter as opposed to a low but steady frame rate.
+
+### Measuring it
+
+`test/perf/run_gpu_gate.gd` — note the absent `--headless` — flies the camera
+along the coral route and samples the viewport's own measured GPU time at each
+waypoint, at all three levels. It is **opt-in** (`OAX_GPU_GATE=1`) because it
+needs a display and takes minutes, not because it is optional to care about.
+
+    OAX_GPU_GATE=1 OAX_GODOT=<godot> python3 tools/oax_test.py --target .
+
+    # or directly, which is what you want on the machine you actually play on:
+    <godot> --audio-driver Dummy --rendering-driver vulkan \
+        --resolution 1920x1080 --path . --script test/perf/run_gpu_gate.gd
+
+**What it asserts is the ORDERING**, not a millisecond figure: each level must
+be at least 1.12× cheaper than the one above it. That is a property of the
+levels themselves and holds on any rasteriser, so a change that makes MEDIUM
+cost what HIGH costs fails on any machine. Absolute milliseconds are reported
+and explicitly *not* gated — CI here rasterises through llvmpipe, a software
+renderer, and treating its numbers as an fps figure would repeat exactly the
+error this whole section corrects.
+
+Measured on llvmpipe at 1280×720 (ratios meaningful, absolutes not):
+
+| level | mean | p95 | worst |
+|---|---|---|---|
+| LOW | 94.5 ms | 134.1 ms | 146.9 ms |
+| MEDIUM | 204.2 ms | 245.6 ms | 300.4 ms |
+| HIGH | 471.5 ms | 533.6 ms | 560.0 ms |
+
+**HIGH costs 2.3× MEDIUM and 5.0× LOW.** Since HIGH was previously the only
+option, moving the default to MEDIUM should roughly halve GPU frame time.
+
+### Changing it
+
+There is no options screen yet — that is follow-up work, and it is where this
+belongs. Until then `OAX_QUALITY=low|medium|high` overrides the default at
+launch.

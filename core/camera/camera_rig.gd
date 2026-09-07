@@ -86,12 +86,20 @@ func collision_margin() -> float:
 ## genuinely different framing — water sits further back and closer to level so
 ## the axolotl can pitch and roll without the camera chasing it; land sits closer
 ## and looks down more, which reads as a conventional follow.
-func base_framing(desired_yaw_deg: float) -> CameraFraming:
+## [param pitch_offset_deg] is the player's own lean on the look axis, ADDED to
+## the grammar's framing pitch rather than replacing it: the rig still decides
+## how far above the axolotl to sit in water versus on land, and the player
+## leans from there. It goes through the framing rather than being applied to
+## the camera's rotation afterwards so that _orbit_position sees the same pitch
+## the rotation will — otherwise looking up would spin the camera in place and
+## drop the axolotl out of the bottom of the frame.
+func base_framing(desired_yaw_deg: float,
+		pitch_offset_deg: float = 0.0) -> CameraFraming:
 	var distance := _tuning.get_number(
 		WATER_DISTANCE_KEY if _in_water else LAND_DISTANCE_KEY)
 	var pitch := _tuning.get_number(
 		WATER_PITCH_KEY if _in_water else LAND_PITCH_KEY)
-	return CameraFraming.new(distance, pitch, desired_yaw_deg)
+	return CameraFraming.new(distance, pitch + pitch_offset_deg, desired_yaw_deg)
 
 
 # --- The per-frame update ---------------------------------------------------
@@ -100,8 +108,9 @@ func base_framing(desired_yaw_deg: float) -> CameraFraming:
 ## movement heading or the player's look input) rather than invented here — the
 ## rig frames what it is told to frame and never decides where the player wants
 ## to look.
-func update(delta: float, target_position: Vector3, desired_yaw_deg: float) -> void:
-	var framing := _resolve_framing(desired_yaw_deg)
+func update(delta: float, target_position: Vector3, desired_yaw_deg: float,
+		pitch_offset_deg: float = 0.0) -> void:
+	var framing := _resolve_framing(desired_yaw_deg, pitch_offset_deg)
 
 	if not _initialised:
 		# First frame: there is no previous transform to be smooth relative to,
@@ -134,8 +143,10 @@ func update(delta: float, target_position: Vector3, desired_yaw_deg: float) -> v
 		absf(_shortest_deg(previous_yaw, _yaw_deg)))
 
 
-func _resolve_framing(desired_yaw_deg: float) -> CameraFraming:
-	var framing := _hints.resolve(base_framing(desired_yaw_deg))
+func _resolve_framing(desired_yaw_deg: float,
+		pitch_offset_deg: float = 0.0) -> CameraFraming:
+	var framing := _hints.resolve(base_framing(desired_yaw_deg,
+		pitch_offset_deg))
 
 	# A LOCKED axis holds what the camera already has rather than tracking its
 	# target. Locking must never move the camera — a lock that snapped the pitch
