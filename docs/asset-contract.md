@@ -104,6 +104,64 @@ What refinement does, and what it deliberately does not:
 Record the refinement in `provenance.json`'s `tool` field, as the hero's
 sidecar does.
 
+### Bringing an outside model inside its budget (headless)
+
+The pipeline now begins outside this repository: a concept image goes to
+Meshy, and what comes back is a dense uniform remesh with its detail baked
+into 4K maps. The hero arrived at **1,933,518 triangles** across 1.75 m² of
+surface — a triangle every 1.4 mm, thirty-two times the character budget, and
+geometry the game will never see, because at gameplay camera distance those
+triangles are far below one pixel each. Every environment kit that follows it
+will arrive the same way, so reduction is a pipeline stage, not a chore:
+
+```sh
+python tools/decimate_model.py --input reference/hero/pink_axolotl_2.glb \
+                               --output reference/hero/pink_axolotl_2_reduced.glb \
+                               --max-triangles 55000
+```
+
+The budget and the texture ceiling come from the **contract**, resolved from
+the output path's category, so neither number is restated in a command line
+and neither can drift from what CI enforces. `--max-triangles` overrides it
+for a destination outside `assets/`, as above. Writing over the input is
+refused: decimation cannot be undone, and the dense source is the only thing
+a second attempt at a different ratio can start from.
+
+**Why this is safe here, and when it would not be.** Reducing polygons ruins
+a model whose detail *is* its geometry — a sculpt with no maps, where the
+wrinkles are vertices. These are the opposite: base colour, normal and
+metallic-roughness over a UV layout, so the wrinkles are pixels, and collapse
+decimation interpolates UVs along the edges it collapses. What is genuinely
+at risk is the **silhouette** — the outline of a gill filament, which no
+normal map can restore — so the tool measures that instead of assuming it.
+
+Two gates, and both exist because they catch different failures:
+
+- **Deviation.** The surface is sampled in both directions. *Decimated →
+  original* catches invention; *original → decimated* catches loss, and that
+  is the one that matters for a creature with thin parts: when a filament
+  dissolves entirely, every point that was on it is suddenly far from any
+  remaining surface, while everything left behind still sits on the original.
+  A one-way measurement would report the model as near-perfect with the gills
+  gone. The default ceiling is 0.5 % of the bounding-box diagonal — about two
+  screen pixels of silhouette error on a hero at gameplay distance.
+- **Open seams.** Deviation is not enough on its own, and the hero proved it.
+  It passed both directions at a *thousandth* of its diagonal and still
+  rendered with black hairline cracks down its flanks, because the export is
+  not one watertight surface: 1,009,622 vertices for 966,739 distinct
+  positions, and **84,666 edges with a single face on them**. In the source
+  the two lips of each seam sit on top of each other and nothing shows.
+  Decimate them and each lip collapses on its own, the pair drifts a fraction
+  of a millimetre apart, and the surface opens — every sample still green,
+  the model visibly broken. So coincident vertices are welded before anything
+  is collapsed (the hero's 84,666 open edges become 0, and stay 0 through the
+  reduction), and an output with more open edges than its welded source is an
+  error. Welding is safe for the maps: Blender keeps UVs per face corner, so
+  the seam's two different UVs stay exactly where they were.
+
+Recording the result: decimation changes geometry, so it needs its own
+provenance note, as the section above requires.
+
 ## Provenance — every asset, no exceptions
 
 Each asset directory carries a `provenance.json`:
