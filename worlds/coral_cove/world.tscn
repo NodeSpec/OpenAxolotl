@@ -1,535 +1,1033 @@
-[gd_scene load_steps=40 format=3]
+[gd_scene load_steps=82 format=3]
 
-; CORAL COVE — the first official world (REQ-011), and deliberately built the
-; way an outside contributor would build one: manifest + scene, NO scripts.
-; Every mechanic below is a DECLARATION the game client's WorldSystems runtime
-; binds — group membership plus node metadata, never code.
+; CORAL COVE — the first official world (REQ-011), and a full platforming
+; playthrough: run, jump, swim, dive, boost and climb, in that order, with
+; the difficulty rising across six acts.
 ;
-; THE ROUTE (one straight line down -Z, drivable with a single held forward
-; key, because completability is a headless test, not a hope):
+; Built the way an outside contributor would build one: manifest + scene, NO
+; scripts. Every mechanic below is a DECLARATION the game client's
+; WorldSystems runtime binds — group membership plus node metadata, never
+; code. The Sanctioned World API Surface is not called here because nothing
+; here calls anything.
 ;
-;   z   2  spawn (land — waddle)
-;   z  -6  the lagoon: a WaterVolume across the route — water grammar
-;   z -18  back onto land (grammar returns)                 [checkpoint 1]
-;   z -22  HERMIT SNAIL — a discovery collectible (a rescued creature) on the
-;          route, declared in the manifest, placed here, persisted by id
-;   z -24  Glow Gill Mod pickup
-;   z -28  GLOW GATE — a bioluminescent false wall, open only while the
-;          equipped mod grants `reveal_bioluminescent`. Mandatory: it spans
-;          the full route. (Camera hint volume tightens framing here.)
-;   z -32  STRAY HOOK — an ORDINARY hazard (group `hazard`, capability leg):
-;          it strips a leg with a pop and NEVER costs a life. On the route
-;          on purpose, so every playthrough exercises pillar one.
-;   z -34  Bubble Gill Mod pickup
-;   z -38  BUBBLE GATE — open only while the mod grants `bubble_platform`.
-;          Coral Cove gates on Bubble and Glow; Bubble Bay takes Jet, so the
-;          official set covers all three MVP mods.       [checkpoint 2, -40]
-;   z -41  REGEN STATION — regrows every lost capability (the leg comes back
-;          before the seed bed, with a bloom).
-;   z -42..-54  seven kelp seed pickups — the `kelp_seed` RESOURCE
-;          collectible, declared once in the manifest and placed seven times;
-;          each delivers to region `coral_shelf` (costs overridden to 3+4 via
-;          sanctioned tuningOverrides, so the seventh seed completes it)
-;   z -45  LANTERN SHRIMP — a second discovery collectible, OFF the route
-;          (x +9): the optional branch the reward layer exists for. The
-;          straight walk never touches it, and the walk asserts that.
-;   z -56  SHELF WALL — the region's declared traversal gate; opens when
-;          `coral_shelf` reaches `restored`. Restoration is MANDATORY.
-;   z -60  finish volume — reach_volume returns the player to the lagoon.
+; GEOMETRY IS DERIVED FROM MEASUREMENT, not from taste. The controller was
+; driven headlessly through the greybox against the shipped tuning and
+; reported:
 ;
-; Below everything: a PIT VOLUME (group `pit_volume`) — CATASTROPHIC. Walking
-; off the edge of the route costs a life and returns the player to the last
-; checkpoint; at zero lives the count refills. That is the whole of the
-; stakes layer, declared as one node.
+;     run 4.20 m/s | standing jump 1.81 m | running jump 3.15 m of gap
+;     climb 2.0 m/s to a 6.0 m ceiling | swim 6.0 m/s | bubble boost x2.2
 ;
-; CHECKPOINT DENSITY follows REQ-003 AC-7: the replay from any anchor to the
-; next must fit progression.max_retry_seconds (5 s) at normal traversal, so
-; five checkpoints sit roughly every 10 m — z -10, -20, -30, -40, -50 — and
-; the coral walk MEASURES every segment rather than trusting this comment.
+; Every mandatory gap on the route is 2.6 m or less against that 3.15 m, and
+; every mandatory rise 1.2 m or less against that 1.81 m — comfortable, but
+; not free. The one jump built to the edge of the envelope (1.6 m of rise
+; across 3.0 m) is the OPTIONAL one, onto ShrimpLedge. If the arc is ever
+; retuned smaller, this level stops being completable, and the coral walk is
+; what says so.
+;
+; THE ROUTE, in six acts down -Z:
+;
+;   ACT 1  z   4 → -29   THE TIDE SHELF. Land. A rising staircase of four
+;                        gaps, teaching run-and-jump on wide, forgiving
+;                        platforms. The hermit snail (a discovery
+;                        collectible) sits on the third.
+;   ACT 2  z -30 → -50   THE LAGOON. Water. The grammar flips on entry. Two
+;                        obstacles that cannot be swum straight through: a
+;                        rock brow passable only UNDERNEATH, then a shelf
+;                        passable only OVER — down, then up, in one
+;                        crossing. The bubble boost is what makes it quick.
+;   ACT 3  z -50 → -67   THE CORAL WALL. Climb. Four metres of climbable
+;                        face inside the 6 m ceiling. The block is both the
+;                        wall and the platform above it, so clearing the lip
+;                        ends the climb by running out of wall.
+;   ACT 4  z -67 → -95   THE GLOW GROTTO. The hard section. The Glow gate
+;                        first, then four narrow pillars over open water,
+;                        two of them offset sideways so the jump has to be
+;                        aimed and not merely timed. The stray hook waits on
+;                        the third and strips a leg — an ORDINARY hazard,
+;                        which never costs a life. Then the Bubble gate.
+;   ACT 5  z -95 → -119  THE SEED BEDS. Three descending terraces carrying
+;                        the seven kelp seeds; two of them out on side
+;                        pillars that cost a jump each way. The regen
+;                        station regrows the leg on the way in.
+;   ACT 6  z-119 → -126  THE SHELF. The restoration gate opens only when
+;                        coral_shelf reaches `restored`, so restoration is
+;                        MANDATORY, then the finish volume returns the
+;                        player to the Open Lagoon.
+;
+; UNDER EVERYTHING: one pit volume. Every gap on the route is real — falling
+; costs a life and returns the player to the last checkpoint (REQ-003).
+;
+; CHECKPOINTS follow REQ-003 AC-7: the replay from any anchor to the next
+; must fit progression.max_retry_seconds. A platforming route is slower per
+; metre than a walk, so they are DENSER than the old corridor's — thirteen
+; of them — and the coral walk MEASURES every segment rather than trusting
+; this comment.
+;
+; NOTHING HERE IS ENFORCED BY A COMMENT. The coral walk flies this exact
+; route waypoint by waypoint, pressing the keys a player would press, and
+; fails naming the waypoint it could not reach. Move a platform out of reach
+; and the walk says so; retune the arc smaller and it says so too.
 
 [ext_resource type="Script" path="res://core/controller/water_volume.gd" id="1_water"]
 [ext_resource type="Script" path="res://core/camera/camera_hint_volume.gd" id="2_hint"]
-[ext_resource type="Material" path="res://core/rendering/water_surface.tres" id="2_watermat"]
-[ext_resource type="PackedScene" path="res://assets/environment/rock_cluster/rock_cluster.glb" id="3_kit_rock_cluster"]
-[ext_resource type="PackedScene" path="res://assets/environment/coral_branch/coral_branch.glb" id="4_kit_coral_branch"]
-[ext_resource type="PackedScene" path="res://assets/environment/kelp_strand/kelp_strand.glb" id="5_kit_kelp_strand"]
-[ext_resource type="PackedScene" path="res://assets/environment/seagrass_tuft/seagrass_tuft.glb" id="6_kit_seagrass_tuft"]
-[ext_resource type="PackedScene" path="res://assets/prop/dredger/dredger.glb" id="7_fleet_dredger"]
-[ext_resource type="PackedScene" path="res://assets/prop/hookline_rig/hookline_rig.glb" id="8_fleet_hookline_rig"]
-[ext_resource type="PackedScene" path="res://assets/prop/netbot/netbot.glb" id="9_fleet_netbot"]
-[ext_resource type="PackedScene" path="res://assets/prop/runoff_drone/runoff_drone.glb" id="10_fleet_runoff_drone"]
+[ext_resource type="Material" path="res://core/rendering/water_surface.tres" id="3_watermat"]
+[ext_resource type="PackedScene" path="res://assets/environment/rock_cluster/rock_cluster.glb" id="4_kit_rock_cluster"]
+[ext_resource type="PackedScene" path="res://assets/environment/coral_branch/coral_branch.glb" id="5_kit_coral_branch"]
+[ext_resource type="PackedScene" path="res://assets/environment/kelp_strand/kelp_strand.glb" id="6_kit_kelp_strand"]
+[ext_resource type="PackedScene" path="res://assets/environment/seagrass_tuft/seagrass_tuft.glb" id="7_kit_seagrass_tuft"]
+[ext_resource type="PackedScene" path="res://assets/prop/dredger/dredger.glb" id="8_fleet_dredger"]
+[ext_resource type="PackedScene" path="res://assets/prop/hookline_rig/hookline_rig.glb" id="9_fleet_hookline_rig"]
+[ext_resource type="PackedScene" path="res://assets/prop/netbot/netbot.glb" id="10_fleet_netbot"]
+[ext_resource type="PackedScene" path="res://assets/prop/runoff_drone/runoff_drone.glb" id="11_fleet_runoff_drone"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_ground"]
-size = Vector3(24, 2, 72)
+[sub_resource type="BoxMesh" id="BoxMesh_0"]
+size = Vector3(12, 2, 10)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
-size = Vector3(24, 2, 72)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+albedo_color = Color(0.78, 0.7, 0.52, 1)
 
-[sub_resource type="StandardMaterial3D" id="Material_ground"]
-albedo_color = Color(0.76, 0.68, 0.5, 1)
+[sub_resource type="BoxShape3D" id="BoxShape3D_2"]
+size = Vector3(12, 2, 10)
 
-[sub_resource type="BoxMesh" id="BoxMesh_water"]
-size = Vector3(24, 2.4, 12)
+[sub_resource type="BoxMesh" id="BoxMesh_3"]
+size = Vector3(7, 2, 3)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_water"]
-size = Vector3(24, 2.4, 12)
+[sub_resource type="BoxShape3D" id="BoxShape3D_4"]
+size = Vector3(7, 2, 3)
 
-[sub_resource type="BoxMesh" id="BoxMesh_gate"]
-size = Vector3(24, 4, 1)
+[sub_resource type="BoxMesh" id="BoxMesh_5"]
+size = Vector3(7, 2, 3)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_gate"]
-size = Vector3(24, 4, 1)
+[sub_resource type="BoxShape3D" id="BoxShape3D_6"]
+size = Vector3(7, 2, 3)
 
-[sub_resource type="StandardMaterial3D" id="Material_glow_gate"]
-albedo_color = Color(0.2, 0.9, 0.7, 1)
+[sub_resource type="BoxMesh" id="BoxMesh_7"]
+size = Vector3(9, 2, 4)
 
-[sub_resource type="StandardMaterial3D" id="Material_bubble_gate"]
-albedo_color = Color(0.55, 0.75, 0.95, 1)
+[sub_resource type="BoxShape3D" id="BoxShape3D_8"]
+size = Vector3(9, 2, 4)
 
-[sub_resource type="StandardMaterial3D" id="Material_shelf_wall"]
-albedo_color = Color(0.85, 0.45, 0.4, 1)
+[sub_resource type="SphereMesh" id="SphereMesh_9"]
+radius = 0.55
+height = 1.1
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_pickup"]
-size = Vector3(20, 3, 2)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_seed"]
-size = Vector3(20, 3, 1.2)
-
-[sub_resource type="SphereMesh" id="SphereMesh_pickup"]
-radius = 0.6
-height = 1.2
-
-[sub_resource type="StandardMaterial3D" id="Material_glow_mod"]
-albedo_color = Color(0.3, 1, 0.8, 1)
-
-[sub_resource type="StandardMaterial3D" id="Material_bubble_mod"]
-albedo_color = Color(0.6, 0.8, 1, 1)
-
-[sub_resource type="StandardMaterial3D" id="Material_seed"]
-albedo_color = Color(0.4, 0.8, 0.35, 1)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_hint"]
-size = Vector3(24, 6, 8)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_creature"]
-size = Vector3(2, 3, 2)
-
-[sub_resource type="StandardMaterial3D" id="Material_snail"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_10"]
 albedo_color = Color(0.95, 0.6, 0.3, 1)
 
-[sub_resource type="StandardMaterial3D" id="Material_shrimp"]
-albedo_color = Color(1, 0.4, 0.55, 1)
+[sub_resource type="BoxShape3D" id="BoxShape3D_11"]
+size = Vector3(2.4, 3, 2.4)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_pit"]
-size = Vector3(400, 4, 400)
+[sub_resource type="BoxMesh" id="BoxMesh_12"]
+size = Vector3(11, 2, 4)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_hazard"]
-size = Vector3(20, 3, 1)
+[sub_resource type="BoxShape3D" id="BoxShape3D_13"]
+size = Vector3(11, 2, 4)
 
-[sub_resource type="StandardMaterial3D" id="Material_hook"]
-albedo_color = Color(0.55, 0.55, 0.6, 1)
+[sub_resource type="BoxMesh" id="BoxMesh_14"]
+size = Vector3(22, 2, 20)
 
-[sub_resource type="StandardMaterial3D" id="Material_station"]
-albedo_color = Color(0.85, 0.95, 0.4, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_15"]
+albedo_color = Color(0.3, 0.42, 0.46, 1)
 
-[sub_resource type="ParticleProcessMaterial" id="Particles_bubbles"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_16"]
+size = Vector3(22, 2, 20)
+
+[sub_resource type="BoxMesh" id="BoxMesh_17"]
+size = Vector3(22, 17, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_18"]
+size = Vector3(22, 17, 20)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_19"]
 direction = Vector3(0, 1, 0)
 spread = 8.0
 initial_velocity_min = 0.25
 initial_velocity_max = 0.7
-gravity = Vector3(0, 0.3, 0)
+gravity = Vector3(0, 0.4, 0)
 scale_min = 0.5
 scale_max = 1.0
 emission_shape = 3
-emission_box_extents = Vector3(11, 1, 5.5)
+emission_box_extents = Vector3(10, 7, 9)
 
-[sub_resource type="StandardMaterial3D" id="Material_bubble"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_20"]
 transparency = 1
 shading_mode = 0
 albedo_color = Color(0.85, 0.95, 1, 0.5)
 
-[sub_resource type="SphereMesh" id="SphereMesh_bubble"]
+[sub_resource type="SphereMesh" id="SphereMesh_21"]
 radius = 0.035
 height = 0.07
-material = SubResource("Material_bubble")
+material = SubResource("StandardMaterial3D_20")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_enemy"]
+[sub_resource type="BoxMesh" id="BoxMesh_22"]
+size = Vector3(22, 6.6, 1.6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_23"]
+albedo_color = Color(0.46, 0.5, 0.55, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_24"]
+size = Vector3(22, 6.6, 1.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_25"]
+size = Vector3(22, 12, 1.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_26"]
+size = Vector3(22, 12, 1.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_27"]
+size = Vector3(12, 2, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_28"]
+size = Vector3(12, 2, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_29"]
+size = Vector3(12, 2, 2.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_30"]
+size = Vector3(12, 2, 2.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_31"]
+size = Vector3(14, 2, 12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_32"]
+size = Vector3(14, 2, 12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_33"]
+size = Vector3(14, 4.4, 8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_34"]
+albedo_color = Color(0.66, 0.42, 0.44, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_35"]
+size = Vector3(14, 4.4, 8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_36"]
+albedo_color = Color(0.3, 1, 0.8, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_37"]
+size = Vector3(14, 4, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_38"]
+albedo_color = Color(0.2, 0.9, 0.7, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_39"]
+size = Vector3(14, 4, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_40"]
+size = Vector3(16, 8, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_41"]
+size = Vector3(5, 2, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_42"]
+size = Vector3(5, 2, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_43"]
+size = Vector3(4, 2, 2.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_44"]
+size = Vector3(4, 2, 2.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_45"]
+albedo_color = Color(0.55, 0.55, 0.6, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_46"]
+size = Vector3(3, 2.6, 1.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_47"]
+size = Vector3(10, 2, 6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_48"]
+size = Vector3(10, 2, 6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_49"]
+size = Vector3(4, 2, 3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_50"]
+albedo_color = Color(0.34, 0.52, 0.4, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_51"]
+size = Vector3(4, 2, 3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_52"]
+albedo_color = Color(1, 0.4, 0.55, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_53"]
+size = Vector3(2.4, 2.6, 2.4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_54"]
+albedo_color = Color(0.6, 0.8, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_55"]
+albedo_color = Color(0.55, 0.75, 0.95, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_56"]
+size = Vector3(10, 2, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_57"]
+size = Vector3(10, 2, 5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_58"]
+albedo_color = Color(0.85, 0.95, 0.4, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_59"]
+albedo_color = Color(0.4, 0.8, 0.35, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_60"]
+size = Vector3(3, 2, 2.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_61"]
+size = Vector3(3, 2, 2.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_62"]
+size = Vector3(12, 2, 7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_63"]
+size = Vector3(12, 2, 7)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_64"]
+albedo_color = Color(0.85, 0.45, 0.4, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_65"]
+size = Vector3(12, 2, 7.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_66"]
+size = Vector3(12, 2, 7.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_67"]
+size = Vector3(12, 4, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_68"]
+size = Vector3(600, 4, 600)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_69"]
 size = Vector3(2.6, 2.6, 2.6)
 
 [node name="CoralCove" type="Node3D"]
 
-[node name="Ground" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -28)
+; === ACT 1: THE TIDE SHELF -- run and jump ===
 
-[node name="Mesh" type="MeshInstance3D" parent="Ground"]
-mesh = SubResource("BoxMesh_ground")
-surface_material_override/0 = SubResource("Material_ground")
+[node name="StartLedge" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -1)
 
-[node name="Collision" type="CollisionShape3D" parent="Ground"]
-shape = SubResource("BoxShape3D_ground")
+[node name="Mesh" type="MeshInstance3D" parent="StartLedge"]
+mesh = SubResource("BoxMesh_0")
+surface_material_override/0 = SubResource("StandardMaterial3D_1")
 
-[node name="Pit" type="Area3D" parent="." groups=["pit_volume"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -30, -28)
-
-[node name="Collision" type="CollisionShape3D" parent="Pit"]
-shape = SubResource("BoxShape3D_pit")
-
-[node name="Lagoon" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -12)
-script = ExtResource("1_water")
-
-[node name="Mesh" type="MeshInstance3D" parent="Lagoon"]
-mesh = SubResource("BoxMesh_water")
-surface_material_override/0 = ExtResource("2_watermat")
-
-[node name="Collision" type="CollisionShape3D" parent="Lagoon"]
-shape = SubResource("BoxShape3D_water")
+[node name="Collision" type="CollisionShape3D" parent="StartLedge"]
+shape = SubResource("BoxShape3D_2")
 
 [node name="Spawn" type="Marker3D" parent="." groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2)
 
-[node name="CheckpointShore" type="Marker3D" parent="." groups=["checkpoint"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -20)
+[node name="ShelfStep1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -9.7)
 
-[node name="CheckpointLagoonEdge" type="Marker3D" parent="." groups=["checkpoint"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -10)
+[node name="Mesh" type="MeshInstance3D" parent="ShelfStep1"]
+mesh = SubResource("BoxMesh_3")
+surface_material_override/0 = SubResource("StandardMaterial3D_1")
 
-[node name="CheckpointGlowPath" type="Marker3D" parent="." groups=["checkpoint"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -30)
+[node name="Collision" type="CollisionShape3D" parent="ShelfStep1"]
+shape = SubResource("BoxShape3D_4")
 
-[node name="CheckpointSeedBed" type="Marker3D" parent="." groups=["checkpoint"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -50)
+[node name="CheckpointTideStep" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, -9.7)
+
+[node name="ShelfStep2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, -15.1)
+
+[node name="Mesh" type="MeshInstance3D" parent="ShelfStep2"]
+mesh = SubResource("BoxMesh_5")
+surface_material_override/0 = SubResource("StandardMaterial3D_1")
+
+[node name="Collision" type="CollisionShape3D" parent="ShelfStep2"]
+shape = SubResource("BoxShape3D_6")
+
+[node name="CheckpointTideRise" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8, -15.1)
+
+[node name="ShelfStep3" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -21)
+
+[node name="Mesh" type="MeshInstance3D" parent="ShelfStep3"]
+mesh = SubResource("BoxMesh_7")
+surface_material_override/0 = SubResource("StandardMaterial3D_1")
+
+[node name="Collision" type="CollisionShape3D" parent="ShelfStep3"]
+shape = SubResource("BoxShape3D_8")
+
+[node name="CheckpointTideShelf" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, -21)
 
 [node name="HermitSnail" type="Area3D" parent="." groups=["collectible"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -22)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, -21.8)
 metadata/collectible_id = "hermit_snail"
 
 [node name="Mesh" type="MeshInstance3D" parent="HermitSnail"]
-mesh = SubResource("SphereMesh_pickup")
-surface_material_override/0 = SubResource("Material_snail")
+mesh = SubResource("SphereMesh_9")
+surface_material_override/0 = SubResource("StandardMaterial3D_10")
 
 [node name="Collision" type="CollisionShape3D" parent="HermitSnail"]
-shape = SubResource("BoxShape3D_pickup")
+shape = SubResource("BoxShape3D_11")
+
+[node name="ShelfLip" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -27.4)
+
+[node name="Mesh" type="MeshInstance3D" parent="ShelfLip"]
+mesh = SubResource("BoxMesh_12")
+surface_material_override/0 = SubResource("StandardMaterial3D_1")
+
+[node name="Collision" type="CollisionShape3D" parent="ShelfLip"]
+shape = SubResource("BoxShape3D_13")
+
+[node name="CheckpointShelfLip" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, -27.4)
+
+; === ACT 2: THE LAGOON -- swim, dive, boost ===
+
+[node name="LagoonFloor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -14, -40.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="LagoonFloor"]
+mesh = SubResource("BoxMesh_14")
+surface_material_override/0 = SubResource("StandardMaterial3D_15")
+
+[node name="Collision" type="CollisionShape3D" parent="LagoonFloor"]
+shape = SubResource("BoxShape3D_16")
+
+[node name="Lagoon" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.5, -40.5)
+script = ExtResource("1_water")
+
+[node name="Mesh" type="MeshInstance3D" parent="Lagoon"]
+mesh = SubResource("BoxMesh_17")
+surface_material_override/0 = ExtResource("3_watermat")
+
+[node name="Collision" type="CollisionShape3D" parent="Lagoon"]
+shape = SubResource("BoxShape3D_18")
+
+[node name="Bubbles" type="GPUParticles3D" parent="Lagoon"]
+amount = 64
+lifetime = 5.0
+preprocess = 4.0
+visibility_aabb = AABB(-11, -8, -10, 22, 16, 20)
+process_material = SubResource("ParticleProcessMaterial_19")
+draw_pass_1 = SubResource("SphereMesh_21")
+
+[node name="CheckpointLagoonEntry" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -32)
+
+; A brow of rock spanning the whole lagoon: the only way past is UNDER it, below y=-2.
+
+[node name="DiveBar" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, -35)
+
+[node name="Mesh" type="MeshInstance3D" parent="DiveBar"]
+mesh = SubResource("BoxMesh_22")
+surface_material_override/0 = SubResource("StandardMaterial3D_23")
+
+[node name="Collision" type="CollisionShape3D" parent="DiveBar"]
+shape = SubResource("BoxShape3D_24")
+
+[node name="CheckpointLagoonDeep" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, -38)
+
+; And the mirror of it: a shelf rising off the floor, passable only OVER the top, above y=-1. Down then up, in one crossing.
+
+[node name="RiseWall" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7, -41)
+
+[node name="Mesh" type="MeshInstance3D" parent="RiseWall"]
+mesh = SubResource("BoxMesh_25")
+surface_material_override/0 = SubResource("StandardMaterial3D_23")
+
+[node name="Collision" type="CollisionShape3D" parent="RiseWall"]
+shape = SubResource("BoxShape3D_26")
+
+[node name="CheckpointLagoonRise" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -43.5)
+
+[node name="ShoreStep1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, -46)
+
+[node name="Mesh" type="MeshInstance3D" parent="ShoreStep1"]
+mesh = SubResource("BoxMesh_27")
+surface_material_override/0 = SubResource("StandardMaterial3D_1")
+
+[node name="Collision" type="CollisionShape3D" parent="ShoreStep1"]
+shape = SubResource("BoxShape3D_28")
+
+[node name="ShoreStep2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -48.4)
+
+[node name="Mesh" type="MeshInstance3D" parent="ShoreStep2"]
+mesh = SubResource("BoxMesh_29")
+surface_material_override/0 = SubResource("StandardMaterial3D_1")
+
+[node name="Collision" type="CollisionShape3D" parent="ShoreStep2"]
+shape = SubResource("BoxShape3D_30")
+
+[node name="CoveShore" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -56)
+
+[node name="Mesh" type="MeshInstance3D" parent="CoveShore"]
+mesh = SubResource("BoxMesh_31")
+surface_material_override/0 = SubResource("StandardMaterial3D_1")
+
+[node name="Collision" type="CollisionShape3D" parent="CoveShore"]
+shape = SubResource("BoxShape3D_32")
+
+[node name="CheckpointCoveShore" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -52)
+
+; === ACT 3: THE CORAL WALL -- climb ===
+
+; Climbable: the `climbable` group is the tag (a physics layer would do as well). One solid block from the shore at y=3.0 to its lip at 7.4, so it is BOTH the 4.4 m face and the platform above it -- clearing the lip ends the climb by simply running out of wall, which is what the controller already does.
+
+[node name="CoralWall" type="StaticBody3D" parent="." groups=["climbable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.2, -66)
+
+[node name="Mesh" type="MeshInstance3D" parent="CoralWall"]
+mesh = SubResource("BoxMesh_33")
+surface_material_override/0 = SubResource("StandardMaterial3D_34")
+
+[node name="Collision" type="CollisionShape3D" parent="CoralWall"]
+shape = SubResource("BoxShape3D_35")
+
+[node name="CheckpointWallBase" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -60)
+
+[node name="CheckpointWallTop" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.4, -65)
 
 [node name="GlowPickup" type="Area3D" parent="." groups=["gill_mod_pickup"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -24)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.2, -66.4)
 metadata/mod_id = "glow"
 
 [node name="Mesh" type="MeshInstance3D" parent="GlowPickup"]
-mesh = SubResource("SphereMesh_pickup")
-surface_material_override/0 = SubResource("Material_glow_mod")
+mesh = SubResource("SphereMesh_9")
+surface_material_override/0 = SubResource("StandardMaterial3D_36")
 
 [node name="Collision" type="CollisionShape3D" parent="GlowPickup"]
-shape = SubResource("BoxShape3D_pickup")
+shape = SubResource("BoxShape3D_11")
+
+; A bioluminescent false wall. Open only while the equipped mod grants reveal_bioluminescent, and it spans the route.
 
 [node name="GlowGate" type="StaticBody3D" parent="." groups=["affordance_gate"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -28)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, -68.5)
 metadata/affordance = "reveal_bioluminescent"
 
 [node name="Mesh" type="MeshInstance3D" parent="GlowGate"]
-mesh = SubResource("BoxMesh_gate")
-surface_material_override/0 = SubResource("Material_glow_gate")
+mesh = SubResource("BoxMesh_37")
+surface_material_override/0 = SubResource("StandardMaterial3D_38")
 
 [node name="Collision" type="CollisionShape3D" parent="GlowGate"]
-shape = SubResource("BoxShape3D_gate")
+shape = SubResource("BoxShape3D_39")
 
 [node name="GrottoHint" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -31)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -73)
 script = ExtResource("2_hint")
 override_distance = true
-distance_m = 5.0
+distance_m = 6.5
 
 [node name="Collision" type="CollisionShape3D" parent="GrottoHint"]
-shape = SubResource("BoxShape3D_hint")
+shape = SubResource("BoxShape3D_40")
+
+; === ACT 4: THE GLOW GROTTO -- the hard pillars ===
+
+[node name="GrottoPillar1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, -74.1)
+
+[node name="Mesh" type="MeshInstance3D" parent="GrottoPillar1"]
+mesh = SubResource("BoxMesh_41")
+surface_material_override/0 = SubResource("StandardMaterial3D_34")
+
+[node name="Collision" type="CollisionShape3D" parent="GrottoPillar1"]
+shape = SubResource("BoxShape3D_42")
+
+[node name="CheckpointGrottoOne" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.4, -74.1)
+
+[node name="GrottoPillar2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 6.4, -79.05)
+
+[node name="Mesh" type="MeshInstance3D" parent="GrottoPillar2"]
+mesh = SubResource("BoxMesh_43")
+surface_material_override/0 = SubResource("StandardMaterial3D_34")
+
+[node name="Collision" type="CollisionShape3D" parent="GrottoPillar2"]
+shape = SubResource("BoxShape3D_44")
+
+[node name="GrottoPillar3" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.6, -83.75)
+
+[node name="Mesh" type="MeshInstance3D" parent="GrottoPillar3"]
+mesh = SubResource("BoxMesh_43")
+surface_material_override/0 = SubResource("StandardMaterial3D_34")
+
+[node name="Collision" type="CollisionShape3D" parent="GrottoPillar3"]
+shape = SubResource("BoxShape3D_44")
 
 [node name="StrayHook" type="Area3D" parent="." groups=["hazard"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -32)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, -83.7)
 metadata/capability = "leg"
 metadata/hazard_id = "stray_hook"
 
 [node name="Mesh" type="MeshInstance3D" parent="StrayHook"]
-mesh = SubResource("SphereMesh_pickup")
-surface_material_override/0 = SubResource("Material_hook")
+mesh = SubResource("SphereMesh_9")
+surface_material_override/0 = SubResource("StandardMaterial3D_45")
 
 [node name="Collision" type="CollisionShape3D" parent="StrayHook"]
-shape = SubResource("BoxShape3D_hazard")
+shape = SubResource("BoxShape3D_46")
 
-[node name="BubblePickup" type="Area3D" parent="." groups=["gill_mod_pickup"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -34)
-metadata/mod_id = "bubble"
+[node name="CheckpointGrottoThree" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.6, -83.7)
 
-[node name="Mesh" type="MeshInstance3D" parent="BubblePickup"]
-mesh = SubResource("SphereMesh_pickup")
-surface_material_override/0 = SubResource("Material_bubble_mod")
+[node name="GrottoPillar4" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 7.6, -88.45)
 
-[node name="Collision" type="CollisionShape3D" parent="BubblePickup"]
-shape = SubResource("BoxShape3D_pickup")
+[node name="Mesh" type="MeshInstance3D" parent="GrottoPillar4"]
+mesh = SubResource("BoxMesh_43")
+surface_material_override/0 = SubResource("StandardMaterial3D_34")
 
-[node name="BubbleGate" type="StaticBody3D" parent="." groups=["affordance_gate"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -38)
-metadata/affordance = "bubble_platform"
+[node name="Collision" type="CollisionShape3D" parent="GrottoPillar4"]
+shape = SubResource("BoxShape3D_44")
 
-[node name="Mesh" type="MeshInstance3D" parent="BubbleGate"]
-mesh = SubResource("BoxMesh_gate")
-surface_material_override/0 = SubResource("Material_bubble_gate")
+[node name="GrottoLanding" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -94.9)
 
-[node name="Collision" type="CollisionShape3D" parent="BubbleGate"]
-shape = SubResource("BoxShape3D_gate")
+[node name="Mesh" type="MeshInstance3D" parent="GrottoLanding"]
+mesh = SubResource("BoxMesh_47")
+surface_material_override/0 = SubResource("StandardMaterial3D_34")
 
-[node name="CheckpointGrotto" type="Marker3D" parent="." groups=["checkpoint"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -40)
+[node name="Collision" type="CollisionShape3D" parent="GrottoLanding"]
+shape = SubResource("BoxShape3D_48")
 
-[node name="RegenStation" type="Area3D" parent="." groups=["regen_station"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -41)
+[node name="CheckpointGrottoLanding" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -94)
 
-[node name="Mesh" type="MeshInstance3D" parent="RegenStation"]
-mesh = SubResource("SphereMesh_pickup")
-surface_material_override/0 = SubResource("Material_station")
+; OFF THE ROUTE, on purpose. Reachable only by a full-height jump from the edge of pillar 2: 1.6 m of rise across 2.5 m, inside the measured 1.81 m / 3.15 m envelope with nothing to spare. The straight route never touches it and the walk asserts that it did not.
 
-[node name="Collision" type="CollisionShape3D" parent="RegenStation"]
-shape = SubResource("BoxShape3D_hazard")
+[node name="ShrimpLedge" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 8, -80)
 
-[node name="Seed1" type="Area3D" parent="." groups=["collectible"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -42)
-metadata/collectible_id = "kelp_seed"
+[node name="Mesh" type="MeshInstance3D" parent="ShrimpLedge"]
+mesh = SubResource("BoxMesh_49")
+surface_material_override/0 = SubResource("StandardMaterial3D_50")
 
-[node name="Mesh" type="MeshInstance3D" parent="Seed1"]
-mesh = SubResource("SphereMesh_pickup")
-surface_material_override/0 = SubResource("Material_seed")
-
-[node name="Collision" type="CollisionShape3D" parent="Seed1"]
-shape = SubResource("BoxShape3D_seed")
-
-[node name="Seed2" type="Area3D" parent="." groups=["collectible"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -44)
-metadata/collectible_id = "kelp_seed"
-
-[node name="Mesh" type="MeshInstance3D" parent="Seed2"]
-mesh = SubResource("SphereMesh_pickup")
-surface_material_override/0 = SubResource("Material_seed")
-
-[node name="Collision" type="CollisionShape3D" parent="Seed2"]
-shape = SubResource("BoxShape3D_seed")
-
-[node name="Seed3" type="Area3D" parent="." groups=["collectible"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -46)
-metadata/collectible_id = "kelp_seed"
-
-[node name="Mesh" type="MeshInstance3D" parent="Seed3"]
-mesh = SubResource("SphereMesh_pickup")
-surface_material_override/0 = SubResource("Material_seed")
-
-[node name="Collision" type="CollisionShape3D" parent="Seed3"]
-shape = SubResource("BoxShape3D_seed")
-
-[node name="Seed4" type="Area3D" parent="." groups=["collectible"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -48)
-metadata/collectible_id = "kelp_seed"
-
-[node name="Mesh" type="MeshInstance3D" parent="Seed4"]
-mesh = SubResource("SphereMesh_pickup")
-surface_material_override/0 = SubResource("Material_seed")
-
-[node name="Collision" type="CollisionShape3D" parent="Seed4"]
-shape = SubResource("BoxShape3D_seed")
-
-[node name="Seed5" type="Area3D" parent="." groups=["collectible"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -50)
-metadata/collectible_id = "kelp_seed"
-
-[node name="Mesh" type="MeshInstance3D" parent="Seed5"]
-mesh = SubResource("SphereMesh_pickup")
-surface_material_override/0 = SubResource("Material_seed")
-
-[node name="Collision" type="CollisionShape3D" parent="Seed5"]
-shape = SubResource("BoxShape3D_seed")
-
-[node name="Seed6" type="Area3D" parent="." groups=["collectible"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -52)
-metadata/collectible_id = "kelp_seed"
-
-[node name="Mesh" type="MeshInstance3D" parent="Seed6"]
-mesh = SubResource("SphereMesh_pickup")
-surface_material_override/0 = SubResource("Material_seed")
-
-[node name="Collision" type="CollisionShape3D" parent="Seed6"]
-shape = SubResource("BoxShape3D_seed")
-
-[node name="Seed7" type="Area3D" parent="." groups=["collectible"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -54)
-metadata/collectible_id = "kelp_seed"
-
-[node name="Mesh" type="MeshInstance3D" parent="Seed7"]
-mesh = SubResource("SphereMesh_pickup")
-surface_material_override/0 = SubResource("Material_seed")
-
-[node name="Collision" type="CollisionShape3D" parent="Seed7"]
-shape = SubResource("BoxShape3D_seed")
+[node name="Collision" type="CollisionShape3D" parent="ShrimpLedge"]
+shape = SubResource("BoxShape3D_51")
 
 [node name="LanternShrimp" type="Area3D" parent="." groups=["collectible"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 1.2, -45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 9.8, -80)
 metadata/collectible_id = "lantern_shrimp"
 
 [node name="Mesh" type="MeshInstance3D" parent="LanternShrimp"]
-mesh = SubResource("SphereMesh_pickup")
-surface_material_override/0 = SubResource("Material_shrimp")
+mesh = SubResource("SphereMesh_9")
+surface_material_override/0 = SubResource("StandardMaterial3D_52")
 
 [node name="Collision" type="CollisionShape3D" parent="LanternShrimp"]
-shape = SubResource("BoxShape3D_creature")
+shape = SubResource("BoxShape3D_53")
+
+[node name="BubblePickup" type="Area3D" parent="." groups=["gill_mod_pickup"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.8, -95.6)
+metadata/mod_id = "bubble"
+
+[node name="Mesh" type="MeshInstance3D" parent="BubblePickup"]
+mesh = SubResource("SphereMesh_9")
+surface_material_override/0 = SubResource("StandardMaterial3D_54")
+
+[node name="Collision" type="CollisionShape3D" parent="BubblePickup"]
+shape = SubResource("BoxShape3D_11")
+
+; The second mod gate. Coral Cove gates on Glow and Bubble; Bubble Bay takes Jet, so the official pair covers all three.
+
+[node name="BubbleGate" type="StaticBody3D" parent="." groups=["affordance_gate"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -97.2)
+metadata/affordance = "bubble_platform"
+
+[node name="Mesh" type="MeshInstance3D" parent="BubbleGate"]
+mesh = SubResource("BoxMesh_37")
+surface_material_override/0 = SubResource("StandardMaterial3D_55")
+
+[node name="Collision" type="CollisionShape3D" parent="BubbleGate"]
+shape = SubResource("BoxShape3D_39")
+
+; === ACT 5: THE SEED BEDS -- restoration ===
+
+[node name="SeedTerrace1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -102.6)
+
+[node name="Mesh" type="MeshInstance3D" parent="SeedTerrace1"]
+mesh = SubResource("BoxMesh_56")
+surface_material_override/0 = SubResource("StandardMaterial3D_50")
+
+[node name="Collision" type="CollisionShape3D" parent="SeedTerrace1"]
+shape = SubResource("BoxShape3D_57")
+
+[node name="RegenStation" type="Area3D" parent="." groups=["regen_station"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.8, -101.2)
+
+[node name="Mesh" type="MeshInstance3D" parent="RegenStation"]
+mesh = SubResource("SphereMesh_9")
+surface_material_override/0 = SubResource("StandardMaterial3D_58")
+
+[node name="Collision" type="CollisionShape3D" parent="RegenStation"]
+shape = SubResource("BoxShape3D_11")
+
+[node name="CheckpointSeedOne" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -102.5)
+
+[node name="Seed1" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.8, -102.6)
+metadata/collectible_id = "kelp_seed"
+
+[node name="Mesh" type="MeshInstance3D" parent="Seed1"]
+mesh = SubResource("SphereMesh_9")
+surface_material_override/0 = SubResource("StandardMaterial3D_59")
+
+[node name="Collision" type="CollisionShape3D" parent="Seed1"]
+shape = SubResource("BoxShape3D_11")
+
+[node name="Seed2" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 7.8, -103.4)
+metadata/collectible_id = "kelp_seed"
+
+[node name="Mesh" type="MeshInstance3D" parent="Seed2"]
+mesh = SubResource("SphereMesh_9")
+surface_material_override/0 = SubResource("StandardMaterial3D_59")
+
+[node name="Collision" type="CollisionShape3D" parent="Seed2"]
+shape = SubResource("BoxShape3D_11")
+
+; A seed out over the drop: one jump each way, and nothing below but the pit.
+
+[node name="SeedPillarA" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 6.4, -103.75)
+
+[node name="Mesh" type="MeshInstance3D" parent="SeedPillarA"]
+mesh = SubResource("BoxMesh_60")
+surface_material_override/0 = SubResource("StandardMaterial3D_50")
+
+[node name="Collision" type="CollisionShape3D" parent="SeedPillarA"]
+shape = SubResource("BoxShape3D_61")
+
+[node name="Seed3" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 8.2, -103.7)
+metadata/collectible_id = "kelp_seed"
+
+[node name="Mesh" type="MeshInstance3D" parent="Seed3"]
+mesh = SubResource("SphereMesh_9")
+surface_material_override/0 = SubResource("StandardMaterial3D_59")
+
+[node name="Collision" type="CollisionShape3D" parent="Seed3"]
+shape = SubResource("BoxShape3D_11")
+
+[node name="SeedTerrace2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -109.8)
+
+[node name="Mesh" type="MeshInstance3D" parent="SeedTerrace2"]
+mesh = SubResource("BoxMesh_56")
+surface_material_override/0 = SubResource("StandardMaterial3D_50")
+
+[node name="Collision" type="CollisionShape3D" parent="SeedTerrace2"]
+shape = SubResource("BoxShape3D_57")
+
+[node name="CheckpointSeedTwo" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -109)
+
+[node name="Seed4" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 6.8, -109.6)
+metadata/collectible_id = "kelp_seed"
+
+[node name="Mesh" type="MeshInstance3D" parent="Seed4"]
+mesh = SubResource("SphereMesh_9")
+surface_material_override/0 = SubResource("StandardMaterial3D_59")
+
+[node name="Collision" type="CollisionShape3D" parent="Seed4"]
+shape = SubResource("BoxShape3D_11")
+
+[node name="Seed5" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 6.8, -111.4)
+metadata/collectible_id = "kelp_seed"
+
+[node name="Mesh" type="MeshInstance3D" parent="Seed5"]
+mesh = SubResource("SphereMesh_9")
+surface_material_override/0 = SubResource("StandardMaterial3D_59")
+
+[node name="Collision" type="CollisionShape3D" parent="Seed5"]
+shape = SubResource("BoxShape3D_11")
+
+[node name="SeedPillarB" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 5.4, -110.25)
+
+[node name="Mesh" type="MeshInstance3D" parent="SeedPillarB"]
+mesh = SubResource("BoxMesh_60")
+surface_material_override/0 = SubResource("StandardMaterial3D_50")
+
+[node name="Collision" type="CollisionShape3D" parent="SeedPillarB"]
+shape = SubResource("BoxShape3D_61")
+
+[node name="Seed6" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 7.2, -110.2)
+metadata/collectible_id = "kelp_seed"
+
+[node name="Mesh" type="MeshInstance3D" parent="Seed6"]
+mesh = SubResource("SphereMesh_9")
+surface_material_override/0 = SubResource("StandardMaterial3D_59")
+
+[node name="Collision" type="CollisionShape3D" parent="Seed6"]
+shape = SubResource("BoxShape3D_11")
+
+[node name="CheckpointSeedTwoFar" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -111.6)
+
+[node name="SeedTerrace3" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -118)
+
+[node name="Mesh" type="MeshInstance3D" parent="SeedTerrace3"]
+mesh = SubResource("BoxMesh_62")
+surface_material_override/0 = SubResource("StandardMaterial3D_50")
+
+[node name="Collision" type="CollisionShape3D" parent="SeedTerrace3"]
+shape = SubResource("BoxShape3D_63")
+
+[node name="CheckpointSeedThree" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -116.5)
+
+[node name="Seed7" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, -117.6)
+metadata/collectible_id = "kelp_seed"
+
+[node name="Mesh" type="MeshInstance3D" parent="Seed7"]
+mesh = SubResource("SphereMesh_9")
+surface_material_override/0 = SubResource("StandardMaterial3D_59")
+
+[node name="Collision" type="CollisionShape3D" parent="Seed7"]
+shape = SubResource("BoxShape3D_11")
+
+; === ACT 6: THE SHELF -- the restoration gate and the finish ===
+
+; The region's declared traversal gate. It opens when coral_shelf reaches `restored`, so restoration is MANDATORY: there is no route past this wall that does not plant seeds.
 
 [node name="ShelfWall" type="StaticBody3D" parent="." groups=["restoration_gate"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -56)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -119.5)
 metadata/region_id = "coral_shelf"
 metadata/gate_id = "shelf_wall"
 
 [node name="Mesh" type="MeshInstance3D" parent="ShelfWall"]
-mesh = SubResource("BoxMesh_gate")
-surface_material_override/0 = SubResource("Material_shelf_wall")
+mesh = SubResource("BoxMesh_37")
+surface_material_override/0 = SubResource("StandardMaterial3D_64")
 
 [node name="Collision" type="CollisionShape3D" parent="ShelfWall"]
-shape = SubResource("BoxShape3D_gate")
+shape = SubResource("BoxShape3D_39")
+
+[node name="FinishLedge" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -125.25)
+
+[node name="Mesh" type="MeshInstance3D" parent="FinishLedge"]
+mesh = SubResource("BoxMesh_65")
+surface_material_override/0 = SubResource("StandardMaterial3D_1")
+
+[node name="Collision" type="CollisionShape3D" parent="FinishLedge"]
+shape = SubResource("BoxShape3D_66")
 
 [node name="Finish" type="Area3D" parent="." groups=["finish_volume"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -60)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -125)
 
 [node name="Collision" type="CollisionShape3D" parent="Finish"]
-shape = SubResource("BoxShape3D_pickup")
+shape = SubResource("BoxShape3D_67")
 
-[node name="Dressing" type="Node3D" parent="."]
+; Everything above sits over open water. One node makes every gap on the route real: fall, lose a life, wake at the last checkpoint (REQ-003).
 
-[node name="RockCluster1" parent="Dressing" instance=ExtResource("3_kit_rock_cluster")]
-transform = Transform3D(0.207, 0, -1.041, 0, 1.061, 0, 1.041, 0, 0.207, 9.96, 0, -5.59)
+[node name="Pit" type="Area3D" parent="." groups=["pit_volume"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -26, -60)
 
-[node name="RockCluster2" parent="Dressing" instance=ExtResource("3_kit_rock_cluster")]
-transform = Transform3D(-0.914, 0, -0.972, 0, 1.334, 0, 0.972, 0, -0.914, -7.24, 0, -28.70)
+[node name="Collision" type="CollisionShape3D" parent="Pit"]
+shape = SubResource("BoxShape3D_68")
 
-[node name="RockCluster3" parent="Dressing" instance=ExtResource("3_kit_rock_cluster")]
-transform = Transform3D(-1.371, 0, -0.340, 0, 1.412, 0, 0.340, 0, -1.371, -8.29, 0, -53.50)
-
-[node name="RockCluster4" parent="Dressing" instance=ExtResource("3_kit_rock_cluster")]
-transform = Transform3D(-1.235, 0, 0.376, 0, 1.291, 0, -0.376, 0, -1.235, -8.88, 0, -36.46)
-
-[node name="RockCluster5" parent="Dressing" instance=ExtResource("3_kit_rock_cluster")]
-transform = Transform3D(0.672, 0, 0.282, 0, 0.729, 0, -0.282, 0, 0.672, -8.99, 0, -7.28)
-
-[node name="RockCluster6" parent="Dressing" instance=ExtResource("3_kit_rock_cluster")]
-transform = Transform3D(-0.541, 0, 1.041, 0, 1.173, 0, -1.041, 0, -0.541, -8.90, 0, -10.87)
-
-[node name="RockCluster7" parent="Dressing" instance=ExtResource("3_kit_rock_cluster")]
-transform = Transform3D(-1.230, 0, 0.002, 0, 1.230, 0, -0.002, 0, -1.230, -8.58, 0, -20.10)
-
-[node name="KelpStrand1" parent="Dressing" instance=ExtResource("5_kit_kelp_strand")]
-transform = Transform3D(-1.207, 0, -0.403, 0, 1.273, 0, 0.403, 0, -1.207, 7.27, 0, -12.31)
-
-[node name="KelpStrand2" parent="Dressing" instance=ExtResource("5_kit_kelp_strand")]
-transform = Transform3D(0.129, 0, 1.007, 0, 1.016, 0, -1.007, 0, 0.129, -7.54, 0, -13.59)
-
-[node name="KelpStrand3" parent="Dressing" instance=ExtResource("5_kit_kelp_strand")]
-transform = Transform3D(0.792, 0, 0.637, 0, 1.016, 0, -0.637, 0, 0.792, -6.82, 0, -16.49)
-
-[node name="KelpStrand4" parent="Dressing" instance=ExtResource("5_kit_kelp_strand")]
-transform = Transform3D(0.984, 0, 0.003, 0, 0.984, 0, -0.003, 0, 0.984, -8.79, 0, -6.14)
-
-[node name="KelpStrand5" parent="Dressing" instance=ExtResource("5_kit_kelp_strand")]
-transform = Transform3D(-0.743, 0, 0.558, 0, 0.929, 0, -0.558, 0, -0.743, -6.35, 0, -4.27)
-
-[node name="KelpStrand6" parent="Dressing" instance=ExtResource("5_kit_kelp_strand")]
-transform = Transform3D(0.882, 0, 0.538, 0, 1.033, 0, -0.538, 0, 0.882, -7.89, 0, -14.22)
-
-[node name="CoralBranch1" parent="Dressing" instance=ExtResource("4_kit_coral_branch")]
-transform = Transform3D(0.022, 0, 0.970, 0, 0.971, 0, -0.970, 0, 0.022, 7.31, 0, -37.64)
-
-[node name="CoralBranch2" parent="Dressing" instance=ExtResource("4_kit_coral_branch")]
-transform = Transform3D(-0.427, 0, -0.939, 0, 1.032, 0, 0.939, 0, -0.427, -5.88, 0, -30.26)
-
-[node name="CoralBranch3" parent="Dressing" instance=ExtResource("4_kit_coral_branch")]
-transform = Transform3D(-1.021, 0, 0.568, 0, 1.169, 0, -0.568, 0, -1.021, -8.43, 0, -24.61)
-
-[node name="CoralBranch4" parent="Dressing" instance=ExtResource("4_kit_coral_branch")]
-transform = Transform3D(-0.196, 0, 1.567, 0, 1.580, 0, -1.567, 0, -0.196, 5.66, 0, -35.74)
-
-[node name="CoralBranch5" parent="Dressing" instance=ExtResource("4_kit_coral_branch")]
-transform = Transform3D(0.613, 0, 1.475, 0, 1.597, 0, -1.475, 0, 0.613, 8.49, 0, -39.61)
-
-[node name="CoralBranch6" parent="Dressing" instance=ExtResource("4_kit_coral_branch")]
-transform = Transform3D(-0.846, 0, 0.326, 0, 0.907, 0, -0.326, 0, -0.846, -3.81, 0, -37.07)
-
-[node name="CoralBranch7" parent="Dressing" instance=ExtResource("4_kit_coral_branch")]
-transform = Transform3D(0.934, 0, 0.471, 0, 1.046, 0, -0.471, 0, 0.934, 7.67, 0, -32.28)
-
-[node name="SeagrassTuft1" parent="Dressing" instance=ExtResource("6_kit_seagrass_tuft")]
-transform = Transform3D(-0.784, 0, -0.756, 0, 1.089, 0, 0.756, 0, -0.784, -3.70, 0, -50.10)
-
-[node name="SeagrassTuft2" parent="Dressing" instance=ExtResource("6_kit_seagrass_tuft")]
-transform = Transform3D(-1.086, 0, 0.944, 0, 1.439, 0, -0.944, 0, -1.086, 8.93, 0, -53.83)
-
-[node name="SeagrassTuft3" parent="Dressing" instance=ExtResource("6_kit_seagrass_tuft")]
-transform = Transform3D(0.004, 0, 1.133, 0, 1.133, 0, -1.133, 0, 0.004, 9.41, 0, -42.92)
-
-[node name="SeagrassTuft4" parent="Dressing" instance=ExtResource("6_kit_seagrass_tuft")]
-transform = Transform3D(-1.049, 0, 0.116, 0, 1.055, 0, -0.116, 0, -1.049, -8.00, 0, -49.79)
-
-[node name="SeagrassTuft5" parent="Dressing" instance=ExtResource("6_kit_seagrass_tuft")]
-transform = Transform3D(1.135, 0, -0.271, 0, 1.167, 0, 0.271, 0, 1.135, -4.26, 0, -55.38)
-
-[node name="SeagrassTuft6" parent="Dressing" instance=ExtResource("6_kit_seagrass_tuft")]
-transform = Transform3D(-0.991, 0, -0.687, 0, 1.205, 0, 0.687, 0, -0.991, 5.24, 0, -42.82)
-
-[node name="SeagrassTuft7" parent="Dressing" instance=ExtResource("6_kit_seagrass_tuft")]
-transform = Transform3D(0.936, 0, 0.953, 0, 1.336, 0, -0.953, 0, 0.936, -9.55, 0, -40.37)
-
-[node name="SeagrassTuft8" parent="Dressing" instance=ExtResource("6_kit_seagrass_tuft")]
-transform = Transform3D(0.288, 0, 0.970, 0, 1.012, 0, -0.970, 0, 0.288, -5.39, 0, -41.32)
-
-[node name="Bubbles" type="GPUParticles3D" parent="Lagoon"]
-amount = 48
-lifetime = 4.0
-preprocess = 3.0
-visibility_aabb = AABB(-12, -2, -6, 24, 5, 12)
-process_material = SubResource("Particles_bubbles")
-draw_pass_1 = SubResource("SphereMesh_bubble")
-
-; --- THE DRIFT FLEET (REQ-036) -----------------------------
-; Declared in the manifest, placed here. Deliberately OFF the
-; walked route: the walk probe measures checkpoint segments
-; against max_retry_seconds, and an entangling unit standing on
-; that line would fail a completability probe for a reason that
-; has nothing to do with completability. A player who leaves the
-; line meets them.
+; === THE DRIFT FLEET ===
 
 [node name="HooklineRigLagoon" type="Area3D" parent="." groups=["enemy"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.2, -12.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, -6, -37)
 metadata/enemy_id = "hookline_rig"
 
-[node name="Model" parent="HooklineRigLagoon" instance=ExtResource("8_fleet_hookline_rig")]
+[node name="Model" parent="HooklineRigLagoon" instance=ExtResource("9_fleet_hookline_rig")]
 
 [node name="Collision" type="CollisionShape3D" parent="HooklineRigLagoon"]
-shape = SubResource("BoxShape3D_enemy")
+shape = SubResource("BoxShape3D_69")
 
-[node name="NetbotGrotto" type="Area3D" parent="." groups=["enemy"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0.6, -26.0)
+[node name="NetbotLagoon" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, -3, -45)
 metadata/enemy_id = "netbot"
 
-[node name="Model" parent="NetbotGrotto" instance=ExtResource("9_fleet_netbot")]
+[node name="Model" parent="NetbotLagoon" instance=ExtResource("10_fleet_netbot")]
 
-[node name="Collision" type="CollisionShape3D" parent="NetbotGrotto"]
-shape = SubResource("BoxShape3D_enemy")
+[node name="Collision" type="CollisionShape3D" parent="NetbotLagoon"]
+shape = SubResource("BoxShape3D_69")
 
-[node name="RunoffDroneSeedBed" type="Area3D" parent="." groups=["enemy"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.0, 0.6, -44.0)
+[node name="RunoffDroneGrotto" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 8.6, -81)
 metadata/enemy_id = "runoff_drone"
 
-[node name="Model" parent="RunoffDroneSeedBed" instance=ExtResource("10_fleet_runoff_drone")]
+[node name="Model" parent="RunoffDroneGrotto" instance=ExtResource("11_fleet_runoff_drone")]
 
-[node name="Collision" type="CollisionShape3D" parent="RunoffDroneSeedBed"]
-shape = SubResource("BoxShape3D_enemy")
+[node name="Collision" type="CollisionShape3D" parent="RunoffDroneGrotto"]
+shape = SubResource("BoxShape3D_69")
 
-[node name="DredgerShelf" type="Area3D" parent="." groups=["enemy"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.0, 0.6, -50.0)
+[node name="DredgerSeedBed" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 6.8, -104)
 metadata/enemy_id = "dredger"
 metadata/region_id = "coral_shelf"
 
-[node name="Model" parent="DredgerShelf" instance=ExtResource("7_fleet_dredger")]
+[node name="Model" parent="DredgerSeedBed" instance=ExtResource("8_fleet_dredger")]
 
-[node name="Collision" type="CollisionShape3D" parent="DredgerShelf"]
-shape = SubResource("BoxShape3D_enemy")
+[node name="Collision" type="CollisionShape3D" parent="DredgerSeedBed"]
+shape = SubResource("BoxShape3D_69")
+
+[node name="Dressing" type="Node3D" parent="."]
+
+[node name="Prop1" parent="Dressing" instance=ExtResource("4_kit_rock_cluster")]
+transform = Transform3D(1.249, 0, 0.605, 0, 1.388, 0, -0.605, 0, 1.249, -0.89, 0, 1.40)
+
+[node name="Prop2" parent="Dressing" instance=ExtResource("4_kit_rock_cluster")]
+transform = Transform3D(-0.707, 0, 0.594, 0, 0.923, 0, -0.594, 0, -0.707, -2.43, 0, 1.63)
+
+[node name="Prop3" parent="Dressing" instance=ExtResource("4_kit_rock_cluster")]
+transform = Transform3D(0.646, 0, -0.646, 0, 0.913, 0, 0.646, 0, 0.646, -3.35, 0, 2.23)
+
+[node name="Prop4" parent="Dressing" instance=ExtResource("4_kit_rock_cluster")]
+transform = Transform3D(0.431, 0, 1.243, 0, 1.316, 0, -1.243, 0, 0.431, 0.68, 0, -4.88)
+
+[node name="Prop5" parent="Dressing" instance=ExtResource("4_kit_rock_cluster")]
+transform = Transform3D(-0.864, 0, -0.897, 0, 1.245, 0, 0.897, 0, -0.864, 4.58, 0, 0.87)
+
+[node name="Prop6" parent="Dressing" instance=ExtResource("4_kit_rock_cluster")]
+transform = Transform3D(0.577, 0, -0.543, 0, 0.792, 0, 0.543, 0, 0.577, -4.94, 0, -4.15)
+
+[node name="Prop7" parent="Dressing" instance=ExtResource("7_kit_seagrass_tuft")]
+transform = Transform3D(-0.547, 0, -0.543, 0, 0.771, 0, 0.543, 0, -0.547, -2.41, 0, -23.13)
+
+[node name="Prop8" parent="Dressing" instance=ExtResource("7_kit_seagrass_tuft")]
+transform = Transform3D(-0.842, 0, 0.319, 0, 0.900, 0, -0.319, 0, -0.842, -1.63, 0, -19.67)
+
+[node name="Prop9" parent="Dressing" instance=ExtResource("7_kit_seagrass_tuft")]
+transform = Transform3D(0.147, 0, -0.768, 0, 0.782, 0, 0.768, 0, 0.147, -0.09, 0, -27.62)
+
+[node name="Prop10" parent="Dressing" instance=ExtResource("7_kit_seagrass_tuft")]
+transform = Transform3D(-1.194, 0, -0.478, 0, 1.286, 0, 0.478, 0, -1.194, 4.68, 0, -21.88)
+
+[node name="Prop11" parent="Dressing" instance=ExtResource("7_kit_seagrass_tuft")]
+transform = Transform3D(0.151, 0, -0.738, 0, 0.753, 0, 0.738, 0, 0.151, -2.30, 0, -25.37)
+
+[node name="Prop12" parent="Dressing" instance=ExtResource("6_kit_kelp_strand")]
+transform = Transform3D(-1.004, 0, 0.099, 0, 1.009, 0, -0.099, 0, -1.004, -2.67, -13, -37.52)
+
+[node name="Prop13" parent="Dressing" instance=ExtResource("6_kit_kelp_strand")]
+transform = Transform3D(1.061, 0, 0.021, 0, 1.061, 0, -0.021, 0, 1.061, -8.27, -13, -34.88)
+
+[node name="Prop14" parent="Dressing" instance=ExtResource("6_kit_kelp_strand")]
+transform = Transform3D(-1.204, 0, -0.012, 0, 1.204, 0, 0.012, 0, -1.204, -6.03, -13, -46.67)
+
+[node name="Prop15" parent="Dressing" instance=ExtResource("6_kit_kelp_strand")]
+transform = Transform3D(0.741, 0, -1.128, 0, 1.349, 0, 1.128, 0, 0.741, -3.03, -13, -48.90)
+
+[node name="Prop16" parent="Dressing" instance=ExtResource("6_kit_kelp_strand")]
+transform = Transform3D(0.813, 0, -0.123, 0, 0.823, 0, 0.123, 0, 0.813, 9.38, -13, -38.14)
+
+[node name="Prop17" parent="Dressing" instance=ExtResource("6_kit_kelp_strand")]
+transform = Transform3D(0.336, 0, -1.190, 0, 1.236, 0, 1.190, 0, 0.336, -3.50, -13, -40.12)
+
+[node name="Prop18" parent="Dressing" instance=ExtResource("6_kit_kelp_strand")]
+transform = Transform3D(-0.602, 0, -1.260, 0, 1.396, 0, 1.260, 0, -0.602, -8.00, -13, -44.35)
+
+[node name="Prop19" parent="Dressing" instance=ExtResource("6_kit_kelp_strand")]
+transform = Transform3D(-0.786, 0, 0.516, 0, 0.940, 0, -0.516, 0, -0.786, -2.78, -13, -34.25)
+
+[node name="Prop20" parent="Dressing" instance=ExtResource("4_kit_rock_cluster")]
+transform = Transform3D(-0.128, 0, -1.041, 0, 1.048, 0, 1.041, 0, -0.128, -9.23, -13, -42.90)
+
+[node name="Prop21" parent="Dressing" instance=ExtResource("4_kit_rock_cluster")]
+transform = Transform3D(-0.742, 0, 0.390, 0, 0.838, 0, -0.390, 0, -0.742, -2.68, -13, -38.67)
+
+[node name="Prop22" parent="Dressing" instance=ExtResource("4_kit_rock_cluster")]
+transform = Transform3D(-0.015, 0, -1.048, 0, 1.048, 0, 1.048, 0, -0.015, -0.03, -13, -49.41)
+
+[node name="Prop23" parent="Dressing" instance=ExtResource("4_kit_rock_cluster")]
+transform = Transform3D(0.514, 0, -1.293, 0, 1.391, 0, 1.293, 0, 0.514, 6.19, -13, -33.22)
+
+[node name="Prop24" parent="Dressing" instance=ExtResource("5_kit_coral_branch")]
+transform = Transform3D(-1.382, 0, 0.401, 0, 1.439, 0, -0.401, 0, -1.382, 4.65, 3, -57.16)
+
+[node name="Prop25" parent="Dressing" instance=ExtResource("5_kit_coral_branch")]
+transform = Transform3D(0.410, 0, -0.712, 0, 0.822, 0, 0.712, 0, 0.410, 4.39, 3, -51.05)
+
+[node name="Prop26" parent="Dressing" instance=ExtResource("5_kit_coral_branch")]
+transform = Transform3D(-0.357, 0, -1.192, 0, 1.244, 0, 1.192, 0, -0.357, 1.38, 3, -52.48)
+
+[node name="Prop27" parent="Dressing" instance=ExtResource("5_kit_coral_branch")]
+transform = Transform3D(1.364, 0, -0.333, 0, 1.404, 0, 0.333, 0, 1.364, 3.89, 3, -54.43)
+
+[node name="Prop28" parent="Dressing" instance=ExtResource("5_kit_coral_branch")]
+transform = Transform3D(0.414, 0, 1.256, 0, 1.322, 0, -1.256, 0, 0.414, 2.37, 3, -60.39)
+
+[node name="Prop29" parent="Dressing" instance=ExtResource("5_kit_coral_branch")]
+transform = Transform3D(-0.442, 0, -0.918, 0, 1.019, 0, 0.918, 0, -0.442, -3.21, 3, -55.49)
+
+[node name="Prop30" parent="Dressing" instance=ExtResource("5_kit_coral_branch")]
+transform = Transform3D(-0.227, 0, -0.887, 0, 0.915, 0, 0.887, 0, -0.227, 5.08, 7.4, -65.03)
+
+[node name="Prop31" parent="Dressing" instance=ExtResource("5_kit_coral_branch")]
+transform = Transform3D(-1.173, 0, -0.119, 0, 1.179, 0, 0.119, 0, -1.173, 1.39, 7.4, -62.54)
+
+[node name="Prop32" parent="Dressing" instance=ExtResource("5_kit_coral_branch")]
+transform = Transform3D(-1.137, 0, -0.557, 0, 1.266, 0, 0.557, 0, -1.137, -4.21, 7.4, -68.25)
+
+[node name="Prop33" parent="Dressing" instance=ExtResource("5_kit_coral_branch")]
+transform = Transform3D(0.260, 0, 1.067, 0, 1.098, 0, -1.067, 0, 0.260, 2.77, 7.4, -64.66)
+
+[node name="Prop34" parent="Dressing" instance=ExtResource("7_kit_seagrass_tuft")]
+transform = Transform3D(0.397, 0, -0.751, 0, 0.849, 0, 0.751, 0, 0.397, -0.59, 7, -103.84)
+
+[node name="Prop35" parent="Dressing" instance=ExtResource("7_kit_seagrass_tuft")]
+transform = Transform3D(1.096, 0, 0.615, 0, 1.256, 0, -0.615, 0, 1.096, -0.21, 7, -104.19)
+
+[node name="Prop36" parent="Dressing" instance=ExtResource("7_kit_seagrass_tuft")]
+transform = Transform3D(-0.667, 0, 1.194, 0, 1.368, 0, -1.194, 0, -0.667, 0.06, 7, -101.49)
+
+[node name="Prop37" parent="Dressing" instance=ExtResource("7_kit_seagrass_tuft")]
+transform = Transform3D(-0.737, 0, -1.112, 0, 1.334, 0, 1.112, 0, -0.737, -0.60, 7, -100.78)
+
+[node name="Prop38" parent="Dressing" instance=ExtResource("7_kit_seagrass_tuft")]
+transform = Transform3D(-0.717, 0, 0.328, 0, 0.788, 0, -0.328, 0, -0.717, 2.01, 7, -102.59)
+
+[node name="Prop39" parent="Dressing" instance=ExtResource("7_kit_seagrass_tuft")]
+transform = Transform3D(-1.008, 0, -0.372, 0, 1.074, 0, 0.372, 0, -1.008, -0.14, 7, -102.28)
+
+[node name="Prop40" parent="Dressing" instance=ExtResource("7_kit_seagrass_tuft")]
+transform = Transform3D(-0.691, 0, 1.265, 0, 1.441, 0, -1.265, 0, -0.691, -1.27, 5, -118.80)
+
+[node name="Prop41" parent="Dressing" instance=ExtResource("7_kit_seagrass_tuft")]
+transform = Transform3D(-1.227, 0, -0.383, 0, 1.285, 0, 0.383, 0, -1.227, -1.28, 5, -117.00)
+
+[node name="Prop42" parent="Dressing" instance=ExtResource("7_kit_seagrass_tuft")]
+transform = Transform3D(-1.222, 0, 0.033, 0, 1.223, 0, -0.033, 0, -1.222, -2.23, 5, -117.16)
+
+[node name="Prop43" parent="Dressing" instance=ExtResource("7_kit_seagrass_tuft")]
+transform = Transform3D(1.038, 0, 0.672, 0, 1.236, 0, -0.672, 0, 1.038, -1.86, 5, -116.15)
+
+[node name="Prop44" parent="Dressing" instance=ExtResource("7_kit_seagrass_tuft")]
+transform = Transform3D(0.473, 0, -1.252, 0, 1.338, 0, 1.252, 0, 0.473, -0.79, 5, -119.67)
+
+[node name="Prop45" parent="Dressing" instance=ExtResource("5_kit_coral_branch")]
+transform = Transform3D(0.904, 0, 0.301, 0, 0.953, 0, -0.301, 0, 0.904, -4.68, 5, -126.03)
+
+[node name="Prop46" parent="Dressing" instance=ExtResource("5_kit_coral_branch")]
+transform = Transform3D(0.822, 0, -0.670, 0, 1.060, 0, 0.670, 0, 0.822, 0.10, 5, -124.69)
+
+[node name="Prop47" parent="Dressing" instance=ExtResource("5_kit_coral_branch")]
+transform = Transform3D(1.197, 0, -0.793, 0, 1.436, 0, 0.793, 0, 1.197, -4.27, 5, -122.16)
+
+[node name="Prop48" parent="Dressing" instance=ExtResource("5_kit_coral_branch")]
+transform = Transform3D(-0.196, 0, -0.951, 0, 0.971, 0, 0.951, 0, -0.196, 2.54, 5, -124.11)
+

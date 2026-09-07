@@ -25,6 +25,7 @@ const DIVE_SPEED_KEY := "controller.dive.speed_m_per_s"
 const HOP_IMPULSE_KEY := "controller.hop.impulse_m_per_s"
 const CLIMB_SPEED_KEY := "controller.climb.speed_m_per_s"
 const CLIMB_ADHESION_KEY := "controller.climb.adhesion_m_per_s"
+const CLIMB_GRACE_KEY := "controller.climb.contact_grace_seconds"
 const MAX_CLIMB_HEIGHT_KEY := "controller.climb.max_height_m"
 const TURN_RATE_KEY := "controller.facing.turn_rate_deg_per_s"
 
@@ -67,6 +68,10 @@ var _body_position: Vector3 = Vector3.ZERO
 var _is_grounded: bool = true
 
 var _climbing: bool = false
+
+## Seconds since the body last reported wall contact while climbing. Reset on
+## every contact and on every attach.
+var _wall_lost_for: float = 0.0
 
 ## Body height at the moment the climb started. The climb CEILING is measured
 ## from here rather than from world zero, so "a lost leg reduces climb height"
@@ -502,6 +507,30 @@ func release_climb() -> void:
 	_end_climb()
 
 
+## The body reporting, once a frame, whether it is still touching the wall.
+##
+## Losing contact for a SINGLE frame must not drop a climber. Two ordinary
+## situations produce exactly that: a wall with a seam or a curve, where the
+## capsule swings clear for a frame; and the top-out, where contact is lost
+## while the feet are still below the lip. In the second case the grace is
+## what carries the climber the last few centimetres over the edge instead of
+## dropping them the whole way back down — which is what Coral Cove's coral
+## wall did, from four metres up, every single time.
+##
+## It is the same idea as coyote time and it earns its keep the same way: it
+## changes no reachable height, only how much precision the geometry demands.
+func report_wall_contact(has_wall: bool, delta: float) -> void:
+	if not _climbing:
+		_wall_lost_for = 0.0
+		return
+	if has_wall:
+		_wall_lost_for = 0.0
+		return
+	_wall_lost_for += delta
+	if _wall_lost_for >= _tuning.get_number(CLIMB_GRACE_KEY):
+		_end_climb()
+
+
 func is_climbing() -> bool:
 	return _climbing
 
@@ -510,6 +539,7 @@ func _end_climb() -> void:
 	if not _climbing:
 		return
 	_climbing = false
+	_wall_lost_for = 0.0
 	climb_ended.emit()
 
 

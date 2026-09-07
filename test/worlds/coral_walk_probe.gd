@@ -4,8 +4,15 @@ extends Node
 ##
 ## Unlike the hub walk — which deliberately names no world — this probe IS
 ## about one world: it enters coral_cove by id and proves the world's own
-## claims. One held forward key carries the whole route, because the world was
-## designed for exactly that: completability is a regression test, not a hope.
+## claims.
+##
+## THE ROUTE IS FLOWN, NOT HELD. This probe used to hold W from spawn to
+## finish, and that was only possible because the level was a flat corridor —
+## which is to say the probe's shape was quietly setting the level's design.
+## Coral Cove is now a platforming route with gaps, a dive, a climb and two
+## side pillars, so the probe drives it through RoutePilot: a waypoint list
+## flown by pressing the same keys a player would press. Completability is
+## still a regression test rather than a hope; it is just a harder claim now.
 ##
 ## What one traversal proves, because the route makes each of these MANDATORY:
 ##   * both movement grammars ran (the lagoon spans the route — AC-4),
@@ -13,11 +20,13 @@ extends Node
 ##     those mods (AC-5's per-world half),
 ##   * region coral_shelf reached `restored`, which is the only thing that
 ##     opens the shelf wall in front of the finish (AC-4's region half),
-##   * the finish condition returned the player to the hub (AC-2).
+##   * the finish condition returned the player to the hub (AC-2),
+##   * and every jump, the dive, the boost and the climb on the route are
+##     inside what the controller can actually do at the shipped tuning.
 
 const WORLD_ID := "coral_cove"
 const SETTLE_FRAMES := 30
-const JOURNEY_FRAMES := 4200
+const JOURNEY_FRAMES := 14000
 
 var _failures: PackedStringArray = []
 var _checks := 0
@@ -54,6 +63,12 @@ var _lives_at_entry := -1
 ## which the walk reached each anchor — spawn, each checkpoint, finish.
 const TUNING_PATH := "res://core/tuning/tuning.json"
 const MAX_RETRY_KEY := "progression.max_retry_seconds"
+## The designed route, waypoint by waypoint. These coordinates are the
+## level's own geometry: each one names the platform it stands on, and the
+## gaps between them are the gaps the world's header measures against the
+## controller's envelope. A waypoint that stops being reachable is a level
+## regression, and the pilot reports which one.
+var _pilot: RoutePilot
 var _checkpoint_z: PackedFloat64Array = []
 var _next_checkpoint := 0
 var _anchor_seconds: PackedFloat64Array = [0.0]
@@ -96,7 +111,8 @@ func _ready() -> void:
 		_completed_id = world_id)
 	_hub.returned_to_hub.connect(func(_world_id: String) -> void:
 		_returned = true
-		_key(KEY_W, false))
+		if _pilot != null:
+			_pilot.release_all())
 
 	var spawn := get_tree().get_first_node_in_group("hub_spawn")
 	_hub_spawn = (spawn as Node3D).global_position if spawn is Node3D \
@@ -120,8 +136,15 @@ func _physics_process(_delta: float) -> void:
 		_wire_world_systems()
 		_collect_checkpoints()
 		_walk_start_frame = _frame
-		_key(KEY_W, true)
+		_pilot = RoutePilot.new(_route(), _world_origin())
 		return
+
+	if _pilot != null and not _returned:
+		_pilot.step(_body)
+		if not _pilot.stuck_reason().is_empty():
+			_fail("the route is not walkable: %s" % _pilot.stuck_reason())
+			_report()
+			return
 
 	if not _returned:
 		_mark_checkpoints_passed()
@@ -135,8 +158,9 @@ func _physics_process(_delta: float) -> void:
 		return
 
 	if _frame > SETTLE_FRAMES + JOURNEY_FRAMES:
-		_fail("the walk never completed (z=%.1f, grammars=%s, mods=%s, "
-			% [_body.global_position.z, str(_grammars_seen.keys()),
+		_fail("the walk never completed (leg %d, z=%.1f, grammars=%s, mods=%s, "
+			% [_pilot.get_leg() if _pilot != null else -1,
+				_body.global_position.z, str(_grammars_seen.keys()),
 				str(_mods_equipped)]
 			+ "gates=%s, restored=%s)"
 			% [str(_gates_opened), str(_region_restored)])
@@ -224,7 +248,7 @@ func _check_collectibles() -> void:
 		"the hermit snail was rescued exactly once (got %d)"
 		% _collected.count("hermit_snail"))
 	_check(not _collected.has("lantern_shrimp"),
-		"the off-route lantern shrimp was NOT collected by the straight walk")
+		"the off-route lantern shrimp was NOT collected by the designed route")
 	var recorded: Variant = _save.get_world_data(WORLD_ID).get("collectibles", [])
 	_check(recorded is Array and (recorded as Array).has("hermit_snail"),
 		"the rescued snail is recorded in the profile through the save interface (%s)"
@@ -306,11 +330,60 @@ func _check_checkpoint_spacing() -> void:
 		% ["CORAL WALK", ", ".join(segments), bound])
 
 
-func _key(keycode: Key, pressed: bool) -> void:
-	var event := InputEventKey.new()
-	event.physical_keycode = keycode
-	event.pressed = pressed
-	Input.parse_input_event(event)
+## The waypoints below are in the LEVEL's coordinates, so they can be read
+## straight off world.tscn. The hub instances an active world at an offset;
+## the spawn marker is a direct child of the world root, so its parent's
+## global position is that offset.
+func _world_origin() -> Vector3:
+	var spawn := get_tree().get_first_node_in_group("spawn_point")
+	if spawn == null:
+		return Vector3.ZERO
+	var root := (spawn as Node).get_parent() as Node3D
+	return root.global_position if root != null else Vector3.ZERO
+
+
+func _route() -> Array[RoutePilot.Waypoint]:
+	return [
+	RoutePilot.at("walk", Vector3(0, 0.8, -4.6), "StartLedge, at the lip"),
+	RoutePilot.at("jump", Vector3(0, 1.7, -9.7), "ShelfStep1  (gap 2.2, rise 0.9)"),
+	RoutePilot.at("jump", Vector3(0, 2.6, -15.1), "ShelfStep2  (gap 2.4, rise 0.9)"),
+	RoutePilot.at("jump", Vector3(0, 3.4, -21.8), "ShelfStep3 + the hermit snail (gap 2.4, rise 0.8)"),
+	RoutePilot.at("jump", Vector3(0, 3.4, -27.8), "ShelfLip -- the last dry ground (gap 2.4)"),
+	RoutePilot.at("swim", Vector3(0, 0.5, -32.5), "into the lagoon, sinking below the surface"),
+	RoutePilot.at("swim", Vector3(0, -5, -34), "line up below the brow"),
+	RoutePilot.at("swim", Vector3(0, -5, -36.5), "through the gap under DiveBar"),
+	RoutePilot.at("boost", Vector3(0, -5, -39.5), "boost for the climb over the shelf"),
+	RoutePilot.at("swim", Vector3(0, 0.6, -40), "up the near face of RiseWall"),
+	RoutePilot.at("swim", Vector3(0, 0.6, -42.5), "over the top"),
+	RoutePilot.at("swim", Vector3(0, 0.8, -46), "onto the first shore step, still submerged"),
+	RoutePilot.at("swim", Vector3(0, 4.2, -49), "up to the surface, clear over the shore lip"),
+	RoutePilot.at("swim", Vector3(0, 4.2, -51.5), "out of the water and down onto CoveShore"),
+	RoutePilot.at("walk", Vector3(0, 3.8, -52), "CoveShore -- out of the water, land grammar back"),
+	RoutePilot.at("climb", Vector3(0, 3.8, -63.5), "INTO the coral wall -- a climb leg aims at the far side of the face, so the pilot keeps pressing into it until the contact it is waiting for actually happens"),
+	RoutePilot.at("walk", Vector3(0, 8.2, -65), "over the lip onto the wall top"),
+	RoutePilot.at("walk", Vector3(0, 8.2, -66.4), "the Glow gill mod"),
+	RoutePilot.at("jump", Vector3(0, 8.2, -69.5), "past the opened glow gate"),
+	RoutePilot.at("jump", Vector3(0, 8.2, -74.1), "pillar 1 (gap 2.6 -- the widest on the route)"),
+	RoutePilot.at("jump", Vector3(1.5, 8.2, -79), "pillar 2 (gap 2.2, and 1.5 m to the right)"),
+	RoutePilot.at("jump", Vector3(0, 9.4, -83.7), "pillar 3 + the stray hook (gap 2.2, rise 1.2)"),
+	RoutePilot.at("jump", Vector3(-1.5, 9.4, -88.4), "pillar 4 (gap 2.2, and 1.5 m back to the left)"),
+	RoutePilot.at("jump", Vector3(0, 8.8, -94), "the grotto landing (gap 2.2)"),
+	RoutePilot.at("walk", Vector3(0, 8.8, -95.6), "the Bubble gill mod"),
+	RoutePilot.at("jump", Vector3(0, 7.8, -102), "terrace 1 (gap 2.2, a step down)"),
+	RoutePilot.at("walk", Vector3(0, 7.8, -102.6), "seed 1"),
+	RoutePilot.at("walk", Vector3(-3, 7.8, -103.4), "seed 2"),
+	RoutePilot.at("jump", Vector3(-8.5, 8.2, -103.7), "seed 3, out on the left pillar (2.0 m across)"),
+	RoutePilot.at("jump", Vector3(-3, 7.8, -104.4), "back onto terrace 1"),
+	RoutePilot.at("jump", Vector3(0, 6.8, -109), "terrace 2 (gap 2.2, another step down)"),
+	RoutePilot.at("walk", Vector3(2.5, 6.8, -109.6), "seed 4"),
+	RoutePilot.at("jump", Vector3(8.5, 7.2, -110.2), "seed 6, out on the right pillar (2.0 m across)"),
+	RoutePilot.at("jump", Vector3(2.5, 6.8, -110.8), "back onto terrace 2"),
+	RoutePilot.at("walk", Vector3(-2.5, 6.8, -111.4), "seed 5"),
+	RoutePilot.at("jump", Vector3(0, 5.8, -116.5), "terrace 3 (gap 2.2)"),
+	RoutePilot.at("walk", Vector3(0, 5.8, -117.6), "seed 7 -- the shelf reaches `restored` here"),
+	RoutePilot.at("walk", Vector3(0, 5.8, -120.6), "through the opened shelf wall"),
+	RoutePilot.at("finish", Vector3(0, 5.8, -125), "the finish volume"),
+	] as Array[RoutePilot.Waypoint]
 
 
 func _check(condition: bool, description: String) -> void:

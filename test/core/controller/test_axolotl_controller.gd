@@ -1106,6 +1106,47 @@ func test_req_001_a_climber_keeps_pushing_into_the_wall_it_is_on() -> void:
 	).is_less(0.0)
 
 
+func test_req_001_one_frame_without_the_wall_does_not_drop_a_climber() -> void:
+	# Losing contact for a single frame must not end a climb. Two ordinary
+	# things produce exactly that — a seam or a curve in the surface, and the
+	# moment of cresting a lip, where contact goes before the feet clear it —
+	# and both dropped the axolotl the whole way down Coral Cove's coral wall
+	# from four metres up, every single run.
+	var tuning := _tuning()
+	var grace := tuning.get_number("controller.climb.contact_grace_seconds")
+	var controller := AxolotlController.new(tuning)
+	controller.physics_step(0.016, false, _intent())
+	controller.try_climb(0, PackedStringArray([ClimbSurface.CLIMBABLE_GROUP]))
+
+	controller.report_wall_contact(false, grace * 0.5)
+	assert_bool(controller.is_climbing()).override_failure_message(
+		"a momentary loss of contact must not end the climb").is_true()
+
+	# Contact back: the window resets, so a bumpy wall never accumulates.
+	controller.report_wall_contact(true, 0.016)
+	controller.report_wall_contact(false, grace * 0.9)
+	assert_bool(controller.is_climbing()).override_failure_message(
+		"regaining the wall must reset the grace, not keep counting").is_true()
+
+
+func test_req_001_a_climber_who_is_really_off_the_wall_lets_go() -> void:
+	# The grace is a window, not a licence to cling to nothing.
+	var tuning := _tuning()
+	var controller := AxolotlController.new(tuning)
+	controller.physics_step(0.016, false, _intent())
+	controller.try_climb(0, PackedStringArray([ClimbSurface.CLIMBABLE_GROUP]))
+
+	var ended: Array[bool] = []
+	controller.climb_ended.connect(func() -> void: ended.append(true))
+
+	controller.report_wall_contact(false,
+		tuning.get_number("controller.climb.contact_grace_seconds") + 0.01)
+	assert_bool(controller.is_climbing()).override_failure_message(
+		"past the grace the climb must end").is_false()
+	assert_int(ended.size()).override_failure_message(
+		"ending the climb must announce it once").is_equal(1)
+
+
 func test_req_001_lateral_steering_runs_along_the_wall_not_into_it() -> void:
 	var controller := _controller()
 	controller.physics_step(0.016, false, _intent())

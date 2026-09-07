@@ -175,7 +175,7 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-	_update_climb(intent)
+	_update_climb(intent, delta)
 
 	# A landing is the floor flag going false to true on land. Water has no
 	# floor to slap; brushing the seabed while swimming is not a landing.
@@ -207,14 +207,17 @@ func _physics_process(delta: float) -> void:
 ## Attachment is REQUESTED, not automatic: brushing a climbable wall while
 ## waddling past must not stick the axolotl to it. The player asks by pressing
 ## the climb verb, and this looks at what they are against when they do.
-func _update_climb(intent: PlayerIntent) -> void:
+func _update_climb(intent: PlayerIntent, delta: float) -> void:
 	if _controller.is_climbing():
-		# Let go when the wall does. is_on_wall() goes false the moment the body
-		# stops touching it, which is the honest end condition — a climber who
-		# reaches the top and moves onto the ledge should be walking, not still
-		# clinging to air.
+		# Let go when the wall does — but not on the FIRST frame without it.
+		# The contact fact is the body's to report; how long a climber may
+		# keep it after losing the wall is the controller's to decide, and it
+		# gives a brief grace so a seam in the surface, or the moment of
+		# cresting a lip, does not drop a climber four metres.
+		_controller.report_wall_contact(is_on_wall(), delta)
+		if not _controller.is_climbing():
+			return
 		if not is_on_wall():
-			_controller.release_climb()
 			return
 		# Kept current every frame: a curved or jointed surface changes the climb
 		# basis as the axolotl traverses it, and a stale normal would send

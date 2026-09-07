@@ -134,6 +134,13 @@
       "max": 10.0,
       "description": "Speed pushed INTO the climbable surface every frame while attached. The body ends a climb the moment it stops touching the wall, and a climber moving purely along the surface generates no contact -- so without this the climb detaches on its second frame. move_and_slide absorbs the component against the wall, so it costs no movement. Raise it if a climber pops off a bumpy or curved surface; 0.0 disables it and restores the detaching behaviour."
     },
+    "controller.climb.contact_grace_seconds": {
+      "value": 0.30,
+      "unit": "seconds",
+      "min": 0.0,
+      "max": 2.0,
+      "description": "How long a climber may keep the wall after the body stops touching it. A seam or a curve in a surface drops the capsule clear for a frame or two, and cresting a lip loses contact while the feet are still below it -- without this grace both end the climb and drop the player the whole way back down. Like coyote time it changes no reachable height, only how much precision the geometry demands. 0.0 restores the strict frame-by-frame release."
+    },
     "controller.climb.max_height_m": {
       "value": 6.0,
       "unit": "meters",
