@@ -56,8 +56,9 @@ import bpy  # type: ignore
 # both classify by, so a model that lost its material names still resolves.
 SKIN_BACK = (0.93, 0.72, 0.74, 1.0)
 SKIN_BELLY = (0.99, 0.88, 0.87, 1.0)
-GILL_STALK = (0.88, 0.40, 0.48, 1.0)
-GILL_TIP = (0.97, 0.55, 0.62, 1.0)
+SKIN_BLUSH = (0.93, 0.55, 0.58, 1.0)
+GILL_STALK = (0.80, 0.24, 0.30, 1.0)
+GILL_TIP = (0.94, 0.45, 0.50, 1.0)
 EYE_COLOUR = (0.03, 0.03, 0.05, 1.0)
 GLEAM_COLOUR = (1.0, 1.0, 1.0, 1.0)
 DETAIL_COLOUR = (0.34, 0.19, 0.25, 1.0)
@@ -76,51 +77,53 @@ ROLE_BASE = {
 # the taper from tail to chest and back down to the snout is the silhouette,
 # so it lives in one table rather than being assembled from parts.
 #
-# PROPORTIONS ARE CHUNKY ON PURPOSE. A leaner, more anatomically faithful
-# salamander was tried first and rendered as a lizard: correct, and wrong for
-# this game. The hero of a family platformer needs an oversized head, a heavy
-# middle and stubby limbs, because that silhouette stays readable when the
-# axolotl is small on screen and is what makes it look like a character
-# rather than a reference photo. Organic FORM, cartoon PROPORTION.
+# PROPORTIONS FOLLOW THE MAINTAINER'S REFERENCE SHEET: a standing, curious
+# little salamander, not a belly-dragging blob. Rounded head about a quarter
+# of the body, a soft chest carried clear of the ground on short planted
+# legs, a long tail sloping down to rest its tip, and a fin ridge running
+# the tail's top edge. An earlier leaner build read as a lizard and an
+# earlier heavier one as a bath toy; this sits between, matched by eye
+# against the sheet's perspective and side views.
 BODY = [
-    (-2.90, 0.60, 0.05, 0.07),
-    (-2.45, 0.60, 0.13, 0.18),
-    (-2.00, 0.60, 0.21, 0.27),
-    (-1.55, 0.60, 0.30, 0.34),
-    (-1.10, 0.60, 0.40, 0.42),
-    (-0.65, 0.60, 0.52, 0.47),
-    (-0.20, 0.60, 0.62, 0.51),
-    (0.25, 0.60, 0.68, 0.53),
-    (0.62, 0.60, 0.70, 0.53),
-    (0.95, 0.62, 0.86, 0.52),   # head: broad and flat, as an axolotl's is
-    (1.22, 0.62, 0.84, 0.50),
-    (1.42, 0.60, 0.60, 0.40),
-    (1.54, 0.58, 0.28, 0.22),   # snout
+    (-2.90, 0.26, 0.030, 0.045),
+    (-2.45, 0.36, 0.10, 0.14),
+    (-2.00, 0.44, 0.17, 0.22),
+    (-1.55, 0.52, 0.25, 0.30),
+    (-1.10, 0.60, 0.34, 0.37),
+    (-0.65, 0.66, 0.44, 0.43),
+    (-0.20, 0.70, 0.52, 0.47),
+    (0.25, 0.72, 0.50, 0.48),
+    (0.62, 0.73, 0.52, 0.47),
+    (0.95, 0.76, 0.68, 0.49),   # head: broad and softly domed
+    (1.22, 0.76, 0.66, 0.47),
+    (1.44, 0.73, 0.48, 0.34),
+    (1.58, 0.70, 0.24, 0.18),   # snout
 ]
 
-# The tail blade: thin across, tall through, riding just above the tail.
+# The tail blade: thin across, tall through, riding the tail's top edge and
+# fading out onto the lower back rather than stopping dead.
 TAIL_FIN = [
-    (-2.86, 0.64, 0.015, 0.14),
-    (-2.45, 0.70, 0.018, 0.32),
-    (-2.00, 0.74, 0.020, 0.42),
-    (-1.55, 0.74, 0.020, 0.40),
-    (-1.10, 0.70, 0.019, 0.31),
-    (-0.70, 0.66, 0.017, 0.18),
+    (-2.85, 0.34, 0.012, 0.05),
+    (-2.45, 0.54, 0.016, 0.20),
+    (-2.00, 0.70, 0.018, 0.27),
+    (-1.55, 0.82, 0.018, 0.25),
+    (-1.10, 0.90, 0.016, 0.18),
+    (-0.65, 0.95, 0.013, 0.08),
 ]
 
-# (label, root y, root z, direction). Short and splayed: an axolotl's legs
-# carry almost none of its weight, and stubby ones keep the body reading as
-# the silhouette.
+# (label, root y, direction sign). Legs now PLANT: they leave the lower
+# flank, step down and slightly out, and end in a foot with toes, holding
+# the chest clear of the ground the way the sheet's standing pose does.
 LEGS = [
-    ("fl", 0.45, 0.34, (1.0, 0.12, -0.62)),
-    ("fr", 0.45, 0.34, (-1.0, 0.12, -0.62)),
-    ("bl", -0.70, 0.34, (1.0, -0.22, -0.66)),
-    ("br", -0.70, 0.34, (-1.0, -0.22, -0.66)),
+    ("fl", 0.42, 1.0, 0.10),
+    ("fr", 0.42, -1.0, 0.10),
+    ("bl", -0.80, 1.0, -0.16),
+    ("br", -0.80, -1.0, -0.16),
 ]
 
-# Three fronds a side, sweeping back and out from behind the head. These are
-# the axolotl's single most recognisable feature, so they are built big.
-GILL_ANGLES = [0.55, 0.10, -0.35]
+# Three feather fronds a side, held upswept like the sheet's crown. Angle is
+# the fan position from front to back.
+GILL_ANGLES = [0.50, 0.0, -0.50]
 
 
 def clear_scene() -> None:
@@ -226,12 +229,36 @@ def join_as(name: str, pieces: list, role: str) -> bpy.types.Object:
     return obj
 
 
+def mottle(obj: bpy.types.Object) -> None:
+    """Blush patches over the painted gradient — the sheet's mottled skin.
+
+    Deterministic low-frequency noise from the vertex position itself, so
+    the patches are coarse blotches rather than salt-and-pepper, and the
+    same run always paints the same animal.
+    """
+    mesh = obj.data
+    layer = mesh.color_attributes.get("Col")
+    if layer is None:
+        return
+    for loop_index, loop in enumerate(mesh.loops):
+        p = mesh.vertices[loop.vertex_index].co
+        wave = (math.sin(p.x * 3.3 + 1.7) * math.sin(p.y * 2.1 + 0.4)
+                * math.sin(p.z * 2.7 + 2.9))
+        if wave <= 0.28 or p.z < 0.50:
+            continue  # belly stays clean, as counter-shading wants
+        blend = min((wave - 0.28) * 1.5, 0.80)
+        colour = layer.data[loop_index].color
+        layer.data[loop_index].color = tuple(
+            colour[i] + (SKIN_BLUSH[i] - colour[i]) * blend for i in range(4))
+
+
 def build_skin() -> bpy.types.Object:
-    """Body, tail fin and legs — the one continuous pink surface."""
+    """Body, tail fin, planted legs and toes — one continuous pink surface."""
     body = skinned("body", [(0.0, y, z, rx, rz) for y, z, rx, rz in BODY])
     # Belly lighter than the back, which is what stops a single-colour
     # creature reading as a toy: real animals are counter-shaded.
     paint(body, SKIN_BELLY, SKIN_BACK, axis=2)
+    mottle(body)
     pieces = [body]
 
     fin = skinned("tail_fin",
@@ -240,76 +267,106 @@ def build_skin() -> bpy.types.Object:
     paint(fin, SKIN_BACK, SKIN_BELLY, axis=2)
     pieces.append(fin)
 
-    for label, root_y, root_z, direction in LEGS:
-        dx, dy, dz = direction
+    for label, root_y, side, splay in LEGS:
+        # Flank, down and slightly out, ending in a planted foot. The foot
+        # sits at the ground so the chest genuinely stands clear of it.
+        foot_x = side * 0.72
+        foot_y = root_y + splay
         points = [
-            (dx * 0.30, root_y + dy * 0.06, root_z, 0.150, 0.150),
-            (dx * 0.52, root_y + dy * 0.16, root_z + dz * 0.20, 0.120, 0.120),
-            (dx * 0.70, root_y + dy * 0.26, root_z + dz * 0.40, 0.095, 0.095),
-            (dx * 0.95, root_y + dy * 0.34, root_z + dz * 0.52, 0.125, 0.050),
+            (side * 0.28, root_y, 0.42, 0.170, 0.170),
+            (side * 0.50, root_y + splay * 0.4, 0.28, 0.130, 0.130),
+            (side * 0.62, root_y + splay * 0.8, 0.14, 0.105, 0.105),
+            (foot_x, foot_y, 0.06, 0.115, 0.050),
         ]
         leg = skinned(f"leg_{label}", points, subdivisions=2)
         paint(leg, SKIN_BACK, SKIN_BELLY, axis=2)
         pieces.append(leg)
 
+        # Toes: three per foot, fanned forward. Tiny, and they carry a huge
+        # share of the sheet's "standing little creature" read.
+        for toe_angle in (-0.45, 0.0, 0.45):
+            tx = math.sin(toe_angle) * 0.16
+            ty = math.cos(toe_angle) * 0.20
+            toe = skinned(
+                f"toe_{label}_{toe_angle:.2f}",
+                [
+                    (foot_x, foot_y + 0.02, 0.06, 0.042, 0.032),
+                    (foot_x + side * tx * 0.6, foot_y + ty, 0.035,
+                     0.020, 0.016),
+                ],
+                subdivisions=1)
+            paint(toe, SKIN_BACK, SKIN_BELLY, axis=2)
+            pieces.append(toe)
+
     return join_as("axolotl_skin", pieces, "skin")
 
 
 def build_gills() -> bpy.types.Object:
-    """Six fronds: a stalk that branches into three filaments each."""
+    """Six feather fronds held upswept like the reference's crown.
+
+    Each frond is a QUILL with paired BARBS: a curved central chain and
+    short flattened chains fanning off it, longest at mid-length, so the
+    silhouette is a feather rather than a bottle-brush. The barbs run
+    roughly fore-and-aft, which keeps the frond reading full from the side
+    and pleasantly spiky from the front — the two views the sheet shows.
+    """
     pieces = []
     for side in (1.0, -1.0):
         for angle in GILL_ANGLES:
-            base_x = side * 0.52
-            base_y = 0.72
-            base_z = 0.66
-            out = side * math.cos(angle)
-            back = math.sin(angle)
-            reach_x, reach_y, reach_z = 1.05, 0.52, 0.06
-            stalk = skinned(
-                f"gill_{side:.0f}_{angle:.2f}",
-                [
-                    (base_x, base_y, base_z, 0.100, 0.100),
-                    (base_x + out * reach_x * 0.34,
-                     base_y + back * reach_y * 0.34,
-                     base_z + reach_z * 0.40, 0.085, 0.085),
-                    (base_x + out * reach_x * 0.68,
-                     base_y + back * reach_y * 0.68,
-                     base_z + reach_z * 0.75, 0.062, 0.062),
-                    (base_x + out * reach_x, base_y + back * reach_y,
-                     base_z + reach_z, 0.032, 0.032),
-                ],
-                subdivisions=1)
-            paint(stalk, GILL_STALK, GILL_TIP, axis=0,
-                  invert=side < 0.0)
-            pieces.append(stalk)
+            base = (side * 0.46, 0.72 + angle * 0.24, 0.90)
+            # Up, out and back; the rearmost frond sweeps back hardest.
+            tip = (side * (1.10 + 0.08 * abs(angle)),
+                   base[1] + angle * 0.34 - 0.16,
+                   1.52 - 0.10 * abs(angle))
 
-            # Filaments: what makes a frond read as feathery rather than as
-            # a rod. Fanned off the stalk's outer two thirds.
-            for step in (0.30, 0.50, 0.70, 0.88):
-                fx = base_x + out * reach_x * step
-                fy = base_y + back * reach_y * step
-                fz = base_z + reach_z * step
-                for lift, sweep in ((0.22, -0.10), (0.00, -0.21),
-                                    (-0.22, -0.10)):
-                    filament = skinned(
-                        f"fil_{side:.0f}_{angle:.2f}_{step}_{lift}",
+            def lerp(t: float) -> tuple:
+                return tuple(base[i] + (tip[i] - base[i]) * t
+                             for i in range(3))
+
+            quill_points = []
+            for t in (0.0, 0.35, 0.70, 1.0):
+                x, y, z = lerp(t)
+                # A slight outward bow so the crown curves like the sheet's.
+                x += side * 0.10 * math.sin(t * math.pi)
+                radius = 0.075 - 0.055 * t
+                quill_points.append((x, y, z, radius, radius))
+            quill = skinned(f"gill_{side:.0f}_{angle:.2f}", quill_points,
+                            subdivisions=1)
+            paint(quill, GILL_STALK, GILL_TIP, axis=2)
+            pieces.append(quill)
+
+            for t in (0.14, 0.26, 0.38, 0.50, 0.62, 0.74,
+                      0.86, 0.96):
+                x, y, z = lerp(t)
+                x += side * 0.10 * math.sin(t * math.pi)
+                length = 0.05 + 0.17 * math.sin(
+                    math.pi * min(t / 0.90, 1.0))
+                for fore in (1.0, -1.0):
+                    barb = skinned(
+                        f"barb_{side:.0f}_{angle:.2f}_{t}_{fore}",
                         [
-                            (fx, fy, fz, 0.042, 0.042),
-                            (fx + out * 0.20, fy + sweep,
-                             fz + lift, 0.016, 0.016),
+                            (x, y, z, 0.050, 0.026),
+                            # Swept toward the tip, not perpendicular: the
+                            # difference between feather vanes and a TV
+                            # antenna.
+                            (x + side * 0.10 + (tip[0] - base[0]) * 0.06,
+                             y + fore * length,
+                             z + (tip[2] - base[2]) * 0.10, 0.014, 0.010),
                         ],
                         subdivisions=1)
-                    paint(filament, GILL_STALK, GILL_TIP, axis=2)
-                    pieces.append(filament)
+                    paint(barb, GILL_STALK, GILL_TIP, axis=1,
+                          invert=fore < 0.0)
+                    pieces.append(barb)
 
     return join_as("axolotl_gill", pieces, "gill")
 
 
 def build_eyes() -> bpy.types.Object:
+    # Forward-set on the dome, not stuck to the flanks: the sheet's axolotl
+    # looks AT the camera, and that reads through where the eyes sit.
     pieces = []
     for side in (1.0, -1.0):
-        eye = sphere(f"eye_{side:.0f}", (side * 0.60, 1.16, 0.74), 0.135)
+        eye = sphere(f"eye_{side:.0f}", (side * 0.44, 1.24, 0.92), 0.155)
         paint(eye, EYE_COLOUR, EYE_COLOUR)
         pieces.append(eye)
     return join_as("axolotl_eye", pieces, "eye")
@@ -319,22 +376,35 @@ def build_gleams() -> bpy.types.Object:
     pieces = []
     for side in (1.0, -1.0):
         gleam = sphere(f"gleam_{side:.0f}",
-                       (side * 0.645, 1.225, 0.800), 0.048)
+                       (side * 0.47, 1.335, 1.015), 0.052)
         paint(gleam, GLEAM_COLOUR, GLEAM_COLOUR)
         pieces.append(gleam)
     return join_as("axolotl_gleam", pieces, "gleam")
 
 
 def build_detail() -> bpy.types.Object:
-    """Mouth line and nostrils. Tiny, and the only thing suggesting a face."""
+    """The face: a wide upturned smile line and two nostrils.
+
+    The smile is a thin curved chain laid across the snout front — its ends
+    lift, which is the whole difference between the sheet's friendly little
+    creature and a fish with a slot for a mouth.
+    """
     pieces = []
-    mouth = sphere("mouth", (0.0, 1.47, 0.50), 0.12,
-                   scale=(1.6, 0.5, 0.22))
-    paint(mouth, DETAIL_COLOUR, DETAIL_COLOUR)
-    pieces.append(mouth)
+    smile_points = []
+    for step in range(7):
+        t = step / 6.0
+        x = (t - 0.5) * 0.78
+        # Ends higher than the middle: the upturn.
+        z = 0.55 + 0.10 * (2.0 * abs(t - 0.5)) ** 1.6
+        # Follow the snout's curve so the line hugs the surface.
+        y = 1.56 - 0.34 * (2.0 * abs(t - 0.5)) ** 2.0
+        smile_points.append((x, y, z, 0.026, 0.026))
+    smile = skinned("smile", smile_points, subdivisions=1)
+    paint(smile, DETAIL_COLOUR, DETAIL_COLOUR)
+    pieces.append(smile)
     for side in (1.0, -1.0):
         nostril = sphere(f"nostril_{side:.0f}",
-                         (side * 0.10, 1.53, 0.61), 0.028)
+                         (side * 0.13, 1.60, 0.76), 0.028)
         paint(nostril, DETAIL_COLOUR, DETAIL_COLOUR)
         pieces.append(nostril)
     return join_as("axolotl_detail", pieces, "detail")
