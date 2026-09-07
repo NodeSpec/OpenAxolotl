@@ -61,9 +61,9 @@ extends Node
 ## CheckpointStore, and every catastrophe returns the player to the last
 ## anchor: a life is spent, and at zero the count refills (a setback, never a
 ## restart). Entry into a world ALWAYS starts at the spawn point even when the
-## profile remembers a later checkpoint, because restoration and pickups are
-## not yet persisted — resuming past the seeds you would need to re-collect
-## would strand you behind a wall. The anchor is still recorded (friction
+## profile remembers a later checkpoint. Restoration and discoveries persist,
+## but temporary Gill Mods and resource pickup placement reset on entry, so
+## checkpoint-based session resume remains a separate task (friction
 ## F-10). Every loss and regrowth asks for feedback through
 ## [signal feedback_requested] and gets a small sparkle burst at the player
 ## — the comedic pop the tone requirement asks for, in greybox form.
@@ -213,7 +213,9 @@ func wire() -> void:
 	_mods.expired.connect(
 		func(_mod_id: String) -> void: _apply_affordance_gates())
 
-	_restoration = RestorationSystem.new(_tuning)
+	var restoration_store := SaveRestorationStore.new(save_system, world_id) \
+		if save_system != null else RestorationStore.new()
+	_restoration = RestorationSystem.new(_tuning, restoration_store)
 	var errors: Array[RestorationError] = []
 	if not _restoration.declare_from_manifest(manifest, errors):
 		# Contract validation runs before load, so this is a defect worth
@@ -233,6 +235,8 @@ func wire() -> void:
 	_wire_drift_fleet()
 	_wire_flagship()
 	_wire_scene()
+	# Scene gates must be bound before loading can emit traversal changes.
+	_restoration.load_saved()
 	_open_lives()
 	_apply_affordance_gates()
 	_publish_modifiers()
@@ -896,8 +900,16 @@ func _on_feedback_requested(cue: FeedbackCue) -> void:
 # --- Gates ------------------------------------------------------------------
 
 func _on_mod_equipped(mod_id: String) -> void:
+	if save_system != null and not mod_id.is_empty():
+		save_system.set_gill_mod_unlocked(mod_id)
 	_apply_affordance_gates()
 	mod_equipped.emit(mod_id)
+
+
+## Snapshot through the same save interface used by pickups and checkpoints.
+func persist_progress() -> void:
+	if _restoration != null:
+		_restoration.save()
 
 
 ## An affordance gate is open exactly while the equipped mod grants its named

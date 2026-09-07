@@ -1,4 +1,4 @@
-[gd_scene load_steps=103 format=3]
+[gd_scene load_steps=111 format=3]
 
 ; CORAL COVE — the first official world (REQ-011), and a full platforming
 ; playthrough: run, jump, swim, dive, boost and climb, with the difficulty
@@ -117,6 +117,14 @@
 [ext_resource type="PackedScene" path="res://assets/prop/hookline_rig/hookline_rig.glb" id="19_fleet_hookline_rig"]
 [ext_resource type="PackedScene" path="res://assets/prop/netbot/netbot.glb" id="20_fleet_netbot"]
 [ext_resource type="PackedScene" path="res://assets/prop/runoff_drone/runoff_drone.glb" id="21_fleet_runoff_drone"]
+[ext_resource type="Script" path="res://core/rendering/scatter_field.gd" id="scatter_field_script"]
+[ext_resource type="Material" path="res://core/rendering/materials/forest_canopy.tres" id="forest_canopy_material"]
+[ext_resource type="Script" path="res://core/rendering/terrain_shell.gd" id="terrain_shell_script"]
+[ext_resource type="Material" path="res://core/rendering/terrain/coral_shelf_stone.tres" id="terrain_coral_shelf_stone"]
+[ext_resource type="Material" path="res://core/rendering/terrain/forest_earth.tres" id="terrain_forest_earth"]
+[ext_resource type="Material" path="res://core/rendering/terrain/mossy_stone.tres" id="terrain_mossy_stone"]
+[ext_resource type="Material" path="res://core/rendering/terrain/river_sand.tres" id="terrain_river_sand"]
+[ext_resource type="Material" path="res://core/rendering/terrain/river_stone.tres" id="terrain_river_stone"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_0"]
 size = Vector3(420, 2, 420)
@@ -411,11 +419,17 @@ surface_material_override/0 = ExtResource("7_surface_forest_earth")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, -11.75)
 
 [node name="Mesh" type="MeshInstance3D" parent="RiverBed"]
+visible = false
 mesh = SubResource("BoxMesh_2")
 surface_material_override/0 = ExtResource("6_surface_river_sand")
 
 [node name="Collision" type="CollisionShape3D" parent="RiverBed"]
 shape = SubResource("BoxShape3D_3")
+
+[node name="Shell" type="Node3D" parent="./RiverBed"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_sand")
+shell_seed = 4420
 
 ; Land on BOTH sides of the water. Without it the player sees the edge of the water volume itself -- a transparent slab ending in mid-air -- and a river that ends is not a river. Seven metres of open water separate the banks from the route's platforms, which is twice the jump, so this is scenery the player can look at and never reach.
 
@@ -423,31 +437,49 @@ shape = SubResource("BoxShape3D_3")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 4.6, -21.75)
 
 [node name="Mesh" type="MeshInstance3D" parent="BankWest"]
+visible = false
 mesh = SubResource("BoxMesh_4")
 surface_material_override/0 = ExtResource("7_surface_forest_earth")
 
 [node name="Collision" type="CollisionShape3D" parent="BankWest"]
 shape = SubResource("BoxShape3D_5")
 
+[node name="Shell" type="Node3D" parent="./BankWest"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 8658
+
 [node name="BankEast" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 4.6, -21.75)
 
 [node name="Mesh" type="MeshInstance3D" parent="BankEast"]
+visible = false
 mesh = SubResource("BoxMesh_4")
 surface_material_override/0 = ExtResource("7_surface_forest_earth")
 
 [node name="Collision" type="CollisionShape3D" parent="BankEast"]
 shape = SubResource("BoxShape3D_5")
 
+[node name="Shell" type="Node3D" parent="./BankEast"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 4648
+
 [node name="LagoonFloor" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -14, -40.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="LagoonFloor"]
+visible = false
 mesh = SubResource("BoxMesh_6")
 surface_material_override/0 = ExtResource("6_surface_river_sand")
 
 [node name="Collision" type="CollisionShape3D" parent="LagoonFloor"]
 shape = SubResource("BoxShape3D_7")
+
+[node name="Shell" type="Node3D" parent="./LagoonFloor"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_forest_earth")
+shell_seed = 4330
 
 [node name="Waterway" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.5, -21.75)
@@ -474,11 +506,17 @@ draw_pass_1 = SubResource("SphereMesh_12")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, -1)
 
 [node name="Mesh" type="MeshInstance3D" parent="StartLedge"]
+visible = false
 mesh = SubResource("BoxMesh_13")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="StartLedge"]
 shape = SubResource("BoxShape3D_14")
+
+[node name="Shell" type="Node3D" parent="./StartLedge"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 5902
 
 [node name="Spawn" type="Marker3D" parent="." groups=["spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 2)
@@ -487,11 +525,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 2)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, -9.7)
 
 [node name="Mesh" type="MeshInstance3D" parent="ShelfStep1"]
+visible = false
 mesh = SubResource("BoxMesh_15")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="ShelfStep1"]
 shape = SubResource("BoxShape3D_16")
+
+[node name="Shell" type="Node3D" parent="./ShelfStep1"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 9326
 
 [node name="CheckpointTideStep" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.4, -9.7)
@@ -500,11 +544,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.4, -9.7)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.3, -15.1)
 
 [node name="Mesh" type="MeshInstance3D" parent="ShelfStep2"]
+visible = false
 mesh = SubResource("BoxMesh_17")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="ShelfStep2"]
 shape = SubResource("BoxShape3D_18")
+
+[node name="Shell" type="Node3D" parent="./ShelfStep2"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 9327
 
 [node name="CheckpointTideRise" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.3, -15.1)
@@ -513,11 +563,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.3, -15.1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.1, -21)
 
 [node name="Mesh" type="MeshInstance3D" parent="ShelfStep3"]
+visible = false
 mesh = SubResource("BoxMesh_19")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="ShelfStep3"]
 shape = SubResource("BoxShape3D_20")
+
+[node name="Shell" type="Node3D" parent="./ShelfStep3"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 9328
 
 [node name="CheckpointTideShelf" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.1, -21)
@@ -537,11 +593,17 @@ shape = SubResource("BoxShape3D_23")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.1, -27.4)
 
 [node name="Mesh" type="MeshInstance3D" parent="ShelfLip"]
+visible = false
 mesh = SubResource("BoxMesh_24")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="ShelfLip"]
 shape = SubResource("BoxShape3D_25")
+
+[node name="Shell" type="Node3D" parent="./ShelfLip"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_coral_shelf_stone")
+shell_seed = 1308
 
 [node name="CheckpointShelfLip" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.1, -27.4)
@@ -557,11 +619,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -32)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -35)
 
 [node name="Mesh" type="MeshInstance3D" parent="DiveBar"]
+visible = false
 mesh = SubResource("BoxMesh_26")
 surface_material_override/0 = ExtResource("5_surface_river_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="DiveBar"]
 shape = SubResource("BoxShape3D_27")
+
+[node name="Shell" type="Node3D" parent="./DiveBar"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 4913
 
 [node name="CheckpointLagoonDeep" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, -38)
@@ -572,11 +640,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, -38)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7, -41)
 
 [node name="Mesh" type="MeshInstance3D" parent="RiseWall"]
+visible = false
 mesh = SubResource("BoxMesh_28")
 surface_material_override/0 = ExtResource("5_surface_river_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="RiseWall"]
 shape = SubResource("BoxShape3D_29")
+
+[node name="Shell" type="Node3D" parent="./RiseWall"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 7148
 
 [node name="CheckpointLagoonRise" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -43.5)
@@ -585,31 +659,49 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -43.5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, -46)
 
 [node name="Mesh" type="MeshInstance3D" parent="ShoreStep1"]
+visible = false
 mesh = SubResource("BoxMesh_30")
 surface_material_override/0 = ExtResource("6_surface_river_sand")
 
 [node name="Collision" type="CollisionShape3D" parent="ShoreStep1"]
 shape = SubResource("BoxShape3D_31")
 
+[node name="Shell" type="Node3D" parent="./ShoreStep1"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_sand")
+shell_seed = 9458
+
 [node name="ShoreStep2" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -48.4)
 
 [node name="Mesh" type="MeshInstance3D" parent="ShoreStep2"]
+visible = false
 mesh = SubResource("BoxMesh_32")
 surface_material_override/0 = ExtResource("6_surface_river_sand")
 
 [node name="Collision" type="CollisionShape3D" parent="ShoreStep2"]
 shape = SubResource("BoxShape3D_33")
 
+[node name="Shell" type="Node3D" parent="./ShoreStep2"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_sand")
+shell_seed = 9459
+
 [node name="CoveShore" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -56)
 
 [node name="Mesh" type="MeshInstance3D" parent="CoveShore"]
+visible = false
 mesh = SubResource("BoxMesh_34")
 surface_material_override/0 = ExtResource("6_surface_river_sand")
 
 [node name="Collision" type="CollisionShape3D" parent="CoveShore"]
 shape = SubResource("BoxShape3D_35")
+
+[node name="Shell" type="Node3D" parent="./CoveShore"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_sand")
+shell_seed = 6302
 
 [node name="CheckpointCoveShore" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -52)
@@ -625,11 +717,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -60)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.2, -66)
 
 [node name="Mesh" type="MeshInstance3D" parent="CoralWall"]
+visible = false
 mesh = SubResource("BoxMesh_36")
 surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="CoralWall"]
 shape = SubResource("BoxShape3D_37")
+
+[node name="Shell" type="Node3D" parent="./CoralWall"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 8896
 
 [node name="CheckpointWallTop" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.4, -65)
@@ -673,11 +771,17 @@ shape = SubResource("BoxShape3D_42")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, -74.1)
 
 [node name="Mesh" type="MeshInstance3D" parent="GrottoPillar1"]
+visible = false
 mesh = SubResource("BoxMesh_43")
 surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GrottoPillar1"]
 shape = SubResource("BoxShape3D_44")
+
+[node name="Shell" type="Node3D" parent="./GrottoPillar1"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_coral_shelf_stone")
+shell_seed = 9895
 
 [node name="CheckpointGrottoOne" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.4, -74.1)
@@ -686,21 +790,33 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.4, -74.1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 6.4, -79.05)
 
 [node name="Mesh" type="MeshInstance3D" parent="GrottoPillar2"]
+visible = false
 mesh = SubResource("BoxMesh_45")
 surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GrottoPillar2"]
 shape = SubResource("BoxShape3D_46")
 
+[node name="Shell" type="Node3D" parent="./GrottoPillar2"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_coral_shelf_stone")
+shell_seed = 9896
+
 [node name="GrottoPillar3" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.6, -83.75)
 
 [node name="Mesh" type="MeshInstance3D" parent="GrottoPillar3"]
+visible = false
 mesh = SubResource("BoxMesh_45")
 surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GrottoPillar3"]
 shape = SubResource("BoxShape3D_46")
+
+[node name="Shell" type="Node3D" parent="./GrottoPillar3"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_coral_shelf_stone")
+shell_seed = 9897
 
 [node name="StrayHook" type="Area3D" parent="." groups=["hazard"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, -83.7)
@@ -721,21 +837,33 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.6, -83.7)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 7.6, -88.45)
 
 [node name="Mesh" type="MeshInstance3D" parent="GrottoPillar4"]
+visible = false
 mesh = SubResource("BoxMesh_45")
 surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GrottoPillar4"]
 shape = SubResource("BoxShape3D_46")
 
+[node name="Shell" type="Node3D" parent="./GrottoPillar4"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_coral_shelf_stone")
+shell_seed = 9898
+
 [node name="GrottoLanding" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -94.9)
 
 [node name="Mesh" type="MeshInstance3D" parent="GrottoLanding"]
+visible = false
 mesh = SubResource("BoxMesh_49")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GrottoLanding"]
 shape = SubResource("BoxShape3D_50")
+
+[node name="Shell" type="Node3D" parent="./GrottoLanding"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 7715
 
 [node name="CheckpointGrottoLanding" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -94)
@@ -746,11 +874,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -94)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 8, -80)
 
 [node name="Mesh" type="MeshInstance3D" parent="ShrimpLedge"]
+visible = false
 mesh = SubResource("BoxMesh_51")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="ShrimpLedge"]
 shape = SubResource("BoxShape3D_52")
+
+[node name="Shell" type="Node3D" parent="./ShrimpLedge"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 2860
 
 [node name="LanternShrimp" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 9.8, -80)
@@ -793,11 +927,17 @@ shape = SubResource("BoxShape3D_41")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -103.25)
 
 [node name="Mesh" type="MeshInstance3D" parent="GorgeBed"]
+visible = false
 mesh = SubResource("BoxMesh_57")
 surface_material_override/0 = ExtResource("5_surface_river_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GorgeBed"]
 shape = SubResource("BoxShape3D_58")
+
+[node name="Shell" type="Node3D" parent="./GorgeBed"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_sand")
+shell_seed = 445
 
 ; The slot walls, set SIX metres back from the landing's edge rather than two. Close in they were a bank a good jump could reach, which is a bypass around the whole swim; out here they are unreachable and, being unreachable, no longer need to be so tall that they hide the water from the camera.
 
@@ -805,21 +945,33 @@ shape = SubResource("BoxShape3D_58")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.5, 5.8, -103.2)
 
 [node name="Mesh" type="MeshInstance3D" parent="GorgeWest"]
+visible = false
 mesh = SubResource("BoxMesh_59")
 surface_material_override/0 = ExtResource("5_surface_river_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GorgeWest"]
 shape = SubResource("BoxShape3D_60")
 
+[node name="Shell" type="Node3D" parent="./GorgeWest"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 8240
+
 [node name="GorgeEast" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.5, 5.8, -103.2)
 
 [node name="Mesh" type="MeshInstance3D" parent="GorgeEast"]
+visible = false
 mesh = SubResource("BoxMesh_59")
 surface_material_override/0 = ExtResource("5_surface_river_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GorgeEast"]
 shape = SubResource("BoxShape3D_60")
+
+[node name="Shell" type="Node3D" parent="./GorgeEast"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 4230
 
 ; Surface at 7.6, half a metre below the landing the player steps off: they WADE in rather than plunge, so the grammar switch is a decision and not an accident. It spans the whole slot, so stepping off the landing sideways is a swim and not a death -- this is the forgiving half of the level.
 
@@ -848,11 +1000,17 @@ draw_pass_1 = SubResource("SphereMesh_12")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.8, -103)
 
 [node name="Mesh" type="MeshInstance3D" parent="GorgeArch"]
+visible = false
 mesh = SubResource("BoxMesh_64")
 surface_material_override/0 = ExtResource("5_surface_river_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GorgeArch"]
 shape = SubResource("BoxShape3D_65")
+
+[node name="Shell" type="Node3D" parent="./GorgeArch"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 7924
 
 [node name="CheckpointGorgeEntry" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, -99.5)
@@ -866,11 +1024,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -104.5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.2, -110.6)
 
 [node name="Mesh" type="MeshInstance3D" parent="SeedTerrace1"]
+visible = false
 mesh = SubResource("BoxMesh_66")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="SeedTerrace1"]
 shape = SubResource("BoxShape3D_67")
+
+[node name="Shell" type="Node3D" parent="./SeedTerrace1"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 7459
 
 [node name="RegenStation" type="Area3D" parent="." groups=["regen_station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -109.2)
@@ -913,11 +1077,17 @@ shape = SubResource("BoxShape3D_23")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 5.6, -111.75)
 
 [node name="Mesh" type="MeshInstance3D" parent="SeedPillarA"]
+visible = false
 mesh = SubResource("BoxMesh_70")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="SeedPillarA"]
 shape = SubResource("BoxShape3D_71")
+
+[node name="Shell" type="Node3D" parent="./SeedPillarA"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_coral_shelf_stone")
+shell_seed = 3483
 
 [node name="Seed3" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 7.4, -111.7)
@@ -934,11 +1104,17 @@ shape = SubResource("BoxShape3D_23")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.2, -117.8)
 
 [node name="Mesh" type="MeshInstance3D" parent="SeedTerrace2"]
+visible = false
 mesh = SubResource("BoxMesh_66")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="SeedTerrace2"]
 shape = SubResource("BoxShape3D_67")
+
+[node name="Shell" type="Node3D" parent="./SeedTerrace2"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 7460
 
 [node name="CheckpointSeedTwo" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, -117)
@@ -958,11 +1134,17 @@ shape = SubResource("BoxShape3D_23")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 4.6, -118.25)
 
 [node name="Mesh" type="MeshInstance3D" parent="SeedPillarB"]
+visible = false
 mesh = SubResource("BoxMesh_70")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="SeedPillarB"]
 shape = SubResource("BoxShape3D_71")
+
+[node name="Shell" type="Node3D" parent="./SeedPillarB"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_coral_shelf_stone")
+shell_seed = 3484
 
 [node name="Seed6" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 6.4, -118.2)
@@ -993,11 +1175,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, -119.6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, -126)
 
 [node name="Mesh" type="MeshInstance3D" parent="SeedTerrace3"]
+visible = false
 mesh = SubResource("BoxMesh_72")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="SeedTerrace3"]
 shape = SubResource("BoxShape3D_73")
+
+[node name="Shell" type="Node3D" parent="./SeedTerrace3"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 7461
 
 [node name="CheckpointSeedThree" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.2, -124.5)
@@ -1023,21 +1211,33 @@ metadata/region_id = "coral_shelf"
 metadata/gate_id = "shelf_wall"
 
 [node name="Mesh" type="MeshInstance3D" parent="ShelfWall"]
+visible = false
 mesh = SubResource("BoxMesh_74")
 surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="ShelfWall"]
 shape = SubResource("BoxShape3D_75")
 
+[node name="Shell" type="Node3D" parent="./ShelfWall"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 9659
+
 [node name="FinishLedge" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, -133.25)
 
 [node name="Mesh" type="MeshInstance3D" parent="FinishLedge"]
+visible = false
 mesh = SubResource("BoxMesh_76")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="FinishLedge"]
 shape = SubResource("BoxShape3D_77")
+
+[node name="Shell" type="Node3D" parent="./FinishLedge"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 4522
 
 [node name="Finish" type="Area3D" parent="." groups=["finish_volume"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.2, -133)
@@ -1094,552 +1294,237 @@ shape = SubResource("BoxShape3D_80")
 
 [node name="Dressing" type="Node3D" parent="."]
 
-[node name="Prop1" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(2.604, 0, 1.260, 0, 2.893, 0, -1.260, 0, 2.604, -40.50, -24, -20.03)
+[node name="CanopyTreeField" type="Node3D" parent="Dressing"]
+script = ExtResource("scatter_field_script")
+prop_scene = ExtResource("13_kit_canopy_tree")
+transforms = PackedFloat32Array(2.604, 0, 1.26, 0, 2.893, 0, -1.26, 0, 2.604, -40.5, -24, -20.03, -1.606, 0, 1.348, 0, 2.097, 0, -1.348, 0, -1.606, -44.79, -24, -15.61, 1.472, 0, -1.47, 0, 2.08, 0, 1.47, 0, 1.472, -47.37, -24, -4.46, 0.908, 0, 2.617, 0, 2.77, 0, -2.617, 0, 0.908, -36.1, -24, -137.83, -1.838, 0, -1.907, 0, 2.649, 0, 1.907, 0, -1.838, -25.17, -24, -29.94, 1.363, 0, -1.283, 0, 1.872, 0, 1.283, 0, 1.363, -51.83, -24, -123.98, -1.304, 0, -1.293, 0, 1.836, 0, 1.293, 0, -1.304, -44.75, -24, -50.56, -1.924, 0, 0.728, 0, 2.057, 0, -0.728, 0, -1.924, -42.57, -24, 7.14, 0.348, 0, -1.822, 0, 1.855, 0, 1.822, 0, 0.348, -38.26, -24, -125.37, -2.524, 0, -1.01, 0, 2.719, 0, 1.01, 0, -2.524, -24.91, -24, -29.65, 0.362, 0, -1.769, 0, 1.805, 0, 1.769, 0, 0.362, -44.43, -24, -87.81, -2.233, 0, 0.221, 0, 2.244, 0, -0.221, 0, -2.233, -41.94, -24, -40.2, 2.333, 0, 0.046, 0, 2.334, 0, -0.046, 0, 2.333, -50.19, -24, -18.21, -2.579, 0, -0.026, 0, 2.579, 0, 0.026, 0, -2.579, -46.88, -24, -116.41, 1.553, 0, -2.363, 0, 2.828, 0, 2.363, 0, 1.553, 33.53, -24, -135.01, 1.903, 0, -0.289, 0, 1.925, 0, 0.289, 0, 1.903, 51.82, -24, -45.32, 0.716, 0, -2.535, 0, 2.634, 0, 2.535, 0, 0.716, 32.84, -24, -61.87, -1.253, 0, -2.624, 0, 2.908, 0, 2.624, 0, -1.253, 26.21, -24, -97.07, -1.776, 0, 1.168, 0, 2.126, 0, -1.168, 0, -1.776, 33.91, -24, -12.89, -0.282, 0, -2.294, 0, 2.312, 0, 2.294, 0, -0.282, 24.39, -24, -85.02, -1.727, 0, 0.908, 0, 1.951, 0, -0.908, 0, -1.727, 34.05, -24, -49.71, -0.032, 0, -2.31, 0, 2.31, 0, 2.31, 0, -0.032, 37.95, -24, -139.25, 1.071, 0, -2.694, 0, 2.899, 0, 2.694, 0, 1.071, 47.12, -24, -4.35, -2.864, 0, 0.831, 0, 2.982, 0, -0.831, 0, -2.864, 48.86, -24, -82.43, 0.96, 0, -1.667, 0, 1.923, 0, 1.667, 0, 0.96, 48.23, -24, 9.29, -0.76, 0, -2.536, 0, 2.647, 0, 2.536, 0, -0.76, 41.23, -24, -12.21, 2.838, 0, -0.693, 0, 2.921, 0, 0.693, 0, 2.838, 47.08, -24, -41.46, 0.872, 0, 2.641, 0, 2.781, 0, -2.641, 0, 0.872, 43.54, -24, -130.87, -1.207, 0, -2.508, 0, 2.784, 0, 2.508, 0, -1.207, -72.88, -24, -58.34, -0.654, 0, -2.553, 0, 2.636, 0, 2.553, 0, -0.654, -57.68, -24, -47.02, -2.997, 0, -0.305, 0, 3.013, 0, 0.305, 0, -2.997, -64.46, -24, -0.7, -2.817, 0, -1.38, 0, 3.137, 0, 1.38, 0, -2.817, -74.72, -24, -106.87, 0.687, 0, 2.815, 0, 2.897, 0, -2.815, 0, 0.687, -61.92, -24, -40.16, 1.188, 0, -2.247, 0, 2.542, 0, 2.247, 0, 1.188, -68.62, -24, -108.48, 2.724, 0, 1.528, 0, 3.123, 0, -1.528, 0, 2.724, 66.43, -24, -119.83, -1.601, 0, 2.866, 0, 3.283, 0, -2.866, 0, -1.601, 67.17, -24, -32.05, -1.787, 0, -2.696, 0, 3.235, 0, 2.696, 0, -1.787, 65.35, -24, -9, -2.233, 0, 1.02, 0, 2.455, 0, -1.02, 0, -2.233, 72.53, -24, -67.96, -2.686, 0, -0.993, 0, 2.863, 0, 0.993, 0, -2.686, 66.62, -24, -57.71, -1.624, 0, 2.973, 0, 3.387, 0, -2.973, 0, -1.624, 63.51, -24, -82.4, 0.49, 0, -0.963, 0, 1.08, 0, 0.963, 0, 0.49, -24.81, 5.6, 2.42, 1.149, 0, -0.794, 0, 1.397, 0, 0.794, 0, 1.149, -29.73, 5.6, -13.25, 1.374, 0, 0.275, 0, 1.401, 0, -0.275, 0, 1.374, -23.37, 5.6, -38.67, 0.64, 0, 1.278, 0, 1.43, 0, -1.278, 0, 0.64, -24.29, 5.6, -21.18, 0.725, 0, 0.881, 0, 1.14, 0, -0.881, 0, 0.725, 16.29, 5.6, -14.91, 1.21, 0, -0.339, 0, 1.256, 0, 0.339, 0, 1.21, 19.03, 5.6, -45.45, -1.129, 0, -0.074, 0, 1.131, 0, 0.074, 0, -1.129, 27.3, 5.6, -21.62, 0.281, 0, -1.029, 0, 1.067, 0, 1.029, 0, 0.281, 19, 5.6, -38.54)
+surface_material = ExtResource("forest_canopy_material")
 
-[node name="Prop2" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-1.606, 0, 1.348, 0, 2.097, 0, -1.348, 0, -1.606, -44.79, -24, -15.61)
+[node name="CoralBranchField" type="Node3D" parent="Dressing"]
+script = ExtResource("scatter_field_script")
+prop_scene = ExtResource("10_kit_coral_branch")
+transforms = PackedFloat32Array(0.463, 0, 1.384, 0, 1.459, 0, -1.384, 0, 0.463, -3.79, 3, -51.83, -0.294, 0, 0.892, 0, 0.939, 0, -0.892, 0, -0.294, 2.67, 3, -57.06, 0.754, 0, -1.018, 0, 1.267, 0, 1.018, 0, 0.754, 4.63, 3, -54.39, -0.928, 0, -0.329, 0, 0.984, 0, 0.329, 0, -0.928, -1.13, 3, -57.32, 1.417, 0, -0.392, 0, 1.47, 0, 0.392, 0, 1.417, -2.12, 3, -59.69, 0.584, 0, 0.78, 0, 0.975, 0, -0.78, 0, 0.584, -3.2, 3, -57.91, 0.892, 0, 0.032, 0, 0.893, 0, -0.032, 0, 0.892, -0.18, 7.4, -63.95, -1.015, 0, -0.346, 0, 1.072, 0, 0.346, 0, -1.015, -0.73, 7.4, -65.53, -1.063, 0, -0.311, 0, 1.108, 0, 0.311, 0, -1.063, 4.07, 7.4, -65.42, 0.804, 0, 0.214, 0, 0.832, 0, -0.214, 0, 0.804, -0.05, 7.4, -68.44)
+surface_material = ExtResource("forest_canopy_material")
 
-[node name="Prop3" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(1.472, 0, -1.470, 0, 2.080, 0, 1.470, 0, 1.472, -47.37, -24, -4.46)
+[node name="FallenLogField" type="Node3D" parent="Dressing"]
+script = ExtResource("scatter_field_script")
+prop_scene = ExtResource("15_kit_fallen_log")
+transforms = PackedFloat32Array(-0.034, 0, -0.987, 0, 0.987, 0, 0.987, 0, -0.034, -25.86, 5.6, 3.43, 1.165, 0, 0.207, 0, 1.183, 0, -0.207, 0, 1.165, -21.78, 5.6, -36.3, -1.186, 0, -0.111, 0, 1.191, 0, 0.111, 0, -1.186, -26.48, 5.6, -27.39, 0.79, 0, 0.469, 0, 0.919, 0, -0.469, 0, 0.79, 21.23, 5.6, -47.84, -0.85, 0, 0.412, 0, 0.945, 0, -0.412, 0, -0.85, 25.58, 5.6, -0.89, 0.897, 0, 0.738, 0, 1.161, 0, -0.738, 0, 0.897, 28.81, 5.6, -38.22, -0.872, 0, 0.892, 0, 1.247, 0, -0.892, 0, -0.872, -33.78, -24, -100.63, 0.742, 0, -1.385, 0, 1.572, 0, 1.385, 0, 0.742, 40.03, -24, -93.43, -1.104, 0, -0.962, 0, 1.465, 0, 0.962, 0, -1.104, -51.21, -24, -77.44, 0.786, 0, 1.238, 0, 1.466, 0, -1.238, 0, 0.786, 20.8, -24, -118.07, 1.355, 0, 0.989, 0, 1.678, 0, -0.989, 0, 1.355, 31.4, -24, -82.93, -0.782, 0, -1.145, 0, 1.386, 0, 1.145, 0, -0.782, -35.41, -24, -28.53, 1.164, 0, 0.049, 0, 1.165, 0, -0.049, 0, 1.164, -12.78, -24, 0.01, -1.26, 0, -0.305, 0, 1.296, 0, 0.305, 0, -1.26, -42.78, -24, -135.61, 0.054, 0, 1.443, 0, 1.444, 0, -1.443, 0, 0.054, 0.1, -24, -11.75, 1.644, 0, -0.017, 0, 1.644, 0, 0.017, 0, 1.644, 47.1, -24, -12.53, 0.64, 0, -1.368, 0, 1.51, 0, 1.368, 0, 0.64, -4.72, -24, -49.99)
 
-[node name="Prop4" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(0.908, 0, 2.617, 0, 2.770, 0, -2.617, 0, 0.908, -36.10, -24, -137.83)
+[node name="KelpStrandField" type="Node3D" parent="Dressing"]
+script = ExtResource("scatter_field_script")
+prop_scene = ExtResource("11_kit_kelp_strand")
+transforms = PackedFloat32Array(1, 0, -0.715, 0, 1.23, 0, 0.715, 0, 1, 6.96, -13, -44.01, -0.569, 0, -0.974, 0, 1.128, 0, 0.974, 0, -0.569, 2.66, -13, -33.53, -0.27, 0, -1.06, 0, 1.094, 0, 1.06, 0, -0.27, 1.98, -13, -35.08, -0.176, 0, 1.5, 0, 1.51, 0, -1.5, 0, -0.176, 10.52, -13, -46.32, -0.835, 0, 0.877, 0, 1.211, 0, -0.877, 0, -0.835, -3.11, -13, -43.62, 0.147, 0, -1.286, 0, 1.294, 0, 1.286, 0, 0.147, 2, -13, -34.77, -1.136, 0, -0.403, 0, 1.205, 0, 0.403, 0, -1.136, -9.41, -13, -32.46, 0.797, 0, -0.822, 0, 1.146, 0, 0.822, 0, 0.797, -3.85, -13, -32.15, -0.065, 0, 1.346, 0, 1.347, 0, -1.346, 0, -0.065, -3.19, -13, -44.78, -1.209, 0, -0.188, 0, 1.224, 0, 0.188, 0, -1.209, 10.72, -13, -42.96)
+surface_material = ExtResource("forest_canopy_material")
 
-[node name="Prop5" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-1.838, 0, -1.907, 0, 2.649, 0, 1.907, 0, -1.838, -25.17, -24, -29.94)
+[node name="RiverBoulderField" type="Node3D" parent="Dressing"]
+script = ExtResource("scatter_field_script")
+prop_scene = ExtResource("17_kit_river_boulder")
+transforms = PackedFloat32Array(-0.108, 0, -0.892, 0, 0.899, 0, 0.892, 0, -0.108, 2.78, -4, -19.93, 0.649, 0, -0.782, 0, 1.016, 0, 0.782, 0, 0.649, 8.04, -4, 2.62, -1.114, 0, 0.223, 0, 1.136, 0, -0.223, 0, -1.114, -9.73, -4, -21.02, 1.032, 0, -1.035, 0, 1.462, 0, 1.035, 0, 1.032, 10.83, -4, -8.84, 0.827, 0, 0.411, 0, 0.924, 0, -0.411, 0, 0.827, -7.57, -4, -24.15, 0.642, 0, 1.175, 0, 1.339, 0, -1.175, 0, 0.642, 3.87, -4, -17.8, -0.205, 0, 1.021, 0, 1.042, 0, -1.021, 0, -0.205, -6.93, -4, -27.81, 0.822, 0, -0.026, 0, 0.822, 0, 0.026, 0, 0.822, -5.33, 2, -100.67, 0.159, 0, -0.85, 0, 0.865, 0, 0.85, 0, 0.159, 4.38, 2, -107.62, -0.511, 0, 0.707, 0, 0.872, 0, -0.707, 0, -0.511, -5.34, 2, -103.97, -0.531, 0, -0.569, 0, 0.778, 0, 0.569, 0, -0.531, -1.92, 2, -105.3)
 
-[node name="Prop6" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(1.363, 0, -1.283, 0, 1.872, 0, 1.283, 0, 1.363, -51.83, -24, -123.98)
+[node name="RiverReedField" type="Node3D" parent="Dressing"]
+script = ExtResource("scatter_field_script")
+prop_scene = ExtResource("16_kit_river_reed")
+transforms = PackedFloat32Array(-0.588, 0, -1.333, 0, 1.457, 0, 1.333, 0, -0.588, -6.21, -4, -16.81, -1.316, 0, 0.228, 0, 1.336, 0, -0.228, 0, -1.316, -8.9, -4, -8.95, 1.494, 0, 0.37, 0, 1.539, 0, -0.37, 0, 1.494, 0.98, -4, -13.2, 0.131, 0, -1.622, 0, 1.628, 0, 1.622, 0, 0.131, 2, -4, -17.82, -0.006, 0, 1.28, 0, 1.28, 0, -1.28, 0, -0.006, -3.7, -4, -9.72, 0.348, 0, 0.983, 0, 1.043, 0, -0.983, 0, 0.348, -5.26, -4, -29.14, 1.015, 0, 0.075, 0, 1.018, 0, -0.075, 0, 1.015, -10.03, -4, -5.96, 0.456, 0, 1.118, 0, 1.207, 0, -1.118, 0, 0.456, -2.3, -4, -9.79, -1.636, 0, -0.323, 0, 1.667, 0, 0.323, 0, -1.636, 11.89, -4, -3.77, 0.03, 0, -1.068, 0, 1.069, 0, 1.068, 0, 0.03, 11.16, -4, 1.48, 0.322, 0, 1.372, 0, 1.409, 0, -1.372, 0, 0.322, -1.34, -4, -19.71, 0.1, 0, 1.173, 0, 1.177, 0, -1.173, 0, 0.1, 0.32, -4, 1.32, -0.516, 0, 1.105, 0, 1.219, 0, -1.105, 0, -0.516, -1.57, 2, -102.64, 1.165, 0, 0.022, 0, 1.165, 0, -0.022, 0, 1.165, -0.55, 2, -98.6, 0.682, 0, -1.191, 0, 1.372, 0, 1.191, 0, 0.682, -3.12, 2, -105.11, 1.347, 0, 0.023, 0, 1.348, 0, -0.023, 0, 1.347, -5.6, 2, -99.72, 0.86, 0, 0.412, 0, 0.953, 0, -0.412, 0, 0.86, 1.31, 2, -106.5, 1.085, 0, 0.424, 0, 1.165, 0, -0.424, 0, 1.085, -0.2, 2, -99, -0.352, 0, -0.954, 0, 1.017, 0, 0.954, 0, -0.352, 2.88, 2, -107.19, -1.175, 0, 0.104, 0, 1.18, 0, -0.104, 0, -1.175, -2.98, 2, -103.97)
+surface_material = ExtResource("forest_canopy_material")
 
-[node name="Prop7" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-1.304, 0, -1.293, 0, 1.836, 0, 1.293, 0, -1.304, -44.75, -24, -50.56)
+[node name="RockClusterField" type="Node3D" parent="Dressing"]
+script = ExtResource("scatter_field_script")
+prop_scene = ExtResource("9_kit_rock_cluster")
+transforms = PackedFloat32Array(1.033, 0, 0.83, 0, 1.325, 0, -0.83, 0, 1.033, 1.68, -13, -42.57, 0.193, 0, -0.882, 0, 0.903, 0, 0.882, 0, 0.193, -4.2, -13, -36.11, 0.173, 0, 1.073, 0, 1.086, 0, -1.073, 0, 0.173, 4.91, -13, -43.13, -0.242, 0, -1.113, 0, 1.139, 0, 1.113, 0, -0.242, -3.75, -13, -42.26, 1.067, 0, -0.123, 0, 1.074, 0, 0.123, 0, 1.067, 7.9, -13, -39.57, -0.733, 0, 0.699, 0, 1.013, 0, -0.699, 0, -0.733, -4.76, -13, -32.51)
 
-[node name="Prop8" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-1.924, 0, 0.728, 0, 2.057, 0, -0.728, 0, -1.924, -42.57, -24, 7.14)
+[node name="SeagrassTuftField" type="Node3D" parent="Dressing"]
+script = ExtResource("scatter_field_script")
+prop_scene = ExtResource("12_kit_seagrass_tuft")
+transforms = PackedFloat32Array(0.515, 0, 0.936, 0, 1.069, 0, -0.936, 0, 0.515, -3.63, 6.2, -112.27, 0.017, 0, 1.006, 0, 1.006, 0, -1.006, 0, 0.017, 3.11, 6.2, -109.79, 0.35, 0, 1.171, 0, 1.222, 0, -1.171, 0, 0.35, -1.33, 6.2, -112.34, 0.108, 0, -0.972, 0, 0.978, 0, 0.972, 0, 0.108, -0.29, 6.2, -111.35, -0.766, 0, 0.611, 0, 0.979, 0, -0.611, 0, -0.766, -2.57, 6.2, -112.21, -0.747, 0, -0.724, 0, 1.041, 0, 0.724, 0, -0.747, 0.2, 6.2, -110.72, 0.863, 0, -1, 0, 1.321, 0, 1, 0, 0.863, -3.51, 4.2, -127.33, 0.046, 0, 1.24, 0, 1.241, 0, -1.24, 0, 0.046, 1.26, 4.2, -125.45, 0.657, 0, -1.207, 0, 1.374, 0, 1.207, 0, 0.657, 0.1, 4.2, -127.18, 0.435, 0, 0.891, 0, 0.991, 0, -0.891, 0, 0.435, 2.23, 4.2, -126.04, -0.022, 0, -0.962, 0, 0.962, 0, 0.962, 0, -0.022, 0.52, 4.2, -123.29)
+surface_material = ExtResource("forest_canopy_material")
 
-[node name="Prop9" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(0.348, 0, -1.822, 0, 1.855, 0, 1.822, 0, 0.348, -38.26, -24, -125.37)
+[node name="UnderstoryFernField" type="Node3D" parent="Dressing"]
+script = ExtResource("scatter_field_script")
+prop_scene = ExtResource("14_kit_understory_fern")
+transforms = PackedFloat32Array(-2.212, 0, -0.691, 0, 2.317, 0, 0.691, 0, -2.212, -17.92, -24, -41.45, -2.21, 0, 0.06, 0, 2.211, 0, -0.06, 0, -2.21, -31.15, -24, -45.28, 1.875, 0, 1.213, 0, 2.234, 0, -1.213, 0, 1.875, -26.03, -24, -20.3, 0.852, 0, -2.252, 0, 2.408, 0, 2.252, 0, 0.852, -10.99, -24, -107.23, 1.659, 0, 0.553, 0, 1.748, 0, -0.553, 0, 1.659, -52.44, -24, -83.85, 1.497, 0, -1.221, 0, 1.932, 0, 1.221, 0, 1.497, 1.14, -24, -53.14, 2.147, 0, -1.423, 0, 2.576, 0, 1.423, 0, 2.147, -47.85, -24, 4.28, -0.358, 0, -1.743, 0, 1.779, 0, 1.743, 0, -0.358, 28.47, -24, -40.09, 1.736, 0, -0.952, 0, 1.98, 0, 0.952, 0, 1.736, 48.28, -24, -97.22, -1.486, 0, -0.085, 0, 1.488, 0, 0.085, 0, -1.486, -33.99, -24, -107.18, -0.774, 0, -1.618, 0, 1.793, 0, 1.618, 0, -0.774, 5.23, -24, -120.37, 1.875, 0, 1.542, 0, 2.428, 0, -1.542, 0, 1.875, -26.5, -24, -109.13, 1.743, 0, -0.397, 0, 1.787, 0, 0.397, 0, 1.743, -49.27, -24, 6.77, 0.407, 0, 1.671, 0, 1.72, 0, -1.671, 0, 0.407, 18.98, -24, -106.97, 1.899, 0, 0.747, 0, 2.041, 0, -0.747, 0, 1.899, -16.32, -24, 1.38, 0.489, 0, 1.609, 0, 1.682, 0, -1.609, 0, 0.489, -19.18, -24, -134.83, 0.772, 0, -1.196, 0, 1.424, 0, 1.196, 0, 0.772, 35.44, -24, -65.37, -0.668, 0, -1.251, 0, 1.419, 0, 1.251, 0, -0.668, 19.18, -24, -22.87, 2.532, 0, 0.457, 0, 2.573, 0, -0.457, 0, 2.532, 55.81, -24, -99.55, 1.954, 0, -1.29, 0, 2.341, 0, 1.29, 0, 1.954, 51.53, -24, -49.36, -1.945, 0, -0.545, 0, 2.02, 0, 0.545, 0, -1.945, 43.29, -24, -52.59, -1.369, 0, -0.583, 0, 1.488, 0, 0.583, 0, -1.369, 25.26, -24, -2.3, -1.62, 0, 1.33, 0, 2.096, 0, -1.33, 0, -1.62, -2.95, -24, -27.96, -2.178, 0, -1.123, 0, 2.45, 0, 1.123, 0, -2.178, 20.89, -24, -108.87, -2.54, 0, -0.037, 0, 2.54, 0, 0.037, 0, -2.54, -1.49, -24, -32.69, 1.371, 0, 0.503, 0, 1.46, 0, -0.503, 0, 1.371, 28.42, -24, -76.36, -0.227, 0, 1.189, 0, 1.211, 0, -1.189, 0, -0.227, -27.88, 5.6, -28.24, -0.387, 0, -1.149, 0, 1.213, 0, 1.149, 0, -0.387, -19.12, 5.6, 1.63, -0.207, 0, 1.14, 0, 1.159, 0, -1.14, 0, -0.207, -23.18, 5.6, 1.97, 1.479, 0, -0.88, 0, 1.721, 0, 0.88, 0, 1.479, -26.14, 5.6, -44.93, -1.431, 0, -0.531, 0, 1.526, 0, 0.531, 0, -1.431, -29.44, 5.6, -7.51, -1.212, 0, -0.824, 0, 1.465, 0, 0.824, 0, -1.212, -17.16, 5.6, -18.13, -0.561, 0, 1.195, 0, 1.32, 0, -1.195, 0, -0.561, -27.2, 5.6, -23.69, 0.989, 0, 0.365, 0, 1.054, 0, -0.365, 0, 0.989, -26.75, 5.6, -22.27, -0.112, 0, -1.165, 0, 1.17, 0, 1.165, 0, -0.112, -29.2, 5.6, -19.4, 1.537, 0, 0.106, 0, 1.541, 0, -0.106, 0, 1.537, -16.32, 5.6, -4.5, -1.128, 0, 0.589, 0, 1.273, 0, -0.589, 0, -1.128, 17.58, 5.6, -10.83, -1.007, 0, -0.094, 0, 1.011, 0, 0.094, 0, -1.007, 23.21, 5.6, -29.74, 0.178, 0, 1.653, 0, 1.663, 0, -1.653, 0, 0.178, 18.38, 5.6, -22.05, 1.4, 0, 0.842, 0, 1.633, 0, -0.842, 0, 1.4, 25.75, 5.6, -47.59, 0.021, 0, 1.271, 0, 1.271, 0, -1.271, 0, 0.021, 19.67, 5.6, -40.16, 1.327, 0, 0.859, 0, 1.58, 0, -0.859, 0, 1.327, 19.81, 5.6, -36.22, -1.207, 0, -0.229, 0, 1.228, 0, 0.229, 0, -1.207, 24.11, 5.6, -3.23, 0.594, 0, -0.944, 0, 1.115, 0, 0.944, 0, 0.594, 24.79, 5.6, -14.92, 1.158, 0, 1.233, 0, 1.692, 0, -1.233, 0, 1.158, 16.08, 5.6, -39.98, 1.389, 0, -0.75, 0, 1.578, 0, 0.75, 0, 1.389, 27.62, 5.6, -4.23, 0.11, 0, -1.522, 0, 1.525, 0, 1.522, 0, 0.11, -0.59, 4.2, -131.31, 1.221, 0, 0.322, 0, 1.263, 0, -0.322, 0, 1.221, 1.88, 4.2, -134.44, -0.512, 0, -1.464, 0, 1.551, 0, 1.464, 0, -0.512, -2.31, 4.2, -135.54, 1.365, 0, 0.819, 0, 1.592, 0, -0.819, 0, 1.365, 1.71, 4.2, -136.23)
+surface_material = ExtResource("forest_canopy_material")
 
-[node name="Prop10" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-2.524, 0, -1.010, 0, 2.719, 0, 1.010, 0, -2.524, -24.91, -24, -29.65)
 
-[node name="Prop11" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(0.362, 0, -1.769, 0, 1.805, 0, 1.769, 0, 0.362, -44.43, -24, -87.81)
 
-[node name="Prop12" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-2.233, 0, 0.221, 0, 2.244, 0, -0.221, 0, -2.233, -41.94, -24, -40.20)
 
-[node name="Prop13" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(2.333, 0, 0.046, 0, 2.334, 0, -0.046, 0, 2.333, -50.19, -24, -18.21)
 
-[node name="Prop14" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-2.579, 0, -0.026, 0, 2.579, 0, 0.026, 0, -2.579, -46.88, -24, -116.41)
 
-[node name="Prop15" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(1.553, 0, -2.363, 0, 2.828, 0, 2.363, 0, 1.553, 33.53, -24, -135.01)
 
-[node name="Prop16" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(1.903, 0, -0.289, 0, 1.925, 0, 0.289, 0, 1.903, 51.82, -24, -45.32)
 
-[node name="Prop17" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(0.716, 0, -2.535, 0, 2.634, 0, 2.535, 0, 0.716, 32.84, -24, -61.87)
 
-[node name="Prop18" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-1.253, 0, -2.624, 0, 2.908, 0, 2.624, 0, -1.253, 26.21, -24, -97.07)
 
-[node name="Prop19" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-1.776, 0, 1.168, 0, 2.126, 0, -1.168, 0, -1.776, 33.91, -24, -12.89)
 
-[node name="Prop20" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-0.282, 0, -2.294, 0, 2.312, 0, 2.294, 0, -0.282, 24.39, -24, -85.02)
 
-[node name="Prop21" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-1.727, 0, 0.908, 0, 1.951, 0, -0.908, 0, -1.727, 34.05, -24, -49.71)
 
-[node name="Prop22" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-0.032, 0, -2.310, 0, 2.310, 0, 2.310, 0, -0.032, 37.95, -24, -139.25)
 
-[node name="Prop23" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(1.071, 0, -2.694, 0, 2.899, 0, 2.694, 0, 1.071, 47.12, -24, -4.35)
 
-[node name="Prop24" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-2.864, 0, 0.831, 0, 2.982, 0, -0.831, 0, -2.864, 48.86, -24, -82.43)
 
-[node name="Prop25" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(0.960, 0, -1.667, 0, 1.923, 0, 1.667, 0, 0.960, 48.23, -24, 9.29)
 
-[node name="Prop26" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-0.760, 0, -2.536, 0, 2.647, 0, 2.536, 0, -0.760, 41.23, -24, -12.21)
 
-[node name="Prop27" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(2.838, 0, -0.693, 0, 2.921, 0, 0.693, 0, 2.838, 47.08, -24, -41.46)
 
-[node name="Prop28" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(0.872, 0, 2.641, 0, 2.781, 0, -2.641, 0, 0.872, 43.54, -24, -130.87)
 
-[node name="Prop29" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-1.207, 0, -2.508, 0, 2.784, 0, 2.508, 0, -1.207, -72.88, -24, -58.34)
 
-[node name="Prop30" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-0.654, 0, -2.553, 0, 2.636, 0, 2.553, 0, -0.654, -57.68, -24, -47.02)
 
-[node name="Prop31" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-2.997, 0, -0.305, 0, 3.013, 0, 0.305, 0, -2.997, -64.46, -24, -0.70)
 
-[node name="Prop32" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-2.817, 0, -1.380, 0, 3.137, 0, 1.380, 0, -2.817, -74.72, -24, -106.87)
 
-[node name="Prop33" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(0.687, 0, 2.815, 0, 2.897, 0, -2.815, 0, 0.687, -61.92, -24, -40.16)
 
-[node name="Prop34" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(1.188, 0, -2.247, 0, 2.542, 0, 2.247, 0, 1.188, -68.62, -24, -108.48)
 
-[node name="Prop35" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(2.724, 0, 1.528, 0, 3.123, 0, -1.528, 0, 2.724, 66.43, -24, -119.83)
 
-[node name="Prop36" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-1.601, 0, 2.866, 0, 3.283, 0, -2.866, 0, -1.601, 67.17, -24, -32.05)
 
-[node name="Prop37" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-1.787, 0, -2.696, 0, 3.235, 0, 2.696, 0, -1.787, 65.35, -24, -9.00)
 
-[node name="Prop38" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-2.233, 0, 1.020, 0, 2.455, 0, -1.020, 0, -2.233, 72.53, -24, -67.96)
 
-[node name="Prop39" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-2.686, 0, -0.993, 0, 2.863, 0, 0.993, 0, -2.686, 66.62, -24, -57.71)
 
-[node name="Prop40" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-1.624, 0, 2.973, 0, 3.387, 0, -2.973, 0, -1.624, 63.51, -24, -82.40)
 
-[node name="Prop41" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-2.212, 0, -0.691, 0, 2.317, 0, 0.691, 0, -2.212, -17.92, -24, -41.45)
 
-[node name="Prop42" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-2.210, 0, 0.060, 0, 2.211, 0, -0.060, 0, -2.210, -31.15, -24, -45.28)
 
-[node name="Prop43" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(1.875, 0, 1.213, 0, 2.234, 0, -1.213, 0, 1.875, -26.03, -24, -20.30)
 
-[node name="Prop44" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(0.852, 0, -2.252, 0, 2.408, 0, 2.252, 0, 0.852, -10.99, -24, -107.23)
 
-[node name="Prop45" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(1.659, 0, 0.553, 0, 1.748, 0, -0.553, 0, 1.659, -52.44, -24, -83.85)
 
-[node name="Prop46" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(1.497, 0, -1.221, 0, 1.932, 0, 1.221, 0, 1.497, 1.14, -24, -53.14)
 
-[node name="Prop47" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(2.147, 0, -1.423, 0, 2.576, 0, 1.423, 0, 2.147, -47.85, -24, 4.28)
 
-[node name="Prop48" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-0.358, 0, -1.743, 0, 1.779, 0, 1.743, 0, -0.358, 28.47, -24, -40.09)
 
-[node name="Prop49" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(1.736, 0, -0.952, 0, 1.980, 0, 0.952, 0, 1.736, 48.28, -24, -97.22)
 
-[node name="Prop50" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-1.486, 0, -0.085, 0, 1.488, 0, 0.085, 0, -1.486, -33.99, -24, -107.18)
 
-[node name="Prop51" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-0.774, 0, -1.618, 0, 1.793, 0, 1.618, 0, -0.774, 5.23, -24, -120.37)
 
-[node name="Prop52" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(1.875, 0, 1.542, 0, 2.428, 0, -1.542, 0, 1.875, -26.50, -24, -109.13)
 
-[node name="Prop53" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(1.743, 0, -0.397, 0, 1.787, 0, 0.397, 0, 1.743, -49.27, -24, 6.77)
 
-[node name="Prop54" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(0.407, 0, 1.671, 0, 1.720, 0, -1.671, 0, 0.407, 18.98, -24, -106.97)
 
-[node name="Prop55" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(1.899, 0, 0.747, 0, 2.041, 0, -0.747, 0, 1.899, -16.32, -24, 1.38)
 
-[node name="Prop56" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(0.489, 0, 1.609, 0, 1.682, 0, -1.609, 0, 0.489, -19.18, -24, -134.83)
 
-[node name="Prop57" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(0.772, 0, -1.196, 0, 1.424, 0, 1.196, 0, 0.772, 35.44, -24, -65.37)
 
-[node name="Prop58" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-0.668, 0, -1.251, 0, 1.419, 0, 1.251, 0, -0.668, 19.18, -24, -22.87)
 
-[node name="Prop59" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(2.532, 0, 0.457, 0, 2.573, 0, -0.457, 0, 2.532, 55.81, -24, -99.55)
 
-[node name="Prop60" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(1.954, 0, -1.290, 0, 2.341, 0, 1.290, 0, 1.954, 51.53, -24, -49.36)
 
-[node name="Prop61" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-1.945, 0, -0.545, 0, 2.020, 0, 0.545, 0, -1.945, 43.29, -24, -52.59)
 
-[node name="Prop62" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-1.369, 0, -0.583, 0, 1.488, 0, 0.583, 0, -1.369, 25.26, -24, -2.30)
 
-[node name="Prop63" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-1.620, 0, 1.330, 0, 2.096, 0, -1.330, 0, -1.620, -2.95, -24, -27.96)
 
-[node name="Prop64" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-2.178, 0, -1.123, 0, 2.450, 0, 1.123, 0, -2.178, 20.89, -24, -108.87)
 
-[node name="Prop65" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-2.540, 0, -0.037, 0, 2.540, 0, 0.037, 0, -2.540, -1.49, -24, -32.69)
 
-[node name="Prop66" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(1.371, 0, 0.503, 0, 1.460, 0, -0.503, 0, 1.371, 28.42, -24, -76.36)
 
-[node name="Prop67" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-0.227, 0, 1.189, 0, 1.211, 0, -1.189, 0, -0.227, -27.88, 5.6, -28.24)
 
-[node name="Prop68" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-0.387, 0, -1.149, 0, 1.213, 0, 1.149, 0, -0.387, -19.12, 5.6, 1.63)
 
-[node name="Prop69" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-0.207, 0, 1.140, 0, 1.159, 0, -1.140, 0, -0.207, -23.18, 5.6, 1.97)
 
-[node name="Prop70" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(1.479, 0, -0.880, 0, 1.721, 0, 0.880, 0, 1.479, -26.14, 5.6, -44.93)
 
-[node name="Prop71" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-1.431, 0, -0.531, 0, 1.526, 0, 0.531, 0, -1.431, -29.44, 5.6, -7.51)
 
-[node name="Prop72" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-1.212, 0, -0.824, 0, 1.465, 0, 0.824, 0, -1.212, -17.16, 5.6, -18.13)
 
-[node name="Prop73" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-0.561, 0, 1.195, 0, 1.320, 0, -1.195, 0, -0.561, -27.20, 5.6, -23.69)
 
-[node name="Prop74" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(0.989, 0, 0.365, 0, 1.054, 0, -0.365, 0, 0.989, -26.75, 5.6, -22.27)
 
-[node name="Prop75" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-0.112, 0, -1.165, 0, 1.170, 0, 1.165, 0, -0.112, -29.20, 5.6, -19.40)
 
-[node name="Prop76" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(1.537, 0, 0.106, 0, 1.541, 0, -0.106, 0, 1.537, -16.32, 5.6, -4.50)
 
-[node name="Prop77" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-1.128, 0, 0.589, 0, 1.273, 0, -0.589, 0, -1.128, 17.58, 5.6, -10.83)
 
-[node name="Prop78" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-1.007, 0, -0.094, 0, 1.011, 0, 0.094, 0, -1.007, 23.21, 5.6, -29.74)
 
-[node name="Prop79" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(0.178, 0, 1.653, 0, 1.663, 0, -1.653, 0, 0.178, 18.38, 5.6, -22.05)
 
-[node name="Prop80" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(1.400, 0, 0.842, 0, 1.633, 0, -0.842, 0, 1.400, 25.75, 5.6, -47.59)
 
-[node name="Prop81" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(0.021, 0, 1.271, 0, 1.271, 0, -1.271, 0, 0.021, 19.67, 5.6, -40.16)
 
-[node name="Prop82" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(1.327, 0, 0.859, 0, 1.580, 0, -0.859, 0, 1.327, 19.81, 5.6, -36.22)
 
-[node name="Prop83" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-1.207, 0, -0.229, 0, 1.228, 0, 0.229, 0, -1.207, 24.11, 5.6, -3.23)
 
-[node name="Prop84" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(0.594, 0, -0.944, 0, 1.115, 0, 0.944, 0, 0.594, 24.79, 5.6, -14.92)
 
-[node name="Prop85" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(1.158, 0, 1.233, 0, 1.692, 0, -1.233, 0, 1.158, 16.08, 5.6, -39.98)
 
-[node name="Prop86" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(1.389, 0, -0.750, 0, 1.578, 0, 0.750, 0, 1.389, 27.62, 5.6, -4.23)
 
-[node name="Prop87" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
-transform = Transform3D(-0.034, 0, -0.987, 0, 0.987, 0, 0.987, 0, -0.034, -25.86, 5.6, 3.43)
 
-[node name="Prop88" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
-transform = Transform3D(1.165, 0, 0.207, 0, 1.183, 0, -0.207, 0, 1.165, -21.78, 5.6, -36.30)
 
-[node name="Prop89" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
-transform = Transform3D(-1.186, 0, -0.111, 0, 1.191, 0, 0.111, 0, -1.186, -26.48, 5.6, -27.39)
 
-[node name="Prop90" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
-transform = Transform3D(0.790, 0, 0.469, 0, 0.919, 0, -0.469, 0, 0.790, 21.23, 5.6, -47.84)
 
-[node name="Prop91" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
-transform = Transform3D(-0.850, 0, 0.412, 0, 0.945, 0, -0.412, 0, -0.850, 25.58, 5.6, -0.89)
 
-[node name="Prop92" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
-transform = Transform3D(0.897, 0, 0.738, 0, 1.161, 0, -0.738, 0, 0.897, 28.81, 5.6, -38.22)
 
-[node name="Prop93" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(0.490, 0, -0.963, 0, 1.080, 0, 0.963, 0, 0.490, -24.81, 5.6, 2.42)
 
-[node name="Prop94" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(1.149, 0, -0.794, 0, 1.397, 0, 0.794, 0, 1.149, -29.73, 5.6, -13.25)
 
-[node name="Prop95" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(1.374, 0, 0.275, 0, 1.401, 0, -0.275, 0, 1.374, -23.37, 5.6, -38.67)
 
-[node name="Prop96" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(0.640, 0, 1.278, 0, 1.430, 0, -1.278, 0, 0.640, -24.29, 5.6, -21.18)
 
-[node name="Prop97" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(0.725, 0, 0.881, 0, 1.140, 0, -0.881, 0, 0.725, 16.29, 5.6, -14.91)
 
-[node name="Prop98" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(1.210, 0, -0.339, 0, 1.256, 0, 0.339, 0, 1.210, 19.03, 5.6, -45.45)
 
-[node name="Prop99" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(-1.129, 0, -0.074, 0, 1.131, 0, 0.074, 0, -1.129, 27.30, 5.6, -21.62)
 
-[node name="Prop100" parent="Dressing" instance=ExtResource("13_kit_canopy_tree")]
-transform = Transform3D(0.281, 0, -1.029, 0, 1.067, 0, 1.029, 0, 0.281, 19.00, 5.6, -38.54)
 
-[node name="Prop101" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
-transform = Transform3D(-0.872, 0, 0.892, 0, 1.247, 0, -0.892, 0, -0.872, -33.78, -24, -100.63)
 
-[node name="Prop102" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
-transform = Transform3D(0.742, 0, -1.385, 0, 1.572, 0, 1.385, 0, 0.742, 40.03, -24, -93.43)
 
-[node name="Prop103" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
-transform = Transform3D(-1.104, 0, -0.962, 0, 1.465, 0, 0.962, 0, -1.104, -51.21, -24, -77.44)
 
-[node name="Prop104" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
-transform = Transform3D(0.786, 0, 1.238, 0, 1.466, 0, -1.238, 0, 0.786, 20.80, -24, -118.07)
 
-[node name="Prop105" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
-transform = Transform3D(1.355, 0, 0.989, 0, 1.678, 0, -0.989, 0, 1.355, 31.40, -24, -82.93)
 
-[node name="Prop106" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
-transform = Transform3D(-0.782, 0, -1.145, 0, 1.386, 0, 1.145, 0, -0.782, -35.41, -24, -28.53)
 
-[node name="Prop107" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
-transform = Transform3D(1.164, 0, 0.049, 0, 1.165, 0, -0.049, 0, 1.164, -12.78, -24, 0.01)
 
-[node name="Prop108" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
-transform = Transform3D(-1.260, 0, -0.305, 0, 1.296, 0, 0.305, 0, -1.260, -42.78, -24, -135.61)
 
-[node name="Prop109" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
-transform = Transform3D(0.054, 0, 1.443, 0, 1.444, 0, -1.443, 0, 0.054, 0.10, -24, -11.75)
 
-[node name="Prop110" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
-transform = Transform3D(1.644, 0, -0.017, 0, 1.644, 0, 0.017, 0, 1.644, 47.10, -24, -12.53)
 
-[node name="Prop111" parent="Dressing" instance=ExtResource("15_kit_fallen_log")]
-transform = Transform3D(0.640, 0, -1.368, 0, 1.510, 0, 1.368, 0, 0.640, -4.72, -24, -49.99)
 
-[node name="Prop112" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(-0.588, 0, -1.333, 0, 1.457, 0, 1.333, 0, -0.588, -6.21, -4, -16.81)
 
-[node name="Prop113" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(-1.316, 0, 0.228, 0, 1.336, 0, -0.228, 0, -1.316, -8.90, -4, -8.95)
 
-[node name="Prop114" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(1.494, 0, 0.370, 0, 1.539, 0, -0.370, 0, 1.494, 0.98, -4, -13.20)
 
-[node name="Prop115" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(0.131, 0, -1.622, 0, 1.628, 0, 1.622, 0, 0.131, 2.00, -4, -17.82)
 
-[node name="Prop116" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(-0.006, 0, 1.280, 0, 1.280, 0, -1.280, 0, -0.006, -3.70, -4, -9.72)
 
-[node name="Prop117" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(0.348, 0, 0.983, 0, 1.043, 0, -0.983, 0, 0.348, -5.26, -4, -29.14)
 
-[node name="Prop118" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(1.015, 0, 0.075, 0, 1.018, 0, -0.075, 0, 1.015, -10.03, -4, -5.96)
 
-[node name="Prop119" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(0.456, 0, 1.118, 0, 1.207, 0, -1.118, 0, 0.456, -2.30, -4, -9.79)
 
-[node name="Prop120" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(-1.636, 0, -0.323, 0, 1.667, 0, 0.323, 0, -1.636, 11.89, -4, -3.77)
 
-[node name="Prop121" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(0.030, 0, -1.068, 0, 1.069, 0, 1.068, 0, 0.030, 11.16, -4, 1.48)
 
-[node name="Prop122" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(0.322, 0, 1.372, 0, 1.409, 0, -1.372, 0, 0.322, -1.34, -4, -19.71)
 
-[node name="Prop123" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(0.100, 0, 1.173, 0, 1.177, 0, -1.173, 0, 0.100, 0.32, -4, 1.32)
 
-[node name="Prop124" parent="Dressing" instance=ExtResource("17_kit_river_boulder")]
-transform = Transform3D(-0.108, 0, -0.892, 0, 0.899, 0, 0.892, 0, -0.108, 2.78, -4, -19.93)
 
-[node name="Prop125" parent="Dressing" instance=ExtResource("17_kit_river_boulder")]
-transform = Transform3D(0.649, 0, -0.782, 0, 1.016, 0, 0.782, 0, 0.649, 8.04, -4, 2.62)
 
-[node name="Prop126" parent="Dressing" instance=ExtResource("17_kit_river_boulder")]
-transform = Transform3D(-1.114, 0, 0.223, 0, 1.136, 0, -0.223, 0, -1.114, -9.73, -4, -21.02)
 
-[node name="Prop127" parent="Dressing" instance=ExtResource("17_kit_river_boulder")]
-transform = Transform3D(1.032, 0, -1.035, 0, 1.462, 0, 1.035, 0, 1.032, 10.83, -4, -8.84)
 
-[node name="Prop128" parent="Dressing" instance=ExtResource("17_kit_river_boulder")]
-transform = Transform3D(0.827, 0, 0.411, 0, 0.924, 0, -0.411, 0, 0.827, -7.57, -4, -24.15)
 
-[node name="Prop129" parent="Dressing" instance=ExtResource("17_kit_river_boulder")]
-transform = Transform3D(0.642, 0, 1.175, 0, 1.339, 0, -1.175, 0, 0.642, 3.87, -4, -17.80)
 
-[node name="Prop130" parent="Dressing" instance=ExtResource("17_kit_river_boulder")]
-transform = Transform3D(-0.205, 0, 1.021, 0, 1.042, 0, -1.021, 0, -0.205, -6.93, -4, -27.81)
 
-[node name="Prop131" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(-0.516, 0, 1.105, 0, 1.219, 0, -1.105, 0, -0.516, -1.57, 2, -102.64)
 
-[node name="Prop132" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(1.165, 0, 0.022, 0, 1.165, 0, -0.022, 0, 1.165, -0.55, 2, -98.60)
 
-[node name="Prop133" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(0.682, 0, -1.191, 0, 1.372, 0, 1.191, 0, 0.682, -3.12, 2, -105.11)
 
-[node name="Prop134" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(1.347, 0, 0.023, 0, 1.348, 0, -0.023, 0, 1.347, -5.60, 2, -99.72)
 
-[node name="Prop135" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(0.860, 0, 0.412, 0, 0.953, 0, -0.412, 0, 0.860, 1.31, 2, -106.50)
 
-[node name="Prop136" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(1.085, 0, 0.424, 0, 1.165, 0, -0.424, 0, 1.085, -0.20, 2, -99.00)
 
-[node name="Prop137" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(-0.352, 0, -0.954, 0, 1.017, 0, 0.954, 0, -0.352, 2.88, 2, -107.19)
 
-[node name="Prop138" parent="Dressing" instance=ExtResource("16_kit_river_reed")]
-transform = Transform3D(-1.175, 0, 0.104, 0, 1.180, 0, -0.104, 0, -1.175, -2.98, 2, -103.97)
 
-[node name="Prop139" parent="Dressing" instance=ExtResource("17_kit_river_boulder")]
-transform = Transform3D(0.822, 0, -0.026, 0, 0.822, 0, 0.026, 0, 0.822, -5.33, 2, -100.67)
 
-[node name="Prop140" parent="Dressing" instance=ExtResource("17_kit_river_boulder")]
-transform = Transform3D(0.159, 0, -0.850, 0, 0.865, 0, 0.850, 0, 0.159, 4.38, 2, -107.62)
 
-[node name="Prop141" parent="Dressing" instance=ExtResource("17_kit_river_boulder")]
-transform = Transform3D(-0.511, 0, 0.707, 0, 0.872, 0, -0.707, 0, -0.511, -5.34, 2, -103.97)
 
-[node name="Prop142" parent="Dressing" instance=ExtResource("17_kit_river_boulder")]
-transform = Transform3D(-0.531, 0, -0.569, 0, 0.778, 0, 0.569, 0, -0.531, -1.92, 2, -105.30)
 
-[node name="Prop143" parent="Dressing" instance=ExtResource("11_kit_kelp_strand")]
-transform = Transform3D(1.000, 0, -0.715, 0, 1.230, 0, 0.715, 0, 1.000, 6.96, -13, -44.01)
 
-[node name="Prop144" parent="Dressing" instance=ExtResource("11_kit_kelp_strand")]
-transform = Transform3D(-0.569, 0, -0.974, 0, 1.128, 0, 0.974, 0, -0.569, 2.66, -13, -33.53)
 
-[node name="Prop145" parent="Dressing" instance=ExtResource("11_kit_kelp_strand")]
-transform = Transform3D(-0.270, 0, -1.060, 0, 1.094, 0, 1.060, 0, -0.270, 1.98, -13, -35.08)
 
-[node name="Prop146" parent="Dressing" instance=ExtResource("11_kit_kelp_strand")]
-transform = Transform3D(-0.176, 0, 1.500, 0, 1.510, 0, -1.500, 0, -0.176, 10.52, -13, -46.32)
 
-[node name="Prop147" parent="Dressing" instance=ExtResource("11_kit_kelp_strand")]
-transform = Transform3D(-0.835, 0, 0.877, 0, 1.211, 0, -0.877, 0, -0.835, -3.11, -13, -43.62)
 
-[node name="Prop148" parent="Dressing" instance=ExtResource("11_kit_kelp_strand")]
-transform = Transform3D(0.147, 0, -1.286, 0, 1.294, 0, 1.286, 0, 0.147, 2.00, -13, -34.77)
 
-[node name="Prop149" parent="Dressing" instance=ExtResource("11_kit_kelp_strand")]
-transform = Transform3D(-1.136, 0, -0.403, 0, 1.205, 0, 0.403, 0, -1.136, -9.41, -13, -32.46)
 
-[node name="Prop150" parent="Dressing" instance=ExtResource("11_kit_kelp_strand")]
-transform = Transform3D(0.797, 0, -0.822, 0, 1.146, 0, 0.822, 0, 0.797, -3.85, -13, -32.15)
 
-[node name="Prop151" parent="Dressing" instance=ExtResource("11_kit_kelp_strand")]
-transform = Transform3D(-0.065, 0, 1.346, 0, 1.347, 0, -1.346, 0, -0.065, -3.19, -13, -44.78)
 
-[node name="Prop152" parent="Dressing" instance=ExtResource("11_kit_kelp_strand")]
-transform = Transform3D(-1.209, 0, -0.188, 0, 1.224, 0, 0.188, 0, -1.209, 10.72, -13, -42.96)
 
-[node name="Prop153" parent="Dressing" instance=ExtResource("9_kit_rock_cluster")]
-transform = Transform3D(1.033, 0, 0.830, 0, 1.325, 0, -0.830, 0, 1.033, 1.68, -13, -42.57)
 
-[node name="Prop154" parent="Dressing" instance=ExtResource("9_kit_rock_cluster")]
-transform = Transform3D(0.193, 0, -0.882, 0, 0.903, 0, 0.882, 0, 0.193, -4.20, -13, -36.11)
 
-[node name="Prop155" parent="Dressing" instance=ExtResource("9_kit_rock_cluster")]
-transform = Transform3D(0.173, 0, 1.073, 0, 1.086, 0, -1.073, 0, 0.173, 4.91, -13, -43.13)
 
-[node name="Prop156" parent="Dressing" instance=ExtResource("9_kit_rock_cluster")]
-transform = Transform3D(-0.242, 0, -1.113, 0, 1.139, 0, 1.113, 0, -0.242, -3.75, -13, -42.26)
 
-[node name="Prop157" parent="Dressing" instance=ExtResource("9_kit_rock_cluster")]
-transform = Transform3D(1.067, 0, -0.123, 0, 1.074, 0, 0.123, 0, 1.067, 7.90, -13, -39.57)
 
-[node name="Prop158" parent="Dressing" instance=ExtResource("9_kit_rock_cluster")]
-transform = Transform3D(-0.733, 0, 0.699, 0, 1.013, 0, -0.699, 0, -0.733, -4.76, -13, -32.51)
 
-[node name="Prop159" parent="Dressing" instance=ExtResource("10_kit_coral_branch")]
-transform = Transform3D(0.463, 0, 1.384, 0, 1.459, 0, -1.384, 0, 0.463, -3.79, 3, -51.83)
 
-[node name="Prop160" parent="Dressing" instance=ExtResource("10_kit_coral_branch")]
-transform = Transform3D(-0.294, 0, 0.892, 0, 0.939, 0, -0.892, 0, -0.294, 2.67, 3, -57.06)
 
-[node name="Prop161" parent="Dressing" instance=ExtResource("10_kit_coral_branch")]
-transform = Transform3D(0.754, 0, -1.018, 0, 1.267, 0, 1.018, 0, 0.754, 4.63, 3, -54.39)
 
-[node name="Prop162" parent="Dressing" instance=ExtResource("10_kit_coral_branch")]
-transform = Transform3D(-0.928, 0, -0.329, 0, 0.984, 0, 0.329, 0, -0.928, -1.13, 3, -57.32)
 
-[node name="Prop163" parent="Dressing" instance=ExtResource("10_kit_coral_branch")]
-transform = Transform3D(1.417, 0, -0.392, 0, 1.470, 0, 0.392, 0, 1.417, -2.12, 3, -59.69)
 
-[node name="Prop164" parent="Dressing" instance=ExtResource("10_kit_coral_branch")]
-transform = Transform3D(0.584, 0, 0.780, 0, 0.975, 0, -0.780, 0, 0.584, -3.20, 3, -57.91)
 
-[node name="Prop165" parent="Dressing" instance=ExtResource("10_kit_coral_branch")]
-transform = Transform3D(0.892, 0, 0.032, 0, 0.893, 0, -0.032, 0, 0.892, -0.18, 7.4, -63.95)
 
-[node name="Prop166" parent="Dressing" instance=ExtResource("10_kit_coral_branch")]
-transform = Transform3D(-1.015, 0, -0.346, 0, 1.072, 0, 0.346, 0, -1.015, -0.73, 7.4, -65.53)
 
-[node name="Prop167" parent="Dressing" instance=ExtResource("10_kit_coral_branch")]
-transform = Transform3D(-1.063, 0, -0.311, 0, 1.108, 0, 0.311, 0, -1.063, 4.07, 7.4, -65.42)
 
-[node name="Prop168" parent="Dressing" instance=ExtResource("10_kit_coral_branch")]
-transform = Transform3D(0.804, 0, 0.214, 0, 0.832, 0, -0.214, 0, 0.804, -0.05, 7.4, -68.44)
 
-[node name="Prop169" parent="Dressing" instance=ExtResource("12_kit_seagrass_tuft")]
-transform = Transform3D(0.515, 0, 0.936, 0, 1.069, 0, -0.936, 0, 0.515, -3.63, 6.2, -112.27)
 
-[node name="Prop170" parent="Dressing" instance=ExtResource("12_kit_seagrass_tuft")]
-transform = Transform3D(0.017, 0, 1.006, 0, 1.006, 0, -1.006, 0, 0.017, 3.11, 6.2, -109.79)
 
-[node name="Prop171" parent="Dressing" instance=ExtResource("12_kit_seagrass_tuft")]
-transform = Transform3D(0.350, 0, 1.171, 0, 1.222, 0, -1.171, 0, 0.350, -1.33, 6.2, -112.34)
 
-[node name="Prop172" parent="Dressing" instance=ExtResource("12_kit_seagrass_tuft")]
-transform = Transform3D(0.108, 0, -0.972, 0, 0.978, 0, 0.972, 0, 0.108, -0.29, 6.2, -111.35)
 
-[node name="Prop173" parent="Dressing" instance=ExtResource("12_kit_seagrass_tuft")]
-transform = Transform3D(-0.766, 0, 0.611, 0, 0.979, 0, -0.611, 0, -0.766, -2.57, 6.2, -112.21)
 
-[node name="Prop174" parent="Dressing" instance=ExtResource("12_kit_seagrass_tuft")]
-transform = Transform3D(-0.747, 0, -0.724, 0, 1.041, 0, 0.724, 0, -0.747, 0.20, 6.2, -110.72)
 
-[node name="Prop175" parent="Dressing" instance=ExtResource("12_kit_seagrass_tuft")]
-transform = Transform3D(0.863, 0, -1.000, 0, 1.321, 0, 1.000, 0, 0.863, -3.51, 4.2, -127.33)
 
-[node name="Prop176" parent="Dressing" instance=ExtResource("12_kit_seagrass_tuft")]
-transform = Transform3D(0.046, 0, 1.240, 0, 1.241, 0, -1.240, 0, 0.046, 1.26, 4.2, -125.45)
 
-[node name="Prop177" parent="Dressing" instance=ExtResource("12_kit_seagrass_tuft")]
-transform = Transform3D(0.657, 0, -1.207, 0, 1.374, 0, 1.207, 0, 0.657, 0.10, 4.2, -127.18)
 
-[node name="Prop178" parent="Dressing" instance=ExtResource("12_kit_seagrass_tuft")]
-transform = Transform3D(0.435, 0, 0.891, 0, 0.991, 0, -0.891, 0, 0.435, 2.23, 4.2, -126.04)
 
-[node name="Prop179" parent="Dressing" instance=ExtResource("12_kit_seagrass_tuft")]
-transform = Transform3D(-0.022, 0, -0.962, 0, 0.962, 0, 0.962, 0, -0.022, 0.52, 4.2, -123.29)
 
-[node name="Prop180" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(0.110, 0, -1.522, 0, 1.525, 0, 1.522, 0, 0.110, -0.59, 4.2, -131.31)
 
-[node name="Prop181" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(1.221, 0, 0.322, 0, 1.263, 0, -0.322, 0, 1.221, 1.88, 4.2, -134.44)
 
-[node name="Prop182" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(-0.512, 0, -1.464, 0, 1.551, 0, 1.464, 0, -0.512, -2.31, 4.2, -135.54)
 
-[node name="Prop183" parent="Dressing" instance=ExtResource("14_kit_understory_fern")]
-transform = Transform3D(1.365, 0, 0.819, 0, 1.592, 0, -0.819, 0, 1.365, 1.71, 4.2, -136.23)
+
+
+
+
+
+
+
+
+
 

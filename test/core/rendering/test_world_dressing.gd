@@ -48,10 +48,20 @@ func test_dressed_scenes_carry_props_and_the_dressing_is_visual_only() -> void:
 			"%s must carry one Dressing container" % scene_path).is_equal(1)
 		var dressing := containers[0] as Node
 
+		# Props reach a world two ways now, and the count has to see both.
+		# A prop can still be its own scene instance, but the bulk of a
+		# dressed world is SCATTERED: one ScatterField per prop type, drawing
+		# every instance of it in a single call. Counting only scene instances
+		# would have read the converted valley as undressed while it carried
+		# 183 plants — the assertion would have failed for a change that made
+		# the dressing better, and someone would have deleted the assertion.
 		var instanced := 0
 		for node: Node in dressing.get_children():
 			if node.scene_file_path.begins_with("res://assets/environment/"):
 				instanced += 1
+			var field := node as ScatterField
+			if field != null:
+				instanced += field.instance_count()
 		assert_int(instanced).override_failure_message(
 			"%s: a Dressing container with fewer than a dozen props is not "
 			% scene_path + "dressed").is_greater_equal(12)

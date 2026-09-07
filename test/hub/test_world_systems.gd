@@ -558,3 +558,41 @@ func test_req_002_a_lost_tail_slows_the_real_controller_through_the_modifier_int
 		).is_equal_approx(1.0, 0.0001)
 	_root().remove_child(body)
 	body.free()
+
+
+func test_req_014_restoration_reload_opens_real_gate_and_preserves_resources() -> void:
+	var save := SaveSystem.new()
+	save.open_world("save_probe", REGION_MANIFEST)
+	var path := create_temp_dir("world_save").path_join("profile.json")
+	var world := Node3D.new()
+	_root().add_child(world)
+	var systems := WorldSystems.new()
+	systems.world_id = "save_probe"
+	systems.manifest = REGION_MANIFEST
+	systems.save_system = save
+	world.add_child(systems)
+	systems.wire()
+	systems.get_restoration().deliver_resources("reef", 9)
+	systems.get_mods().equip("jet")
+	systems.persist_progress()
+	assert_bool(save.save_to_file(path)).is_true()
+	_teardown(world)
+
+	var reloaded := SaveSystem.new()
+	assert_bool(reloaded.load_from_file(path)).is_true()
+	assert_array(reloaded.get_unlocked_gill_mods()).contains(["jet"])
+	var wall := _barrier("restoration_gate",
+		{"region_id": "reef", "gate_id": "reef_wall"})
+	var second_world := Node3D.new()
+	second_world.add_child(wall)
+	_root().add_child(second_world)
+	var second := WorldSystems.new()
+	second.world_id = "save_probe"
+	second.manifest = REGION_MANIFEST
+	second.save_system = reloaded
+	second_world.add_child(second)
+	second.wire()
+	assert_bool(second.get_restoration().get_region("reef").is_restored()).is_true()
+	assert_int(second.get_restoration().get_region("reef").get_resources()).is_equal(2)
+	assert_bool(wall.visible).is_false()
+	_teardown(second_world)
