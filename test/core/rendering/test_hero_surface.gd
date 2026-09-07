@@ -110,6 +110,14 @@ func _count_triangles(scene: Node) -> int:
 	# 43,320 triangles — the budget assertion would have kept passing while
 	# measuring almost nothing, which is the most dangerous way for a gate to
 	# break. One mesh times its instance count is the real cost.
+	# Visual shells are geometry too. They are cheap — tens of triangles each —
+	# but a counter that cannot see them would let a shell pass that generated
+	# hundreds, and the whole point of the budget is that it notices.
+	for node: Node in scene.find_children("*", "Node3D", true, false):
+		var shell := node as TerrainShell
+		if shell != null:
+			total += shell.shell_triangles()
+
 	for node: Node in scene.find_children("*", "Node3D", true, false):
 		var field := node as ScatterField
 		if field == null:

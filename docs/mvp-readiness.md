@@ -34,7 +34,7 @@ spec decision before replacing the original mod lineup.
 - REQ-022: HUD countdown/recharge processing stays enabled when the hub
   disables its own physics and processing during world play.
 - REQ-015 / REQ-016: the unreferenced Meshy source GLB is preserved under
-  `source_assets/`, outside engine import and game export. Its original name
+  `reference/`, outside engine import and game export. Its original name
   failed the naming check; correcting that exposed its triangle-budget failure.
   The existing runtime hero remains the player scene's asset.
 
@@ -53,7 +53,7 @@ spec decision before replacing the original mod lineup.
 
 ## Asset finding
 
-`source_assets/axolotl/pink_axolotl_2_0.glb` is 73,480,152 bytes with
+`reference/hero/pink_axolotl_2.glb` is 73,480,152 bytes with
 1,933,518 indexed triangles, no skins and no animations. It was not referenced
 by the player scene. This is a source model, not a drop-in animated hero.
 The repository currently allows 60,000 character triangles; the working asset
@@ -89,3 +89,11 @@ Only a Linux export preset is currently present. The setup script pins Godot
 - Headless Godot logs still contain rendering-dummy and resource-cleanup
   diagnostics. No graphical or audio acceptance, Windows build verification,
   or target-PC performance claim is made here.
+
+## Integration update
+
+Merged Claude's terrain-shell work at `4de8113` and preserved its source-model
+location under `reference/hero/`. The hub scene keeps both the terrain shell
+and production save session. `reference/.gdignore` and the export exclusion
+keep reference inputs out of the runtime. The verification counts above
+describe the original patch before this integration update.

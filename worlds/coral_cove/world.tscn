@@ -1,4 +1,4 @@
-[gd_scene load_steps=105 format=3]
+[gd_scene load_steps=111 format=3]
 
 ; CORAL COVE — the first official world (REQ-011), and a full platforming
 ; playthrough: run, jump, swim, dive, boost and climb, with the difficulty
@@ -119,6 +119,12 @@
 [ext_resource type="PackedScene" path="res://assets/prop/runoff_drone/runoff_drone.glb" id="21_fleet_runoff_drone"]
 [ext_resource type="Script" path="res://core/rendering/scatter_field.gd" id="scatter_field_script"]
 [ext_resource type="Material" path="res://core/rendering/materials/forest_canopy.tres" id="forest_canopy_material"]
+[ext_resource type="Script" path="res://core/rendering/terrain_shell.gd" id="terrain_shell_script"]
+[ext_resource type="Material" path="res://core/rendering/terrain/coral_shelf_stone.tres" id="terrain_coral_shelf_stone"]
+[ext_resource type="Material" path="res://core/rendering/terrain/forest_earth.tres" id="terrain_forest_earth"]
+[ext_resource type="Material" path="res://core/rendering/terrain/mossy_stone.tres" id="terrain_mossy_stone"]
+[ext_resource type="Material" path="res://core/rendering/terrain/river_sand.tres" id="terrain_river_sand"]
+[ext_resource type="Material" path="res://core/rendering/terrain/river_stone.tres" id="terrain_river_stone"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_0"]
 size = Vector3(420, 2, 420)
@@ -413,11 +419,17 @@ surface_material_override/0 = ExtResource("7_surface_forest_earth")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, -11.75)
 
 [node name="Mesh" type="MeshInstance3D" parent="RiverBed"]
+visible = false
 mesh = SubResource("BoxMesh_2")
 surface_material_override/0 = ExtResource("6_surface_river_sand")
 
 [node name="Collision" type="CollisionShape3D" parent="RiverBed"]
 shape = SubResource("BoxShape3D_3")
+
+[node name="Shell" type="Node3D" parent="./RiverBed"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_sand")
+shell_seed = 4420
 
 ; Land on BOTH sides of the water. Without it the player sees the edge of the water volume itself -- a transparent slab ending in mid-air -- and a river that ends is not a river. Seven metres of open water separate the banks from the route's platforms, which is twice the jump, so this is scenery the player can look at and never reach.
 
@@ -425,31 +437,49 @@ shape = SubResource("BoxShape3D_3")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 4.6, -21.75)
 
 [node name="Mesh" type="MeshInstance3D" parent="BankWest"]
+visible = false
 mesh = SubResource("BoxMesh_4")
 surface_material_override/0 = ExtResource("7_surface_forest_earth")
 
 [node name="Collision" type="CollisionShape3D" parent="BankWest"]
 shape = SubResource("BoxShape3D_5")
 
+[node name="Shell" type="Node3D" parent="./BankWest"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 8658
+
 [node name="BankEast" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 4.6, -21.75)
 
 [node name="Mesh" type="MeshInstance3D" parent="BankEast"]
+visible = false
 mesh = SubResource("BoxMesh_4")
 surface_material_override/0 = ExtResource("7_surface_forest_earth")
 
 [node name="Collision" type="CollisionShape3D" parent="BankEast"]
 shape = SubResource("BoxShape3D_5")
 
+[node name="Shell" type="Node3D" parent="./BankEast"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 4648
+
 [node name="LagoonFloor" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -14, -40.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="LagoonFloor"]
+visible = false
 mesh = SubResource("BoxMesh_6")
 surface_material_override/0 = ExtResource("6_surface_river_sand")
 
 [node name="Collision" type="CollisionShape3D" parent="LagoonFloor"]
 shape = SubResource("BoxShape3D_7")
+
+[node name="Shell" type="Node3D" parent="./LagoonFloor"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_forest_earth")
+shell_seed = 4330
 
 [node name="Waterway" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.5, -21.75)
@@ -476,11 +506,17 @@ draw_pass_1 = SubResource("SphereMesh_12")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, -1)
 
 [node name="Mesh" type="MeshInstance3D" parent="StartLedge"]
+visible = false
 mesh = SubResource("BoxMesh_13")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="StartLedge"]
 shape = SubResource("BoxShape3D_14")
+
+[node name="Shell" type="Node3D" parent="./StartLedge"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 5902
 
 [node name="Spawn" type="Marker3D" parent="." groups=["spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 2)
@@ -489,11 +525,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 2)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, -9.7)
 
 [node name="Mesh" type="MeshInstance3D" parent="ShelfStep1"]
+visible = false
 mesh = SubResource("BoxMesh_15")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="ShelfStep1"]
 shape = SubResource("BoxShape3D_16")
+
+[node name="Shell" type="Node3D" parent="./ShelfStep1"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 9326
 
 [node name="CheckpointTideStep" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.4, -9.7)
@@ -502,11 +544,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.4, -9.7)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.3, -15.1)
 
 [node name="Mesh" type="MeshInstance3D" parent="ShelfStep2"]
+visible = false
 mesh = SubResource("BoxMesh_17")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="ShelfStep2"]
 shape = SubResource("BoxShape3D_18")
+
+[node name="Shell" type="Node3D" parent="./ShelfStep2"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 9327
 
 [node name="CheckpointTideRise" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.3, -15.1)
@@ -515,11 +563,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.3, -15.1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.1, -21)
 
 [node name="Mesh" type="MeshInstance3D" parent="ShelfStep3"]
+visible = false
 mesh = SubResource("BoxMesh_19")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="ShelfStep3"]
 shape = SubResource("BoxShape3D_20")
+
+[node name="Shell" type="Node3D" parent="./ShelfStep3"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 9328
 
 [node name="CheckpointTideShelf" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.1, -21)
@@ -539,11 +593,17 @@ shape = SubResource("BoxShape3D_23")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.1, -27.4)
 
 [node name="Mesh" type="MeshInstance3D" parent="ShelfLip"]
+visible = false
 mesh = SubResource("BoxMesh_24")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="ShelfLip"]
 shape = SubResource("BoxShape3D_25")
+
+[node name="Shell" type="Node3D" parent="./ShelfLip"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_coral_shelf_stone")
+shell_seed = 1308
 
 [node name="CheckpointShelfLip" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.1, -27.4)
@@ -559,11 +619,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -32)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -35)
 
 [node name="Mesh" type="MeshInstance3D" parent="DiveBar"]
+visible = false
 mesh = SubResource("BoxMesh_26")
 surface_material_override/0 = ExtResource("5_surface_river_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="DiveBar"]
 shape = SubResource("BoxShape3D_27")
+
+[node name="Shell" type="Node3D" parent="./DiveBar"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 4913
 
 [node name="CheckpointLagoonDeep" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, -38)
@@ -574,11 +640,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, -38)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7, -41)
 
 [node name="Mesh" type="MeshInstance3D" parent="RiseWall"]
+visible = false
 mesh = SubResource("BoxMesh_28")
 surface_material_override/0 = ExtResource("5_surface_river_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="RiseWall"]
 shape = SubResource("BoxShape3D_29")
+
+[node name="Shell" type="Node3D" parent="./RiseWall"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 7148
 
 [node name="CheckpointLagoonRise" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -43.5)
@@ -587,31 +659,49 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -43.5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, -46)
 
 [node name="Mesh" type="MeshInstance3D" parent="ShoreStep1"]
+visible = false
 mesh = SubResource("BoxMesh_30")
 surface_material_override/0 = ExtResource("6_surface_river_sand")
 
 [node name="Collision" type="CollisionShape3D" parent="ShoreStep1"]
 shape = SubResource("BoxShape3D_31")
 
+[node name="Shell" type="Node3D" parent="./ShoreStep1"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_sand")
+shell_seed = 9458
+
 [node name="ShoreStep2" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -48.4)
 
 [node name="Mesh" type="MeshInstance3D" parent="ShoreStep2"]
+visible = false
 mesh = SubResource("BoxMesh_32")
 surface_material_override/0 = ExtResource("6_surface_river_sand")
 
 [node name="Collision" type="CollisionShape3D" parent="ShoreStep2"]
 shape = SubResource("BoxShape3D_33")
 
+[node name="Shell" type="Node3D" parent="./ShoreStep2"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_sand")
+shell_seed = 9459
+
 [node name="CoveShore" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -56)
 
 [node name="Mesh" type="MeshInstance3D" parent="CoveShore"]
+visible = false
 mesh = SubResource("BoxMesh_34")
 surface_material_override/0 = ExtResource("6_surface_river_sand")
 
 [node name="Collision" type="CollisionShape3D" parent="CoveShore"]
 shape = SubResource("BoxShape3D_35")
+
+[node name="Shell" type="Node3D" parent="./CoveShore"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_sand")
+shell_seed = 6302
 
 [node name="CheckpointCoveShore" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -52)
@@ -627,11 +717,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -60)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.2, -66)
 
 [node name="Mesh" type="MeshInstance3D" parent="CoralWall"]
+visible = false
 mesh = SubResource("BoxMesh_36")
 surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="CoralWall"]
 shape = SubResource("BoxShape3D_37")
+
+[node name="Shell" type="Node3D" parent="./CoralWall"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 8896
 
 [node name="CheckpointWallTop" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.4, -65)
@@ -675,11 +771,17 @@ shape = SubResource("BoxShape3D_42")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, -74.1)
 
 [node name="Mesh" type="MeshInstance3D" parent="GrottoPillar1"]
+visible = false
 mesh = SubResource("BoxMesh_43")
 surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GrottoPillar1"]
 shape = SubResource("BoxShape3D_44")
+
+[node name="Shell" type="Node3D" parent="./GrottoPillar1"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_coral_shelf_stone")
+shell_seed = 9895
 
 [node name="CheckpointGrottoOne" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.4, -74.1)
@@ -688,21 +790,33 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.4, -74.1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 6.4, -79.05)
 
 [node name="Mesh" type="MeshInstance3D" parent="GrottoPillar2"]
+visible = false
 mesh = SubResource("BoxMesh_45")
 surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GrottoPillar2"]
 shape = SubResource("BoxShape3D_46")
 
+[node name="Shell" type="Node3D" parent="./GrottoPillar2"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_coral_shelf_stone")
+shell_seed = 9896
+
 [node name="GrottoPillar3" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.6, -83.75)
 
 [node name="Mesh" type="MeshInstance3D" parent="GrottoPillar3"]
+visible = false
 mesh = SubResource("BoxMesh_45")
 surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GrottoPillar3"]
 shape = SubResource("BoxShape3D_46")
+
+[node name="Shell" type="Node3D" parent="./GrottoPillar3"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_coral_shelf_stone")
+shell_seed = 9897
 
 [node name="StrayHook" type="Area3D" parent="." groups=["hazard"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.4, -83.7)
@@ -723,21 +837,33 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.6, -83.7)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 7.6, -88.45)
 
 [node name="Mesh" type="MeshInstance3D" parent="GrottoPillar4"]
+visible = false
 mesh = SubResource("BoxMesh_45")
 surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GrottoPillar4"]
 shape = SubResource("BoxShape3D_46")
 
+[node name="Shell" type="Node3D" parent="./GrottoPillar4"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_coral_shelf_stone")
+shell_seed = 9898
+
 [node name="GrottoLanding" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -94.9)
 
 [node name="Mesh" type="MeshInstance3D" parent="GrottoLanding"]
+visible = false
 mesh = SubResource("BoxMesh_49")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GrottoLanding"]
 shape = SubResource("BoxShape3D_50")
+
+[node name="Shell" type="Node3D" parent="./GrottoLanding"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 7715
 
 [node name="CheckpointGrottoLanding" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -94)
@@ -748,11 +874,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -94)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 8, -80)
 
 [node name="Mesh" type="MeshInstance3D" parent="ShrimpLedge"]
+visible = false
 mesh = SubResource("BoxMesh_51")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="ShrimpLedge"]
 shape = SubResource("BoxShape3D_52")
+
+[node name="Shell" type="Node3D" parent="./ShrimpLedge"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 2860
 
 [node name="LanternShrimp" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 9.8, -80)
@@ -795,11 +927,17 @@ shape = SubResource("BoxShape3D_41")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -103.25)
 
 [node name="Mesh" type="MeshInstance3D" parent="GorgeBed"]
+visible = false
 mesh = SubResource("BoxMesh_57")
 surface_material_override/0 = ExtResource("5_surface_river_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GorgeBed"]
 shape = SubResource("BoxShape3D_58")
+
+[node name="Shell" type="Node3D" parent="./GorgeBed"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_sand")
+shell_seed = 445
 
 ; The slot walls, set SIX metres back from the landing's edge rather than two. Close in they were a bank a good jump could reach, which is a bypass around the whole swim; out here they are unreachable and, being unreachable, no longer need to be so tall that they hide the water from the camera.
 
@@ -807,21 +945,33 @@ shape = SubResource("BoxShape3D_58")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.5, 5.8, -103.2)
 
 [node name="Mesh" type="MeshInstance3D" parent="GorgeWest"]
+visible = false
 mesh = SubResource("BoxMesh_59")
 surface_material_override/0 = ExtResource("5_surface_river_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GorgeWest"]
 shape = SubResource("BoxShape3D_60")
 
+[node name="Shell" type="Node3D" parent="./GorgeWest"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 8240
+
 [node name="GorgeEast" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.5, 5.8, -103.2)
 
 [node name="Mesh" type="MeshInstance3D" parent="GorgeEast"]
+visible = false
 mesh = SubResource("BoxMesh_59")
 surface_material_override/0 = ExtResource("5_surface_river_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GorgeEast"]
 shape = SubResource("BoxShape3D_60")
+
+[node name="Shell" type="Node3D" parent="./GorgeEast"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 4230
 
 ; Surface at 7.6, half a metre below the landing the player steps off: they WADE in rather than plunge, so the grammar switch is a decision and not an accident. It spans the whole slot, so stepping off the landing sideways is a swim and not a death -- this is the forgiving half of the level.
 
@@ -850,11 +1000,17 @@ draw_pass_1 = SubResource("SphereMesh_12")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.8, -103)
 
 [node name="Mesh" type="MeshInstance3D" parent="GorgeArch"]
+visible = false
 mesh = SubResource("BoxMesh_64")
 surface_material_override/0 = ExtResource("5_surface_river_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="GorgeArch"]
 shape = SubResource("BoxShape3D_65")
+
+[node name="Shell" type="Node3D" parent="./GorgeArch"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 7924
 
 [node name="CheckpointGorgeEntry" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, -99.5)
@@ -868,11 +1024,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -104.5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.2, -110.6)
 
 [node name="Mesh" type="MeshInstance3D" parent="SeedTerrace1"]
+visible = false
 mesh = SubResource("BoxMesh_66")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="SeedTerrace1"]
 shape = SubResource("BoxShape3D_67")
+
+[node name="Shell" type="Node3D" parent="./SeedTerrace1"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 7459
 
 [node name="RegenStation" type="Area3D" parent="." groups=["regen_station"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -109.2)
@@ -915,11 +1077,17 @@ shape = SubResource("BoxShape3D_23")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 5.6, -111.75)
 
 [node name="Mesh" type="MeshInstance3D" parent="SeedPillarA"]
+visible = false
 mesh = SubResource("BoxMesh_70")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="SeedPillarA"]
 shape = SubResource("BoxShape3D_71")
+
+[node name="Shell" type="Node3D" parent="./SeedPillarA"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_coral_shelf_stone")
+shell_seed = 3483
 
 [node name="Seed3" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 7.4, -111.7)
@@ -936,11 +1104,17 @@ shape = SubResource("BoxShape3D_23")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.2, -117.8)
 
 [node name="Mesh" type="MeshInstance3D" parent="SeedTerrace2"]
+visible = false
 mesh = SubResource("BoxMesh_66")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="SeedTerrace2"]
 shape = SubResource("BoxShape3D_67")
+
+[node name="Shell" type="Node3D" parent="./SeedTerrace2"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 7460
 
 [node name="CheckpointSeedTwo" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, -117)
@@ -960,11 +1134,17 @@ shape = SubResource("BoxShape3D_23")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 4.6, -118.25)
 
 [node name="Mesh" type="MeshInstance3D" parent="SeedPillarB"]
+visible = false
 mesh = SubResource("BoxMesh_70")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="SeedPillarB"]
 shape = SubResource("BoxShape3D_71")
+
+[node name="Shell" type="Node3D" parent="./SeedPillarB"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_coral_shelf_stone")
+shell_seed = 3484
 
 [node name="Seed6" type="Area3D" parent="." groups=["collectible"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 6.4, -118.2)
@@ -995,11 +1175,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, -119.6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, -126)
 
 [node name="Mesh" type="MeshInstance3D" parent="SeedTerrace3"]
+visible = false
 mesh = SubResource("BoxMesh_72")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="SeedTerrace3"]
 shape = SubResource("BoxShape3D_73")
+
+[node name="Shell" type="Node3D" parent="./SeedTerrace3"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 7461
 
 [node name="CheckpointSeedThree" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.2, -124.5)
@@ -1025,21 +1211,33 @@ metadata/region_id = "coral_shelf"
 metadata/gate_id = "shelf_wall"
 
 [node name="Mesh" type="MeshInstance3D" parent="ShelfWall"]
+visible = false
 mesh = SubResource("BoxMesh_74")
 surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="ShelfWall"]
 shape = SubResource("BoxShape3D_75")
 
+[node name="Shell" type="Node3D" parent="./ShelfWall"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_river_stone")
+shell_seed = 9659
+
 [node name="FinishLedge" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, -133.25)
 
 [node name="Mesh" type="MeshInstance3D" parent="FinishLedge"]
+visible = false
 mesh = SubResource("BoxMesh_76")
 surface_material_override/0 = ExtResource("4_surface_mossy_stone")
 
 [node name="Collision" type="CollisionShape3D" parent="FinishLedge"]
 shape = SubResource("BoxShape3D_77")
+
+[node name="Shell" type="Node3D" parent="./FinishLedge"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("terrain_mossy_stone")
+shell_seed = 4522
 
 [node name="Finish" type="Area3D" parent="." groups=["finish_volume"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.2, -133)

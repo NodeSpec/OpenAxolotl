@@ -16,3 +16,11 @@ its own, and packing it would ship art the player never sees.
     pink blotching all trace to this image. It was chosen deliberately over
     a realistic-salamander reading; the reasoning is recorded in
     `assets/character/axolotl/provenance.json` and in REQ-041.
+
+  * `hero/pink_axolotl_2.glb` — the maintainer's Meshy-generated hero (added
+    2026-09-07). STAGED HERE RATHER THAN SHIPPED, because it cannot pass the
+    Asset Contract as it stands: 1,933,518 triangles against the character
+    budget of 60,000, no skeleton and no animation clips, and one PBR material
+    where the game client dresses by five named roles. It needs a decimate,
+    a re-rig and a bake before it can move to `assets/character/axolotl/`.
+    Nothing under `reference/` ships, so it can sit here safely until then.
