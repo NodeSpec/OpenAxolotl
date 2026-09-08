@@ -14,8 +14,9 @@ JPEG maps — the same shape the hero arrived in. Measured on arrival:
 | `Coral_Cove_River_Bank.glb` | 2,002,284 | 16.1 MB | environment, 200,000 |
 | `Dredger_Rustbreaker.glb` | 1,985,600 | 16.0 MB | **prop, 10,000** |
 | `Hookline.glb` | 1,984,122 | 18.3 MB | **prop, 10,000** |
+| `Netgrin_Salvage_Bot.glb` | 1,972,184 | 15.0 MB | **prop, 10,000** |
 
-The two props are roughly two hundred times their budget; the environment
+The three props are roughly two hundred times their budget; the environment
 pieces about ten times. That is not a complaint about the models — it is what
 an image-to-3D export is, and the repository has a pipeline for exactly this:
 
@@ -40,5 +41,9 @@ geometry whose terms are someone else's. Either the terms permit it, or these
 are replaced by in-repo generated equivalents whose output is Apache-2.0 with
 the rest of the project.
 
-**Not delivered:** the coral branch and the netbot were named in the upload but
-did not arrive; those two directories still hold only their generated versions.
+The netbot arrived separately, already texture-optimised by Meshy — which
+reduces the maps, not the mesh: it is still 1.97 million triangles, so it lands
+here with the rest.
+
+**Not delivered:** the coral branch was named in the upload but did not arrive;
+that directory still holds only its generated version.
