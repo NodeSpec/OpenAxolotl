@@ -33,6 +33,17 @@ const PLAYER_GROUP := "player"
 ## geometry that is not supposed to exist right now.
 const WORLD_OFFSET := Vector3(0.0, 0.0, -200.0)
 
+## How far below the lagoon the player may fall before the hub takes them
+## back. See _recover_fallen_player.
+##
+## Forty metres, which is roughly two seconds of falling: far enough below the
+## lagoon floor that no jump, dive or knockback reaches it by accident, close
+## enough that a player who has clearly left the level is not left watching
+## the sky for long. It is the value dev/fall_guard.gd used while it was
+## standing in for this, kept so the behaviour a person tested by hand is the
+## behaviour that shipped.
+const RECOVERY_FLOOR_Y := -40.0
+
 ## The scanned directory. Exported so a test scene can point the same hub at a
 ## scratch directory — the hub code itself must work against any of them.
 @export var worlds_dir: String = WorldRegistry.DEFAULT_WORLDS_DIR
@@ -303,10 +314,74 @@ func _set_hub_active(active: bool) -> void:
 		else Node.PROCESS_MODE_DISABLED
 
 
+## Take the player back to the lagoon when they leave it downwards.
+##
+## THE HUB HAD NO FLOOR AND FALLING OUT OF IT WAS UNRECOVERABLE. Both official
+## worlds carry a pit volume — a 600x600 and a 400x400 kill slab under the
+## whole playable area — so a fall there costs a life and returns the player
+## to their last checkpoint, which is REQ-003 working exactly as designed.
+## The hub carries no pit volume, owns no LifeSystem, and had nothing else
+## watching: measured, the player fell 583 units in twenty seconds and was
+## still accelerating, with no way back except quitting the game.
+##
+## It returns rather than costing a life on purpose. The hub is not a
+## challenge space: it holds the portals, the save, and no hazards, so there
+## is nothing here to be punished for failing. A lives cost would also have
+## nowhere to go — the LifeSystem belongs to a loaded world, and in the hub
+## there is not one to charge.
+##
+## Skipped entirely while a world is loaded, because that world's pit volume
+## and checkpoint graph own the fall and are better at it: they charge a life
+## and return the player to progress, which is the designed consequence.
+func _recover_fallen_player() -> void:
+	if _active_world != null:
+		return
+	var player := get_tree().get_first_node_in_group(PLAYER_GROUP) as Node3D
+	if player == null or player.global_position.y >= RECOVERY_FLOOR_Y:
+		return
+	_move_player_to(_hub_spawn_position())
+
+	# HELD KEYS ARE DROPPED HERE AND NOWHERE ELSE. The walk that carried
+	# someone off an edge is still being pressed when they land back on it, so
+	# a recovery that keeps the input queue sends them straight back over —
+	# which is what dev/fall_guard.gd found and cleared. It belongs to the
+	# FALL and not to _move_player_to, because that function also runs on
+	# world entry, where the player pressed forward on purpose and expects to
+	# keep walking: clearing it there froze the hub walk probe at its spawn
+	# with the world entered and the level never completed.
+	var body := player as AxolotlBody
+	if body != null and body.get_input_system() != null:
+		body.get_input_system().clear()
+
+
+func _physics_process(_delta: float) -> void:
+	_recover_fallen_player()
+
+
+## Put the player somewhere, and make sure they ARRIVE there at rest.
+##
+## Position alone is not enough and this used to set only position. A body
+## teleported mid-fall keeps its downward velocity, so it arrives at the spawn
+## marker already moving and is off the edge again within a second — the
+## respawn becomes the next fall. Every teleport the hub does wants this:
+## arriving at a world's spawn point already falling is no better than
+## arriving at the lagoon's.
+##
+## The controller is told too, not just the body. It integrates its own
+## velocity and tracks its own position, so a body moved out from under it
+## would be dragged back toward where the controller still thinks it is.
 func _move_player_to(position_3d: Vector3) -> void:
 	var player := get_tree().get_first_node_in_group(PLAYER_GROUP)
 	if player is Node3D:
 		(player as Node3D).global_position = position_3d
+	var body := player as AxolotlBody
+	if body == null:
+		return
+	body.velocity = Vector3.ZERO
+	var controller := body.get_controller()
+	if controller != null:
+		controller.set_velocity(Vector3.ZERO)
+		controller.sync_body_position(position_3d)
 
 
 func _hub_spawn_position() -> Vector3:
