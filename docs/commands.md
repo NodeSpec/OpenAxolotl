@@ -67,6 +67,7 @@ python tools/static_gate.py --target .
 commands and merges their exit codes. Run any of them alone while iterating
 (`godot` here is `.toolchain/godot` or your own pinned binary):
 
+<!-- local-suites -->
 ```sh
 python3 -m unittest discover -s tools -p 'test_*.py'
 godot --headless --audio-driver Dummy --path . --script test/run_tests.gd
@@ -77,6 +78,20 @@ godot --headless --audio-driver Dummy --path . --script test/hub/run_fall_recove
 godot --headless --audio-driver Dummy --path . --script test/worlds/run_coral_walk.gd
 godot --headless --audio-driver Dummy --path . --script test/worlds/run_bubble_walk.gd
 godot --headless --audio-driver Dummy --path . --script test/perf/run_perf_gate.gd
+```
+
+## World authoring
+
+Four more commands rewrite a level's art without touching its game — the
+terrain sheller, the prop scatterer, the dressing filler, and the gameplay
+snapshot that proves the other three changed nothing. They are deliberate
+passes, not part of `oax-test`, and they have their own page:
+[docs/world-authoring.md](world-authoring.md).
+
+```sh
+oax-snapshot --target worlds/coral_cove > /tmp/before.json
+oax-fill --target worlds/coral_cove
+oax-snapshot --target worlds/coral_cove --compare /tmp/before.json
 ```
 
 ## Toolchain pin

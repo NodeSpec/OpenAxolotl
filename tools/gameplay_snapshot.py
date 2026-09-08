@@ -198,7 +198,7 @@ def compare(now: dict, before: dict) -> list:
     return findings
 
 
-def main(argv: list) -> int:
+def main(argv: list | None = None) -> int:
     parser = argparse.ArgumentParser(prog="oax-snapshot")
     parser.add_argument("--target", required=True)
     parser.add_argument("--compare", help="a snapshot JSON to diff against")

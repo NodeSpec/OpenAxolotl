@@ -84,6 +84,15 @@ def _suites(godot: str | None) -> list[dict]:
                      "--script", "test/hub/run_hub_walk.gd"],
         },
         {
+            # Falling out of the hub, proven by doing it. Written with the
+            # fix and then left out of this table, so the one suite that
+            # guards an unrecoverable soft-lock ran nowhere but by hand.
+            "id": "hub-fall-recovery",
+            "file": "test/hub/run_fall_recovery.gd",
+            "argv": [godot, *GODOT_FLAGS,
+                     "--script", "test/hub/run_fall_recovery.gd"],
+        },
+        {
             "id": "coral-walk",
             "file": "test/worlds/run_coral_walk.gd",
             "argv": [godot, *GODOT_FLAGS,

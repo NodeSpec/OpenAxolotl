@@ -28,6 +28,8 @@ available -- never silently.
 
 from __future__ import annotations
 
+import ast
+import glob
 import json
 import os
 import re
@@ -58,6 +60,14 @@ TOOL_ENUM = ("level-contract-checker", "asset-contract-validator",
 def _read(path: str) -> str:
     with open(path, "r", encoding="utf-8") as handle:
         return handle.read()
+
+
+def _entry_points() -> dict:
+    """The console commands pyproject installs, as {name: (module, attr)}."""
+    found = re.findall(r'^(oax-[\w-]+)\s*=\s*"([\w.]+):(\w+)"',
+                       _read(os.path.join(REPO, "pyproject.toml")),
+                       re.MULTILINE)
+    return {name: (module, attr) for name, module, attr in found}
 
 
 def fenced_block(doc: str, marker: str) -> list[str]:
@@ -105,6 +115,28 @@ class CommandParity(unittest.TestCase):
                 matches,
                 f"documented command not run character-identically by CI:\n"
                 f"  {command}")
+
+    def test_req_018_every_documented_suite_is_one_the_harness_runs(self) -> None:
+        """The other parity, and the one that had already slipped.
+
+        `oax-test` owns no tests: it runs exactly the commands a contributor
+        runs by hand, which is what makes a laptop and a CI job the same
+        check. That only holds while the two lists agree — and they had
+        stopped. test/hub/run_fall_recovery.gd was written with the hub floor
+        fix, documented, and left out of the harness table, so the one suite
+        guarding an unrecoverable soft-lock ran nowhere but by hand.
+        """
+        documented = [command for command
+                      in fenced_block(_read(COMMANDS_DOC), "local-suites")
+                      if "--script" in command]
+        self.assertGreaterEqual(len(documented), 8,
+                                "anti-vacuity: the doc must list the suites")
+        harness = {suite["file"] for suite in oax_test._suites("godot")}
+        for command in documented:
+            script = command.split("--script", 1)[1].strip()
+            self.assertIn(script, harness,
+                          "docs/commands.md documents `%s`, which oax-test "
+                          "does not run" % script)
 
     def test_req_018_ci_runs_no_validator_that_is_not_documented(self) -> None:
         # The other direction: a check that exists only in YAML cannot be run
@@ -162,18 +194,52 @@ class ValidatorEnvelopes(unittest.TestCase):
             capture_output=True, text=True, cwd=REPO)
 
     def test_req_018_entry_points_resolve_to_real_callables(self) -> None:
-        # CI invokes the console names; each must map to an importable main.
+        # CI invokes the console names; each must map to an importable main
+        # that a console script can actually call -- that is, one whose argv
+        # is optional, since an entry point is invoked with no arguments.
         import importlib
-        with open(os.path.join(REPO, "pyproject.toml"), encoding="utf-8") as f:
-            scripts = re.findall(r'^(oax-[\w-]+)\s*=\s*"([\w.]+):(\w+)"',
-                                 f.read(), re.MULTILINE)
-        self.assertEqual(
-            sorted(name for name, _, _ in scripts),
-            ["oax-asset-check", "oax-level-check", "oax-static-gate",
-             "oax-test"])
-        for _, module_name, attr in scripts:
+        import inspect
+        scripts = _entry_points()
+        self.assertLessEqual(
+            {"oax-asset-check", "oax-level-check", "oax-static-gate",
+             "oax-test"},
+            set(scripts),
+            "the four validator commands CI runs must stay installed")
+        for name, (module_name, attr) in sorted(scripts.items()):
             module = importlib.import_module(module_name)
-            self.assertTrue(callable(getattr(module, attr)))
+            main = getattr(module, attr)
+            self.assertTrue(callable(main), name)
+            required = [p for p in inspect.signature(main).parameters.values()
+                        if p.default is inspect.Parameter.empty]
+            self.assertEqual(required, [],
+                             "%s would fail as a console script: %s takes a "
+                             "required argument" % (name, module_name))
+
+    def test_req_018_every_command_a_tool_documents_is_a_command(self) -> None:
+        """Two-directional, like the doc/workflow parity above it.
+
+        Seven tools named an `oax-*` command in their own docstring while
+        installing the package gave you four. `oax-shell`, `oax-fill`,
+        `oax-snapshot`, `oax-scatter`, `oax-refine`, `oax-decimate` and
+        `oax-rig` were documented commands that did not exist, which is worse
+        than an undocumented tool: the reader has no way to tell.
+        """
+        installed = _entry_points()
+        for path in sorted(glob.glob(os.path.join(REPO, "tools", "*.py"))):
+            if os.path.basename(path).startswith("test_"):
+                continue
+            docstring = ast.get_docstring(ast.parse(_read(path))) or ""
+            for claimed in set(re.findall(r"^\s{4}(oax-[\w-]+)", docstring,
+                                          re.MULTILINE)):
+                self.assertIn(
+                    claimed, installed,
+                    "%s documents `%s`, which pyproject.toml does not install"
+                    % (os.path.relpath(path, REPO), claimed))
+                module = installed[claimed][0].split(".")[-1]
+                self.assertEqual(
+                    module, os.path.splitext(os.path.basename(path))[0],
+                    "`%s` is installed from a different module than the one "
+                    "that documents it" % claimed)
 
     def test_req_018_level_checker_emits_the_shared_envelope(self) -> None:
         clean = self.run_tool("level_contract_checker.py",
@@ -217,11 +283,21 @@ class ValidatorEnvelopes(unittest.TestCase):
         self.assert_envelope(payload, "test-harness")
         # "import" warms the engine cache first: a clean checkout has no
         # .godot/ directory, and every imported asset resolves through it.
-        self.assertEqual(
-            payload["suitesRun"],
-            ["import", "python-unit", "gdunit", "smoke-greybox",
-             "template-walk", "hub-walk", "coral-walk", "bubble-walk",
-             "perf-gate"])
+        #
+        # The rest is DERIVED from the harness table rather than restated
+        # here. Restating it looked stricter and was weaker: this list sat
+        # two suites out of date — it never learnt perf-gate-coral — and said
+        # nothing, because it is skipped both under the harness and without
+        # an engine, so it only runs when somebody sets $OAX_GODOT by hand.
+        expected = ["import"] + [suite["id"]
+                                 for suite in oax_test._suites("godot")]
+        self.assertEqual(payload["suitesRun"], expected)
+        for required in ("python-unit", "gdunit", "hub-walk",
+                         "hub-fall-recovery", "coral-walk", "bubble-walk",
+                         "perf-gate"):
+            self.assertIn(required, expected,
+                          "anti-vacuity: the harness must still run %s"
+                          % required)
 
     def test_req_018_harness_refuses_rather_than_skipping_godot(self) -> None:
         # No engine must be exit 2 (invocation error), never a hollow pass.

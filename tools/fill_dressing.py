@@ -33,9 +33,12 @@ WHERE IT PUTS THINGS, and every rule is about not ruining the level:
   * NEVER within a clearance of an authored landmark, so the composition
     beats keep the silhouette they were placed for rather than being crowded
     out by filler.
-  * DETERMINISTICALLY. Seeded per platform by name, so re-running produces a
-    byte-identical scene and a diff means someone changed the level, not that
-    the tool ran again.
+  * DETERMINISTICALLY, AND RE-RUNNABLY. Seeded per platform by name, and each
+    run first removes the fields a previous run left, so running twice
+    produces a byte-identical scene. A diff means someone changed the level,
+    not that the tool ran again. Getting this wrong is not cosmetic: without
+    the strip, a second run appended a second set of fields under the same
+    names and doubled the filler in the scene.
 
 It writes no gameplay. tools/gameplay_snapshot.py is how that gets proven
 rather than asserted, and the tests run it either side of this.
@@ -119,7 +122,22 @@ MAX_PER_PLATFORM = 14
 ## proportionally, so the mix survives: the valley gets sparser, not patchier.
 DEFAULT_TRIANGLE_BUDGET = 18000
 
+## The fewest instances a prop keeps while it is still in the mix. Thinning
+## proportionally takes a prop that only ever placed six down to one, and one
+## fern in a valley reads as a mistake rather than as ground cover.
+MIN_PER_PROP = 4
+
 VECTOR_RE = re.compile(r"Vector3\(([^)]*)\)")
+
+## What a previous run of THIS tool left behind: its field nodes, and the kit
+## resources they point at. Both are matched by the shapes the tool itself
+## writes, so nothing hand-authored can be caught by either pattern.
+FIELD_RE = re.compile(
+    r'^\[node name="Filler[A-Za-z0-9]+Field" type="Node3D" '
+    r'parent="Dressing"\]$')
+FILL_KIT_RE = re.compile(
+    r'^\[ext_resource type="PackedScene" path="[^"]+" '
+    r'id="fill_kit_[A-Za-z0-9_]+"\]$')
 
 
 def _floats(raw: str) -> list:
@@ -163,7 +181,13 @@ def read_scene(path: str) -> tuple:
 
         if any(group in node["groups"] for group in GAMEPLAY_GROUPS):
             gameplay.append(spot)
-        if parent == "Dressing":
+        # A LANDMARK IS AN INSTANCE, which is what separates the two kinds of
+        # dressing at read time as well as at write time. Every child of
+        # Dressing used to count, which swept up the scatter fields — nodes
+        # with no transform of their own, so they read as a landmark AT THE
+        # ORIGIN and punched a hole in the filler there, growing by six every
+        # time the tool was run.
+        if parent == "Dressing" and node["instance"]:
             landmarks.append(spot)
 
         shape = node["properties"].get("shape", "")
@@ -251,22 +275,41 @@ def triangles_of(path: str) -> int:
         return 0
 
 
+def cost_of(placements: dict, costs: dict) -> int:
+    return sum(costs.get(prop, 0) * len(rows)
+               for prop, rows in placements.items())
+
+
 def thin_to_budget(placements: dict, budget: int) -> tuple:
     """Drop instances until the filler fits, keeping the mix."""
     costs = {name: triangles_of(path) for name, path, _d, _s in PALETTE}
-    total = sum(costs.get(prop, 0) * len(rows)
-                for prop, rows in placements.items())
+    total = cost_of(placements, costs)
     if total <= budget or total == 0:
         return placements, total, total
+
+    # Proportional first, so the valley gets sparser rather than patchier.
     share = float(budget) / float(total)
     thinned: dict = {}
     for prop, rows in placements.items():
-        keep = max(4, int(len(rows) * share)) if rows else 0
+        keep = max(MIN_PER_PROP, int(len(rows) * share)) if rows else 0
         if keep:
             thinned[prop] = rows[:keep]
-    after = sum(costs.get(prop, 0) * len(rows)
-                for prop, rows in thinned.items())
-    return thinned, total, after
+
+    # THEN STRICTLY, because the floor above can leave the result over budget
+    # on its own and a budget that is not met is not a budget: asked for 3,000
+    # triangles this returned 4,560 and called it done, which is exactly the
+    # overspend the ceiling exists to prevent. The dearest prop gives up
+    # instances — and finally its place in the mix — until the fill fits.
+    while cost_of(thinned, costs) > budget and thinned:
+        dearest = max(sorted(thinned),
+                      key=lambda prop: costs.get(prop, 0) * len(thinned[prop]))
+        remaining = thinned[dearest][:-1]
+        if remaining:
+            thinned[dearest] = remaining
+        else:
+            del thinned[dearest]
+
+    return thinned, total, cost_of(thinned, costs)
 
 
 def field_blocks(placements: dict) -> tuple:
@@ -308,7 +351,41 @@ def field_blocks(placements: dict) -> tuple:
     return blocks, summary, resources
 
 
+def strip_previous(text: str) -> str:
+    """Undo the last run, so this one is a rewrite rather than an addition.
+
+    Only the tool's own output is matched — `Filler<Prop>Field` nodes under
+    Dressing and `fill_kit_*` resources — so an authored landmark, a hand-
+    placed prop or a field written by tools/scatter_props.py all survive.
+
+    It is the exact inverse of apply(), down to the whitespace: apply writes a
+    blank line and then each field, so this drops each field and the blank
+    line before it, and nothing else. That is what makes a second run produce
+    the same bytes as the first rather than the same bytes plus formatting.
+    """
+    out: list = []
+    skipping = False
+    for line in text.split("\n"):
+        if skipping:
+            # A property line of the field being removed. Its own trailing
+            # blank is not part of it and survives — the next field header
+            # will claim it, or it stays as the separator it always was.
+            if line.strip() != "" and not line.startswith("["):
+                continue
+            skipping = False
+        if FIELD_RE.match(line):
+            if out and out[-1].strip() == "":
+                out.pop()
+            skipping = True
+            continue
+        if FILL_KIT_RE.match(line):
+            continue
+        out.append(line)
+    return "\n".join(out)
+
+
 def apply(text: str, blocks: list, resources: list) -> str:
+    text = strip_previous(text)
     lines = text.split("\n")
     insert_at = None
     for index, line in enumerate(lines):
@@ -348,7 +425,7 @@ def apply(text: str, blocks: list, resources: list) -> str:
     return _bump_load_steps(text)
 
 
-def main(argv: list) -> int:
+def main(argv: list | None = None) -> int:
     parser = argparse.ArgumentParser(prog="oax-fill")
     parser.add_argument("--target", required=True, help="a world directory")
     parser.add_argument("--dry-run", action="store_true")

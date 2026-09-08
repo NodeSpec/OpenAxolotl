@@ -22,6 +22,16 @@ collision, so anything the player can stand on or bump into has to stay a real
 node. The kit's props are scenery and carry no colliders, which is what makes
 them eligible in the first place.
 
+AND IT WILL NOT RUN TWICE, which is the rule that keeps a composed level
+composed. Once a world carries scatter fields, the individual instances still
+under Dressing are the ones somebody KEPT: the authored landmarks REQ-011 asks
+for, one per traversal beat, deliberately left legible while the filler around
+them went into MultiMeshes (tools/fill_dressing.py writes that filler). A
+second run cannot tell a kept landmark from an unconverted prop, and it ate
+them — twenty-four named clusters in Coral Cove became eight anonymous fields,
+exit 0, no warning. So a scene that already has fields is refused unless
+--collapse-landmarks says that is really what you meant.
+
 Exit codes are the contract with CI and with agents:
     0  converted (or, with --dry-run, would convert cleanly)
     1  the world does not conform well enough to convert safely
@@ -102,7 +112,7 @@ def prop_key(path: str) -> str:
     return os.path.splitext(os.path.basename(path))[0]
 
 
-def convert(text: str) -> tuple[str, dict, list]:
+def convert(text: str, collapse_landmarks: bool = False) -> tuple[str, dict, list]:
     resources, props = parse_scene(text)
     findings: list = []
 
@@ -112,6 +122,16 @@ def convert(text: str) -> tuple[str, dict, list]:
             "scatter.no_dressing",
             "no prop instances found under a 'Dressing' parent; nothing to "
             "convert (this tool only rewrites scenery, never level geometry)"))
+        return text, {}, findings
+
+    if SCATTER_SCRIPT in text and not collapse_landmarks:
+        findings.append(Finding(
+            "scatter.landmarks_kept",
+            "this world already carries scatter fields, so the %d instance(s) "
+            "still under Dressing are the authored landmarks somebody kept "
+            "(REQ-011). Collapsing them would erase the composition beats and "
+            "report success. Pass --collapse-landmarks if that is genuinely "
+            "the intent." % len(dressing)))
         return text, {}, findings
 
     # Group by the resource each instance points at: one field per prop type.
@@ -230,11 +250,15 @@ def _bump_load_steps(text: str) -> str:
     return re.sub(r"load_steps=\d+", "load_steps=%d" % steps, text, count=1)
 
 
-def main(argv: list) -> int:
+def main(argv: list | None = None) -> int:
     parser = argparse.ArgumentParser(prog="oax-scatter")
     parser.add_argument("--target", required=True,
                         help="world directory containing world.tscn")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--collapse-landmarks", action="store_true",
+                        help="collapse individual instances even in a world "
+                             "that already has fields, where they are the "
+                             "landmarks somebody deliberately kept")
     parser.add_argument("--format", choices=("text", "json"), default="text")
     args = parser.parse_args(argv)
 
@@ -247,7 +271,7 @@ def main(argv: list) -> int:
     with open(scene_path, encoding="utf-8") as handle:
         original = handle.read()
 
-    converted, summary, findings = convert(original)
+    converted, summary, findings = convert(original, args.collapse_landmarks)
     report = {
         "tool": TOOL_NAME,
         "schemaVersion": "1.0",
