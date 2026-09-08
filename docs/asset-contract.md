@@ -42,16 +42,22 @@ The last column is how far a *decimated* surface may stray from the dense
 source it came from, and it only applies to a model that went through
 `oax-decimate`; the section on that tool derives the numbers.
 
-**The mesh budget is a ceiling on what may enter, not a target to fill.** It
-bounds one file. What actually has to fit is the *scene*, and
-`test/core/rendering/test_hero_surface.gd` asserts that separately at 150 000
-triangles for the whole dressed valley plus the hero. Coral Cove instances ten
-externally authored machines: at the prop ceiling those alone are 100 000
-triangles, two thirds of the budget, against a 25 000-triangle hero and a
-valley that has to fit in what is left. So a shipped asset is decimated to
-what its scene can afford — the machines ship at 5 000 and the Meshy
-environment kits at 6 000 — and the category ceiling is what the validator
-refuses to let past, not what a contributor should aim at.
+**The mesh budget bounds one file; the scene has a budget of its own.**
+`test/core/rendering/test_hero_surface.gd` asserts 400 000 triangles for the
+whole dressed valley plus the hero, and the two numbers have to be read
+together. Coral Cove instances ten externally authored machines: at the prop
+ceiling those alone are 100 000 triangles, so an asset is only allowed to fill
+its category budget while the scene it lives in has room for what that costs.
+
+That reading cuts both ways, and it is worth recording which way it went here.
+Squeezing the machines to 5 000 to fit a 150 000-triangle scene made the
+Netbot's net stray 3.07 % of its diagonal — refused by its own deviation gate
+— and cost the Dredger its hose runs and railings. Paying real quality to a
+number is the moment to check the number, and 150 000 turned out to be a
+holdover from when every mesh in the valley was a `BoxMesh` or a 176-triangle
+generated prop. It was never what the baseline GTX 1650 struggles with; SDFGI
+and the shadow cascades are. So the scene ceiling moved and the machines ship
+at their category budget, textures included.
 
 Characters, creatures and props composite over arbitrary backgrounds — an
 image without an alpha channel ships a rectangle, so alpha is required.

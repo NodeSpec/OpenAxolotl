@@ -23,8 +23,7 @@ an image-to-3D export is, and the repository has a pipeline for exactly this:
 ```sh
 python tools/decimate_model.py \
     --input reference/coral_cove/Dredger_Rustbreaker.glb \
-    --output assets/prop/dredger/dredger.glb \
-    --max-triangles 3000 --max-texture 1024
+    --output assets/prop/dredger/dredger.glb
 ```
 
 The budget, the texture ceiling and the deviation ceiling all come from the
@@ -32,12 +31,24 @@ Asset Contract, resolved from the OUTPUT path's category, so no number is
 restated on a command line and none can drift from what CI enforces. See
 `docs/asset-contract.md`.
 
-**They are decimated well past their category ceilings, on purpose.** The
-contract's 10 000 triangles is what a prop file may contain; what actually has
-to fit is the scene, and Coral Cove places fifteen machines against a 150 000
-triangle whole-scene budget. Three thousand each is what the level can afford,
-and at that count each machine still reads as itself — the Dredger keeps its
-red cab, amber stripe and cutting drum. The environment pieces ship at 6 000.
+**They ship at their category budget, and the road to that was not straight.**
+Coral Cove instances ten of these machines, so the first attempt squeezed each
+one to 5 000 triangles with 1024 maps to fit a 150 000-triangle whole-scene
+budget. The gate refused it: the Netbot's net strayed 3.07 % of its diagonal,
+and a render showed the Dredger had lost its hose runs and railings while the
+1024 maps flattened the panel weathering that is most of what a Meshy asset
+*is* — the detail is in the maps, not the geometry. Since 150 000 was a
+holdover from a valley made of `BoxMesh` and 176-triangle generated props, and
+was never what the baseline GTX 1650 struggles with, the scene ceiling moved to
+400 000 and these ship at 10 000 triangles with 2048 maps. The environment
+kits ship at 20 000.
+
+Worth being explicit, because it is the thing most easily confused: the
+14–18 MB you see above is *file size*, and it is not a triangle count. Meshy's
+texture optimisation shrinks the maps and Draco compresses the geometry
+stream; both leave the mesh at roughly two million triangles when it is
+decoded. Reduction was never optional here — ten machines at their source
+density is twenty million triangles in one level.
 
 **Draco.** These arrive with `KHR_draco_mesh_compression`, and the Blender here
 has no `libextern_draco.so`, so it imports them as empty. Decode first:
