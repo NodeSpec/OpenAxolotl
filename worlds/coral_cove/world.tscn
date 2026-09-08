@@ -433,6 +433,49 @@ height = 0.68
 [sub_resource type="BoxShape3D" id="BoxShape3D_race_finish"]
 size = Vector3(14, 4, 3)
 
+[sub_resource type="BoxMesh" id="BoxMesh_yard_causeway"]
+size = Vector3(10, 2, 9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yard_causeway"]
+size = Vector3(10, 2, 9)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yard_hull"]
+size = Vector3(8, 2, 6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yard_hull"]
+size = Vector3(8, 2, 6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yard_deck"]
+size = Vector3(14, 2, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yard_deck"]
+size = Vector3(14, 2, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yard_mast"]
+size = Vector3(12, 5.2, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yard_mast"]
+size = Vector3(12, 5.2, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yard_crown"]
+size = Vector3(12, 2, 8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yard_crown"]
+size = Vector3(12, 2, 8)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_yard_beacon"]
+radius = 0.85
+
+[sub_resource type="SphereMesh" id="SphereMesh_yard_beacon"]
+radius = 0.34
+height = 0.68
+
+[sub_resource type="BoxShape3D" id="HintYard"]
+size = Vector3(30, 16, 44)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yard_finish"]
+size = Vector3(14, 4, 3)
+
 [sub_resource type="BoxShape3D" id="HintRace"]
 size = Vector3(26, 12, 30)
 
@@ -1646,6 +1689,11 @@ script = ExtResource("terrain_shell_script")
 surface_material = ExtResource("4_surface_mossy_stone")
 shell_seed = 9903
 
+; The door into the yard. Without it the sea-shore Drone, the terrace and
+; the causeway jump were one seven-second replay.
+[node name="CheckpointSeaTerrace" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, -198.5)
+
 [node name="RaceHint" type="Area3D" parent="."]
 position = Vector3(0, 3, -172)
 script = ExtResource("2_hint")
@@ -1658,11 +1706,276 @@ pitch_deg = 8.0
 [node name="Collision" type="CollisionShape3D" parent="RaceHint"]
 shape = SubResource("HintRace")
 
+
+; === ACT 8: THE FLEET YARD ===
+; Where the level stops being a valley and becomes a fight.
+;
+; Acts one to seven each introduce ONE machine at a time against a traversal
+; problem the player has just learned. This act asks for all of it at once, on
+; a chain of moored hulls over open water with nothing under them but the pit:
+; the gate machine, a Rig out on a hull, two machines sharing one deck, and a
+; last Netbot standing over the reward. Nothing here is tougher than the
+; Dredger in act five -- the ladder tops out where it tops out, and inventing
+; a five-strike machine for a finale would be a new balance decision smuggled
+; in as level dressing. What is new is DENSITY, and having to platform between
+; fights with no ground to retreat to.
+;
+; Appended rather than threaded through, for the reason act seven was: every
+; coordinate before this is a number the flown route was measured against.
+;
+; The envelope is the same one the whole level is built to -- every mandatory
+; gap 2.0 m against the jump's 3.15 m of reach, every rise 0.8 m, and no
+; lateral step wider than 2.5 m. The act is hard because of what is standing
+; on the platforms, not because the platforms are unfair.
+;
+; Surfaces climb the whole way: causeway 2.4, hulls 3.2, 4.0, 4.8 and 5.6, the
+; deck 6.4, and the crown 10.6 over a mast that has to be climbed rather than
+; jumped -- the one verb act seven never asks for again after the coral wall.
+
+[node name="YardCauseway" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -208.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="YardCauseway"]
+visible = false
+mesh = SubResource("BoxMesh_yard_causeway")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="YardCauseway"]
+shape = SubResource("BoxShape3D_yard_causeway")
+
+[node name="Shell" type="Node3D" parent="YardCauseway"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("4_surface_mossy_stone")
+shell_seed = 7714
+
+[node name="CheckpointYardCauseway" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, -208.5)
+
+; The gate machine: a one-strike Netbot, the same unit the level opened
+; with, so the act starts on ground the player is sure of.
+[node name="NetbotYardGate" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0, 3.3, -208.5)
+metadata/enemy_id = "netbot"
+
+[node name="Model" parent="NetbotYardGate" instance=ExtResource("20_fleet_netbot")]
+
+[node name="Collision" type="CollisionShape3D" parent="NetbotYardGate"]
+shape = SubResource("BoxShape3D_80")
+
+[node name="YardHull1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, -218)
+
+[node name="Mesh" type="MeshInstance3D" parent="YardHull1"]
+visible = false
+mesh = SubResource("BoxMesh_yard_hull")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="YardHull1"]
+shape = SubResource("BoxShape3D_yard_hull")
+
+[node name="Shell" type="Node3D" parent="YardHull1"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("8_surface_coral_shelf_stone")
+shell_seed = 7715
+
+[node name="CheckpointYardHull1" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.2, -218)
+
+[node name="YardHull2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 3.0, -226)
+
+[node name="Mesh" type="MeshInstance3D" parent="YardHull2"]
+visible = false
+mesh = SubResource("BoxMesh_yard_hull")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="YardHull2"]
+shape = SubResource("BoxShape3D_yard_hull")
+
+[node name="Shell" type="Node3D" parent="YardHull2"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("8_surface_coral_shelf_stone")
+shell_seed = 7716
+
+[node name="CheckpointYardHull2" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 5.0, -226)
+
+; A Rig out on the hull, fought with a two-metre drop on three sides.
+[node name="HooklineYardHull" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0, 4.9, -226)
+metadata/enemy_id = "hookline_rig"
+
+[node name="Model" parent="HooklineYardHull" instance=ExtResource("19_fleet_hookline_rig")]
+
+[node name="Collision" type="CollisionShape3D" parent="HooklineYardHull"]
+shape = SubResource("BoxShape3D_80")
+
+[node name="YardHull3" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -234)
+
+[node name="Mesh" type="MeshInstance3D" parent="YardHull3"]
+visible = false
+mesh = SubResource("BoxMesh_yard_hull")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="YardHull3"]
+shape = SubResource("BoxShape3D_yard_hull")
+
+[node name="Shell" type="Node3D" parent="YardHull3"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("8_surface_coral_shelf_stone")
+shell_seed = 7717
+
+[node name="CheckpointYardHull3" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, -234)
+
+[node name="YardHull4" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 4.6, -242)
+
+[node name="Mesh" type="MeshInstance3D" parent="YardHull4"]
+visible = false
+mesh = SubResource("BoxMesh_yard_hull")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="YardHull4"]
+shape = SubResource("BoxShape3D_yard_hull")
+
+[node name="Shell" type="Node3D" parent="YardHull4"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("8_surface_coral_shelf_stone")
+shell_seed = 7718
+
+[node name="CheckpointYardHull4" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 6.6, -242)
+
+[node name="YardDeck" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.4, -252)
+
+[node name="Mesh" type="MeshInstance3D" parent="YardDeck"]
+visible = false
+mesh = SubResource("BoxMesh_yard_deck")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="YardDeck"]
+shape = SubResource("BoxShape3D_yard_deck")
+
+[node name="Shell" type="Node3D" parent="YardDeck"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("4_surface_mossy_stone")
+shell_seed = 7719
+
+[node name="CheckpointYardDeck" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, -252)
+
+; TWO machines on the deck, five strikes between them, one at each end: the
+; Drone where the player lands and the Rig in front of the mast, so clearing
+; the deck means crossing it under both. It is the only ground in forty metres
+; wide enough to back up on. This is the act.
+[node name="RunoffDroneYardDeck" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0, 7.3, -252)
+metadata/enemy_id = "runoff_drone"
+
+[node name="Model" parent="RunoffDroneYardDeck" instance=ExtResource("21_fleet_runoff_drone")]
+
+[node name="Collision" type="CollisionShape3D" parent="RunoffDroneYardDeck"]
+shape = SubResource("BoxShape3D_80")
+
+[node name="HooklineYardDeck" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.3, -255.5)
+metadata/enemy_id = "hookline_rig"
+
+[node name="Model" parent="HooklineYardDeck" instance=ExtResource("19_fleet_hookline_rig")]
+
+[node name="Collision" type="CollisionShape3D" parent="HooklineYardDeck"]
+shape = SubResource("BoxShape3D_80")
+
+; Between the deck's two machines, and again at the foot of the mast. Five
+; strikes and a climb in one replay measured ten seconds against the
+; five-second bound; these are what bring it back inside.
+[node name="CheckpointYardDeckMid" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, -253.5)
+
+[node name="CheckpointYardMastFoot" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, -256.8)
+
+; Climbed, not jumped: the last thing the level asks for is the verb it
+; taught at the coral wall and has not needed since.
+[node name="YardMast" type="StaticBody3D" parent="." groups=["climbable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.0, -259)
+
+[node name="Mesh" type="MeshInstance3D" parent="YardMast"]
+visible = false
+mesh = SubResource("BoxMesh_yard_mast")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="YardMast"]
+shape = SubResource("BoxShape3D_yard_mast")
+
+[node name="Shell" type="Node3D" parent="YardMast"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("8_surface_coral_shelf_stone")
+shell_seed = 7720
+
+[node name="YardCrown" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.6, -264)
+
+[node name="Mesh" type="MeshInstance3D" parent="YardCrown"]
+visible = false
+mesh = SubResource("BoxMesh_yard_crown")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="YardCrown"]
+shape = SubResource("BoxShape3D_yard_crown")
+
+[node name="Shell" type="Node3D" parent="YardCrown"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("4_surface_mossy_stone")
+shell_seed = 7721
+
+[node name="CheckpointYardCrown" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.6, -262.5)
+
+; Standing over the reward, which is the oldest reason in the genre to
+; fight something.
+[node name="NetbotYardCrown" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0, 11.5, -264)
+metadata/enemy_id = "netbot"
+
+[node name="Model" parent="NetbotYardCrown" instance=ExtResource("20_fleet_netbot")]
+
+[node name="Collision" type="CollisionShape3D" parent="NetbotYardCrown"]
+shape = SubResource("BoxShape3D_80")
+
+[node name="FleetBeacon" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4, -265)
+metadata/collectible_id = "fleet_beacon"
+
+[node name="Mesh" type="MeshInstance3D" parent="FleetBeacon"]
+mesh = SubResource("SphereMesh_yard_beacon")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="FleetBeacon"]
+shape = SubResource("SphereShape3D_yard_beacon")
+
+[node name="YardHint" type="Area3D" parent="."]
+position = Vector3(0, 6, -234)
+script = ExtResource("2_hint")
+hint_priority = 9
+override_distance = true
+distance_m = 9.4
+override_pitch = true
+pitch_deg = 12.0
+
+[node name="Collision" type="CollisionShape3D" parent="YardHint"]
+shape = SubResource("HintYard")
+
+; The finish moved out here with the act. It used to sit at the sea terrace,
+; which is now the door into the yard rather than the end of the level.
 [node name="SeaFinish" type="Area3D" parent="." groups=["finish_volume"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, -201)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.5, -267)
 
 [node name="Collision" type="CollisionShape3D" parent="SeaFinish"]
-shape = SubResource("BoxShape3D_race_finish")
+shape = SubResource("BoxShape3D_yard_finish")
 
 ; === DRIFT FLEET ===
 ; ON THE ROUTE, NOT BESIDE IT. Every machine used to stand six to ten metres

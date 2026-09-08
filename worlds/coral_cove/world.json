@@ -47,6 +47,11 @@
       "collectibleId": "tide_pearl",
       "kind": "discovery",
       "displayName": "Tide pearl"
+    },
+    {
+      "collectibleId": "fleet_beacon",
+      "kind": "discovery",
+      "displayName": "Fleet beacon"
     }
   ],
   "enemies": [

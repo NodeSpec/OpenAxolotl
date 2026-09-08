@@ -96,5 +96,25 @@ static func waypoints() -> Array[RoutePilot.Waypoint]:
 	RoutePilot.at("walk", Vector3(0, 2.0, -191), "SeaShore -- land grammar back"),
 	RoutePilot.fight("RunoffDroneSeaShore", Vector3(0, 2.0, -193), "the last machine in the level, between the player and the final jump"),
 	RoutePilot.at("jump", Vector3(0, 3.0, -198.5), "SeaTerrace (gap 1.0, rise 1.0)"),
-	RoutePilot.at("finish", Vector3(0, 3.0, -201), "the finish volume, at the open sea"),
+
+	# --- ACT 8: THE FLEET YARD --------------------------------------------
+	# The sea terrace is now the door into the yard rather than the end of the
+	# level. Everything past it is a chain of moored hulls over open water,
+	# and the act's difficulty is DENSITY: five machines and a climb, with
+	# nothing under the gaps but the pit.
+	RoutePilot.at("jump", Vector3(0, 3.4, -208.5), "YardCauseway (gap 2.0, rise 0.2)"),
+	RoutePilot.fight("NetbotYardGate", Vector3(3, 3.4, -208.5), "the gate machine: the same one-strike Netbot the level opened with, so the act starts on ground the player is sure of"),
+	RoutePilot.at("jump", Vector3(0, 4.2, -218), "YardHull1 (gap 2.0, rise 0.8)"),
+	RoutePilot.at("jump", Vector3(2.5, 5.0, -226), "YardHull2 (gap 2.0, and 2.5 m right)"),
+	RoutePilot.fight("HooklineYardHull", Vector3(5, 5.0, -226), "a Rig out on the hull, fought with a two-metre drop on three sides"),
+	RoutePilot.at("jump", Vector3(0, 5.8, -234), "YardHull3 (gap 2.0, back to the centre line)"),
+	RoutePilot.at("jump", Vector3(-2.5, 6.6, -242), "YardHull4 (gap 2.0, and 2.5 m left)"),
+	RoutePilot.at("jump", Vector3(0, 7.4, -252), "YardDeck (gap 2.0, rise 0.8)"),
+	RoutePilot.fight("RunoffDroneYardDeck", Vector3(-4, 7.4, -252), "the deck, and the first of the two machines on it"),
+	RoutePilot.fight("HooklineYardDeck", Vector3(0, 7.4, -255.5), "and the second, in front of the mast: five strikes between them, and the deck is the only ground in forty metres wide enough to back up on"),
+	RoutePilot.at("climb", Vector3(0, 7.4, -259.5), "INTO YardMast -- the climb verb the coral wall taught and the level has not asked for since"),
+	RoutePilot.at("walk", Vector3(0, 11.6, -261), "over the lip onto the crown"),
+	RoutePilot.fight("NetbotYardCrown", Vector3(3, 11.6, -264), "the last machine in the level, standing over the reward"),
+	RoutePilot.at("walk", Vector3(0, 11.6, -265), "the fleet beacon"),
+	RoutePilot.at("finish", Vector3(0, 11.6, -267), "the finish volume, on the crown of the yard"),
 	] as Array[RoutePilot.Waypoint]

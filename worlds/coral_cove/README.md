@@ -133,6 +133,23 @@ signal in the language for "this object obeys different rules".
    where the wave displacement, the surf against the shore and the splash
    going in are all in shot at once.
 
+8. **The fleet yard** *(the fight act)*. The sea terrace is now the door into
+   it rather than the end of the level. Past it a chain of moored hulls climbs
+   out over open water with nothing under the gaps but the pit: a gate Netbot
+   on the causeway, a Rig out on a hull with a two-metre drop on three sides,
+   then a deck carrying two machines at opposite ends so clearing it means
+   crossing under both, a **mast that has to be climbed** — the verb the coral
+   wall taught and the level has not asked for since — and a last Netbot on the
+   crown standing over the **fleet beacon**.
+
+   Nothing here is tougher than the act-five Dredger. The ladder tops out where
+   it tops out, and inventing a five-strike machine for a finale would be a new
+   balance decision smuggled in as level dressing. What is new is **density**,
+   and having to platform between fights with no ground to retreat to. The
+   envelope is unchanged: every mandatory gap 2.0 m against the jump's 3.15 m
+   of reach, every rise 0.8 m, no lateral step wider than 2.5 m. The act is
+   hard because of what is standing on the platforms.
+
    Then the finish volume returns the player to the Open Lagoon, with
    completion recorded through the save-integration interface.
 
@@ -164,7 +181,12 @@ the next:
 | 5, the seed-bed gate | `DredgerSeedBed` | 4 | The boss beat: the only machine that can spend a life, standing over the shelf it flattened |
 | 5, terrace two | `RunoffDroneSeedBed` | 3 | Seeds here are gathered half blind until it is down |
 | 7, the race channel | `NetbotTideRace` | 1 | One strike, in a current |
-| 7, the sea shore | `RunoffDroneSeaShore` | 3 | The last machine, between the player and the final jump |
+| 7, the sea shore | `RunoffDroneSeaShore` | 3 | Between the player and the door into the yard |
+| 8, the causeway | `NetbotYardGate` | 1 | The act opens on ground the player is sure of |
+| 8, hull two | `HooklineYardHull` | 2 | Fought with a two-metre drop on three sides |
+| 8, the deck | `RunoffDroneYardDeck` | 3 | Where the player lands |
+| 8, the deck | `HooklineYardDeck` | 2 | And in front of the mast, so the deck is crossed under both |
+| 8, the crown | `NetbotYardCrown` | 1 | The last machine in the level, standing over the beacon |
 
 **The Dredger stands at the entrance to the seed bed, not inside it**, and
 that is forced rather than chosen. Seven seeds at one resource each against
@@ -178,7 +200,7 @@ reversion: fourteen here, not eight.
 
 ## Checkpoints
 
-Twenty-seven of them, which is far denser than the old corridor's five. A
+Thirty-seven of them, which is far denser than the old corridor's five. A
 platforming route is slower per metre than a walk, and REQ-003 AC-7 bounds
 the replay from any anchor to the next by `progression.max_retry_seconds`
 (5 s) — so climbs, dives and pillar detours each need an anchor of their
@@ -191,7 +213,9 @@ against the five-second bound, so there is now one on the last dry step
 and one mid-channel. The fight ladder added four more for the same measured
 reason: a fight is a place a player dies, and the lagoon swim, the gorge
 exit and terrace two each held one more of them than a five-second replay
-could carry.
+could carry. The fleet yard added ten, three of them found the same way —
+the sea-shore Drone plus the causeway jump measured 7.2 s, and the deck's two
+machines plus the mast climb measured 10.0 s.
 
 ## Declarations used
 
@@ -201,8 +225,8 @@ could carry.
 | optional: restorableRegions | `coral_shelf`, gate `shelf_wall` opens at `restored` |
 | optional: tuningOverrides | both restoration resource costs (sanctioned set) |
 | optional: cameraHints | one hint volume over the grotto |
-| optional: collectibles | `kelp_seed` (resource → `coral_shelf`), `hermit_snail` and `lantern_shrimp` (discovery) — Coral Cove is the world that exercises **both** kinds; Bubble Bay declares resources only |
-| optional: enemies | all four Drift Fleet kinds, **nine machines** placed on the walked route; the coral walk fights eight of them |
+| optional: collectibles | `kelp_seed` (resource → `coral_shelf`), `hermit_snail`, `lantern_shrimp`, `tide_pearl` and `fleet_beacon` (discovery) — Coral Cove is the world that exercises **both** kinds; Bubble Bay declares resources only |
+| optional: enemies | all four Drift Fleet kinds, **fourteen machines** placed on the walked route; the coral walk fights thirteen of them |
 | scene conventions: two `WaterVolume` bodies | the valley waterway (river into cove) and the gorge river |
 | optional: boss, music, npcs, secretAreas, customAbility | **not declared** — absent defaults apply |
 | scene conventions: `pit_volume`, `hazard`, `regen_station`, `climbable` | one pit under the whole world; one leg-stripping hook; one station; one climbable wall |

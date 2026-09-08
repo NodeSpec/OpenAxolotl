@@ -26,7 +26,7 @@ extends Node
 
 const WORLD_ID := "coral_cove"
 const SETTLE_FRAMES := 30
-const JOURNEY_FRAMES := 14000
+const JOURNEY_FRAMES := 20000
 
 var _failures: PackedStringArray = []
 var _checks := 0
@@ -240,9 +240,9 @@ func _finish_checks() -> void:
 
 ## REQ-010, end to end through the real runtime and the real save interface:
 ## the seven seeds were collected as the ONE declared resource type and
-## spent (the shelf restored above proves the spending); the on-route
-## discovery was rescued once and is in the profile; the off-route one was
-## not — an optional branch stays optional.
+## spent (the shelf restored above proves the spending); both on-route
+## discoveries were rescued once and are in the profile; neither off-route
+## one was — an optional branch stays optional.
 func _check_collectibles() -> void:
 	_check(_collected.count("kelp_seed") == 7,
 		"all seven kelp seeds were collected as the declared resource (got %d)"
@@ -250,11 +250,17 @@ func _check_collectibles() -> void:
 	_check(_collected.count("hermit_snail") == 1,
 		"the hermit snail was rescued exactly once (got %d)"
 		% _collected.count("hermit_snail"))
+	_check(_collected.count("fleet_beacon") == 1,
+		"the fleet beacon at the top of the yard was rescued exactly once (got %d)"
+		% _collected.count("fleet_beacon"))
 	_check(not _collected.has("lantern_shrimp"),
 		"the off-route lantern shrimp was NOT collected by the designed route")
+	_check(not _collected.has("tide_pearl"),
+		"nor the off-route tide pearl -- an optional branch stays optional")
 	var recorded: Variant = _save.get_world_data(WORLD_ID).get("collectibles", [])
-	_check(recorded is Array and (recorded as Array).has("hermit_snail"),
-		"the rescued snail is recorded in the profile through the save interface (%s)"
+	_check(recorded is Array and (recorded as Array).has("hermit_snail")
+		and (recorded as Array).has("fleet_beacon"),
+		"both rescued discoveries are recorded in the profile through the save interface (%s)"
 		% str(recorded))
 	_check(recorded is Array and not (recorded as Array).has("kelp_seed"),
 		"a spent resource is never recorded by id")

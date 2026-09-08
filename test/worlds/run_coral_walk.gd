@@ -18,7 +18,7 @@ const PROBE_PATH := "res://test/worlds/coral_walk_probe.gd"
 ## cadence, and waiting out the stagger between strikes is real time the old
 ## budget had no room for. Raised once, from a measured run, rather than
 ## guessed at — see the walk's own reported frame count.
-const FRAME_BUDGET := 9000
+const FRAME_BUDGET := 14000
 
 
 func _initialize() -> void:

@@ -41,7 +41,7 @@ const SETTLE_FRAMES := 30
 ## climbs, dives and pillar detours — so it gets the same budget the coral
 ## walk itself runs under.
 const JOURNEY_FRAMES := 4200
-const PILOTED_JOURNEY_FRAMES := 14000
+const PILOTED_JOURNEY_FRAMES := 20000
 
 var _failures: PackedStringArray = []
 var _frame := 0
