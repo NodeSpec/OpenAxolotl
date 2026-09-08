@@ -77,7 +77,7 @@ The two mod gates are the deliberate exception — they keep a flat colour,
 because a gate is a rule and not geology, and flat colour is the oldest
 signal in the language for "this object obeys different rules".
 
-## The route, in seven acts
+## The route, in eight acts
 
 1. **The tide shelf** *(land — run, jump)*. A rising staircase of four gaps
    on wide, forgiving platforms. The **hermit snail** — a *discovery*
@@ -115,10 +115,25 @@ signal in the language for "this object obeys different rules".
    (`restoration.*.resource_cost` overridden to 3+4 through the sanctioned
    `tuningOverrides`). Two of the seeds are out on side pillars that cost a
    jump each way. The **regen station** on the way in regrows the leg.
-6. **The shelf**. Only a **restored** `coral_shelf` opens the wall in front
-   of the finish, so restoration is on the critical path, not a side
-   activity. Then the finish volume returns the player to the Open Lagoon,
-   with completion recorded through the save-integration interface.
+6. **The shelf**. Only a **restored** `coral_shelf` opens the wall, so
+   restoration is on the critical path, not a side activity. Past it the
+   valley drains toward open sea.
+7. **The tide race** *(the water act)*. Two tide steps down to a waterline,
+   then thirty metres of channel between two banks with a **surge bar**
+   across it that has to be dived under, and a submerged sea shore to swim
+   up onto at the far end. The **tide pearl** sits out on a perch in the
+   middle of the channel, off the route like the lantern shrimp: the flown
+   walk never collects it.
+
+   It is also where the water is meant to be **looked at**. Acts 2 and 4b
+   cross water at depth, under a brow and under an arch, where the surface
+   is overhead and mostly out of frame. Here the route runs along the
+   waterline with a bank either side, which is the one place in the level
+   where the wave displacement, the surf against the shore and the splash
+   going in are all in shot at once.
+
+   Then the finish volume returns the player to the Open Lagoon, with
+   completion recorded through the save-integration interface.
 
 Under everything: one **pit volume**, sitting *between* the route and the
 forest floor. Every gap the waterway does not run under is a real one —
@@ -128,14 +143,17 @@ scenery and the pit is invisible.
 
 ## Checkpoints
 
-Nineteen of them, which is far denser than the old corridor's five. A
+Twenty-three of them, which is far denser than the old corridor's five. A
 platforming route is slower per metre than a walk, and REQ-003 AC-7 bounds
 the replay from any anchor to the next by `progression.max_retry_seconds`
 (5 s) — so climbs, dives and pillar detours each need an anchor of their
 own. The coral walk **measures every segment** on the run rather than
 trusting this paragraph; the two segments that first broke the bound are
 why there is a checkpoint at the foot of the coral wall and another past
-the second seed terrace.
+the second seed terrace. The tide race added two more the same way: laid
+out with one anchor at each end it measured a **nine-second** replay
+against the five-second bound, so there is now one on the last dry step
+and one mid-channel.
 
 ## Declarations used
 

@@ -42,6 +42,11 @@
       "collectibleId": "lantern_shrimp",
       "kind": "discovery",
       "displayName": "Lantern shrimp"
+    },
+    {
+      "collectibleId": "tide_pearl",
+      "kind": "discovery",
+      "displayName": "Tide pearl"
     }
   ],
   "enemies": [

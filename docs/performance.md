@@ -93,12 +93,18 @@ the heaviest world plus the hero:
 
 | scene | mesh instances | triangles |
 |---|---|---|
-| Coral Cove (forested river valley, fully dressed) | 239 | 99,416 |
-| Bubble Bay | 47 | 68,800 |
-| Open Lagoon hub | 28 | 36,912 |
-| hero (all five role meshes) | 5 | 34,392 |
+| Coral Cove (valley plus the tide race, fully dressed) | 95 | 71,672 |
+| Bubble Bay | 21 | 60,124 |
+| Open Lagoon hub | 24 | 32,280 |
+| hero (one skinned mesh) | 1 | 25,000 |
 
-Heaviest playable frame ≈ 134k triangles. **Triangle count is not what makes
+Heaviest playable frame ≈ 97k triangles. The counts fell rather than rose
+across the last few passes even as the level grew by an act: the hero became
+one decimated mesh instead of five generated ones, and the dressing moved
+into MultiMeshes, which the counter reads once per field rather than once per
+plant. The tide race's own water is the largest single thing added — its
+surface is subdivided to two-metre cells so the shader has something to bend,
+which costs about 1,800 triangles for the whole game's water. **Triangle count is not what makes
 this game slow, and an earlier version of this paragraph claimed otherwise.**
 It said the scene was "an order of magnitude under where a desktop GPU starts
 to care" — true about geometry, and irrelevant, because the cost is in the

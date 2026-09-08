@@ -62,5 +62,23 @@ static func waypoints() -> Array[RoutePilot.Waypoint]:
 	RoutePilot.at("jump", Vector3(0, 5, -124.5), "terrace 3 (gap 2.2)"),
 	RoutePilot.at("walk", Vector3(0, 5, -125.6), "seed 7 -- the shelf reaches `restored` here"),
 	RoutePilot.at("walk", Vector3(0, 5, -128.6), "through the opened shelf wall"),
-	RoutePilot.at("finish", Vector3(0, 5, -133), "the finish volume"),
+
+	# --- ACT 7: THE TIDE RACE ---------------------------------------------
+	# The shelf wall used to open onto the finish two metres later. It now
+	# opens onto sixty-eight more metres of level: down the tide steps to the
+	# waterline, along the race channel with a dive under the surge bar, and
+	# out onto the sea terrace.
+	RoutePilot.at("walk", Vector3(0, 5, -136), "onto RaceLanding past the wall"),
+	RoutePilot.at("jump", Vector3(0, 4.2, -147), "TideStep1 (gap 1.5, a step down)"),
+	RoutePilot.at("jump", Vector3(2.5, 3.4, -154), "TideStep2 (gap 2.0, down and 2.5 m right)"),
+	RoutePilot.at("swim", Vector3(0, 2.2, -160), "off the last step straight into the race"),
+	RoutePilot.at("swim", Vector3(0, -0.4, -165), "down for the surge bar"),
+	RoutePilot.at("swim", Vector3(0, -0.4, -169), "under SurgeBar"),
+	RoutePilot.at("boost", Vector3(0, 0.4, -173), "boost along the channel"),
+	RoutePilot.at("swim", Vector3(0, 1.6, -180), "back up to the waterline"),
+	RoutePilot.at("swim", Vector3(0, 2.4, -187), "over the submerged sea shore"),
+	RoutePilot.at("swim", Vector3(0, 2.2, -190), "out of the water and down onto SeaShore"),
+	RoutePilot.at("walk", Vector3(0, 2.0, -191), "SeaShore -- land grammar back"),
+	RoutePilot.at("jump", Vector3(0, 3.0, -198.5), "SeaTerrace (gap 1.0, rise 1.0)"),
+	RoutePilot.at("finish", Vector3(0, 3.0, -201), "the finish volume, at the open sea"),
 	] as Array[RoutePilot.Waypoint]

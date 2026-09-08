@@ -137,16 +137,18 @@ func test_req_012_a_disabled_dredger_neither_dredges_nor_costs_a_life() -> void:
 	var fleet := _fleet(tuning)
 	var lives := LifeSystem.new(tuning)
 	var restoration := RestorationSystem.new(tuning)
-	restoration.load_manifest({"restorableRegions": [{"regionId": "reef"}]})
+	var errors: Array[RestorationError] = []
+	restoration.declare_from_manifest(
+		{"restorableRegions": [{"regionId": "reef"}]}, errors)
 	fleet.set_life_system(lives)
 	fleet.set_restoration(restoration)
 
 	assert_bool(fleet.strike("dredger", "tail_whack")).is_true()
 
-	var before: int = lives.get_remaining()
+	var before: int = lives.get_lives()
 	assert_bool(fleet.area_wipe("dredger")).override_failure_message(
 		"a disabled Dredger must not be able to spend a life").is_false()
-	assert_int(lives.get_remaining()).is_equal(before)
+	assert_int(lives.get_lives()).is_equal(before)
 	assert_bool(fleet.strike_region("dredger", "reef")).override_failure_message(
 		"nor revert a region").is_false()
 
@@ -165,8 +167,14 @@ func test_req_012_a_disabled_hookline_cannot_take_the_equipped_mod() -> void:
 
 
 func test_req_012_disabling_one_machine_leaves_the_others_alone() -> void:
-	# The knock-out is keyed per machine, not per roster entry: two Netbots in
-	# one level are two obstacles, and beating one is not beating both.
+	# Knocking one machine over must not knock the roster over.
+	#
+	# A LIMITATION WORTH NAMING RATHER THAN HIDING: the knock-out is keyed by
+	# ROSTER ID, not by placed node, so two Netbots in one level share a single
+	# disabled state and striking either one disables both. No shipped world
+	# places two of anything, so nothing is wrong today; a world that wanted a
+	# pair of Netbots would need the strike lane keyed by node, which is a
+	# change to how WorldSystems resolves a strike rather than to this file.
 	var fleet := _fleet(_tuning())
 	assert_bool(fleet.strike("netbot", "tail_whack")).is_true()
 	assert_bool(fleet.is_disabled("netbot")).is_true()

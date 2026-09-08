@@ -11,6 +11,23 @@
 //     sparkle react to the apparent ripple slope instead of to a perfectly
 //     flat plane.
 //
+// THE SURFACE NOW ACTUALLY MOVES. Everything above was true of a shader that
+// animated a tint across a geometrically flat slab, and from the shore that
+// is what it looked like: a painted plane. The vertex stage lifts the top
+// face along the same wave field the fragment stage shades with, so the
+// silhouette of the water against the far bank rises and falls, and the
+// sparkle sits on a surface that is really where the highlight says it is.
+// Water meshes must be SUBDIVIDED for this to show — a bare BoxMesh has four
+// corners on its top face and nothing to bend.
+//
+// AND IT BREAKS AT THE SHORE. Displacement is damped to nothing at the
+// volume's own rim, which does three jobs at once: a wave flattening as it
+// reaches shallow water is what water does; the top face stays welded to the
+// side faces, which a wave carried to the edge would tear open; and the same
+// falloff drives a band of surf where the water meets the land, which is the
+// single strongest cue that a body of water has an edge rather than being a
+// blue box someone placed.
+//
 // The shader stays UNSHADED. Water is a transparent gameplay volume that the
 // camera regularly looks through; lighting both faces of that slab makes the
 // colour stack with camera angle and hides the axolotl. The shared world rig
@@ -35,16 +52,107 @@ uniform float micro_ripple_scale: hint_range(0.1, 12.0) = 2.65;
 uniform float micro_ripple_strength: hint_range(0.0, 1.0) = 0.24;
 uniform float normal_strength: hint_range(0.0, 1.0) = 0.22;
 
+// HOW FAR THE SURFACE ACTUALLY LIFTS, in metres, peak to trough.
+//
+// Deliberately small, and the reason is gameplay rather than taste: the
+// movement grammar switches at the COLLISION box, and this displaces only the
+// visual. Every centimetre here is a centimetre where the water looks like it
+// is in a slightly different place from where swimming starts, and
+// test_water_boundary_alignment exists because that mismatch reads as broken
+// physics. Two tenths of a metre is visible from the shore and invisible at
+// the waterline, which is the trade this number is making.
+uniform float wave_height: hint_range(0.0, 1.0) = 0.2;
+
+// How much of the water's own half-width the wave takes to flatten into, and
+// how strong the surf there is.
+//
+// A FRACTION RATHER THAN METRES, and that is a decision rather than a
+// shortcut. Metres would need each volume to publish its own size, and the
+// only per-instance channel for that — an instance uniform — is silently
+// dropped by the headless renderer, so the value would be right in the game
+// and untestable in CI, which is the worst of both. The face-local
+// coordinate below needs nothing published and is exact. It also reads
+// better: a wide lagoon showing a broader band of surf than a narrow channel
+// is what a wide lagoon should do, where a fixed 2.4 m band would have turned
+// the gorge river almost entirely to foam.
+uniform float shore_band_share: hint_range(0.01, 0.9) = 0.16;
+uniform float shore_foam: hint_range(0.0, 1.0) = 0.6;
+
+// WHERE THE WATER ACTUALLY MEETS THE LAND, and this is the one place the
+// no-screen-textures rule bends.
+//
+// The rim falloff above knows where the VOLUME ends. It does not know where
+// the water ends, and in a real level those are nowhere near each other: the
+// Coral Cove waterway is a twenty-six by fifty-seven metre box whose sides are
+// buried in cliff, and the waterline a player actually looks at is a sand
+// shelf somewhere in the middle of it. Rim foam therefore drew a bright band
+// around four edges nobody can see and nothing at all along the shore, which
+// is worse than no foam: it spends the effect where it cannot be read.
+//
+// Comparing this fragment's own depth against the depth already in the buffer
+// gives the thickness of water at this pixel, which is exactly "how close is
+// the bottom" — and a band of surf wherever that goes to nothing follows every
+// shore, every rock and every step the level has, for one texture read. No
+// refraction pass, no screen colour, no normal map: the doctrine at the top of
+// this file is about not needing the EXPENSIVE parts of a water stack, and a
+// depth compare is the cheap one.
+uniform sampler2D depth_buffer: hint_depth_texture, filter_linear_mipmap;
+uniform float shallows_depth_m: hint_range(0.05, 8.0) = 0.28;
+uniform float shallows_foam: hint_range(0.0, 1.0) = 0.42;
+
+// Where the top face sits in Godot's BoxMesh UV atlas. The layout is a fixed
+// three-by-two grid — MEASURED across four wildly different box proportions,
+// identical every time, and mapping to the face exactly linearly — so this is
+// a constant rather than something a volume has to tell the shader. A test
+// holds Godot to it, because it is the one assumption here that a future
+// engine release could take away.
+const vec2 TOP_FACE_UV_ORIGIN = vec2(1.0 / 3.0, 0.5);
+const vec2 TOP_FACE_UV_SPAN = vec2(3.0, 2.0);
+
 varying vec3 world_position;
 varying vec3 world_normal;
 
+// How far this fragment is from the volume's rim: 0 on the bank, 1 once it is
+// shore_band_share of the way into open water.
+varying float shore;
+
+// Whether this fragment belongs to the top face, computed once in the vertex
+// stage from the undisplaced normal.
+varying float top_face;
+
+
+// The broad wave field, shared by both stages so the geometry and the shading
+// cannot drift apart. Returns roughly -3..3.
+float wave_field(vec2 p, float t) {
+	float a = p.x * 1.70 + t * 1.35;
+	float b = p.y * 2.30 - t * 1.10;
+	float c = (p.x + p.y) * 1.10 + t * 0.70;
+	return sin(a) + sin(b) + sin(c);
+}
+
+
 void vertex() {
+	// Face-local coordinates, 0..1 across the top face whatever the volume's
+	// size or proportions. `rim` is how far in from the nearest of the four
+	// edges this vertex is, as a share of the half-width, so 0 sits on the
+	// bank and 1 is open water.
+	vec2 face = (UV - TOP_FACE_UV_ORIGIN) * TOP_FACE_UV_SPAN;
+	vec2 inset = 0.5 - abs(face - 0.5);
+	float rim = min(inset.x, inset.y) * 2.0;
+	shore = clamp(rim / max(shore_band_share, 0.001), 0.0, 1.0);
+	top_face = smoothstep(0.65, 0.95, NORMAL.y);
+
+	// Lift from the world position, so two volumes meeting at a seam agree
+	// about where the crests are instead of each running its own wave from
+	// its own origin.
+	vec3 placed = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	float lift = wave_field(placed.xz * ripple_scale, TIME * ripple_speed) / 3.0;
+	VERTEX.y += top_face * shore * wave_height * lift;
+
 	world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	// WaterVolume meshes are axis-aligned boxes in the shipped worlds. This
-	// gives us enough information to perturb only the horizontal surface and
-	// leave the transparent side walls visually quiet.
 	world_normal = normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
 }
+
 
 void fragment() {
 	vec2 flow = world_position.xz * ripple_scale;
@@ -96,10 +204,34 @@ void fragment() {
 	tint = mix(tint, foam_tint, foam * 0.22 * horizontal_face);
 	tint = mix(tint, sparkle_tint, glint * 0.58 * horizontal_face);
 
+	// How much water stands between this pixel and whatever is behind it.
+	float behind = texture(depth_buffer, SCREEN_UV).r;
+	vec4 behind_view = INV_PROJECTION_MATRIX * vec4(
+		SCREEN_UV * 2.0 - 1.0, behind, 1.0);
+	float thickness = (behind_view.z / behind_view.w) - VERTEX.z;
+	float shallows = 1.0 - smoothstep(0.0, shallows_depth_m, thickness);
+	shallows *= shallows;
+
+	// SURF, on the top face only, and breathing with the same wave field the
+	// surface is riding so it reads as water arriving somewhere rather than as
+	// a painted line. Two sources, and they answer different questions: the
+	// shallows band follows the real waterline against every shore and rock,
+	// the rim band catches the case where a volume simply stops in mid-air.
+	float surge = 0.5 + 0.5 * sin(combined * 1.4 + TIME * 1.7);
+	float breath = 0.55 + 0.45 * surge;
+	float surf = max(shallows * shallows_foam,
+		smoothstep(0.9, 0.05, shore) * shore_foam) * top_face * breath;
+	tint = mix(tint, foam_tint, clamp(surf, 0.0, 1.0));
+
+	// And deeper water is darker water — the same thickness, spent again.
+	tint = mix(tint * 0.78, tint,
+		clamp(smoothstep(0.0, shallows_depth_m * 8.0, thickness), 0.4, 1.0));
+
 	ALBEDO = tint;
 	ALPHA = clamp(
 		mix(alpha_facing, alpha_grazing, fresnel)
 		+ foam * 0.035 * horizontal_face
-		+ glint * 0.10 * horizontal_face,
-		0.0, 0.62);
+		+ glint * 0.10 * horizontal_face
+		+ surf * 0.18,
+		0.0, 0.78);
 }
