@@ -484,12 +484,12 @@
       "max": 60.0,
       "description": "How briskly a grounded axolotl sheds horizontal speed when the player is not steering. Applied as exp(-rate*delta) so the tuned number means the same at any frame rate. High relative to the swim drag: land should feel planted, and releasing the key should stop you almost at once. The minimum is deliberately above zero -- at zero the axolotl would coast forever and walk off the level, which is a bug rather than a tuning choice."
     },
-    "enemy.disabled_seconds": {
-      "value": 6.0,
+    "enemy.stagger_seconds": {
+      "value": 1.6,
       "unit": "seconds",
-      "min": 0.5,
-      "max": 120.0,
-      "description": "How long a struck Drift Fleet machine stays knocked out: its effect is refused, and whatever it was already doing to the player is released. It recovers rather than being destroyed — these are machines being knocked over, not things being killed (REQ-019), and a permanent removal would let a player empty a level and walk it unopposed."
+      "min": 0.2,
+      "max": 20.0,
+      "description": "How long a Drift Fleet machine reels from a strike that did not finish it: its effect is refused and whatever it was doing to the player is released, then it works again. Short on purpose — a stagger is the feedback that the hit landed, not the reward, and the reward is the strike that reaches the machine's declared durability and puts it down for the attempt. At six seconds, which is what this was when a single strike disabled a machine outright, a durability-4 Dredger would spend most of the fight lying still and the exchange would read as waiting rather than as fighting."
     },
     "enemy.hookline.mod_strip_seconds": {
       "value": 8.0,

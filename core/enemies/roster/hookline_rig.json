@@ -3,6 +3,7 @@
   "displayName": "Hookline Rig",
   "behavior": "snag",
   "audioCueId": "enemy_hookline_snag",
+  "durability": 2,
   "snag": {
     "revealAffordance": "reveal_hookline"
   }

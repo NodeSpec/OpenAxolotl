@@ -160,6 +160,9 @@ class _IntAssert extends _Base:
 		_check(_v < bound, "expected less than %d but got %d" % [bound, _v])
 	func is_less_equal(bound: int) -> void:
 		_check(_v <= bound, "expected at most %d but got %d" % [bound, _v])
+	func is_between(low: int, high: int) -> void:
+		_check(_v >= low and _v <= high,
+			"expected between %d and %d but got %d" % [low, high, _v])
 	func is_zero() -> void:
 		_check(_v == 0, "expected 0 but got %d" % _v)
 

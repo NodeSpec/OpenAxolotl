@@ -35,23 +35,52 @@ extends RefCounted
 ##
 ## STRIKING BACK (REQ-012, REQ-019). Until recently every one of those lanes
 ## ran one way: the machines acted on the player and the player routed around
-## them. A struck machine is now KNOCKED OUT for a tuned window — its effect is
-## refused, and whatever it was already doing to the player is released on the
-## spot, so the tail whack that lands on a Netbot is also how you get out of
-## its net.
+## them. A strike is now a real answer, and it lands in one of two ways.
 ##
-## It recovers rather than being destroyed, and that is a design decision
-## rather than an unfinished one. These are faceless industrial machines and
-## the game may not depict violence done to anything that reads as alive
-## (REQ-019 AC-5), so they are knocked over and they right themselves; and a
-## level a player can permanently empty is a level that stops being a route
-## problem the second time they walk it.
+## A STRIKE BELOW A MACHINE'S DURABILITY STAGGERS IT. The machine reels for a
+## tuned window — its effect is refused, and whatever it was already doing to
+## the player is released on the spot, so the tail whack that lands on a Netbot
+## is also how you get out of its net — and then it rights itself and works
+## again. Stagger is the feedback that the hit landed; it is not the win.
+##
+## THE STRIKE THAT REACHES ITS DURABILITY DEFEATS IT, for good. The machine
+## goes inert and stays inert: every lane refuses it forever, and no tick
+## brings it back. That is what makes clearing an area mean something, and it
+## is the whole reason durability is worth having — a roster where every
+## machine reels and returns has no fight in it, only interruptions.
+##
+## HOW MANY STRIKES IS THE WORLD'S DECISION, NOT THIS FILE'S. Durability is a
+## field on the enemy declaration (see EnemyDef), so the Netbot goes down to a
+## single whack and the Dredger takes four because their JSON says so. Reading
+## it here rather than knowing it is what lets a forked world ship a machine
+## with its own weight without touching the runtime.
+##
+## DEFEAT IS A KNOCK-OUT THAT STAYS DOWN, NOT A DESTRUCTION. These are faceless
+## industrial machines and the game may not depict violence done to anything
+## that reads as alive (REQ-019 AC-5). And "for good" means for the ATTEMPT:
+## [method reset_defeats] puts the whole roster back on its feet, and the Game
+## Client calls it on a checkpoint respawn — so a player who dies re-fights the
+## stretch they died in rather than walking an emptied level.
 ##
 ## All magnitudes and windows are tuning KEYS read live at the moment of
 ## contact (REQ-025): retuning an enemy takes effect with no recompile.
 
 const FACTOR_PREFIX := "drift:"
-const DISABLED_SECONDS_KEY := "enemy.disabled_seconds"
+const STAGGER_SECONDS_KEY := "enemy.stagger_seconds"
+
+## What a strike did. Returned rather than a bool because "the hit landed" and
+## "the machine is down" are different events to a caller: the first wants a
+## reel animation and a light cue, the second wants the node taken out of the
+## scene. Collapsing them into true/false is what would make a presentation
+## layer guess.
+enum StrikeResult {
+	## Nothing to hit: an unknown machine, or one already defeated.
+	MISSED,
+	## The machine reeled and will recover.
+	STAGGERED,
+	## The machine reached its durability and is out for the attempt.
+	DEFEATED,
+}
 
 signal entangled(enemy_id: String, seconds: float)
 signal entangle_escaped(enemy_id: String)
@@ -61,8 +90,10 @@ signal region_dredged(enemy_id: String, region_id: String)
 signal area_wipe_struck(enemy_id: String, life_lost: bool)
 signal aura_entered(enemy_id: String)
 signal aura_cleared(enemy_id: String)
-signal enemy_disabled(enemy_id: String, kind: String, seconds: float)
+signal enemy_staggered(enemy_id: String, kind: String, seconds: float)
 signal enemy_recovered(enemy_id: String)
+signal enemy_defeated(enemy_id: String, kind: String)
+signal defeats_reset()
 
 ## Semantic audio event id, emitted on every effect an enemy lands. Never a
 ## file path; the Audio System resolves it (REQ-023).
@@ -85,8 +116,18 @@ var _auras: Dictionary = {}
 ## snag-behavior enemy_id -> whether its line is currently revealed.
 var _revealed: Dictionary = {}
 
-## enemy_id -> remaining seconds of the knock-out a strike landed.
-var _disabled: Dictionary = {}
+## enemy_id -> remaining seconds of the stagger a strike landed.
+var _staggered: Dictionary = {}
+
+## enemy_id -> strikes taken so far, short of its durability. Cleared when the
+## machine goes down, because a defeated machine has no partial damage left to
+## remember.
+var _damage: Dictionary = {}
+
+## enemy_id -> true for every machine out for this attempt. A separate set from
+## _damage rather than a count that reached durability: "defeated" is a state
+## every lane asks about on every call, and a set lookup says it plainly.
+var _defeated: Dictionary = {}
 
 
 func _init(tuning: TuningData, registry: EnemyRegistry) -> void:
@@ -124,7 +165,7 @@ func get_registry() -> EnemyRegistry:
 ## the behavior does not entangle.
 func contact(enemy_id: String) -> bool:
 	var def := _registry.get_enemy(enemy_id)
-	if def == null or is_disabled(enemy_id):
+	if def == null or is_inert(enemy_id):
 		return false
 
 	match def.behavior:
@@ -187,43 +228,117 @@ static func entangle_factor_id(enemy_id: String) -> String:
 
 # --- Striking back -----------------------------------------------------------
 
-## A strike landed on [param enemy_id]. The machine is knocked out for the
-## tuned window, and anything it is currently doing to the player stops.
+## A strike landed on [param enemy_id]. Returns what it did.
 ##
-## RELEASING THE ACTIVE EFFECT IS THE POINT, not a tidy-up. A Netbot whose net
-## survived the whack that knocked it over would make the strike a thing you
-## do after the danger rather than about it; releasing means the swing is both
-## the answer to being caught and the reason to aim for the machine instead of
-## swimming around it.
+## RELEASING THE ACTIVE EFFECT IS THE POINT, not a tidy-up, and it happens on
+## BOTH outcomes. A Netbot whose net survived the whack that knocked it over
+## would make the strike a thing you do after the danger rather than about it;
+## releasing means the swing is both the answer to being caught and the reason
+## to aim for the machine instead of swimming around it. A stagger that left
+## the net on would be a hit the player cannot feel.
 ##
-## Returns false for an unknown machine or one already down, so a caller can
-## tell a landed hit from a wasted one — the same contract every other lane
-## here uses.
-func strike(enemy_id: String, kind: String = "") -> bool:
-	if _registry.get_enemy(enemy_id) == null or is_disabled(enemy_id):
-		return false
+## A STAGGERED MACHINE CAN BE HIT AGAIN, and that is the difference between
+## this and the window it replaced. Chaining strikes while a machine reels is
+## how a durability-4 Dredger goes down in one exchange instead of four
+## separate approaches; refusing them would make toughness mean "wait" rather
+## than "keep going". What is refused is a strike on a machine already
+## defeated, which is a swing at nothing.
+func strike(enemy_id: String, kind: String = "") -> StrikeResult:
+	var def := _registry.get_enemy(enemy_id)
+	if def == null or is_defeated(enemy_id):
+		return StrikeResult.MISSED
 
-	var seconds := _tuning.get_number(DISABLED_SECONDS_KEY)
-	_disabled[enemy_id] = seconds
+	var taken := int(_damage.get(enemy_id, 0)) + 1
+	_release_everything(enemy_id)
 
+	if taken >= def.durability:
+		_damage.erase(enemy_id)
+		_staggered.erase(enemy_id)
+		_defeated[enemy_id] = true
+		enemy_defeated.emit(enemy_id, kind)
+		return StrikeResult.DEFEATED
+
+	var seconds := _tuning.get_number(STAGGER_SECONDS_KEY)
+	_damage[enemy_id] = taken
+	# Re-set rather than accumulated: a second hit lands the machine back at a
+	# full reel, so a player who keeps swinging keeps it down. Adding the
+	# windows together would let a fast player bank a stagger longer than the
+	# fight.
+	_staggered[enemy_id] = seconds
+	enemy_staggered.emit(enemy_id, kind, seconds)
+	return StrikeResult.STAGGERED
+
+
+## Stops whatever [param enemy_id] is currently doing to the player. Shared by
+## both strike outcomes, because a hit that landed must be felt either way.
+func _release_everything(enemy_id: String) -> void:
 	if _entangles.has(enemy_id):
 		_release_entangle(enemy_id, true)
 	if _auras.has(enemy_id):
 		_auras.erase(enemy_id)
 		aura_cleared.emit(enemy_id)
 
-	enemy_disabled.emit(enemy_id, kind, seconds)
-	return true
+
+## Whether [param enemy_id] cannot act right now — reeling from a strike, or
+## out for the attempt. Every effect lane asks this first, so a struck machine
+## is inert rather than merely quiet.
+func is_inert(enemy_id: String) -> bool:
+	return _staggered.has(enemy_id) or _defeated.has(enemy_id)
 
 
-## Whether [param enemy_id] is knocked out right now. Every effect lane asks
-## this first, so a disabled machine is inert rather than merely quiet.
-func is_disabled(enemy_id: String) -> bool:
-	return _disabled.has(enemy_id)
+## Whether [param enemy_id] is reeling and will recover.
+func is_staggered(enemy_id: String) -> bool:
+	return _staggered.has(enemy_id)
 
 
-func disabled_remaining(enemy_id: String) -> float:
-	return float(_disabled.get(enemy_id, 0.0))
+## Whether [param enemy_id] is out for the rest of this attempt.
+func is_defeated(enemy_id: String) -> bool:
+	return _defeated.has(enemy_id)
+
+
+func stagger_remaining(enemy_id: String) -> float:
+	return float(_staggered.get(enemy_id, 0.0))
+
+
+## Strikes [param enemy_id] has taken and survived. Zero once it is defeated —
+## a machine that is down has no partial damage left to carry.
+func strikes_taken(enemy_id: String) -> int:
+	return int(_damage.get(enemy_id, 0))
+
+
+## How many more strikes [param enemy_id] has in it, or 0 when it is already
+## down. Published so a presentation layer can show wear without duplicating
+## the arithmetic — and so a world author can check the ladder they declared.
+func strikes_remaining(enemy_id: String) -> int:
+	var def := _registry.get_enemy(enemy_id)
+	if def == null or is_defeated(enemy_id):
+		return 0
+	return maxi(0, def.durability - strikes_taken(enemy_id))
+
+
+## Puts the whole roster back on its feet.
+##
+## Called by whatever binds the scene on a checkpoint respawn. Defeat lasting
+## "for good" has to mean for the ATTEMPT and not for the save, or a player who
+## dies once walks the rest of the level unopposed — which is the same failure
+## the old recover-on-a-timer model was avoiding, arrived at from the other
+## side. Partial damage goes with it: a Dredger you got to three hits is a
+## fresh Dredger after you die, because the run that wore it down is over.
+func reset_defeats() -> void:
+	if _defeated.is_empty() and _damage.is_empty() and _staggered.is_empty():
+		return
+	_defeated.clear()
+	_damage.clear()
+	_staggered.clear()
+	defeats_reset.emit()
+
+
+## Every machine currently out for this attempt.
+func defeated_ids() -> Array[String]:
+	var ids: Array[String] = []
+	for enemy_id: String in _defeated:
+		ids.append(enemy_id)
+	return ids
 
 
 # --- AC-2: the reveal half of the Hookline counter ---------------------------
@@ -246,7 +361,7 @@ func strike_region(enemy_id: String, region_id: String) -> bool:
 	var def := _registry.get_enemy(enemy_id)
 	if def == null or def.behavior != EnemyDef.Behavior.DREDGE:
 		return false
-	if is_disabled(enemy_id):
+	if is_inert(enemy_id):
 		return false
 	if _restoration == null or not _restoration.dredger_attack(region_id):
 		return false
@@ -263,7 +378,7 @@ func area_wipe(enemy_id: String) -> bool:
 	var def := _registry.get_enemy(enemy_id)
 	if def == null or def.behavior != EnemyDef.Behavior.DREDGE:
 		return false
-	if _lives == null or is_disabled(enemy_id):
+	if _lives == null or is_inert(enemy_id):
 		return false
 
 	var lost := _lives.report_catastrophe(def.area_wipe_source)
@@ -284,7 +399,7 @@ func enter_aura(enemy_id: String) -> bool:
 	# A knocked-over drone is not venting. Refusing entry here rather than
 	# clearing it later is what stops the player walking back into the volume
 	# of the machine they just disabled and being debuffed by it anyway.
-	if is_disabled(enemy_id):
+	if is_inert(enemy_id):
 		return false
 
 	var fresh := not _auras.has(enemy_id)
@@ -365,13 +480,16 @@ func tick(delta: float) -> void:
 		else:
 			_auras[enemy_id] = remaining
 
-	for enemy_id: String in _disabled.keys():
-		var left := float(_disabled[enemy_id]) - delta
+	# Only STAGGER counts down. A defeated machine is not in this dictionary at
+	# all, which is what makes "for good" a property of the data rather than a
+	# timer somebody has to remember not to start.
+	for enemy_id: String in _staggered.keys():
+		var left := float(_staggered[enemy_id]) - delta
 		if left <= 0.0:
-			_disabled.erase(enemy_id)
+			_staggered.erase(enemy_id)
 			enemy_recovered.emit(enemy_id)
 		else:
-			_disabled[enemy_id] = left
+			_staggered[enemy_id] = left
 
 	for enemy_id: String in _registry.get_ids():
 		var def := _registry.get_enemy(enemy_id)

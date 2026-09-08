@@ -173,6 +173,12 @@ var _checkpoint_nodes: Array[Node3D] = []
 ## positions rather than by walking the tree on the frame of a swing.
 var _enemy_nodes: Array[Node3D] = []
 
+## Each enemy node's transform as the world author placed it, taken at wiring
+## time. A defeated machine is tipped over in place, and putting it back on a
+## respawn needs the pose it started in — recomputing one from the geometry
+## would be guessing at what the author meant.
+var _enemy_poses: Dictionary = {}  # Node3D -> Transform3D
+
 ## Whether the player body's strike signal has been joined yet. The body is
 ## found lazily — it is a sibling the hub adds, not a child of this node — so
 ## the join is attempted each frame until it takes.
@@ -310,6 +316,11 @@ func _wire_drift_fleet() -> void:
 	_fleet.region_dredged.connect(
 		func(_enemy_id: String, region_id: String) -> void:
 			region_dredged.emit(region_id))
+	# A machine going down changes what the level LOOKS like, and standing the
+	# roster back up on a respawn changes it back. Both are followed here so
+	# the scene never has to be told twice.
+	_fleet.enemy_defeated.connect(_on_enemy_defeated)
+	_fleet.defeats_reset.connect(_on_defeats_reset)
 
 	var declared: Variant = manifest.get(MANIFEST_ENEMIES, [])
 	if not (declared is Array):
@@ -401,6 +412,12 @@ func _wire_pillar_one() -> void:
 			checkpoint_activated.emit(checkpoint_id))
 	_lives.respawned.connect(
 		func(position: Vector3, checkpoint_id: String, _replenished: int) -> void:
+			# The machines get up with the player. Defeat lasting for the
+			# ATTEMPT rather than for the save is what keeps a stretch that
+			# killed you a stretch you have to fight through again, instead of
+			# a corridor you emptied on the way to dying in it.
+			if _fleet != null:
+				_fleet.reset_defeats()
 			_return_player_to(position, checkpoint_id))
 
 
@@ -586,6 +603,7 @@ func _wire_enemy_node(node: Area3D) -> void:
 	# declared units are listed, so an undeclared node is as unhittable as it
 	# is harmless.
 	_enemy_nodes.append(node)
+	_enemy_poses[node] = node.transform
 
 	match enemy.behavior:
 		EnemyDef.Behavior.TOXIN_AURA:
@@ -669,6 +687,58 @@ func _on_strike_opened(kind: CombatStrike.Kind, origin: Vector3,
 		if _world_position_of(node).distance_to(origin) > reach:
 			continue
 		_fleet.strike(enemy_id, kind_id)
+
+
+# --- What a defeated machine looks like ---------------------------------------
+
+## How far a defeated machine tips over, and how far it sinks, in the scene.
+##
+## It is TIPPED, not deleted. A machine that vanished would leave the player
+## unsure whether they beat it or the level despawned it, and it would take the
+## landmark with it — these things are placed where they are partly because
+## they are things to see. Lying over at a hard angle, half into the ground,
+## reads as beaten from any distance and from any camera.
+const DEFEATED_TIP_RADIANS := 1.22   # about 70 degrees
+const DEFEATED_SINK_M := 0.45
+
+
+## Puts every scene node standing for [param enemy_id] into its beaten pose and
+## stops it being touchable.
+##
+## The area is closed as well as the pose changed, and both matter for
+## different reasons: the pose is what the player reads, and `monitoring = false`
+## is what stops a defeated Dredger's volume firing its lane at a player who
+## walks back through where it used to be. The runtime already refuses that
+## call — this only means the call is never made.
+func _on_enemy_defeated(enemy_id: String, _kind: String) -> void:
+	for node: Node3D in _enemy_nodes:
+		if not is_instance_valid(node) or _declared_unit_of(node) != enemy_id:
+			continue
+		var pose: Transform3D = _enemy_poses.get(node, node.transform)
+		var beaten := pose
+		beaten.basis = pose.basis.rotated(Vector3.RIGHT, DEFEATED_TIP_RADIANS)
+		beaten.origin.y -= DEFEATED_SINK_M
+		node.transform = beaten
+		var area := node as Area3D
+		if area != null:
+			area.monitoring = false
+			area.monitorable = false
+
+
+## Stands the whole roster back up, on the respawn that reset it.
+##
+## Driven by the fleet's own signal rather than by the respawn handler, so the
+## scene cannot drift out of step with the runtime: whatever puts the machines
+## back on their feet in the model puts them back on their feet here.
+func _on_defeats_reset() -> void:
+	for node: Node3D in _enemy_nodes:
+		if not is_instance_valid(node) or not _enemy_poses.has(node):
+			continue
+		node.transform = _enemy_poses[node]
+		var area := node as Area3D
+		if area != null:
+			area.monitoring = true
+			area.monitorable = true
 
 
 ## Whether this contact was the player LANDING on the machine.

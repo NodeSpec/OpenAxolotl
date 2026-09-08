@@ -3,6 +3,7 @@
   "displayName": "Dredger",
   "behavior": "dredge",
   "audioCueId": "enemy_dredger_wipe",
+  "durability": 4,
   "dredge": {
     "areaWipeSource": "dredger_area_wipe"
   }

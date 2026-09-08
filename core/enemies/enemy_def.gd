@@ -26,6 +26,13 @@ extends RefCounted
 ##   * `toxin_aura` — factors published while the player is inside the volume,
 ##                    lingering for a tuned duration after leaving (Runoff
 ##                    Drones: vision and gill-recharge debuffs).
+##
+## DURABILITY IS THE OTHER HALF, and it is data for the same reason the
+## behavior is: how many strikes a machine takes to put down is what makes one
+## unit read as a nuisance and another as a wall, and a roster where every
+## machine falls to the same number of hits has no texture at all. A world
+## shipping its own machine chooses its own, in its own file, and the runtime
+## reads it rather than knowing it.
 
 enum Behavior {
 	ENTANGLE,
@@ -38,6 +45,19 @@ const FIELD_ID := "id"
 const FIELD_NAME := "displayName"
 const FIELD_BEHAVIOR := "behavior"
 const FIELD_AUDIO_CUE := "audioCueId"
+const FIELD_DURABILITY := "durability"
+
+## What a declaration that omits durability gets. Two rather than one: a
+## machine that silently became a one-hit knockout because somebody forgot a
+## field would be a balance change nobody made, and one that took ten would be
+## unkillable. Two is the middle of the shipped range and obviously a default.
+const DEFAULT_DURABILITY := 2
+
+## The most strikes any machine may ask for. A ceiling rather than a taste
+## judgement: past about half a dozen the player stops reading "tough" and
+## starts reading "my hits are not landing", which is the same failure as a
+## broken hitbox and much harder to diagnose.
+const MAX_DURABILITY := 6
 
 const FIELD_ENTANGLE := "entangle"
 const FIELD_FACTOR_KEY := "factorKey"
@@ -72,6 +92,9 @@ var id: String = ""
 var display_name: String = ""
 var behavior: Behavior = Behavior.ENTANGLE
 var audio_cue_id: String = ""
+
+## Strikes needed to defeat this machine. Every strike below it staggers.
+var durability: int = DEFAULT_DURABILITY
 
 ## entangle
 var factor_key: String = ""
@@ -112,6 +135,20 @@ static func from_dictionary(data: Dictionary,
 	def.display_name = String(data[FIELD_NAME])
 	def.behavior = BEHAVIOR_IDS[behavior_id]
 	def.audio_cue_id = String(data[FIELD_AUDIO_CUE])
+
+	if data.has(FIELD_DURABILITY):
+		var declared: Variant = data[FIELD_DURABILITY]
+		# REFUSED, not clamped. A roster asking for zero hits wants a machine
+		# that is already defeated when the level loads, and one asking for
+		# fifty wants an invincible one; both are far likelier to be a typo
+		# than an intention, and quietly correcting either hides it.
+		if not (declared is float or declared is int) \
+				or int(declared) < 1 or int(declared) > MAX_DURABILITY:
+			out_errors.append(EnemyError.new(EnemyError.MISSING_FIELD, def.id,
+				"durability must be a whole number of strikes between 1 and "
+				+ "%d, got '%s'" % [MAX_DURABILITY, str(declared)]))
+			return null
+		def.durability = int(declared)
 
 	match def.behavior:
 		Behavior.ENTANGLE:
