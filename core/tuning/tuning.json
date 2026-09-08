@@ -162,6 +162,48 @@
       "max": 10,
       "description": "Restoration resources one resource-kind collectible delivers to its declared region when picked up. Read at pickup time by the Collectibles System, never cached. A world's restoration economy is this value times its placed pickups against the region costs, so raising it makes every world's restoration cheaper at once; per-world economy belongs in the overridable resource costs instead."
     },
+    "combat.spin_sprint.reach_m": {
+      "value": 1.9,
+      "unit": "meters",
+      "min": 0.1,
+      "max": 10.0,
+      "description": "How far from the axolotl a spinning body knocks a machine out. Measured from the body's centre, so it is roughly a body length: the spin has to CONNECT, not merely happen nearby."
+    },
+    "combat.stomp.bounce_m_per_s": {
+      "value": 7.0,
+      "unit": "meters_per_second",
+      "min": 0.0,
+      "max": 30.0,
+      "description": "The upward kick off a stomped machine. Below the hop impulse on purpose: a bounce that beat a jump would make enemies the best way up, and this is a reward for landing the hit, not a traversal route."
+    },
+    "combat.stomp.reach_m": {
+      "value": 1.4,
+      "unit": "meters",
+      "min": 0.1,
+      "max": 10.0,
+      "description": "How close beneath the axolotl a machine has to be for a landing to count as a stomp. Landing ON a thing is a platformer's oldest verb and the one players try first, so the radius is forgiving."
+    },
+    "combat.tail_whack.cooldown_s": {
+      "value": 0.55,
+      "unit": "seconds",
+      "min": 0.0,
+      "max": 10.0,
+      "description": "Rest between swings, so the land strike is a swing rather than a held button."
+    },
+    "combat.tail_whack.reach_m": {
+      "value": 2.3,
+      "unit": "meters",
+      "min": 0.1,
+      "max": 10.0,
+      "description": "How far the tail whack reaches. Longer than the spin's radius because the tail is the axolotl's longest part and swinging it is the whole point."
+    },
+    "combat.tail_whack.window_s": {
+      "value": 0.3,
+      "unit": "seconds",
+      "min": 0.05,
+      "max": 2.0,
+      "description": "How long the swing is live. The strike lands once, on the frame the window opens; the window is what stops the player steering out of the animation and what the clip is timed against."
+    },
     "controller.bubble_boost.cooldown_s": {
       "value": 4.0,
       "unit": "seconds",
@@ -224,6 +266,13 @@
       "min": 0.25,
       "max": 30.0,
       "description": "Time submerged to regain one dash charge. Does not accrue on land."
+    },
+    "controller.dive.acceleration_m_per_s2": {
+      "value": 40.0,
+      "unit": "meters_per_second_squared",
+      "min": 1.0,
+      "max": 200.0,
+      "description": "How fast a dive or a surface reaches its target vertical speed. A dive used to SET velocity.y outright, which snapped the axolotl downward in one frame and read as a teleport rather than a movement; easing into it is what makes the descent a glide. At this rate full dive speed arrives in about an eighth of a second — visibly a movement, and quick enough that the flown Coral Cove route still makes every jump. THERE IS A FLOOR HERE AND IT IS MEASURED: at 22 the swim timing shifted enough to compound into a missed lateral jump forty legs later, and the route lost a life to the gorge. Lower this and re-fly the coral walk before believing it."
     },
     "controller.dive.speed_m_per_s": {
       "value": 5.0,
@@ -309,6 +358,69 @@
       "max": 1.0,
       "description": "Fraction of the RISING vertical speed kept when the player releases the hop button mid-climb. This is what makes one button express a range of heights, so a level can ask for a small hop onto a low ledge and a full leap across a gap without a second verb. 1.0 disables the cut and every jump reaches full height."
     },
+    "controller.pitch.full_speed_m_per_s": {
+      "value": 5.0,
+      "unit": "meters_per_second",
+      "min": 0.5,
+      "max": 40.0,
+      "description": "The vertical speed at which the model reaches controller.pitch.max_deg. Deliberately the dive speed, so a full dive is a full nose-down and everything gentler is proportional."
+    },
+    "controller.pitch.max_deg": {
+      "value": 42.0,
+      "unit": "degrees",
+      "min": 0.0,
+      "max": 89.0,
+      "description": "How far the model noses down or up at full vertical speed. Visual only, like facing: the capsule never rotates. Past about fifty degrees the tail swings through the ground on a shallow seabed, which is why this stops well short of vertical."
+    },
+    "controller.pitch.rate_deg_per_s": {
+      "value": 220.0,
+      "unit": "degrees_per_second",
+      "min": 1.0,
+      "max": 1440.0,
+      "description": "How fast the model's pitch chases the pitch its vertical speed asks for. Chased rather than set for the same reason the heading is: an instantaneous match makes every ripple in vertical speed a visible flick of the whole body."
+    },
+    "controller.roll.cooldown_s": {
+      "value": 0.65,
+      "unit": "seconds",
+      "min": 0.0,
+      "max": 10.0,
+      "description": "Rest between rolls, measured from the end of one to the start of the next. Without it, holding the key turns a dodge into the fastest way across a level and the waddle stops mattering."
+    },
+    "controller.roll.duration_s": {
+      "value": 0.38,
+      "unit": "seconds",
+      "min": 0.05,
+      "max": 2.0,
+      "description": "How long the roll drives the body. Short: the roll is a commitment, and every frame of it is a frame the player is not steering."
+    },
+    "controller.roll.speed_m_per_s": {
+      "value": 9.5,
+      "unit": "meters_per_second",
+      "min": 1.0,
+      "max": 40.0,
+      "description": "Ground speed of the sideways dodge roll. Faster than a waddle by more than double, or the roll would be a way of walking rather than a way of getting out of the way."
+    },
+    "controller.spin_sprint.cooldown_s": {
+      "value": 1.1,
+      "unit": "seconds",
+      "min": 0.0,
+      "max": 15.0,
+      "description": "Rest between spin sprints. Longer than the roll's because the spin also lands a strike, and a strike on tap is a strike with no timing in it."
+    },
+    "controller.spin_sprint.duration_s": {
+      "value": 0.55,
+      "unit": "seconds",
+      "min": 0.05,
+      "max": 3.0,
+      "description": "How long the spin sprint drives. Long enough to cross a Netbot's reach, short enough that it cannot be used as a swim speed."
+    },
+    "controller.spin_sprint.speed_m_per_s": {
+      "value": 13.0,
+      "unit": "meters_per_second",
+      "min": 1.0,
+      "max": 60.0,
+      "description": "Speed of the underwater spin sprint. Above the bubble boost's peak, because the boost is a sustained cruise and this is a lunge — and because it is the water grammar's strike, so it has to close distance on a machine that is holding station."
+    },
     "controller.squash.hop_stretch": {
       "value": 0.25,
       "unit": "ratio",
@@ -329,6 +441,13 @@
       "min": 1.0,
       "max": 60.0,
       "description": "Exponential rate at which a squash or stretch returns to rest. 10.0 recovers most of the way in a quarter of a second: quick enough to read as rubber, slow enough that a hop visibly stretches before the arc."
+    },
+    "controller.surface.acceleration_m_per_s2": {
+      "value": 30.0,
+      "unit": "meters_per_second_squared",
+      "min": 1.0,
+      "max": 200.0,
+      "description": "The same easing for rising. Slower than the dive on purpose: an axolotl drops with gravity behind it and climbs against buoyancy, so surfacing that eased as hard as diving read as a lift rather than a swim. Constrained by the flown route the same way the dive is."
     },
     "controller.swim.base_speed_m_per_s": {
       "value": 6.0,
@@ -364,6 +483,13 @@
       "min": 0.1,
       "max": 60.0,
       "description": "How briskly a grounded axolotl sheds horizontal speed when the player is not steering. Applied as exp(-rate*delta) so the tuned number means the same at any frame rate. High relative to the swim drag: land should feel planted, and releasing the key should stop you almost at once. The minimum is deliberately above zero -- at zero the axolotl would coast forever and walk off the level, which is a bug rather than a tuning choice."
+    },
+    "enemy.disabled_seconds": {
+      "value": 6.0,
+      "unit": "seconds",
+      "min": 0.5,
+      "max": 120.0,
+      "description": "How long a struck Drift Fleet machine stays knocked out: its effect is refused, and whatever it was already doing to the player is released. It recovers rather than being destroyed — these are machines being knocked over, not things being killed (REQ-019), and a permanent removal would let a player empty a level and walk it unopposed."
     },
     "enemy.hookline.mod_strip_seconds": {
       "value": 8.0,

@@ -168,6 +168,15 @@ var _declared_enemies: PackedStringArray = PackedStringArray()
 var _affordance_gates: Array[Node3D] = []
 var _restoration_gates: Dictionary = {}  # gate_id -> Node3D
 var _checkpoint_nodes: Array[Node3D] = []
+
+## Every enemy node the scene placed, kept so a strike can be resolved against
+## positions rather than by walking the tree on the frame of a swing.
+var _enemy_nodes: Array[Node3D] = []
+
+## Whether the player body's strike signal has been joined yet. The body is
+## found lazily — it is a sibling the hub adds, not a child of this node — so
+## the join is attempted each frame until it takes.
+var _strikes_bound: bool = false
 var _spawn_position: Vector3 = Vector3.ZERO
 
 
@@ -447,6 +456,7 @@ func get_tuning() -> TuningData:
 
 
 func _physics_process(delta: float) -> void:
+	_bind_player_strikes()
 	if _mods != null:
 		_mods.tick(delta)
 	if _regen != null:
@@ -572,6 +582,11 @@ func _wire_enemy_node(node: Area3D) -> void:
 	if enemy == null:
 		return
 
+	# Kept for the strike lane, which resolves a swing against POSITIONS. Only
+	# declared units are listed, so an undeclared node is as unhittable as it
+	# is harmless.
+	_enemy_nodes.append(node)
+
 	match enemy.behavior:
 		EnemyDef.Behavior.TOXIN_AURA:
 			# An aura is a VOLUME, not a hit: it applies while the player is
@@ -609,8 +624,86 @@ func _declared_unit_of(enemy_node: Node) -> String:
 ## physics.
 func _on_enemy_contact(enemy_node: Node) -> void:
 	var enemy_id := _declared_unit_of(enemy_node)
-	if not enemy_id.is_empty():
-		_fleet.contact(enemy_id)
+	if enemy_id.is_empty() or _stomped(enemy_node):
+		return
+	_fleet.contact(enemy_id)
+
+
+# --- Striking back -----------------------------------------------------------
+
+## Joins the player's strike signal to the machines the scene placed.
+##
+## Attempted every frame until it takes, because the player body is a SIBLING
+## the hub adds rather than a child of this node: there is no ordering this
+## can assume, and a one-shot attempt in wire() simply missed.
+func _bind_player_strikes() -> void:
+	if _strikes_bound or _fleet == null:
+		return
+	var body := _player() as AxolotlBody
+	if body == null:
+		return
+	_strikes_bound = true
+	if not body.strike_opened.is_connected(_on_strike_opened):
+		body.strike_opened.connect(_on_strike_opened)
+
+
+## A strike window opened at [param origin]. Every declared machine within
+## [param reach] of it is knocked out.
+##
+## The reach test is the whole of the hit detection, and it is deliberately a
+## DISTANCE rather than a physics query. A swing is a moment and a volume, not
+## a collision: giving the tail its own Area3D would mean a node that exists
+## for three tenths of a second and has to be kept in step with the animation
+## that only LOOKS like it is doing the hitting.
+func _on_strike_opened(kind: CombatStrike.Kind, origin: Vector3,
+		reach: float) -> void:
+	if _fleet == null:
+		return
+	var kind_id := CombatStrike.kind_id(kind)
+	for node: Node3D in _enemy_nodes:
+		if not is_instance_valid(node):
+			continue
+		var enemy_id := _declared_unit_of(node)
+		if enemy_id.is_empty():
+			continue
+		if _world_position_of(node).distance_to(origin) > reach:
+			continue
+		_fleet.strike(enemy_id, kind_id)
+
+
+## Whether this contact was the player LANDING on the machine.
+##
+## Checked ahead of every effect lane, so the oldest verb in the genre wins
+## the tie: a player who jumps on a Netbot has beaten it, and charging them
+## with its net for the privilege would teach them not to try. Two facts make
+## it a stomp rather than a collision — the axolotl is on its way DOWN, and it
+## is above the machine rather than beside it — and both are required, or
+## walking into a Dredger at a run would read as jumping on it.
+func _stomped(enemy_node: Node) -> bool:
+	var body := _player() as AxolotlBody
+	var target := enemy_node as Node3D
+	if body == null or target == null or _fleet == null or _tuning == null:
+		return false
+	if body.velocity.y >= 0.0:
+		return false
+
+	var here := _world_position_of(body)
+	var there := _world_position_of(target)
+	if here.y <= there.y:
+		return false
+	if here.distance_to(there) > _tuning.get_number(CombatStrike.reach_key(
+			CombatStrike.Kind.STOMP)):
+		return false
+
+	var enemy_id := _declared_unit_of(enemy_node)
+	if enemy_id.is_empty():
+		return false
+	# The bounce is paid whether or not the machine was already down: the
+	# player still landed on it, and a stomp that silently did nothing would
+	# read as the collision being broken.
+	_fleet.strike(enemy_id, CombatStrike.kind_id(CombatStrike.Kind.STOMP))
+	body.stomped()
+	return true
 
 
 ## A Dredger strikes the region its node names, reverting restored terrain
@@ -618,7 +711,7 @@ func _on_enemy_contact(enemy_node: Node) -> void:
 ## reef a dredger sits over is placement, not roster data.
 func _on_dredger_touched(enemy_node: Node) -> void:
 	var enemy_id := _declared_unit_of(enemy_node)
-	if enemy_id.is_empty():
+	if enemy_id.is_empty() or _stomped(enemy_node):
 		return
 	var region_id := String(enemy_node.get_meta(META_REGION_ID, ""))
 	if region_id.is_empty():
@@ -630,8 +723,9 @@ func _on_dredger_touched(enemy_node: Node) -> void:
 
 func _on_aura_entered(enemy_node: Node) -> void:
 	var enemy_id := _declared_unit_of(enemy_node)
-	if not enemy_id.is_empty():
-		_fleet.enter_aura(enemy_id)
+	if enemy_id.is_empty() or _stomped(enemy_node):
+		return
+	_fleet.enter_aura(enemy_id)
 
 
 func _on_aura_exited(enemy_node: Node) -> void:

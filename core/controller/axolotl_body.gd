@@ -43,6 +43,12 @@ const TERMINAL_SPEED_KEY := "controller.gravity.terminal_speed_m_per_s"
 signal grammar_changed(grammar: MovementGrammar.Grammar)
 signal water_state_changed(in_water: bool)
 
+## A strike window opened, re-emitted from the controller with the body's own
+## position folded in. The controller has no scene and no enemies; whatever
+## binds the world answers this by finding the machines within reach of that
+## point. Same division as anchor discovery for the grapple.
+signal strike_opened(kind: CombatStrike.Kind, origin: Vector3, reach: float)
+
 var _tuning: TuningData
 var _controller: AxolotlController
 var _input: InputSystem
@@ -120,6 +126,15 @@ func initialise() -> void:
 	_squash = HeroSquash.new(_tuning)
 	_controller.hopped.connect(_squash.on_hop)
 
+	# The action clips are triggered by the VERB, never guessed from motion: a
+	# roll and a fast waddle look identical to a velocity sample, and the whole
+	# point of the dodge is that the player can see they committed to it.
+	_controller.rolled.connect(
+		func() -> void: _animator.play_action(HeroAnimator.ROLL))
+	_controller.spin_sprint_started.connect(
+		func() -> void: _animator.play_action(HeroAnimator.SPIN))
+	_controller.strike_opened.connect(_on_strike_opened)
+
 
 func get_controller() -> AxolotlController:
 	return _controller
@@ -186,6 +201,25 @@ func is_in_water() -> bool:
 	return _water_volumes > 0
 
 
+## The swing plays here rather than in the controller for the same reason the
+## roll and the spin do: the controller owns no AnimationPlayer. The strike is
+## re-emitted with the body's position, which is the one fact the controller
+## cannot supply and the scene cannot do without.
+func _on_strike_opened(kind: CombatStrike.Kind, reach: float) -> void:
+	if kind == CombatStrike.Kind.TAIL_WHACK:
+		_animator.play_action(HeroAnimator.WHACK)
+	strike_opened.emit(kind, global_position, reach)
+
+
+## A machine was landed on. Called by whatever owns the scene, which is the
+## only thing that knows: the bounce is the controller's, the flourish is the
+## animator's.
+func stomped() -> void:
+	_controller.apply_stomp_bounce()
+	velocity = _controller.get_velocity()
+	_squash.on_hop()
+
+
 # --- The event feed ----------------------------------------------------------
 
 ## The entire engine-facing input surface. Marking the event handled stops it
@@ -229,7 +263,11 @@ func _physics_process(delta: float) -> void:
 	_animator.step(delta, is_in_water(), grounded, velocity)
 
 	if _model != null:
-		_model.rotation.y = _controller.get_heading_yaw()
+		# Yaw then pitch, in that order: the pitch is about the model's OWN
+		# lateral axis, so it has to be applied after the turn or a diving
+		# axolotl swimming east would tip sideways instead of nose-down.
+		_model.rotation = Vector3(_controller.get_pitch(),
+			_controller.get_heading_yaw(), 0.0)
 		_model.scale = _model_base_scale * _squash.step(delta)
 
 	# Collision may have cancelled the motion the controller asked for — walking

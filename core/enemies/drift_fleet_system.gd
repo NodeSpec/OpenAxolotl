@@ -33,10 +33,25 @@ extends RefCounted
 ##     presentation layers; the recharge scale is applied by whoever ticks
 ##     the Gill Mod system, via [method scaled_mod_delta].
 ##
+## STRIKING BACK (REQ-012, REQ-019). Until recently every one of those lanes
+## ran one way: the machines acted on the player and the player routed around
+## them. A struck machine is now KNOCKED OUT for a tuned window — its effect is
+## refused, and whatever it was already doing to the player is released on the
+## spot, so the tail whack that lands on a Netbot is also how you get out of
+## its net.
+##
+## It recovers rather than being destroyed, and that is a design decision
+## rather than an unfinished one. These are faceless industrial machines and
+## the game may not depict violence done to anything that reads as alive
+## (REQ-019 AC-5), so they are knocked over and they right themselves; and a
+## level a player can permanently empty is a level that stops being a route
+## problem the second time they walk it.
+##
 ## All magnitudes and windows are tuning KEYS read live at the moment of
 ## contact (REQ-025): retuning an enemy takes effect with no recompile.
 
 const FACTOR_PREFIX := "drift:"
+const DISABLED_SECONDS_KEY := "enemy.disabled_seconds"
 
 signal entangled(enemy_id: String, seconds: float)
 signal entangle_escaped(enemy_id: String)
@@ -46,6 +61,8 @@ signal region_dredged(enemy_id: String, region_id: String)
 signal area_wipe_struck(enemy_id: String, life_lost: bool)
 signal aura_entered(enemy_id: String)
 signal aura_cleared(enemy_id: String)
+signal enemy_disabled(enemy_id: String, kind: String, seconds: float)
+signal enemy_recovered(enemy_id: String)
 
 ## Semantic audio event id, emitted on every effect an enemy lands. Never a
 ## file path; the Audio System resolves it (REQ-023).
@@ -67,6 +84,9 @@ var _auras: Dictionary = {}
 
 ## snag-behavior enemy_id -> whether its line is currently revealed.
 var _revealed: Dictionary = {}
+
+## enemy_id -> remaining seconds of the knock-out a strike landed.
+var _disabled: Dictionary = {}
 
 
 func _init(tuning: TuningData, registry: EnemyRegistry) -> void:
@@ -104,7 +124,7 @@ func get_registry() -> EnemyRegistry:
 ## the behavior does not entangle.
 func contact(enemy_id: String) -> bool:
 	var def := _registry.get_enemy(enemy_id)
-	if def == null:
+	if def == null or is_disabled(enemy_id):
 		return false
 
 	match def.behavior:
@@ -165,6 +185,47 @@ static func entangle_factor_id(enemy_id: String) -> String:
 	return "%sentangle:%s" % [FACTOR_PREFIX, enemy_id]
 
 
+# --- Striking back -----------------------------------------------------------
+
+## A strike landed on [param enemy_id]. The machine is knocked out for the
+## tuned window, and anything it is currently doing to the player stops.
+##
+## RELEASING THE ACTIVE EFFECT IS THE POINT, not a tidy-up. A Netbot whose net
+## survived the whack that knocked it over would make the strike a thing you
+## do after the danger rather than about it; releasing means the swing is both
+## the answer to being caught and the reason to aim for the machine instead of
+## swimming around it.
+##
+## Returns false for an unknown machine or one already down, so a caller can
+## tell a landed hit from a wasted one — the same contract every other lane
+## here uses.
+func strike(enemy_id: String, kind: String = "") -> bool:
+	if _registry.get_enemy(enemy_id) == null or is_disabled(enemy_id):
+		return false
+
+	var seconds := _tuning.get_number(DISABLED_SECONDS_KEY)
+	_disabled[enemy_id] = seconds
+
+	if _entangles.has(enemy_id):
+		_release_entangle(enemy_id, true)
+	if _auras.has(enemy_id):
+		_auras.erase(enemy_id)
+		aura_cleared.emit(enemy_id)
+
+	enemy_disabled.emit(enemy_id, kind, seconds)
+	return true
+
+
+## Whether [param enemy_id] is knocked out right now. Every effect lane asks
+## this first, so a disabled machine is inert rather than merely quiet.
+func is_disabled(enemy_id: String) -> bool:
+	return _disabled.has(enemy_id)
+
+
+func disabled_remaining(enemy_id: String) -> float:
+	return float(_disabled.get(enemy_id, 0.0))
+
+
 # --- AC-2: the reveal half of the Hookline counter ---------------------------
 
 ## Whether [param enemy_id]'s line is revealed right now. Follows the reveal
@@ -185,6 +246,8 @@ func strike_region(enemy_id: String, region_id: String) -> bool:
 	var def := _registry.get_enemy(enemy_id)
 	if def == null or def.behavior != EnemyDef.Behavior.DREDGE:
 		return false
+	if is_disabled(enemy_id):
+		return false
 	if _restoration == null or not _restoration.dredger_attack(region_id):
 		return false
 
@@ -200,7 +263,7 @@ func area_wipe(enemy_id: String) -> bool:
 	var def := _registry.get_enemy(enemy_id)
 	if def == null or def.behavior != EnemyDef.Behavior.DREDGE:
 		return false
-	if _lives == null:
+	if _lives == null or is_disabled(enemy_id):
 		return false
 
 	var lost := _lives.report_catastrophe(def.area_wipe_source)
@@ -217,6 +280,11 @@ func area_wipe(enemy_id: String) -> bool:
 func enter_aura(enemy_id: String) -> bool:
 	var def := _registry.get_enemy(enemy_id)
 	if def == null or def.behavior != EnemyDef.Behavior.TOXIN_AURA:
+		return false
+	# A knocked-over drone is not venting. Refusing entry here rather than
+	# clearing it later is what stops the player walking back into the volume
+	# of the machine they just disabled and being debuffed by it anyway.
+	if is_disabled(enemy_id):
 		return false
 
 	var fresh := not _auras.has(enemy_id)
@@ -296,6 +364,14 @@ func tick(delta: float) -> void:
 			aura_cleared.emit(enemy_id)
 		else:
 			_auras[enemy_id] = remaining
+
+	for enemy_id: String in _disabled.keys():
+		var left := float(_disabled[enemy_id]) - delta
+		if left <= 0.0:
+			_disabled.erase(enemy_id)
+			enemy_recovered.emit(enemy_id)
+		else:
+			_disabled[enemy_id] = left
 
 	for enemy_id: String in _registry.get_ids():
 		var def := _registry.get_enemy(enemy_id)

@@ -17,19 +17,32 @@ enum Grammar {
 ## Every player verb. DASH is deliberately outside both per-grammar sets below:
 ## it works in either grammar, which is what makes it read as the transition
 ## skill binding the two together rather than a generic ability.
+##
+## THE TWO STRIKE VERBS ARE GRAMMAR-EXCLUSIVE, and that is the point rather
+## than an omission. A tail whack plants four feet and swings; a spin sprint
+## is a body with nothing to push against turning itself into the attack. One
+## button carries both, and which one you get is decided by where you are —
+## the same contextual rule that already makes SPACE hop on land and rise in
+## water. A shared "attack" verb would have thrown that away and made combat
+## the one thing in the game that does not care which grammar you are in.
 enum Verb {
 	SWIM,        ## full 3D directional movement
 	DIVE,
 	BUBBLE_BOOST,
+	SPIN_SPRINT, ## the water burst, and the water strike
 	WADDLE,      ## grounded locomotion
 	HOP,
 	CLIMB,
+	ROLL,        ## the land dodge
+	TAIL_WHACK,  ## the land strike
 	GRAPPLE,
 	DASH,
 }
 
-const WATER_VERBS: Array[Verb] = [Verb.SWIM, Verb.DIVE, Verb.BUBBLE_BOOST]
-const LAND_VERBS: Array[Verb] = [Verb.WADDLE, Verb.HOP, Verb.CLIMB]
+const WATER_VERBS: Array[Verb] = [Verb.SWIM, Verb.DIVE, Verb.BUBBLE_BOOST,
+	Verb.SPIN_SPRINT]
+const LAND_VERBS: Array[Verb] = [Verb.WADDLE, Verb.HOP, Verb.CLIMB, Verb.ROLL,
+	Verb.TAIL_WHACK]
 
 ## Usable in both grammars.
 const UNIVERSAL_VERBS: Array[Verb] = [Verb.DASH, Verb.GRAPPLE]

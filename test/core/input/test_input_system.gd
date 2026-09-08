@@ -175,8 +175,12 @@ func test_req_024_the_shipped_defaults_hold_no_conflicts() -> void:
 	assert_array(errors).override_failure_message(
 		"a shipped default that conflicts with itself would ship a dead verb"
 	).is_empty()
-	# 11 verbs on each of two devices.
-	assert_int(table.size()).is_equal(22)
+	# 14 verbs on each of two devices. The three newest — the land roll and
+	# tail whack, the water spin sprint — are exactly the case this assertion
+	# is for: F is the whack on land and the sprint in water, and SHIFT is the
+	# roll on land while it is already swim-down in water, so both would be
+	# conflicts if contexts were not doing their job.
+	assert_int(table.size()).is_equal(28)
 
 
 func test_req_024_sharing_an_input_inside_one_context_is_refused() -> void:

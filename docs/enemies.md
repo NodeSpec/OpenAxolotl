@@ -22,6 +22,40 @@ closed set. Every other behavior has no field for a catastrophic source at
 all — REQ-003's "ordinary contact never decrements lives" stays structural
 with an open roster.
 
+## Hitting back
+
+Every lane above used to run one way: the machines acted, and the player's
+only answer was to route around them. Three strikes now answer them, and each
+one is a thing the player already knows how to do rather than a new weapon:
+
+| Strike | Where | How | Reach |
+|---|---|---|---|
+| **Tail whack** | Land | The land strike verb (`F` / right shoulder) — plants the feet and swings the longest part of the animal | `combat.tail_whack.reach_m` |
+| **Stomp** | Land | Land on the machine from above. No button: the oldest verb in the genre, and the first thing a player tries | `combat.stomp.reach_m` |
+| **Spin sprint** | Water | The water burst verb (`F` / right shoulder) — underwater there is nothing to plant your feet against, so the body becomes the attack | `combat.spin_sprint.reach_m` |
+
+**A struck machine is knocked out for `enemy.disabled_seconds`, not
+destroyed.** Every effect lane refuses while it is down, and anything it was
+already doing to the player is released on the spot — so the swing that lands
+on a Netbot is also how you get out of its net. Two reasons it recovers rather
+than dying, and both are deliberate:
+
+* These are **machines being knocked over**, not things being killed. REQ-019
+  AC-5 forbids depicting violence done to anything that reads as alive, and
+  nothing here has hit points, health, or a death.
+* A level a player can permanently empty **stops being a route problem** the
+  second time they walk it.
+
+A stomp pays a bounce (`combat.stomp.bounce_m_per_s`), deliberately set below
+the hop impulse: it rewards landing the hit without making machines the best
+way up.
+
+The strike itself carries no scene. The controller opens a window and says how
+far it reaches; `WorldSystems` decides which placed machines are inside that
+reach — the same division the tongue grapple already uses for anchor
+discovery, and what lets the whole combat lane be tested without a physics
+world.
+
 ## The extension interface
 
 Enemies are **declarations, not scripts** — the same shape as Gill Mods. The

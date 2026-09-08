@@ -117,12 +117,27 @@ control at all.
 | mouse / right stick | look — turn and pitch the camera |
 | click | capture the mouse (Escape releases it) |
 | Space | hop on land, swim up in water (hold for height) |
-| Shift | swim down |
+| Shift | dodge roll on land, swim down in water |
 | E | climb on land, bubble boost in water |
-| C | dive |
+| F | tail whack on land, spin sprint in water |
+| C | dive (hold to keep descending) |
 | Q | tongue grapple |
 | right mouse | dash |
 | left mouse / Tab / R | gill mod activate / next / previous |
+
+Three of those are contextual pairs — `Shift`, `E` and `F` each mean one thing
+on land and another in water — and none of them is a conflict, because a
+binding is scoped to a movement grammar and the two never overlap. That is the
+same rule that lets `W` be swim-forward and waddle-forward.
+
+**Diving and surfacing are held, not tapped.** A dive eases into its speed
+rather than snapping to it, and the model noses down into the descent and up
+into a rise, so holding `C` is a dive and releasing it levels off.
+
+**The two strikes are grammar-exclusive on purpose.** A tail whack plants four
+feet and swings; a spin sprint is a body with nothing to push against turning
+itself into the attack. See [docs/enemies.md](enemies.md) for what a strike
+does to a machine.
 
 The camera holds where you put it while you are moving. It eases back behind
 your direction of travel only after `camera.look.assist_delay_seconds` of no

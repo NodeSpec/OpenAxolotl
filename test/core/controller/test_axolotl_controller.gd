@@ -180,18 +180,56 @@ func test_req_001_water_grammar_supports_full_3d_directional_movement() -> void:
 	).is_true()
 
 
+## Full speed on every axis, HELD RATHER THAN INSTANT on the vertical one.
+##
+## This used to take a single step and demand the tuned speed on all four
+## directions, and the vertical two now take about a third of a second to
+## arrive: the water grammar eases into a climb or a descent instead of
+## snapping to it, because a body that goes from level to five metres a second
+## downward between two rendered frames has not dived, it has cut. Horizontal
+## steering is unchanged and still immediate — that is the swim's
+## responsiveness, and every measured route depends on it.
+##
+## What the criterion actually says is that water movement is full 3D at the
+## tuned speed. It still is, on every axis; the vertical two are simply
+## asserted after the glide has had time to run rather than before.
 func test_req_001_swimming_moves_at_the_tuned_speed_in_any_of_three_axes() -> void:
 	var tuning := _tuning()
 	var speed := tuning.get_number("controller.swim.base_speed_m_per_s")
-	var controller := AxolotlController.new(tuning)
 
 	for direction: Vector3 in [Vector3.RIGHT, Vector3.UP, Vector3.FORWARD,
 			Vector3(1.0, 1.0, 1.0)]:
-		controller.physics_step(0.016, true, _intent(direction))
+		var controller := AxolotlController.new(tuning)
+		# Two seconds of held steering: far longer than the glide needs, and
+		# it must SETTLE at the tuned speed rather than pass through it.
+		for _step: int in range(120):
+			controller.physics_step(0.016, true, _intent(direction))
 		assert_float(controller.get_velocity().length()).override_failure_message(
 			"REQ-001 AC-2: full 3D steering must reach tuned swim speed on %s"
 			% str(direction)
 		).is_equal_approx(speed, 0.0001)
+
+
+func test_req_001_horizontal_steering_is_immediate_and_vertical_is_eased() -> void:
+	# The two halves of the same decision, held apart so neither can quietly
+	# become the other: a glide applied to the whole vector would make the
+	# swim mushy, and no glide at all is what made a dive read as a cut.
+	var tuning := _tuning()
+	var speed := tuning.get_number("controller.swim.base_speed_m_per_s")
+	var controller := AxolotlController.new(tuning)
+
+	controller.physics_step(0.016, true, _intent(Vector3.RIGHT))
+	assert_float(controller.get_velocity().x).override_failure_message(
+		"horizontal steering must still arrive on the first frame"
+	).is_equal_approx(speed, 0.0001)
+
+	controller.set_velocity(Vector3.ZERO)
+	controller.physics_step(0.016, true, _intent(Vector3.UP))
+	assert_bool(controller.get_velocity().y > 0.0
+		and controller.get_velocity().y < speed).override_failure_message(
+		"a rise must BEGIN on the first frame and not be finished by it "
+		+ "(y %.3f, tuned speed %.3f)" % [controller.get_velocity().y, speed]
+	).is_true()
 
 
 # --- AC-2: dive ------------------------------------------------------------
@@ -201,12 +239,75 @@ func test_req_001_dive_descends_at_the_tuned_speed_from_a_standstill() -> void:
 	var dive_speed := tuning.get_number("controller.dive.speed_m_per_s")
 	var controller := AxolotlController.new(tuning)
 
-	controller.physics_step(0.016, true, _intent(Vector3.ZERO,
-		[MovementGrammar.Verb.DIVE]))
+	# HELD, and settling. The dive used to SET velocity.y outright and arrive
+	# in one frame; it now eases into the tuned speed, which is what gives the
+	# descent a shape the player can see beginning. What the criterion asks —
+	# that a dive descends at the tuned speed with no steering at all — is
+	# unchanged, and is asserted where the glide has finished.
+	for _step: int in range(60):
+		controller.physics_step(0.016, true, _intent(Vector3.ZERO,
+			[MovementGrammar.Verb.DIVE], [MovementGrammar.Verb.DIVE]))
 
 	assert_float(controller.get_velocity().y).override_failure_message(
 		"REQ-001 AC-2: a dive is a deliberate descent, so it must work with no steering"
 	).is_equal_approx(-dive_speed, 0.0001)
+
+
+func test_req_001_a_dive_eases_downward_instead_of_snapping_to_speed() -> void:
+	# The glide itself, and the reason the case above had to change. A single
+	# frame of dive must have STARTED the descent without completing it: the
+	# frame that used to take the axolotl from level flight to full dive speed
+	# was not a movement, it was a cut, and it is what a pitched body has to
+	# have something to tip into.
+	var tuning := _tuning()
+	var dive_speed := tuning.get_number("controller.dive.speed_m_per_s")
+	var controller := AxolotlController.new(tuning)
+
+	controller.physics_step(0.016, true, _intent(Vector3.ZERO,
+		[MovementGrammar.Verb.DIVE]))
+	var first := controller.get_velocity().y
+
+	assert_bool(first < 0.0 and first > -dive_speed).override_failure_message(
+		"one frame of dive must begin the descent without finishing it "
+		+ "(y %.3f, tuned speed %.3f)" % [first, dive_speed]).is_true()
+
+	# And the descent DEEPENS while the key is held, rather than stalling at
+	# whatever the first frame reached.
+	controller.physics_step(0.016, true, _intent(Vector3.ZERO,
+		[], [MovementGrammar.Verb.DIVE]))
+	assert_bool(controller.get_velocity().y < first).override_failure_message(
+		"a held dive must keep accelerating downward").is_true()
+
+
+func test_req_001_the_model_pitches_into_a_dive_and_levels_off() -> void:
+	# The visual half, and the reason the glide exists at all: an axolotl
+	# sinking at five metres a second while held perfectly level is being
+	# lowered, not diving. Negative is nose-down.
+	var tuning := _tuning()
+	var controller := AxolotlController.new(tuning)
+	assert_float(controller.get_pitch()).is_equal_approx(0.0, 0.0001)
+
+	for _step: int in range(60):
+		controller.physics_step(0.016, true, _intent(Vector3.ZERO,
+			[MovementGrammar.Verb.DIVE], [MovementGrammar.Verb.DIVE]))
+	var diving := controller.get_pitch()
+	assert_bool(diving < 0.0).override_failure_message(
+		"a diving axolotl must nose DOWN (pitch %.3f rad)" % diving).is_true()
+	assert_float(rad_to_deg(diving)).is_equal_approx(
+		-tuning.get_number("controller.pitch.max_deg"), 0.5)
+
+	# Rising noses up, which is the same rule with the sign flipped rather
+	# than a second behaviour.
+	for _step: int in range(60):
+		controller.physics_step(0.016, true, _intent(Vector3.UP))
+	assert_bool(controller.get_pitch() > 0.0).override_failure_message(
+		"a rising axolotl must nose UP").is_true()
+
+	# And on land it levels off: the vertical axis there is gravity and the
+	# hop, which the fall and hop clips already answer.
+	for _step: int in range(60):
+		controller.physics_step(0.016, false, _intent(Vector3.ZERO))
+	assert_float(controller.get_pitch()).is_equal_approx(0.0, 0.001)
 
 
 func test_req_001_dive_overrides_upward_steering() -> void:

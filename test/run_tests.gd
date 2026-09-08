@@ -69,10 +69,22 @@ func _run_suite(suite_path: String) -> void:
 	var suite_name := suite_path.get_file().get_basename()
 	print("\n%s" % suite_name)
 
+	# A SUITE THAT CONTRIBUTES NOTHING IS A FAILURE, not a quiet zero.
+	#
+	# load() returning non-null is not the same as the script having compiled:
+	# a PARSE ERROR hands back a script whose method list is empty, so the
+	# suite ran no tests, added nothing to either counter, and the run stayed
+	# green while a whole file of assertions never executed. That is exactly
+	# the shape of the vacuity the per-test assertion count below guards
+	# against, one level up — and it happened here, to a suite of eight cases,
+	# on a single mistyped variable.
+	var ran := 0
+
 	for method: Dictionary in script.get_script_method_list():
 		var test_name := String(method["name"])
 		if not test_name.begins_with("test_"):
 			continue
+		ran += 1
 
 		# A fresh instance per test: state must never leak between cases.
 		var suite: GdUnitTestSuite = script.new()
@@ -112,4 +124,18 @@ func _run_suite(suite_path: String) -> void:
 		_results.append({
 			"suite": suite_name, "test": test_name,
 			"ok": ok, "failures": failures,
+		})
+
+	if ran == 0:
+		_failed += 1
+		var why := PackedStringArray([
+			"this suite ran no tests at all — it either has no test_* methods "
+			+ "or failed to compile (check the log above for a Godot Parse "
+			+ "Error). A file of assertions that never executes is not a pass."])
+		print("  FAIL  <no tests ran>")
+		for message: String in why:
+			print("          %s" % message)
+		_results.append({
+			"suite": suite_name, "test": "<no tests ran>",
+			"ok": false, "failures": why,
 		})

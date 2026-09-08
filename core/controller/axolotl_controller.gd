@@ -22,6 +22,20 @@ const WADDLE_SPEED_KEY := "controller.waddle.base_speed_m_per_s"
 const WADDLE_DRAG_KEY := "controller.waddle.drag_per_second"
 const SWIM_DRAG_KEY := "controller.swim.drag_per_second"
 const DIVE_SPEED_KEY := "controller.dive.speed_m_per_s"
+const DIVE_ACCELERATION_KEY := "controller.dive.acceleration_m_per_s2"
+const SURFACE_ACCELERATION_KEY := "controller.surface.acceleration_m_per_s2"
+const PITCH_MAX_KEY := "controller.pitch.max_deg"
+const PITCH_RATE_KEY := "controller.pitch.rate_deg_per_s"
+const PITCH_FULL_SPEED_KEY := "controller.pitch.full_speed_m_per_s"
+const ROLL_SPEED_KEY := "controller.roll.speed_m_per_s"
+const ROLL_DURATION_KEY := "controller.roll.duration_s"
+const ROLL_COOLDOWN_KEY := "controller.roll.cooldown_s"
+const SPIN_SPEED_KEY := "controller.spin_sprint.speed_m_per_s"
+const SPIN_DURATION_KEY := "controller.spin_sprint.duration_s"
+const SPIN_COOLDOWN_KEY := "controller.spin_sprint.cooldown_s"
+const WHACK_WINDOW_KEY := "combat.tail_whack.window_s"
+const WHACK_COOLDOWN_KEY := "combat.tail_whack.cooldown_s"
+const STOMP_BOUNCE_KEY := "combat.stomp.bounce_m_per_s"
 const HOP_IMPULSE_KEY := "controller.hop.impulse_m_per_s"
 const CLIMB_SPEED_KEY := "controller.climb.speed_m_per_s"
 const CLIMB_ADHESION_KEY := "controller.climb.adhesion_m_per_s"
@@ -44,6 +58,13 @@ signal climb_started()
 signal climb_ended()
 signal grapple_attached(anchor_id: String)
 signal grapple_detached(anchor_id: String, arrived: bool)
+signal rolled()
+signal spin_sprint_started()
+
+## A strike window opened. Whatever owns the scene answers this by finding the
+## machines within [param reach] of the body — the controller has no scene and
+## never learns which, or whether, anything was hit.
+signal strike_opened(kind: CombatStrike.Kind, reach: float)
 
 var _tuning: TuningData
 var _grammar: MovementGrammar.Grammar = MovementGrammar.Grammar.LAND
@@ -54,6 +75,13 @@ var _was_in_water: bool = false
 ## horizontal direction of travel at the tuned rate. Zero faces down -Z,
 ## Godot's forward, which is also the direction every greybox route runs.
 var _heading_yaw: float = 0.0
+
+## The pitch the model should wear, in radians: negative noses down, which is
+## what a descending axolotl does. Visual only, like the heading — the capsule
+## is round and never rotates — and the thing the heading's own comment used to
+## call "a follow-up".
+var _pitch: float = 0.0
+
 var _initialised: bool = false
 
 ## Published by the CharacterBody3D wrapper each step. The wrapper still OWNS the
@@ -88,8 +116,17 @@ var _dash: WaterDash
 var _boost: BubbleBoost
 var _grapple: TongueGrapple
 var _jump_feel: JumpFeel
+var _roll: BurstMove
+var _spin: BurstMove
 var _anchor_source: AnchorSource = null
 var _ability_hooks: Dictionary = {}
+
+## The tail whack's live window and its rest. It is not a BurstMove because it
+## moves nothing: the axolotl plants its feet and swings, so there is no
+## direction to commit to and no velocity to drive. What it shares with the
+## bursts is only the shape of the timer, which is small enough to keep here.
+var _whack_window: float = 0.0
+var _whack_cooldown: float = 0.0
 
 
 func _init(tuning: TuningData) -> void:
@@ -99,6 +136,10 @@ func _init(tuning: TuningData) -> void:
 	_boost = BubbleBoost.new(tuning)
 	_grapple = TongueGrapple.new(tuning)
 	_jump_feel = JumpFeel.new(tuning)
+	_roll = BurstMove.new(tuning, ROLL_SPEED_KEY, ROLL_DURATION_KEY,
+		ROLL_COOLDOWN_KEY)
+	_spin = BurstMove.new(tuning, SPIN_SPEED_KEY, SPIN_DURATION_KEY,
+		SPIN_COOLDOWN_KEY)
 
 
 # --- The physics step -------------------------------------------------------
@@ -115,8 +156,12 @@ func physics_step(delta: float, is_in_water: bool, intent: PlayerIntent) -> void
 	_apply_water_state(is_in_water)
 	_dash.tick(delta, is_in_water)
 	_boost.tick(delta)
+	_roll.tick(delta)
+	_spin.tick(delta)
+	_tick_whack(delta)
 	_integrate(delta, intent)
 	_update_heading(delta)
+	_update_pitch(delta)
 
 
 ## The body turns toward where it is going, never instantly: the heading chases
@@ -133,6 +178,36 @@ func _update_heading(delta: float) -> void:
 	var difference := wrapf(target - _heading_yaw, -PI, PI)
 	_heading_yaw = wrapf(
 		_heading_yaw + clampf(difference, -max_step, max_step), -PI, PI)
+
+
+## The model noses into where it is going vertically.
+##
+## THIS IS WHAT MAKES A DIVE READ AS A DIVE. The glide below gives the descent
+## a shape; without a body that tips into it, an axolotl sinking at five metres
+## a second is still an axolotl held perfectly level being lowered, which is
+## the posture of a lift rather than of an animal. The pitch is proportional to
+## vertical speed and chased rather than set, for the same reason the heading
+## is chased: matching it instantly turns every ripple in vertical speed into a
+## visible flick of the whole body.
+##
+## Water only. On land the vertical axis is gravity and the hop, both of which
+## the fall and hop clips already answer with the head and the legs, and a
+## model pitched forty degrees down while standing on a slope reads as broken.
+func _update_pitch(delta: float) -> void:
+	var wanted := 0.0
+	var full := _tuning.get_number(PITCH_FULL_SPEED_KEY)
+	if _grammar == MovementGrammar.Grammar.WATER and full > 0.0:
+		wanted = deg_to_rad(_tuning.get_number(PITCH_MAX_KEY)) \
+			* clampf(_velocity.y / full, -1.0, 1.0)
+	var max_step := deg_to_rad(_tuning.get_number(PITCH_RATE_KEY)) * delta
+	_pitch += clampf(wanted - _pitch, -max_step, max_step)
+
+
+func _tick_whack(delta: float) -> void:
+	if delta <= 0.0:
+		return
+	_whack_window = maxf(0.0, _whack_window - delta)
+	_whack_cooldown = maxf(0.0, _whack_cooldown - delta)
 
 
 func _apply_water_state(is_in_water: bool) -> void:
@@ -163,8 +238,14 @@ func _apply_water_state(is_in_water: bool) -> void:
 	if target == MovementGrammar.Grammar.WATER:
 		if _climbing:
 			_end_climb()
+		# A roll is a land verb. Carried into water it would be a swim burst
+		# nobody granted, and it would keep driving a heading that was chosen
+		# against the ground.
+		_roll.interrupt()
+		_whack_window = 0.0
 	else:
 		_boost.interrupt()
+		_spin.interrupt()
 
 	grammar_changed.emit(_grammar)
 
@@ -215,25 +296,76 @@ func _integrate_water(delta: float, intent: PlayerIntent) -> void:
 	# difference between swimming and a land grammar wearing a swim animation.
 	var direction := intent.direction
 
+	# THE SPIN SPRINT DOMINATES, like the grapple pull above it. It is a
+	# commitment: the body is spinning, so steering out of it mid-flight would
+	# both look wrong and take the timing out of the one verb whose timing is
+	# the whole skill.
+	if intent.wants(MovementGrammar.Verb.SPIN_SPRINT):
+		var heading := direction if not direction.is_zero_approx() \
+			else _facing_direction()
+		if _spin.try_activate(heading):
+			spin_sprint_started.emit()
+			_open_strike(CombatStrike.Kind.SPIN_SPRINT)
+	if _spin.is_active():
+		_velocity = _spin.velocity()
+		return
+
 	# Steering OVERRIDES momentum; absence of steering PRESERVES it. Overwriting
 	# unconditionally would zero the velocity every frame the player is not
 	# holding a direction — which would silently undo the retention applied in
 	# _apply_water_state and make AC-1's momentum carry unobservable.
+	var target: Vector3
 	if not direction.is_zero_approx():
-		_velocity = direction.normalized() * _swim_speed()
+		target = direction.normalized() * _swim_speed()
 	else:
 		# Momentum is PRESERVED but not forever. Water glides, so the drag here
 		# is gentle — but without any the axolotl would coast at its entry speed
 		# until it hit something, which is what a fall into a pool did before
 		# this existed.
-		_velocity = _dragged(_velocity, _tuning.get_number(SWIM_DRAG_KEY), delta)
+		target = _dragged(_velocity, _tuning.get_number(SWIM_DRAG_KEY), delta)
 
+	# A dive is a deliberate descent, not steering: it SETS the vertical target
+	# rather than adding to it, so diving from a standstill still descends and a
+	# dive held against upward steering still goes down. It is read from BOTH
+	# halves of the intent — the press announces it, the hold sustains it — so
+	# holding the key is a dive rather than a series of taps.
 	if intent.wants(MovementGrammar.Verb.DIVE):
-		# A dive is a deliberate descent, not steering: it SETS the vertical
-		# component rather than adding to it, so diving from a standstill still
-		# descends and a dive held against upward steering still goes down.
-		_velocity.y = -_tuning.get_number(DIVE_SPEED_KEY)
 		dived.emit()
+	if intent.wants(MovementGrammar.Verb.DIVE) \
+			or intent.sustains(MovementGrammar.Verb.DIVE):
+		target.y = -_tuning.get_number(DIVE_SPEED_KEY)
+
+	# THE GLIDE. Horizontal steering stays immediate — that is the swim's
+	# responsiveness and every route was measured against it — but the VERTICAL
+	# component is eased into. Setting velocity.y outright moved the axolotl
+	# from level flight to five metres a second downward between two rendered
+	# frames, which is not a dive: it is a cut. Easing gives the descent and the
+	# rise a shape the player can see beginning, and it is what _update_pitch
+	# above has to work with.
+	_velocity.x = target.x
+	_velocity.z = target.z
+	_velocity.y = _glide(_velocity.y, target.y, delta)
+
+
+## Eases a vertical speed toward its target, downward faster than upward.
+##
+## The asymmetry is deliberate: an axolotl drops with gravity behind it and
+## climbs against buoyancy, so a surface that eased in as hard as a dive read
+## as being winched rather than swum.
+func _glide(current: float, target: float, delta: float) -> float:
+	var rate := _tuning.get_number(DIVE_ACCELERATION_KEY) if target < current \
+		else _tuning.get_number(SURFACE_ACCELERATION_KEY)
+	if rate <= 0.0 or delta <= 0.0:
+		return target
+	return current + clampf(target - current, -rate * delta, rate * delta)
+
+
+## The way the body is pointing, as a direction. What a burst uses when the
+## player asked for one without holding a direction: rolling or spinning on
+## the spot would spend the cooldown and move nothing, which reads as the
+## button being broken rather than as a decision.
+func _facing_direction() -> Vector3:
+	return Vector3(-sin(_heading_yaw), 0.0, -cos(_heading_yaw))
 
 
 func _swim_speed() -> float:
@@ -249,6 +381,28 @@ func _integrate_land(delta: float, intent: PlayerIntent) -> void:
 	# vertical component of VELOCITY is preserved, because that is the hop and
 	# gravity, which steering has no business erasing.
 	var direction := Vector3(intent.direction.x, 0.0, intent.direction.z)
+
+	# The tail whack plants the feet and swings, so it is checked before the
+	# roll and does not touch velocity at all: the axolotl keeps whatever it
+	# was doing horizontally, and the swing happens on top of it.
+	if intent.wants(MovementGrammar.Verb.TAIL_WHACK):
+		_try_whack()
+
+	# THE ROLL DOMINATES steering for its window, exactly as the spin sprint
+	# does in water and for the same reason: a dodge you can steer out of is
+	# not a dodge, and the commitment is what makes when you press it a
+	# decision rather than a direction.
+	if intent.wants(MovementGrammar.Verb.ROLL):
+		var heading := direction if not direction.is_zero_approx() \
+			else _facing_direction()
+		if _roll.try_activate(heading):
+			rolled.emit()
+	if _roll.is_active():
+		var driven := _roll.velocity()
+		# Vertical is left to gravity and the hop: a roll off a ledge is a
+		# roll that falls, not one that flies.
+		_velocity = Vector3(driven.x, _velocity.y, driven.z)
+		return
 	if not direction.is_zero_approx():
 		var waddle := direction.normalized() \
 			* _tuning.get_number(WADDLE_SPEED_KEY) \
@@ -371,6 +525,55 @@ func max_climb_height() -> float:
 		* _modifiers.combined(CapabilityModifiers.Target.CLIMB_HEIGHT)
 
 
+# --- Combat: three strikes, none of them a new button ------------------------
+
+## Opens a strike window and announces it. Refused for a strike the current
+## grammar does not own, so a land verb underwater neither swings nor spends
+## anything.
+func _open_strike(kind: CombatStrike.Kind) -> bool:
+	if not CombatStrike.allowed_in(kind, _grammar):
+		return false
+	strike_opened.emit(kind, _tuning.get_number(CombatStrike.reach_key(kind)))
+	return true
+
+
+func _try_whack() -> bool:
+	if _whack_cooldown > 0.0 or _whack_window > 0.0:
+		return false
+	if not _open_strike(CombatStrike.Kind.TAIL_WHACK):
+		return false
+	_whack_window = _tuning.get_number(WHACK_WINDOW_KEY)
+	_whack_cooldown = _whack_window + _tuning.get_number(WHACK_COOLDOWN_KEY)
+	return true
+
+
+## Whether a tail whack is mid-swing. Read by the animator, and by anything
+## that wants to know the axolotl is busy.
+func is_whacking() -> bool:
+	return _whack_window > 0.0
+
+
+## The bounce off a machine the axolotl landed on.
+##
+## Called by whatever owns the scene, because only it knows the landing
+## happened — the controller has no enemies in it. It is a SET rather than an
+## add, so the bounce is the same height however fast the player was falling:
+## a stomp from six metres up must not fling them further than a stomp from
+## one, or the reward for the hit depends on how badly they misjudged the drop.
+func apply_stomp_bounce() -> void:
+	_velocity.y = _tuning.get_number(STOMP_BOUNCE_KEY)
+	_is_grounded = false
+	_jump_feel.consume()
+
+
+func get_roll() -> BurstMove:
+	return _roll
+
+
+func get_spin_sprint() -> BurstMove:
+	return _spin
+
+
 # --- Public interface: movement state ---------------------------------------
 
 func get_grammar() -> MovementGrammar.Grammar:
@@ -388,6 +591,13 @@ func get_velocity() -> Vector3:
 ## Radians about +Y; zero faces -Z. Applied by the body wrapper to the model.
 func get_heading_yaw() -> float:
 	return _heading_yaw
+
+
+## Radians about the model's own +X; negative noses DOWN. Applied by the body
+## wrapper to the model beside the heading, and visual only — the capsule the
+## whole game was measured against does not rotate.
+func get_pitch() -> float:
+	return _pitch
 
 
 ## Seeds velocity for a test or a spawn. Never called during normal play — the
