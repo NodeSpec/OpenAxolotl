@@ -110,7 +110,8 @@ signal in the language for "this object obeys different rules".
    metres back from the landing's edge, which is twice the jump: there is no
    bank to hop along instead.
 5. **The seed beds** *(restoration)*. Three descending terraces carrying the
-   seven kelp seeds — one `resource`-kind collectible, `kelp_seed`, declared
+   seven kelp seeds, with a Dredger over the entrance and a Runoff Drone on
+   terrace two, — one `resource`-kind collectible, `kelp_seed`, declared
    once and placed seven times, each delivered to the shelf and *spent*
    (`restoration.*.resource_cost` overridden to 3+4 through the sanctioned
    `tuningOverrides`). Two of the seeds are out on side pillars that cost a
@@ -141,9 +142,43 @@ falling costs a life and returns the player to the last checkpoint — and the
 player watches the valley come up at them on the way, because the floor is
 scenery and the pit is invisible.
 
+## The Drift Fleet, and the fight ladder
+
+Nine machines, and the route stops for eight of them. They used to stand six
+to ten metres off the line the level is designed around while the longest
+strike reached 2.3 m, so a player walking the route swam past all four and
+never met one: the whole combat lane was decoration. The coral walk now
+**fights** its way through, and a machine that drifts out of reach fails the
+run rather than going quiet.
+
+They climb in durability, and the level teaches each step before it asks for
+the next:
+
+| Act | Machine | Strikes | Why here |
+|---|---|---|---|
+| 2, the lagoon | `NetbotLagoonGap` | 1 | The first machine in the game. In water, where one spin sprint is both the escape from its net and the end of it — the cheapest possible place to learn that machines can be hit at all |
+| 2, over RiseWall | `NetbotRiseWall` | 1 | The same lesson mid-climb, with somewhere to be |
+| 4, the wall top | `HooklineGlowGate` | 2 | On land with Glow already in hand, so its line is visible: the counter and the fight in one beat |
+| 4, ShrimpLedge | `HooklineShrimpLedge` | 2 | **Optional**, guarding the lantern shrimp. A reward worth a fight, never a toll |
+| 4b, past the arch | `RunoffDroneGorge` | 3 | The first three-strike machine, fought from inside its own murk |
+| 5, the seed-bed gate | `DredgerSeedBed` | 4 | The boss beat: the only machine that can spend a life, standing over the shelf it flattened |
+| 5, terrace two | `RunoffDroneSeedBed` | 3 | Seeds here are gathered half blind until it is down |
+| 7, the race channel | `NetbotTideRace` | 1 | One strike, in a current |
+| 7, the sea shore | `RunoffDroneSeaShore` | 3 | The last machine, between the player and the final jump |
+
+**The Dredger stands at the entrance to the seed bed, not inside it**, and
+that is forced rather than chosen. Seven seeds at one resource each against
+costs of 3 and 4 is exactly seven with no slack, and a Dredger reversion
+zeroes a region's banked resources as well as its state — so a player who
+touched this machine after collecting even one seed could never reach
+`restored` again, and the shelf wall would stay shut with no way back. The
+flown route found that in one pass. A world wanting a Dredger that threatens
+work already done needs enough spare seeds to re-restore from barren after a
+reversion: fourteen here, not eight.
+
 ## Checkpoints
 
-Twenty-three of them, which is far denser than the old corridor's five. A
+Twenty-seven of them, which is far denser than the old corridor's five. A
 platforming route is slower per metre than a walk, and REQ-003 AC-7 bounds
 the replay from any anchor to the next by `progression.max_retry_seconds`
 (5 s) — so climbs, dives and pillar detours each need an anchor of their
@@ -153,7 +188,10 @@ why there is a checkpoint at the foot of the coral wall and another past
 the second seed terrace. The tide race added two more the same way: laid
 out with one anchor at each end it measured a **nine-second** replay
 against the five-second bound, so there is now one on the last dry step
-and one mid-channel.
+and one mid-channel. The fight ladder added four more for the same measured
+reason: a fight is a place a player dies, and the lagoon swim, the gorge
+exit and terrace two each held one more of them than a five-second replay
+could carry.
 
 ## Declarations used
 
@@ -164,7 +202,7 @@ and one mid-channel.
 | optional: tuningOverrides | both restoration resource costs (sanctioned set) |
 | optional: cameraHints | one hint volume over the grotto |
 | optional: collectibles | `kelp_seed` (resource → `coral_shelf`), `hermit_snail` and `lantern_shrimp` (discovery) — Coral Cove is the world that exercises **both** kinds; Bubble Bay declares resources only |
-| optional: enemies | four Drift Fleet units, all placed **off** the walked route |
+| optional: enemies | all four Drift Fleet kinds, **nine machines** placed on the walked route; the coral walk fights eight of them |
 | scene conventions: two `WaterVolume` bodies | the valley waterway (river into cove) and the gorge river |
 | optional: boss, music, npcs, secretAreas, customAbility | **not declared** — absent defaults apply |
 | scene conventions: `pit_volume`, `hazard`, `regen_station`, `climbable` | one pit under the whole world; one leg-stripping hook; one station; one climbable wall |

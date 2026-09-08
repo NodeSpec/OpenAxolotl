@@ -385,12 +385,10 @@ func test_req_012_a_defeated_hookline_cannot_take_the_equipped_mod() -> void:
 func test_req_012_beating_one_machine_leaves_the_others_alone() -> void:
 	# Knocking one machine over must not knock the roster over.
 	#
-	# A LIMITATION WORTH NAMING RATHER THAN HIDING: defeat is keyed by ROSTER
-	# ID, not by placed node, so two Netbots in one level share a single state
-	# and beating either one beats both. No shipped world places two of
-	# anything, so nothing is wrong today; a world that wanted a pair of Netbots
-	# would need the strike lane keyed by node, which is a change to how
-	# WorldSystems resolves a strike rather than to this file.
+	# This suite names its machines by ROSTER ID, which the runtime resolves as
+	# a unit of that name — the one-of-a-kind case. Two machines of the SAME
+	# kind being two separate fights is the other half, and it is held where the
+	# placement lives: test/hub/test_world_drift_fleet.gd.
 	var fleet := _fleet(_tuning())
 	assert_int(fleet.strike("netbot", "tail_whack")).is_equal(
 		DriftFleetSystem.StrikeResult.DEFEATED)

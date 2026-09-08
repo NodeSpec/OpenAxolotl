@@ -155,6 +155,12 @@ func _physics_process(_delta: float) -> void:
 		_wire_restoration()
 		if _world_id == "coral_cove":
 			_pilot = RoutePilot.new(CoralRoute.waypoints(), _world_origin())
+			# The gate measures the route as PLAYED, fights included: a machine
+			# staggering, going down and its node being taken out of the scene
+			# is frame cost the player pays, and a gate that flew past every
+			# encounter would be measuring a level nobody walks.
+			_pilot.set_fight_test(RoutePilot.fleet_defeat_test(
+				get_tree().get_first_node_in_group("world_systems")))
 		else:
 			_key(KEY_W, true)
 		return

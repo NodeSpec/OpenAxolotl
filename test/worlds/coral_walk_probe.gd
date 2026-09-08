@@ -137,6 +137,9 @@ func _physics_process(_delta: float) -> void:
 		_collect_checkpoints()
 		_walk_start_frame = _frame
 		_pilot = RoutePilot.new(_route(), _world_origin())
+		# The route's fight legs end when the machine they name is down, and
+		# the world's own runtime is the only thing that knows.
+		_pilot.set_fight_test(RoutePilot.fleet_defeat_test(_systems))
 		return
 
 	if _pilot != null and not _returned:
@@ -267,9 +270,17 @@ func _check_pillar_one() -> void:
 		"the regen station regrew the leg (got %s)" % str(_regrown))
 	_check(_lives_spent == 0,
 		"ordinary hazard contact spent no life (spent %d)" % _lives_spent)
-	_check(_checkpoints_hit.size() == _checkpoint_z.size(),
-		"every checkpoint was activated by touch (%d of %d: %s)"
-		% [_checkpoints_hit.size(), _checkpoint_z.size(), str(_checkpoints_hit)])
+	# COUNTED BY UNIQUE ID, not by activation. Re-entering an anchor's volume
+	# is ordinary play — a spin sprint aimed at a machine throws the player
+	# several metres, sometimes back through the checkpoint they just passed —
+	# and a walk that failed for touching one twice would be asserting the
+	# route is a one-way corridor rather than that every anchor is reachable.
+	var unique: Dictionary = {}
+	for id: String in _checkpoints_hit:
+		unique[id] = true
+	_check(unique.size() == _checkpoint_z.size(),
+		"every checkpoint was activated by touch (%d distinct of %d: %s)"
+		% [unique.size(), _checkpoint_z.size(), str(unique.keys())])
 	_check(_lives_at_entry > 0,
 		"the world opened with a positive life count (%d)" % _lives_at_entry)
 	var recorded: Variant = _save.get_world_data(WORLD_ID).get("lastCheckpointId", "")

@@ -14,6 +14,14 @@ extends RefCounted
 ## Coordinates are in the LEVEL's own space, readable against world.tscn.
 ## Each waypoint names the platform it stands on; the gaps between them are
 ## the gaps the world's header measures against the controller's envelope.
+##
+## FIGHT LEGS NAME A MACHINE AND END WHEN IT IS DOWN. They are here for the
+## same reason the jumps are: the level's machines were placed six to ten
+## metres off this line while the longest strike reached 2.3 m, so every one
+## of them was decoration. A route that walks past a machine proves nothing
+## about whether it can be fought; a leg that has to put one down proves both
+## that it is in reach and that its declared durability is beatable with the
+## verb the grammar there actually offers.
 
 
 static func waypoints() -> Array[RoutePilot.Waypoint]:
@@ -26,9 +34,11 @@ static func waypoints() -> Array[RoutePilot.Waypoint]:
 	RoutePilot.at("swim", Vector3(0, 1.5, -32.5), "off the lip and into the cove"),
 	RoutePilot.at("swim", Vector3(0, -5, -34), "line up below the brow"),
 	RoutePilot.at("swim", Vector3(0, -5, -36.5), "through the gap under DiveBar"),
+	RoutePilot.fight("NetbotLagoonGap", Vector3(0, -5, -37.6), "the first machine in the level: a one-hit Netbot in open water, where a single spin sprint is both the escape from its net and the end of it"),
 	RoutePilot.at("boost", Vector3(0, -5, -39.5), "boost for the climb over the shelf"),
 	RoutePilot.at("swim", Vector3(0, 0.6, -40), "up the near face of RiseWall"),
 	RoutePilot.at("swim", Vector3(0, 0.6, -42.5), "over the top"),
+	RoutePilot.fight("NetbotRiseWall", Vector3(0, 0.6, -43.6), "the same lesson again, mid-climb over RiseWall"),
 	RoutePilot.at("swim", Vector3(0, 0.8, -46), "onto the first shore step, still submerged"),
 	RoutePilot.at("swim", Vector3(0, 4.2, -49), "up to the surface, clear over the shore lip"),
 	RoutePilot.at("swim", Vector3(0, 4.2, -51.5), "out of the water and down onto CoveShore"),
@@ -36,6 +46,7 @@ static func waypoints() -> Array[RoutePilot.Waypoint]:
 	RoutePilot.at("climb", Vector3(0, 3.8, -63.5), "INTO the coral wall -- a climb leg aims at the far side of the face, so the pilot keeps pressing into it until the contact it is waiting for actually happens"),
 	RoutePilot.at("walk", Vector3(0, 8.2, -65), "over the lip onto the wall top"),
 	RoutePilot.at("walk", Vector3(0, 8.2, -66.4), "the Glow gill mod"),
+	RoutePilot.fight("HooklineGlowGate", Vector3(3.2, 8.2, -67.4), "a Hookline Rig on the wall top: two tail whacks, fought with the Glow mod already in hand so its line is visible"),
 	RoutePilot.at("jump", Vector3(0, 8.2, -69.5), "past the opened glow gate"),
 	RoutePilot.at("jump", Vector3(0, 8.2, -74.1), "pillar 1 (gap 2.6 -- the widest on the route)"),
 	RoutePilot.at("jump", Vector3(1.5, 8.2, -79), "pillar 2 (gap 2.2, and 1.5 m to the right)"),
@@ -46,15 +57,18 @@ static func waypoints() -> Array[RoutePilot.Waypoint]:
 	RoutePilot.at("swim", Vector3(0, 7, -99.5), "into the gorge river"),
 	RoutePilot.at("swim", Vector3(0, 3.6, -102), "down for the arch"),
 	RoutePilot.at("swim", Vector3(0, 3.6, -104.2), "under GorgeArch"),
-	RoutePilot.at("boost", Vector3(0, 3.6, -105.2), "boost down the last of the channel"),
+	RoutePilot.fight("RunoffDroneGorge", Vector3(0, 3.6, -105.8), "a Runoff Drone past the arch: three strikes, fought from inside its own murk"),
+	RoutePilot.at("boost", Vector3(0, 3.6, -106.6), "boost down the last of the channel"),
 	RoutePilot.at("swim", Vector3(0, 7.2, -107.4), "up to the surface at the far end"),
 	RoutePilot.at("swim", Vector3(0, 7.2, -109.6), "out of the water onto the first terrace"),
 	RoutePilot.at("walk", Vector3(0, 7, -110), "terrace 1"),
+	RoutePilot.fight("DredgerSeedBed", Vector3(-3.5, 7, -110), "the level's boss beat, guarding the way into the seed bed: four strikes on the only machine that can spend a life, and it must fall before a single seed is planted"),
 	RoutePilot.at("walk", Vector3(0, 7, -110.6), "seed 1"),
 	RoutePilot.at("walk", Vector3(-3, 7, -111.4), "seed 2"),
 	RoutePilot.at("jump", Vector3(-8.5, 7.4, -111.7), "seed 3, out on the left pillar (2.0 m across)"),
 	RoutePilot.at("jump", Vector3(-3, 7, -112.4), "back onto terrace 1"),
 	RoutePilot.at("jump", Vector3(0, 6, -117), "terrace 2 (gap 2.2, a step down)"),
+	RoutePilot.fight("RunoffDroneSeedBed", Vector3(3.5, 6, -117.8), "a Drone venting over terrace two: three strikes on foot, and the seeds here are gathered half blind until it is down"),
 	RoutePilot.at("walk", Vector3(2.5, 6, -117.6), "seed 4"),
 	RoutePilot.at("jump", Vector3(8.5, 6.4, -118.2), "seed 6, out on the right pillar (2.0 m across)"),
 	RoutePilot.at("jump", Vector3(2.5, 6, -118.8), "back onto terrace 2"),
@@ -74,11 +88,13 @@ static func waypoints() -> Array[RoutePilot.Waypoint]:
 	RoutePilot.at("swim", Vector3(0, 2.2, -160), "off the last step straight into the race"),
 	RoutePilot.at("swim", Vector3(0, -0.4, -165), "down for the surge bar"),
 	RoutePilot.at("swim", Vector3(0, -0.4, -169), "under SurgeBar"),
+	RoutePilot.fight("NetbotTideRace", Vector3(0, -0.4, -170.5), "a Netbot in the race current -- one strike, but the current is moving"),
 	RoutePilot.at("boost", Vector3(0, 0.4, -173), "boost along the channel"),
 	RoutePilot.at("swim", Vector3(0, 1.6, -180), "back up to the waterline"),
 	RoutePilot.at("swim", Vector3(0, 2.4, -187), "over the submerged sea shore"),
 	RoutePilot.at("swim", Vector3(0, 2.2, -190), "out of the water and down onto SeaShore"),
 	RoutePilot.at("walk", Vector3(0, 2.0, -191), "SeaShore -- land grammar back"),
+	RoutePilot.fight("RunoffDroneSeaShore", Vector3(0, 2.0, -193), "the last machine in the level, between the player and the final jump"),
 	RoutePilot.at("jump", Vector3(0, 3.0, -198.5), "SeaTerrace (gap 1.0, rise 1.0)"),
 	RoutePilot.at("finish", Vector3(0, 3.0, -201), "the finish volume, at the open sea"),
 	] as Array[RoutePilot.Waypoint]

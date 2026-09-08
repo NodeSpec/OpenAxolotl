@@ -264,7 +264,7 @@ func test_req_012_a_defeated_machine_is_tipped_over_and_stops_being_touchable() 
 
 	assert_bool(netbot.monitoring).is_true()
 	# One strike: the Netbot is the roster's one-hit knockout.
-	assert_int(systems.get_drift_fleet().strike("netbot", "tail_whack")
+	assert_int(systems.get_drift_fleet().strike(netbot.name, "tail_whack")
 		).is_equal(DriftFleetSystem.StrikeResult.DEFEATED)
 
 	assert_bool(netbot.transform.is_equal_approx(placed)
@@ -293,7 +293,7 @@ func test_req_012_a_respawn_stands_the_scene_machines_back_up() -> void:
 	var systems := built[1] as WorldSystems
 	var placed := netbot.transform
 
-	systems.get_drift_fleet().strike("netbot", "stomp")
+	systems.get_drift_fleet().strike(netbot.name, "stomp")
 	systems.get_drift_fleet().reset_defeats()
 
 	assert_bool(netbot.transform.is_equal_approx(placed)
@@ -317,8 +317,42 @@ func test_req_012_a_stagger_leaves_the_scene_alone() -> void:
 	var systems := built[1] as WorldSystems
 	var placed := dredger.transform
 
-	assert_int(systems.get_drift_fleet().strike("dredger", "tail_whack")
+	assert_int(systems.get_drift_fleet().strike(dredger.name, "tail_whack")
 		).is_equal(DriftFleetSystem.StrikeResult.STAGGERED)
 	assert_bool(dredger.transform.is_equal_approx(placed)).is_true()
 	assert_bool(dredger.monitoring).is_true()
+	_teardown(built[0])
+
+
+func test_req_012_two_machines_of_one_kind_are_two_machines() -> void:
+	# The constraint this replaced: keyed by ROSTER ID, striking either Netbot
+	# beat both and they went down together, so "one of each per world" was a
+	# load-bearing rule nobody had written down. A level with real encounters
+	# needs several of a kind, and each has to be its own fight.
+	var manifest := REGION_MANIFEST.duplicate(true)
+	manifest["enemies"] = [{"enemyId": "netbot"}]
+	var first := _enemy_node("netbot")
+	first.name = "NetbotOne"
+	first.position = Vector3(-4, 1, -20)
+	var second := _enemy_node("netbot")
+	second.name = "NetbotTwo"
+	second.position = Vector3(4, 1, -26)
+	var built := _build(manifest, [first, second] as Array[Area3D])
+	var fleet := (built[1] as WorldSystems).get_drift_fleet()
+
+	assert_int(fleet.strike("NetbotOne", "tail_whack")).is_equal(
+		DriftFleetSystem.StrikeResult.DEFEATED)
+	assert_bool(fleet.is_defeated("NetbotTwo")).override_failure_message(
+		"beating one machine must not beat its twin across the level"
+		).is_false()
+	assert_bool(second.monitoring).override_failure_message(
+		"and the twin must still be standing in the scene").is_true()
+	assert_bool(first.monitoring).is_false()
+
+	# Both resolve to the same roster entry, so both fight the same way.
+	assert_str(fleet.roster_id_of("NetbotTwo")).is_equal("netbot")
+	assert_bool(fleet.contact("NetbotTwo")).override_failure_message(
+		"the untouched twin still catches the player").is_true()
+	assert_bool(fleet.contact("NetbotOne")).override_failure_message(
+		"the beaten one does not").is_false()
 	_teardown(built[0])

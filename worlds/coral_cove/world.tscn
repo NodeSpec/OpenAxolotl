@@ -720,6 +720,12 @@ script = ExtResource("terrain_shell_script")
 surface_material = ExtResource("5_surface_river_stone")
 shell_seed = 7148
 
+; Added when the lagoon grew a fight: the boost run and the climb up
+; RiseWall used to be one replay, and a Netbot in the middle of it put
+; that replay past the retry bound.
+[node name="CheckpointLagoonBoost" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.0, -40.5)
+
 [node name="CheckpointLagoonRise" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -43.5)
 
@@ -770,6 +776,10 @@ shape = SubResource("BoxShape3D_35")
 script = ExtResource("terrain_shell_script")
 surface_material = ExtResource("6_surface_river_sand")
 shell_seed = 6302
+
+; The far half of the same swim, past the machine.
+[node name="CheckpointShoreStep" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -46.5)
 
 [node name="CheckpointCoveShore" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -52)
@@ -1120,6 +1130,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, -99.5)
 
 [node name="CheckpointGorgeArch" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -104.5)
+; Past the gorge Drone and back at the surface, before the seed bed and
+; the two machines guarding its entrance.
+[node name="CheckpointGorgeExit" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.2, -108.0)
+
 [node name="SeedBedHint" type="Area3D" parent="."]
 position = Vector3(0, 7, -117)
 script = ExtResource("2_hint")
@@ -1323,6 +1338,11 @@ phase = 0.8
 
 [node name="Collision" type="CollisionShape3D" parent="Seed5"]
 shape = SubResource("BoxShape3D_23")
+
+; Immediately past the terrace-two Drone: a fight is a place a player
+; dies, and every one of them wants an anchor on its far side.
+[node name="CheckpointSeedTwoDrone" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, -118.4)
 
 [node name="CheckpointSeedTwoFar" type="Marker3D" parent="." groups=["checkpoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, -119.6)
@@ -1645,44 +1665,154 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, -201)
 shape = SubResource("BoxShape3D_race_finish")
 
 ; === DRIFT FLEET ===
-; Their positions still match the declared enemy ids. Dressing around them now
-; frames them as silhouettes rather than burying them in uniform scatter.
+; ON THE ROUTE, NOT BESIDE IT. Every machine used to stand six to ten metres
+; off the line the level is designed around, and the longest strike reaches
+; 2.3 m: the whole combat lane was unreachable in play. A player walking the
+; route swam past all four and never met one. These stand where the route
+; goes.
+;
+; ONE LADDER, CLIMBED IN ORDER. The first machine a player meets is the
+; one-hit Netbot, in water, where a single spin sprint both frees them from
+; its net and ends it -- the cheapest possible place to learn that machines
+; can be hit at all. From there the count rises: two-strike Rigs on land once
+; the Glow mod makes their lines visible, three-strike Drones fought from
+; inside their own murk, and the four-strike Dredger guarding the seed bed it
+; exists to undo. Nothing is introduced at a durability the player has not
+; already seen one step below.
+;
+; MATCHED TO THE GRAMMAR THEY STAND IN. Water machines are met swimming, where
+; the strike verb is the spin sprint; land machines are met on foot, where it
+; is the tail whack. A machine placed across a grammar boundary would be a
+; machine the player fights with a verb the level never taught them there.
+;
+; EACH IS ITS OWN UNIT. The runtime keys defeat by placed node, so the three
+; Netbots below are three separate fights: beating the one in the lagoon
+; leaves the one in the tide race standing.
 
-[node name="HooklineRigCove" type="Area3D" parent="." groups=["enemy"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, -6, -37)
-metadata/enemy_id = "hookline_rig"
-
-[node name="Model" parent="HooklineRigCove" instance=ExtResource("19_fleet_hookline_rig")]
-
-[node name="Collision" type="CollisionShape3D" parent="HooklineRigCove"]
-shape = SubResource("BoxShape3D_80")
-
-[node name="NetbotCove" type="Area3D" parent="." groups=["enemy"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, -3, -45)
+; --- Act 2: the lagoon. Two Netbots, the teaching pair. -----------------------
+[node name="NetbotLagoonGap" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, -37.6)
 metadata/enemy_id = "netbot"
 
-[node name="Model" parent="NetbotCove" instance=ExtResource("20_fleet_netbot")]
+[node name="Model" parent="NetbotLagoonGap" instance=ExtResource("20_fleet_netbot")]
 
-[node name="Collision" type="CollisionShape3D" parent="NetbotCove"]
+[node name="Collision" type="CollisionShape3D" parent="NetbotLagoonGap"]
 shape = SubResource("BoxShape3D_80")
 
-[node name="RunoffDroneGrotto" type="Area3D" parent="." groups=["enemy"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 8.6, -81)
+; The second arrives mid-climb over RiseWall, so the lesson is repeated
+; under a little pressure rather than at rest.
+[node name="NetbotRiseWall" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -43.6)
+metadata/enemy_id = "netbot"
+
+[node name="Model" parent="NetbotRiseWall" instance=ExtResource("20_fleet_netbot")]
+
+[node name="Collision" type="CollisionShape3D" parent="NetbotRiseWall"]
+shape = SubResource("BoxShape3D_80")
+
+
+; --- Act 4: the grotto. Rigs, once Glow can reveal their lines. ---------------
+; On the wall top with the Glow mod already in hand and the gate ahead, so the
+; player fights it able to SEE its line -- which is the whole of the Glow
+; counter. Off to one side of the top rather than astride the jump to pillar
+; one: the gap past the gate is 2.6 m, the widest on the route, and a machine
+; standing in it would be a machine that has to be fought from mid-air.
+[node name="HooklineGlowGate" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 8.2, -67.4)
+metadata/enemy_id = "hookline_rig"
+
+[node name="Model" parent="HooklineGlowGate" instance=ExtResource("19_fleet_hookline_rig")]
+
+[node name="Collision" type="CollisionShape3D" parent="HooklineGlowGate"]
+shape = SubResource("BoxShape3D_80")
+
+; Optional: this one guards the Lantern Shrimp out on ShrimpLedge, off the
+; mandatory line. A reward worth a fight, never a toll on the route.
+[node name="HooklineShrimpLedge" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 9.0, -80)
+metadata/enemy_id = "hookline_rig"
+
+[node name="Model" parent="HooklineShrimpLedge" instance=ExtResource("19_fleet_hookline_rig")]
+
+[node name="Collision" type="CollisionShape3D" parent="HooklineShrimpLedge"]
+shape = SubResource("BoxShape3D_80")
+
+
+; --- Act 5: the gorge river. The first Drone, fought inside its own murk. -----
+; DOWNSTREAM of GorgeArch, not under it. Under the arch reads better and does
+; not work: the arch's underside is 5.0 m up and the route's next move is a
+; three-and-a-half metre rise to the surface, so a fight that ends beneath it
+; leaves the player rising into stone. The flown route found that in one pass
+; and it is the kind of thing only a flown route finds.
+[node name="RunoffDroneGorge" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, -105.8)
 metadata/enemy_id = "runoff_drone"
 
-[node name="Model" parent="RunoffDroneGrotto" instance=ExtResource("21_fleet_runoff_drone")]
+[node name="Model" parent="RunoffDroneGorge" instance=ExtResource("21_fleet_runoff_drone")]
 
-[node name="Collision" type="CollisionShape3D" parent="RunoffDroneGrotto"]
+[node name="Collision" type="CollisionShape3D" parent="RunoffDroneGorge"]
 shape = SubResource("BoxShape3D_80")
 
+
+; --- Act 6: the seed bed, and its Dredger. -----------------------------------
+[node name="RunoffDroneSeedBed" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 6.0, -117.8)
+metadata/enemy_id = "runoff_drone"
+
+[node name="Model" parent="RunoffDroneSeedBed" instance=ExtResource("21_fleet_runoff_drone")]
+
+[node name="Collision" type="CollisionShape3D" parent="RunoffDroneSeedBed"]
+shape = SubResource("BoxShape3D_80")
+
+; The act's boss beat, and it stands at the ENTRANCE to the seed bed rather
+; than anywhere inside it. That is not a staging preference, it is forced by
+; this world's restoration economy: seven kelp seeds at one resource each
+; against costs overridden to 3 and 4 is exactly seven, with no slack at all,
+; and a Dredger reverting a region zeroes its banked resources as well as its
+; state. A player who touched this machine after collecting even one seed
+; could never reach `restored` again, and the shelf wall would stay shut with
+; no way back -- an unwinnable level, reachable by walking into a thing the
+; level put in the way. The flown route found it in one pass.
+;
+; So the fight comes first and the planting comes after: the machine that
+; flattened the shelf stands over it, you put it down, and only then do you
+; sow. Its area wipe is still live during the fight, which is where the stake
+; actually is -- it is the only machine in the level that can spend a life.
+;
+; A world wanting a Dredger that threatens work already done needs spare
+; seeds, and enough of them to re-restore from barren AFTER a reversion --
+; fourteen here, not eight. That is a level-economy change, not a placement.
 [node name="DredgerSeedBed" type="Area3D" parent="." groups=["enemy"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 6, -112)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 7.0, -110)
 metadata/enemy_id = "dredger"
 metadata/region_id = "coral_shelf"
 
 [node name="Model" parent="DredgerSeedBed" instance=ExtResource("18_fleet_dredger")]
 
 [node name="Collision" type="CollisionShape3D" parent="DredgerSeedBed"]
+shape = SubResource("BoxShape3D_80")
+
+
+; --- Act 7: the tide race. A Netbot in the current, a Drone on the far shore. -
+[node name="NetbotTideRace" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, -170.5)
+metadata/enemy_id = "netbot"
+
+[node name="Model" parent="NetbotTideRace" instance=ExtResource("20_fleet_netbot")]
+
+[node name="Collision" type="CollisionShape3D" parent="NetbotTideRace"]
+shape = SubResource("BoxShape3D_80")
+
+; The last machine in the level, on the sea shore, between the player and the
+; final jump. No Dredger here on purpose: this far past the shelf wall a
+; reversion would take restoration the player can no longer walk back to.
+[node name="RunoffDroneSeaShore" type="Area3D" parent="." groups=["enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, -193)
+metadata/enemy_id = "runoff_drone"
+
+[node name="Model" parent="RunoffDroneSeaShore" instance=ExtResource("21_fleet_runoff_drone")]
+
+[node name="Collision" type="CollisionShape3D" parent="RunoffDroneSeaShore"]
 shape = SubResource("BoxShape3D_80")
 
 ; === DELIBERATE DRESSING ===

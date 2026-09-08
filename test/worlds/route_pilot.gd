@@ -30,13 +30,43 @@ extends RefCounted
 ##   SWIM   steer in three dimensions; the grammar must already be water
 ##   BOOST  ask for the bubble boost, then move on immediately
 ##   CLIMB  walk into the wall, then ask to climb once actually against it
+##   FIGHT  close on the machine and swing until it goes down
 ##   FINISH steer at it and never advance — the world ends the walk
-enum Move { WALK, JUMP, SWIM, BOOST, CLIMB, FINISH }
+enum Move { WALK, JUMP, SWIM, BOOST, CLIMB, FIGHT, FINISH }
 
 const MOVE_ID: Dictionary = {
 	"walk": Move.WALK, "jump": Move.JUMP, "swim": Move.SWIM,
-	"boost": Move.BOOST, "climb": Move.CLIMB, "finish": Move.FINISH,
+	"boost": Move.BOOST, "climb": Move.CLIMB, "fight": Move.FIGHT,
+	"finish": Move.FINISH,
 }
+
+## Frames between swings on a FIGHT leg, and how many are budgeted.
+##
+## TAPPED LIKE THE CLIMB, AND FOR THE SAME REASON: the strike verb is
+## edge-triggered, so a key held down asks once and never again. The cadence is
+## slower than the climb's because a swing has a real window — hammering faster
+## than the animation only queues presses the controller drops.
+##
+## The budget is per leg and generous: the toughest shipped machine takes four
+## strikes, and a leg that has swung fifteen times without one landing is a
+## broken encounter rather than a slow one, which is what the probe exists to
+## say out loud.
+## Thirty-six frames is 0.6 s, just over combat.tail_whack.cooldown_s (0.55).
+## Tapping FASTER than the cooldown is not faster: the verb is edge-triggered
+## and a press inside the cooldown is simply dropped, so half the swings did
+## nothing and the fights ran twice as long as they needed to.
+const SWING_TAP := 36
+const MAX_SWINGS := 15
+
+## How close the pilot gets before swinging, in metres.
+##
+## An ABSOLUTE distance, deliberately, and inside the shortest strike reach
+## (the spin sprint's 1.9 m; the tail whack has 2.3). Adding it to the
+## arrival tolerance instead — which is what this did first — let the pilot
+## swing from three metres and miss, so a leg that was really "close, then
+## hit" became "flail from wherever you happen to be" and reported a reach
+## problem as a slow fight.
+const STRIKE_RANGE := 1.6
 
 ## Steering deadband. Below this the axis is left alone, so the pilot does not
 ## chatter a key on and off either side of a target it is already on.
@@ -84,10 +114,18 @@ class Waypoint:
 	var target: Vector3
 	var note: String
 
-	func _init(p_move: Move, p_target: Vector3, p_note: String) -> void:
+	## What this leg acts ON, when it acts on something nameable: the unit id
+	## of the machine a FIGHT leg has to put down. Empty for every other move,
+	## because nothing else in the route needs to name a thing rather than a
+	## place.
+	var subject: String
+
+	func _init(p_move: Move, p_target: Vector3, p_note: String,
+			p_subject: String = "") -> void:
 		move = p_move
 		target = p_target
 		note = p_note
+		subject = p_subject
 
 
 var _route: Array[Waypoint] = []
@@ -115,6 +153,15 @@ var _leg_start := Vector3.ZERO
 
 var _stuck := ""
 
+## Swings taken on the current FIGHT leg.
+var _swings := 0
+
+## Asked, on a FIGHT leg, whether the named machine is down yet. Supplied by
+## the walk that owns the world — the pilot presses keys and knows nothing
+## about enemy systems, exactly as it knows nothing about checkpoints or
+## collectibles.
+var _fight_won: Callable = Callable()
+
 ## Where the world module was instanced. The hub places an active world at an
 ## offset so its floor cannot interpenetrate the lagoon's, which means a
 ## waypoint written in the level's own coordinates — the numbers a reader can
@@ -132,6 +179,13 @@ func _init(route: Array[Waypoint], origin: Vector3 = Vector3.ZERO) -> void:
 ## Builds a waypoint from the compact form the world probes declare.
 static func at(move_id: String, target: Vector3, note: String) -> Waypoint:
 	return Waypoint.new(MOVE_ID.get(move_id, Move.WALK) as Move, target, note)
+
+
+## A leg that ends when [param unit_id] is down. Its own constructor rather
+## than a fifth argument on at(), so a route reads as "fight THIS machine here"
+## and a fight leg cannot be written without naming what it fights.
+static func fight(unit_id: String, target: Vector3, note: String) -> Waypoint:
+	return Waypoint.new(Move.FIGHT, target, note, unit_id)
 
 
 func is_done() -> bool:
@@ -253,6 +307,21 @@ func _act(body: CharacterBody3D, wp: Waypoint, flat: float, delta: Vector3,
 			_hold(KEY_E, not _acted)
 			_acted = true
 
+		Move.FIGHT:
+			# Close first, then swing: a strike opened at four metres is a
+			# strike that misses, and a probe that swung from wherever it
+			# happened to be would pass a level whose machines are out of
+			# reach — which is precisely the bug this leg exists to catch.
+			if _in_range(delta, in_water):
+				_hold(KEY_F, _leg_frames % SWING_TAP < 3)
+				if _leg_frames % SWING_TAP == 0:
+					_swings += 1
+			else:
+				_hold(KEY_F, false)
+			# SPACE still steers upward in water, so a machine above the pilot
+			# can be reached rather than swum under.
+			_hold(KEY_SPACE, in_water and delta.y > DEADBAND)
+
 		Move.CLIMB:
 			# TAPPED, on a cadence, for as long as the body is against the wall
 			# and has not started rising — which is exactly what a player does.
@@ -284,11 +353,32 @@ func _at_an_edge(body: CharacterBody3D, delta: Vector3) -> bool:
 	return space.intersect_ray(query).is_empty()
 
 
+## Whether the machine this leg names is inside striking distance.
+func _in_range(delta: Vector3, in_water: bool) -> bool:
+	if in_water:
+		return delta.length() < STRIKE_RANGE
+	return Vector2(delta.x, delta.z).length() < STRIKE_RANGE
+
+
 func _arrived(wp: Waypoint, here: Vector3, delta: Vector3, flat: float,
 		in_water: bool) -> bool:
 	match wp.move:
 		Move.FINISH:
 			return false
+		Move.FIGHT:
+			# ENDS ON THE WORLD SAYING SO, not on a swing count. The probe
+			# reports what it did; whether the machine went down is the
+			# world's answer, delivered through the callback the walk installs.
+			# A fight that ends because the pilot ran out of swings is a
+			# failure with a name, not a leg quietly moving on.
+			if _swings > MAX_SWINGS:
+				_stuck = ("leg %d (%s) swung %d times without putting '%s' "
+					% [_leg, wp.note, _swings, wp.subject]
+					+ "down — it is out of reach of the waypoint, or tougher "
+					+ "than the route assumes")
+				release_all()
+				return false
+			return _fight_won.is_valid() and bool(_fight_won.call(wp.subject))
 		Move.BOOST:
 			return _acted
 		Move.CLIMB:
@@ -306,11 +396,34 @@ func _arrived(wp: Waypoint, here: Vector3, delta: Vector3, flat: float,
 	return false
 
 
+## Installs the "is this machine down?" question a FIGHT leg ends on. Called
+## with the leg's subject — the unit id of the machine it is fighting.
+func set_fight_test(test: Callable) -> void:
+	_fight_won = test
+
+
+## The standard question, for a world whose enemies a WorldSystems runs.
+##
+## Offered here rather than written out in each probe for the same reason the
+## coral route itself lives in one file: two probes fly this route, and two
+## copies of "is it down yet" could disagree about what down means. The pilot
+## still knows nothing — it holds a Callable and calls it.
+static func fleet_defeat_test(systems: Node) -> Callable:
+	if systems == null or not systems.has_method("get_drift_fleet"):
+		return Callable()
+	var fleet: DriftFleetSystem = systems.call("get_drift_fleet")
+	if fleet == null:
+		return Callable()
+	return func(unit_id: String) -> bool: return fleet.is_defeated(unit_id)
+
+
 func _advance() -> void:
 	_leg += 1
 	_leg_frames = 0
 	_acted = false
 	_airborne = 0
+	_swings = 0
+	_hold(KEY_F, false)
 	# ALWAYS released, including into another jump leg. Leaving it held there
 	# looks harmless and is not: the hop verb is edge-triggered, so a key that
 	# was never released cannot press again, and the second jump of a pair

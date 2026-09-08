@@ -599,6 +599,17 @@ func _wire_enemy_node(node: Area3D) -> void:
 	if enemy == null:
 		return
 
+	# REGISTERED AS ITS OWN UNIT, under the node's name. The runtime keys every
+	# lane by unit, so two Netbots placed in one level are two machines that
+	# stagger, fall and come back independently — which is what lets a level
+	# hold real encounters rather than one of each kind. A scene with two nodes
+	# of the same name is a scene Godot has already renamed for us, so the key
+	# is unique by construction.
+	if not _fleet.place(node.name, enemy_id):
+		push_warning("WorldSystems: enemy node '%s' could not be placed"
+			% node.name)
+		return
+
 	# Kept for the strike lane, which resolves a swing against POSITIONS. Only
 	# declared units are listed, so an undeclared node is as unhittable as it
 	# is harmless.
@@ -623,8 +634,13 @@ func _wire_enemy_node(node: Area3D) -> void:
 				_on_pickup_touched.bind(node, _on_enemy_contact))
 
 
-## The declared unit a scene node stands for, or "" if the node names one the
-## world never declared.
+## The UNIT id a scene node stands for, or "" if the node names a roster entry
+## the world never declared.
+##
+## The node's own name is the unit id, and the meta is the roster entry it is
+## an instance of. Two things follow: a level can place several machines of one
+## kind and each is beaten separately, and a node whose meta names an
+## undeclared entry resolves to nothing however it is reached.
 ##
 ## Checked on every lane rather than only at wiring time. The wiring check
 ## alone left the rule resting on "nothing else ever calls these" — and the
@@ -634,7 +650,7 @@ func _declared_unit_of(enemy_node: Node) -> String:
 	var enemy_id := String(enemy_node.get_meta(META_ENEMY_ID, ""))
 	if _fleet == null or not (enemy_id in _declared_enemies):
 		return ""
-	return enemy_id
+	return enemy_node.name
 
 
 ## Contact with an entangling or snagging unit. Driven through the same
