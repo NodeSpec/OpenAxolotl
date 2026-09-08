@@ -30,13 +30,28 @@ assets/<category>/<name>/
 
 ## Per-category constraints
 
-| Category | File types | Image resolution | Alpha | Mesh budget |
-|---|---|---|---|---|
-| character | `.png`, `.glb` | 64×64 – 2048×2048 | **required** | ≤ 60 000 triangles |
-| creature | `.png`, `.glb` | 64×64 – 2048×2048 | **required** | ≤ 30 000 triangles |
-| prop | `.png`, `.glb` | 32×32 – 2048×2048 | **required** | ≤ 10 000 triangles |
-| environment | `.png`, `.glb` | 128×128 – 4096×4096 | allowed | ≤ 200 000 triangles |
-| audio | `.wav`, `.ogg` | ≤ 2 channels, 44100 or 48000 Hz | — | — |
+| Category | File types | Image resolution | Alpha | Mesh budget | Deviation |
+|---|---|---|---|---|---|
+| character | `.png`, `.glb` | 64×64 – 2048×2048 | **required** | ≤ 60 000 triangles | ≤ 0.5 % |
+| creature | `.png`, `.glb` | 64×64 – 2048×2048 | **required** | ≤ 30 000 triangles | ≤ 0.5 % |
+| prop | `.png`, `.glb` | 32×32 – 2048×2048 | **required** | ≤ 10 000 triangles | ≤ 2 % |
+| environment | `.png`, `.glb` | 128×128 – 4096×4096 | allowed | ≤ 200 000 triangles | ≤ 3 % |
+| audio | `.wav`, `.ogg` | ≤ 2 channels, 44100 or 48000 Hz | — | — | — |
+
+The last column is how far a *decimated* surface may stray from the dense
+source it came from, and it only applies to a model that went through
+`oax-decimate`; the section on that tool derives the numbers.
+
+**The mesh budget is a ceiling on what may enter, not a target to fill.** It
+bounds one file. What actually has to fit is the *scene*, and
+`test/core/rendering/test_hero_surface.gd` asserts that separately at 150 000
+triangles for the whole dressed valley plus the hero. Coral Cove instances ten
+externally authored machines: at the prop ceiling those alone are 100 000
+triangles, two thirds of the budget, against a 25 000-triangle hero and a
+valley that has to fit in what is left. So a shipped asset is decimated to
+what its scene can afford — the machines ship at 5 000 and the Meshy
+environment kits at 6 000 — and the category ceiling is what the validator
+refuses to let past, not what a contributor should aim at.
 
 Characters, creatures and props composite over arbitrary backgrounds — an
 image without an alpha channel ships a rectangle, so alpha is required.
@@ -120,12 +135,21 @@ python tools/decimate_model.py --input reference/hero/pink_axolotl_2.glb \
                                --max-triangles 55000
 ```
 
-The budget and the texture ceiling come from the **contract**, resolved from
-the output path's category, so neither number is restated in a command line
-and neither can drift from what CI enforces. `--max-triangles` overrides it
-for a destination outside `assets/`, as above. Writing over the input is
-refused: decimation cannot be undone, and the dense source is the only thing
-a second attempt at a different ratio can start from.
+The budget, the texture ceiling **and the deviation ceiling** all come from the
+**contract**, resolved from the output path's category, so no number is
+restated in a command line and none can drift from what CI enforces.
+`--max-triangles`, `--max-texture` and `--max-deviation` override them for a
+destination outside `assets/`, as above — and `--max-triangles` is how a
+shipped asset reaches its *scene* budget rather than its category ceiling:
+
+```sh
+python tools/decimate_model.py --input reference/coral_cove/Dredger_Rustbreaker.glb \
+                               --output assets/prop/dredger/dredger.glb \
+                               --max-triangles 3000 --max-texture 1024
+```
+
+Writing over the input is refused: decimation cannot be undone, and the dense
+source is the only thing a second attempt at a different ratio can start from.
 
 **Why this is safe here, and when it would not be.** Reducing polygons ruins
 a model whose detail *is* its geometry — a sculpt with no maps, where the
@@ -143,8 +167,26 @@ Two gates, and both exist because they catch different failures:
   dissolves entirely, every point that was on it is suddenly far from any
   remaining surface, while everything left behind still sits on the original.
   A one-way measurement would report the model as near-perfect with the gills
-  gone. The default ceiling is 0.5 % of the bounding-box diagonal — about two
-  screen pixels of silhouette error on a hero at gameplay distance.
+  gone. The ceiling is **0.5 % of the bounding-box diagonal for a character or
+  creature** — about two screen pixels of silhouette error on a hero at
+  gameplay distance, since a two-metre hero fills roughly a third of a 1080p
+  frame a couple of metres away, so one pixel is about a fifth of a percent of
+  its diagonal. Props get 2 % and environment 3 %, and the reason is not only
+  distance: **it is what the strayed geometry is made of.** A Dredger's worst
+  point is its hardware — a railing, a hose, an intake lip — where the hero's
+  is the outline the player reads all game. Losing pipework off a machine at
+  gameplay distance costs nothing; losing a gill filament changes the
+  character. Half a percent stays the fallback wherever the contract has no
+  category to consult, because the strictest number in the family is the safe
+  one to guess.
+
+  **The looser ceilings are not licence to stop looking.** Every asset here
+  was rendered at its shipped count before it was committed, and the numbers
+  were chosen so the gate still catches what it is for: a model collapsing to
+  a coarse hull, which a triangle count alone reports as a success.
+  `tools/test_decimate_model.py` holds both halves — the same coarse sphere is
+  refused at `assets/character/` and accepted at `assets/environment/`, so a
+  tool that quietly stopped reading the contract fails the pair.
 - **Open seams.** Deviation is not enough on its own, and the hero proved it.
   It passed both directions at a *thousandth* of its diagonal and still
   rendered with black hairline cracks down its flanks, because the export is
@@ -158,6 +200,19 @@ Two gates, and both exist because they catch different failures:
   reduction), and an output with more open edges than its welded source is an
   error. Welding is safe for the maps: Blender keeps UVs per face corner, so
   the seam's two different UVs stay exactly where they were.
+
+**What comes out is named for what it is.** Godot extracts an
+embedded-texture `.glb`'s images when it imports one, and names each file
+`<glb stem>_<image name>` — so whatever the exporter called a map becomes a
+real filename in `assets/`. Meshy's current exports call them `Image_0`,
+`Image_1` and `Image_2`, which land as `dredger_Image_0.jpg`: a name the
+contract's lower_snake_case rule rejects, and one the repository's ignore
+rules (written for `_base_color`, `_normal`, `_metallic_roughness`) do not
+cover, so an otherwise perfect asset fails validation over a derived file
+nobody authored. The decimator therefore renames each map by the Principled
+BSDF input it reaches — base colour, normal, metallic-roughness — before it
+exports, and reports the renames in `imagesRenamed`. Extracted textures stay
+gitignored: they are regenerated from the model on any fresh checkout.
 
 Recording the result: decimation changes geometry, so it needs its own
 provenance note, as the section above requires.

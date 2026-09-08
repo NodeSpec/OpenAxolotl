@@ -68,7 +68,7 @@ BLENDER_SCRIPT = os.path.join(
 TAIL_LINES = 25
 
 ## How far the decimated surface may stray from the original, as a fraction of
-## the model's bounding-box diagonal.
+## the model's bounding-box diagonal, when the contract has nothing to say.
 ##
 ## HALF A PERCENT, and the number is chosen from what the player can see rather
 ## than from what looks tidy. A hero two metres along its longest axis fills
@@ -78,6 +78,13 @@ TAIL_LINES = 25
 ## error at the very worst sampled point, which is invisible in motion and
 ## still tight enough that a dissolved gill filament (millimetres thick, but
 ## centimetres from anything that remains) blows straight through it.
+##
+## It is the FLOOR of the family rather than the whole rule, because "two
+## screen pixels" converts to a different fraction of the diagonal for a
+## machine three times further away and for canopy behind the depth fog. The
+## contract carries that conversion per category (`maxDeviation`), and this
+## constant is what a destination outside `assets/` falls back to — the same
+## relationship `--max-triangles` and `--max-texture` already have with it.
 DEFAULT_MAX_DEVIATION = 0.005
 
 ## Longest side any texture may keep. Zero leaves images alone.
@@ -103,6 +110,22 @@ def texture_ceiling(category: str | None, contract_path: str) -> int:
     if isinstance(maximum, list) and len(maximum) == 2:
         return int(max(maximum))
     return DEFAULT_MAX_TEXTURE
+
+
+def deviation_ceiling(category: str | None, contract_path: str) -> float:
+    """The category's permitted surface deviation, or the default."""
+    if category is None:
+        return DEFAULT_MAX_DEVIATION
+    try:
+        with open(contract_path, encoding="utf-8") as handle:
+            contract = json.load(handle)
+    except (OSError, json.JSONDecodeError):
+        return DEFAULT_MAX_DEVIATION
+    rules = contract.get("categories", {}).get(category, {})
+    allowed = rules.get("maxDeviation")
+    if isinstance(allowed, (int, float)) and allowed > 0:
+        return float(allowed)
+    return DEFAULT_MAX_DEVIATION
 
 
 def build_argv(blender: str, input_path: str, output_path: str,
@@ -145,11 +168,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-texture", type=int, default=None,
                         help="longest texture side to keep; defaults to the "
                              "category's maxSize")
-    parser.add_argument("--max-deviation", type=float,
-                        default=DEFAULT_MAX_DEVIATION,
+    parser.add_argument("--max-deviation", type=float, default=None,
                         help="permitted surface deviation as a fraction of "
-                             "the bounding-box diagonal "
-                             f"(default {DEFAULT_MAX_DEVIATION})")
+                             "the bounding-box diagonal; defaults to the "
+                             "category's maxDeviation, or "
+                             f"{DEFAULT_MAX_DEVIATION} outside assets/")
     parser.add_argument("--samples", type=int, default=20000,
                         help="surface probes per direction")
     parser.add_argument("--weld", type=float, default=DEFAULT_WELD,
@@ -189,6 +212,10 @@ def main(argv: list[str] | None = None) -> int:
     max_texture = args.max_texture
     if max_texture is None:
         max_texture = texture_ceiling(category, args.contract)
+
+    max_deviation = args.max_deviation
+    if max_deviation is None:
+        max_deviation = deviation_ceiling(category, args.contract)
 
     blender = find_blender()
     if blender is None:
@@ -250,6 +277,25 @@ def main(argv: list[str] | None = None) -> int:
             summary["reductionFactor"] = (
                 round(triangles_before / triangles_after, 1)
                 if triangles_after else 0)
+            # AN EMPTY OUTPUT IS NOT A PASS. Every other gate here is
+            # satisfied trivially by a model with no geometry — zero
+            # triangles is inside any budget, no edges are open, and the
+            # deviation figures come from measurements taken before the
+            # export — so without this check the tool's happiest result is
+            # the one where it destroyed the asset. That is exactly what it
+            # reported for four models before this existed.
+            if triangles_after <= 0 or meshes_after <= 0:
+                violations.append({
+                    "rule": f"{TOOL_NAME}.empty_output",
+                    "severity": "error",
+                    "file": args.output,
+                    "message": f"the export wrote {meshes_after} mesh(es) and "
+                               f"{triangles_after} triangles: the model is "
+                               "empty, whatever the other measurements say",
+                    "remediation": "the exporter dropped the geometry; check "
+                                   "that the decimate modifier was applied to "
+                                   "the mesh data before export",
+                })
             if triangles_after > budget:
                 violations.append({
                     "rule": f"{TOOL_NAME}.triangle_budget",
@@ -286,7 +332,11 @@ def main(argv: list[str] | None = None) -> int:
 
             strayed, entry = worst_deviation(summary)
             summary["worstDeviationFraction"] = strayed
-            if strayed > args.max_deviation:
+            # The ceiling travels WITH the measurement. A run's evidence has
+            # to say what it was judged against, or a later reader cannot tell
+            # a 1.3% pass on a prop from a 1.3% failure on a character.
+            summary["deviationCeiling"] = max_deviation
+            if strayed > max_deviation:
                 where = entry.get("worstAt") if entry else "unknown"
                 direction = entry.get("direction") if entry else "unknown"
                 violations.append({
@@ -295,7 +345,7 @@ def main(argv: list[str] | None = None) -> int:
                     "file": args.output,
                     "message": f"the surface moved {strayed:.4%} of the "
                                f"bounding-box diagonal ({direction}) at "
-                               f"{where}, over the {args.max_deviation:.4%} "
+                               f"{where}, over the {max_deviation:.4%} "
                                "allowed; the model lost shape, not just "
                                "triangles",
                     "remediation": "raise --max-triangles, or protect the "

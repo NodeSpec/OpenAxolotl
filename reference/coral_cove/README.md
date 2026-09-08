@@ -23,16 +23,42 @@ an image-to-3D export is, and the repository has a pipeline for exactly this:
 ```sh
 python tools/decimate_model.py \
     --input reference/coral_cove/Dredger_Rustbreaker.glb \
-    --output assets/prop/dredger/dredger.glb
+    --output assets/prop/dredger/dredger.glb \
+    --max-triangles 3000 --max-texture 1024
 ```
 
-The budget and the texture ceiling come from the Asset Contract, resolved from
-the OUTPUT path's category, so neither number is restated on a command line and
-neither can drift from what CI enforces. See `docs/asset-contract.md`.
+The budget, the texture ceiling and the deviation ceiling all come from the
+Asset Contract, resolved from the OUTPUT path's category, so no number is
+restated on a command line and none can drift from what CI enforces. See
+`docs/asset-contract.md`.
 
-Until a reduced version lands in `assets/`, the shipped models remain the
-procedurally generated ones from `tools/blender/make_drift_fleet.py` and
-`tools/blender/make_forest_kit.py`.
+**They are decimated well past their category ceilings, on purpose.** The
+contract's 10 000 triangles is what a prop file may contain; what actually has
+to fit is the scene, and Coral Cove places fifteen machines against a 150 000
+triangle whole-scene budget. Three thousand each is what the level can afford,
+and at that count each machine still reads as itself — the Dredger keeps its
+red cab, amber stripe and cutting drum. The environment pieces ship at 6 000.
+
+**Draco.** These arrive with `KHR_draco_mesh_compression`, and the Blender here
+has no `libextern_draco.so`, so it imports them as empty. Decode first:
+
+```sh
+npx @gltf-transform/cli copy in.glb out.glb   # strips the Draco extension
+```
+
+**They are kits, not single objects.** `Coral_Cove_Canopy_Tree_1.glb` is a
+grove of six trees at assorted sizes; `Coral_Cove_River_Bank.glb` is four
+separate shelf pieces. Both are one mesh in the file, so they can only be
+placed as a whole until someone splits the loose parts into their own assets.
+That is why they land under names that say what they are rather than replacing
+the single-tree `canopy_tree` a ScatterField scatters — scattering a grove
+would plant six trees at every scatter point.
+
+The three machines ARE like-for-like replacements, so they took over the
+`dredger`, `hookline_rig` and `netbot` asset paths Coral Cove already
+references. The Flagship and the Runoff Drone remain the procedurally
+generated ones from `tools/blender/make_drift_fleet.py`, and the forest kit
+from `tools/blender/make_forest_kit.py` still supplies the scattered dressing.
 
 **Licensing.** These carry Meshy's terms, like the hero. REQ-021 is blocking on
 that decision and it is sharper now than it was: the project's promise is

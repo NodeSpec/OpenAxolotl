@@ -19,7 +19,8 @@
   ],
   "models": {
     "fileType": ".glb",
-    "description": "3D assets are binary glTF 2.0, one .glb per asset directory beside any textures it uses. Godot imports glTF natively - meshes, skeletons, materials, animation clips - so no conversion step exists to drift. Each category that carries meshes declares a triangle budget: the validator reads the file's JSON chunk (its header) and sums primitive index counts, never decoding geometry. Godot's <file>.import sidecars are engine bookkeeping, not sources, and are ignored wherever they appear."
+    "description": "3D assets are binary glTF 2.0, one .glb per asset directory beside any textures it uses. Godot imports glTF natively - meshes, skeletons, materials, animation clips - so no conversion step exists to drift. Each category that carries meshes declares a triangle budget: the validator reads the file's JSON chunk (its header) and sums primitive index counts, never decoding geometry. Godot's <file>.import sidecars are engine bookkeeping, not sources, and are ignored wherever they appear.",
+    "deviationDescription": "Each mesh category also declares maxDeviation: how far a decimated surface may stray from the dense source it came from, as a fraction of the bounding-box diagonal, measured in BOTH directions by oax-decimate. The numbers rise with distance from the camera and with how little the strayed geometry means. Half a percent on a character is about two screen pixels: a two-metre hero fills roughly a third of a 1080p frame at gameplay camera distance, so one pixel is a fifth of a percent of its diagonal - and every one of those pixels is silhouette the player reads all game. A Drift Fleet machine is engaged further out and strays at its hardware rather than its outline; set dressing recedes into the teal depth fog. Holding those to the hero's number would not buy sharper silhouettes, it would buy triangles nobody can see, which is exactly what this tool exists to remove. The looser ceilings are not licence to skip looking: a shipped asset is checked by render at its shipped count, and the gate's job is to catch the collapse to a coarse hull that a glance at a triangle count would call a success."
   },
   "categories": {
     "character": {
@@ -28,7 +29,8 @@
       "maxSize": [2048, 2048],
       "alpha": "required",
       "maxTriangles": 60000,
-      "why": "Characters composite over every background the game has; a character sprite or texture without an alpha channel ships a rectangle. The hero and named characters get the largest mesh budget: they are on screen every frame and closest to the camera."
+      "maxDeviation": 0.005,
+      "why": "Characters composite over every background the game has; a character sprite or texture without an alpha channel ships a rectangle. The hero and named characters get the largest mesh budget: they are on screen every frame and closest to the camera - which is also why they carry the tightest deviation ceiling, since their silhouette is the one the player reads all game."
     },
     "creature": {
       "fileTypes": [".png", ".glb"],
@@ -36,7 +38,8 @@
       "maxSize": [2048, 2048],
       "alpha": "required",
       "maxTriangles": 30000,
-      "why": "Same compositing rule as characters. Creatures appear in numbers, so each carries half a hero's mesh budget."
+      "maxDeviation": 0.005,
+      "why": "Same compositing rule as characters. Creatures appear in numbers, so each carries half a hero's mesh budget - but they share the hero's camera distance, so they keep the hero's deviation ceiling."
     },
     "prop": {
       "fileTypes": [".png", ".glb"],
@@ -44,7 +47,8 @@
       "maxSize": [2048, 2048],
       "alpha": "required",
       "maxTriangles": 10000,
-      "why": "Props sit in scenes over arbitrary geometry, and a world places dozens of them."
+      "maxDeviation": 0.02,
+      "why": "Props sit in scenes over arbitrary geometry, and a world places dozens of them. Ten thousand triangles is the CEILING for a file entering the repository, not a target to fill: a world that instances ten of them at the ceiling has spent two thirds of its whole-scene budget on machinery alone, so shipped props are decimated to what the scene they live in can afford. Four times the hero's deviation allowance because the deviation is made of something different: a machine's worst-strayed point is its hardware - a railing, a hose, an intake lip - while a hero's is the outline the player reads all game. Losing pipework off a Dredger costs nothing that can be seen at gameplay distance, and each shipped machine is checked by render at its shipped count rather than trusted to the number alone."
     },
     "environment": {
       "fileTypes": [".png", ".glb"],
@@ -52,7 +56,8 @@
       "maxSize": [4096, 4096],
       "alpha": "allowed",
       "maxTriangles": 200000,
-      "why": "Environment textures may be opaque (ground, walls) or cut-out (foliage); both are legitimate, so alpha is neither required nor forbidden. Environment meshes are a world's set dressing in one piece, hence the largest budget."
+      "maxDeviation": 0.03,
+      "why": "Environment textures may be opaque (ground, walls) or cut-out (foliage); both are legitimate, so alpha is neither required nor forbidden. Environment meshes are a world's set dressing in one piece, hence the largest budget - and the same ceiling caveat as props: two hundred thousand is what may enter, while what ships is decimated to the scene budget. Set dressing recedes into the teal depth fog, so the same two pixels of silhouette error are worth six times the hero's fraction of a diagonal."
     },
     "audio": {
       "fileTypes": [".wav", ".ogg"],

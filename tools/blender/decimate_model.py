@@ -341,6 +341,85 @@ def downscale_images(limit: int) -> list:
     return changed
 
 
+## Which Principled BSDF input an image reaches, and what the contract calls
+## the map that feeds it. Ordered: the first role an image satisfies wins, so a
+## single ORM map wired to both Metallic and Roughness gets one name.
+IMAGE_ROLES = (
+    ("Base Color", "base_color"),
+    ("Normal", "normal"),
+    ("Metallic", "metallic_roughness"),
+    ("Roughness", "metallic_roughness"),
+)
+
+
+def _image_behind(socket, depth: int = 0):
+    """The image datablock feeding a shader socket, through whatever sits
+    between it and the surface — a Normal Map node, a channel separator, a
+    colour-space conversion. Bounded so a cyclic node group cannot hang us."""
+    if depth > 8 or not socket.is_linked:
+        return None
+    node = socket.links[0].from_node
+    if node.type == "TEX_IMAGE":
+        return node.image
+    for candidate in node.inputs:
+        found = _image_behind(candidate, depth + 1)
+        if found is not None:
+            return found
+    return None
+
+
+def rename_images_by_role() -> list:
+    """Give every map the name the Asset Contract expects, and report it.
+
+    NOT COSMETIC. Godot extracts an embedded-texture .glb's images on import
+    and names each file `<glb stem>_<image name>`, so the exporter's own name
+    for a map becomes a real file in `assets/`. Meshy calls them `Image_0`,
+    `Image_1`, `Image_2` — which produce `dredger_Image_0.jpg`, a filename the
+    contract's lower_snake_case rule rejects and the repository's ignore rules
+    (written for `_base_color`, `_normal`, `_metallic_roughness`) do not cover,
+    so the derived files show up untracked and the asset fails validation
+    through no fault of its geometry. The same three maps out of an older
+    Meshy export already arrive named for their role and extract cleanly; this
+    just stops the pipeline depending on which side of that change a model
+    came from.
+
+    Naming by ROLE rather than by index also makes the ignore rules honest: a
+    map is ignored because it is a regenerable base-colour bake, not because
+    some exporter happened to number it first.
+    """
+    renamed = []
+    claimed: dict = {}
+    for material in bpy.data.materials:
+        if material.node_tree is None:
+            continue
+        for node in material.node_tree.nodes:
+            if node.type != "BSDF_PRINCIPLED":
+                continue
+            for socket_name, role in IMAGE_ROLES:
+                socket = node.inputs.get(socket_name)
+                if socket is None:
+                    continue
+                image = _image_behind(socket)
+                if image is None or image in claimed:
+                    continue
+                claimed[image] = role
+    for image, role in claimed.items():
+        # The ROLE alone: Godot prefixes the .glb's own stem when it extracts,
+        # so `base_color` becomes `dredger_base_color.jpg` on import — which is
+        # both conforming and already ignored. Prefixing here would produce
+        # `dredger_dredger_base_color.jpg`.
+        wanted = role
+        if image.name == wanted:
+            continue
+        was = image.name
+        image.name = wanted
+        # Blender disambiguates a clash with a `.001` suffix, which would put
+        # the dot back into a filename the contract will not take. Say so
+        # rather than shipping it.
+        renamed.append({"image": was, "to": image.name, "role": role})
+    return renamed
+
+
 def main() -> int:
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     args = parse_args(argv)
@@ -354,16 +433,20 @@ def main() -> int:
         return 1
 
     span = diagonal(live)
-    originals = stash(live)
-    original_tree = scene_bvh(originals)
-    rng = np.random.default_rng(SAMPLE_SEED)
-    original_points = np.concatenate([
-        sample_surface(*triangle_arrays(obj), args.samples // len(originals), rng)
-        for obj in originals])
 
-    # Welded AFTER the original is stashed and sampled, so deviation is
-    # measured against the file as it arrived rather than against our own
-    # first edit of it.
+    # The originals are COPIED here and MEASURED after the export, and the
+    # split matters. Copying has to happen before the weld, or deviation would
+    # be measured against our own first edit of the file rather than against
+    # the file as it arrived. Measuring has to happen after the write, because
+    # building a BVH over two million triangles materialises about four
+    # million Python tuples, and an exporter asked to serialise a mesh while
+    # that is resident comes up short: "Array length mismatch (got 599997,
+    # expected more)", then a node with no mesh attached, then a 176-byte file
+    # every other gate in this tool called a pass. Four of the six models this
+    # pipeline was first pointed at failed exactly that way, and the two that
+    # survived were simply the smallest.
+    originals = stash(live)
+    rng = np.random.default_rng(SAMPLE_SEED)
     welding = weld(live, span * args.weld)
 
     bpy.ops.object.select_all(action="DESELECT")
@@ -377,22 +460,50 @@ def main() -> int:
             use_auto_smooth=True,
             auto_smooth_angle=math.radians(args.smooth_angle))
 
-    decimated_tree = scene_bvh(live)
-    decimated_points = np.concatenate([
-        sample_surface(*triangle_arrays(obj), args.samples // len(live), rng)
-        for obj in live])
-
-    measurements = [
-        deviation(original_tree, decimated_points, "decimated_to_original"),
-        deviation(decimated_tree, original_points, "original_to_decimated"),
-    ]
-    for entry in measurements:
-        if "max" in entry and span > 0.0:
-            entry["maxAsFractionOfDiagonal"] = entry["max"] / span
-            entry["p95AsFractionOfDiagonal"] = entry["p95"] / span
+    # REPAIRED BEFORE ANYTHING READS IT. Welding coincident vertices and then
+    # collapsing two million triangles by a factor of ten can leave topology
+    # Blender itself calls invalid — duplicate loops, faces referencing a
+    # vertex twice — and the exporter's own warning says so out loud before it
+    # gives up: "Mesh is not valid, and may be exported wrongly", then "Array
+    # length mismatch (got 599997, expected more)", then a node with no mesh
+    # attached and a 176-byte file it reports as a success.
+    #
+    # validate() drops exactly those elements and is the remedy that warning
+    # is asking for. It is cheap, it is idempotent, and four of the six models
+    # this pipeline was first pointed at needed it.
+    repairs = 0
+    for obj in live:
+        # Round-tripped through bmesh first, which rebuilds the datablock and
+        # drops every derived cache on it — loop triangles, split normals, the
+        # lot. The caches are what the exporter trips over: it reads one that
+        # disagrees with the polygon count and gives up mid-write.
+        rebuilt = bmesh.new()
+        rebuilt.from_mesh(obj.data)
+        rebuilt.to_mesh(obj.data)
+        rebuilt.free()
+        obj.data.update()
+        if obj.data.validate(verbose=False):
+            repairs += 1
+    if repairs:
+        print("DECIMATE_REPAIR " + json.dumps({"meshesRepaired": repairs}))
 
     images = downscale_images(args.max_texture)
+    renamed = rename_images_by_role()
 
+    # EXPORTED BEFORE THE SHAPE IS MEASURED, and the order is load-bearing.
+    #
+    # Measuring calls mesh.calc_loop_triangles() to pull the surface out
+    # through foreach_get. That fills a cache, and on a mesh carrying even one
+    # degenerate face the cache holds FEWER triangles than the mesh has
+    # polygons — a collapse to 200,000 polygons left 199,999 triangles here.
+    # The glTF exporter reads that cache, finds the array a triangle short,
+    # and fails with "Array length mismatch (got 599997, expected more)" —
+    # then writes a node with no mesh attached and returns success. Four of
+    # the six models this pipeline was first pointed at came out as 176-byte
+    # files that every other gate called a pass.
+    #
+    # Measuring after the write costs nothing: the deviation figures still
+    # gate the result, and the file on disk is the geometry they describe.
     bpy.ops.object.select_all(action="DESELECT")
     bpy.ops.export_scene.gltf(
         filepath=args.output,
@@ -408,6 +519,24 @@ def main() -> int:
         export_yup=True,
     )
 
+    original_tree = scene_bvh(originals)
+    original_points = np.concatenate([
+        sample_surface(*triangle_arrays(obj), args.samples // len(originals), rng)
+        for obj in originals])
+    decimated_tree = scene_bvh(live)
+    decimated_points = np.concatenate([
+        sample_surface(*triangle_arrays(obj), args.samples // len(live), rng)
+        for obj in live])
+
+    measurements = [
+        deviation(original_tree, decimated_points, "decimated_to_original"),
+        deviation(decimated_tree, original_points, "original_to_decimated"),
+    ]
+    for entry in measurements:
+        if "max" in entry and span > 0.0:
+            entry["maxAsFractionOfDiagonal"] = entry["max"] / span
+            entry["p95AsFractionOfDiagonal"] = entry["p95"] / span
+
     print("DECIMATE " + json.dumps({
         "input": args.input,
         "output": args.output,
@@ -418,6 +547,7 @@ def main() -> int:
         "reduction": reduction,
         "deviation": measurements,
         "images": images,
+        "imagesRenamed": renamed,
         "blender": bpy.app.version_string,
     }))
     return 0

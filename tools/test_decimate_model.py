@@ -106,6 +106,37 @@ class CommandLineTests(unittest.TestCase):
         self.assertEqual(
             decimate_model.texture_ceiling("environment", contract), 4096)
 
+    def test_req_015_the_deviation_ceiling_comes_from_the_contract_too(self):
+        # The third number the contract owns, and the one it took longest to
+        # admit was per-category. A flat half a percent is the HERO's
+        # allowance: it is what two screen pixels of silhouette error works
+        # out to on a two-metre body at gameplay camera distance. A Drift
+        # Fleet machine engaged three times further away and canopy behind the
+        # depth fog are the same two pixels at a larger fraction of their own
+        # diagonals, so holding them to the hero's figure buys triangles
+        # nobody can see -- which is precisely what this tool exists to strip.
+        contract = decimate_model.DEFAULT_CONTRACT
+        self.assertEqual(
+            decimate_model.deviation_ceiling("character", contract), 0.005)
+        self.assertEqual(
+            decimate_model.deviation_ceiling("creature", contract), 0.005)
+        self.assertGreater(
+            decimate_model.deviation_ceiling("prop", contract),
+            decimate_model.deviation_ceiling("character", contract))
+        self.assertGreater(
+            decimate_model.deviation_ceiling("environment", contract),
+            decimate_model.deviation_ceiling("prop", contract))
+
+    def test_req_015_a_category_the_contract_says_nothing_about_falls_back(self):
+        # Audio declares no mesh rules at all, and a path outside assets/ has
+        # no category. Neither may silently become "no ceiling": both land on
+        # the hero's figure, which is the strictest one in the family.
+        contract = decimate_model.DEFAULT_CONTRACT
+        for category in ("audio", None):
+            self.assertEqual(
+                decimate_model.deviation_ceiling(category, contract),
+                decimate_model.DEFAULT_MAX_DEVIATION)
+
     def test_req_015_a_loose_output_path_with_no_budget_is_an_invocation_error(self):
         # Outside assets/<category>/ there is no contract budget to read, and
         # guessing one would let an over-budget asset through unnoticed.
@@ -193,8 +224,9 @@ class EndToEndTests(unittest.TestCase):
     """Real Blender, and every gate held to both of its answers."""
 
     def _decimate(self, tmp: str, source: str, budget: int,
-                  extra: list[str] | None = None) -> tuple[int, dict, str]:
-        target = os.path.join(tmp, "assets", "character", "x")
+                  extra: list[str] | None = None,
+                  category: str = "character") -> tuple[int, dict, str]:
+        target = os.path.join(tmp, "assets", category, "x")
         os.makedirs(target, exist_ok=True)
         out_path = os.path.join(target, "x.glb")
         code, out, err = run(["--input", source, "--output", out_path,
@@ -245,6 +277,43 @@ class EndToEndTests(unittest.TestCase):
             self.assertIn("model-decimator.shape_deviation", rules,
                           "a sphere reduced to a coarse hull must be caught "
                           "by the SHAPE gate, not merely by the budget")
+
+    def test_req_015_the_same_reduction_is_judged_by_where_it_will_be_seen(self):
+        """The gate the OUTPUT PATH decides, end to end.
+
+        One source, one budget, two destinations. Written to
+        `assets/character/` the coarse hull is refused, because a hero's
+        silhouette is the one the player reads all game from a couple of
+        metres away. Written to `assets/environment/` the identical geometry
+        is accepted, because set dressing recedes into the depth fog and the
+        same absolute error is a fraction of a screen pixel there.
+
+        Asserted as a PAIR on purpose. Either half alone would pass on a tool
+        that had quietly stopped reading the contract and pinned one number
+        for everything -- and the number it pinned would be invisible.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            source = build_fixture(tmp, "closed")
+
+            code, report, _ = self._decimate(tmp, source, 120,
+                                             category="character")
+            self.assertEqual(code, decimate_model.EXIT_VIOLATIONS,
+                             json.dumps(report))
+            strayed = report["summary"]["worstDeviationFraction"]
+            self.assertEqual(report["summary"]["deviationCeiling"], 0.005)
+
+            code, report, _ = self._decimate(tmp, source, 120,
+                                             category="environment")
+            self.assertEqual(code, decimate_model.EXIT_OK, json.dumps(report))
+            self.assertEqual(report["summary"]["deviationCeiling"], 0.03)
+
+            # ...and the same surface really did move the same distance, so
+            # the difference in verdict is the ceiling and nothing else.
+            self.assertAlmostEqual(
+                report["summary"]["worstDeviationFraction"], strayed,
+                delta=strayed * 0.5,
+                msg="the two runs must be measuring comparable geometry; a "
+                    "wildly different reading means this proves nothing")
 
     def test_req_032_a_seam_split_surface_is_welded_before_it_is_collapsed(self):
         """The failure the deviation measurement CANNOT see.
