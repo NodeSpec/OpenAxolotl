@@ -150,6 +150,22 @@ signal in the language for "this object obeys different rules".
    of reach, every rise 0.8 m, no lateral step wider than 2.5 m. The act is
    hard because of what is standing on the platforms.
 
+9. **The Flagship** *(the boss)*. The crown of the yard is a diving board, not
+   an ending: ten metres down into open sea, where the vessel the whole fleet
+   was launched from lies moored. Three phases, and the hull is shaped so the
+   fight is legible before anyone explains it — four intake mouths 2.6 m under
+   the waterline (**water only**), a long open deck 0.5 m proud of it (**land
+   only**), and a shuttered core housing at the stern (**gated on the Bubble
+   mod's active window**). Boarding is a submerged shore and two mooring posts
+   hopped alongside the hull, because this controller jumps gaps and does not
+   climb walls.
+
+   Beating it unlocks `open_sea`; the nine **fleet cores** gathered through the
+   yard are spent the instant it unlocks; `open_sea` reaches `restored`; the
+   **sea gate** off the stern opens; and the finish is one hop past it. The
+   restoration payoff lands on the last thing the player did, which is the
+   whole reason the boss goes at the end.
+
    Then the finish volume returns the player to the Open Lagoon, with
    completion recorded through the save-integration interface.
 
@@ -222,13 +238,14 @@ machines plus the mast climb measured 10.0 s.
 | Contract element | Used here |
 |---|---|
 | required: spawnPoint, checkpoints, finishCondition (`reach_volume`), saveIntegration, controllerCompatibility | yes |
-| optional: restorableRegions | `coral_shelf`, gate `shelf_wall` opens at `restored` |
+| optional: restorableRegions | `coral_shelf` (`unlockedBy: entry`, gate `shelf_wall`) and `open_sea` (`unlockedBy: boss`, gate `sea_gate`) — the world that forced friction F-2 |
 | optional: tuningOverrides | both restoration resource costs (sanctioned set) |
 | optional: cameraHints | one hint volume over the grotto |
 | optional: collectibles | `kelp_seed` (resource → `coral_shelf`), `hermit_snail`, `lantern_shrimp`, `tide_pearl` and `fleet_beacon` (discovery) — Coral Cove is the world that exercises **both** kinds; Bubble Bay declares resources only |
-| optional: enemies | all four Drift Fleet kinds, **fourteen machines** placed on the walked route; the coral walk fights thirteen of them |
+| optional: enemies | all four Drift Fleet kinds, **fourteen machines** plus the Flagship, placed on the walked route; the coral walk fights thirteen of them |
 | scene conventions: two `WaterVolume` bodies | the valley waterway (river into cove) and the gorge river |
-| optional: boss, music, npcs, secretAreas, customAbility | **not declared** — absent defaults apply |
+| optional: boss | the Flagship, three phases, region `open_sea` — the game's only boss |
+| optional: music, npcs, secretAreas, customAbility | **not declared** — absent defaults apply |
 | scene conventions: `pit_volume`, `hazard`, `regen_station`, `climbable` | one pit under the whole world; one leg-stripping hook; one station; one climbable wall |
 
 Scene-group conventions bound by the runtime (`gill_mod_pickup`,

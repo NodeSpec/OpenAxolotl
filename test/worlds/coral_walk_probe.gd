@@ -145,7 +145,13 @@ func _physics_process(_delta: float) -> void:
 	if _pilot != null and not _returned:
 		_pilot.step(_body)
 		if not _pilot.stuck_reason().is_empty():
-			_fail("the route is not walkable: %s" % _pilot.stuck_reason())
+			# The encounter and the restoration economy are printed with the
+			# stall because act 9's failures are almost never "the geometry is
+			# wrong" — they are "the gate is shut because the fight did not
+			# finish" or "a pickup was missed", and those are invisible from a
+			# position alone.
+			_fail("the route is not walkable: %s\n      %s"
+				% [_pilot.stuck_reason(), _world_state()])
 			_report()
 			return
 
@@ -292,6 +298,26 @@ func _check_pillar_one() -> void:
 	var recorded: Variant = _save.get_world_data(WORLD_ID).get("lastCheckpointId", "")
 	_check(String(recorded) != "" and _checkpoints_hit.has(String(recorded)),
 		"the last activated checkpoint is recorded in the profile (%s)" % str(recorded))
+
+
+## A one-line dump of everything act 9 depends on, for a stall report.
+func _world_state() -> String:
+	if _systems == null:
+		return "(no WorldSystems)"
+	var parts: PackedStringArray = []
+	var boss := _systems.get_flagship()
+	parts.append("boss=%s" % ("absent" if boss == null
+		else "phase %d/%d (%s) defeated=%s" % [boss.get_current_phase_index(),
+			boss.phase_count(), boss.get_current_phase_id(),
+			str(boss.is_defeated())]))
+	var restoration := _systems.get_restoration()
+	for region_id: String in restoration.get_region_ids():
+		parts.append("%s=%s unlocked=%s res=%d" % [region_id,
+			RegionState.id(restoration.get_state(region_id)),
+			str(restoration.is_unlocked(region_id)),
+			restoration.get_region(region_id).get_resources()])
+	parts.append("collected=%s" % str(_collected))
+	return " | ".join(parts)
 
 
 func _elapsed_seconds() -> float:

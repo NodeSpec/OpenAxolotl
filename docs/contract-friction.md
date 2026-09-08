@@ -32,7 +32,23 @@ verify them (e.g. a `restoration_gate` naming a `gateId` the manifest never
 declared should fail conformance, not silently never open). Additive, so it
 lands within v1.
 
-## F-2 · Regions have no declared unlock condition
+## F-2 · Regions have no declared unlock condition — **RESOLVED**
+
+**Resolved in the contract**: `restorableRegions[].unlockedBy` is now an
+optional per-region field, `"entry"` or `"boss"`. Omitting it keeps the old
+inference exactly, so every world and fixture written before the field means
+what it always meant; declaring it is how a world says what it actually wants.
+An unrecognised value is refused with `restoration.unknown_unlock_policy`
+rather than defaulted, because a misspelled policy is a level that unlocks at
+the wrong moment — which surfaces as an unreachable route, not as an error.
+
+**What forced it**: Coral Cove's Flagship. The inference could not express a
+level that wants restoration on its critical path AND a boss at its end, and
+under it that level DEADLOCKED — `coral_shelf` stayed locked behind a boss the
+route could not reach without the shelf wall the shelf opens. The original
+entry below is kept because the reasoning is still the reasoning.
+
+### The original entry
 
 **Needed:** `coral_shelf` must be restorable on entry — there is no Flagship
 yet — but REQ-008 AC-2 says a locked region cannot advance and the Flagship

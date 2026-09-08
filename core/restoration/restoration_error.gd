@@ -15,6 +15,7 @@ const MALFORMED_DECLARATION := "restoration.malformed_declaration"
 const UNKNOWN_STATE := "restoration.unknown_state"
 const NO_TRAVERSAL_EFFECT := "restoration.no_traversal_effect"
 const UNKNOWN_GATE_STATE := "restoration.unknown_gate_state"
+const UNKNOWN_UNLOCK_POLICY := "restoration.unknown_unlock_policy"
 
 var code: String = ""
 var subject: String = ""

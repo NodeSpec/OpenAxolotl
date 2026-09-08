@@ -116,5 +116,28 @@ static func waypoints() -> Array[RoutePilot.Waypoint]:
 	RoutePilot.at("walk", Vector3(0, 11.6, -261), "over the lip onto the crown"),
 	RoutePilot.fight("NetbotYardCrown", Vector3(3, 11.6, -264), "the last machine in the level, standing over the reward"),
 	RoutePilot.at("walk", Vector3(0, 11.6, -265), "the fleet beacon"),
-	RoutePilot.at("finish", Vector3(0, 11.6, -267), "the finish volume, on the crown of the yard"),
+
+	# --- ACT 9: THE FLAGSHIP ----------------------------------------------
+	# The crown is a diving board, not an ending. Eight metres down into open
+	# sea, then the three phases in the order the hull reads them: under it,
+	# onto it, and into its stern. Beating it unlocks `open_sea`, the seven
+	# cores gathered through the yard are spent on the spot, the sea gate
+	# opens on `restored`, and the finish is past it.
+	RoutePilot.at("walk", Vector3(0, 11.6, -267.5), "the crown lip, over the open sea"),
+	RoutePilot.at("swim", Vector3(0, 1.2, -272), "off the crown and ten metres down into open sea, clear of the bow"),
+	RoutePilot.at("swim", Vector3(4.4, 0.8, -280), "down the hull's flank"),
+	RoutePilot.at("swim", Vector3(3.3, 0.7, -286.6), "PHASE 1: the port intake, 2.6 m under the waterline -- water only, so the only way in is to swim"),
+	RoutePilot.at("swim", Vector3(4.6, 1.4, -285), "out to port, toward the boarding shore"),
+	RoutePilot.at("swim", Vector3(4.6, 3.0, -285), "up to the surface FIRST, in the 1.3 m of clear water between the deck overhang and the shore -- swimming at the shore's edge catches the capsule on its lip"),
+	RoutePilot.at("swim", Vector3(9.5, 3.0, -285), "east over the shore and out of the sea, dropping onto it as the water runs out"),
+	RoutePilot.at("walk", Vector3(10.5, 2.6, -287), "BoardingShore -- land grammar back, beside the sea rather than in it"),
+	RoutePilot.at("jump", Vector3(8.0, 3.7, -291.5), "MooringPostA (gap 1.5, rise 1.1) -- boarding is hopped, because this controller has no step-up"),
+	RoutePilot.at("jump", Vector3(6.5, 4.64, -294), "MooringPostB (gap 2.9 across, rise 0.94), level with the deck"),
+	RoutePilot.at("walk", Vector3(2.6, 4.64, -294), "aboard: across 1.3 m onto the deck itself"),
+	RoutePilot.at("walk", Vector3(0, 4.6, -290), "PHASE 2: amidships -- land only, which the deck is"),
+	RoutePilot.at("walk", Vector3(0, 5.0, -296), "aft along the deck toward the stern"),
+	RoutePilot.at("mod", Vector3(0, 5.0, -296.5), "open the Bubble platform -- phase 3 is gated on its ACTIVE window, not on carrying it"),
+	RoutePilot.at("walk", Vector3(0, 5.4, -298.6), "PHASE 3: the shuttered core housing -- gated on the Bubble mod from act 4"),
+	RoutePilot.at("jump", Vector3(0, 4.64, -305), "off the stern through the opened sea gate onto the finish ledge (gap 1.55) -- the gate was solid until the Flagship fell"),
+	RoutePilot.at("finish", Vector3(0, 4.64, -307), "the finish volume, past the fallen Flagship and out to open sea"),
 	] as Array[RoutePilot.Waypoint]

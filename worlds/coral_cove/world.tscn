@@ -38,6 +38,7 @@
 [ext_resource type="PackedScene" path="res://assets/prop/dredger/dredger.glb" id="18_fleet_dredger"]
 [ext_resource type="PackedScene" path="res://assets/prop/hookline_rig/hookline_rig.glb" id="19_fleet_hookline_rig"]
 [ext_resource type="PackedScene" path="res://assets/prop/netbot/netbot.glb" id="20_fleet_netbot"]
+[ext_resource type="PackedScene" path="res://assets/prop/flagship/flagship.glb" id="22_fleet_flagship"]
 [ext_resource type="PackedScene" path="res://assets/prop/runoff_drone/runoff_drone.glb" id="21_fleet_runoff_drone"]
 [ext_resource type="Script" path="res://core/rendering/terrain_shell.gd" id="terrain_shell_script"]
 [ext_resource type="Script" path="res://core/rendering/presentation_motion.gd" id="presentation_motion_script"]
@@ -101,7 +102,8 @@ albedo_color = Color(0.85, 0.95, 1, 0.5)
 radius = 0.035
 height = 0.07
 material = SubResource("StandardMaterial3D_11")
-
+radial_segments = 16
+rings = 8
 [sub_resource type="BoxMesh" id="BoxMesh_13"]
 size = Vector3(12, 2, 10)
 
@@ -129,7 +131,8 @@ size = Vector3(9, 2, 4)
 [sub_resource type="SphereMesh" id="SphereMesh_21"]
 radius = 0.55
 height = 1.1
-
+radial_segments = 16
+rings = 8
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_22"]
 albedo_color = Color(0.95, 0.6, 0.3, 1)
 
@@ -361,7 +364,8 @@ emission_energy_multiplier = 1.8
 radius = 0.025
 height = 0.05
 material = SubResource("MoteMaterial")
-
+radial_segments = 16
+rings = 8
 [sub_resource type="BoxMesh" id="BoxMesh_race_landing"]
 size = Vector3(12, 2, 8)
 
@@ -429,7 +433,8 @@ radius = 0.85
 [sub_resource type="SphereMesh" id="SphereMesh_race_pearl"]
 radius = 0.34
 height = 0.68
-
+radial_segments = 16
+rings = 8
 [sub_resource type="BoxShape3D" id="BoxShape3D_race_finish"]
 size = Vector3(14, 4, 3)
 
@@ -469,12 +474,86 @@ radius = 0.85
 [sub_resource type="SphereMesh" id="SphereMesh_yard_beacon"]
 radius = 0.34
 height = 0.68
-
+radial_segments = 16
+rings = 8
 [sub_resource type="BoxShape3D" id="HintYard"]
 size = Vector3(30, 16, 44)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yard_finish"]
 size = Vector3(14, 4, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sea_water"]
+size = Vector3(13, 12, 46)
+subdivide_width = 5
+subdivide_depth = 18
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sea_water"]
+size = Vector3(13, 12, 46)
+
+[sub_resource type="BoxMesh" id="BoxMesh_seabed"]
+size = Vector3(26, 2, 46)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_seabed"]
+size = Vector3(26, 2, 46)
+
+[sub_resource type="BoxMesh" id="BoxMesh_board_shore"]
+size = Vector3(8, 2, 12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_board_shore"]
+size = Vector3(8, 2, 12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mooring_post"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mooring_post"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mooring_head"]
+size = Vector3(3, 2, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mooring_head"]
+size = Vector3(3, 2, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_flag_deck"]
+size = Vector3(7.4, 0.5, 21.9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_flag_deck"]
+size = Vector3(7.4, 0.5, 21.9)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sea_gate"]
+size = Vector3(9, 5, 1.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sea_gate"]
+size = Vector3(9, 5, 1.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_flag_finish_ledge"]
+size = Vector3(10, 2, 6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_flag_finish_ledge"]
+size = Vector3(10, 2, 6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_phase_intake"]
+size = Vector3(3, 3, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_phase_deck"]
+size = Vector3(6, 3, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_phase_core"]
+size = Vector3(5, 4, 5)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_core_pickup"]
+radius = 0.9
+
+[sub_resource type="SphereMesh" id="SphereMesh_core_pickup"]
+radius = 0.3
+height = 0.6
+radial_segments = 16
+rings = 8
+[sub_resource type="BoxShape3D" id="BoxShape3D_flag_finish"]
+size = Vector3(10, 4, 3)
+
+[sub_resource type="BoxShape3D" id="HintFlagship"]
+size = Vector3(44, 20, 50)
 
 [sub_resource type="BoxShape3D" id="HintRace"]
 size = Vector3(26, 12, 30)
@@ -1969,13 +2048,362 @@ pitch_deg = 12.0
 [node name="Collision" type="CollisionShape3D" parent="YardHint"]
 shape = SubResource("HintYard")
 
-; The finish moved out here with the act. It used to sit at the sea terrace,
-; which is now the door into the yard rather than the end of the level.
+
+; === ACT 9: THE FLAGSHIP ===
+; The end of the level, and the only boss in the game.
+;
+; Acts one to eight each taught something and then asked for it. This asks for
+; all of it at once, against the vessel the whole fleet was launched from --
+; and it is the LAST thing in the level, which is a design rule rather than a
+; staging preference (REQ-013). Put a boss in the middle and everything after
+; it is anticlimax; put it last and beating it is the payoff. Defeating this
+; unlocks `open_sea`, the cores gathered through the yard are spent the moment
+; it unlocks, the sea gate opens on `restored`, and the finish is past it: the
+; restoration reward lands on the last thing the player did.
+;
+; THREE PHASES, ONE PER READ, and the hull is shaped so a player can see where
+; the fight goes next before anyone explains it (REQ-013 AC-3, AC-4):
+;
+;   1. HULL BREACH, water only. Four intake mouths sit 1.9 m under the
+;      waterline. The only way in is to swim, which is the grammar act 2
+;      taught and the tide race asked for again.
+;   2. DECK ASSAULT, land only. The deck stands 1.24 m proud of the water, so
+;      boarding is a real transition rather than a swim-through, and the fight
+;      on it is the land grammar with the tail whack.
+;   3. CORE PURGE, gated on `bubble_platform`. The stern housing is shuttered;
+;      the Bubble mod picked up in act 4 is what opens it. A player who never
+;      collected it can reach this and not finish, which is the mod gate doing
+;      its job.
+;
+; WHY IT IS BUILT AT LEVEL SCALE. Every other Drift Fleet machine is an
+; obstacle a metre or two across. This one is a PLACE -- twenty-two metres of
+; hull the player swims under, climbs onto and fights across -- so the mesh is
+; generated at that scale and the collision below agrees with it rather than
+; approximating it.
+
+[node name="OpenSea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.7, -292)
+script = ExtResource("1_water")
+
+[node name="Mesh" type="MeshInstance3D" parent="OpenSea"]
+mesh = SubResource("BoxMesh_sea_water")
+surface_material_override/0 = ExtResource("3_watermat")
+
+[node name="Collision" type="CollisionShape3D" parent="OpenSea"]
+shape = SubResource("BoxShape3D_sea_water")
+
+[node name="Bubbles" type="GPUParticles3D" parent="OpenSea"]
+amount = 24
+lifetime = 5.5
+randomness = 1.0
+visibility_aabb = AABB(-6.5, -6, -18, 13, 12, 36)
+process_material = SubResource("ParticleProcessMaterial_race")
+draw_pass_1 = SubResource("MoteMesh")
+
+[node name="Seabed" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.5, -292)
+
+[node name="Mesh" type="MeshInstance3D" parent="Seabed"]
+visible = false
+mesh = SubResource("BoxMesh_seabed")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="Collision" type="CollisionShape3D" parent="Seabed"]
+shape = SubResource("BoxShape3D_seabed")
+
+[node name="CheckpointOpenSea" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -276)
+
+; Rotated a quarter turn so the hull runs along the route: bow at z -279,
+; stern and core housing at z -298.6. The deck collision below is a slab
+; matching the generated deck at local y 3.84, because a player standing
+; on a mesh needs something to stand on.
+[node name="Flagship" type="Node3D" parent="."]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, -290)
+
+[node name="Model" parent="Flagship" instance=ExtResource("22_fleet_flagship")]
+
+[node name="FlagshipDeck" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.59, -290)
+
+[node name="Mesh" type="MeshInstance3D" parent="FlagshipDeck"]
+visible = false
+mesh = SubResource("BoxMesh_flag_deck")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="FlagshipDeck"]
+shape = SubResource("BoxShape3D_flag_deck")
+
+; BOARDING, and every line of this is a lesson the flown route taught rather
+; than a shape anyone designed up front.
+;
+; ONE RULE DECIDES IT ALL: land grammar means the body is OUTSIDE the water
+; volume, not merely above the waterline. A body resting on a shelf under the
+; surface is still swimming, so the first thing the player STANDS on has to be
+; somewhere the sea is not -- either beside it, or high enough that the whole
+; capsule clears its top face.
+;
+; THE SECOND RULE: this controller jumps GAPS, it does not climb walls. There
+; is no step-up. Every rise in this level is paired with a gap for exactly
+; that reason, and boarding a ship is no exception -- which is why this is a
+; line of mooring posts with water between them rather than a staircase. Three
+; earlier attempts (a bow step under the deck's overhang, a submerged shelf
+; against the hull, a shore with steps cut into it) each failed on one of
+; those two rules, and each failed on the run rather than on paper.
+;
+; The stack, every gap under 2.2 m and every rise under 1.2: waterline 3.3,
+; shore top 1.8 with 1.5 m of water over its submerged lip so a swimmer
+; settles onto it the way act 2's CoveShore and act 7's SeaShore both ask,
+; post 2.9, post 3.84, deck 3.84.
+[node name="BoardingShore" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0.8, -283)
+
+[node name="Mesh" type="MeshInstance3D" parent="BoardingShore"]
+visible = false
+mesh = SubResource("BoxMesh_board_shore")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="Collision" type="CollisionShape3D" parent="BoardingShore"]
+shape = SubResource("BoxShape3D_board_shore")
+
+[node name="Shell" type="Node3D" parent="BoardingShore"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("6_surface_river_sand")
+shell_seed = 8806
+
+; Two mooring posts alongside, hopped rather than climbed. Their tops clear
+; the waterline, so standing on them is dry however close to the hull they are.
+[node name="MooringPostA" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.9, -291.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="MooringPostA"]
+visible = false
+mesh = SubResource("BoxMesh_mooring_post")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="MooringPostA"]
+shape = SubResource("BoxShape3D_mooring_post")
+
+[node name="MooringPostB" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 2.84, -294)
+
+[node name="Mesh" type="MeshInstance3D" parent="MooringPostB"]
+visible = false
+mesh = SubResource("BoxMesh_mooring_head")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="MooringPostB"]
+shape = SubResource("BoxShape3D_mooring_head")
+
+[node name="CheckpointBoarding" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2.6, -285)
+
+; PHASE 1, water only: the port intake, 1.9 m under the waterline.
+[node name="BossPhaseHullBreach" type="Area3D" parent="." groups=["boss_phase"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3, 0.7, -286.6)
+
+[node name="Collision" type="CollisionShape3D" parent="BossPhaseHullBreach"]
+shape = SubResource("BoxShape3D_phase_intake")
+
+[node name="CheckpointHullBreach" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, -284)
+
+; PHASE 2, land only: amidships on the deck, which is dry.
+[node name="BossPhaseDeckAssault" type="Area3D" parent="." groups=["boss_phase"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.6, -290)
+
+[node name="Collision" type="CollisionShape3D" parent="BossPhaseDeckAssault"]
+shape = SubResource("BoxShape3D_phase_deck")
+
+[node name="CheckpointDeckAssault" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.6, -292)
+
+; An anchor before the last phase. Without it the walk aft, the mod window and
+; the purge were one 6.7-second replay against the five-second bound.
+[node name="CheckpointCorePurge" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.64, -296)
+
+; PHASE 3, gated on bubble_platform: the shuttered core housing at the stern.
+[node name="BossPhaseCorePurge" type="Area3D" parent="." groups=["boss_phase"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.4, -298.6)
+
+[node name="Collision" type="CollisionShape3D" parent="BossPhaseCorePurge"]
+shape = SubResource("BoxShape3D_phase_core")
+
+; The gate `open_sea` opens at `restored`. It is the reason the boss matters
+; mechanically rather than only dramatically: the finish is behind it, and the
+; only thing that unlocks the region is the Flagship falling.
+;
+; It stands in the 1.55 m gap off the stern, level with the deck, so the last
+; move of the level is a hop the player has made forty times -- through a wall
+; that was solid on the way in.
+[node name="SeaGate" type="StaticBody3D" parent="." groups=["restoration_gate"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.6, -302)
+metadata/region_id = "open_sea"
+metadata/gate_id = "sea_gate"
+[node name="Mesh" type="MeshInstance3D" parent="SeaGate"]
+visible = false
+mesh = SubResource("BoxMesh_sea_gate")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="SeaGate"]
+shape = SubResource("BoxShape3D_sea_gate")
+
+[node name="FlagshipFinishLedge" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.84, -305.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="FlagshipFinishLedge"]
+visible = false
+mesh = SubResource("BoxMesh_flag_finish_ledge")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="FlagshipFinishLedge"]
+shape = SubResource("BoxShape3D_flag_finish_ledge")
+
+[node name="Shell" type="Node3D" parent="FlagshipFinishLedge"]
+script = ExtResource("terrain_shell_script")
+surface_material = ExtResource("4_surface_mossy_stone")
+shell_seed = 8805
+
+[node name="CheckpointFlagshipFinish" type="Marker3D" parent="." groups=["checkpoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.64, -305.5)
+
+[node name="FlagshipHint" type="Area3D" parent="."]
+position = Vector3(0, 4, -288)
+script = ExtResource("2_hint")
+hint_priority = 24
+override_distance = true
+distance_m = 12.5
+override_pitch = true
+pitch_deg = 16.0
+
+[node name="Collision" type="CollisionShape3D" parent="FlagshipHint"]
+shape = SubResource("HintFlagship")
+
+; NINE FLEET CORES against a cost of seven, so the economy has two spare.
+; Laid out at exactly seven first, and the flown route collected six: one
+; pickup sat two metres off the line between a landing and a fight, and with
+; no slack that single miss made the level unfinishable. Act 6's kelp seeds
+; are still exactly seven against seven and that is the reason its Dredger has
+; to stand outside the seed bed; this act does not repeat the constraint.
+;
+; The original seven were placed on the yard's landings because`open_sea` costs (3 to resourced,
+; 4 to restored, this world's overridden costs). They are gathered through
+; the yard while the region is still locked -- banked, not spent -- and the
+; Flagship's defeat spends them all at once. That is the payoff landing on
+; the fight rather than on an errand.
+;
+; Placed ON the yard's landings rather than between them. Laid out mid-arc
+; first and the flown route sailed past several of them: a pickup a jump
+; passes through at speed is a pickup the player misses, and with an economy
+; this tight one missed core is a level that cannot be finished.
+[node name="FleetCore1" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.2, -218)
+metadata/collectible_id = "fleet_core"
+
+[node name="Mesh" type="MeshInstance3D" parent="FleetCore1"]
+mesh = SubResource("SphereMesh_core_pickup")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="FleetCore1"]
+shape = SubResource("SphereShape3D_core_pickup")
+
+[node name="FleetCore2" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 5.0, -226)
+metadata/collectible_id = "fleet_core"
+
+[node name="Mesh" type="MeshInstance3D" parent="FleetCore2"]
+mesh = SubResource("SphereMesh_core_pickup")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="FleetCore2"]
+shape = SubResource("SphereShape3D_core_pickup")
+
+[node name="FleetCore3" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, -234)
+metadata/collectible_id = "fleet_core"
+
+[node name="Mesh" type="MeshInstance3D" parent="FleetCore3"]
+mesh = SubResource("SphereMesh_core_pickup")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="FleetCore3"]
+shape = SubResource("SphereShape3D_core_pickup")
+
+[node name="FleetCore4" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 6.6, -242)
+metadata/collectible_id = "fleet_core"
+
+[node name="Mesh" type="MeshInstance3D" parent="FleetCore4"]
+mesh = SubResource("SphereMesh_core_pickup")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="FleetCore4"]
+shape = SubResource("SphereShape3D_core_pickup")
+
+[node name="FleetCore5" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, -252)
+metadata/collectible_id = "fleet_core"
+
+[node name="Mesh" type="MeshInstance3D" parent="FleetCore5"]
+mesh = SubResource("SphereMesh_core_pickup")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="FleetCore5"]
+shape = SubResource("SphereShape3D_core_pickup")
+
+[node name="FleetCore6" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, -255)
+metadata/collectible_id = "fleet_core"
+
+[node name="Mesh" type="MeshInstance3D" parent="FleetCore6"]
+mesh = SubResource("SphereMesh_core_pickup")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="FleetCore6"]
+shape = SubResource("SphereShape3D_core_pickup")
+
+[node name="FleetCore7" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.6, -261)
+metadata/collectible_id = "fleet_core"
+
+[node name="Mesh" type="MeshInstance3D" parent="FleetCore7"]
+mesh = SubResource("SphereMesh_core_pickup")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="FleetCore7"]
+shape = SubResource("SphereShape3D_core_pickup")
+
+[node name="FleetCore8" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, -208.5)
+metadata/collectible_id = "fleet_core"
+
+[node name="Mesh" type="MeshInstance3D" parent="FleetCore8"]
+mesh = SubResource("SphereMesh_core_pickup")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="FleetCore8"]
+shape = SubResource("SphereShape3D_core_pickup")
+
+[node name="FleetCore9" type="Area3D" parent="." groups=["collectible"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.64, -283)
+metadata/collectible_id = "fleet_core"
+
+[node name="Mesh" type="MeshInstance3D" parent="FleetCore9"]
+mesh = SubResource("SphereMesh_core_pickup")
+surface_material_override/0 = ExtResource("8_surface_coral_shelf_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="FleetCore9"]
+shape = SubResource("SphereShape3D_core_pickup")
+
+; The finish moved again, out past the sea gate. It sat at the sea terrace,
+; then on the crown of the yard; both are now doors rather than endings. The
+; level ends where the Flagship falls and the sea opens.
 [node name="SeaFinish" type="Area3D" parent="." groups=["finish_volume"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.5, -267)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.6, -307.5)
 
 [node name="Collision" type="CollisionShape3D" parent="SeaFinish"]
-shape = SubResource("BoxShape3D_yard_finish")
+shape = SubResource("BoxShape3D_flag_finish")
 
 ; === DRIFT FLEET ===
 ; ON THE ROUTE, NOT BESIDE IT. Every machine used to stand six to ten metres

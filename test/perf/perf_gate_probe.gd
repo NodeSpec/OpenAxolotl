@@ -209,8 +209,18 @@ func _record_frame_delta() -> void:
 	var delta_ms := float(now - _last_tick_usec) / 1000.0
 	_last_tick_usec = now
 	if _restore_pending:
+		# WORST of them, and EXCLUDED from the traversal sample. Both halves
+		# changed when Coral Cove grew a second region: this kept only the last
+		# restore frame and also let every restore frame into _deltas_ms, so
+		# with two regions the "largest spike" the protocol discards was one
+		# geometry swap and the spike it then reported was the OTHER one —
+		# a scene-swap cost measured against a budget written for traversal.
+		# The restore frame has its own budget check below; it does not belong
+		# in both.
 		_restore_pending = false
-		_restore_delta_ms = delta_ms
+		_restore_delta_ms = maxf(_restore_delta_ms, delta_ms)
+		_last_tick_usec = now
+		return
 	# The settle window keeps world-entry instantiation noise out of the
 	# traversal sample; entry cost is the LOAD claim, measured above.
 	if _frame < SETTLE_FRAMES + _settle_after_entry:

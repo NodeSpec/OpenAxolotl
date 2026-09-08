@@ -31,13 +31,14 @@ extends RefCounted
 ##   BOOST  ask for the bubble boost, then move on immediately
 ##   CLIMB  walk into the wall, then ask to climb once actually against it
 ##   FIGHT  close on the machine and swing until it goes down
+##   MOD    open the equipped Gill Mod's window, then move on
 ##   FINISH steer at it and never advance — the world ends the walk
-enum Move { WALK, JUMP, SWIM, BOOST, CLIMB, FIGHT, FINISH }
+enum Move { WALK, JUMP, SWIM, BOOST, CLIMB, FIGHT, MOD, FINISH }
 
 const MOVE_ID: Dictionary = {
 	"walk": Move.WALK, "jump": Move.JUMP, "swim": Move.SWIM,
 	"boost": Move.BOOST, "climb": Move.CLIMB, "fight": Move.FIGHT,
-	"finish": Move.FINISH,
+	"mod": Move.MOD, "finish": Move.FINISH,
 }
 
 ## Frames between swings on a FIGHT leg, and how many are budgeted.
@@ -57,6 +58,11 @@ const MOVE_ID: Dictionary = {
 ## nothing and the fights ran twice as long as they needed to.
 const SWING_TAP := 36
 const MAX_SWINGS := 15
+
+## Frames the mod-activate button is held. Long enough that the press and the
+## release land on different frames, short enough that the window it opens is
+## still open when the next leg reaches the volume it gates.
+const MOD_PRESS := 8
 
 ## How close the pilot gets before swinging, in metres.
 ##
@@ -307,6 +313,21 @@ func _act(body: CharacterBody3D, wp: Waypoint, flat: float, delta: Vector3,
 			_hold(KEY_E, not _acted)
 			_acted = true
 
+		Move.MOD:
+			# THE ONE VERB BOUND TO A MOUSE BUTTON, not a key: gill_mod_activate
+			# is mouse.1 in the default scheme, so this is the only leg that
+			# cannot be driven by the keyboard path the rest of the pilot uses.
+			# It exists because the Flagship's third phase is gated on the
+			# Bubble mod's ACTIVE window (REQ-013 AC-4) — equipping it is not
+			# enough, and a probe that only walked into the volume proved the
+			# gate refuses rather than that the fight can be finished.
+			#
+			# HELD ACROSS FRAMES, not pressed and released inside one. Parsed
+			# input is processed on the following frame, so a press and a
+			# release in the same frame can cancel each other and the verb
+			# never fires — which is exactly how this first failed.
+			_click(_leg_frames <= MOD_PRESS)
+
 		Move.FIGHT:
 			# Close first, then swing: a strike opened at four metres is a
 			# strike that misses, and a probe that swung from wherever it
@@ -381,6 +402,8 @@ func _arrived(wp: Waypoint, here: Vector3, delta: Vector3, flat: float,
 			return _fight_won.is_valid() and bool(_fight_won.call(wp.subject))
 		Move.BOOST:
 			return _acted
+		Move.MOD:
+			return _leg_frames > MOD_PRESS + 2
 		Move.CLIMB:
 			# Ends when the body has actually STARTED to rise. Ending it on the
 			# request instead would call a climb that never attached a success.
@@ -417,6 +440,19 @@ static func fleet_defeat_test(systems: Node) -> Callable:
 	return func(unit_id: String) -> bool: return fleet.is_defeated(unit_id)
 
 
+## Presses or releases the primary mouse button, the same way _hold presses a
+## key: through Input.parse_input_event, so the whole binding chain is under
+## test rather than bypassed.
+func _click(down: bool) -> void:
+	if bool(_held.get(MOUSE_BUTTON_LEFT, false)) == down:
+		return
+	_held[MOUSE_BUTTON_LEFT] = down
+	var event := InputEventMouseButton.new()
+	event.button_index = MOUSE_BUTTON_LEFT
+	event.pressed = down
+	Input.parse_input_event(event)
+
+
 func _advance() -> void:
 	_leg += 1
 	_leg_frames = 0
@@ -424,6 +460,7 @@ func _advance() -> void:
 	_airborne = 0
 	_swings = 0
 	_hold(KEY_F, false)
+	_click(false)
 	# ALWAYS released, including into another jump leg. Leaving it held there
 	# looks harmless and is not: the hop verb is edge-triggered, so a key that
 	# was never released cannot press again, and the second jump of a pair

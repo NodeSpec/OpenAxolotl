@@ -6,47 +6,77 @@
   "authoringPath": "Code and Godot scenes only. There is no editor GUI authoring path, in any phase \u2014 which is what keeps this surface narrow enough to check, and what lets a human and an AI coding agent build a world the same way.",
   "ruleKinds": {
     "manifest_field_present": {
-      "arguments": ["field"],
+      "arguments": [
+        "field"
+      ],
       "description": "The dotted field path exists in world.json and is not null."
     },
     "manifest_field_type": {
-      "arguments": ["field", "type"],
+      "arguments": [
+        "field",
+        "type"
+      ],
       "description": "The field is of the named JSON type (string, number, integer, boolean, array, object)."
     },
     "manifest_field_matches": {
-      "arguments": ["field", "pattern"],
+      "arguments": [
+        "field",
+        "pattern"
+      ],
       "description": "The string field matches the given regular expression, anchored."
     },
     "manifest_field_in_set": {
-      "arguments": ["field", "values"],
+      "arguments": [
+        "field",
+        "values"
+      ],
       "description": "The field's value is one of a closed set. A value outside it is a violation, never a warning."
     },
     "manifest_array_min_length": {
-      "arguments": ["field", "min"],
+      "arguments": [
+        "field",
+        "min"
+      ],
       "description": "The array field has at least min entries."
     },
     "manifest_keys_subset_of": {
-      "arguments": ["field", "allowedFrom"],
+      "arguments": [
+        "field",
+        "allowedFrom"
+      ],
       "description": "Every key of the object field appears in the list named by allowedFrom, which is a path into another contract file. Used so an allowlist is referenced rather than duplicated."
     },
     "scene_group_count": {
-      "arguments": ["group", "min", "max"],
+      "arguments": [
+        "group",
+        "min",
+        "max"
+      ],
       "description": "The world scene contains between min and max nodes belonging to the named Godot group. Omit max for unbounded. Group membership IS the tag: no name matching, no type sniffing, because a contributor renaming a node must not silently break conformance."
     },
     "file_present": {
-      "arguments": ["path"],
+      "arguments": [
+        "path"
+      ],
       "description": "The path exists inside the module root."
     },
     "file_absent": {
-      "arguments": ["path"],
+      "arguments": [
+        "path"
+      ],
       "description": "The path does NOT exist inside the module root."
     },
     "manifest_field_equals_directory_name": {
-      "arguments": ["field"],
+      "arguments": [
+        "field"
+      ],
       "description": "The string field equals the module's own directory name. Used so an identity that is also a directory name and a save namespace cannot disagree with the folder it lives in."
     },
     "manifest_array_items_prefixed_by": {
-      "arguments": ["field", "prefixFrom"],
+      "arguments": [
+        "field",
+        "prefixFrom"
+      ],
       "description": "Every entry of the array field begins with the value of the field named by prefixFrom, followed by a dot. Used to namespace save keys per world."
     }
   },
@@ -108,7 +138,9 @@
         {
           "kind": "manifest_field_in_set",
           "field": "contractVersion",
-          "values": ["1.0"]
+          "values": [
+            "1.0"
+          ]
         }
       ]
     },
@@ -171,7 +203,12 @@
         {
           "kind": "manifest_field_in_set",
           "field": "finishCondition.kind",
-          "values": ["reach_volume", "defeat_boss", "restore_all_regions", "collect_all"]
+          "values": [
+            "reach_volume",
+            "defeat_boss",
+            "restore_all_regions",
+            "collect_all"
+          ]
         }
       ],
       "kinds": {
@@ -193,7 +230,9 @@
         {
           "kind": "manifest_field_in_set",
           "field": "controllerCompatibility",
-          "values": ["1.0"]
+          "values": [
+            "1.0"
+          ]
         }
       ]
     },
@@ -282,7 +321,12 @@
     "restorableRegions": {
       "absentDefault": "none \u2014 the world has no restoration progression",
       "manifestField": "restorableRegions",
-      "description": "Each region declares the barren/resourced/restored progression plus a SEPARATE boolean unlocked flag. The flag is not a fourth state."
+      "description": "Each region declares the barren/resourced/restored progression plus a SEPARATE boolean unlocked flag. The flag is not a fourth state. Each region may also declare `unlockedBy`: \"entry\" (unlocked the moment the player arrives) or \"boss\" (unlocked by the Flagship encounter). Omitting it keeps the pre-F-2 inference \u2014 unlocked at entry when the world declares no boss, locked until the encounter when it declares one \u2014 so a world written before this field means what it always meant. Declare it when a level wants both restoration on its critical path and a boss at its end; inferring the policy from an unrelated element deadlocks that level.",
+      "regionFields": {
+        "regionId": "required \u2014 the region's id",
+        "traversalGates": "required, non-empty \u2014 restoration must open a real path",
+        "unlockedBy": "optional \u2014 \"entry\" | \"boss\"; absent keeps the inference"
+      }
     },
     "tuningOverrides": {
       "absentDefault": "none \u2014 every tuning value stays at its global setting",

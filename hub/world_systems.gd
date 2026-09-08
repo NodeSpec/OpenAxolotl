@@ -237,8 +237,16 @@ func wire() -> void:
 		# hearing about — but a broken declaration must not crash the world.
 		push_warning("WorldSystems: region declaration failed: %s"
 			% str(errors.map(func(e: RestorationError) -> String: return str(e))))
-	if not manifest.has("boss"):
-		for region_id in _restoration.get_region_ids():
+	# ASKED PER REGION, not inferred from whether a boss exists (friction F-2).
+	# The old rule — no boss anywhere means unlock everything, a boss anywhere
+	# means lock everything — cannot express the level that wants both:
+	# restoration on its critical path AND a Flagship at its end. Coral Cove is
+	# that level, and under the inference it deadlocked, with the regions its
+	# route needs locked behind a boss the route could not reach without them.
+	# A region that declares nothing still gets the old inference.
+	var declares_boss := manifest.has(MANIFEST_BOSS)
+	for region_id in _restoration.get_region_ids():
+		if _restoration.unlocks_at_entry(region_id, declares_boss):
 			_restoration.unlock_region(region_id)
 	_restoration.region_traversal_changed.connect(_on_traversal_changed)
 
@@ -680,6 +688,19 @@ func _bind_player_strikes() -> void:
 	if not body.strike_opened.is_connected(_on_strike_opened):
 		body.strike_opened.connect(_on_strike_opened)
 
+	# THE ABILITY VERBS, WHICH NOTHING WAS LISTENING TO. The Input System has
+	# always resolved and emitted them — `gill_mod_activate` is bound to a
+	# button in the default scheme, and the binding tests cover it — but no
+	# runtime ever connected the signal, so the ONLY thing that ever activated
+	# a Gill Mod was picking it up. A mod with a cooldown that can never be
+	# re-activated is a mod with one use, and any gate more than one window
+	# away from its pickup was unopenable: the Flagship's core purge, two
+	# hundred metres past the Bubble pickup, is where that finally showed.
+	var input := body.get_input_system() as InputSystem
+	if input != null and not input.ability_verb_requested.is_connected(
+			_on_ability_verb):
+		input.ability_verb_requested.connect(_on_ability_verb)
+
 
 ## A strike window opened at [param origin]. Every declared machine within
 ## [param reach] of it is knocked out.
@@ -755,6 +776,20 @@ func _on_defeats_reset() -> void:
 		if area != null:
 			area.monitoring = true
 			area.monitorable = true
+
+
+## An ability verb the player asked for. Only the Gill Mod lane lives here:
+## movement verbs go to the controller through PlayerIntent, and the mod
+## system is the one thing outside the controller a button can reach.
+func _on_ability_verb(verb_id: String) -> void:
+	if _mods == null:
+		return
+	# Only activate is wired: the Gill Mod system has no cycle call yet, so
+	# `gill_mod_next` and `gill_mod_prev` resolve, arrive here and are dropped
+	# rather than silently doing the wrong thing. One equipped mod at a time is
+	# the MVP shape; cycling belongs with the mod loadout work.
+	if verb_id == InputVerb.verb_id(InputVerb.Verb.GILL_MOD_ACTIVATE):
+		_mods.activate()
 
 
 ## Whether this contact was the player LANDING on the machine.
