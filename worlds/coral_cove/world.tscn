@@ -1,4 +1,4 @@
-[gd_scene load_steps=142 format=3]
+[gd_scene load_steps=364 format=3]
 
 ; CORAL COVE — composed vertical slice for REQ-011.
 ;
@@ -50,6 +50,9 @@
 [ext_resource type="PackedScene" path="res://assets/environment/rock_cluster/rock_cluster.glb" id="fill_kit_rock_cluster"]
 [ext_resource type="PackedScene" path="res://assets/environment/seagrass_tuft/seagrass_tuft.glb" id="fill_kit_seagrass_tuft"]
 [ext_resource type="PackedScene" path="res://assets/environment/understory_fern/understory_fern.glb" id="fill_kit_understory_fern"]
+[ext_resource type="PackedScene" path="res://assets/environment/canopy_grove/canopy_grove.glb" id="kit_canopy_grove"]
+[ext_resource type="PackedScene" path="res://assets/environment/canopy_grove_tall/canopy_grove_tall.glb" id="kit_canopy_grove_tall"]
+[ext_resource type="PackedScene" path="res://assets/environment/sand_shelf_set/sand_shelf_set.glb" id="kit_sand_shelf_set"]
 [sub_resource type="BoxMesh" id="BoxMesh_0"]
 size = Vector3(420, 2, 420)
 
@@ -558,26 +561,669 @@ size = Vector3(44, 20, 50)
 [sub_resource type="BoxShape3D" id="HintRace"]
 size = Vector3(26, 12, 30)
 
+[sub_resource type="BoxMesh" id="BoxMesh_gorge1"]
+size = Vector3(13.26, 54.04, 13.13)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge2"]
+size = Vector3(13.26, 54.04, 13.13)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge3"]
+size = Vector3(11.43, 52.39, 13.13)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge4"]
+size = Vector3(11.43, 52.39, 13.13)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge5"]
+size = Vector3(11.17, 53.56, 16.63)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge6"]
+size = Vector3(11.17, 53.56, 16.63)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge7"]
+size = Vector3(10.09, 53.45, 16.63)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge8"]
+size = Vector3(10.09, 53.45, 16.63)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge9"]
+size = Vector3(12.83, 56.48, 15.59)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge10"]
+size = Vector3(12.83, 56.48, 15.59)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge11"]
+size = Vector3(13.91, 54.65, 15.59)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge12"]
+size = Vector3(13.91, 54.65, 15.59)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge13"]
+size = Vector3(13.35, 58.96, 18.86)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge14"]
+size = Vector3(13.35, 58.96, 18.86)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge15"]
+size = Vector3(14.23, 55.59, 18.86)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge16"]
+size = Vector3(14.23, 55.59, 18.86)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge17"]
+size = Vector3(15.31, 58.47, 18.36)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge18"]
+size = Vector3(15.31, 58.47, 18.36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge19"]
+size = Vector3(13.91, 60.63, 18.36)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge20"]
+size = Vector3(13.91, 60.63, 18.36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge21"]
+size = Vector3(13.93, 60.72, 12.9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge22"]
+size = Vector3(13.93, 60.72, 12.9)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge23"]
+size = Vector3(15.37, 60.13, 12.9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge24"]
+size = Vector3(15.37, 60.13, 12.9)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge25"]
+size = Vector3(12.86, 61.02, 18.78)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge26"]
+size = Vector3(12.86, 61.02, 18.78)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge27"]
+size = Vector3(14.27, 63.2, 18.78)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge28"]
+size = Vector3(14.27, 63.2, 18.78)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge29"]
+size = Vector3(15.92, 60.24, 13.95)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge30"]
+size = Vector3(15.92, 60.24, 13.95)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge31"]
+size = Vector3(11.97, 64.25, 13.95)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge32"]
+size = Vector3(11.97, 64.25, 13.95)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge33"]
+size = Vector3(15.81, 62.27, 12.58)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge34"]
+size = Vector3(15.81, 62.27, 12.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge35"]
+size = Vector3(11.19, 63.34, 12.58)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge36"]
+size = Vector3(11.19, 63.34, 12.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge37"]
+size = Vector3(11, 64.09, 13.94)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge38"]
+size = Vector3(11, 64.09, 13.94)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge39"]
+size = Vector3(12.98, 65.17, 13.94)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge40"]
+size = Vector3(12.98, 65.17, 13.94)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge41"]
+size = Vector3(14.11, 62.54, 15.41)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge42"]
+size = Vector3(14.11, 62.54, 15.41)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge43"]
+size = Vector3(10.87, 60.08, 15.41)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge44"]
+size = Vector3(10.87, 60.08, 15.41)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge45"]
+size = Vector3(10.84, 59.32, 15.71)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge46"]
+size = Vector3(10.84, 59.32, 15.71)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge47"]
+size = Vector3(11.19, 59.25, 15.71)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge48"]
+size = Vector3(11.19, 59.25, 15.71)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge49"]
+size = Vector3(14.81, 60.89, 17.87)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge50"]
+size = Vector3(14.81, 60.89, 17.87)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge51"]
+size = Vector3(11.31, 63.15, 17.87)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge52"]
+size = Vector3(11.31, 63.15, 17.87)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge53"]
+size = Vector3(10.19, 61.24, 15.48)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge54"]
+size = Vector3(10.19, 61.24, 15.48)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge55"]
+size = Vector3(10.77, 62.07, 15.48)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge56"]
+size = Vector3(10.77, 62.07, 15.48)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge57"]
+size = Vector3(12.68, 59.92, 14.95)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge58"]
+size = Vector3(12.68, 59.92, 14.95)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge59"]
+size = Vector3(12.82, 59.41, 14.95)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge60"]
+size = Vector3(12.82, 59.41, 14.95)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge61"]
+size = Vector3(10.08, 58.03, 15.13)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge62"]
+size = Vector3(10.08, 58.03, 15.13)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge63"]
+size = Vector3(10.08, 55.62, 15.13)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge64"]
+size = Vector3(10.08, 55.62, 15.13)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge65"]
+size = Vector3(12.25, 54.19, 15.13)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge66"]
+size = Vector3(12.25, 54.19, 15.13)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge67"]
+size = Vector3(11.22, 54.98, 15.13)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge68"]
+size = Vector3(11.22, 54.98, 15.13)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge69"]
+size = Vector3(13, 58.84, 15.56)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge70"]
+size = Vector3(13, 58.84, 15.56)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge71"]
+size = Vector3(12.82, 57.63, 15.56)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge72"]
+size = Vector3(12.82, 57.63, 15.56)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge73"]
+size = Vector3(10.87, 53.85, 13.43)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge74"]
+size = Vector3(10.87, 53.85, 13.43)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge75"]
+size = Vector3(15.05, 54.21, 13.43)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge76"]
+size = Vector3(15.05, 54.21, 13.43)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge77"]
+size = Vector3(10.65, 54.95, 19.08)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge78"]
+size = Vector3(10.65, 54.95, 19.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge79"]
+size = Vector3(11.35, 50.51, 19.08)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge80"]
+size = Vector3(11.35, 50.51, 19.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge81"]
+size = Vector3(13.34, 51.88, 14.68)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge82"]
+size = Vector3(13.34, 51.88, 14.68)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge83"]
+size = Vector3(11.52, 49.36, 14.68)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge84"]
+size = Vector3(11.52, 49.36, 14.68)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge85"]
+size = Vector3(12.59, 48.06, 13.85)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge86"]
+size = Vector3(12.59, 48.06, 13.85)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge87"]
+size = Vector3(11.2, 49.34, 13.85)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge88"]
+size = Vector3(11.2, 49.34, 13.85)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge89"]
+size = Vector3(12.96, 42.05, 15.34)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge90"]
+size = Vector3(12.96, 42.05, 15.34)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge91"]
+size = Vector3(15.92, 45.67, 15.34)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge92"]
+size = Vector3(15.92, 45.67, 15.34)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge93"]
+size = Vector3(14.95, 44.06, 16.08)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge94"]
+size = Vector3(14.95, 44.06, 16.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge95"]
+size = Vector3(10.61, 43.94, 16.08)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge96"]
+size = Vector3(10.61, 43.94, 16.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge97"]
+size = Vector3(11.4, 40, 17.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge98"]
+size = Vector3(11.4, 40, 17.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge99"]
+size = Vector3(13.14, 40.23, 17.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gorge100"]
+size = Vector3(13.14, 40.23, 17.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge101"]
+size = Vector3(60.53, 16.5, 27)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge102"]
+size = Vector3(55.46, 16.5, 27)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge103"]
+size = Vector3(53.9, 16.5, 27)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge104"]
+size = Vector3(53.22, 16.5, 27)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge105"]
+size = Vector3(53.74, 16.5, 27)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge106"]
+size = Vector3(54.52, 16.5, 27)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge107"]
+size = Vector3(55.56, 16.5, 27)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge108"]
+size = Vector3(57.5, 16.5, 27)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge109"]
+size = Vector3(60.16, 16.5, 27)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge110"]
+size = Vector3(64.32, 16.5, 27)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge111"]
+size = Vector3(69.44, 16.5, 27)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge112"]
+size = Vector3(81.92, 16.5, 27)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge113"]
+size = Vector3(93.54, 16.5, 27)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge114"]
+size = Vector3(100, 16.5, 27)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge115"]
+size = Vector3(4.072, 2.997, 10.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge116"]
+size = Vector3(3.374, 2.864, 10.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge117"]
+size = Vector3(3.168, 2.953, 10.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge118"]
+size = Vector3(3.305, 3.11, 10.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge119"]
+size = Vector3(3.372, 3.075, 10.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge120"]
+size = Vector3(3.217, 2.35, 10.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge121"]
+size = Vector3(3.474, 3.417, 10.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge122"]
+size = Vector3(3.133, 3.118, 10.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge123"]
+size = Vector3(3.213, 3.559, 10.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge124"]
+size = Vector3(3.79, 2.366, 10.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge125"]
+size = Vector3(3.464, 2.778, 10.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge126"]
+size = Vector3(3.116, 3.275, 10.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge127"]
+size = Vector3(3.635, 3.413, 4.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge128"]
+size = Vector3(3.969, 3.539, 4.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge129"]
+size = Vector3(3.86, 3.014, 4.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge130"]
+size = Vector3(3.231, 2.62, 4.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge131"]
+size = Vector3(4.188, 3.149, 4.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge132"]
+size = Vector3(3.946, 2.62, 4.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge133"]
+size = Vector3(3.666, 3.719, 11)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge134"]
+size = Vector3(3.854, 2.253, 11)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge135"]
+size = Vector3(3.582, 3.243, 11)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge136"]
+size = Vector3(3.251, 3.468, 11)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge137"]
+size = Vector3(4.009, 2.606, 11)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge138"]
+size = Vector3(3.223, 3.412, 11)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge139"]
+size = Vector3(3.981, 3.088, 10.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge140"]
+size = Vector3(3.484, 2.47, 10.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge141"]
+size = Vector3(4.054, 2.953, 10.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge142"]
+size = Vector3(3.402, 3.186, 10.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge143"]
+size = Vector3(4.113, 3.298, 10.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge144"]
+size = Vector3(3.261, 2.466, 10.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge145"]
+size = Vector3(3.498, 3.478, 10.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge146"]
+size = Vector3(3.855, 3.299, 10.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge147"]
+size = Vector3(3.918, 2.529, 10.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge148"]
+size = Vector3(3.608, 3.324, 10.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge149"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge150"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge151"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge152"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge153"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge154"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge155"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge156"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge157"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge158"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge159"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge160"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge161"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge162"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge163"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge164"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge165"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge166"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge167"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge168"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge169"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge170"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge171"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge172"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge173"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge174"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge175"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge176"]
+size = Vector3(90, 6, 23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge177"]
+size = Vector3(760, 0.4, 360)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge178"]
+size = Vector3(40, 26, 64)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge179"]
+size = Vector3(56, 34, 80)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge180"]
+size = Vector3(74, 44, 96)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge181"]
+size = Vector3(40, 26, 64)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge182"]
+size = Vector3(56, 34, 80)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge183"]
+size = Vector3(74, 44, 96)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge184"]
+size = Vector3(34, 39.81, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge185"]
+size = Vector3(34, 48.18, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge186"]
+size = Vector3(34, 46.55, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge187"]
+size = Vector3(34, 55.42, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge188"]
+size = Vector3(34, 52.6, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge189"]
+size = Vector3(34, 42.19, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge190"]
+size = Vector3(34, 38.41, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge191"]
+size = Vector3(34, 50.54, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge192"]
+size = Vector3(34, 42.76, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge193"]
+size = Vector3(34, 42.77, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge194"]
+size = Vector3(34, 53.68, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge195"]
+size = Vector3(34, 40.26, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge196"]
+size = Vector3(34, 38.35, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge197"]
+size = Vector3(34, 47.74, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge198"]
+size = Vector3(34, 39.34, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge199"]
+size = Vector3(34, 46.33, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge200"]
+size = Vector3(34, 44.07, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge201"]
+size = Vector3(34, 52.15, 36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge202"]
+size = Vector3(1.989, 2.4, 20.17)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge203"]
+size = Vector3(1.989, 2.4, 20.17)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge204"]
+size = Vector3(1.5, 2.4, 20.17)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge205"]
+size = Vector3(1.5, 2.4, 20.17)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge206"]
+size = Vector3(1.5, 2.4, 20.17)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge207"]
+size = Vector3(1.5, 2.4, 20.17)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge208"]
+size = Vector3(1.905, 2.4, 6.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge209"]
+size = Vector3(1.905, 2.4, 6.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge210"]
+size = Vector3(1.956, 2.4, 6.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge211"]
+size = Vector3(1.956, 2.4, 6.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge212"]
+size = Vector3(1.5, 2.4, 16)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge213"]
+size = Vector3(1.5, 2.4, 16)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge214"]
+size = Vector3(1.975, 2.4, 16)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge215"]
+size = Vector3(1.975, 2.4, 16)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge216"]
+size = Vector3(6, 2.4, 24)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge217"]
+size = Vector3(6, 2.4, 24)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge218"]
+size = Vector3(6, 2.4, 24)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gorge219"]
+size = Vector3(6, 2.4, 24)
+
 [node name="CoralCove" type="Node3D"]
 
 [node name="Scenery" type="Node3D" parent="."]
 
-[node name="ForestFloor" type="MeshInstance3D" parent="Scenery"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -24, -60)
-mesh = SubResource("BoxMesh_0")
-surface_material_override/0 = ExtResource("7_surface_forest_earth")
 
-[node name="RidgeWest" type="MeshInstance3D" parent="Scenery"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -96, -6, -60)
-mesh = SubResource("BoxMesh_1")
-surface_material_override/0 = ExtResource("7_surface_forest_earth")
 
-[node name="RidgeEast" type="MeshInstance3D" parent="Scenery"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 96, -6, -60)
-mesh = SubResource("BoxMesh_1")
-surface_material_override/0 = ExtResource("7_surface_forest_earth")
-
-; === WATERWAY / SAFETY NET ===
 
 [node name="RiverBed" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, -11.75)
@@ -2788,3 +3434,1130 @@ light_color = Color(0.68, 1, 0.72, 1)
 light_energy = 0.5
 omni_range = 7.0
 shadow_enabled = false
+
+; === GORGE — the enclosure (generated by tools/build_gorge.py) ===
+
+[node name="Gorge" type="Node3D" parent="."]
+
+[node name="GorgeWallWest00" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(1, 0, 0.003288, 0, 1, 0, -0.003288, 0, 1, -25.8, -2.979, 14.18)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest00"]
+mesh = SubResource("BoxMesh_gorge1")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest00"]
+shape = SubResource("BoxShape3D_gorge2")
+
+[node name="GorgeWallEast00" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9991, 0, -0.04154, 0, 1, 0, 0.04154, 0, 0.9991, 25.32, -3.804, 14.18)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast00"]
+mesh = SubResource("BoxMesh_gorge3")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast00"]
+shape = SubResource("BoxShape3D_gorge4")
+
+[node name="GorgeWallWest01" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9997, 0, 0.02564, 0, 1, 0, -0.02564, 0, 0.9997, -25.04, -3.222, 0.8013)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest01"]
+mesh = SubResource("BoxMesh_gorge5")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest01"]
+shape = SubResource("BoxShape3D_gorge6")
+
+[node name="GorgeWallEast01" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9989, 0, -0.04693, 0, 1, 0, 0.04693, 0, 0.9989, 24.38, -3.276, 0.8013)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast01"]
+mesh = SubResource("BoxMesh_gorge7")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast01"]
+shape = SubResource("BoxShape3D_gorge8")
+
+[node name="GorgeWallWest02" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9989, 0, -0.04706, 0, 1, 0, 0.04706, 0, 0.9989, -22.5, -1.759, -13.81)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest02"]
+mesh = SubResource("BoxMesh_gorge9")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest02"]
+shape = SubResource("BoxShape3D_gorge10")
+
+[node name="GorgeWallEast02" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9986, 0, 0.05253, 0, 1, 0, -0.05253, 0, 0.9986, 24.07, -2.676, -13.81)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast02"]
+mesh = SubResource("BoxMesh_gorge11")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast02"]
+shape = SubResource("BoxShape3D_gorge12")
+
+[node name="GorgeWallWest03" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9994, 0, -0.03327, 0, 1, 0, 0.03327, 0, 0.9994, -23.03, -0.5217, -29.54)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest03"]
+mesh = SubResource("BoxMesh_gorge13")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest03"]
+shape = SubResource("BoxShape3D_gorge14")
+
+[node name="GorgeWallEast03" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9987, 0, -0.05154, 0, 1, 0, 0.05154, 0, 0.9987, 24.46, -2.207, -29.54)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast03"]
+mesh = SubResource("BoxMesh_gorge15")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast03"]
+shape = SubResource("BoxShape3D_gorge16")
+
+[node name="GorgeWallWest04" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(1, 0, 0.002726, 0, 1, 0, -0.002726, 0, 1, -24.59, -0.7641, -46.65)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest04"]
+mesh = SubResource("BoxMesh_gorge17")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest04"]
+shape = SubResource("BoxShape3D_gorge18")
+
+[node name="GorgeWallEast04" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9999, 0, 0.01601, 0, 1, 0, -0.01601, 0, 0.9999, 22.73, 0.3147, -46.65)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast04"]
+mesh = SubResource("BoxMesh_gorge19")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast04"]
+shape = SubResource("BoxShape3D_gorge20")
+
+[node name="GorgeWallWest05" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.999, 0, -0.04439, 0, 1, 0, 0.04439, 0, 0.999, -21.66, 0.3602, -60.78)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest05"]
+mesh = SubResource("BoxMesh_gorge21")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest05"]
+shape = SubResource("BoxShape3D_gorge22")
+
+[node name="GorgeWallEast05" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0.004248, 0, 1, 0, 0.004248, 0, 1, 22.29, 0.06278, -60.78)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast05"]
+mesh = SubResource("BoxMesh_gorge23")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast05"]
+shape = SubResource("BoxShape3D_gorge24")
+
+[node name="GorgeWallWest06" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9996, 0, 0.0282, 0, 1, 0, -0.0282, 0, 0.9996, -22.71, 0.5124, -75.12)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest06"]
+mesh = SubResource("BoxMesh_gorge25")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest06"]
+shape = SubResource("BoxShape3D_gorge26")
+
+[node name="GorgeWallEast06" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9995, 0, 0.03038, 0, 1, 0, -0.03038, 0, 0.9995, 24.5, 1.598, -75.12)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast06"]
+mesh = SubResource("BoxMesh_gorge27")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast06"]
+shape = SubResource("BoxShape3D_gorge28")
+
+[node name="GorgeWallWest07" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9992, 0, 0.04114, 0, 1, 0, -0.04114, 0, 0.9992, -22.6, 0.1224, -89.99)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest07"]
+mesh = SubResource("BoxMesh_gorge29")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest07"]
+shape = SubResource("BoxShape3D_gorge30")
+
+[node name="GorgeWallEast07" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.999, 0, -0.04466, 0, 1, 0, 0.04466, 0, 0.999, 23.04, 2.127, -89.99)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast07"]
+mesh = SubResource("BoxMesh_gorge31")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast07"]
+shape = SubResource("BoxShape3D_gorge32")
+
+[node name="GorgeWallWest08" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0.0007315, 0, 1, 0, 0.0007315, 0, 1, -23.54, 1.134, -101.8)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest08"]
+mesh = SubResource("BoxMesh_gorge33")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest08"]
+shape = SubResource("BoxShape3D_gorge34")
+
+[node name="GorgeWallEast08" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9989, 0, 0.046, 0, 1, 0, -0.046, 0, 0.9989, 20.19, 1.668, -101.8)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast08"]
+mesh = SubResource("BoxMesh_gorge35")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast08"]
+shape = SubResource("BoxShape3D_gorge36")
+
+[node name="GorgeWallWest09" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9999, 0, 0.01653, 0, 1, 0, -0.01653, 0, 0.9999, -20.9, 2.047, -113.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest09"]
+mesh = SubResource("BoxMesh_gorge37")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest09"]
+shape = SubResource("BoxShape3D_gorge38")
+
+[node name="GorgeWallEast09" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9995, 0, -0.03093, 0, 1, 0, 0.03093, 0, 0.9995, 22.72, 2.586, -113.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast09"]
+mesh = SubResource("BoxMesh_gorge39")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast09"]
+shape = SubResource("BoxShape3D_gorge40")
+
+[node name="GorgeWallWest10" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9992, 0, -0.04061, 0, 1, 0, 0.04061, 0, 0.9992, -24.91, 1.27, -126.7)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest10"]
+mesh = SubResource("BoxMesh_gorge41")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest10"]
+shape = SubResource("BoxShape3D_gorge42")
+
+[node name="GorgeWallEast10" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9999, 0, 0.01599, 0, 1, 0, -0.01599, 0, 0.9999, 21.7, 0.04092, -126.7)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast10"]
+mesh = SubResource("BoxMesh_gorge43")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast10"]
+shape = SubResource("BoxShape3D_gorge44")
+
+[node name="GorgeWallWest11" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9987, 0, -0.05188, 0, 1, 0, 0.05188, 0, 0.9987, -21.39, -0.3396, -140.7)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest11"]
+mesh = SubResource("BoxMesh_gorge45")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest11"]
+shape = SubResource("BoxShape3D_gorge46")
+
+[node name="GorgeWallEast11" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9996, 0, 0.02819, 0, 1, 0, -0.02819, 0, 0.9996, 20.89, -0.3749, -140.7)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast11"]
+mesh = SubResource("BoxMesh_gorge47")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast11"]
+shape = SubResource("BoxShape3D_gorge48")
+
+[node name="GorgeWallWest12" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9997, 0, 0.02356, 0, 1, 0, -0.02356, 0, 0.9997, -24.04, 0.4445, -156)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest12"]
+mesh = SubResource("BoxMesh_gorge49")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest12"]
+shape = SubResource("BoxShape3D_gorge50")
+
+[node name="GorgeWallEast12" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9994, 0, 0.03345, 0, 1, 0, -0.03345, 0, 0.9994, 21.89, 1.573, -156)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast12"]
+mesh = SubResource("BoxMesh_gorge51")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast12"]
+shape = SubResource("BoxShape3D_gorge52")
+
+[node name="GorgeWallWest13" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9994, 0, 0.03378, 0, 1, 0, -0.03378, 0, 0.9994, -22.38, 0.6187, -171.2)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest13"]
+mesh = SubResource("BoxMesh_gorge53")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest13"]
+shape = SubResource("BoxShape3D_gorge54")
+
+[node name="GorgeWallEast13" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9984, 0, 0.05608, 0, 1, 0, -0.05608, 0, 0.9984, 24.67, 1.033, -171.2)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast13"]
+mesh = SubResource("BoxMesh_gorge55")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast13"]
+shape = SubResource("BoxShape3D_gorge56")
+
+[node name="GorgeWallWest14" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9997, 0, 0.02418, 0, 1, 0, -0.02418, 0, 0.9997, -24.86, -0.04156, -184.9)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest14"]
+mesh = SubResource("BoxMesh_gorge57")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest14"]
+shape = SubResource("BoxShape3D_gorge58")
+
+[node name="GorgeWallEast14" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9995, 0, -0.03237, 0, 1, 0, 0.03237, 0, 0.9995, 24.34, -0.2964, -184.9)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast14"]
+mesh = SubResource("BoxMesh_gorge59")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast14"]
+shape = SubResource("BoxShape3D_gorge60")
+
+[node name="GorgeWallWest15" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9996, 0, 0.02863, 0, 1, 0, -0.02863, 0, 0.9996, -25.54, -0.9826, -198.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest15"]
+mesh = SubResource("BoxMesh_gorge61")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest15"]
+shape = SubResource("BoxShape3D_gorge62")
+
+[node name="GorgeWallEast15" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9998, 0, -0.01933, 0, 1, 0, 0.01933, 0, 0.9998, 23.96, -2.189, -198.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast15"]
+mesh = SubResource("BoxMesh_gorge63")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast15"]
+shape = SubResource("BoxShape3D_gorge64")
+
+[node name="GorgeWallWest16" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9998, 0, -0.0217, 0, 1, 0, 0.0217, 0, 0.9998, -25.2, -2.903, -212.1)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest16"]
+mesh = SubResource("BoxMesh_gorge65")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest16"]
+shape = SubResource("BoxShape3D_gorge66")
+
+[node name="GorgeWallEast16" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9983, 0, 0.05891, 0, 1, 0, -0.05891, 0, 0.9983, 25.4, -2.509, -212.1)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast16"]
+mesh = SubResource("BoxMesh_gorge67")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast16"]
+shape = SubResource("BoxShape3D_gorge68")
+
+[node name="GorgeWallWest17" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9987, 0, 0.05039, 0, 1, 0, -0.05039, 0, 0.9987, -27.91, -0.5796, -225.9)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest17"]
+mesh = SubResource("BoxMesh_gorge69")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest17"]
+shape = SubResource("BoxShape3D_gorge70")
+
+[node name="GorgeWallEast17" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9998, 0, 0.01952, 0, 1, 0, -0.01952, 0, 0.9998, 28.09, -1.185, -225.9)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast17"]
+mesh = SubResource("BoxMesh_gorge71")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast17"]
+shape = SubResource("BoxShape3D_gorge72")
+
+[node name="GorgeWallWest18" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9998, 0, -0.0176, 0, 1, 0, 0.0176, 0, 0.9998, -27.33, -3.076, -238.9)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest18"]
+mesh = SubResource("BoxMesh_gorge73")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest18"]
+shape = SubResource("BoxShape3D_gorge74")
+
+[node name="GorgeWallEast18" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9999, 0, -0.01637, 0, 1, 0, 0.01637, 0, 0.9999, 31.11, -2.897, -238.9)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast18"]
+mesh = SubResource("BoxMesh_gorge75")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast18"]
+shape = SubResource("BoxShape3D_gorge76")
+
+[node name="GorgeWallWest19" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9998, 0, 0.01992, 0, 1, 0, -0.01992, 0, 0.9998, -30.49, -2.524, -253.7)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest19"]
+mesh = SubResource("BoxMesh_gorge77")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest19"]
+shape = SubResource("BoxShape3D_gorge78")
+
+[node name="GorgeWallEast19" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9997, 0, 0.02491, 0, 1, 0, -0.02491, 0, 0.9997, 28.99, -4.743, -253.7)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast19"]
+mesh = SubResource("BoxMesh_gorge79")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast19"]
+shape = SubResource("BoxShape3D_gorge80")
+
+[node name="GorgeWallWest20" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9997, 0, 0.02254, 0, 1, 0, -0.02254, 0, 0.9997, -35.27, -4.061, -269.1)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest20"]
+mesh = SubResource("BoxMesh_gorge81")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest20"]
+shape = SubResource("BoxShape3D_gorge82")
+
+[node name="GorgeWallEast20" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9991, 0, -0.04294, 0, 1, 0, 0.04294, 0, 0.9991, 32.09, -5.32, -269.1)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast20"]
+mesh = SubResource("BoxMesh_gorge83")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast20"]
+shape = SubResource("BoxShape3D_gorge84")
+
+[node name="GorgeWallWest21" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9996, 0, -0.02868, 0, 1, 0, 0.02868, 0, 0.9996, -37.87, -5.97, -281.8)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest21"]
+mesh = SubResource("BoxMesh_gorge85")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest21"]
+shape = SubResource("BoxShape3D_gorge86")
+
+[node name="GorgeWallEast21" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9998, 0, -0.01739, 0, 1, 0, 0.01739, 0, 0.9998, 34.67, -5.328, -281.8)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast21"]
+mesh = SubResource("BoxMesh_gorge87")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast21"]
+shape = SubResource("BoxShape3D_gorge88")
+
+[node name="GorgeWallWest22" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9991, 0, -0.04261, 0, 1, 0, 0.04261, 0, 0.9991, -40.6, -8.977, -294.9)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest22"]
+mesh = SubResource("BoxMesh_gorge89")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest22"]
+shape = SubResource("BoxShape3D_gorge90")
+
+[node name="GorgeWallEast22" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.999, 0, -0.04527, 0, 1, 0, 0.04527, 0, 0.999, 42.79, -7.163, -294.9)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast22"]
+mesh = SubResource("BoxMesh_gorge91")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast22"]
+shape = SubResource("BoxShape3D_gorge92")
+
+[node name="GorgeWallWest23" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9999, 0, -0.01648, 0, 1, 0, 0.01648, 0, 0.9999, -44.28, -7.969, -309.1)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest23"]
+mesh = SubResource("BoxMesh_gorge93")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest23"]
+shape = SubResource("BoxShape3D_gorge94")
+
+[node name="GorgeWallEast23" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9985, 0, 0.05559, 0, 1, 0, -0.05559, 0, 0.9985, 43.17, -8.028, -309.1)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast23"]
+mesh = SubResource("BoxMesh_gorge95")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast23"]
+shape = SubResource("BoxShape3D_gorge96")
+
+[node name="GorgeWallWest24" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9988, 0, 0.04819, 0, 1, 0, -0.04819, 0, 0.9988, -45.16, -9.998, -324.2)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallWest24"]
+mesh = SubResource("BoxMesh_gorge97")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallWest24"]
+shape = SubResource("BoxShape3D_gorge98")
+
+[node name="GorgeWallEast24" type="StaticBody3D" parent="Gorge"]
+transform = Transform3D(0.9999, 0, 0.01214, 0, 1, 0, -0.01214, 0, 0.9999, 47.05, -9.883, -324.2)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gorge/GorgeWallEast24"]
+mesh = SubResource("BoxMesh_gorge99")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="Collision" type="CollisionShape3D" parent="Gorge/GorgeWallEast24"]
+shape = SubResource("BoxShape3D_gorge100")
+
+[node name="ValleyBed00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, -21.75, 7)
+mesh = SubResource("BoxMesh_gorge101")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="ValleyBed01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, -21.75, -19)
+mesh = SubResource("BoxMesh_gorge102")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="ValleyBed02" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, -21.75, -45)
+mesh = SubResource("BoxMesh_gorge103")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="ValleyBed03" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, -21.75, -71)
+mesh = SubResource("BoxMesh_gorge104")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="ValleyBed04" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, -21.75, -97)
+mesh = SubResource("BoxMesh_gorge105")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="ValleyBed05" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, -21.75, -123)
+mesh = SubResource("BoxMesh_gorge106")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="ValleyBed06" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, -21.75, -149)
+mesh = SubResource("BoxMesh_gorge107")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="ValleyBed07" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, -21.75, -175)
+mesh = SubResource("BoxMesh_gorge108")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="ValleyBed08" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, -21.75, -201)
+mesh = SubResource("BoxMesh_gorge109")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="ValleyBed09" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, -21.75, -227)
+mesh = SubResource("BoxMesh_gorge110")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="ValleyBed10" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, -21.75, -253)
+mesh = SubResource("BoxMesh_gorge111")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="ValleyBed11" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, -21.75, -279)
+mesh = SubResource("BoxMesh_gorge112")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="ValleyBed12" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, -21.75, -305)
+mesh = SubResource("BoxMesh_gorge113")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="ValleyBed13" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, -21.75, -331)
+mesh = SubResource("BoxMesh_gorge114")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="LipWaterwayWest00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9957, 0, 0.09276, 0, 1, 0, -0.09276, 0, 0.9957, -14.74, 3.051, 2.208)
+mesh = SubResource("BoxMesh_gorge115")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipWaterwayEast00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9996, 0, 0.0281, 0, 1, 0, -0.0281, 0, 0.9996, 14.39, 3.118, 2.208)
+mesh = SubResource("BoxMesh_gorge116")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipWaterwayWest01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9963, 0, -0.08588, 0, 1, 0, 0.08588, 0, 0.9963, -14.28, 3.073, -7.375)
+mesh = SubResource("BoxMesh_gorge117")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipWaterwayEast01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0.008107, 0, 1, 0, 0.008107, 0, 1, 14.35, 2.995, -7.375)
+mesh = SubResource("BoxMesh_gorge118")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipWaterwayWest02" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0.009904, 0, 1, 0, 0.009904, 0, 1, -14.39, 3.012, -16.96)
+mesh = SubResource("BoxMesh_gorge119")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipWaterwayEast02" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9994, 0, 0.0357, 0, 1, 0, -0.0357, 0, 0.9994, 14.31, 3.375, -16.96)
+mesh = SubResource("BoxMesh_gorge120")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipWaterwayWest03" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9985, 0, 0.05396, 0, 1, 0, -0.05396, 0, 0.9985, -14.44, 2.841, -26.54)
+mesh = SubResource("BoxMesh_gorge121")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipWaterwayEast03" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, 0.005025, 0, 1, 0, -0.005025, 0, 1, 14.27, 2.991, -26.54)
+mesh = SubResource("BoxMesh_gorge122")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipWaterwayWest04" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9952, 0, 0.09779, 0, 1, 0, -0.09779, 0, 0.9952, -14.31, 2.771, -36.12)
+mesh = SubResource("BoxMesh_gorge123")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipWaterwayEast04" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9995, 0, 0.03224, 0, 1, 0, -0.03224, 0, 0.9995, 14.59, 3.367, -36.12)
+mesh = SubResource("BoxMesh_gorge124")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipWaterwayWest05" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9989, 0, -0.04772, 0, 1, 0, 0.04772, 0, 0.9989, -14.43, 3.161, -45.71)
+mesh = SubResource("BoxMesh_gorge125")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipWaterwayEast05" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9995, 0, 0.03033, 0, 1, 0, -0.03033, 0, 0.9995, 14.26, 2.912, -45.71)
+mesh = SubResource("BoxMesh_gorge126")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipGorgeRiverWest00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9966, 0, 0.08188, 0, 1, 0, -0.08188, 0, 0.9966, -12.52, 6.443, -99.6)
+mesh = SubResource("BoxMesh_gorge127")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipGorgeRiverEast00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, 0.007743, 0, 1, 0, -0.007743, 0, 1, 12.68, 6.381, -99.6)
+mesh = SubResource("BoxMesh_gorge128")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipGorgeRiverWest01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.997, 0, 0.07762, 0, 1, 0, -0.07762, 0, 0.997, -12.63, 6.643, -103)
+mesh = SubResource("BoxMesh_gorge129")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipGorgeRiverEast01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9998, 0, 0.01953, 0, 1, 0, -0.01953, 0, 0.9998, 12.32, 6.84, -103)
+mesh = SubResource("BoxMesh_gorge130")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipGorgeRiverWest02" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9987, 0, -0.0516, 0, 1, 0, 0.0516, 0, 0.9987, -12.79, 6.576, -106.4)
+mesh = SubResource("BoxMesh_gorge131")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipGorgeRiverEast02" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9968, 0, 0.0799, 0, 1, 0, -0.0799, 0, 0.9968, 12.67, 6.84, -106.4)
+mesh = SubResource("BoxMesh_gorge132")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipRaceChannelWest00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9996, 0, 0.0266, 0, 1, 0, -0.0266, 0, 0.9996, -14.53, 1.291, -162)
+mesh = SubResource("BoxMesh_gorge133")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipRaceChannelEast00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9956, 0, -0.0941, 0, 1, 0, 0.0941, 0, 0.9956, 14.63, 2.023, -162)
+mesh = SubResource("BoxMesh_gorge134")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipRaceChannelWest01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9989, 0, 0.047, 0, 1, 0, -0.047, 0, 0.9989, -14.49, 1.528, -172)
+mesh = SubResource("BoxMesh_gorge135")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipRaceChannelEast01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9979, 0, -0.06522, 0, 1, 0, 0.06522, 0, 0.9979, 14.33, 1.416, -172)
+mesh = SubResource("BoxMesh_gorge136")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipRaceChannelWest02" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9998, 0, -0.02193, 0, 1, 0, 0.02193, 0, 0.9998, -14.7, 1.847, -182)
+mesh = SubResource("BoxMesh_gorge137")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipRaceChannelEast02" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9998, 0, 0.02196, 0, 1, 0, -0.02196, 0, 0.9998, 14.31, 1.444, -182)
+mesh = SubResource("BoxMesh_gorge138")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipOpenSeaWest00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9999, 0, 0.01492, 0, 1, 0, -0.01492, 0, 0.9999, -8.191, 2.306, -273.6)
+mesh = SubResource("BoxMesh_gorge139")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipOpenSeaEast00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9988, 0, 0.0492, 0, 1, 0, -0.0492, 0, 0.9988, 7.942, 2.615, -273.6)
+mesh = SubResource("BoxMesh_gorge140")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipOpenSeaWest01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9977, 0, -0.06777, 0, 1, 0, 0.06777, 0, 0.9977, -8.227, 2.373, -282.8)
+mesh = SubResource("BoxMesh_gorge141")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipOpenSeaEast01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, 0.002541, 0, 1, 0, -0.002541, 0, 1, 7.901, 2.257, -282.8)
+mesh = SubResource("BoxMesh_gorge142")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipOpenSeaWest02" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9962, 0, -0.08682, 0, 1, 0, 0.08682, 0, 0.9962, -8.256, 2.201, -292)
+mesh = SubResource("BoxMesh_gorge143")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipOpenSeaEast02" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9968, 0, 0.07973, 0, 1, 0, -0.07973, 0, 0.9968, 7.83, 2.617, -292)
+mesh = SubResource("BoxMesh_gorge144")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipOpenSeaWest03" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, 0.008631, 0, 1, 0, -0.008631, 0, 1, -7.949, 2.111, -301.2)
+mesh = SubResource("BoxMesh_gorge145")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipOpenSeaEast03" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9989, 0, -0.04699, 0, 1, 0, 0.04699, 0, 0.9989, 8.128, 2.2, -301.2)
+mesh = SubResource("BoxMesh_gorge146")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipOpenSeaWest04" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9966, 0, -0.08201, 0, 1, 0, 0.08201, 0, 0.9966, -8.159, 2.586, -310.4)
+mesh = SubResource("BoxMesh_gorge147")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="LipOpenSeaEast04" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9995, 0, 0.03, 0, 1, 0, -0.03, 0, 0.9995, 8.004, 2.188, -310.4)
+mesh = SubResource("BoxMesh_gorge148")
+surface_material_override/0 = ExtResource("5_surface_river_stone")
+
+[node name="RimWest00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -71.53, 19.84, 9)
+mesh = SubResource("BoxMesh_gorge149")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimEast01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 71.53, 19.99, 9)
+mesh = SubResource("BoxMesh_gorge150")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimWest02" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -68.91, 22.23, -13)
+mesh = SubResource("BoxMesh_gorge151")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimEast03" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 68.91, 23.2, -13)
+mesh = SubResource("BoxMesh_gorge152")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimWest04" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -68.25, 26.4, -35)
+mesh = SubResource("BoxMesh_gorge153")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimEast05" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 68.25, 25.99, -35)
+mesh = SubResource("BoxMesh_gorge154")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimWest06" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -67.59, 27.93, -57)
+mesh = SubResource("BoxMesh_gorge155")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimEast07" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 67.59, 27.82, -57)
+mesh = SubResource("BoxMesh_gorge156")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimWest08" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -67.69, 29.68, -79)
+mesh = SubResource("BoxMesh_gorge157")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimEast09" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 67.69, 29.89, -79)
+mesh = SubResource("BoxMesh_gorge158")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimWest10" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -67.91, 30.47, -101)
+mesh = SubResource("BoxMesh_gorge159")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimEast11" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 67.91, 30.34, -101)
+mesh = SubResource("BoxMesh_gorge160")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimWest12" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -68.26, 30.4, -123)
+mesh = SubResource("BoxMesh_gorge161")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimEast13" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 68.26, 31.12, -123)
+mesh = SubResource("BoxMesh_gorge162")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimWest14" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -68.7, 27.64, -145)
+mesh = SubResource("BoxMesh_gorge163")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimEast15" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 68.7, 28.92, -145)
+mesh = SubResource("BoxMesh_gorge164")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimWest16" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -69.35, 27.58, -167)
+mesh = SubResource("BoxMesh_gorge165")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimEast17" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 69.35, 27.81, -167)
+mesh = SubResource("BoxMesh_gorge166")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimWest18" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -70.45, 25.18, -189)
+mesh = SubResource("BoxMesh_gorge167")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimEast19" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 70.45, 24.82, -189)
+mesh = SubResource("BoxMesh_gorge168")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimWest20" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -71.88, 23.79, -211)
+mesh = SubResource("BoxMesh_gorge169")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimEast21" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 71.88, 22.96, -211)
+mesh = SubResource("BoxMesh_gorge170")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimWest22" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -73.64, 21.94, -233)
+mesh = SubResource("BoxMesh_gorge171")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimEast23" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 73.64, 22.83, -233)
+mesh = SubResource("BoxMesh_gorge172")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimWest24" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -76.2, 19.54, -255)
+mesh = SubResource("BoxMesh_gorge173")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimEast25" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 76.2, 19.33, -255)
+mesh = SubResource("BoxMesh_gorge174")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimWest26" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -81.48, 14.11, -277)
+mesh = SubResource("BoxMesh_gorge175")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="RimEast27" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 81.48, 14.96, -277)
+mesh = SubResource("BoxMesh_gorge176")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="OpenSeaPlane" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, 3.1, -430)
+mesh = SubResource("BoxMesh_gorge177")
+surface_material_override/0 = ExtResource("3_watermat")
+
+[node name="HeadlandWest00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9941, 0, 0.1083, 0, 1, 0, -0.1083, 0, 0.9941, -58, 9, -300)
+mesh = SubResource("BoxMesh_gorge178")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="HeadlandWest01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, 0.005955, 0, 1, 0, -0.005955, 0, 1, -96, 13, -352)
+mesh = SubResource("BoxMesh_gorge179")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="HeadlandWest02" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9954, 0, -0.09619, 0, 1, 0, 0.09619, 0, 0.9954, -150, 18, -404)
+mesh = SubResource("BoxMesh_gorge180")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="HeadlandEast00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9927, 0, 0.1205, 0, 1, 0, -0.1205, 0, 0.9927, 58, 9, -300)
+mesh = SubResource("BoxMesh_gorge181")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="HeadlandEast01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9975, 0, -0.07036, 0, 1, 0, 0.07036, 0, 0.9975, 96, 13, -352)
+mesh = SubResource("BoxMesh_gorge182")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="HeadlandEast02" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9998, 0, 0.01984, 0, 1, 0, -0.01984, 0, 0.9998, 150, 18, -404)
+mesh = SubResource("BoxMesh_gorge183")
+surface_material_override/0 = ExtResource("4_surface_mossy_stone")
+
+[node name="BackdropWest00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.999, 0, -0.0452, 0, 1, 0, 0.0452, 0, 0.999, -118, 9.903, 4)
+mesh = SubResource("BoxMesh_gorge184")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="BackdropWest01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9999, 0, 0.01416, 0, 1, 0, -0.01416, 0, 0.9999, -118, 14.09, -28)
+mesh = SubResource("BoxMesh_gorge185")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="BackdropWest02" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9998, 0, 0.01828, 0, 1, 0, -0.01828, 0, 0.9998, -118, 13.28, -60)
+mesh = SubResource("BoxMesh_gorge186")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="BackdropWest03" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0.009966, 0, 1, 0, 0.009966, 0, 1, -118, 17.71, -92)
+mesh = SubResource("BoxMesh_gorge187")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="BackdropWest04" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9994, 0, 0.0353, 0, 1, 0, -0.0353, 0, 0.9994, -118, 16.3, -124)
+mesh = SubResource("BoxMesh_gorge188")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="BackdropWest05" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9997, 0, -0.02444, 0, 1, 0, 0.02444, 0, 0.9997, -118, 11.09, -156)
+mesh = SubResource("BoxMesh_gorge189")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="BackdropWest06" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9999, 0, -0.01423, 0, 1, 0, 0.01423, 0, 0.9999, -118, 9.205, -188)
+mesh = SubResource("BoxMesh_gorge190")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="BackdropWest07" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9998, 0, 0.02053, 0, 1, 0, -0.02053, 0, 0.9998, -118, 15.27, -220)
+mesh = SubResource("BoxMesh_gorge191")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="BackdropWest08" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9991, 0, 0.04278, 0, 1, 0, -0.04278, 0, 0.9991, -118, 11.38, -252)
+mesh = SubResource("BoxMesh_gorge192")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="BackdropEast00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9997, 0, 0.02505, 0, 1, 0, -0.02505, 0, 0.9997, 118, 11.38, 4)
+mesh = SubResource("BoxMesh_gorge193")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="BackdropEast01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9999, 0, 0.01198, 0, 1, 0, -0.01198, 0, 0.9999, 118, 16.84, -28)
+mesh = SubResource("BoxMesh_gorge194")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="BackdropEast02" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9998, 0, -0.01817, 0, 1, 0, 0.01817, 0, 0.9998, 118, 10.13, -60)
+mesh = SubResource("BoxMesh_gorge195")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="BackdropEast03" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9989, 0, -0.04586, 0, 1, 0, 0.04586, 0, 0.9989, 118, 9.175, -92)
+mesh = SubResource("BoxMesh_gorge196")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="BackdropEast04" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, 0.00934, 0, 1, 0, -0.00934, 0, 1, 118, 13.87, -124)
+mesh = SubResource("BoxMesh_gorge197")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="BackdropEast05" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9997, 0, -0.02392, 0, 1, 0, 0.02392, 0, 0.9997, 118, 9.669, -156)
+mesh = SubResource("BoxMesh_gorge198")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="BackdropEast06" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9999, 0, 0.01065, 0, 1, 0, -0.01065, 0, 0.9999, 118, 13.17, -188)
+mesh = SubResource("BoxMesh_gorge199")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="BackdropEast07" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9998, 0, -0.01817, 0, 1, 0, 0.01817, 0, 0.9998, 118, 12.03, -220)
+mesh = SubResource("BoxMesh_gorge200")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="BackdropEast08" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(0.9999, 0, 0.01323, 0, 1, 0, -0.01323, 0, 0.9999, 118, 16.07, -252)
+mesh = SubResource("BoxMesh_gorge201")
+surface_material_override/0 = ExtResource("7_surface_forest_earth")
+
+[node name="ShoreWaterwayWest00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -16.19, 2.5, -2.583)
+mesh = SubResource("BoxMesh_gorge202")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="ShoreWaterwayEast00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 16.19, 2.5, -2.583)
+mesh = SubResource("BoxMesh_gorge203")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="ShoreWaterwayWest01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -15.95, 2.5, -21.75)
+mesh = SubResource("BoxMesh_gorge204")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="ShoreWaterwayEast01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 15.95, 2.5, -21.75)
+mesh = SubResource("BoxMesh_gorge205")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="ShoreWaterwayWest02" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -15.95, 2.5, -40.92)
+mesh = SubResource("BoxMesh_gorge206")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="ShoreWaterwayEast02" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 15.95, 2.5, -40.92)
+mesh = SubResource("BoxMesh_gorge207")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="ShoreGorgeRiverWest00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -14.15, 6.1, -100.5)
+mesh = SubResource("BoxMesh_gorge208")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="ShoreGorgeRiverEast00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 14.15, 6.1, -100.5)
+mesh = SubResource("BoxMesh_gorge209")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="ShoreGorgeRiverWest01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -14.18, 6.1, -105.6)
+mesh = SubResource("BoxMesh_gorge210")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="ShoreGorgeRiverEast01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 14.18, 6.1, -105.6)
+mesh = SubResource("BoxMesh_gorge211")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="ShoreRaceChannelWest00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -15.95, 1.1, -164.5)
+mesh = SubResource("BoxMesh_gorge212")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="ShoreRaceChannelEast00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 15.95, 1.1, -164.5)
+mesh = SubResource("BoxMesh_gorge213")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="ShoreRaceChannelWest01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -16.19, 1.1, -179.5)
+mesh = SubResource("BoxMesh_gorge214")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="ShoreRaceChannelEast01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 16.19, 1.1, -179.5)
+mesh = SubResource("BoxMesh_gorge215")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="ShoreOpenSeaWest00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -11.7, 1.8, -280.5)
+mesh = SubResource("BoxMesh_gorge216")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="ShoreOpenSeaEast00" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 11.7, 1.8, -280.5)
+mesh = SubResource("BoxMesh_gorge217")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="ShoreOpenSeaWest01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -11.7, 1.8, -303.5)
+mesh = SubResource("BoxMesh_gorge218")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+[node name="ShoreOpenSeaEast01" type="MeshInstance3D" parent="Gorge"]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 11.7, 1.8, -303.5)
+mesh = SubResource("BoxMesh_gorge219")
+surface_material_override/0 = ExtResource("6_surface_river_sand")
+
+; === MESHY KITS — uploaded groves and shelf set (generated by tools/place_kits.py) ===
+
+[node name="MeshyKits" type="Node3D" parent="."]
+
+[node name="RimGroveOpening" parent="MeshyKits" instance=ExtResource("kit_canopy_grove")]
+transform = Transform3D(11.05, 0, -4.673, 0, 12, 0, 4.673, 0, 11.05, -31.53, 25.2, -6)
+
+[node name="RimGroveNarrows" parent="MeshyKits" instance=ExtResource("kit_canopy_grove_tall")]
+transform = Transform3D(4.99, 0, 9.803, 0, 11, 0, -9.803, 0, 4.99, 29.62, 31.52, -56)
+
+[node name="RimGroveGorge" parent="MeshyKits" instance=ExtResource("kit_canopy_grove")]
+transform = Transform3D(-7.356, 0, -10.11, 0, 12.5, 0, 10.11, 0, -7.356, -29.94, 33.76, -104)
+
+[node name="RimGroveRace" parent="MeshyKits" instance=ExtResource("kit_canopy_grove_tall")]
+transform = Transform3D(7.149, 0, -9.008, 0, 11.5, 0, 9.008, 0, 7.149, 31.3, 29.7, -166)
+
+[node name="RimGroveShelf" parent="MeshyKits" instance=ExtResource("kit_canopy_grove")]
+transform = Transform3D(11.41, 0, 6.233, 0, 13, 0, -6.233, 0, 11.41, -34.12, 26.88, -214)
+
+[node name="RimGroveShelfWall" parent="MeshyKits" instance=ExtResource("kit_canopy_grove_tall")]
+transform = Transform3D(-1.417, 0, -10.91, 0, 11, 0, 10.91, 0, -1.417, 37.96, 23.04, -254)
+
+[node name="EstuaryIsletWest" parent="MeshyKits" instance=ExtResource("kit_sand_shelf_set")]
+transform = Transform3D(8.253, 0, -5.646, 0, 10, 0, 5.646, 0, 8.253, -30, 3, -282)
+
+[node name="EstuaryIsletEast" parent="MeshyKits" instance=ExtResource("kit_sand_shelf_set")]
+transform = Transform3D(2.942, 0, 10.6, 0, 11, 0, -10.6, 0, 2.942, 34, 3, -318)
