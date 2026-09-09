@@ -247,28 +247,65 @@ func _apply_water_state(is_in_water: bool) -> void:
 		_boost.interrupt()
 		_spin.interrupt()
 
+	# The universal water-powered dash is deliberately NOT interrupted here.
+	# REQ-001 names it as the transition skill joining the grammars; a burst that
+	# dies exactly on the seam would make the transition skill fail at transition.
 	grammar_changed.emit(_grammar)
 
 
 ## Velocity only — the CharacterBody3D wrapper owns position and the motion call,
 ## so delta belongs there rather than here.
 func _integrate(delta: float, intent: PlayerIntent) -> void:
-	# The dash is spent independently of steering — dashing from a standstill is
-	# legitimate, so this cannot sit behind the steering early-returns below.
-	if intent.wants(MovementGrammar.Verb.DASH) and _dash.try_consume():
-		dash_spent.emit(_dash.get_charges())
-
 	if intent.wants(MovementGrammar.Verb.GRAPPLE) and not _grapple.is_attached():
 		try_grapple()
 
-	# The pull DOMINATES steering: the tongue is taut, so a player who fires it
-	# commits to the arc rather than steering out of it mid-flight.
+	# The tongue is already a committed traversal state. Do not spend a dash
+	# charge into a grapple pull that will immediately overwrite it.
 	if _grapple.is_attached():
 		if _grapple.has_arrived(_body_position):
 			_end_grapple(true)
 		else:
 			_velocity = _grapple.pull_velocity(_body_position)
 			return
+
+	# REQ-001 AC-5: DASH is not merely a charge counter. It is the signature
+	# transition burst and therefore has to move the body in both grammars.
+	#
+	# To stay inside REQ-025's single tuning surface without inventing a second
+	# set of unreviewed balance values, the dash deliberately borrows the existing
+	# short-burst profile of the active grammar: roll profile on land, spin profile
+	# in water. The dash remains mechanically distinct because it spends the
+	# water-earned universal charge economy and survives grammar boundaries.
+	if intent.wants(MovementGrammar.Verb.DASH) and not _dash.is_active():
+		var dash_direction := intent.direction
+		if _grammar == MovementGrammar.Grammar.LAND:
+			dash_direction.y = 0.0
+		if dash_direction.is_zero_approx():
+			dash_direction = _facing_direction()
+
+		var dash_speed_key := SPIN_SPEED_KEY if _grammar == MovementGrammar.Grammar.WATER \
+			else ROLL_SPEED_KEY
+		var dash_duration_key := SPIN_DURATION_KEY \
+			if _grammar == MovementGrammar.Grammar.WATER else ROLL_DURATION_KEY
+		if _dash.try_activate(dash_direction,
+				_tuning.get_number(dash_speed_key),
+				_tuning.get_number(dash_duration_key)):
+			# Dashing away from a wall releases the climb. The dash is universal;
+			# making it dead while clinging would contradict that public grammar.
+			_end_climb()
+			dash_spent.emit(_dash.get_charges())
+
+	# The committed dash dominates ordinary steering for its live window. On land
+	# only the planar component is driven so a dash off a ledge still falls; in
+	# water the whole 3D direction is the movement, so a rising or diving dash is
+	# genuinely three-dimensional.
+	if _dash.is_active():
+		var driven := _dash.velocity()
+		if _grammar == MovementGrammar.Grammar.WATER:
+			_velocity = driven
+		else:
+			_velocity = Vector3(driven.x, _velocity.y, driven.z)
+		return
 
 	if _climbing:
 		_integrate_climb(intent)
