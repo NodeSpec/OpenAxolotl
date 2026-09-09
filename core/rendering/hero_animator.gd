@@ -113,14 +113,18 @@ func play_hurt() -> void:
 	play_action(HURT)
 
 
-## Plays a one-shot over locomotion for the clip's own length.
+## Plays a one-shot over locomotion.
 ##
+## When [param target_duration] is positive, the imported clip is time-scaled
+## so its visible motion lasts exactly as long as the gameplay action that
+## triggered it. This is the gameplay/presentation seam for REQ-035: a 0.38 s
+## dodge must not keep showing a one-second roll after control has returned, and
+## a short clip must not visibly finish while the body is still committed.
+##
+## A negative target keeps legacy behaviour and uses the authored clip length.
 ## Returns false when there is nothing to play — no player, no such clip, or a
-## higher-ranked action already running. A rig that predates one of these clips
-## therefore keeps moving normally rather than freezing on a clip it does not
-## have, which is the same forgiveness `bind` extends to a model with no
-## AnimationPlayer at all.
-func play_action(action: String) -> bool:
+## higher-ranked action already running.
+func play_action(action: String, target_duration: float = -1.0) -> bool:
 	if _player == null or not _player.has_animation(action):
 		return false
 	if not ACTIONS.has(action):
@@ -131,10 +135,20 @@ func play_action(action: String) -> bool:
 			and ACTIONS.find(_action) <= ACTIONS.find(action):
 		return false
 
+	var clip := _player.get_animation(action)
+	var authored_length := clip.length
+	var visible_duration := target_duration if target_duration > 0.0 \
+		else authored_length
+	if visible_duration <= 0.0:
+		return false
+
 	_action = action
-	_action_remaining = _player.get_animation(action).length
+	_action_remaining = visible_duration
 	_current = action
-	_player.speed_scale = 1.0
+	# AnimationPlayer speed_scale multiplies playback rate. A 1.0 s authored
+	# clip targeting a 0.5 s gameplay window therefore runs at 2x; a 0.25 s clip
+	# targeting 0.5 s runs at 0.5x. The visual and the mechanic end together.
+	_player.speed_scale = authored_length / visible_duration
 	_player.play(action, BLEND_SECONDS)
 	return true
 
