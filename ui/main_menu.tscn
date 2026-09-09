@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3]
+
+; MAIN MENU — the game's first screen.
+;
+; Deliberately one node. Everything the screen contains is built in
+; ui/main_menu.gd, for the same reason PlayerHud and WaterSplash are built in
+; code: a title, three buttons and a confirm row explain themselves better as
+; commented lines than as a .tscn that cannot be diffed.
+
+[ext_resource type="Script" path="res://ui/main_menu.gd" id="1_menu"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")

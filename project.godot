@@ -12,7 +12,7 @@ config_version=5
 config/name="OpenAxolotl"
 config/description="A colorful 3D action-platformer where an axolotl regenerates itself and its world."
 config/features=PackedStringArray("4.7", "Forward Plus")
-run/main_scene="res://hub/open_lagoon.tscn"
+run/main_scene="res://ui/main_menu.tscn"
 
 [dotnet]
 
