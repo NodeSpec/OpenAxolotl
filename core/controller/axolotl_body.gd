@@ -129,10 +129,16 @@ func initialise() -> void:
 	# The action clips are triggered by the VERB, never guessed from motion: a
 	# roll and a fast waddle look identical to a velocity sample, and the whole
 	# point of the dodge is that the player can see they committed to it.
+	#
+	# REQ-035 gameplay-feel pass: the visible one-shot is time-scaled to the
+	# exact committed movement window. Imported clip length is an art property;
+	# roll/spin duration is gameplay tuning. They must end together.
 	_controller.rolled.connect(
-		func() -> void: _animator.play_action(HeroAnimator.ROLL))
+		func() -> void: _animator.play_action(
+			HeroAnimator.ROLL, _controller.get_roll().duration_seconds()))
 	_controller.spin_sprint_started.connect(
-		func() -> void: _animator.play_action(HeroAnimator.SPIN))
+		func() -> void: _animator.play_action(
+			HeroAnimator.SPIN, _controller.get_spin_sprint().duration_seconds()))
 	_controller.strike_opened.connect(_on_strike_opened)
 
 
