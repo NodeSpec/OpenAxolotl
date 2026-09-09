@@ -3,6 +3,7 @@
   "displayName": "Netbot",
   "behavior": "entangle",
   "audioCueId": "enemy_netbot_entangle",
+  "durability": 1,
   "entangle": {
     "factorKey": "enemy.netbot.swim_speed_multiplier",
     "durationKey": "enemy.netbot.entangle_seconds",

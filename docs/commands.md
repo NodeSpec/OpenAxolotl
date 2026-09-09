@@ -67,15 +67,31 @@ python tools/static_gate.py --target .
 commands and merges their exit codes. Run any of them alone while iterating
 (`godot` here is `.toolchain/godot` or your own pinned binary):
 
+<!-- local-suites -->
 ```sh
 python3 -m unittest discover -s tools -p 'test_*.py'
 godot --headless --audio-driver Dummy --path . --script test/run_tests.gd
 godot --headless --audio-driver Dummy --path . --script dev/run_smoke.gd
 godot --headless --audio-driver Dummy --path . --script test/worlds/run_template_walk.gd
 godot --headless --audio-driver Dummy --path . --script test/hub/run_hub_walk.gd
+godot --headless --audio-driver Dummy --path . --script test/hub/run_fall_recovery.gd
 godot --headless --audio-driver Dummy --path . --script test/worlds/run_coral_walk.gd
 godot --headless --audio-driver Dummy --path . --script test/worlds/run_bubble_walk.gd
 godot --headless --audio-driver Dummy --path . --script test/perf/run_perf_gate.gd
+```
+
+## World authoring
+
+Four more commands rewrite a level's art without touching its game — the
+terrain sheller, the prop scatterer, the dressing filler, and the gameplay
+snapshot that proves the other three changed nothing. They are deliberate
+passes, not part of `oax-test`, and they have their own page:
+[docs/world-authoring.md](world-authoring.md).
+
+```sh
+oax-snapshot --target worlds/coral_cove > /tmp/before.json
+oax-fill --target worlds/coral_cove
+oax-snapshot --target worlds/coral_cove --compare /tmp/before.json
 ```
 
 ## Toolchain pin
@@ -86,3 +102,47 @@ The project targets Godot 4.7 (`project.godot` `config/features`); advancing
 the pin is a deliberate act — rerun the full suite on the new engine, then
 change that one line. CI caches the engine and export templates keyed on the
 pin, so a version bump automatically invalidates the cache.
+
+
+## Controls
+
+Movement is CAMERA-RELATIVE: forward is wherever the camera is looking, not
+world -Z. That is the other half of the look axis — a camera you can turn
+while W still meant a fixed world direction would be worse than no camera
+control at all.
+
+| input | does |
+|---|---|
+| W A S D | move, relative to the camera |
+| mouse / right stick | look — turn and pitch the camera |
+| click | capture the mouse (Escape releases it) |
+| Space | hop on land, swim up in water (hold for height) |
+| Shift | dodge roll on land, swim down in water |
+| E | climb on land, bubble boost in water |
+| F | tail whack on land, spin sprint in water |
+| C | dive (hold to keep descending) |
+| Q | tongue grapple |
+| right mouse | dash |
+| left mouse / Tab / R | gill mod activate / next / previous |
+
+Three of those are contextual pairs — `Shift`, `E` and `F` each mean one thing
+on land and another in water — and none of them is a conflict, because a
+binding is scoped to a movement grammar and the two never overlap. That is the
+same rule that lets `W` be swim-forward and waddle-forward.
+
+**Diving and surfacing are held, not tapped.** A dive eases into its speed
+rather than snapping to it, and the model noses down into the descent and up
+into a rise, so holding `C` is a dive and releasing it levels off.
+
+**The two strikes are grammar-exclusive on purpose.** A tail whack plants four
+feet and swings; a spin sprint is a body with nothing to push against turning
+itself into the attack. See [docs/enemies.md](enemies.md) for what a strike
+does to a machine.
+
+The camera holds where you put it while you are moving. It eases back behind
+your direction of travel only after `camera.look.assist_delay_seconds` of no
+look input — if it followed travel continuously it would close a loop with
+camera-relative movement and the two would spiral.
+
+Sensitivity, pitch limits, invert and the assist are all `camera.look.*` keys
+in `core/tuning/tuning.json`.

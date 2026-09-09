@@ -4,8 +4,15 @@ extends Node
 ##
 ## Unlike the hub walk — which deliberately names no world — this probe IS
 ## about one world: it enters coral_cove by id and proves the world's own
-## claims. One held forward key carries the whole route, because the world was
-## designed for exactly that: completability is a regression test, not a hope.
+## claims.
+##
+## THE ROUTE IS FLOWN, NOT HELD. This probe used to hold W from spawn to
+## finish, and that was only possible because the level was a flat corridor —
+## which is to say the probe's shape was quietly setting the level's design.
+## Coral Cove is now a platforming route with gaps, a dive, a climb and two
+## side pillars, so the probe drives it through RoutePilot: a waypoint list
+## flown by pressing the same keys a player would press. Completability is
+## still a regression test rather than a hope; it is just a harder claim now.
 ##
 ## What one traversal proves, because the route makes each of these MANDATORY:
 ##   * both movement grammars ran (the lagoon spans the route — AC-4),
@@ -13,11 +20,13 @@ extends Node
 ##     those mods (AC-5's per-world half),
 ##   * region coral_shelf reached `restored`, which is the only thing that
 ##     opens the shelf wall in front of the finish (AC-4's region half),
-##   * the finish condition returned the player to the hub (AC-2).
+##   * the finish condition returned the player to the hub (AC-2),
+##   * and every jump, the dive, the boost and the climb on the route are
+##     inside what the controller can actually do at the shipped tuning.
 
 const WORLD_ID := "coral_cove"
 const SETTLE_FRAMES := 30
-const JOURNEY_FRAMES := 4200
+const JOURNEY_FRAMES := 20000
 
 var _failures: PackedStringArray = []
 var _checks := 0
@@ -54,6 +63,12 @@ var _lives_at_entry := -1
 ## which the walk reached each anchor — spawn, each checkpoint, finish.
 const TUNING_PATH := "res://core/tuning/tuning.json"
 const MAX_RETRY_KEY := "progression.max_retry_seconds"
+## The designed route, waypoint by waypoint. These coordinates are the
+## level's own geometry: each one names the platform it stands on, and the
+## gaps between them are the gaps the world's header measures against the
+## controller's envelope. A waypoint that stops being reachable is a level
+## regression, and the pilot reports which one.
+var _pilot: RoutePilot
 var _checkpoint_z: PackedFloat64Array = []
 var _next_checkpoint := 0
 var _anchor_seconds: PackedFloat64Array = [0.0]
@@ -96,7 +111,8 @@ func _ready() -> void:
 		_completed_id = world_id)
 	_hub.returned_to_hub.connect(func(_world_id: String) -> void:
 		_returned = true
-		_key(KEY_W, false))
+		if _pilot != null:
+			_pilot.release_all())
 
 	var spawn := get_tree().get_first_node_in_group("hub_spawn")
 	_hub_spawn = (spawn as Node3D).global_position if spawn is Node3D \
@@ -120,8 +136,24 @@ func _physics_process(_delta: float) -> void:
 		_wire_world_systems()
 		_collect_checkpoints()
 		_walk_start_frame = _frame
-		_key(KEY_W, true)
+		_pilot = RoutePilot.new(_route(), _world_origin())
+		# The route's fight legs end when the machine they name is down, and
+		# the world's own runtime is the only thing that knows.
+		_pilot.set_fight_test(RoutePilot.fleet_defeat_test(_systems))
 		return
+
+	if _pilot != null and not _returned:
+		_pilot.step(_body)
+		if not _pilot.stuck_reason().is_empty():
+			# The encounter and the restoration economy are printed with the
+			# stall because act 9's failures are almost never "the geometry is
+			# wrong" — they are "the gate is shut because the fight did not
+			# finish" or "a pickup was missed", and those are invisible from a
+			# position alone.
+			_fail("the route is not walkable: %s\n      %s"
+				% [_pilot.stuck_reason(), _world_state()])
+			_report()
+			return
 
 	if not _returned:
 		_mark_checkpoints_passed()
@@ -135,8 +167,9 @@ func _physics_process(_delta: float) -> void:
 		return
 
 	if _frame > SETTLE_FRAMES + JOURNEY_FRAMES:
-		_fail("the walk never completed (z=%.1f, grammars=%s, mods=%s, "
-			% [_body.global_position.z, str(_grammars_seen.keys()),
+		_fail("the walk never completed (leg %d, z=%.1f, grammars=%s, mods=%s, "
+			% [_pilot.get_leg() if _pilot != null else -1,
+				_body.global_position.z, str(_grammars_seen.keys()),
 				str(_mods_equipped)]
 			+ "gates=%s, restored=%s)"
 			% [str(_gates_opened), str(_region_restored)])
@@ -213,9 +246,9 @@ func _finish_checks() -> void:
 
 ## REQ-010, end to end through the real runtime and the real save interface:
 ## the seven seeds were collected as the ONE declared resource type and
-## spent (the shelf restored above proves the spending); the on-route
-## discovery was rescued once and is in the profile; the off-route one was
-## not — an optional branch stays optional.
+## spent (the shelf restored above proves the spending); both on-route
+## discoveries were rescued once and are in the profile; neither off-route
+## one was — an optional branch stays optional.
 func _check_collectibles() -> void:
 	_check(_collected.count("kelp_seed") == 7,
 		"all seven kelp seeds were collected as the declared resource (got %d)"
@@ -223,11 +256,17 @@ func _check_collectibles() -> void:
 	_check(_collected.count("hermit_snail") == 1,
 		"the hermit snail was rescued exactly once (got %d)"
 		% _collected.count("hermit_snail"))
+	_check(_collected.count("fleet_beacon") == 1,
+		"the fleet beacon at the top of the yard was rescued exactly once (got %d)"
+		% _collected.count("fleet_beacon"))
 	_check(not _collected.has("lantern_shrimp"),
-		"the off-route lantern shrimp was NOT collected by the straight walk")
+		"the off-route lantern shrimp was NOT collected by the designed route")
+	_check(not _collected.has("tide_pearl"),
+		"nor the off-route tide pearl -- an optional branch stays optional")
 	var recorded: Variant = _save.get_world_data(WORLD_ID).get("collectibles", [])
-	_check(recorded is Array and (recorded as Array).has("hermit_snail"),
-		"the rescued snail is recorded in the profile through the save interface (%s)"
+	_check(recorded is Array and (recorded as Array).has("hermit_snail")
+		and (recorded as Array).has("fleet_beacon"),
+		"both rescued discoveries are recorded in the profile through the save interface (%s)"
 		% str(recorded))
 	_check(recorded is Array and not (recorded as Array).has("kelp_seed"),
 		"a spent resource is never recorded by id")
@@ -243,14 +282,42 @@ func _check_pillar_one() -> void:
 		"the regen station regrew the leg (got %s)" % str(_regrown))
 	_check(_lives_spent == 0,
 		"ordinary hazard contact spent no life (spent %d)" % _lives_spent)
-	_check(_checkpoints_hit.size() == _checkpoint_z.size(),
-		"every checkpoint was activated by touch (%d of %d: %s)"
-		% [_checkpoints_hit.size(), _checkpoint_z.size(), str(_checkpoints_hit)])
+	# COUNTED BY UNIQUE ID, not by activation. Re-entering an anchor's volume
+	# is ordinary play — a spin sprint aimed at a machine throws the player
+	# several metres, sometimes back through the checkpoint they just passed —
+	# and a walk that failed for touching one twice would be asserting the
+	# route is a one-way corridor rather than that every anchor is reachable.
+	var unique: Dictionary = {}
+	for id: String in _checkpoints_hit:
+		unique[id] = true
+	_check(unique.size() == _checkpoint_z.size(),
+		"every checkpoint was activated by touch (%d distinct of %d: %s)"
+		% [unique.size(), _checkpoint_z.size(), str(unique.keys())])
 	_check(_lives_at_entry > 0,
 		"the world opened with a positive life count (%d)" % _lives_at_entry)
 	var recorded: Variant = _save.get_world_data(WORLD_ID).get("lastCheckpointId", "")
 	_check(String(recorded) != "" and _checkpoints_hit.has(String(recorded)),
 		"the last activated checkpoint is recorded in the profile (%s)" % str(recorded))
+
+
+## A one-line dump of everything act 9 depends on, for a stall report.
+func _world_state() -> String:
+	if _systems == null:
+		return "(no WorldSystems)"
+	var parts: PackedStringArray = []
+	var boss := _systems.get_flagship()
+	parts.append("boss=%s" % ("absent" if boss == null
+		else "phase %d/%d (%s) defeated=%s" % [boss.get_current_phase_index(),
+			boss.phase_count(), boss.get_current_phase_id(),
+			str(boss.is_defeated())]))
+	var restoration := _systems.get_restoration()
+	for region_id: String in restoration.get_region_ids():
+		parts.append("%s=%s unlocked=%s res=%d" % [region_id,
+			RegionState.id(restoration.get_state(region_id)),
+			str(restoration.is_unlocked(region_id)),
+			restoration.get_region(region_id).get_resources()])
+	parts.append("collected=%s" % str(_collected))
+	return " | ".join(parts)
 
 
 func _elapsed_seconds() -> float:
@@ -306,11 +373,20 @@ func _check_checkpoint_spacing() -> void:
 		% ["CORAL WALK", ", ".join(segments), bound])
 
 
-func _key(keycode: Key, pressed: bool) -> void:
-	var event := InputEventKey.new()
-	event.physical_keycode = keycode
-	event.pressed = pressed
-	Input.parse_input_event(event)
+## The route itself lives in CoralRoute — the perf gate flies the same
+## waypoints, and two copies would drift. The hub instances an active world
+## at an offset; the spawn marker is a direct child of the world root, so
+## its parent's global position is that offset.
+func _world_origin() -> Vector3:
+	var spawn := get_tree().get_first_node_in_group("spawn_point")
+	if spawn == null:
+		return Vector3.ZERO
+	var root := (spawn as Node).get_parent() as Node3D
+	return root.global_position if root != null else Vector3.ZERO
+
+
+func _route() -> Array[RoutePilot.Waypoint]:
+	return CoralRoute.waypoints()
 
 
 func _check(condition: bool, description: String) -> void:

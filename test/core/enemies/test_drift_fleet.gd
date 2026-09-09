@@ -438,20 +438,23 @@ func test_req_012_a_declaration_cannot_widen_the_catastrophic_set() -> void:
 
 func test_req_012_no_installed_world_declares_enemies() -> void:
 	# The completability half is proven every run by the template, coral and
-	# bubble walks; this pins the declaration half: every installed world
-	# omits the optional element, and the framework treats absence as a
-	# well-defined no-op rather than an error.
-	var dir := DirAccess.open("res://worlds")
-	assert_object(dir).is_not_null()
-	var modules := dir.get_directories()
-	assert_int(modules.size()).is_greater_equal(3)
-	for module: String in modules:
-		var manifest: Variant = JSON.parse_string(
-			_read("res://worlds/%s/world.json" % module))
-		assert_bool(manifest is Dictionary
-			and not (manifest as Dictionary).has("enemies")
+	# bubble walks; this pins the declaration half: a world may omit the
+	# optional element, and the framework treats absence as a well-defined
+	# no-op rather than an error.
+	#
+	# This once asserted that EVERY installed world omits `enemies`, which
+	# was true only because nothing could bind a declaration yet — a snapshot
+	# of temporary content standing in for a rule. The official worlds now
+	# declare a Drift Fleet, so the absent-default path is pinned to the
+	# REFERENCE TEMPLATE, whose whole job is to exercise every optional
+	# element's absent default (REQ-029).
+	var manifest: Variant = JSON.parse_string(
+		_read("res://worlds/reference_template/world.json"))
+	assert_bool(manifest is Dictionary).is_true()
+	assert_bool(not (manifest as Dictionary).has("enemies")
 		).override_failure_message(
-			"world '%s' unexpectedly declares enemies" % module).is_true()
+		"the reference template must keep exercising the absent default"
+		).is_true()
 
 	var fleet := _fleet(_tuning())
 	fleet.tick(1.0)

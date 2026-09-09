@@ -14,9 +14,20 @@
   "restorableRegions": [
     {
       "regionId": "coral_shelf",
+      "unlockedBy": "entry",
       "traversalGates": [
         {
           "gateId": "shelf_wall",
+          "opensAt": "restored"
+        }
+      ]
+    },
+    {
+      "regionId": "open_sea",
+      "unlockedBy": "boss",
+      "traversalGates": [
+        {
+          "gateId": "sea_gate",
           "opensAt": "restored"
         }
       ]
@@ -34,6 +45,12 @@
       "displayName": "Kelp seed"
     },
     {
+      "collectibleId": "fleet_core",
+      "kind": "resource",
+      "regionId": "open_sea",
+      "displayName": "Fleet core"
+    },
+    {
       "collectibleId": "hermit_snail",
       "kind": "discovery",
       "displayName": "Hermit snail"
@@ -42,6 +59,16 @@
       "collectibleId": "lantern_shrimp",
       "kind": "discovery",
       "displayName": "Lantern shrimp"
+    },
+    {
+      "collectibleId": "tide_pearl",
+      "kind": "discovery",
+      "displayName": "Tide pearl"
+    },
+    {
+      "collectibleId": "fleet_beacon",
+      "kind": "discovery",
+      "displayName": "Fleet beacon"
     }
   ],
   "enemies": [
@@ -57,5 +84,23 @@
     {
       "enemyId": "dredger"
     }
-  ]
+  ],
+  "boss": {
+    "regionId": "open_sea",
+    "phases": [
+      {
+        "phaseId": "hull_breach",
+        "grammar": "water"
+      },
+      {
+        "phaseId": "deck_assault",
+        "grammar": "land"
+      },
+      {
+        "phaseId": "core_purge",
+        "grammar": "any",
+        "requiresAffordance": "bubble_platform"
+      }
+    ]
+  }
 }

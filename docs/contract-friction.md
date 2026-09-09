@@ -32,7 +32,23 @@ verify them (e.g. a `restoration_gate` naming a `gateId` the manifest never
 declared should fail conformance, not silently never open). Additive, so it
 lands within v1.
 
-## F-2 · Regions have no declared unlock condition
+## F-2 · Regions have no declared unlock condition — **RESOLVED**
+
+**Resolved in the contract**: `restorableRegions[].unlockedBy` is now an
+optional per-region field, `"entry"` or `"boss"`. Omitting it keeps the old
+inference exactly, so every world and fixture written before the field means
+what it always meant; declaring it is how a world says what it actually wants.
+An unrecognised value is refused with `restoration.unknown_unlock_policy`
+rather than defaulted, because a misspelled policy is a level that unlocks at
+the wrong moment — which surfaces as an unreachable route, not as an error.
+
+**What forced it**: Coral Cove's Flagship. The inference could not express a
+level that wants restoration on its critical path AND a boss at its end, and
+under it that level DEADLOCKED — `coral_shelf` stayed locked behind a boss the
+route could not reach without the shelf wall the shelf opens. The original
+entry below is kept because the reasoning is still the reasoning.
+
+### The original entry
 
 **Needed:** `coral_shelf` must be restorable on entry — there is no Flagship
 yet — but REQ-008 AC-2 says a locked region cannot advance and the Flagship
@@ -185,3 +201,35 @@ for a future resume feature, not a behaviour yet.
 over the Save Integration Interface plus persisted pickup state, after
 which entry can honour the recorded anchor. Until then the honest answer is
 "a world restarts on entry".
+
+## F-11 · Checkpoint spacing is bounded by a value that means something else
+
+**Noticed while rebuilding Coral Cove as a platforming route:** REQ-003
+AC-7's spacing rule is asserted against `progression.max_retry_seconds`,
+whose own description in the tuning surface is "upper bound from losing a
+life to being playable again at the last checkpoint" — respawn *latency*,
+not replay *distance*. The walk probes have always borrowed it as the
+spacing bound because it is the only number in the neighbourhood.
+
+It held fine while both official worlds were corridors walked at a constant
+4.2 m/s. It stops being incidental the moment a route platforms: a climb is
+2 m/s, a dive-and-rise crossing is slower still, and a side-pillar detour
+doubles back. Coral Cove went from five checkpoints to seventeen, and two
+of those exist purely because the measured segment came in at 5.5 s and
+5.4 s against a 5.0 s bound.
+
+That is the rule working — the walk measured it and refused, which is
+exactly what it is for. The friction is that the bound is not *about* what
+it is bounding, so it cannot be tuned for one without moving the other, and
+a world author reading the tuning surface has no way to discover that the
+number governs their level layout at all.
+
+**Interim:** Coral Cove is checkpointed densely enough to pass, and its
+README says why. Dense checkpointing is right for a hard platformer
+regardless, so nothing is being distorted to fit.
+
+**Proposed change (tuning surface, not the contract):** a separate
+`progression.max_replay_seconds` for the spacing rule, documented as "the
+longest stretch a player may be asked to replay after a death", leaving
+`max_retry_seconds` to mean respawn latency. The walk probes then assert
+against the value that names what they measure.

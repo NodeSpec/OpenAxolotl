@@ -1,20 +1,27 @@
 extends Node
 
-## Puts the axolotl back when it leaves the level. DEVELOPMENT ONLY.
+## Puts the axolotl back when it leaves the greybox. DEVELOPMENT ONLY.
 ##
-## This is NOT the lives system. Falling out of the world is a catastrophic
-## event that costs a life and returns the player to the last checkpoint —
-## REQ-003 owns that, via pit volumes and CatastrophicSource.PIT_VOLUME, and the
-## logic already exists and is tested. What does not exist yet is a world with
-## checkpoints in it for that system to return anyone to.
+## ITS ORIGINAL JOB IS DONE AND THIS IS WHAT IS LEFT. It was written as
+## scaffolding, to be "replaced, not extended, the moment the reference
+## template gives us a world with real checkpoints", because falling out of a
+## WORLD is a catastrophic event that costs a life and returns the player to a
+## checkpoint — REQ-003, via pit volumes and CatastrophicSource.PIT_VOLUME.
 ##
-## So this is scaffolding with a deliberately short life: it exists so a person
-## testing the greybox by hand does not have to restart the game every time they
-## walk off the edge. It is replaced, not extended, the moment the reference
-## template (REQ-029) gives us a world with real checkpoints.
+## That moment came. Both official worlds now carry a pit volume sized as a
+## floor under their whole playable area, so REQ-003 handles the fall there,
+## and the hub — which owns no LifeSystem and so had nothing to charge — grew
+## its own recovery in OpenLagoon._recover_fallen_player. Neither of those is
+## this file, and this file is not used by either.
+##
+## What it still does is the one case those do not cover: dev/greybox.tscn is
+## a bare proving ground with no checkpoints, no life system and no hub, and a
+## person testing the controller by hand there should not have to restart the
+## game every time they walk off the edge.
 ##
 ## Kept in dev/ and out of core/ precisely so it cannot quietly become the real
-## answer. A respawn that costs nothing is the opposite of what Pillar 1 wants.
+## answer. A respawn that costs nothing is the opposite of what Pillar 1 wants,
+## and the greybox is the only place where nothing is what it should cost.
 
 @export var target_path: NodePath
 @export var floor_y: float = -40.0

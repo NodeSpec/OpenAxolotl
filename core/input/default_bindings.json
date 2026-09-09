@@ -1,5 +1,5 @@
 {
-  "note": "Default control schemes (REQ-024). Data, not code: a remap rewrites entries of exactly this shape and persists them through the save profile's 'input' section. Contexts are what let a physical input mean different things in water and on land -- WASD is swim in water and waddle on land, SPACE is swim-up in water and hop on land, E is bubble boost in water and climb on land. Those pairs are not conflicts because their contexts never overlap; two bindings in the SAME context sharing an input are refused with input.binding_conflict.",
+  "note": "Default control schemes (REQ-024). Data, not code: a remap rewrites entries of exactly this shape and persists them through the save profile's 'input' section. Contexts are what let a physical input mean different things in water and on land -- WASD is swim in water and waddle on land, SPACE is swim-up in water and hop on land, E is bubble boost in water and climb on land, F is the tail whack on land and the spin sprint in water, and SHIFT is swim-down in water and the dodge roll on land. Those pairs are not conflicts because their contexts never overlap; two bindings in the SAME context sharing an input are refused with input.binding_conflict.",
   "bindings": [
     {
       "verb": "swim",
@@ -27,8 +27,11 @@
     },
     { "verb": "dive", "context": "water", "device": "keyboard_mouse", "input": "key.c" },
     { "verb": "bubble_boost", "context": "water", "device": "keyboard_mouse", "input": "key.e" },
+    { "verb": "spin_sprint", "context": "water", "device": "keyboard_mouse", "input": "key.f" },
     { "verb": "hop", "context": "land", "device": "keyboard_mouse", "input": "key.space" },
     { "verb": "climb", "context": "land", "device": "keyboard_mouse", "input": "key.e" },
+    { "verb": "roll", "context": "land", "device": "keyboard_mouse", "input": "key.shift" },
+    { "verb": "tail_whack", "context": "land", "device": "keyboard_mouse", "input": "key.f" },
     { "verb": "grapple", "context": "any", "device": "keyboard_mouse", "input": "key.q" },
     { "verb": "dash", "context": "any", "device": "keyboard_mouse", "input": "mouse.2" },
     { "verb": "gill_mod_activate", "context": "any", "device": "keyboard_mouse", "input": "mouse.1" },
@@ -61,8 +64,11 @@
     },
     { "verb": "dive", "context": "water", "device": "gamepad", "input": "pad.button.1" },
     { "verb": "bubble_boost", "context": "water", "device": "gamepad", "input": "pad.button.2" },
+    { "verb": "spin_sprint", "context": "water", "device": "gamepad", "input": "pad.button.5" },
     { "verb": "hop", "context": "land", "device": "gamepad", "input": "pad.button.0" },
     { "verb": "climb", "context": "land", "device": "gamepad", "input": "pad.button.2" },
+    { "verb": "roll", "context": "land", "device": "gamepad", "input": "pad.button.4" },
+    { "verb": "tail_whack", "context": "land", "device": "gamepad", "input": "pad.button.5" },
     { "verb": "grapple", "context": "any", "device": "gamepad", "input": "pad.button.3" },
     { "verb": "dash", "context": "any", "device": "gamepad", "input": "pad.button.10" },
     { "verb": "gill_mod_activate", "context": "any", "device": "gamepad", "input": "pad.button.9" },

@@ -23,8 +23,11 @@ enum Verb {
 	## Movement verbs, edge-triggered.
 	DIVE,
 	BUBBLE_BOOST,
+	SPIN_SPRINT,
 	HOP,
 	CLIMB,
+	ROLL,
+	TAIL_WHACK,
 	GRAPPLE,
 	DASH,
 
@@ -53,8 +56,11 @@ const MOVEMENT_EQUIVALENT: Dictionary = {
 	Verb.WADDLE: MovementGrammar.Verb.WADDLE,
 	Verb.DIVE: MovementGrammar.Verb.DIVE,
 	Verb.BUBBLE_BOOST: MovementGrammar.Verb.BUBBLE_BOOST,
+	Verb.SPIN_SPRINT: MovementGrammar.Verb.SPIN_SPRINT,
 	Verb.HOP: MovementGrammar.Verb.HOP,
 	Verb.CLIMB: MovementGrammar.Verb.CLIMB,
+	Verb.ROLL: MovementGrammar.Verb.ROLL,
+	Verb.TAIL_WHACK: MovementGrammar.Verb.TAIL_WHACK,
 	Verb.GRAPPLE: MovementGrammar.Verb.GRAPPLE,
 	Verb.DASH: MovementGrammar.Verb.DASH,
 }

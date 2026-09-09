@@ -105,45 +105,56 @@ func test_the_shipped_hero_is_skinned_to_a_skeleton() -> void:
 	body.free()
 
 
-func test_the_eye_and_its_highlight_are_bound_rigidly_to_the_head() -> void:
-	# The eye sits a few centimetres from where the gill bones start, so the
-	# rigger's nearest-two rule USED to hand it 77% to the fronds — and the
-	# highlight a different 70%, so the two rode apart and the glint slid off
-	# the pupil whenever the gills swung. Both are rigid features of the head
-	# and are bound whole to it; this is what stops that regressing.
+func test_every_vertex_of_the_hero_is_driven_by_the_rig() -> void:
+	"""What replaced the eye-and-gleam rigid-binding test.
+
+	That test defended a real bug: the eye sits centimetres from where the
+	gill bones start, so the old rigger's nearest-two rule handed it 77% to
+	the fronds and the highlight a different 70%, and the glint slid off the
+	pupil whenever the gills swung. It defended it by name — it looked for
+	meshes called `axolotl_eye` and `axolotl_gleam` — and the shipped hero is
+	one surface with a painted face, so there is nothing left to look up.
+
+	What replaced it guards the failure mode the CURRENT pipeline actually
+	has. Bone-heat weighting leaves gaps: on this hero the gill filament tips
+	came back with no weight at all, and an unweighted vertex stays in rest
+	pose while the surface around it moves, which spikes the mesh. It is not
+	hypothetical — it also killed the glTF exporter outright, which is how it
+	was found. tools/blender/rig_model.py adopts orphans by nearest bone; this
+	is what proves it kept doing so.
+	"""
 	var body := (load(SCENE_PATH) as PackedScene).instantiate()
 	var model := body.get_node("Model") as Node3D
 
-	var seen := PackedStringArray()
+	var checked := 0
+	var orphans := 0
 	for node: Node in model.find_children("*", "MeshInstance3D", true, false):
 		var mesh_instance := node as MeshInstance3D
-		if not (mesh_instance.name in ["axolotl_eye", "axolotl_gleam"]):
+		if mesh_instance.skin == null or mesh_instance.mesh == null:
 			continue
-		seen.append(String(mesh_instance.name))
-
-		var skin := mesh_instance.skin
-		assert_object(skin).is_not_null()
-		var arrays: Array = (mesh_instance.mesh as ArrayMesh
-			).surface_get_arrays(0)
-		var bones: PackedInt32Array = arrays[Mesh.ARRAY_BONES]
-		var weights: PackedFloat32Array = arrays[Mesh.ARRAY_WEIGHTS]
-
-		var driving := PackedStringArray()
-		for index: int in bones.size():
-			if weights[index] <= 0.001:
+		for surface: int in mesh_instance.mesh.get_surface_count():
+			var arrays: Array = mesh_instance.mesh.surface_get_arrays(surface)
+			var weights: PackedFloat32Array = arrays[Mesh.ARRAY_WEIGHTS]
+			if weights.is_empty():
 				continue
-			var bind := String(skin.get_bind_name(bones[index]))
-			if not (bind in driving):
-				driving.append(bind)
+			# Four weights per vertex is glTF's fixed stride.
+			var per_vertex := 4
+			for vertex: int in weights.size() / per_vertex:
+				checked += 1
+				var total := 0.0
+				for slot: int in per_vertex:
+					total += weights[vertex * per_vertex + slot]
+				if total <= 0.0001:
+					orphans += 1
 
-		assert_int(driving.size()).override_failure_message(
-			"%s is driven by %s; a rigid feature must ride one bone"
-			% [mesh_instance.name, driving]).is_equal(1)
-		assert_str(driving[0]).is_equal("head")
-
-	assert_int(seen.size()).override_failure_message(
-		"the eye and the gleam must both survive the merge as named meshes"
-		).is_equal(2)
+	assert_int(checked).override_failure_message(
+		"no skinned vertices were found in the hero, so this proves nothing"
+		).is_greater(0)
+	assert_int(orphans).override_failure_message(
+		("%d of %d hero vertices carry no bone weight at all. They will hang "
+		+ "in rest pose while the surface around them moves, and Blender's "
+		+ "glTF exporter refuses to write them.") % [orphans, checked]
+		).is_equal(0)
 
 	body.free()
 

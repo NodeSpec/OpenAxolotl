@@ -44,11 +44,20 @@ gdscript/warnings/unsafe_call_argument=1
 ;
 ; The baseline machine in docs/performance.md (GTX 1650 class at 1080p) drives
 ; Forward+ with this rig; the perf gate is the tripwire, not this comment.
+;
+; THESE ARE THE *MEDIUM* VALUES, matching core/rendering/base_environment.tres
+; and for the same reason. RenderQuality owns TAA, the shadow atlas size and
+; the soft-shadow filter at runtime and sets each one explicitly per level, so
+; what is written here only decides what the EDITOR costs — and the editor
+; never runs RenderQuality. Left at their HIGH values (TAA on, a 4096 atlas at
+; the highest filter) the viewport was strictly more expensive than the game
+; it was authoring, which on a 2 GB mobile GPU is the difference between a
+; slow editor and a dead one. HIGH restores all three in RenderQuality.apply.
 renderer/rendering_method="forward_plus"
 renderer/rendering_method.mobile="mobile"
 anti_aliasing/quality/msaa_3d=1
-anti_aliasing/quality/use_taa=true
-lights_and_shadows/directional_shadow/size=4096
-lights_and_shadows/directional_shadow/soft_shadow_filter_quality=3
-lights_and_shadows/positional_shadow/soft_shadow_filter_quality=3
+anti_aliasing/quality/use_taa=false
+lights_and_shadows/directional_shadow/size=2048
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=2
+lights_and_shadows/positional_shadow/soft_shadow_filter_quality=2
 textures/default_filters/anisotropic_filtering_level=3

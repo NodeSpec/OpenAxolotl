@@ -14,6 +14,14 @@ extends RefCounted
 ## Coordinates are in the LEVEL's own space, readable against world.tscn.
 ## Each waypoint names the platform it stands on; the gaps between them are
 ## the gaps the world's header measures against the controller's envelope.
+##
+## FIGHT LEGS NAME A MACHINE AND END WHEN IT IS DOWN. They are here for the
+## same reason the jumps are: the level's machines were placed six to ten
+## metres off this line while the longest strike reached 2.3 m, so every one
+## of them was decoration. A route that walks past a machine proves nothing
+## about whether it can be fought; a leg that has to put one down proves both
+## that it is in reach and that its declared durability is beatable with the
+## verb the grammar there actually offers.
 
 
 static func waypoints() -> Array[RoutePilot.Waypoint]:
@@ -26,9 +34,11 @@ static func waypoints() -> Array[RoutePilot.Waypoint]:
 	RoutePilot.at("swim", Vector3(0, 1.5, -32.5), "off the lip and into the cove"),
 	RoutePilot.at("swim", Vector3(0, -5, -34), "line up below the brow"),
 	RoutePilot.at("swim", Vector3(0, -5, -36.5), "through the gap under DiveBar"),
+	RoutePilot.fight("NetbotLagoonGap", Vector3(0, -5, -37.6), "the first machine in the level: a one-hit Netbot in open water, where a single spin sprint is both the escape from its net and the end of it"),
 	RoutePilot.at("boost", Vector3(0, -5, -39.5), "boost for the climb over the shelf"),
 	RoutePilot.at("swim", Vector3(0, 0.6, -40), "up the near face of RiseWall"),
 	RoutePilot.at("swim", Vector3(0, 0.6, -42.5), "over the top"),
+	RoutePilot.fight("NetbotRiseWall", Vector3(0, 0.6, -43.6), "the same lesson again, mid-climb over RiseWall"),
 	RoutePilot.at("swim", Vector3(0, 0.8, -46), "onto the first shore step, still submerged"),
 	RoutePilot.at("swim", Vector3(0, 4.2, -49), "up to the surface, clear over the shore lip"),
 	RoutePilot.at("swim", Vector3(0, 4.2, -51.5), "out of the water and down onto CoveShore"),
@@ -36,6 +46,7 @@ static func waypoints() -> Array[RoutePilot.Waypoint]:
 	RoutePilot.at("climb", Vector3(0, 3.8, -63.5), "INTO the coral wall -- a climb leg aims at the far side of the face, so the pilot keeps pressing into it until the contact it is waiting for actually happens"),
 	RoutePilot.at("walk", Vector3(0, 8.2, -65), "over the lip onto the wall top"),
 	RoutePilot.at("walk", Vector3(0, 8.2, -66.4), "the Glow gill mod"),
+	RoutePilot.fight("HooklineGlowGate", Vector3(3.2, 8.2, -67.4), "a Hookline Rig on the wall top: two tail whacks, fought with the Glow mod already in hand so its line is visible"),
 	RoutePilot.at("jump", Vector3(0, 8.2, -69.5), "past the opened glow gate"),
 	RoutePilot.at("jump", Vector3(0, 8.2, -74.1), "pillar 1 (gap 2.6 -- the widest on the route)"),
 	RoutePilot.at("jump", Vector3(1.5, 8.2, -79), "pillar 2 (gap 2.2, and 1.5 m to the right)"),
@@ -46,15 +57,18 @@ static func waypoints() -> Array[RoutePilot.Waypoint]:
 	RoutePilot.at("swim", Vector3(0, 7, -99.5), "into the gorge river"),
 	RoutePilot.at("swim", Vector3(0, 3.6, -102), "down for the arch"),
 	RoutePilot.at("swim", Vector3(0, 3.6, -104.2), "under GorgeArch"),
-	RoutePilot.at("boost", Vector3(0, 3.6, -105.2), "boost down the last of the channel"),
+	RoutePilot.fight("RunoffDroneGorge", Vector3(0, 3.6, -105.8), "a Runoff Drone past the arch: three strikes, fought from inside its own murk"),
+	RoutePilot.at("boost", Vector3(0, 3.6, -106.6), "boost down the last of the channel"),
 	RoutePilot.at("swim", Vector3(0, 7.2, -107.4), "up to the surface at the far end"),
 	RoutePilot.at("swim", Vector3(0, 7.2, -109.6), "out of the water onto the first terrace"),
 	RoutePilot.at("walk", Vector3(0, 7, -110), "terrace 1"),
+	RoutePilot.fight("DredgerSeedBed", Vector3(-3.5, 7, -110), "the level's boss beat, guarding the way into the seed bed: four strikes on the only machine that can spend a life, and it must fall before a single seed is planted"),
 	RoutePilot.at("walk", Vector3(0, 7, -110.6), "seed 1"),
 	RoutePilot.at("walk", Vector3(-3, 7, -111.4), "seed 2"),
 	RoutePilot.at("jump", Vector3(-8.5, 7.4, -111.7), "seed 3, out on the left pillar (2.0 m across)"),
 	RoutePilot.at("jump", Vector3(-3, 7, -112.4), "back onto terrace 1"),
 	RoutePilot.at("jump", Vector3(0, 6, -117), "terrace 2 (gap 2.2, a step down)"),
+	RoutePilot.fight("RunoffDroneSeedBed", Vector3(3.5, 6, -117.8), "a Drone venting over terrace two: three strikes on foot, and the seeds here are gathered half blind until it is down"),
 	RoutePilot.at("walk", Vector3(2.5, 6, -117.6), "seed 4"),
 	RoutePilot.at("jump", Vector3(8.5, 6.4, -118.2), "seed 6, out on the right pillar (2.0 m across)"),
 	RoutePilot.at("jump", Vector3(2.5, 6, -118.8), "back onto terrace 2"),
@@ -62,5 +76,68 @@ static func waypoints() -> Array[RoutePilot.Waypoint]:
 	RoutePilot.at("jump", Vector3(0, 5, -124.5), "terrace 3 (gap 2.2)"),
 	RoutePilot.at("walk", Vector3(0, 5, -125.6), "seed 7 -- the shelf reaches `restored` here"),
 	RoutePilot.at("walk", Vector3(0, 5, -128.6), "through the opened shelf wall"),
-	RoutePilot.at("finish", Vector3(0, 5, -133), "the finish volume"),
+
+	# --- ACT 7: THE TIDE RACE ---------------------------------------------
+	# The shelf wall used to open onto the finish two metres later. It now
+	# opens onto sixty-eight more metres of level: down the tide steps to the
+	# waterline, along the race channel with a dive under the surge bar, and
+	# out onto the sea terrace.
+	RoutePilot.at("walk", Vector3(0, 5, -136), "onto RaceLanding past the wall"),
+	RoutePilot.at("jump", Vector3(0, 4.2, -147), "TideStep1 (gap 1.5, a step down)"),
+	RoutePilot.at("jump", Vector3(2.5, 3.4, -154), "TideStep2 (gap 2.0, down and 2.5 m right)"),
+	RoutePilot.at("swim", Vector3(0, 2.2, -160), "off the last step straight into the race"),
+	RoutePilot.at("swim", Vector3(0, -0.4, -165), "down for the surge bar"),
+	RoutePilot.at("swim", Vector3(0, -0.4, -169), "under SurgeBar"),
+	RoutePilot.fight("NetbotTideRace", Vector3(0, -0.4, -170.5), "a Netbot in the race current -- one strike, but the current is moving"),
+	RoutePilot.at("boost", Vector3(0, 0.4, -173), "boost along the channel"),
+	RoutePilot.at("swim", Vector3(0, 1.6, -180), "back up to the waterline"),
+	RoutePilot.at("swim", Vector3(0, 2.4, -187), "over the submerged sea shore"),
+	RoutePilot.at("swim", Vector3(0, 2.2, -190), "out of the water and down onto SeaShore"),
+	RoutePilot.at("walk", Vector3(0, 2.0, -191), "SeaShore -- land grammar back"),
+	RoutePilot.fight("RunoffDroneSeaShore", Vector3(0, 2.0, -193), "the last machine in the level, between the player and the final jump"),
+	RoutePilot.at("jump", Vector3(0, 3.0, -198.5), "SeaTerrace (gap 1.0, rise 1.0)"),
+
+	# --- ACT 8: THE FLEET YARD --------------------------------------------
+	# The sea terrace is now the door into the yard rather than the end of the
+	# level. Everything past it is a chain of moored hulls over open water,
+	# and the act's difficulty is DENSITY: five machines and a climb, with
+	# nothing under the gaps but the pit.
+	RoutePilot.at("jump", Vector3(0, 3.4, -208.5), "YardCauseway (gap 2.0, rise 0.2)"),
+	RoutePilot.fight("NetbotYardGate", Vector3(3, 3.4, -208.5), "the gate machine: the same one-strike Netbot the level opened with, so the act starts on ground the player is sure of"),
+	RoutePilot.at("jump", Vector3(0, 4.2, -218), "YardHull1 (gap 2.0, rise 0.8)"),
+	RoutePilot.at("jump", Vector3(2.5, 5.0, -226), "YardHull2 (gap 2.0, and 2.5 m right)"),
+	RoutePilot.fight("HooklineYardHull", Vector3(5, 5.0, -226), "a Rig out on the hull, fought with a two-metre drop on three sides"),
+	RoutePilot.at("jump", Vector3(0, 5.8, -234), "YardHull3 (gap 2.0, back to the centre line)"),
+	RoutePilot.at("jump", Vector3(-2.5, 6.6, -242), "YardHull4 (gap 2.0, and 2.5 m left)"),
+	RoutePilot.at("jump", Vector3(0, 7.4, -252), "YardDeck (gap 2.0, rise 0.8)"),
+	RoutePilot.fight("RunoffDroneYardDeck", Vector3(-4, 7.4, -252), "the deck, and the first of the two machines on it"),
+	RoutePilot.fight("HooklineYardDeck", Vector3(0, 7.4, -255.5), "and the second, in front of the mast: five strikes between them, and the deck is the only ground in forty metres wide enough to back up on"),
+	RoutePilot.at("climb", Vector3(0, 7.4, -259.5), "INTO YardMast -- the climb verb the coral wall taught and the level has not asked for since"),
+	RoutePilot.at("walk", Vector3(0, 11.6, -261), "over the lip onto the crown"),
+	RoutePilot.fight("NetbotYardCrown", Vector3(3, 11.6, -264), "the last machine in the level, standing over the reward"),
+	RoutePilot.at("walk", Vector3(0, 11.6, -265), "the fleet beacon"),
+
+	# --- ACT 9: THE FLAGSHIP ----------------------------------------------
+	# The crown is a diving board, not an ending. Eight metres down into open
+	# sea, then the three phases in the order the hull reads them: under it,
+	# onto it, and into its stern. Beating it unlocks `open_sea`, the seven
+	# cores gathered through the yard are spent on the spot, the sea gate
+	# opens on `restored`, and the finish is past it.
+	RoutePilot.at("walk", Vector3(0, 11.6, -267.5), "the crown lip, over the open sea"),
+	RoutePilot.at("swim", Vector3(0, 1.2, -272), "off the crown and ten metres down into open sea, clear of the bow"),
+	RoutePilot.at("swim", Vector3(4.4, 0.8, -280), "down the hull's flank"),
+	RoutePilot.at("swim", Vector3(3.3, 0.7, -286.6), "PHASE 1: the port intake, 2.6 m under the waterline -- water only, so the only way in is to swim"),
+	RoutePilot.at("swim", Vector3(4.6, 1.4, -285), "out to port, toward the boarding shore"),
+	RoutePilot.at("swim", Vector3(4.6, 3.0, -285), "up to the surface FIRST, in the 1.3 m of clear water between the deck overhang and the shore -- swimming at the shore's edge catches the capsule on its lip"),
+	RoutePilot.at("swim", Vector3(9.5, 3.0, -285), "east over the shore and out of the sea, dropping onto it as the water runs out"),
+	RoutePilot.at("walk", Vector3(10.5, 2.6, -287), "BoardingShore -- land grammar back, beside the sea rather than in it"),
+	RoutePilot.at("jump", Vector3(8.0, 3.7, -291.5), "MooringPostA (gap 1.5, rise 1.1) -- boarding is hopped, because this controller has no step-up"),
+	RoutePilot.at("jump", Vector3(6.5, 4.64, -294), "MooringPostB (gap 2.9 across, rise 0.94), level with the deck"),
+	RoutePilot.at("walk", Vector3(2.6, 4.64, -294), "aboard: across 1.3 m onto the deck itself"),
+	RoutePilot.at("walk", Vector3(0, 4.6, -290), "PHASE 2: amidships -- land only, which the deck is"),
+	RoutePilot.at("walk", Vector3(0, 5.0, -296), "aft along the deck toward the stern"),
+	RoutePilot.at("mod", Vector3(0, 5.0, -296.5), "open the Bubble platform -- phase 3 is gated on its ACTIVE window, not on carrying it"),
+	RoutePilot.at("walk", Vector3(0, 5.4, -298.6), "PHASE 3: the shuttered core housing -- gated on the Bubble mod from act 4"),
+	RoutePilot.at("jump", Vector3(0, 4.64, -305), "off the stern through the opened sea gate onto the finish ledge (gap 1.55) -- the gate was solid until the Flagship fell"),
+	RoutePilot.at("finish", Vector3(0, 4.64, -307), "the finish volume, past the fallen Flagship and out to open sea"),
 	] as Array[RoutePilot.Waypoint]

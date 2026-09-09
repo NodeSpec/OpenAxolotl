@@ -15,6 +15,7 @@ import json
 import os
 import shutil
 import struct
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -135,51 +136,131 @@ class PaletteParityTests(unittest.TestCase):
             self.assertIn(f"const {name} := {value}", game_side, name)
 
 
+## Builds the end-to-end fixture: two vertex-coloured meshes, one near-black
+## (an eye) and one deep pink (a gill), which is the input shape refinement
+## exists for.
+##
+## A FIXTURE RATHER THAN THE SHIPPED HERO, and the reason is the point of this
+## file. This case used to refine assets/character/axolotl/axolotl.glb, which
+## worked only while the hero happened to be the in-repo generator's
+## vertex-coloured output. The shipped hero is now an externally authored,
+## TEXTURED single surface: refinement would classify it as one role, clear
+## the material carrying its maps, and the test would have been asserting
+## that a destructive pass ran cleanly. Refinement is still the pass for
+## contributed vertex-coloured models, so it is proven on one of those.
+FIXTURE_SCRIPT = """
+import sys
+import bpy
+
+path = sys.argv[sys.argv.index("--") + 1:][0]
+bpy.ops.wm.read_factory_settings(use_empty=True)
+for name, colour, offset in (("dark", (0.04, 0.05, 0.08, 1.0), 0.0),
+                             ("pink", (0.90, 0.43, 0.53, 1.0), 3.0)):
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=1.0, location=(offset, 0, 0))
+    obj = bpy.context.object
+    obj.name = name
+    layer = obj.data.color_attributes.new(
+        name="Col", type="FLOAT_COLOR", domain="CORNER")
+    for entry in layer.data:
+        entry.color = colour
+bpy.ops.export_scene.gltf(filepath=path, export_format="GLB",
+                          export_colors=True, export_materials="EXPORT")
+"""
+
+
+def build_fixture(directory: str) -> str:
+    script = os.path.join(directory, "fixture.py")
+    with open(script, "w", encoding="utf-8") as handle:
+        handle.write(FIXTURE_SCRIPT)
+    path = os.path.join(directory, "fixture.glb")
+    subprocess.run([refine_model.find_blender(), "--background",
+                    "--python-exit-code", "1", "--python", script, "--", path],
+                   check=True, capture_output=True, text=True)
+    return path
+
+
 @unittest.skipUnless(refine_model.find_blender(),
                      "Blender is not installed here; the end-to-end case "
                      "runs only where it is")
 class EndToEndTests(unittest.TestCase):
-    """Refines the real hero asset and checks what comes back."""
+    """Refines a vertex-coloured model and checks what comes back."""
 
-    def test_req_032_the_hero_refines_to_one_mesh_per_role_with_geometry_intact(self):
+    def test_req_032_a_vertex_coloured_model_merges_into_role_meshes(self):
         with tempfile.TemporaryDirectory() as tmp:
-            target = os.path.join(tmp, "axolotl.glb")
-            code, out, err = run(["--input", HERO, "--output", target,
+            source = build_fixture(tmp)
+            target = os.path.join(tmp, "refined.glb")
+            code, out, err = run(["--input", source, "--output", target,
                                   "--format", "json"])
             self.assertEqual(code, refine_model.EXIT_OK, out + err)
-            report = json.loads(out)
-            self.assertTrue(report["passed"])
-            before = glb_header(HERO)
+            self.assertTrue(json.loads(out)["passed"])
+
+            before = glb_header(source)
             after = glb_header(target)
             self.assertEqual(after[0], before[0], "triangles must be preserved")
-            self.assertLessEqual(after[1], 5, "at most one mesh per role")
+
             names = glb_materials(target)
-            self.assertIn("axolotl_skin", names)
-            self.assertIn("axolotl_eye", names)
-            self.assertIn("axolotl_gill", names)
+            self.assertIn("axolotl_eye", names,
+                          "the near-black mesh must be classified as an eye")
+            self.assertIn("axolotl_gill", names,
+                          "the deep pink mesh must be classified as a gill")
             self.assertTrue(glb_has_attribute(target, "NORMAL"),
                             "smooth normals must be written")
             self.assertTrue(glb_has_attribute(target, "COLOR_0"),
                             "vertex colours must survive")
 
 
-
-
 class ShippedAssetTests(unittest.TestCase):
-    """The hero asset in the repository IS the refined form, and says so."""
+    """The hero asset in the repository, held to what it now IS."""
 
-    def test_req_032_the_shipped_hero_is_refined_and_its_provenance_records_it(self):
-        triangles, meshes, _ = glb_header(HERO)
-        self.assertLessEqual(meshes, 5, "the shipped hero is one mesh per role")
+    def test_req_032_the_shipped_hero_is_game_ready_with_honest_provenance(self):
+        """REQ-032 AC-4, held to its SUBSTANCE rather than to one pipeline.
+
+        The criterion asks that the shipped hero be a game-ready form with
+        the passes that produced it recorded in its provenance chain. What
+        "game-ready" means operationally has not changed -- skinned, normals,
+        UVs, tangents, every animation clip the client plays, inside the
+        category's triangle budget -- but WHICH pipeline produced it has
+        changed twice now, and pinning the assertions to a script name would
+        make this test about the tooling instead of the asset.
+
+        It used to require one mesh per role with `axolotl_<role>` materials,
+        because the in-repo generator emitted exactly that. The shipped hero
+        is now an external Meshy export: a single textured surface whose face
+        is painted rather than modelled, brought inside by decimate, fit and
+        rig passes that ARE in this repository. Requiring role materials of
+        it would mean either failing a perfectly good asset or splitting it
+        pointlessly to satisfy a string.
+        """
+        triangles, meshes, animations = glb_header(HERO)
         self.assertGreater(triangles, 0)
+        self.assertLessEqual(triangles, 60000,
+                             "the hero must sit inside the character budget")
+        self.assertGreaterEqual(meshes, 1)
+
+        for clip in ("idle", "waddle", "swim", "hop", "fall", "hurt"):
+            self.assertIn(clip, animations,
+                          "the client plays %s, so the hero must carry it"
+                          % clip)
+
         self.assertTrue(glb_has_attribute(HERO, "NORMAL"))
-        self.assertIn("axolotl_eye", glb_materials(HERO))
+        self.assertTrue(glb_has_attribute(HERO, "TEXCOORD_0"),
+                        "the UV layout must ship in the glb")
+        self.assertTrue(glb_has_attribute(HERO, "TANGENT"),
+                        "tangents must ship, not be a per-machine import step")
+        self.assertTrue(glb_has_attribute(HERO, "JOINTS_0"),
+                        "the hero must be skinned or the rig poses nothing")
+
         sidecar = os.path.join(os.path.dirname(HERO), "provenance.json")
         with open(sidecar, encoding="utf-8") as handle:
             provenance = json.load(handle)
         self.assertIn("Blender", provenance["tool"],
-                      "a refinement is a tool in the provenance chain")
-        self.assertIn("refine_model.py", provenance["tool"])
+                      "the Blender passes are tools in the provenance chain")
+        self.assertTrue(
+            any(name in provenance["tool"]
+                for name in ("make_axolotl.py", "refine_model.py",
+                             "rig_model.py", "decimate_model.py")),
+            "provenance must name the passes that produced the shipped form")
+        self.assertIn("licenseTerms", provenance)
 
 
 if __name__ == "__main__":

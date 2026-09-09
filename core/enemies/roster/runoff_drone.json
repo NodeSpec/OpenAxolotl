@@ -3,6 +3,7 @@
   "displayName": "Runoff Drone",
   "behavior": "toxin_aura",
   "audioCueId": "enemy_runoff_hum",
+  "durability": 3,
   "toxinAura": {
     "visionFactorKey": "enemy.runoff.vision_debuff_factor",
     "rechargeFactorKey": "enemy.runoff.gill_recharge_multiplier",

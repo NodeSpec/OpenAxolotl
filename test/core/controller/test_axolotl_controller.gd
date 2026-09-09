@@ -20,8 +20,9 @@ func _controller() -> AxolotlController:
 
 
 func _intent(direction: Vector3 = Vector3.ZERO,
-		verbs: Array[MovementGrammar.Verb] = []) -> PlayerIntent:
-	return PlayerIntent.new(direction, verbs)
+		verbs: Array[MovementGrammar.Verb] = [],
+		sustained: Array[MovementGrammar.Verb] = []) -> PlayerIntent:
+	return PlayerIntent.new(direction, verbs, sustained)
 
 
 ## Stands in for the live scene so AC-4's discovery order — group query, range
@@ -179,18 +180,56 @@ func test_req_001_water_grammar_supports_full_3d_directional_movement() -> void:
 	).is_true()
 
 
+## Full speed on every axis, HELD RATHER THAN INSTANT on the vertical one.
+##
+## This used to take a single step and demand the tuned speed on all four
+## directions, and the vertical two now take about a third of a second to
+## arrive: the water grammar eases into a climb or a descent instead of
+## snapping to it, because a body that goes from level to five metres a second
+## downward between two rendered frames has not dived, it has cut. Horizontal
+## steering is unchanged and still immediate — that is the swim's
+## responsiveness, and every measured route depends on it.
+##
+## What the criterion actually says is that water movement is full 3D at the
+## tuned speed. It still is, on every axis; the vertical two are simply
+## asserted after the glide has had time to run rather than before.
 func test_req_001_swimming_moves_at_the_tuned_speed_in_any_of_three_axes() -> void:
 	var tuning := _tuning()
 	var speed := tuning.get_number("controller.swim.base_speed_m_per_s")
-	var controller := AxolotlController.new(tuning)
 
 	for direction: Vector3 in [Vector3.RIGHT, Vector3.UP, Vector3.FORWARD,
 			Vector3(1.0, 1.0, 1.0)]:
-		controller.physics_step(0.016, true, _intent(direction))
+		var controller := AxolotlController.new(tuning)
+		# Two seconds of held steering: far longer than the glide needs, and
+		# it must SETTLE at the tuned speed rather than pass through it.
+		for _step: int in range(120):
+			controller.physics_step(0.016, true, _intent(direction))
 		assert_float(controller.get_velocity().length()).override_failure_message(
 			"REQ-001 AC-2: full 3D steering must reach tuned swim speed on %s"
 			% str(direction)
 		).is_equal_approx(speed, 0.0001)
+
+
+func test_req_001_horizontal_steering_is_immediate_and_vertical_is_eased() -> void:
+	# The two halves of the same decision, held apart so neither can quietly
+	# become the other: a glide applied to the whole vector would make the
+	# swim mushy, and no glide at all is what made a dive read as a cut.
+	var tuning := _tuning()
+	var speed := tuning.get_number("controller.swim.base_speed_m_per_s")
+	var controller := AxolotlController.new(tuning)
+
+	controller.physics_step(0.016, true, _intent(Vector3.RIGHT))
+	assert_float(controller.get_velocity().x).override_failure_message(
+		"horizontal steering must still arrive on the first frame"
+	).is_equal_approx(speed, 0.0001)
+
+	controller.set_velocity(Vector3.ZERO)
+	controller.physics_step(0.016, true, _intent(Vector3.UP))
+	assert_bool(controller.get_velocity().y > 0.0
+		and controller.get_velocity().y < speed).override_failure_message(
+		"a rise must BEGIN on the first frame and not be finished by it "
+		+ "(y %.3f, tuned speed %.3f)" % [controller.get_velocity().y, speed]
+	).is_true()
 
 
 # --- AC-2: dive ------------------------------------------------------------
@@ -200,12 +239,75 @@ func test_req_001_dive_descends_at_the_tuned_speed_from_a_standstill() -> void:
 	var dive_speed := tuning.get_number("controller.dive.speed_m_per_s")
 	var controller := AxolotlController.new(tuning)
 
-	controller.physics_step(0.016, true, _intent(Vector3.ZERO,
-		[MovementGrammar.Verb.DIVE]))
+	# HELD, and settling. The dive used to SET velocity.y outright and arrive
+	# in one frame; it now eases into the tuned speed, which is what gives the
+	# descent a shape the player can see beginning. What the criterion asks —
+	# that a dive descends at the tuned speed with no steering at all — is
+	# unchanged, and is asserted where the glide has finished.
+	for _step: int in range(60):
+		controller.physics_step(0.016, true, _intent(Vector3.ZERO,
+			[MovementGrammar.Verb.DIVE], [MovementGrammar.Verb.DIVE]))
 
 	assert_float(controller.get_velocity().y).override_failure_message(
 		"REQ-001 AC-2: a dive is a deliberate descent, so it must work with no steering"
 	).is_equal_approx(-dive_speed, 0.0001)
+
+
+func test_req_001_a_dive_eases_downward_instead_of_snapping_to_speed() -> void:
+	# The glide itself, and the reason the case above had to change. A single
+	# frame of dive must have STARTED the descent without completing it: the
+	# frame that used to take the axolotl from level flight to full dive speed
+	# was not a movement, it was a cut, and it is what a pitched body has to
+	# have something to tip into.
+	var tuning := _tuning()
+	var dive_speed := tuning.get_number("controller.dive.speed_m_per_s")
+	var controller := AxolotlController.new(tuning)
+
+	controller.physics_step(0.016, true, _intent(Vector3.ZERO,
+		[MovementGrammar.Verb.DIVE]))
+	var first := controller.get_velocity().y
+
+	assert_bool(first < 0.0 and first > -dive_speed).override_failure_message(
+		"one frame of dive must begin the descent without finishing it "
+		+ "(y %.3f, tuned speed %.3f)" % [first, dive_speed]).is_true()
+
+	# And the descent DEEPENS while the key is held, rather than stalling at
+	# whatever the first frame reached.
+	controller.physics_step(0.016, true, _intent(Vector3.ZERO,
+		[], [MovementGrammar.Verb.DIVE]))
+	assert_bool(controller.get_velocity().y < first).override_failure_message(
+		"a held dive must keep accelerating downward").is_true()
+
+
+func test_req_001_the_model_pitches_into_a_dive_and_levels_off() -> void:
+	# The visual half, and the reason the glide exists at all: an axolotl
+	# sinking at five metres a second while held perfectly level is being
+	# lowered, not diving. Negative is nose-down.
+	var tuning := _tuning()
+	var controller := AxolotlController.new(tuning)
+	assert_float(controller.get_pitch()).is_equal_approx(0.0, 0.0001)
+
+	for _step: int in range(60):
+		controller.physics_step(0.016, true, _intent(Vector3.ZERO,
+			[MovementGrammar.Verb.DIVE], [MovementGrammar.Verb.DIVE]))
+	var diving := controller.get_pitch()
+	assert_bool(diving < 0.0).override_failure_message(
+		"a diving axolotl must nose DOWN (pitch %.3f rad)" % diving).is_true()
+	assert_float(rad_to_deg(diving)).is_equal_approx(
+		-tuning.get_number("controller.pitch.max_deg"), 0.5)
+
+	# Rising noses up, which is the same rule with the sign flipped rather
+	# than a second behaviour.
+	for _step: int in range(60):
+		controller.physics_step(0.016, true, _intent(Vector3.UP))
+	assert_bool(controller.get_pitch() > 0.0).override_failure_message(
+		"a rising axolotl must nose UP").is_true()
+
+	# And on land it levels off: the vertical axis there is gravity and the
+	# hop, which the fall and hop clips already answer.
+	for _step: int in range(60):
+		controller.physics_step(0.016, false, _intent(Vector3.ZERO))
+	assert_float(controller.get_pitch()).is_equal_approx(0.0, 0.001)
 
 
 func test_req_001_dive_overrides_upward_steering() -> void:
@@ -416,7 +518,12 @@ func test_req_001_waddling_does_not_erase_hop_momentum() -> void:
 	var rise := controller.get_velocity().y
 
 	# Steering mid-hop must move you horizontally without cancelling the hop.
-	controller.physics_step(0.016, false, _intent(Vector3.RIGHT))
+	# The hop button is still DOWN on the follow-up step on purpose: releasing
+	# it mid-climb now cuts the rise deliberately (REQ-037 variable height), and
+	# this test is about STEERING, so the cut is held off to isolate it. It goes
+	# in the SUSTAINED set, not the verb set — the press already happened.
+	controller.physics_step(0.016, false, _intent(Vector3.RIGHT, [],
+		[MovementGrammar.Verb.HOP] as Array[MovementGrammar.Verb]))
 
 	assert_float(controller.get_velocity().y).is_equal_approx(rise, 0.0001)
 	assert_bool(controller.get_velocity().x > 0.0).is_true()
@@ -490,7 +597,14 @@ func test_req_001_a_climber_clings_rather_than_sliding() -> void:
 
 	controller.physics_step(0.016, false, _intent())  # let go of the stick
 
-	assert_float(controller.get_velocity().length()).is_equal_approx(0.0, 0.0001)
+	# Motion is measured ALONG the wall, not in total. A climber holding still
+	# still pushes into the surface, or the body loses contact and drops them
+	# (see the adhesion test below); that push is not sliding.
+	var normal := controller.get_climb_surface_normal()
+	var along := controller.get_velocity() - normal * controller.get_velocity().dot(normal)
+	assert_float(along.length()).override_failure_message(
+		"REQ-001 AC-3: a climber with no steering must not slide along the wall"
+	).is_equal_approx(0.0, 0.0001)
 
 
 func test_req_001_entering_water_ends_a_climb() -> void:
@@ -986,7 +1100,11 @@ func test_req_001_land_drag_never_touches_the_vertical() -> void:
 	var launched := controller.get_velocity().y
 	assert_float(launched).is_greater(1.0)
 
-	controller.physics_step(0.016, false, _intent())
+	# Hop button still DOWN through the follow-up step: releasing it mid-climb
+	# now cuts the rise on purpose (REQ-037 variable height), and this test is
+	# about DRAG, so the cut is held off to isolate what is being asserted.
+	controller.physics_step(0.016, false, _intent(Vector3.ZERO, [],
+		[MovementGrammar.Verb.HOP] as Array[MovementGrammar.Verb]))
 	assert_float(controller.get_velocity().y).override_failure_message(
 		"the hop's rise was dragged away; only the horizontal plane may be slowed"
 	).is_equal_approx(launched, 0.001)
@@ -1060,6 +1178,76 @@ func test_req_001_pushing_forward_on_a_wall_climbs_it() -> void:
 	).is_greater(0.1)
 
 
+func test_req_001_a_climber_keeps_pushing_into_the_wall_it_is_on() -> void:
+	# The third half of the climb bug. The body ends a climb when it stops
+	# touching the wall, and climbing straight up is motion purely ALONG the
+	# surface — so with no push into it, the very next frame reported no wall
+	# and dropped the climber. Measured in the greybox: attached on frame 78,
+	# detached on frame 80, rose 0.12 m ballistically and fell back to 0.801.
+	#
+	# Asserted as a NEGATIVE dot with the surface normal, which is the property
+	# that keeps contact, rather than as a speed a retune would invalidate.
+	var controller := _controller()
+	controller.physics_step(0.016, false, _intent())
+	controller.try_climb(0, PackedStringArray([ClimbSurface.CLIMBABLE_GROUP]))
+	controller.set_climb_surface_normal(Vector3.BACK)
+
+	controller.physics_step(0.016, false, _intent(Vector3.FORWARD))
+	assert_float(controller.get_velocity().dot(Vector3.BACK)
+	).override_failure_message(
+		"REQ-001 AC-3: climbing UP must still press into the wall, or the body "
+		+ "loses contact and the climb ends on its second frame"
+	).is_less(0.0)
+
+	# And while clinging, which is the other way to generate no contact.
+	controller.physics_step(0.016, false, _intent())
+	assert_float(controller.get_velocity().dot(Vector3.BACK)
+	).override_failure_message(
+		"REQ-001 AC-3: a motionless climber must still press into the wall"
+	).is_less(0.0)
+
+
+func test_req_001_one_frame_without_the_wall_does_not_drop_a_climber() -> void:
+	# Losing contact for a single frame must not end a climb. Two ordinary
+	# things produce exactly that — a seam or a curve in the surface, and the
+	# moment of cresting a lip, where contact goes before the feet clear it —
+	# and both dropped the axolotl the whole way down Coral Cove's coral wall
+	# from four metres up, every single run.
+	var tuning := _tuning()
+	var grace := tuning.get_number("controller.climb.contact_grace_seconds")
+	var controller := AxolotlController.new(tuning)
+	controller.physics_step(0.016, false, _intent())
+	controller.try_climb(0, PackedStringArray([ClimbSurface.CLIMBABLE_GROUP]))
+
+	controller.report_wall_contact(false, grace * 0.5)
+	assert_bool(controller.is_climbing()).override_failure_message(
+		"a momentary loss of contact must not end the climb").is_true()
+
+	# Contact back: the window resets, so a bumpy wall never accumulates.
+	controller.report_wall_contact(true, 0.016)
+	controller.report_wall_contact(false, grace * 0.9)
+	assert_bool(controller.is_climbing()).override_failure_message(
+		"regaining the wall must reset the grace, not keep counting").is_true()
+
+
+func test_req_001_a_climber_who_is_really_off_the_wall_lets_go() -> void:
+	# The grace is a window, not a licence to cling to nothing.
+	var tuning := _tuning()
+	var controller := AxolotlController.new(tuning)
+	controller.physics_step(0.016, false, _intent())
+	controller.try_climb(0, PackedStringArray([ClimbSurface.CLIMBABLE_GROUP]))
+
+	var ended: Array[bool] = []
+	controller.climb_ended.connect(func() -> void: ended.append(true))
+
+	controller.report_wall_contact(false,
+		tuning.get_number("controller.climb.contact_grace_seconds") + 0.01)
+	assert_bool(controller.is_climbing()).override_failure_message(
+		"past the grace the climb must end").is_false()
+	assert_int(ended.size()).override_failure_message(
+		"ending the climb must announce it once").is_equal(1)
+
+
 func test_req_001_lateral_steering_runs_along_the_wall_not_into_it() -> void:
 	var controller := _controller()
 	controller.physics_step(0.016, false, _intent())
@@ -1071,9 +1259,17 @@ func test_req_001_lateral_steering_runs_along_the_wall_not_into_it() -> void:
 
 	assert_float(absf(sideways.x)).override_failure_message(
 		"lateral steering should traverse the wall").is_greater(0.1)
-	assert_float(absf(sideways.z)).override_failure_message(
-		"lateral steering must not push into or off the wall (z=%.3f)" % sideways.z
-	).is_equal_approx(0.0, 0.001)
+
+	# Along the normal there must be the adhesion and NOTHING else: steering
+	# sideways contributes zero there. Comparing against the adhesion rather
+	# than against zero is what keeps this a statement about STEERING now that
+	# a deliberate into-wall component exists.
+	var adhesion := _tuning().get_number("controller.climb.adhesion_m_per_s")
+	assert_float(sideways.dot(Vector3.BACK)).override_failure_message(
+		"lateral steering must not push into or off the wall beyond the "
+		+ "adhesion (normal component %.3f, adhesion %.3f)"
+			% [sideways.dot(Vector3.BACK), adhesion]
+	).is_equal_approx(-adhesion, 0.001)
 
 
 func test_req_001_the_climb_basis_follows_the_surface_normal() -> void:
@@ -1089,9 +1285,11 @@ func test_req_001_the_climb_basis_follows_the_surface_normal() -> void:
 		"forward must climb regardless of which way the wall faces").is_greater(0.1)
 
 	controller.physics_step(0.016, false, _intent(Vector3.RIGHT))
-	assert_float(absf(controller.get_velocity().x)).override_failure_message(
-		"lateral must not push into a wall whose normal is +X"
-	).is_equal_approx(0.0, 0.001)
+	var adhesion := _tuning().get_number("controller.climb.adhesion_m_per_s")
+	assert_float(controller.get_velocity().dot(Vector3.RIGHT)
+	).override_failure_message(
+		"lateral must not push into a wall whose normal is +X beyond the adhesion"
+	).is_equal_approx(-adhesion, 0.001)
 
 
 # --- Facing: the body turns toward its direction of travel -------------------

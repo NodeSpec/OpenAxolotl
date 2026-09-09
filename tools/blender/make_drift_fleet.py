@@ -268,6 +268,100 @@ def make_runoff_drone(rng: random.Random) -> bpy.types.Object:
     obj.name = "runoff_drone"
     return obj
 
+def make_flagship(rng: random.Random) -> bpy.types.Object:
+    """The Flagship: the source vessel the whole fleet is launched from.
+
+    THE ONLY UNIT BUILT TO BE STOOD ON. Every other machine here is an
+    obstacle a metre or two across; this one is a place — the player swims
+    under its intakes, climbs onto its deck, and fights across it. So it is
+    modelled at LEVEL scale rather than prop scale (about twenty-two metres
+    long) and its deck is a real flat surface at a known height, because
+    collision geometry in the scene has to agree with it.
+
+    THREE READS, ONE PER PHASE, so the fight is legible before it is
+    explained. Below the waterline, four intake mouths — the part you breach.
+    Above it, a long open deck with derrick masts — the part you assault. At
+    the stern, a raised core housing behind shutters — the part you purge.
+    A player who has never seen this should be able to point at where the
+    fight is going next.
+
+    STILL FACELESS. Bigger is the temptation to add a bridge, windows, a
+    crew. There are none: no glass, no cabin you could imagine someone
+    inside, nothing that reads as occupied. It is a machine that arrived on
+    its own and it is emptier than the small ones, not more populated.
+    """
+    pieces = []
+
+    # The hull: a long barge, widest amidships. Built as three blocks rather
+    # than one so the silhouette has a bow and a stern from a distance.
+    for offset, half_len, half_wide, half_tall in (
+            (-8.4, 2.6, 2.4, 1.5), (0.0, 6.2, 3.4, 1.8), (7.8, 3.0, 2.8, 1.6)):
+        block = box((offset, 0.0, half_tall), (half_len * 2, half_wide * 2,
+                                               half_tall * 2))
+        paint(block, HULL_DEEP, HULL_LIGHT)
+        pieces.append(block)
+
+    # PHASE ONE, below the waterline: four intake mouths along the port and
+    # starboard flanks. Drums on their sides, so they read as openings that
+    # draw water in rather than as decoration bolted on.
+    for side in (-1, 1):
+        for along in (-3.4, 2.2):
+            mouth = drum((along, side * 3.3, 0.7), 0.85, 0.7,
+                         rotation=(math.pi / 2, 0.0, 0.0))
+            paint(mouth, RUST_DARK, RUST_LIGHT, axis=1)
+            pieces.append(mouth)
+            rim = drum((along, side * 3.62, 0.7), 0.95, 0.14,
+                       rotation=(math.pi / 2, 0.0, 0.0))
+            paint_flat(rim, WARNING)
+            pieces.append(rim)
+
+    # PHASE TWO, the deck: flat, open, and long enough to fight across. Kept
+    # deliberately clear of clutter — the fight needs the floor.
+    deck = box((0.0, 0.0, 3.72), (17.5, 6.4, 0.24))
+    paint(deck, HULL_LIGHT, HULL_LIGHT)
+    pieces.append(deck)
+
+    for along in (-6.0, -1.0, 4.0):
+        for side in (-1, 1):
+            rail = box((along, side * 3.1, 4.12), (1.4, 0.18, 0.8))
+            paint_flat(rail, HULL_DEEP)
+            pieces.append(rail)
+
+    # Derricks: the fleet's launch gantries, and the reason the deck reads as
+    # industrial rather than as a raft. Leaned slightly outboard, which is
+    # what stops three identical masts looking like a fence.
+    for index, along in enumerate((-5.2, 0.6, 5.4)):
+        lean = rng.uniform(-0.09, 0.09)
+        mast = box((along, 0.0, 5.6), (0.5, 0.5, 3.6))
+        mast.rotation_euler = (lean, 0.0, 0.0)
+        paint(mast, HULL_DEEP, HULL_LIGHT)
+        pieces.append(mast)
+        arm = box((along, 1.9 * (1 if index % 2 == 0 else -1), 7.1),
+                  (0.34, 3.4, 0.34))
+        paint_flat(arm, RUST_LIGHT)
+        pieces.append(arm)
+
+    # PHASE THREE, the stern: the core housing, shuttered. The shutters are
+    # the affordance gate's read — they are what the Bubble platform opens.
+    housing = drum((8.6, 0.0, 5.0), 2.1, 2.6)
+    paint(housing, HULL_DEEP, HULL_LIGHT)
+    pieces.append(housing)
+    for index in range(6):
+        angle = index * math.tau / 6
+        shutter = box((8.6 + math.cos(angle) * 2.0,
+                       math.sin(angle) * 2.0, 5.0), (0.5, 0.5, 2.2))
+        shutter.rotation_euler = (0.0, 0.0, -angle)
+        paint_flat(shutter, RUST_DARK)
+        pieces.append(shutter)
+    lamp = drum((8.6, 0.0, 6.5), 1.5, 0.4)
+    paint_flat(lamp, WARNING)
+    pieces.append(lamp)
+
+    obj = join(pieces)
+    obj.name = "flagship"
+    return obj
+
+
 
 # Keyed by ROSTER ID (core/enemies/roster/<id>.json) so a scene node's
 # enemy_id and its mesh are the same word.
@@ -276,6 +370,12 @@ BUILDERS = {
     "netbot": make_netbot,
     "hookline_rig": make_hookline_rig,
     "runoff_drone": make_runoff_drone,
+    # NOT a roster unit: the Flagship is an ENCOUNTER (REQ-013), declared by a
+    # world's `boss` element rather than by an enemy declaration. It lives in
+    # this generator anyway because it is the same faction built from the same
+    # palette and the same primitives, and splitting it into its own file
+    # would let the two drift apart.
+    "flagship": make_flagship,
 }
 
 

@@ -43,10 +43,31 @@ const GATES_FIELD := "traversalGates"
 const GATE_ID_FIELD := "gateId"
 const OPENS_AT_FIELD := "opensAt"
 
+## What lifts a region's unlock, declared per region (contract friction F-2).
+##
+## WHY THIS EXISTS. The policy used to be INFERRED from an unrelated element:
+## a world declaring no boss had every region unlocked at entry, and a world
+## declaring one had every region locked until the encounter. That reads fine
+## until a level wants both — restoration on its critical path AND a Flagship
+## at its end — at which point the inference deadlocks it: the regions the
+## route needs stay locked behind a boss the route cannot reach without them.
+## Coral Cove is exactly that level.
+##
+## ABSENT KEEPS THE OLD INFERENCE, so every world and fixture written before
+## this field existed means what it always meant. Declaring it is how a world
+## says what it actually wants.
+const UNLOCKED_BY_FIELD := "unlockedBy"
+const UNLOCK_AT_ENTRY := "entry"
+const UNLOCK_BY_BOSS := "boss"
+const UNLOCK_POLICIES: Array[String] = [UNLOCK_AT_ENTRY, UNLOCK_BY_BOSS]
+
 var _tuning: TuningData
 var _store: RestorationStore
 var _regions: Dictionary = {}
 var _order: PackedStringArray = PackedStringArray()
+
+## region_id -> declared unlock policy, or absent when the world did not say.
+var _unlock_policy: Dictionary = {}
 
 
 func _init(tuning: TuningData, store: RestorationStore = null) -> void:
@@ -67,12 +88,14 @@ func declare_from_manifest(
 	var before := out_errors.size()
 	var declared: Dictionary = {}
 	var order := PackedStringArray()
+	var policies: Dictionary = {}
 
 	if not manifest.has(MANIFEST_FIELD):
 		# Absent is legal and means no restoration progression — the contract's
 		# defined default for an omitted optional element.
 		_regions = {}
 		_order = PackedStringArray()
+		_unlock_policy = {}
 		return true
 
 	var raw: Variant = manifest[MANIFEST_FIELD]
@@ -83,13 +106,14 @@ func declare_from_manifest(
 		return false
 
 	for entry: Variant in (raw as Array):
-		_declare_one(entry, declared, order, out_errors)
+		_declare_one(entry, declared, order, policies, out_errors)
 
 	if out_errors.size() != before:
 		return false
 
 	_regions = declared
 	_order = order
+	_unlock_policy = policies
 	return true
 
 
@@ -97,6 +121,7 @@ func _declare_one(
 	entry: Variant,
 	declared: Dictionary,
 	order: PackedStringArray,
+	policies: Dictionary,
 	out_errors: Array[RestorationError]
 ) -> void:
 	if not (entry is Dictionary):
@@ -118,6 +143,19 @@ func _declare_one(
 			RestorationError.DUPLICATE_REGION, region_id,
 			"region '%s' is declared more than once" % region_id))
 		return
+
+	# REFUSED, not defaulted. A misspelled policy is a level that unlocks at
+	# the wrong moment, which surfaces as an unreachable route rather than as
+	# an error — the most expensive kind of typo this contract can carry.
+	if row.has(UNLOCKED_BY_FIELD):
+		var policy := String(row[UNLOCKED_BY_FIELD]).strip_edges()
+		if not UNLOCK_POLICIES.has(policy):
+			out_errors.append(RestorationError.new(
+				RestorationError.UNKNOWN_UNLOCK_POLICY, region_id,
+				"region '%s' declares '%s': '%s'; expected one of %s"
+				% [region_id, UNLOCKED_BY_FIELD, policy, str(UNLOCK_POLICIES)]))
+			return
+		policies[region_id] = policy
 
 	var gates := _declare_gates(region_id, row, out_errors)
 	if gates.is_empty():
@@ -213,6 +251,27 @@ func is_unlocked(region_id: String) -> bool:
 	return false if region == null else region.is_unlocked()
 
 
+## Whether [param region_id] should be unlocked the moment the player enters,
+## given whether the world declares a boss at all.
+##
+## The declared policy wins. When a region declares none, this falls back to
+## the inference the runtime used before the field existed — no boss in the
+## world means nothing to gate on, so unlock; a boss means wait for it — which
+## is what keeps every world written before F-2 meaning what it meant.
+func unlocks_at_entry(region_id: String, world_declares_boss: bool) -> bool:
+	var policy := String(_unlock_policy.get(region_id, ""))
+	if policy == UNLOCK_AT_ENTRY:
+		return true
+	if policy == UNLOCK_BY_BOSS:
+		return false
+	return not world_declares_boss
+
+
+## What a region declared, or "" when it left the policy to the inference.
+func unlock_policy_of(region_id: String) -> String:
+	return String(_unlock_policy.get(region_id, ""))
+
+
 ## Every declared region restored. Backs the Level Contract's
 ## `restore_all_regions` finish condition; a world with no regions is vacuously
 ## complete, which is why the hub requires the element for that finish kind.
@@ -235,9 +294,24 @@ func deliver_resources(region_id: String, count: int) -> int:
 
 ## The Flagship encounter unlocks a region. Idempotent: re-defeating cannot
 ## re-emit the cue.
+##
+## THE UNLOCK SPENDS WHAT THE PLAYER ALREADY BANKED. Resources delivered while
+## a region was locked are held rather than wasted (that is the point of the
+## flag being separate from the state), but nothing used to spend them: the
+## lock lifted and the banked pile just sat there until some unrelated later
+## pickup happened to call deliver_resources again. On a boss-gated region that
+## made the encounter's whole payoff a no-op — you beat the Flagship, the
+## region unlocked, and visibly nothing happened. A zero delivery banks nothing
+## and advances as far as the existing pile pays for, which is exactly the
+## "restoration may now begin, and it does" moment the fight is for.
 func unlock_region(region_id: String) -> bool:
 	var region := get_region(region_id)
-	return false if region == null else region.set_unlocked(true)
+	if region == null:
+		return false
+	var changed := region.set_unlocked(true)
+	if changed:
+		region.deliver_resources(0, _tuning)
+	return changed
 
 
 ## A Dredger flattens a region back to barren, keeping its unlock (AC-5, AC-6).

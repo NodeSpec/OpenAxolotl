@@ -13,8 +13,12 @@ const HUB_PATH := "res://hub/open_lagoon.tscn"
 const PROBE_PATH := "res://test/worlds/coral_walk_probe.gd"
 
 ## A frame ceiling, so a probe that never completes fails the run instead of
-## hanging a CI job. Coral Cove's route is the longest in the game so far.
-const FRAME_BUDGET := 4800
+## hanging a CI job. Coral Cove's route is the longest in the game so far, and
+## it now stops to FIGHT eight times: closing on a machine, swinging on a
+## cadence, and waiting out the stagger between strikes is real time the old
+## budget had no room for. Raised once, from a measured run, rather than
+## guessed at — see the walk's own reported frame count.
+const FRAME_BUDGET := 14000
 
 
 func _initialize() -> void:
@@ -25,6 +29,7 @@ func _initialize() -> void:
 		return
 
 	var hub := packed.instantiate()
+	hub.set("profile_path", "")
 	root.add_child(hub)
 	current_scene = hub
 

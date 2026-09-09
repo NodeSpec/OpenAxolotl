@@ -2,7 +2,7 @@ extends SceneTree
 
 ## Headless entry point for the reference template's completability check.
 ##
-##   godot --headless --audio-driver Dummy --path . \\
+##   godot --headless --audio-driver Dummy --path . \
 ##       --script test/worlds/run_template_walk.gd
 ##
 ## Proves REQ-029 AC-6: the template is completable from spawn to finish
@@ -40,7 +40,7 @@ func _initialize() -> void:
 
 	var watchdog := Timer.new()
 	watchdog.name = "Watchdog"
-	watchdog.wait_time = float(FRAME_BUDGET) \\
+	watchdog.wait_time = float(FRAME_BUDGET) \
 		/ float(Engine.physics_ticks_per_second)
 	watchdog.one_shot = true
 	# Autostart rather than start(): a Timer refuses to start before it is in

@@ -71,6 +71,8 @@ size = Vector3(10, 1, 6)
 
 [sub_resource type="BoxMesh" id="BoxMesh_water"]
 size = Vector3(60, 12, 24)
+subdivide_width = 30
+subdivide_depth = 12
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_water"]
 size = Vector3(60, 12, 24)

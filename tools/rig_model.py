@@ -53,7 +53,8 @@ BLENDER_SCRIPT = os.path.join(
 ## The clip names the game client plays. Kept here rather than imported from
 ## the bpy script because THIS file is the one CI can import: the bpy script
 ## cannot even be loaded outside Blender.
-REQUIRED_CLIPS = ("idle", "waddle", "swim", "hop", "fall", "hurt")
+REQUIRED_CLIPS = ("idle", "waddle", "swim", "hop", "fall", "hurt",
+                  "roll", "spin", "whack")
 
 
 def build_argv(blender: str, input_path: str, output_path: str) -> list[str]:

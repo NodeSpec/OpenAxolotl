@@ -22,6 +22,71 @@ closed set. Every other behavior has no field for a catastrophic source at
 all — REQ-003's "ordinary contact never decrements lives" stays structural
 with an open roster.
 
+## Hitting back
+
+Every lane above used to run one way: the machines acted, and the player's
+only answer was to route around them. Three strikes now answer them, and each
+one is a thing the player already knows how to do rather than a new weapon:
+
+| Strike | Where | How | Reach |
+|---|---|---|---|
+| **Tail whack** | Land | The land strike verb (`F` / right shoulder) — plants the feet and swings the longest part of the animal | `combat.tail_whack.reach_m` |
+| **Stomp** | Land | Land on the machine from above. No button: the oldest verb in the genre, and the first thing a player tries | `combat.stomp.reach_m` |
+| **Spin sprint** | Water | The water burst verb (`F` / right shoulder) — underwater there is nothing to plant your feet against, so the body becomes the attack | `combat.spin_sprint.reach_m` |
+
+### How many strikes a machine takes
+
+**Durability is roster data.** Every declaration carries a `durability` — the
+number of strikes that puts the machine down — and the runtime reads it rather
+than knowing it, so a forked world ships a machine with its own weight without
+touching a line of core code. The field is optional and defaults to `2`;
+declaring anything outside 1–6 is **refused, not clamped**, because a roster
+asking for zero hits wants a machine that is already beaten when the level
+loads and one asking for fifty wants an invincible one, and both are far
+likelier to be a typo than an intention.
+
+The shipped ladder is a spread rather than a curve, so the four machines read
+as four different problems:
+
+| Machine | Durability | Why |
+|---|---|---|
+| **Netbot** | 1 | The lightest unit, and its entangle is the most frustrating thing to be caught by mid-swim. A single answer is the right answer |
+| **Hookline Rig** | 2 | Static and telegraphed; two hits is enough to make approaching it a decision |
+| **Runoff Drone** | 3 | Fought from inside its own debuff, so the exchange is longer by construction |
+| **Dredger** | 4 | The only machine that can cost a life, and the only one that changes the level. It should be the wall |
+
+**A strike short of durability STAGGERS; the one that reaches it DEFEATS.**
+Both release whatever the machine was already doing to the player on the spot —
+so the swing that lands on a Netbot is also how you get out of its net — and
+both refuse every effect lane while they hold. The difference is what happens
+next: a staggered machine reels for `enemy.stagger_seconds` and then works
+again, and a defeated one stays down. A staggered machine can be struck again,
+which is what lets a durability-4 Dredger go down in one exchange rather than
+four separate approaches.
+
+**Defeat is a knock-out that stays down, not a destruction, and it lasts for
+the ATTEMPT.** Two constraints meet here and both are deliberate:
+
+* These are **machines being knocked over**, not things being killed. REQ-019
+  AC-5 forbids depicting violence done to anything that reads as alive, and
+  nothing here has hit points, health, or a death. A defeated machine is tipped
+  over in place and half sunk — visibly beaten, still a landmark.
+* A level a player can permanently empty **stops being a route problem** the
+  second time they walk it. So a checkpoint respawn calls
+  `DriftFleetSystem.reset_defeats()` and the whole roster stands back up,
+  partial damage included: the stretch that killed you is a stretch you fight
+  through again.
+
+A stomp pays a bounce (`combat.stomp.bounce_m_per_s`), deliberately set below
+the hop impulse: it rewards landing the hit without making machines the best
+way up.
+
+The strike itself carries no scene. The controller opens a window and says how
+far it reaches; `WorldSystems` decides which placed machines are inside that
+reach — the same division the tongue grapple already uses for anchor
+discovery, and what lets the whole combat lane be tested without a physics
+world.
+
 ## The extension interface
 
 Enemies are **declarations, not scripts** — the same shape as Gill Mods. The
@@ -38,6 +103,7 @@ A declaration:
   "displayName": "Netbot",
   "behavior": "entangle",
   "audioCueId": "enemy_netbot_entangle",
+  "durability": 1,
   "entangle": {
     "factorKey": "enemy.netbot.swim_speed_multiplier",
     "durationKey": "enemy.netbot.entangle_seconds",
@@ -48,7 +114,9 @@ A declaration:
 ```
 
 `id`, `displayName`, `behavior` and `audioCueId` are always required, plus
-one block named after the behavior:
+one block named after the behavior. `durability` is optional and defaults to
+`2` — a middle-of-the-range number that is obviously a default, so a machine
+that lost the field is neither a free kill nor invincible:
 
 | `behavior` | Block | Required fields |
 |---|---|---|
@@ -70,6 +138,8 @@ dotted codes):
   misspelled key fails at load, not at first contact;
 - `areaWipeSource` outside the catastrophic closed set is refused
   (`enemy.unsanctioned_catastrophe`);
+- `durability` outside 1–`EnemyDef.MAX_DURABILITY` (6), or not a whole number,
+  is refused rather than clamped (`enemy.missing_field`);
 - duplicate ids, unknown behaviors and missing fields are refused.
 
 ## Worlds and enemies

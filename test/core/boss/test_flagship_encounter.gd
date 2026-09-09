@@ -225,14 +225,14 @@ func test_req_013_defeat_flips_the_unlocked_flag_and_restoration_begins() -> voi
 
 	assert_array(defeated).contains(["reef"])
 	assert_bool(restoration.is_unlocked("reef")).is_true()
-	# Restoration BEGINS: the defeat grants no state by itself, but the
-	# resources banked while the region was locked now count — the next
-	# delivery advances all the way on what was already gathered.
-	assert_int(int(restoration.get_state("reef"))).is_equal(
-		int(RegionState.State.BARREN))
-	restoration.deliver_resources("reef", 1)
-	assert_int(int(restoration.get_state("reef"))).is_equal(
-		int(RegionState.State.RESTORED))
+	# RESTORATION BEGINS, AND IT BEGINS HERE. The resources banked while the
+	# region was locked are spent by the unlock itself, so the fight's payoff
+	# lands on the fight. This used to wait for a later delivery that nothing
+	# performed: the Flagship fell, the flag flipped, and the player saw
+	# nothing change until they happened to pick something else up.
+	assert_int(int(restoration.get_state("reef"))).override_failure_message(
+		"beating the Flagship must spend what the player already gathered"
+	).is_equal(int(RegionState.State.RESTORED))
 
 
 # --- AC-5: checkpoints resume the encounter ----------------------------------
@@ -289,20 +289,53 @@ func test_req_013_without_a_checkpoint_the_resume_anchor_is_phase_zero() -> void
 
 # --- AC-6: a world declaring no boss stays valid and completable -------------
 
-func test_req_013_no_installed_world_declares_a_boss() -> void:
-	# The completability half is proven every run by the template, coral and
-	# bubble walks (and the no-boss unlock path by the WorldSystems suite);
-	# this pins the declaration half across every installed module.
+func test_req_013_exactly_one_installed_world_declares_a_boss() -> void:
+	"""The MVP has ONE boss, at the end of ONE level, and that is checked here.
+
+	This used to assert that NO world declared one, which was true while the
+	encounter existed only in fixtures — and a boss verified only in fixtures
+	is not a boss. Coral Cove now ends with the Flagship; Bubble Bay ends on
+	traversal instead, deliberately, so the two official worlds do not share a
+	shape; and the template declares no optional element at all.
+
+	The scarcity is the point rather than an accident of what got built: one
+	Flagship reads as the climax of the game, and a Flagship in every world
+	would read as a recurring level feature.
+	"""
 	var dir := DirAccess.open("res://worlds")
 	assert_object(dir).is_not_null()
 	var modules := dir.get_directories()
 	assert_int(modules.size()).is_greater_equal(3)
+
+	var with_boss: Array[String] = []
 	for module: String in modules:
 		var handle := FileAccess.open(
 			"res://worlds/%s/world.json" % module, FileAccess.READ)
 		var manifest: Variant = JSON.parse_string(handle.get_as_text())
 		handle.close()
-		assert_bool(manifest is Dictionary
-			and not (manifest as Dictionary).has("boss")
-		).override_failure_message(
-			"world '%s' unexpectedly declares a boss" % module).is_true()
+		assert_bool(manifest is Dictionary).is_true()
+		if (manifest as Dictionary).has("boss"):
+			with_boss.append(module)
+
+	assert_array(with_boss).override_failure_message(
+		"exactly one installed world declares a boss, and it is coral_cove "
+		+ "(got %s)" % str(with_boss)).contains(["coral_cove"])
+	assert_int(with_boss.size()).override_failure_message(
+		"a second boss would make the encounter a level feature rather than "
+		+ "the end of the game (got %s)" % str(with_boss)).is_equal(1)
+
+	# And the world that declares one declares a VALID encounter: three phases,
+	# one water-only, one land-only, one affordance-gated. The declaration is
+	# refused without all three, so this also pins that the level's fight
+	# exercises both grammars and its world's mod (REQ-013 AC-3, AC-4).
+	var coral := FileAccess.open(
+		"res://worlds/coral_cove/world.json", FileAccess.READ)
+	var declared: Dictionary = JSON.parse_string(coral.get_as_text())
+	coral.close()
+	var errors: Array[FlagshipError] = []
+	var encounter := FlagshipEncounter.from_declaration(
+		declared["boss"] as Dictionary, errors)
+	assert_array(errors).override_failure_message(
+		"coral_cove's boss declaration is refused: %s" % str(errors)).is_empty()
+	assert_object(encounter).is_not_null()
+	assert_int(encounter.phase_count()).is_equal(3)

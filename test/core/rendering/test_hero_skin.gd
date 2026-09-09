@@ -62,38 +62,71 @@ func test_each_role_wears_the_material_the_art_direction_asks_for() -> void:
 	assert_float(detail.roughness).is_greater_equal(0.7)
 
 
-func test_the_shipped_hero_model_is_dressed_by_role() -> void:
+func test_the_shipped_hero_keeps_the_art_it_arrived_with() -> void:
+	"""The shipped hero is TEXTURED, so the client must not dress it.
+
+	The role materials exist because the previous hero was vertex-coloured
+	geometry with no maps: undressed it rendered as flat plastic. The shipped
+	one is the opposite case — its mottling, gill gradient and pore relief are
+	the asset, and overriding them with a flat toy material would throw away
+	the whole reason it was commissioned and leave the hero looking worse than
+	the greybox.
+
+	Both halves are asserted, because either alone would pass on a broken
+	implementation: nothing may be dressed, AND the surfaces must actually be
+	reported as authored. A HeroSkin that simply did nothing would satisfy the
+	first and fail the second.
+	"""
 	var packed: PackedScene = load(SCENE_PATH)
 	var body := packed.instantiate()
 	var model := body.get_node("Model") as Node3D
 
 	var counts := HeroSkin.apply(model)
 
-	# The shipped asset is the REFINED form (one mesh per role, named by the
-	# pipeline); a raw re-upload would count one surface per part instead.
-	# Either way every role must be present: an axolotl with no eyes, no
-	# gleams or no translucent gills was read wrong.
+	assert_int(counts[HeroSkin.AUTHORED]).override_failure_message(
+		"the shipped hero carries base-colour maps, so every surface should "
+		+ "have been left alone; got %s" % str(counts)).is_greater_equal(1)
 	for role: String in ["skin", "eye", "gleam", "gill", "detail"]:
 		assert_int(counts[role]).override_failure_message(
-			"no surface read as %s; got %s" % [role, str(counts)]
-			).is_greater_equal(1)
+			("surface(s) were dressed as %s over a model that brought its own "
+			+ "textures, which discards them; got %s") % [role, str(counts)]
+			).is_equal(0)
 
-	# Every surface now wears a client material, and the eyes wear the eye.
-	var eye_material := HeroSkin.material_for(HeroSkin.Role.EYE)
-	var eyes_found := 0
 	for node: Node in model.find_children("*", "MeshInstance3D", true, false):
 		var instance := node as MeshInstance3D
 		for surface: int in instance.mesh.get_surface_count():
-			var worn := instance.get_surface_override_material(surface)
-			assert_object(worn).override_failure_message(
-				"%s surface %d was left undressed" % [instance.name, surface]
-				).is_not_null()
-			if worn == eye_material:
-				eyes_found += 1
-	assert_int(eyes_found).is_greater_equal(1)
-	assert_int(eyes_found).is_less_equal(2)
+			assert_object(instance.get_surface_override_material(surface)
+				).override_failure_message(
+				"%s surface %d was overridden, losing its authored map"
+				% [instance.name, surface]).is_null()
 
 	body.free()
+
+
+func test_a_model_with_no_maps_is_still_dressed_by_role() -> void:
+	# The fallback still has to work: this is the generated-hero case, and
+	# without it a vertex-coloured model renders as untextured plastic. Held
+	# on a synthetic model so it keeps being proven after the shipped hero
+	# stopped exercising this path.
+	var model := Node3D.new()
+	for entry: Array in [[Color(0.96, 0.75, 0.75), "skin"],
+			[Color(0.04, 0.05, 0.08), "eye"],
+			[Color(1, 1, 1), "gleam"],
+			[Color(0.90, 0.43, 0.53), "gill"],
+			[Color(0.37, 0.21, 0.28), "detail"]]:
+		var instance := MeshInstance3D.new()
+		instance.mesh = _mesh_with(entry[0] as Color)
+		model.add_child(instance)
+
+	var counts := HeroSkin.apply(model)
+	for role: String in ["skin", "eye", "gleam", "gill", "detail"]:
+		assert_int(counts[role]).override_failure_message(
+			"the untextured fallback stopped reading %s: %s"
+			% [role, str(counts)]).is_greater_equal(1)
+	assert_int(counts[HeroSkin.AUTHORED]).override_failure_message(
+		"a model with no maps must not be reported as bringing its own art"
+		).is_equal(0)
+	model.free()
 
 
 func _mesh_with(color: Color, material_name: String = "") -> ArrayMesh:

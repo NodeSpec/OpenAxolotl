@@ -175,8 +175,12 @@ func test_req_024_the_shipped_defaults_hold_no_conflicts() -> void:
 	assert_array(errors).override_failure_message(
 		"a shipped default that conflicts with itself would ship a dead verb"
 	).is_empty()
-	# 11 verbs on each of two devices.
-	assert_int(table.size()).is_equal(22)
+	# 14 verbs on each of two devices. The three newest — the land roll and
+	# tail whack, the water spin sprint — are exactly the case this assertion
+	# is for: F is the whack on land and the sprint in water, and SHIFT is the
+	# roll on land while it is already swim-down in water, so both would be
+	# conflicts if contexts were not doing their job.
+	assert_int(table.size()).is_equal(28)
 
 
 func test_req_024_sharing_an_input_inside_one_context_is_refused() -> void:
@@ -766,3 +770,74 @@ func test_req_019_each_scheme_stands_alone_on_its_own_device() -> void:
 					"REQ-019 AC-3: '%s' on %s requires a chord"
 					% [InputVerb.verb_id(binding.verb),
 						InputDevice.device_id(device)]).is_equal(1)
+
+
+# --- Sustained verbs (REQ-037) -----------------------------------------------
+
+func test_req_037_a_held_press_verb_is_sustained_until_release() -> void:
+	# The edge set answers "did they ask?"; the sustained set answers "are they
+	# still asking?". Variable jump height needs the second question, and the
+	# absence of an answer to it silently cut every jump to the release height.
+	var system := _system()
+	system.set_grammar(MovementGrammar.Grammar.LAND)
+
+	system.handle_event(_key(KEY_SPACE, true))
+	var first := system.poll_intent()
+	assert_bool(first.wants(MovementGrammar.Verb.HOP)).override_failure_message(
+		"the press frame must still carry the edge verb").is_true()
+	assert_bool(first.sustains(MovementGrammar.Verb.HOP)
+	).override_failure_message(
+		"a key that is down must read as sustained").is_true()
+
+	# No further events: the key is simply still down.
+	var second := system.poll_intent()
+	assert_bool(second.wants(MovementGrammar.Verb.HOP)
+	).override_failure_message(
+		"the edge verb fires once, not every frame").is_false()
+	assert_bool(second.sustains(MovementGrammar.Verb.HOP)
+	).override_failure_message(
+		"holding must keep sustaining the verb").is_true()
+
+	system.handle_event(_key(KEY_SPACE, false))
+	assert_bool(system.poll_intent().sustains(MovementGrammar.Verb.HOP)
+	).override_failure_message(
+		"release must drop the verb from the sustained set").is_false()
+
+
+func test_req_037_a_sustained_verb_re_resolves_under_the_new_grammar() -> void:
+	# SPACE is hop on land and swim-up in water. A player holding it through the
+	# surface must sustain what it means NOW, not what it meant when pressed --
+	# the same rule the held direction set already follows.
+	var system := _system()
+	system.set_grammar(MovementGrammar.Grammar.LAND)
+	system.handle_event(_key(KEY_SPACE, true))
+	assert_bool(system.poll_intent().sustains(MovementGrammar.Verb.HOP)).is_true()
+
+	system.set_grammar(MovementGrammar.Grammar.WATER)
+	assert_bool(system.poll_intent().sustains(MovementGrammar.Verb.HOP)
+	).override_failure_message(
+		"in water SPACE is not a hop and must not sustain one").is_false()
+
+
+func test_req_037_the_sustained_set_is_dropped_when_the_device_changes() -> void:
+	# A key held when the player picks up the gamepad gets no release event, so
+	# leaving it sustained would hold the jump button down forever.
+	var system := _system()
+	system.set_grammar(MovementGrammar.Grammar.LAND)
+	system.handle_event(_key(KEY_SPACE, true))
+	assert_bool(system.poll_intent().sustains(MovementGrammar.Verb.HOP)).is_true()
+
+	system.handle_event(_pad_button(3, true))
+	assert_bool(system.poll_intent().sustains(MovementGrammar.Verb.HOP)
+	).override_failure_message(
+		"the abandoned device's held keys must not stay sustained").is_false()
+
+
+func test_req_037_clear_drops_the_sustained_set() -> void:
+	var system := _system()
+	system.set_grammar(MovementGrammar.Grammar.LAND)
+	system.handle_event(_key(KEY_SPACE, true))
+	system.clear()
+	assert_bool(system.poll_intent().sustains(MovementGrammar.Verb.HOP)
+	).override_failure_message(
+		"a respawn must not carry a held jump into the new life").is_false()

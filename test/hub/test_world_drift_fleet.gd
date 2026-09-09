@@ -244,3 +244,115 @@ func test_req_036_a_refused_boss_declaration_leaves_the_region_locked() -> void:
 		).override_failure_message(
 		"a refused declaration must not open the region").is_false()
 	_teardown(built[0])
+
+
+# --- What a beaten machine looks like in the scene (REQ-012) -----------------
+
+func test_req_012_a_defeated_machine_is_tipped_over_and_stops_being_touchable() -> void:
+	# The runtime already refuses a defeated machine's lanes. This is the other
+	# half: the LEVEL has to change, or the player cannot tell a machine they
+	# beat from one they walked past. Both parts are asserted because they fail
+	# separately — a node left monitoring keeps firing its lane at whoever
+	# walks through where it used to be.
+	var manifest := REGION_MANIFEST.duplicate(true)
+	manifest["enemies"] = [{"enemyId": "netbot"}]
+	var netbot := _enemy_node("netbot")
+	netbot.position = Vector3(3, 2, -7)
+	var built := _build(manifest, [netbot] as Array[Area3D])
+	var systems := built[1] as WorldSystems
+	var placed := netbot.transform
+
+	assert_bool(netbot.monitoring).is_true()
+	# One strike: the Netbot is the roster's one-hit knockout.
+	assert_int(systems.get_drift_fleet().strike(netbot.name, "tail_whack")
+		).is_equal(DriftFleetSystem.StrikeResult.DEFEATED)
+
+	assert_bool(netbot.transform.is_equal_approx(placed)
+		).override_failure_message(
+		"a beaten machine that stands exactly as it did is a win the player "
+		+ "cannot see").is_false()
+	assert_float(netbot.position.y).override_failure_message(
+		"it settles rather than floating").is_less(placed.origin.y)
+	assert_bool(netbot.monitoring).override_failure_message(
+		"a beaten machine's volume must stop firing at whoever walks through it"
+		).is_false()
+	assert_bool(netbot.monitorable).is_false()
+	_teardown(built[0])
+
+
+func test_req_012_a_respawn_stands_the_scene_machines_back_up() -> void:
+	# The pose comes back from the transform the AUTHOR placed, not from an
+	# inverse of the tip: a rotation undone by rotating back accumulates float
+	# error every death, and the machine would drift out of its own placement.
+	var manifest := REGION_MANIFEST.duplicate(true)
+	manifest["enemies"] = [{"enemyId": "netbot"}]
+	var netbot := _enemy_node("netbot")
+	netbot.position = Vector3(3, 2, -7)
+	netbot.rotation = Vector3(0, 0.7, 0)
+	var built := _build(manifest, [netbot] as Array[Area3D])
+	var systems := built[1] as WorldSystems
+	var placed := netbot.transform
+
+	systems.get_drift_fleet().strike(netbot.name, "stomp")
+	systems.get_drift_fleet().reset_defeats()
+
+	assert_bool(netbot.transform.is_equal_approx(placed)
+		).override_failure_message(
+		"a machine standing back up must stand exactly where it was placed"
+		).is_true()
+	assert_bool(netbot.monitoring).override_failure_message(
+		"and be touchable again, or the fight it comes back for cannot happen"
+		).is_true()
+	_teardown(built[0])
+
+
+func test_req_012_a_stagger_leaves_the_scene_alone() -> void:
+	# Only DEFEAT changes the level. A machine that tipped over every time it
+	# reeled would spend a four-hit fight lying on the floor.
+	var manifest := REGION_MANIFEST.duplicate(true)
+	manifest["enemies"] = [{"enemyId": "dredger"}]
+	var dredger := _enemy_node("dredger", "reef")
+	dredger.position = Vector3(-2, 1, -11)
+	var built := _build(manifest, [dredger] as Array[Area3D])
+	var systems := built[1] as WorldSystems
+	var placed := dredger.transform
+
+	assert_int(systems.get_drift_fleet().strike(dredger.name, "tail_whack")
+		).is_equal(DriftFleetSystem.StrikeResult.STAGGERED)
+	assert_bool(dredger.transform.is_equal_approx(placed)).is_true()
+	assert_bool(dredger.monitoring).is_true()
+	_teardown(built[0])
+
+
+func test_req_012_two_machines_of_one_kind_are_two_machines() -> void:
+	# The constraint this replaced: keyed by ROSTER ID, striking either Netbot
+	# beat both and they went down together, so "one of each per world" was a
+	# load-bearing rule nobody had written down. A level with real encounters
+	# needs several of a kind, and each has to be its own fight.
+	var manifest := REGION_MANIFEST.duplicate(true)
+	manifest["enemies"] = [{"enemyId": "netbot"}]
+	var first := _enemy_node("netbot")
+	first.name = "NetbotOne"
+	first.position = Vector3(-4, 1, -20)
+	var second := _enemy_node("netbot")
+	second.name = "NetbotTwo"
+	second.position = Vector3(4, 1, -26)
+	var built := _build(manifest, [first, second] as Array[Area3D])
+	var fleet := (built[1] as WorldSystems).get_drift_fleet()
+
+	assert_int(fleet.strike("NetbotOne", "tail_whack")).is_equal(
+		DriftFleetSystem.StrikeResult.DEFEATED)
+	assert_bool(fleet.is_defeated("NetbotTwo")).override_failure_message(
+		"beating one machine must not beat its twin across the level"
+		).is_false()
+	assert_bool(second.monitoring).override_failure_message(
+		"and the twin must still be standing in the scene").is_true()
+	assert_bool(first.monitoring).is_false()
+
+	# Both resolve to the same roster entry, so both fight the same way.
+	assert_str(fleet.roster_id_of("NetbotTwo")).is_equal("netbot")
+	assert_bool(fleet.contact("NetbotTwo")).override_failure_message(
+		"the untouched twin still catches the player").is_true()
+	assert_bool(fleet.contact("NetbotOne")).override_failure_message(
+		"the beaten one does not").is_false()
+	_teardown(built[0])

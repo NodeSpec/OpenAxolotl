@@ -18,6 +18,11 @@ whether the shell is paying for itself.
 
 WHAT IT SKIPS, and why each:
 
+  * Bodies that already carry a Shell child. This is what makes the tool
+    RE-RUNNABLE, and it is not a nicety: without it a second run added a
+    second Shell to every body and a second `visible = false` to every proxy
+    mesh — thirty-two shells became sixty-four, doubling the shell geometry in
+    the scene while the report cheerfully said it had shelled thirty-two.
   * Bodies with no BoxMesh — already invisible, nothing to shell.
   * Bodies flagged MANUFACTURED (a name in --geometric). Mod gates, pedestals
     and machinery are DELIBERATELY geometric: a bevelled organic rock where a
@@ -103,6 +108,7 @@ class Body:
         self.mesh_line = -1
         self.mesh_name = ""
         self.has_box_shape = False
+        self.shelled = False
         self.child_lines: list = []
 
 
@@ -157,12 +163,16 @@ def scan(text: str, geometric: tuple) -> tuple:
             current.child_lines.append(index)
             if node_type == "MeshInstance3D":
                 current.mesh_name = name
+            elif name == "Shell":
+                current.shelled = True
         elif node_type in ("StaticBody3D", "Node3D", "Area3D", "Marker3D"):
             current = None
 
     eligible = {}
     for key, body in bodies.items():
-        if not body.has_box_shape:
+        if body.shelled:
+            skipped.append((key, "already shelled"))
+        elif not body.has_box_shape:
             skipped.append((key, "no BoxShape3D collider to wrap"))
         elif body.mesh_line < 0:
             skipped.append((key, "no BoxMesh visual to replace"))
@@ -184,7 +194,14 @@ def convert(text: str, geometric: tuple) -> tuple:
         additions.setdefault(body.mesh_line, []).append("visible = false")
         # The shell goes after the body's last child block.
         anchor = max(body.child_lines) if body.child_lines else body.line
-        path = "%s/%s" % (body.parent, body.name) if body.parent else body.name
+        # A child of the scene root is written `parent="Ledge"`, not
+        # `parent="./Ledge"` — Godot resolves both, but only one of them is
+        # what Godot itself writes, and a scene that round-trips through the
+        # editor should come back byte-identical. The seed keeps using the
+        # unnormalised key so shells already in the repository keep the
+        # silhouettes they were reviewed with.
+        path = body.name if body.parent in ("", ".") \
+            else "%s/%s" % (body.parent, body.name)
         material = material_for(body.name)
         materials.add(material)
         additions.setdefault(anchor, []).append(
@@ -266,7 +283,7 @@ def _bump_load_steps(text: str) -> str:
     return re.sub(r"load_steps=\d+", "load_steps=%d" % steps, text, count=1)
 
 
-def main(argv: list) -> int:
+def main(argv: list | None = None) -> int:
     parser = argparse.ArgumentParser(prog="oax-shell")
     parser.add_argument("--target", required=True,
                         help="a directory of .tscn files, or one .tscn")

@@ -1,4 +1,4 @@
-# Packaging for the repo validators, and nothing else (REQ-018).
+# Packaging for the repo's command-line tools (REQ-018).
 #
 # This exists so the four validator commands have STABLE NAMES -- oax-level-check,
 # oax-asset-check, oax-static-gate, oax-test -- and CI can invoke the
@@ -7,6 +7,12 @@
 # standard-library-only on purpose, and running them directly
 # (`python tools/level_contract_checker.py ...`) remains a supported
 # zero-install path.
+#
+# The authoring tools below name themselves in their own --help and in their
+# docstrings, and for a long time seven of those names existed nowhere else:
+# `oax-shell`, `oax-fill` and the rest were documented commands that installing
+# the package did not give you. tools/test_ci_pipeline.py now holds this table
+# and those docstrings to each other, in both directions.
 #
 # Install:  python3 -m pip install -e .
 
@@ -22,10 +28,20 @@ requires-python = ">=3.10"
 license = { text = "MIT" }
 
 [project.scripts]
+# The repo validators, run character-identically by CI and by contributors.
 oax-level-check = "tools.level_contract_checker:main"
 oax-asset-check = "tools.asset_contract_validator:main"
 oax-static-gate = "tools.static_gate:main"
 oax-test = "tools.oax_test:main"
+# The world-authoring passes (docs/world-authoring.md).
+oax-shell = "tools.shell_terrain:main"
+oax-scatter = "tools.scatter_props:main"
+oax-fill = "tools.fill_dressing:main"
+oax-snapshot = "tools.gameplay_snapshot:main"
+# The asset pipeline stages (docs/asset-contract.md).
+oax-refine = "tools.refine_model:main"
+oax-decimate = "tools.decimate_model:main"
+oax-rig = "tools.rig_model:main"
 
 [tool.setuptools]
 packages = ["tools"]

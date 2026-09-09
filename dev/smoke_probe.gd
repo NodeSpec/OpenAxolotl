@@ -7,7 +7,7 @@ extends Node
 ## controller, that the velocity reaches move_and_slide, that gravity lands the
 ## body on a floor, that a water volume flips the grammar, and that the camera
 ## follows what moved. Every one of those is a scene-tree fact, and every one of
-## them is a place this could be silently dead while the unit suite stays green.
+## them is a place this could be silently dead while 289 unit tests stay green.
 ##
 ## Events go in through `Input.parse_input_event`, which pushes them along the
 ## engine's real delivery path into AxolotlBody._unhandled_input, rather than
@@ -24,12 +24,11 @@ extends Node
 
 const SETTLE_FRAMES := 30
 const WALK_FRAMES := 90
-## A 6 m/s hop against 18 m/s^2 gravity is airborne for ~0.67 s, which is 40
-## frames at 60 Hz — so 40 would sample the landing on the exact frame it
+## A 9 m/s hop against 20 m/s^2 gravity is airborne for 0.90 s, which is 54
+## frames at 60 Hz — so 54 would sample the landing on the exact frame it
 ## happens. The margin is for the tuning moving, not for flakiness.
 const HOP_FRAMES := 75
 const STOP_FRAMES := 45
-const CLIMB_APPROACH := 70
 const CLIMB_FRAMES := 80
 const SWIM_FRAMES := 120
 
@@ -51,6 +50,10 @@ var _saw_water_grammar := false
 var _camera_start: Vector3 = Vector3.ZERO
 var _stop_start: Vector3 = Vector3.ZERO
 var _climb_base: float = 0.0
+
+## Frame the climb key was pressed, set when the body first touches the wall.
+## Negative until then.
+var _climb_press_frame: int = -1
 var _climb_started := false
 
 
@@ -150,7 +153,7 @@ func _walk() -> void:
 	_key(KEY_W, false)
 	var travelled := _body.global_position - _walk_start
 	_check(travelled.z < -1.0,
-		"holding W moved the axolotl %.3f m along Z; expected it to walk forward"
+		"holding W moved the axolotl %.3f m along Z; expected it to walk north"
 			% travelled.z)
 	_check(_body.is_on_floor(), "the axolotl left the ground while waddling")
 	_advance()
@@ -180,27 +183,6 @@ func _stop() -> void:
 	_advance()
 
 
-## The hop is grounded-gated in the controller and the fall is the wrapper's, so
-## a rise followed by a return to rest proves both halves are connected.
-func _hop() -> void:
-	if _elapsed() == 1:
-		_key(KEY_SPACE, true)
-		return
-	if _elapsed() == 3:
-		_key(KEY_SPACE, false)
-	_hop_peak = maxf(_hop_peak, _body.global_position.y)
-
-	if _elapsed() < HOP_FRAMES:
-		return
-
-	_check(_hop_peak > _rest_position.y + 0.5,
-		"the hop peaked at %.3f, only %.3f above rest"
-			% [_hop_peak, _hop_peak - _rest_position.y])
-	_check(_body.is_on_floor(),
-		"the axolotl never came back down: gravity is not being applied")
-	_advance()
-
-
 ## Climbing needs BOTH halves wired: the body must notice a climbable wall and
 ## call try_climb, and forward steering must then run UP the wall rather than
 ## into it. Both were broken while the unit tests stayed green.
@@ -213,16 +195,22 @@ func _climb() -> void:
 		_key(KEY_W, true)
 		return
 
-	# Walked into the wall by now; ask to climb, still pushing forward.
-	if _elapsed() == CLIMB_APPROACH:
-		_climb_base = _body.global_position.y
-		_key(KEY_E, true)
+	# Ask to climb once the body is ACTUALLY against the wall, rather than at
+	# a frame number. The frame count here used to be calibrated against the
+	# waddle speed, so raising that speed for platforming made the probe press
+	# the key at the wrong moment and report a climb bug that did not exist.
+	# Reacting to the contact keeps this correct at any tuning.
+	if _climb_press_frame < 0:
+		if _body.is_on_wall():
+			_climb_press_frame = _elapsed()
+			_climb_base = _body.global_position.y
+			_key(KEY_E, true)
 		return
-	if _elapsed() == CLIMB_APPROACH + 2:
+	if _elapsed() == _climb_press_frame + 2:
 		_key(KEY_E, false)
 		return
 
-	if _elapsed() < CLIMB_APPROACH + CLIMB_FRAMES:
+	if _elapsed() < _climb_press_frame + CLIMB_FRAMES:
 		return
 
 	_key(KEY_W, false)
@@ -232,6 +220,29 @@ func _climb() -> void:
 	_check(_body.global_position.y > _climb_base + 0.5,
 		"attached but rose only %.2f m; forward steering is driving into the "
 			% (_body.global_position.y - _climb_base) + "wall rather than up it")
+	_advance()
+
+
+## The hop is grounded-gated in the controller and the fall is the wrapper's, so
+## a rise followed by a return to rest proves both halves are connected.
+func _hop() -> void:
+	if _elapsed() == 1:
+		_key(KEY_SPACE, true)
+		return
+	# Held through the climb: releasing early now CUTS the rise on purpose
+	# (REQ-037), so a 2-frame tap would measure the short jump, not the arc.
+	if _elapsed() == 30:
+		_key(KEY_SPACE, false)
+	_hop_peak = maxf(_hop_peak, _body.global_position.y)
+
+	if _elapsed() < HOP_FRAMES:
+		return
+
+	_check(_hop_peak > _rest_position.y + 0.5,
+		"the hop peaked at %.3f, only %.3f above rest"
+			% [_hop_peak, _hop_peak - _rest_position.y])
+	_check(_body.is_on_floor(),
+		"the axolotl never came back down: gravity is not being applied")
 	_advance()
 
 

@@ -16,9 +16,19 @@ extends RefCounted
 ##   waddle   grounded and moving
 ##   idle     grounded and still
 ##
-## HURT is the exception: a one-shot that OVERRIDES the locomotion choice for
-## its own length, because a flinch the player cannot see is not feedback. It
-## is triggered by the world's capability-loss signal, not by motion.
+## ACTIONS are the exception: one-shots that OVERRIDE the locomotion choice for
+## their own length, because a movement the player asked for and cannot see did
+## not happen as far as they are concerned. Four of them, and none is chosen
+## from motion — each is triggered by the controller announcing the verb:
+##
+##   hurt   the flinch, from the world's capability-loss signal
+##   roll   the land dodge
+##   spin   the water sprint, which is also the water strike
+##   whack  the tail swing
+##
+## A model whose rig predates one of these simply does not play it (the clip is
+## absent, `has_animation` says so, and locomotion carries on) — which is the
+## same rule that lets a body with no AnimationPlayer at all keep running.
 ##
 ## `choose_clip` is static and pure so the whole state table is testable
 ## without a scene, an AnimationPlayer, or a frame of simulation.
@@ -29,11 +39,19 @@ const SWIM := "swim"
 const HOP := "hop"
 const FALL := "fall"
 const HURT := "hurt"
+const ROLL := "roll"
+const SPIN := "spin"
+const WHACK := "whack"
 
 ## Clips that describe an ongoing state rather than an event. Godot's glTF
 ## import leaves every clip non-looping, so the ongoing ones are set to loop
 ## here — a one-shot idle would freeze the axolotl after four seconds.
 const LOOPING: Array[String] = [IDLE, WADDLE, SWIM, FALL]
+
+## The one-shots, in the order a clash is resolved: a flinch outranks a dodge,
+## because being hit interrupts what you were doing. Anything already playing
+## from this list is otherwise left to finish.
+const ACTIONS: Array[String] = [HURT, ROLL, SPIN, WHACK]
 
 ## Below this vertical speed a body in the air is neither rising nor falling
 ## in any way worth animating, and the clip would flicker at the apex.
@@ -50,7 +68,10 @@ const BLEND_SECONDS := 0.12
 
 var _player: AnimationPlayer
 var _current: String = ""
-var _hurt_remaining: float = 0.0
+
+## The one-shot currently overriding locomotion, and how much of it is left.
+var _action: String = ""
+var _action_remaining: float = 0.0
 
 
 ## Which clip a body in this state should be playing.
@@ -89,20 +110,49 @@ func get_current_clip() -> String:
 ## The flinch. Overrides locomotion for the clip's own length, so it always
 ## plays through rather than being cut off by the next step's state.
 func play_hurt() -> void:
-	if _player == null or not _player.has_animation(HURT):
-		return
-	_hurt_remaining = _player.get_animation(HURT).length
-	_current = HURT
-	_player.play(HURT, BLEND_SECONDS)
+	play_action(HURT)
+
+
+## Plays a one-shot over locomotion for the clip's own length.
+##
+## Returns false when there is nothing to play — no player, no such clip, or a
+## higher-ranked action already running. A rig that predates one of these clips
+## therefore keeps moving normally rather than freezing on a clip it does not
+## have, which is the same forgiveness `bind` extends to a model with no
+## AnimationPlayer at all.
+func play_action(action: String) -> bool:
+	if _player == null or not _player.has_animation(action):
+		return false
+	if not ACTIONS.has(action):
+		return false
+	# A flinch interrupts a dodge; a dodge does not interrupt a flinch. Being
+	# hit is the more important thing to have seen.
+	if _action_remaining > 0.0 \
+			and ACTIONS.find(_action) <= ACTIONS.find(action):
+		return false
+
+	_action = action
+	_action_remaining = _player.get_animation(action).length
+	_current = action
+	_player.speed_scale = 1.0
+	_player.play(action, BLEND_SECONDS)
+	return true
+
+
+## The one-shot currently overriding locomotion, or "".
+func get_current_action() -> String:
+	return _action if _action_remaining > 0.0 else ""
 
 
 func step(delta: float, in_water: bool, grounded: bool,
 		velocity: Vector3) -> void:
 	if _player == null:
 		return
-	if _hurt_remaining > 0.0:
-		_hurt_remaining -= delta
-		return
+	if _action_remaining > 0.0:
+		_action_remaining -= delta
+		if _action_remaining > 0.0:
+			return
+		_action = ""
 
 	var planar := Vector2(velocity.x, velocity.z).length()
 	var wanted := choose_clip(in_water, grounded, velocity.y, planar)

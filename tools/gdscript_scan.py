@@ -12,7 +12,7 @@ newlines and column positions exactly, so line numbers survive untouched.
 Then tokenize the masked text, which by construction contains only code.
 
 Scene files are handled differently and deliberately so. In a `.tscn` the node
-type lives INSIDE a string (`type=\"MultiplayerSpawner\"`), so masking strings
+type lives INSIDE a string (`type="MultiplayerSpawner"`), so masking strings
 would erase the very thing being looked for. A `MultiplayerSpawner` can be
 added in the editor without any script mentioning it, which is why scenes are
 scanned at all.
@@ -45,7 +45,7 @@ class Name(NamedTuple):
 # A dotted name, optionally annotation-prefixed: @rpc, rpc_id, OS.execute.
 _NAME = re.compile(r"@?[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*")
 
-_TRIPLE_QUOTES = ('\"\"\"', "'''")
+_TRIPLE_QUOTES = ('"""', "'''")
 
 
 def mask_source(text: str) -> str:
@@ -69,7 +69,7 @@ def mask_source(text: str) -> str:
                 index += 1
             continue
 
-        if char in ('\"', "'"):
+        if char in ('"', "'"):
             triple = next(
                 (q for q in _TRIPLE_QUOTES if text.startswith(q, index)), None
             )
@@ -78,9 +78,9 @@ def mask_source(text: str) -> str:
             index += len(closer)
 
             while index < length:
-                if text[index] == "\\\\" and not triple:
-                    # An escape consumes the next character, so a \\\" does not
-                    # end the string. Without this, \"say \\\"hi\\\"\" would close
+                if text[index] == "\\" and not triple:
+                    # An escape consumes the next character, so a \" does not
+                    # end the string. Without this, "say \"hi\"" would close
                     # early and the tail would be scanned as code.
                     out.append("  ")
                     index += 2
@@ -113,9 +113,9 @@ def iter_names(text: str) -> Iterator[Name]:
         )
 
 
-# In a .tscn, `type=\"MultiplayerSpawner\"` and `script = ExtResource(...)` both
+# In a .tscn, `type="MultiplayerSpawner"` and `script = ExtResource(...)` both
 # matter, and both live in quoted attribute values — so scenes are scanned raw.
-_SCENE_QUOTED = re.compile(r'\"([^\"\\\\]*)\"')
+_SCENE_QUOTED = re.compile(r'"([^"\\]*)"')
 
 
 def _blank_scene_comments(text: str) -> str:
@@ -137,7 +137,7 @@ def iter_scene_names(text: str) -> Iterator[Name]:
     """Yields quoted attribute values from a scene file, with line numbers.
 
     Scene files are NOT masked the way code is: the node type being searched
-    for is itself a string (`type=\"MultiplayerSpawner\"`), so masking strings
+    for is itself a string (`type="MultiplayerSpawner"`), so masking strings
     would delete the evidence. Comments are still removed.
     """
     text = _blank_scene_comments(text)

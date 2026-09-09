@@ -38,8 +38,15 @@ func test_the_project_renders_with_forward_plus_and_a_mobile_fallback() -> void:
 		"rendering/renderer/rendering_method"))).is_equal("forward_plus")
 	assert_str(str(ProjectSettings.get_setting(
 		"rendering/renderer/rendering_method.mobile"))).is_equal("mobile")
-	assert_bool(bool(ProjectSettings.get_setting(
-		"rendering/anti_aliasing/quality/use_taa"))).is_true()
+	# TAA is NOT asserted on here. It is one of the settings RenderQuality
+	# owns per level (HIGH only), so the project default decides what the
+	# EDITOR costs rather than what the game does — and pinning it on made
+	# the editor viewport heavier than the game it was authoring. That TAA
+	# reaches HIGH is held in test_render_quality.gd, where it belongs.
+	assert_int(int(ProjectSettings.get_setting(
+		"rendering/anti_aliasing/quality/msaa_3d"))).override_failure_message(
+		"MSAA is on at every level above LOW, so it stays a project default"
+		).is_greater(0)
 
 
 func test_the_shared_environment_carries_the_look_the_art_direction_needs() -> void:
@@ -61,13 +68,26 @@ func test_the_shared_environment_carries_the_look_the_art_direction_needs() -> v
 	# the light shafts — each one on. Their strengths are art direction, not
 	# a contract; only their presence is held here.
 	assert_bool(environment.ssao_enabled).is_true()
-	assert_bool(environment.sdfgi_enabled).is_true()
 	assert_bool(environment.glow_enabled).is_true()
 	assert_float(environment.glow_hdr_threshold).override_failure_message(
 		"glow must only reach highlights brighter than white, never albedo"
 		).is_greater_equal(1.0)
 	assert_bool(environment.fog_enabled).is_true()
-	assert_bool(environment.volumetric_fog_enabled).is_true()
+
+	# SDFGI and volumetric fog are NOT asserted enabled, and that is the
+	# point. RenderQuality owns both, setting each to (level == HIGH) in both
+	# directions, so their flags here reach only the editor — where, left on,
+	# they made the viewport strictly more expensive than the game. What this
+	# file must still guarantee is that HIGH has something to switch on: the
+	# TUNING has to survive, or turning the flag on would light up a default
+	# that was never art-directed.
+	assert_int(environment.sdfgi_cascades).override_failure_message(
+		"the SDFGI tuning must stay authored even with the flag off, or HIGH "
+		+ "switches on an untuned default").is_greater(0)
+	assert_float(environment.sdfgi_bounce_feedback).is_greater(0.0)
+	assert_float(environment.volumetric_fog_density).override_failure_message(
+		"the volumetric fog tuning must stay authored even with the flag off"
+		).is_greater(0.0)
 
 
 func test_the_rig_ships_one_environment_and_a_soft_shadowed_sun() -> void:

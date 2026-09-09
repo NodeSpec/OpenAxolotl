@@ -153,13 +153,22 @@ func test_req_008_resources_delivered_while_locked_are_banked_not_burned() -> vo
 	system.deliver_resources("kelp_shallows", cost)
 	assert_int(system.get_region("kelp_shallows").get_resources()).is_equal(cost)
 
+	# SPENT BY THE UNLOCK, not merely spendable after it. This used to assert
+	# that a later zero-delivery would advance; nothing performed that delivery,
+	# so on a boss-gated region the encounter's whole payoff was a no-op — the
+	# Flagship fell, the region unlocked, and visibly nothing happened.
 	system.unlock_region("kelp_shallows")
+	assert_int(int(system.get_state("kelp_shallows"))).override_failure_message(
+		"banked resources must be spent the moment the region unlocks"
+	).is_equal(int(RegionState.State.RESOURCED))
 	assert_int(system.deliver_resources("kelp_shallows", 0)).override_failure_message(
-		"banked resources must be spendable the moment the region unlocks"
-	).is_equal(1)
+		"and spent once: a second flush must find nothing left to advance on"
+	).is_equal(0)
 
 
-func test_req_008_unlocking_alone_does_not_advance_anything() -> void:
+func test_req_008_unlocking_with_nothing_banked_advances_nothing() -> void:
+	# The other half of the rule above: the unlock spends what the player
+	# already earned, and invents nothing they did not.
 	var system := _unlocked_system()
 	assert_int(int(system.get_state("kelp_shallows"))).is_equal(
 		RegionState.State.BARREN)
@@ -595,3 +604,60 @@ func _restore_region(region: RestorableRegion) -> void:
 	region.deliver_resources(
 		tuning.get_count(RegionState.RESOURCED_COST_KEY)
 		+ tuning.get_count(RegionState.RESTORED_COST_KEY), tuning)
+
+
+# --- F-2: what lifts a region's lock is DECLARED, not inferred ---------------
+
+func _declared(rows: Array) -> RestorationSystem:
+	var system := RestorationSystem.new(_tuning())
+	var errors: Array[RestorationError] = []
+	assert_bool(system.declare_from_manifest(
+		{"restorableRegions": rows}, errors)).override_failure_message(
+		"declaration refused: %s" % str(errors)).is_true()
+	return system
+
+
+const GATE: Array = [{"gateId": "wall", "opensAt": "restored"}]
+
+
+func test_req_008_a_region_declares_what_lifts_its_lock() -> void:
+	var system := _declared([
+		{"regionId": "shelf", "traversalGates": GATE, "unlockedBy": "entry"},
+		{"regionId": "sea", "traversalGates": GATE, "unlockedBy": "boss"},
+	])
+	# The world declares a boss, so under the old inference BOTH would be
+	# locked. That is the deadlock this field exists to break: a level with
+	# restoration on its critical path AND a Flagship at its end.
+	assert_bool(system.unlocks_at_entry("shelf", true)).override_failure_message(
+		"a region declaring 'entry' unlocks on arrival even in a boss world"
+		).is_true()
+	assert_bool(system.unlocks_at_entry("sea", true)).is_false()
+	# And the declaration wins in the other direction too.
+	assert_bool(system.unlocks_at_entry("sea", false)).override_failure_message(
+		"a region declaring 'boss' stays locked even where nothing inferred it"
+		).is_false()
+
+
+func test_req_008_a_region_declaring_nothing_keeps_the_old_inference() -> void:
+	# Every world and fixture written before this field existed must still mean
+	# what it meant: no boss anywhere, unlock at entry; a boss, wait for it.
+	var system := _declared([{"regionId": "reef", "traversalGates": GATE}])
+	assert_str(system.unlock_policy_of("reef")).is_equal("")
+	assert_bool(system.unlocks_at_entry("reef", false)).is_true()
+	assert_bool(system.unlocks_at_entry("reef", true)).is_false()
+
+
+func test_req_008_an_unknown_unlock_policy_is_refused_not_defaulted() -> void:
+	# A misspelled policy is a level that unlocks at the wrong moment, which
+	# surfaces as an unreachable route rather than an error — the most
+	# expensive kind of typo this contract can carry.
+	for bad: String in ["Entry", "flagship", "on_entry", ""]:
+		var system := RestorationSystem.new(_tuning())
+		var errors: Array[RestorationError] = []
+		assert_bool(system.declare_from_manifest({"restorableRegions": [
+			{"regionId": "reef", "traversalGates": GATE, "unlockedBy": bad}]},
+			errors)).override_failure_message(
+			"'unlockedBy: %s' must be refused" % bad).is_false()
+		assert_array(errors).is_not_empty()
+		assert_str(errors[0].code).is_equal(
+			RestorationError.UNKNOWN_UNLOCK_POLICY)
