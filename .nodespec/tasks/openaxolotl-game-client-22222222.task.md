@@ -13,6 +13,10 @@
 
 **Working code for this component**, honoring the contracts and criteria below, plus its configuration artifacts and tests.
 
+## Constraints That Apply Here
+
+None recorded for this node. Standing conditions the build must honour (security, compliance, cost, technology and the like) can be filed with a `create_constraint` patch.
+
 ## Implementation Context
 
 > ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
@@ -183,43 +187,58 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T25 — Implement: "An AI coding agent, given only the repository and a one-sentence world brief, produces a world that passes the compliance checker" (REQ-017).** <!-- t:0426c75f -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-017 "An AI coding agent, given only the repository and a one-sentence world brief, produces a world that passes the compliance checker" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
-- [ ] **T26 — Implement: "Official worlds sustain the documented frame-rate target on the baseline specification during normal traversal" (REQ-027).** <!-- t:6305f4b4 -->
+- [ ] **T26 — Implement: "The README is the front door and reaches the rest: it states what the game is, that levels can be added to it, and links every contributor document in the repository, so no contributor-facing page is discoverable only by browsing the file tree" (REQ-017).** <!-- t:a2b55a3c -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-017 "The README is the front door and reaches the rest: it states what the game is, that levels can be added to it, and links every contributor document in the repository, so no contributor-facing page is discoverable only by browsing the file tree" — possible coordination point: Contract "Level Contract v1" (dependency) to World: Coral Cove (keyword signal only)
+- [ ] **T27 — Implement: "Documentation walks the editor-first path end to end — open the template in Godot, play it, change a platform, add a machine, run the checkers, see it in the hub — written for someone who has not used Godot before and assuming no terminal-first or agent workflow" (REQ-017).** <!-- t:c8131e1e -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-017 "Documentation walks the editor-first path end to end — open the template in Godot, play it, change a platform, add a machine, run the checkers, see it in the hub — written for someone who has not used Godot before and assuming no terminal-first or agent workflow" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T28 — Implement: "A person outside this project follows the editor-first path from the README alone and gets a change of their own running, without a maintainer answering questions" (REQ-017).** <!-- t:d599d559 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-017 "A person outside this project follows the editor-first path from the README alone and gets a change of their own running, without a maintainer answering questions" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T29 — Implement: "Official worlds sustain the documented frame-rate target on the baseline specification during normal traversal" (REQ-027).** <!-- t:6305f4b4 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-027 "Official worlds sustain the documented frame-rate target on the baseline specification during normal traversal" — possible coordination point: Contract "Level Contract v1" (dependency) to World: Coral Cove (keyword signal only)
-- [ ] **T27 — Implement: "A performance regression test runs in CI against an official world and fails when any of the three documented targets is breached" (REQ-027).** <!-- t:ba2d3e65 -->
+- [ ] **T30 — Implement: "A performance regression test runs in CI against an official world and fails when any of the three documented targets is breached" (REQ-027).** <!-- t:ba2d3e65 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-027 "A performance regression test runs in CI against an official world and fails when any of the three documented targets is breached" — possible coordination point: Contract "Core Module Dependency" (dependency) from Test Harness and Fixtures (keyword signal only)
-- [ ] **T28 — Implement: "The game remains smooth during a Flagship encounter combined with a restoration reversion, the heaviest expected load case" (REQ-027).** <!-- t:447b635f -->
+- [ ] **T31 — Implement: "The game remains smooth during a Flagship encounter combined with a restoration reversion, the heaviest expected load case" (REQ-027).** <!-- t:447b635f -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-027 "The game remains smooth during a Flagship encounter combined with a restoration reversion, the heaviest expected load case"
-- [ ] **T29 — Implement: "The hub and both official worlds read as the documented toy look (saturated albedo, real lighting) to the maintainer on baseline-class hardware at the documented frame rate" (REQ-031).** <!-- t:08ad7205 -->
+- [ ] **T32 — Implement: "The hub and both official worlds read as the documented toy look (saturated albedo, real lighting) to the maintainer on baseline-class hardware at the documented frame rate" (REQ-031).** <!-- t:08ad7205 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-031 "The hub and both official worlds read as the documented toy look (saturated albedo, real lighting) to the maintainer on baseline-class hardware at the documented frame rate" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
-- [ ] **T30 — Implement: "Code license is chosen and applied to the repository" (REQ-021).** <!-- t:281343c1 -->
+- [ ] **T33 — Implement: "Code license is chosen and applied to the repository" (REQ-021).** <!-- t:281343c1 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-021 "Code license is chosen and applied to the repository" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
-- [ ] **T31 — Implement: "Official art and audio asset license is chosen, documented, and distinguished from the code license" (REQ-021).** <!-- t:f8fd989b -->
+- [ ] **T34 — Implement: "Official art and audio asset license is chosen, documented, and distinguished from the code license" (REQ-021).** <!-- t:f8fd989b -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-021 "Official art and audio asset license is chosen, documented, and distinguished from the code license" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
-- [ ] **T32 — Implement: "Policy documents how AI-generated asset provenance and generator terms of service affect redistribution and relicensing" (REQ-021).** <!-- t:207df9ff -->
+- [ ] **T35 — Implement: "Policy documents how AI-generated asset provenance and generator terms of service affect redistribution and relicensing" (REQ-021).** <!-- t:207df9ff -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-021 "Policy documents how AI-generated asset provenance and generator terms of service affect redistribution and relicensing" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
-- [ ] **T33 — Implement: "Contributor licensing terms for submitted worlds and assets are documented in the contribution guide" (REQ-021).** <!-- t:6f240208 -->
+- [ ] **T36 — Implement: "Contributor licensing terms for submitted worlds and assets are documented in the contribution guide" (REQ-021).** <!-- t:6f240208 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-021 "Contributor licensing terms for submitted worlds and assets are documented in the contribution guide" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
-- [ ] **T34 — Implement: "Licensing decision is resolved before the public README and contribution guide ship" (REQ-021).** <!-- t:ac788e6d -->
+- [ ] **T37 — Implement: "Licensing decision is resolved before the public README and contribution guide ship" (REQ-021).** <!-- t:ac788e6d -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-021 "Licensing decision is resolved before the public README and contribution guide ship" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
-- [ ] **T35 — Resolve ownership, then implement: "The dressed hub and worlds read as an underwater place rather than a greybox to the maintainer in rendered captures" (REQ-034).** <!-- t:869fddb7 -->
+- [ ] **T38 — Implement: "The policy states explicitly whether a level author may build with the shipped assets, and on what terms, both inside this repository and outside it" (REQ-021).** <!-- t:9211484f -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-021 "The policy states explicitly whether a level author may build with the shipped assets, and on what terms, both inside this repository and outside it" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] **T39 — Implement: "Every shipped asset whose provenance records terms originating outside this repository is either covered by the chosen policy or replaced with an asset the project can license, with none left unresolved at the point the contribution guide ships" (REQ-021).** <!-- t:6599fbcd -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-021 "Every shipped asset whose provenance records terms originating outside this repository is either covered by the chosen policy or replaced with an asset the project can license, with none left unresolved at the point the contribution guide ships" — possible coordination point: Contract "Level Contract v1" (dependency) to World: Coral Cove (keyword signal only)
+- [ ] **T40 — Resolve ownership, then implement: "The dressed hub and worlds read as an underwater place rather than a greybox to the maintainer in rendered captures" (REQ-034).** <!-- t:869fddb7 -->
   [PLACEHOLDER: owner — this node or a sharing node (Model Refinement Pipeline); assign via the requirement mapping, then keep this task here or move it to the owning node's doc]
   ↳ serves: REQ-034 "The dressed hub and worlds read as an underwater place rather than a greybox to the maintainer in rendered captures" — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
-- [ ] **T36 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T41 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
 
-**Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Technology Guidance, and node context as your references. Record the expanded list in this section via update_artifact (propose_patches) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
+**Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Existing Implementation, Technology Guidance, and node context as your references. Write each work order's steps under its task line as indented checkbox lines (`  - [ ] <step>`), one action each, naming the file, setting or interface it changes, and send them with update_artifact (propose_patches, passing base_sequence) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact; the steps stay with their work order when this doc regenerates. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
 
 ## Configuration
 
@@ -230,36 +249,9 @@ User-selected configuration for this component (honor these choices):
 - **language:** GDScript
 - **rationale:** One language keeps the contribution surface narrow for humans and AI agents alike; a second toolchain doubles build, review and static-gate parser burden for no gameplay gain.
 
-## Project Context
+## Vision This Node Serves
 
-OpenAxolotl — Play it. Fork it. Build a world.
-
-A colorful 3D action-platformer in Godot where a tiny axolotl explores strange aquatic worlds, restoring damaged habitats and rescuing creatures. Every world is a self-contained module anyone — human or AI coding agent — can fork, replace, or extend. Open source is a gameplay feature, not a line in the README.
-
-FOUR PILLARS
-
-1. Regeneration is the constant loop; lives are the hard failure state. Damage strips a capability — tail, gill, leg — with comedic pop-and-sparkle framing rather than draining a health bar, and never ends a run on its own. A separate limited life count is spent only on catastrophic events and returns the player to the last checkpoint. Regeneration stays expressive and ever-present; lives supply the stakes.
-
-2. Two movement grammars, one axolotl. Water and land are mechanically distinct, joined by a water-powered dash as the signature transition skill. This is the answer to "why is this not a cute skin on generic platformer mechanics."
-
-3. The world regenerates with you. Regions progress barren, resourced, restored — opening real traversal paths rather than swapping visuals — and Drift Fleet dredgers can undo that progress. This carries the open-source metaphor mechanically, without a child ever needing to notice it.
-
-4. The repo is the game. Every world conforms to a versioned Level Contract published as a machine-readable schema. A contributor never needs to understand the whole game, only the contract. The project is effectively an open-source platformer SDK.
-
-ANTAGONISTS
-The Drift Fleet: faceless industrial extraction machinery, deliberately never human characters. Nets, hooks, dredges and pollution, with no gore and no humanized violence — the same machinery that broke the habitat is what the player disables to heal it.
-
-MVP SCOPE
-PC only. Two official worlds plus a minimal reference template. Three Gill Mods — Bubble, Jet, Glow — built to depth rather than breadth; Electric, Frost and Giant are post-MVP and double as the reference example for community-built mods. Contract compliance, asset conformance, and world static analysis are automated and merge-blocking, so an AI agent can verify its own work before submitting.
-
-COMMUNITY (post-MVP)
-Opens only once Level Contract v1 is frozen; opening earlier means every core update breaks early contributor worlds. Community worlds ship code like any other world — safety comes from static analysis against the sanctioned world API surface plus mandatory human review, never an automated-only merge path. This is a family game with an agent-authored contribution pipeline, so that gate is load-bearing.
-
-NON-GOALS (firm, not deferrals)
-No multiplayer, in any phase. No console certification. No level-editor GUI, ever — worlds are authored as code and Godot scenes only, so humans and AI agents build the same way and the contract surface stays narrow enough to check.
-
-OPEN ITEMS
-Licensing split between code and official art/audio, entangled with AI-generation provenance. Save-compatibility policy for forked and divergent worlds.
+No outcome behind this node's requirements cites the vision, so no sentence is carried here. The whole vision is one read away: get_outcome_board lists every sentence with its id.
 
 ## Requirements — Your Scope
 
@@ -307,9 +299,15 @@ The hub that makes the modular architecture visible as a place. The Open Lagoon 
 - [x] Hub reflects per-world completion and restoration progress read through the save-integration interface
   → THIS NODE: internal logic — possible coordination point: Contract "Save Integration Interface" (dependency) to Save System (keyword signal only)
 
-### REQ-017: AI-Agent Contributor Workflow and Documentation
+### REQ-017: Level Author Workflow and Documentation
 Category: technical | Status: in-progress
-The requirement that produces the project's distinctive public identity: an open-source game designed for humans AND AI coding agents to extend together. A contributor must be able to open any AI coding agent, point it at this repository, say "create a new OpenAxolotl level set inside a giant aquarium where the player uses Bubble Gills to climb to the top," and get a compliant world. That only works if the repository carries machine-readable, agent-consumable documentation of everything an agent needs: the architecture, the Level Contract, the Asset Contract, Godot and GDScript conventions, existing mechanics and their extension interfaces, acceptance criteria, and how to run the checkers and tests to self-verify before submitting. This documentation is a first-class deliverable, not README garnish, and it must be validated by actually driving an agent through it end to end.
+Everything a person needs to add a level to this game, and the documentation that makes it possible without asking a maintainer.
+
+THE PRIMARY PATH IS THE GODOT EDITOR. A newcomer opens the template level (REQ-029) in Godot, plays it, changes something, and sees the change. They are not writing a game — they are editing a level of a game that already works, using the editor the engine already ships. Nothing in this requirement may assume an AI agent, a terminal-first workflow, or prior Godot experience as a precondition for that path.
+
+AN AI CODING AGENT IS A SECOND WAY IN, not the only one and not a prerequisite. Someone who would rather describe a level than place it should be able to point an agent at this repository, say "a level set inside a giant aquarium where the player uses Bubble Gills to climb to the top," and get something that passes the checkers. That works only because the repository already carries machine-readable, agent-consumable documentation — the architecture, the Level Contract, the Asset Contract, the asset catalogue, Godot and GDScript conventions, the extension interfaces, and how to run the checkers and tests to self-verify.
+
+THE DOCUMENTATION IS A FIRST-CLASS DELIVERABLE AND IT HAS TO BE REACHABLE. A repository can carry a thousand lines of excellent contributor documentation and still have no on-ramp if nothing links to it; the front door is the README, and the README is part of this requirement rather than garnish on it. Both paths are proven by someone outside this project actually walking them, not by the machinery existing.
 
 **Acceptance criteria — your task boxes:**
 - [ ] A reference example world exists, passes the compliance checker, and is documented as the canonical starting point for a new world
@@ -324,6 +322,12 @@ The requirement that produces the project's distinctive public identity: an open
   → covered by Task T24
 - [ ] An AI coding agent, given only the repository and a one-sentence world brief, produces a world that passes the compliance checker (manual)
   → covered by Task T25
+- [ ] The README is the front door and reaches the rest: it states what the game is, that levels can be added to it, and links every contributor document in the repository, so no contributor-facing page is discoverable only by browsing the file tree
+  → covered by Task T26
+- [ ] Documentation walks the editor-first path end to end — open the template in Godot, play it, change a platform, add a machine, run the checkers, see it in the hub — written for someone who has not used Godot before and assuming no terminal-first or agent workflow
+  → covered by Task T27
+- [ ] A person outside this project follows the editor-first path from the README alone and gets a change of their own running, without a maintainer answering questions (manual)
+  → covered by Task T28
 
 ### REQ-027: Performance Targets
 Category: non-functional | Status: in-progress
@@ -333,15 +337,15 @@ A colorful 3D platformer for families on unspecified PC hardware needs stated pe
 - [x] A baseline target PC specification is documented, and the frame-rate target, the maximum permitted frame-time spike, and the world load-time budget on that baseline are each stated as numbers
   → THIS NODE: internal logic — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
 - [ ] Official worlds sustain the documented frame-rate target on the baseline specification during normal traversal
-  → covered by Task T26
+  → covered by Task T29
 - [x] A restoration state transition completes without exceeding the documented maximum frame-time spike
   → THIS NODE: internal logic — possible coordination point: Contract "HUD State Interface" (dependency) to Player HUD (keyword signal only)
 - [x] World load time from selecting a hub portal to player control stays within the documented load-time budget
   → THIS NODE: internal logic — possible coordination point: Contract "Level Contract v1" (dependency) to World: Coral Cove (keyword signal only)
 - [ ] A performance regression test runs in CI against an official world and fails when any of the three documented targets is breached
-  → covered by Task T27
+  → covered by Task T30
 - [ ] The game remains smooth during a Flagship encounter combined with a restoration reversion, the heaviest expected load case (manual)
-  → covered by Task T28
+  → covered by Task T31
 
 ### REQ-031: Shared Look Foundation
 Category: technical | Status: pending
@@ -359,7 +363,7 @@ One rendering look for the whole game, owned by the game client and shared by ev
 - [x] The reference template ships no sun of its own and is lit by the client's rig, proving a world needs no lighting to be complete
   → THIS NODE: internal logic — possible coordination point: Contract "Level Contract v1" (dependency) to World: Reference Template (keyword signal only)
 - [ ] The hub and both official worlds read as the documented toy look (saturated albedo, real lighting) to the maintainer on baseline-class hardware at the documented frame rate (manual)
-  → covered by Task T29
+  → covered by Task T32
 
 ### REQ-033: Hero Character Look
 Category: functional | Status: pending
@@ -397,23 +401,37 @@ The step from greybox to a place: a shared, regenerable environment kit and wate
 - [x] Every walk probe, the perf gate and both contract checkers pass unchanged with the dressing in place
   → owner unresolved — this node or a sharing node (Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
 - [ ] The dressed hub and worlds read as an underwater place rather than a greybox to the maintainer in rendered captures (manual)
-  → covered by Task T35
+  → covered by Task T40
 
 ### REQ-021: Licensing Policy — Code, Assets, and AI Provenance
-Category: business | Status: pending
-A NAMED OPEN ITEM that blocks the public-facing README and contribution guide. The project's headline claim is "fork it," which requires an explicit and defensible split between the code license and the official art/audio license — these likely cannot both be maximally permissive if the axolotl character IP is to stay controlled. This decision is entangled with AI-art provenance: assets generated through external AI tools carry the generator's terms of service, captured per-asset in provenance.json, which may constrain how official and community art can be relicensed or redistributed. Both must be resolved together, not separately, and must be resolved before any public contribution workflow copy is written. Contributor licensing terms for submitted worlds and assets are part of this decision.
+Category: business | Status: blocked
+A BLOCKER, no longer an open item beside the work. The project's promise is now "add a level to this game, built out of our assets" — and the second half of that sentence is a GRANT. You cannot invite people to build with assets you have not established you can license to them, and every day the invitation is unwritten is a day the project's headline is unsupported.
+
+The decision has three parts and they resolve together or not at all:
+
+CODE AND ART ARE PROBABLY NOT THE SAME LICENSE. Code wants to be maximally permissive. Official art likely does not, if the axolotl's identity is to stay coherent — a character anyone may relicense into anything is a character with no character. The split has to be explicit and defensible rather than inherited from whichever LICENSE file happened to land at the repo root.
+
+AI PROVENANCE CONSTRAINS WHAT CAN BE GRANTED. Assets generated through external tools carry that generator's terms of service, captured per-asset in provenance.json. The shipped hero is exactly this case: its own provenance record states that the generator's terms govern the geometry and flags review before any redistribution assuming a uniform repository-wide grant. Either those terms permit what we intend to promise, or the asset is replaced with one generated by the in-repo pipeline, whose output the project can license freely. That is a decision plus possibly a rebuild, and it is the concrete blocking item.
+
+REUSE HAS TO BE POSITIVELY PERMITTED, not merely unprohibited. A level author needs to know they may ship a level built from our assets, and under what terms — inside this repository and, if it is allowed at all, outside it. Contributor terms for submitted levels and any art they bring are the same decision from the other side.
+
+Resolved before the README and the contribution guide ship, because those documents are where the grant is actually made.
 
 **Acceptance criteria — your task boxes:**
 - [ ] Code license is chosen and applied to the repository (manual)
-  → covered by Task T30
-- [ ] Official art and audio asset license is chosen, documented, and distinguished from the code license (manual)
-  → covered by Task T31
-- [ ] Policy documents how AI-generated asset provenance and generator terms of service affect redistribution and relicensing (manual)
-  → covered by Task T32
-- [ ] Contributor licensing terms for submitted worlds and assets are documented in the contribution guide (manual)
   → covered by Task T33
-- [ ] Licensing decision is resolved before the public README and contribution guide ship (manual)
+- [ ] Official art and audio asset license is chosen, documented, and distinguished from the code license (manual)
   → covered by Task T34
+- [ ] Policy documents how AI-generated asset provenance and generator terms of service affect redistribution and relicensing (manual)
+  → covered by Task T35
+- [ ] Contributor licensing terms for submitted worlds and assets are documented in the contribution guide (manual)
+  → covered by Task T36
+- [ ] Licensing decision is resolved before the public README and contribution guide ship (manual)
+  → covered by Task T37
+- [ ] The policy states explicitly whether a level author may build with the shipped assets, and on what terms, both inside this repository and outside it (manual)
+  → covered by Task T38
+- [ ] Every shipped asset whose provenance records terms originating outside this repository is either covered by the chosen policy or replaced with an asset the project can license, with none left unresolved at the point the contribution guide ships (manual)
+  → covered by Task T39
 
 ### REQ-035: Hero rig and animation set
 Category: functional | Status: pending
@@ -447,6 +465,58 @@ Geometry is never altered by rigging, so the triangle budget the Asset Contract 
   → owner unresolved — this node or a sharing node (Axolotl Controller, Blender (headless), Model Refinement Pipeline, Asset Contract Validator): no contract evidence; assign via the requirement mapping
 - [x] The hero's provenance records the rigging step, its tool, and the bones and clips it added
   → owner unresolved — this node or a sharing node (Axolotl Controller, Blender (headless), Model Refinement Pipeline, Asset Contract Validator): no contract evidence; assign via the requirement mapping
+
+### REQ-039: Forested river valley: procedural surfaces and water placed as difficulty
+Category: functional | Status: pending
+_Shared with: World: Coral Cove, Blender (headless) — their slices live in their own task docs._
+The space around and below a platforming route is gameplay, not garnish: a jump over nothing gives the player no way to judge height or distance, and a surface with no variation across it has no scale. Coral Cove therefore sits inside a forested river valley, and every terrain surface in the game wears a material instead of a flat colour.
+
+SURFACES WITHOUT TEXTURE FILES. Platforms and terrain wear one shared triplanar shader — three octaves of value noise over a warped stratum term, sampled from world position on all three axes and blended by the normal, with a third colour on upward faces only for moss. A material is a handful of uniform values in a client-owned .tres. Triplanar and world-space for this project's specific reasons: level geometry is BoxMesh primitives and props are generated with no UV layout, so a texture path would mean unwrapping everything and keeping the unwrap in step with generators that change; and the grain runs ACROSS the seam where two boxes butt, which tiling cannot do. The two mod gates deliberately keep a flat colour — a gate is a rule, not geology. The whole decision, including when a baked PNG is the right tool instead, is documented in the Asset Contract's prose.
+
+THE VALLEY: a scenery forest floor 24 m below the route (no collider — the pit volume sits BETWEEN route and floor, so a fall still dies at the last checkpoint while the player watches the forest come up at them), canopy trees planted on it that rise past the route and close overhead, ridges for sides, and banks enclosing the water so no volume's edge is ever visible. A five-prop forest kit (canopy tree, understory fern, fallen log, river reed, river boulder) is generated headless in Blender, deterministic under one seed, vertex-coloured, with provenance, the whole set well under a thousand triangles because it is placed by the dozen.
+
+WATER IS PLACED AS DIFFICULTY. A river runs the full length of the act-1 staircase, so a missed jump there is a swim downstream and never a life — reeds mark that waterline, making the forgiveness legible. The glow grotto's pillars have no water under them at all. And the gorge river drops a MANDATORY swim into the middle of the jumping, with a rock rib to dive under and slot walls set twice-the-jump back from the landing so no bank bypasses it. The difficulty curve is thereby stated in geometry.
+
+The shared haze is retuned from dense teal to thin grey-green air, because every scene in this game is above water and the underwater feel belongs to the water volumes, which tint it themselves; at the old density anything past thirty metres flattened into one plane and the valley rendered as an empty sea.
+
+**Acceptance criteria — your task boxes:**
+- [x] A shared triplanar world-space terrain shader exists with a small set of client-owned material resources, and Coral Cove's platforms, walls, beds and banks wear them rather than per-node flat colours — with the two mod gates keeping flat colour as the deliberate exception
+  → THIS NODE via Contract "Level Contract v1" (dependency) to World: Coral Cove — coordinate with World: Coral Cove
+- [x] The forest kit's five props are generated headless in Blender, deterministic under a seed, carry provenance records, and pass the Asset Contract validator inside the environment budget
+  → owner unresolved — this node or a sharing node (World: Coral Cove, Blender (headless)): no contract evidence; assign via the requirement mapping
+- [x] A missed jump anywhere over the act-1 river costs a swim and never a life, while a fall in the glow grotto still costs a life at the last checkpoint: the pit volume sits between the route and the scenery forest floor and the waterway spans exactly the forgiving stretch
+  → owner unresolved — this node or a sharing node (World: Coral Cove, Blender (headless)): no contract evidence; assign via the requirement mapping
+- [x] The gorge river is a mandatory swim between jump sections — entered from the landing, dived under the rib, exited onto the first terrace — and its slot walls stand at least twice the measured jump from any standable edge so the swim cannot be bypassed on a bank
+  → owner unresolved — this node or a sharing node (World: Coral Cove, Blender (headless)): no contract evidence; assign via the requirement mapping
+- [x] Every water volume in the world carries bubble particles (the REQ-034 dressing rule), emitted by the same construction that makes the volume so a new river cannot ship without them
+  → THIS NODE via Contract "Level Contract v1" (dependency) to World: Coral Cove — coordinate with World: Coral Cove
+- [x] The retuned haze keeps distant geometry legible: rendered captures show the forest floor, trees and valley sides reading at route distance in every act, and the full verification chain stays green
+  → owner unresolved — this node or a sharing node (World: Coral Cove, Blender (headless)): no contract evidence; assign via the requirement mapping
+
+### REQ-040: Hero surface quality: baked character maps at toy-grade finish
+Category: functional | Status: pending
+_Shared with: Blender (headless), Model Refinement Pipeline — their slices live in their own task docs._
+The hero must read as a finished toy at gameplay distance AND in a close-up: the reference is a well-made vinyl figure under studio light — pristine gloss, soft translucent skin, deep wet eyes — not a vertex-tinted mesh. This extends REQ-035 (Hero Character Look), whose final criterion (the maintainer sign-off render) has stayed unmet precisely because flat vertex colour under real lighting still reads as unfinished.
+
+THE CHARACTER IS THE ONE ASSET THAT EARNS TEXTURES. The Asset Contract's surface doctrine says baked maps are the last resort, paid for only where a pattern must be AUTHORED rather than DESCRIBED — and the hero's skin is that case: mottling that follows anatomy, a belly-to-back gradient, pore-scale relief. So the Blender lane gains a bake stage: UV-unwrap the generated hero headless, bake fine-detail maps (albedo detail and normal) from procedural node trees in Cycles, and ship them beside the glb under the character category's documented size bounds, with the bake recorded in provenance like every other generation step.
+
+THE ROLE MATERIALS finish the job in Godot, because most of the Astro Bot read is MATERIAL rather than map: subsurface scattering and a clearcoat sheen on skin so light enters rather than bounces; a high-gloss dark eye whose highlight is geometry (the gleam) and therefore never lost to environment reflections; gill fronds lit from behind through backlight so they glow when the sun crosses them; the baked normal map giving the skin its fine relief only at close range.
+
+PERFORMANCE IS A CONSTRAINT, NOT A HOPE: the hero stays inside its existing Asset Contract triangle budget (the bake adds maps, never geometry), texture memory stays within the category's size bounds, and the whole dressed Coral Cove scene is measured — total triangles counted headlessly and the perf gate extended to run the valley — so desktop testing meets a scene in the tens of thousands of triangles, not hundreds.
+
+**Acceptance criteria — your task boxes:**
+- [x] The Blender lane bakes hero maps headless and reproducibly: the generated axolotl is UV-unwrapped and fine-detail albedo and normal maps are baked from procedural sources in one CLI invocation, recorded in the asset's provenance
+  → owner unresolved — this node or a sharing node (Blender (headless), Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
+- [x] Baked maps conform to the Asset Contract character category: PNG, within the documented size bounds, living in the asset's own directory, and the validator passes
+  → owner unresolved — this node or a sharing node (Blender (headless), Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
+- [x] The bake adds no geometry: the shipped hero's triangle count is unchanged and remains inside its Asset Contract budget
+  → owner unresolved — this node or a sharing node (Blender (headless), Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
+- [x] The skin role material carries the baked normal and detail maps with subsurface scattering and a clearcoat sheen; the eye is high-gloss with its highlight guaranteed by the gleam geometry; gills glow when backlit — all applied by the existing role classification at runtime
+  → owner unresolved — this node or a sharing node (Blender (headless), Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
+- [x] Rendered close-up and gameplay-distance captures on the shared rig show the finish: visible skin relief in close-up that vanishes into a clean silhouette at distance, no shading seam at any UV boundary
+  → owner unresolved — this node or a sharing node (Blender (headless), Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
+- [x] The dressed Coral Cove scene's total triangle count is measured headlessly and stays under 150,000, and the performance gate runs the valley world within the documented budgets
+  → owner unresolved — this node or a sharing node (Blender (headless), Model Refinement Pipeline): no contract evidence; assign via the requirement mapping
 
 ## Interface Contracts
 
@@ -1018,6 +1088,7 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 | File | Kind | Language | Status |
 |------|------|----------|--------|
+| `docs/mvp-readiness.md` | doc | --- | draft |
 | `docs/performance.md` | doc | --- | draft |
 | `hub/open_lagoon.gd` | source | --- | draft |
 | `project.godot` | config | --- | draft |
@@ -1026,25 +1097,48 @@ Startup/initialization order based on edge directions and interaction patterns.
 | `dev/fall_guard.gd` | source | --- | draft |
 | `.nodespec/tests/req-006.tests.md` - Test plan for requirement: Level Contract v1 Specification | test-plan | markdown | draft |
 | `hub/open_lagoon.tscn` | source | --- | draft |
+| `assets/character/axolotl/axolotl_skin_normal.png` | design | --- | draft |
+| `assets/environment/understory_fern/understory_fern.glb` | design | --- | draft |
+| `assets/environment/river_reed/provenance.json` | config | --- | draft |
+| `test/core/rendering/test_hero_anatomy.gd` | source | --- | draft |
 | `test/hub/test_world_registry.gd` | source | --- | draft |
 | `assets/character/axolotl/axolotl.glb` | design | --- | draft |
+| `core/rendering/terrain/mossy_stone.tres` | source | --- | draft |
 | `test/hub/hub_walk_probe.gd` | source | --- | draft |
+| `assets/environment/river_boulder/provenance.json` | config | --- | draft |
+| `assets/environment/fallen_log/provenance.json` | config | --- | draft |
+| `core/rendering/materials/forest_canopy.tres` | source | --- | draft |
+| `core/rendering/terrain/coral_shelf_stone.tres` | source | --- | draft |
+| `core/rendering/terrain/river_stone.tres` | source | --- | draft |
 | `test/hub/test_world_systems.gd` | source | --- | draft |
 | `test/hub/run_hub_walk.gd` | source | --- | draft |
+| `test/core/rendering/test_terrain_shell.gd` | source | --- | draft |
+| `assets/environment/canopy_tree/canopy_tree.glb` | design | --- | draft |
+| `test/perf/run_gpu_gate.gd` | source | --- | draft |
 | `.nodespec/tests/req-021.tests.md` - Test plan for requirement: Licensing Policy — Code, Assets, and AI Provenance | test-plan | markdown | draft |
+| `core/rendering/scatter_field.gd` | source | --- | draft |
+| `core/rendering/terrain_surface.gdshader` | source | --- | draft |
 | `core/rendering/base_environment.tres` | source | --- | draft |
+| `assets/environment/river_boulder/river_boulder.glb` | design | --- | draft |
 | `test/perf/perf_gate_probe.gd` | source | --- | draft |
+| `assets/environment/river_reed/river_reed.glb` | design | --- | draft |
 | `core/rendering/world_lighting.tscn` | source | --- | draft |
+| `assets/environment/fallen_log/fallen_log.glb` | design | --- | draft |
 | `core/rendering/world_lighting.gd` | source | --- | draft |
+| `core/rendering/terrain/river_sand.tres` | source | --- | draft |
+| `assets/environment/understory_fern/provenance.json` | config | --- | draft |
 | `hub/hub_error.gd` | source | --- | draft |
+| `core/rendering/vegetation_wind.gdshader` | source | --- | draft |
 | `core/rendering/water_surface.tres` | source | --- | draft |
 | `assets/character/axolotl/provenance.json` | config | --- | draft |
 | `contracts/level_contract.v1.json` | schema | --- | draft |
 | `hub/portal_tier.gd` | source | --- | draft |
 | `.nodespec/tests/req-027.tests.md` - Test plan for requirement: Performance Targets | test-plan | markdown | draft |
+| `core/rendering/render_quality.gd` | source | --- | draft |
 | `tools/test_performance_targets.py` | source | --- | draft |
 | `test/perf/run_perf_gate.gd` | source | --- | draft |
 | `test/core/rendering/test_world_lighting.gd` | source | --- | draft |
+| `test/core/rendering/test_hero_surface.gd` | source | --- | draft |
 | `core/rendering/hero_skin.gd` | source | --- | draft |
 | `core/rendering/materials/axolotl_skin.tres` | source | --- | draft |
 | `core/rendering/materials/axolotl_eye.tres` | source | --- | draft |
@@ -1054,9 +1148,11 @@ Startup/initialization order based on edge directions and interaction patterns.
 | `test/core/rendering/test_hero_skin.gd` | source | --- | draft |
 | `contracts/sanctioned_api.v1.json` | schema | --- | draft |
 | `hub/contract_validator.gd` | source | --- | draft |
+| `test/core/rendering/test_scatter_field.gd` | source | --- | draft |
 | `test/contracts/test_level_contract.gd` | source | --- | draft |
 | `hub/world_portal.gd` | source | --- | draft |
 | `dev/greybox.tscn` | design | --- | draft |
+| `assets/character/axolotl/axolotl_skin_detail.png` | design | --- | draft |
 | `core/rendering/water_surface.gdshader` | source | --- | draft |
 | `test/core/rendering/test_world_dressing.gd` | source | --- | draft |
 | `assets/environment/rock_cluster/rock_cluster.glb` | design | --- | draft |
@@ -1069,10 +1165,14 @@ Startup/initialization order based on edge directions and interaction patterns.
 | `assets/environment/seagrass_tuft/provenance.json` | config | --- | draft |
 | `docs/level-contract.md` | doc | --- | draft |
 | `contracts/performance_targets.v1.json` | config | --- | draft |
+| `assets/environment/canopy_tree/provenance.json` | config | --- | draft |
 | `hub/world_registry.gd` | source | --- | draft |
+| `test/core/rendering/test_render_quality.gd` | source | --- | draft |
+| `core/rendering/terrain_shell.gd` | source | --- | draft |
 | `dev/run_smoke.gd` | source | --- | draft |
 | `.nodespec/tests/req-009.tests.md` - Test plan for requirement: Open Lagoon Hub and World Loading | test-plan | markdown | draft |
 | `core/rendering/hero_animator.gd` | source | --- | draft |
 | `test/core/rendering/test_hero_animator.gd` | test-plan | --- | draft |
 | `hub/world_loader.gd` | source | --- | draft |
 | `dev/smoke_probe.gd` | source | --- | draft |
+| `core/rendering/terrain/forest_earth.tres` | source | --- | draft |

@@ -13,6 +13,10 @@
 
 **Working code for this component**, honoring the contracts and criteria below, plus its configuration artifacts and tests.
 
+## Constraints That Apply Here
+
+None recorded for this node. Standing conditions the build must honour (security, compliance, cost, technology and the like) can be filed with a `create_constraint` patch.
+
 ## Implementation Context
 
 > ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
@@ -120,53 +124,41 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T8 — Implement: "A contributor can produce a conforming asset from the Asset Contract document alone" (REQ-015).** <!-- t:6566e4f2 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-015 "A contributor can produce a conforming asset from the Asset Contract document alone"
-- [ ] **T9 — Implement: "Validator exits non-zero on failure and runs as a required CI check on every pull request touching assets" (REQ-016).** <!-- t:cf7730dc -->
+- [ ] **T9 — Implement: "A generated, checked-in catalogue lists every shipped asset with its category, triangle count, texture footprint and intended use, and a test fails when an asset is added or removed without the catalogue being regenerated" (REQ-015).** <!-- t:08cab20f -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-015 "A generated, checked-in catalogue lists every shipped asset with its category, triangle count, texture footprint and intended use, and a test fails when an asset is added or removed without the catalogue being regenerated" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T10 — Implement: "Every asset whose provenance records license terms originating outside this repository is listed as such by the validator, so the set needing a licensing decision or replacement is enumerated rather than discovered" (REQ-015).** <!-- t:4517f8b8 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-015 "Every asset whose provenance records license terms originating outside this repository is listed as such by the validator, so the set needing a licensing decision or replacement is enumerated rather than discovered"
+- [ ] **T11 — Implement: "The shipped library is broad enough that a new level in a setting the official worlds do not cover can be built from it without authoring new art, demonstrated by building one" (REQ-015).** <!-- t:e8ce8a44 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-015 "The shipped library is broad enough that a new level in a setting the official worlds do not cover can be built from it without authoring new art, demonstrated by building one"
+- [ ] **T12 — Implement: "Validator exits non-zero on failure and runs as a required CI check on every pull request touching assets" (REQ-016).** <!-- t:cf7730dc -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-016 "Validator exits non-zero on failure and runs as a required CI check on every pull request touching assets" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
-- [ ] **T10 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T13 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
 
-**Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Technology Guidance, and node context as your references. Record the expanded list in this section via update_artifact (propose_patches) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
+**Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Existing Implementation, Technology Guidance, and node context as your references. Write each work order's steps under its task line as indented checkbox lines (`  - [ ] <step>`), one action each, naming the file, setting or interface it changes, and send them with update_artifact (propose_patches, passing base_sequence) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact; the steps stay with their work order when this doc regenerates. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
 
-## Project Context
+## Vision This Node Serves
 
-OpenAxolotl — Play it. Fork it. Build a world.
-
-A colorful 3D action-platformer in Godot where a tiny axolotl explores strange aquatic worlds, restoring damaged habitats and rescuing creatures. Every world is a self-contained module anyone — human or AI coding agent — can fork, replace, or extend. Open source is a gameplay feature, not a line in the README.
-
-FOUR PILLARS
-
-1. Regeneration is the constant loop; lives are the hard failure state. Damage strips a capability — tail, gill, leg — with comedic pop-and-sparkle framing rather than draining a health bar, and never ends a run on its own. A separate limited life count is spent only on catastrophic events and returns the player to the last checkpoint. Regeneration stays expressive and ever-present; lives supply the stakes.
-
-2. Two movement grammars, one axolotl. Water and land are mechanically distinct, joined by a water-powered dash as the signature transition skill. This is the answer to "why is this not a cute skin on generic platformer mechanics."
-
-3. The world regenerates with you. Regions progress barren, resourced, restored — opening real traversal paths rather than swapping visuals — and Drift Fleet dredgers can undo that progress. This carries the open-source metaphor mechanically, without a child ever needing to notice it.
-
-4. The repo is the game. Every world conforms to a versioned Level Contract published as a machine-readable schema. A contributor never needs to understand the whole game, only the contract. The project is effectively an open-source platformer SDK.
-
-ANTAGONISTS
-The Drift Fleet: faceless industrial extraction machinery, deliberately never human characters. Nets, hooks, dredges and pollution, with no gore and no humanized violence — the same machinery that broke the habitat is what the player disables to heal it.
-
-MVP SCOPE
-PC only. Two official worlds plus a minimal reference template. Three Gill Mods — Bubble, Jet, Glow — built to depth rather than breadth; Electric, Frost and Giant are post-MVP and double as the reference example for community-built mods. Contract compliance, asset conformance, and world static analysis are automated and merge-blocking, so an AI agent can verify its own work before submitting.
-
-COMMUNITY (post-MVP)
-Opens only once Level Contract v1 is frozen; opening earlier means every core update breaks early contributor worlds. Community worlds ship code like any other world — safety comes from static analysis against the sanctioned world API surface plus mandatory human review, never an automated-only merge path. This is a family game with an agent-authored contribution pipeline, so that gate is load-bearing.
-
-NON-GOALS (firm, not deferrals)
-No multiplayer, in any phase. No console certification. No level-editor GUI, ever — worlds are authored as code and Godot scenes only, so humans and AI agents build the same way and the contract surface stays narrow enough to check.
-
-OPEN ITEMS
-Licensing split between code and official art/audio, entangled with AI-generation provenance. Save-compatibility policy for forked and divergent worlds.
+No outcome behind this node's requirements cites the vision, so no sentence is carried here. The whole vision is one read away: get_outcome_board lists every sentence with its id.
 
 ## Requirements — Your Scope
 
-### REQ-015: Asset Contract and AI-Art Provenance
+### REQ-015: Asset Contract, Asset Library and AI-Art Provenance
 Category: technical | Status: in-progress
-The art-side sibling of the Level Contract: a specification any character, creature, or prop asset must conform to in order to enter the repo. Contributors generate art with whatever external AI tool they choose (offline authoring — no in-editor generation plugin at MVP), then drop conforming output into the repo. The contract defines required file types, directory layout and naming convention, resolution and format specs, alpha-channel handling, and a required provenance.json per asset. Provenance records author, generation method, and applicable license terms for EVERY asset; AI-generated assets additionally record the generation tool and prompt, which do not apply to hand-authored work. Provenance capture is not bookkeeping: AI-generated art may carry different rights and attribution obligations depending on generator terms of service, which is why it intersects directly with the project licensing decision.
+The art-side sibling of the Level Contract, and — since "build your level out of our assets" is half the open-source promise — the library itself.
+
+THE CONTRACT. A specification any character, creature, or prop asset must conform to in order to enter the repo. Contributors generate art with whatever external AI tool they choose (offline authoring — no in-editor generation plugin at MVP), then drop conforming output into the repo. The contract defines required file types, directory layout and naming convention, resolution and format specs, alpha-channel handling, and a required provenance.json per asset. Provenance records author, generation method, and applicable license terms for EVERY asset; AI-generated assets additionally record the generation tool and prompt.
+
+THE LIBRARY IS A DELIVERABLE, NOT A BYPRODUCT. This is the part the new vision adds. Today's assets exist because the official levels needed exactly them; a person building a level of their own composes from what is there, and finds it either sufficient or empty. So the shipped set has to be broad enough that a new level can be built without authoring any art, and CATALOGUED — a browsable index naming every asset, its category, its footprint and what it is for. An uncatalogued library is a directory tree, and a newcomer cannot compose from a directory tree.
+
+PROVENANCE IS NOW LOAD-BEARING, NOT BOOKKEEPING. Telling someone "build with our assets" is issuing a grant, and a grant cannot be issued over geometry whose terms belong to an external generator. Assets whose provenance records external terms of service must be resolved or replaced before the contribution story is published; this requirement is the place that surfaces them, and REQ-021 is the place the decision is made.
 
 **Acceptance criteria — your task boxes:**
 - [x] Asset Contract specifies required file types, resolution/format constraints, and alpha-channel handling per asset category
@@ -183,6 +175,12 @@ The art-side sibling of the Level Contract: a specification any character, creat
   → covered by Task T7
 - [ ] A contributor can produce a conforming asset from the Asset Contract document alone (manual)
   → covered by Task T8
+- [ ] A generated, checked-in catalogue lists every shipped asset with its category, triangle count, texture footprint and intended use, and a test fails when an asset is added or removed without the catalogue being regenerated
+  → covered by Task T9
+- [ ] Every asset whose provenance records license terms originating outside this repository is listed as such by the validator, so the set needing a licensing decision or replacement is enumerated rather than discovered
+  → covered by Task T10
+- [ ] The shipped library is broad enough that a new level in a setting the official worlds do not cover can be built from it without authoring new art, demonstrated by building one (manual)
+  → covered by Task T11
 
 ### REQ-016: Asset Contract Automated Validator
 Category: technical | Status: in-progress
@@ -198,7 +196,7 @@ The art-pipeline counterpart to the Level Contract checker, and the automated ha
 - [x] Failure output names the specific asset and the specific violated rule
   → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
 - [ ] Validator exits non-zero on failure and runs as a required CI check on every pull request touching assets
-  → covered by Task T9
+  → covered by Task T12
 - [x] Validator is runnable locally with a single documented command
   → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
 - [x] A deliberately non-conforming fixture asset fails validation and conforming official assets pass

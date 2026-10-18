@@ -13,6 +13,10 @@
 
 **Working code for this component**, honoring the contracts and criteria below, plus its configuration artifacts and tests.
 
+## Constraints That Apply Here
+
+None recorded for this node. Standing conditions the build must honour (security, compliance, cost, technology and the like) can be filed with a `create_constraint` patch.
+
 ## Implementation Context
 
 > ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
@@ -123,16 +127,28 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T6 — Expose the interface World Static Analysis Gate consumes, per Contract "Engine Feature Policy" (dependency).** <!-- t:5c920cb0 -->
   Record the endpoint/identifiers World Static Analysis Gate needs in this node's config artifacts — coordinate with World Static Analysis Gate.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T7 — Implement: "The encounter reads as a climactic set piece and its restoration payoff lands" (REQ-013).** <!-- t:89189d9f -->
+- [ ] **T7 — Implement: "The encounter contains at least one mandatory phase gated on the Gill Mod its world requires" (REQ-013).** <!-- t:b7dadb72 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-013 "The encounter contains at least one mandatory phase gated on the Gill Mod its world requires" — possible coordination point: Contract "Engine Feature Policy" (dependency) from World Static Analysis Gate (keyword signal only)
+- [ ] **T8 — Implement: "The Flagship is the final encounter of the level that hosts it: no mandatory traversal, collectible or region objective remains after it, and the world's finish condition is reached only once the encounter completes" (REQ-013).** <!-- t:19a5ea31 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-013 "The Flagship is the final encounter of the level that hosts it: no mandatory traversal, collectible or region objective remains after it, and the world's finish condition is reached only once the encounter completes" — possible coordination point: Contract "Restoration Region Interface" (dependency) to Restoration State System (keyword signal only)
+- [ ] **T9 — Implement: "Coral Cove declares a boss and reaches the encounter in normal play, proven by the same flown-route probe that proves the rest of that level" (REQ-013).** <!-- t:1891653c -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-013 "Coral Cove declares a boss and reaches the encounter in normal play, proven by the same flown-route probe that proves the rest of that level" — possible coordination point: Contract "Enemy Registration Interface" (dependency) from World: Coral Cove (keyword signal only)
+- [ ] **T10 — Implement: "The Open Lagoon hub hosts no Flagship and no Drift Fleet encounter of any kind, and a test asserts the hub scene declares neither" (REQ-013).** <!-- t:bde09090 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-013 "The Open Lagoon hub hosts no Flagship and no Drift Fleet encounter of any kind, and a test asserts the hub scene declares neither" — possible coordination point: Contract "Enemy Registration Interface" (dependency) to Drift Fleet Enemy Framework (keyword signal only)
+- [ ] **T11 — Implement: "The encounter reads as a climactic set piece and its restoration payoff lands" (REQ-013).** <!-- t:89189d9f -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-013 "The encounter reads as a climactic set piece and its restoration payoff lands" — possible coordination point: Contract "Restoration Region Interface" (dependency) to Restoration State System (keyword signal only)
-- [ ] **T8 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
 
-**Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Technology Guidance, and node context as your references. Record the expanded list in this section via update_artifact (propose_patches) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
+**Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Existing Implementation, Technology Guidance, and node context as your references. Write each work order's steps under its task line as indented checkbox lines (`  - [ ] <step>`), one action each, naming the file, setting or interface it changes, and send them with update_artifact (propose_patches, passing base_sequence) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact; the steps stay with their work order when this doc regenerates. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
 
 ## Configuration
 
@@ -143,42 +159,25 @@ User-selected configuration for this component (honor these choices):
 - **language:** GDScript
 - **rationale:** One language keeps the contribution surface narrow for humans and AI agents alike; a second toolchain doubles build, review and static-gate parser burden for no gameplay gain.
 
-## Project Context
+## Vision This Node Serves
 
-OpenAxolotl — Play it. Fork it. Build a world.
-
-A colorful 3D action-platformer in Godot where a tiny axolotl explores strange aquatic worlds, restoring damaged habitats and rescuing creatures. Every world is a self-contained module anyone — human or AI coding agent — can fork, replace, or extend. Open source is a gameplay feature, not a line in the README.
-
-FOUR PILLARS
-
-1. Regeneration is the constant loop; lives are the hard failure state. Damage strips a capability — tail, gill, leg — with comedic pop-and-sparkle framing rather than draining a health bar, and never ends a run on its own. A separate limited life count is spent only on catastrophic events and returns the player to the last checkpoint. Regeneration stays expressive and ever-present; lives supply the stakes.
-
-2. Two movement grammars, one axolotl. Water and land are mechanically distinct, joined by a water-powered dash as the signature transition skill. This is the answer to "why is this not a cute skin on generic platformer mechanics."
-
-3. The world regenerates with you. Regions progress barren, resourced, restored — opening real traversal paths rather than swapping visuals — and Drift Fleet dredgers can undo that progress. This carries the open-source metaphor mechanically, without a child ever needing to notice it.
-
-4. The repo is the game. Every world conforms to a versioned Level Contract published as a machine-readable schema. A contributor never needs to understand the whole game, only the contract. The project is effectively an open-source platformer SDK.
-
-ANTAGONISTS
-The Drift Fleet: faceless industrial extraction machinery, deliberately never human characters. Nets, hooks, dredges and pollution, with no gore and no humanized violence — the same machinery that broke the habitat is what the player disables to heal it.
-
-MVP SCOPE
-PC only. Two official worlds plus a minimal reference template. Three Gill Mods — Bubble, Jet, Glow — built to depth rather than breadth; Electric, Frost and Giant are post-MVP and double as the reference example for community-built mods. Contract compliance, asset conformance, and world static analysis are automated and merge-blocking, so an AI agent can verify its own work before submitting.
-
-COMMUNITY (post-MVP)
-Opens only once Level Contract v1 is frozen; opening earlier means every core update breaks early contributor worlds. Community worlds ship code like any other world — safety comes from static analysis against the sanctioned world API surface plus mandatory human review, never an automated-only merge path. This is a family game with an agent-authored contribution pipeline, so that gate is load-bearing.
-
-NON-GOALS (firm, not deferrals)
-No multiplayer, in any phase. No console certification. No level-editor GUI, ever — worlds are authored as code and Godot scenes only, so humans and AI agents build the same way and the contract surface stays narrow enough to check.
-
-OPEN ITEMS
-Licensing split between code and official art/audio, entangled with AI-generation provenance. Save-compatibility policy for forked and divergent worlds.
+No outcome behind this node's requirements cites the vision, so no sentence is carried here. The whole vision is one read away: get_outcome_board lists every sentence with its id.
 
 ## Requirements — Your Scope
 
 ### REQ-013: Flagship Boss Encounter
 Category: functional | Status: in-progress
-The regional set-piece encounter and the mechanic that ties boss design directly to Pillar 3. The Flagship is the source vessel anchoring a region's Drift Fleet presence — the largest piece of extraction machinery, still faceless, still unmanned. Its finishing moves are one of the few life-costing catastrophic events, while its ordinary attacks strip capability like any other Drift Fleet unit, so the fight escalates along both layers at once. Defeating it flips the whole region from barren to restorable, making the boss the gate on the restoration payoff rather than a detached spectacle. The encounter should require both movement grammars and the Gill Mod its world emphasizes. Boss is an optional Level Contract element, so a world without one remains fully valid.
+The level's CLIMAX, and the mechanic that ties boss design directly to Pillar 3. The Flagship is the source vessel anchoring a region's Drift Fleet presence — the largest piece of extraction machinery, still faceless, still unmanned. Its finishing moves are one of the few life-costing catastrophic events, while its ordinary attacks strip capability like any other Drift Fleet unit, so the fight escalates along both layers at once.
+
+IT GOES AT THE END OF A LEVEL, and that is a design rule rather than a staging preference. A level is a run of acts, each introducing something new and then asking for it under pressure; the Flagship is what asks for all of it at once. Placed in the middle it is an obstacle and everything after it is anticlimax. Placed last it is the payoff — and because defeating it flips the region from barren to restorable, the restoration reward lands on the last thing the player did rather than on an errand they ran an hour earlier. The encounter requires both movement grammars and the Gill Mod its world emphasizes, because by the end of the level the player has all of them.
+
+WHERE IT DOES NOT GO, STATED SO NOBODY RE-DERIVES IT.
+
+  * NOT IN THE OPEN LAGOON HUB. The hub is the place between levels: a calm, safe space holding portals, where the player arrives, chooses and returns. It is not a level, it declares no world manifest and therefore has no `boss` element to declare, and putting a set-piece fight in it would break the one job it has — being somewhere you are not being attacked. This is structural today and must stay a rule rather than an accident of the hub not being a world module.
+
+  * NOT IN EVERY WORLD. At MVP exactly one world hosts a Flagship: Coral Cove, the long build the whole level ladder leads to. Bubble Bay ships without one (REQ-028), and `boss` stays an OPTIONAL Level Contract element so a short or experimental level remains valid without it — a path the reference template and the conforming-world fixture both prove on every pull request.
+
+Until a shipped world actually reaches this encounter in play it is verified in fixtures only, which is not verified.
 
 **Acceptance criteria — your task boxes:**
 - [x] Flagship ordinary attacks strip capability, and its designated finishing moves decrement a life
@@ -187,14 +186,20 @@ The regional set-piece encounter and the mechanic that ties boss design directly
   → THIS NODE: internal logic — possible coordination point: Contract "Restoration Region Interface" (dependency) to Restoration State System (keyword signal only)
 - [x] The encounter contains at least one mandatory phase completable only in the water grammar and at least one completable only in the land grammar
   → THIS NODE: internal logic — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
-- [x] The encounter contains at least one mandatory phase gated on the Gill Mod its host world requires
-  → THIS NODE: internal logic — possible coordination point: Contract "Engine Feature Policy" (dependency) from World Static Analysis Gate (keyword signal only)
+- [ ] The encounter contains at least one mandatory phase gated on the Gill Mod its world requires
+  → covered by Task T7
 - [x] Checkpoints within the encounter restore lives and capability state and resume the encounter at the last completed phase rather than from its start
   → THIS NODE: internal logic — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
 - [x] A world declaring no boss remains contract-valid and fully completable
   → THIS NODE: internal logic — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
+- [ ] The Flagship is the final encounter of the level that hosts it: no mandatory traversal, collectible or region objective remains after it, and the world's finish condition is reached only once the encounter completes
+  → covered by Task T8
+- [ ] Coral Cove declares a boss and reaches the encounter in normal play, proven by the same flown-route probe that proves the rest of that level
+  → covered by Task T9
+- [ ] The Open Lagoon hub hosts no Flagship and no Drift Fleet encounter of any kind, and a test asserts the hub scene declares neither
+  → covered by Task T10
 - [ ] The encounter reads as a climactic set piece and its restoration payoff lands (manual)
-  → covered by Task T7
+  → covered by Task T11
 
 ### REQ-036: Drift Fleet and Flagship reachable from a world
 Category: functional | Status: pending

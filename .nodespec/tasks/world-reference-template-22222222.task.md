@@ -13,7 +13,13 @@
 
 **Working code for this component**, honoring the contracts and criteria below, plus its configuration artifacts and tests.
 
+## Constraints That Apply Here
+
+None recorded for this node. Standing conditions the build must honour (security, compliance, cost, technology and the like) can be filed with a `create_constraint` patch.
+
 ## Implementation Context
+
+> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
 The template is the canonical starting point for a new world, and it is also the
@@ -114,13 +120,25 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T6 — Implement: "The template is documented as the canonical starting point for a new world, with instructions on what to copy and what to change" (REQ-029).** <!-- t:ceeee88b -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-029 "The template is documented as the canonical starting point for a new world, with instructions on what to copy and what to change"
-- [ ] **T7 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T7 — Implement: "The template demonstrates each mechanic a new level is likely to use at least once as a worked example: both movement grammars, a checkpoint, a collectible, a Drift Fleet machine, water using the shared surface, the shared lighting rig, and one gated path" (REQ-029).** <!-- t:e9b8be87 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-029 "The template demonstrates each mechanic a new level is likely to use at least once as a worked example: both movement grammars, a checkpoint, a collectible, a Drift Fleet machine, water using the shared surface, the shared lighting rig, and one gated path" — possible coordination point: Contract "Sanctioned World API Surface" (dependency) from World Static Analysis Gate (keyword signal only)
+- [ ] **T8 — Implement: "The template is short enough to play in a few minutes and its scene tree is organised and commented so a newcomer can find and change a platform, a machine and a collectible without reading any core code" (REQ-029).** <!-- t:8ef8e4e7 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-029 "The template is short enough to play in a few minutes and its scene tree is organised and commented so a newcomer can find and change a platform, a machine and a collectible without reading any core code"
+- [ ] **T9 — Implement: "A minimal world declaring no optional contract elements still loads and completes, proving every optional element's absent-default path, exercised by the conforming-world fixture rather than by the shipped template" (REQ-029).** <!-- t:391d993e -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-029 "A minimal world declaring no optional contract elements still loads and completes, proving every optional element's absent-default path, exercised by the conforming-world fixture rather than by the shipped template"
+- [ ] **T10 — Implement: "Someone who has not worked on this project opens the template in the Godot editor, makes a change of their own, and sees it in play without being told how by a maintainer" (REQ-029).** <!-- t:493d9aca -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-029 "Someone who has not worked on this project opens the template in the Godot editor, makes a change of their own, and sees it in play without being told how by a maintainer"
+- [ ] **T11 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
 
-**Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Technology Guidance, and node context as your references. Record the expanded list in this section via update_artifact (propose_patches) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
+**Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Existing Implementation, Technology Guidance, and node context as your references. Write each work order's steps under its task line as indented checkbox lines (`  - [ ] <step>`), one action each, naming the file, setting or interface it changes, and send them with update_artifact (propose_patches, passing base_sequence) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact; the steps stay with their work order when this doc regenerates. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
 
 ## Configuration
 
@@ -131,48 +149,25 @@ User-selected configuration for this component (honor these choices):
 - **language:** GDScript
 - **rationale:** One language keeps the contribution surface narrow for humans and AI agents alike; a second toolchain doubles build, review and static-gate parser burden for no gameplay gain.
 
-## Project Context
+## Vision This Node Serves
 
-OpenAxolotl — Play it. Fork it. Build a world.
-
-A colorful 3D action-platformer in Godot where a tiny axolotl explores strange aquatic worlds, restoring damaged habitats and rescuing creatures. Every world is a self-contained module anyone — human or AI coding agent — can fork, replace, or extend. Open source is a gameplay feature, not a line in the README.
-
-FOUR PILLARS
-
-1. Regeneration is the constant loop; lives are the hard failure state. Damage strips a capability — tail, gill, leg — with comedic pop-and-sparkle framing rather than draining a health bar, and never ends a run on its own. A separate limited life count is spent only on catastrophic events and returns the player to the last checkpoint. Regeneration stays expressive and ever-present; lives supply the stakes.
-
-2. Two movement grammars, one axolotl. Water and land are mechanically distinct, joined by a water-powered dash as the signature transition skill. This is the answer to "why is this not a cute skin on generic platformer mechanics."
-
-3. The world regenerates with you. Regions progress barren, resourced, restored — opening real traversal paths rather than swapping visuals — and Drift Fleet dredgers can undo that progress. This carries the open-source metaphor mechanically, without a child ever needing to notice it.
-
-4. The repo is the game. Every world conforms to a versioned Level Contract published as a machine-readable schema. A contributor never needs to understand the whole game, only the contract. The project is effectively an open-source platformer SDK.
-
-ANTAGONISTS
-The Drift Fleet: faceless industrial extraction machinery, deliberately never human characters. Nets, hooks, dredges and pollution, with no gore and no humanized violence — the same machinery that broke the habitat is what the player disables to heal it.
-
-MVP SCOPE
-PC only. Two official worlds plus a minimal reference template. Three Gill Mods — Bubble, Jet, Glow — built to depth rather than breadth; Electric, Frost and Giant are post-MVP and double as the reference example for community-built mods. Contract compliance, asset conformance, and world static analysis are automated and merge-blocking, so an AI agent can verify its own work before submitting.
-
-COMMUNITY (post-MVP)
-Opens only once Level Contract v1 is frozen; opening earlier means every core update breaks early contributor worlds. Community worlds ship code like any other world — safety comes from static analysis against the sanctioned world API surface plus mandatory human review, never an automated-only merge path. This is a family game with an agent-authored contribution pipeline, so that gate is load-bearing.
-
-NON-GOALS (firm, not deferrals)
-No multiplayer, in any phase. No console certification. No level-editor GUI, ever — worlds are authored as code and Godot scenes only, so humans and AI agents build the same way and the contract surface stays narrow enough to check.
-
-OPEN ITEMS
-Licensing split between code and official art/audio, entangled with AI-generation provenance. Save-compatibility policy for forked and divergent worlds.
+No outcome behind this node's requirements cites the vision, so no sentence is carried here. The whole vision is one read away: get_outcome_board lists every sentence with its id.
 
 ## Requirements — Your Scope
 
-### REQ-029: Reference Template World
+### REQ-029: Template Level — the on-ramp a new author opens
 Category: technical | Status: in-progress
-The canonical starting point a contributor or AI coding agent copies to begin a new world. Deliberately minimal: it implements the five REQUIRED Level Contract elements and nothing optional, which makes it both the smallest possible proof that the contract is satisfiable and a live test that every optional element's declared default actually works when absent. Coral Cove and Bubble Bay are full official worlds and far too large to serve this purpose. Because it is what every new contributor copies, it must never drift out of conformance: it is validated by the compliance checker and the static-analysis gate on every pull request exactly like any other world, so a contract change that would break the template fails CI rather than silently teaching the wrong pattern.
+THE PROJECT'S TEACHING ARTIFACT, and the concrete answer to "families learn AI-development here." Not a curriculum and not a document: a level you can take apart. A newcomer opens it in Godot's own editor, plays it, changes something, and watches the change happen. That is the on-ramp, and everything else in the contribution story hangs off whether this level is actually openable by someone who has never seen the repo.
+
+WHAT CHANGED, AND WHY. This started as a deliberately minimal fixture: five required contract elements, nothing optional, existing to prove the contract was satisfiable and that every optional element's absent-default really worked. That is a real job but it is a CI job, and it is the wrong shape for teaching — you cannot learn a game from an empty room, and a template that demonstrates nothing gives a newcomer nothing to change. That proof moves to `fixtures/worlds/conforming_world`, which already exists and is already exercised by the compliance checker, and the shipped template becomes the thing it is actually for.
+
+WHAT IT HAS TO BE. Playable start to finish and small enough to hold in your head — minutes, not the acts an official world runs to. Built from a representative slice of the REAL game: the shipped axolotl, at least one Drift Fleet machine, water with the real shader, the shared lighting rig, a checkpoint, a collectible, and at least one mod-gated or restoration-gated path — so that every mechanic a newcomer might want to use is present once, as a worked example they can copy in place. Laid out and commented so the obvious first edits are obvious: move a platform, add a machine, drop in a collectible, retune a jump.
+
+WHAT IT STILL HAS TO BE. It remains what a new level is COPIED from, so it must never drift out of conformance: validated by the compliance checker and the static-analysis gate on every pull request exactly like any other world, so a contract change that would break it fails CI rather than silently teaching the wrong pattern. Coral Cove and Bubble Bay are full official worlds and far too large to serve either purpose.
 
 **Acceptance criteria — your task boxes:**
 - [x] The template implements all five required Level Contract elements: spawn point, checkpoints, finish condition, controller compatibility, save integration
   → THIS NODE: internal logic — possible coordination point: Contract "Level Contract v1" (dependency) from OpenAxolotl Game Client (keyword signal only)
-- [x] The template declares no optional contract elements, exercising every optional element's absent-default path
-  → THIS NODE: internal logic
 - [x] The template passes the Level Contract compliance checker as a required CI check
   → THIS NODE: internal logic — possible coordination point: Contract "Level Contract v1" (dependency) from Level Contract Compliance Checker (keyword signal only)
 - [x] The template passes the World Static Analysis Gate, calling only the sanctioned world API surface
@@ -185,6 +180,14 @@ The canonical starting point a contributor or AI coding agent copies to begin a 
   → THIS NODE: internal logic
 - [ ] The template is documented as the canonical starting point for a new world, with instructions on what to copy and what to change (manual)
   → covered by Task T6
+- [ ] The template demonstrates each mechanic a new level is likely to use at least once as a worked example: both movement grammars, a checkpoint, a collectible, a Drift Fleet machine, water using the shared surface, the shared lighting rig, and one gated path
+  → covered by Task T7
+- [ ] The template is short enough to play in a few minutes and its scene tree is organised and commented so a newcomer can find and change a platform, a machine and a collectible without reading any core code
+  → covered by Task T8
+- [ ] A minimal world declaring no optional contract elements still loads and completes, proving every optional element's absent-default path, exercised by the conforming-world fixture rather than by the shipped template
+  → covered by Task T9
+- [ ] Someone who has not worked on this project opens the template in the Godot editor, makes a change of their own, and sees it in play without being told how by a maintainer (manual)
+  → covered by Task T10
 
 ## Interface Contracts
 

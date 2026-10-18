@@ -13,7 +13,13 @@
 
 **Working code for this component**, honoring the contracts and criteria below, plus its configuration artifacts and tests.
 
+## Constraints That Apply Here
+
+None recorded for this node. Standing conditions the build must honour (security, compliance, cost, technology and the like) can be filed with a `create_constraint` patch.
+
 ## Implementation Context
+
+> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
 Coral Cove is the first official world and the one that carries the cross-world
@@ -134,16 +140,25 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T13 — Implement: "Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen" (REQ-011).** <!-- t:472ee673 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-011 "Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen" — possible coordination point: Contract "Level Contract v1" (dependency) from OpenAxolotl Game Client (keyword signal only)
-- [ ] **T14 — Implement: "Each world is fun to play through and delivers a satisfying broken-to-restored payoff" (REQ-011).** <!-- t:e1d96cf2 -->
+- [ ] **T14 — Implement: "Each official world is structured as a sequence of acts, each introducing a mechanic or hazard the player has not met and then requiring it, with the flown route proving every act is traversable" (REQ-011).** <!-- t:0eb4c79b -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-011 "Each official world is structured as a sequence of acts, each introducing a mechanic or hazard the player has not met and then requiring it, with the flown route proving every act is traversable"
+- [ ] **T15 — Implement: "Coral Cove builds to a Flagship encounter at its end and reaches it in normal play; Bubble Bay declares no boss and the hub hosts no encounter" (REQ-011).** <!-- t:1bbaee55 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-011 "Coral Cove builds to a Flagship encounter at its end and reaches it in normal play; Bubble Bay declares no boss and the hub hosts no encounter" — possible coordination point: Contract "Enemy Registration Interface" (dependency) to Flagship Boss Encounter (keyword signal only)
+- [ ] **T16 — Implement: "Each world is fun to play through and delivers a satisfying broken-to-restored payoff" (REQ-011).** <!-- t:e1d96cf2 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-011 "Each world is fun to play through and delivers a satisfying broken-to-restored payoff"
-- [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T17 — Implement: "A first-time player finishes each official world without developer instructions or debug commands" (REQ-011).** <!-- t:1b065702 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-011 "A first-time player finishes each official world without developer instructions or debug commands"
+- [ ] **T18 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
 
-**Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Technology Guidance, and node context as your references. Record the expanded list in this section via update_artifact (propose_patches) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
+**Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Existing Implementation, Technology Guidance, and node context as your references. Write each work order's steps under its task line as indented checkbox lines (`  - [ ] <step>`), one action each, naming the file, setting or interface it changes, and send them with update_artifact (propose_patches, passing base_sequence) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact; the steps stay with their work order when this doc regenerates. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
 
 ## Configuration
 
@@ -154,42 +169,23 @@ User-selected configuration for this component (honor these choices):
 - **language:** GDScript
 - **rationale:** One language keeps the contribution surface narrow for humans and AI agents alike; a second toolchain doubles build, review and static-gate parser burden for no gameplay gain.
 
-## Project Context
+## Vision This Node Serves
 
-OpenAxolotl — Play it. Fork it. Build a world.
-
-A colorful 3D action-platformer in Godot where a tiny axolotl explores strange aquatic worlds, restoring damaged habitats and rescuing creatures. Every world is a self-contained module anyone — human or AI coding agent — can fork, replace, or extend. Open source is a gameplay feature, not a line in the README.
-
-FOUR PILLARS
-
-1. Regeneration is the constant loop; lives are the hard failure state. Damage strips a capability — tail, gill, leg — with comedic pop-and-sparkle framing rather than draining a health bar, and never ends a run on its own. A separate limited life count is spent only on catastrophic events and returns the player to the last checkpoint. Regeneration stays expressive and ever-present; lives supply the stakes.
-
-2. Two movement grammars, one axolotl. Water and land are mechanically distinct, joined by a water-powered dash as the signature transition skill. This is the answer to "why is this not a cute skin on generic platformer mechanics."
-
-3. The world regenerates with you. Regions progress barren, resourced, restored — opening real traversal paths rather than swapping visuals — and Drift Fleet dredgers can undo that progress. This carries the open-source metaphor mechanically, without a child ever needing to notice it.
-
-4. The repo is the game. Every world conforms to a versioned Level Contract published as a machine-readable schema. A contributor never needs to understand the whole game, only the contract. The project is effectively an open-source platformer SDK.
-
-ANTAGONISTS
-The Drift Fleet: faceless industrial extraction machinery, deliberately never human characters. Nets, hooks, dredges and pollution, with no gore and no humanized violence — the same machinery that broke the habitat is what the player disables to heal it.
-
-MVP SCOPE
-PC only. Two official worlds plus a minimal reference template. Three Gill Mods — Bubble, Jet, Glow — built to depth rather than breadth; Electric, Frost and Giant are post-MVP and double as the reference example for community-built mods. Contract compliance, asset conformance, and world static analysis are automated and merge-blocking, so an AI agent can verify its own work before submitting.
-
-COMMUNITY (post-MVP)
-Opens only once Level Contract v1 is frozen; opening earlier means every core update breaks early contributor worlds. Community worlds ship code like any other world — safety comes from static analysis against the sanctioned world API surface plus mandatory human review, never an automated-only merge path. This is a family game with an agent-authored contribution pipeline, so that gate is load-bearing.
-
-NON-GOALS (firm, not deferrals)
-No multiplayer, in any phase. No console certification. No level-editor GUI, ever — worlds are authored as code and Godot scenes only, so humans and AI agents build the same way and the contract surface stays narrow enough to check.
-
-OPEN ITEMS
-Licensing split between code and official art/audio, entangled with AI-generation provenance. Save-compatibility policy for forked and divergent worlds.
+No outcome behind this node's requirements cites the vision, so no sentence is carried here. The whole vision is one read away: get_outcome_board lists every sentence with its id.
 
 ## Requirements — Your Scope
 
 ### REQ-011: Official MVP Worlds
 Category: functional | Status: in-progress
-Two to three official worlds at MVP — Coral Cove, Bubble Bay, and one more — each a discrete, bounded, checkpointed playthrough space entered from the Open Lagoon. Their purpose is dual and the second purpose is the more important one: they are shipped content AND they are the battle-test of the Level Contract. They must be built as ordinary contract-conforming world modules using only the public extension interfaces, taking no shortcuts unavailable to an outside contributor — if a core team world needs a private back door, that is a contract defect to fix, not a special case to permit. Friction encountered building them feeds back into the contract, and only once that feedback is absorbed is the contract frozen at v1. Each world should exercise both movement grammars, at least one restoration region, and a distinct Gill Mod emphasis.
+Two official worlds at MVP — Coral Cove and Bubble Bay — each a discrete, bounded, checkpointed playthrough space entered from the Open Lagoon hub.
+
+THEY ARE THE GAME FIRST. This used to say their contract battle-test purpose was "the more important one." That was true when the project was framed as a platformer SDK and it is not true now: these are the levels people play, and if they are not enjoyable the contract they validate does not matter. Shipped content is the first purpose; battle-testing the Level Contract is the second, and a real one.
+
+They must still be built as ordinary contract-conforming world modules using only the public extension interfaces, taking no shortcuts unavailable to an outside author — if a core-team world needs a private back door, that is a contract defect to fix, not a special case to permit. Friction encountered building them feeds back into the contract, and only once that feedback is absorbed is the contract frozen at v1.
+
+SHAPE. A world is a run of acts, each introducing something the player has not done yet and then asking for it under pressure. Length is not capped: a level runs as long as its ideas sustain, and the official worlds are deliberately substantial rather than bite-sized. Each world exercises both movement grammars, at least one restoration region, and a distinct Gill Mod emphasis.
+
+THE TWO WORLDS ARE NOT THE SAME SHAPE, DELIBERATELY. Coral Cove is the long build: acts stacking mechanic on mechanic to a Flagship at its end, where the restoration payoff lands (REQ-013). Bubble Bay ends on traversal instead (REQ-028). Neither the Open Lagoon hub nor any future hub hosts a boss — the hub is the calm place between levels and holds no encounter at all.
 
 **Acceptance criteria — your task boxes:**
 - [x] At least two official worlds are implemented, each passing the Level Contract compliance checker
@@ -204,8 +200,14 @@ Two to three official worlds at MVP — Coral Cove, Bubble Bay, and one more —
   → THIS NODE: internal logic — possible coordination point: Contract "Gill Mod Registration Interface" (dependency) to Gill Mod Ability Framework (keyword signal only)
 - [ ] Contract friction discovered while building the official worlds is fed back into the Level Contract before v1 is frozen (manual)
   → covered by Task T13
-- [ ] Each world is fun to play through and delivers a satisfying broken-to-restored payoff (manual)
+- [ ] Each official world is structured as a sequence of acts, each introducing a mechanic or hazard the player has not met and then requiring it, with the flown route proving every act is traversable
   → covered by Task T14
+- [ ] Coral Cove builds to a Flagship encounter at its end and reaches it in normal play; Bubble Bay declares no boss and the hub hosts no encounter
+  → covered by Task T15
+- [ ] Each world is fun to play through and delivers a satisfying broken-to-restored payoff (manual)
+  → covered by Task T16
+- [ ] A first-time player finishes each official world without developer instructions or debug commands (manual)
+  → covered by Task T17
 
 ### REQ-036: Drift Fleet and Flagship reachable from a world
 Category: functional | Status: pending
@@ -247,6 +249,62 @@ Units sit OFF the walked route in both official worlds: the walk probes measure 
   → THIS NODE via Contract "Enemy Registration Interface" (dependency) to Drift Fleet Enemy Framework — coordinate with Drift Fleet Enemy Framework
 - [x] Every Drift Fleet unit ships as a contract-conforming asset with provenance recording the generator
   → THIS NODE via Contract "Enemy Registration Interface" (dependency) to Drift Fleet Enemy Framework — coordinate with Drift Fleet Enemy Framework
+
+### REQ-038: Coral Cove full platforming playthrough, proven by a flown route
+Category: functional | Status: pending
+_Shared with: Test Harness and Fixtures — their slices live in their own task docs._
+Coral Cove must be a full platforming playthrough — run, jump, swim, dive, boost and climb, with difficulty rising across its acts — and its completability must remain a headless regression test rather than a hope.
+
+THE OLD PROBE SHAPED THE OLD LEVEL. The walk held one forward key from spawn to finish, which was honest for a corridor and quietly became the level's design: a route a held key can finish has no gaps, no climbs and no reason to leave the ground. Probe and level therefore change together.
+
+GEOMETRY COMES FROM MEASUREMENT. The controller is driven headlessly through the greybox against the shipped tuning and reports its envelope (run 4.20 m/s, standing jump 1.81 m, running gap 3.15 m edge to edge, climb 2.0 m/s under a 6.0 m ceiling, swim 6.0 m/s, boost ×2.2). Every mandatory gap and rise on the route sits inside documented design bounds under that envelope; exactly one jump is built to the envelope's edge and it is the OPTIONAL one, onto the lantern shrimp's ledge, so the hard reach is a choice and never a wall.
+
+THE ROUTE IS FLOWN, NOT HELD. A RoutePilot drives a declared waypoint list by pressing the same keys a player would press, through Input.parse_input_event, so bindings, grammar context, the Input System, PlayerIntent, the controller and move_and_slide are all under test on every run. Jumps commit by LOOKING — a short ray ahead along the direction of travel asks whether the floor stops there, and the hop fires on the last stride before it does — because the takeoff edge is the gap plus half the landing platform away from a waypoint, and no fixed distance is right for a 3 m pillar and a 12 m terrace at once. A waypoint that stops being reachable fails naming itself and where the body got to, which makes a broken route a bug report rather than a mystery.
+
+Building the pilot surfaced and fixed real bugs unit tests could not see (the climb dropping four metres at the lip, the second jump of a pair lost to a never-released edge-triggered key), which is the point of it: the probe is the one consumer that exercises the whole platforming surface every run.
+
+Checkpoint density follows REQ-003 AC-7 measured on the flown run, and the walk still proves every prior claim of the world — both grammars, both mod gates, the restorable region, collectibles, pillar one, completion and return.
+
+**Acceptance criteria — your task boxes:**
+- [x] The coral walk completes the world end to end by flying the designed waypoint route with real key presses — every jump, the dive under the brow, the rise over the shelf, the boost, the climb and both rivers — and still proves every prior claim: both grammars, both mod gates, seven seeds spent, the region restored, discoveries persisted, no life lost, completion and return
+  → owner unresolved — this node or a sharing node (Test Harness and Fixtures): no contract evidence; assign via the requirement mapping
+- [x] The pilot commits each jump from an edge probe (a ray ahead along travel), not from a fixed distance, and a leg that cannot be completed fails naming the waypoint and the position reached
+  → owner unresolved — this node or a sharing node (Test Harness and Fixtures): no contract evidence; assign via the requirement mapping
+- [x] Every mandatory gap is at most 2.7 m and every mandatory rise at most 1.3 m against the measured 3.15 m / 1.81 m envelope, verified edge to edge between platform footprints at generation time and enforced at run time by the flown route
+  → owner unresolved — this node or a sharing node (Test Harness and Fixtures): no contract evidence; assign via the requirement mapping
+- [x] The optional lantern shrimp demands an envelope-edge jump off the route, and the flown route never collects it — the optional branch stays optional
+  → owner unresolved — this node or a sharing node (Test Harness and Fixtures): no contract evidence; assign via the requirement mapping
+- [x] Checkpoint replay segments are measured on the flown run and every segment fits progression.max_retry_seconds
+  → owner unresolved — this node or a sharing node (Test Harness and Fixtures): no contract evidence; assign via the requirement mapping
+- [x] The route exercises the climb contact grace and the sustained-verb cut on real geometry: the coral wall is crested without a fall and a held jump clears gaps a tapped one cannot
+  → owner unresolved — this node or a sharing node (Test Harness and Fixtures): no contract evidence; assign via the requirement mapping
+
+### REQ-039: Forested river valley: procedural surfaces and water placed as difficulty
+Category: functional | Status: pending
+_Shared with: OpenAxolotl Game Client, Blender (headless) — their slices live in their own task docs._
+The space around and below a platforming route is gameplay, not garnish: a jump over nothing gives the player no way to judge height or distance, and a surface with no variation across it has no scale. Coral Cove therefore sits inside a forested river valley, and every terrain surface in the game wears a material instead of a flat colour.
+
+SURFACES WITHOUT TEXTURE FILES. Platforms and terrain wear one shared triplanar shader — three octaves of value noise over a warped stratum term, sampled from world position on all three axes and blended by the normal, with a third colour on upward faces only for moss. A material is a handful of uniform values in a client-owned .tres. Triplanar and world-space for this project's specific reasons: level geometry is BoxMesh primitives and props are generated with no UV layout, so a texture path would mean unwrapping everything and keeping the unwrap in step with generators that change; and the grain runs ACROSS the seam where two boxes butt, which tiling cannot do. The two mod gates deliberately keep a flat colour — a gate is a rule, not geology. The whole decision, including when a baked PNG is the right tool instead, is documented in the Asset Contract's prose.
+
+THE VALLEY: a scenery forest floor 24 m below the route (no collider — the pit volume sits BETWEEN route and floor, so a fall still dies at the last checkpoint while the player watches the forest come up at them), canopy trees planted on it that rise past the route and close overhead, ridges for sides, and banks enclosing the water so no volume's edge is ever visible. A five-prop forest kit (canopy tree, understory fern, fallen log, river reed, river boulder) is generated headless in Blender, deterministic under one seed, vertex-coloured, with provenance, the whole set well under a thousand triangles because it is placed by the dozen.
+
+WATER IS PLACED AS DIFFICULTY. A river runs the full length of the act-1 staircase, so a missed jump there is a swim downstream and never a life — reeds mark that waterline, making the forgiveness legible. The glow grotto's pillars have no water under them at all. And the gorge river drops a MANDATORY swim into the middle of the jumping, with a rock rib to dive under and slot walls set twice-the-jump back from the landing so no bank bypasses it. The difficulty curve is thereby stated in geometry.
+
+The shared haze is retuned from dense teal to thin grey-green air, because every scene in this game is above water and the underwater feel belongs to the water volumes, which tint it themselves; at the old density anything past thirty metres flattened into one plane and the valley rendered as an empty sea.
+
+**Acceptance criteria — your task boxes:**
+- [x] A shared triplanar world-space terrain shader exists with a small set of client-owned material resources, and Coral Cove's platforms, walls, beds and banks wear them rather than per-node flat colours — with the two mod gates keeping flat colour as the deliberate exception
+  → THIS NODE via Contract "Level Contract v1" (dependency) from OpenAxolotl Game Client — coordinate with OpenAxolotl Game Client
+- [x] The forest kit's five props are generated headless in Blender, deterministic under a seed, carry provenance records, and pass the Asset Contract validator inside the environment budget
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client, Blender (headless)): no contract evidence; assign via the requirement mapping
+- [x] A missed jump anywhere over the act-1 river costs a swim and never a life, while a fall in the glow grotto still costs a life at the last checkpoint: the pit volume sits between the route and the scenery forest floor and the waterway spans exactly the forgiving stretch
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client, Blender (headless)): no contract evidence; assign via the requirement mapping
+- [x] The gorge river is a mandatory swim between jump sections — entered from the landing, dived under the rib, exited onto the first terrace — and its slot walls stand at least twice the measured jump from any standable edge so the swim cannot be bypassed on a bank
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client, Blender (headless)): no contract evidence; assign via the requirement mapping
+- [x] Every water volume in the world carries bubble particles (the REQ-034 dressing rule), emitted by the same construction that makes the volume so a new river cannot ship without them
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client, Blender (headless)): no contract evidence; assign via the requirement mapping
+- [x] The retuned haze keeps distant geometry legible: rendered captures show the forest floor, trees and valley sides reading at route distance in every act, and the full verification chain stays green
+  → owner unresolved — this node or a sharing node (OpenAxolotl Game Client, Blender (headless)): no contract evidence; assign via the requirement mapping
 
 ## Interface Contracts
 
@@ -765,6 +823,7 @@ Startup/initialization order based on edge directions and interaction patterns.
 | `test/worlds/coral_walk_probe.gd` | source | --- | draft |
 | `test/worlds/run_coral_walk.gd` | source | --- | draft |
 | `.nodespec/tests/req-011.tests.md` - Test plan for requirement: Official MVP Worlds | test-plan | markdown | draft |
+| `test/worlds/coral_route.gd` | source | --- | draft |
 | `test/hub/test_world_drift_fleet.gd` | test-plan | --- | draft |
 | `worlds/coral_cove/world.json` | config | --- | draft |
 | `worlds/bubble_bay/world.json` | config | --- | draft |

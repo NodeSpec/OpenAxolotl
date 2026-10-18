@@ -13,7 +13,13 @@
 
 **Working code for this component**, honoring the contracts and criteria below, plus its configuration artifacts and tests.
 
+## Constraints That Apply Here
+
+None recorded for this node. Standing conditions the build must honour (security, compliance, cost, technology and the like) can be filed with a `create_constraint` patch.
+
 ## Implementation Context
+
+> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
 
 <!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
 This is the project's security and policy gate. It answers: does this GDScript
@@ -185,56 +191,38 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T27 — Implement: "Content guidelines and the maintainer review checklist are documented for a family-audience bar" (REQ-020).** <!-- t:1ef7c7b6 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-020 "Content guidelines and the maintainer review checklist are documented for a family-audience bar" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
-- [ ] **T28 — Implement: "The check runs as a required CI check and a pull request introducing any forbidden multiplayer API cannot merge" (REQ-030).** <!-- t:9275cc64 -->
+- [ ] **T28 — Implement: "The submission guide states that a submission is a level for this game rather than a fork, and names the asset-reuse terms it is accepted under" (REQ-020).** <!-- t:0778576f -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-020 "The submission guide states that a submission is a level for this game rather than a fork, and names the asset-reuse terms it is accepted under" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
+- [ ] **T29 — Implement: "The check runs as a required CI check and a pull request introducing any forbidden multiplayer API cannot merge" (REQ-030).** <!-- t:9275cc64 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-030 "The check runs as a required CI check and a pull request introducing any forbidden multiplayer API cannot merge" — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
-- [ ] **T29 — Implement: "Contributor documentation states the project is single-player only and warns that general Godot multiplayer guidance and engine sample code do not apply here" (REQ-030).** <!-- t:97ad73fc -->
+- [ ] **T30 — Implement: "Contributor documentation states the project is single-player only and warns that general Godot multiplayer guidance and engine sample code do not apply here" (REQ-030).** <!-- t:97ad73fc -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-030 "Contributor documentation states the project is single-player only and warns that general Godot multiplayer guidance and engine sample code do not apply here" — possible coordination point: Contract "Engine Feature Policy" (dependency) to Regeneration and Capability System (keyword signal only)
-- [ ] **T30 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T31 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
 
-**Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Technology Guidance, and node context as your references. Record the expanded list in this section via update_artifact (propose_patches) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
+**Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Existing Implementation, Technology Guidance, and node context as your references. Write each work order's steps under its task line as indented checkbox lines (`  - [ ] <step>`), one action each, naming the file, setting or interface it changes, and send them with update_artifact (propose_patches, passing base_sequence) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact; the steps stay with their work order when this doc regenerates. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
 
-## Project Context
+## Vision This Node Serves
 
-OpenAxolotl — Play it. Fork it. Build a world.
-
-A colorful 3D action-platformer in Godot where a tiny axolotl explores strange aquatic worlds, restoring damaged habitats and rescuing creatures. Every world is a self-contained module anyone — human or AI coding agent — can fork, replace, or extend. Open source is a gameplay feature, not a line in the README.
-
-FOUR PILLARS
-
-1. Regeneration is the constant loop; lives are the hard failure state. Damage strips a capability — tail, gill, leg — with comedic pop-and-sparkle framing rather than draining a health bar, and never ends a run on its own. A separate limited life count is spent only on catastrophic events and returns the player to the last checkpoint. Regeneration stays expressive and ever-present; lives supply the stakes.
-
-2. Two movement grammars, one axolotl. Water and land are mechanically distinct, joined by a water-powered dash as the signature transition skill. This is the answer to "why is this not a cute skin on generic platformer mechanics."
-
-3. The world regenerates with you. Regions progress barren, resourced, restored — opening real traversal paths rather than swapping visuals — and Drift Fleet dredgers can undo that progress. This carries the open-source metaphor mechanically, without a child ever needing to notice it.
-
-4. The repo is the game. Every world conforms to a versioned Level Contract published as a machine-readable schema. A contributor never needs to understand the whole game, only the contract. The project is effectively an open-source platformer SDK.
-
-ANTAGONISTS
-The Drift Fleet: faceless industrial extraction machinery, deliberately never human characters. Nets, hooks, dredges and pollution, with no gore and no humanized violence — the same machinery that broke the habitat is what the player disables to heal it.
-
-MVP SCOPE
-PC only. Two official worlds plus a minimal reference template. Three Gill Mods — Bubble, Jet, Glow — built to depth rather than breadth; Electric, Frost and Giant are post-MVP and double as the reference example for community-built mods. Contract compliance, asset conformance, and world static analysis are automated and merge-blocking, so an AI agent can verify its own work before submitting.
-
-COMMUNITY (post-MVP)
-Opens only once Level Contract v1 is frozen; opening earlier means every core update breaks early contributor worlds. Community worlds ship code like any other world — safety comes from static analysis against the sanctioned world API surface plus mandatory human review, never an automated-only merge path. This is a family game with an agent-authored contribution pipeline, so that gate is load-bearing.
-
-NON-GOALS (firm, not deferrals)
-No multiplayer, in any phase. No console certification. No level-editor GUI, ever — worlds are authored as code and Godot scenes only, so humans and AI agents build the same way and the contract surface stays narrow enough to check.
-
-OPEN ITEMS
-Licensing split between code and official art/audio, entangled with AI-generation provenance. Save-compatibility policy for forked and divergent worlds.
+No outcome behind this node's requirements cites the vision, so no sentence is carried here. The whole vision is one read away: get_outcome_board lists every sentence with its id.
 
 ## Requirements — Your Scope
 
-### REQ-020: Community Lagoon Submission Pipeline (Post-MVP)
+### REQ-020: Community Lagoon — levels submitted to this game (Post-MVP)
 Category: business | Status: in-progress
-POST-MVP, and strictly sequenced: this opens only after Level Contract v1 is frozen. Opening earlier means every core update breaks early contributor worlds and burns exactly the goodwill the project depends on. Contributors submit worlds by pull request; accepted worlds become packaged community worlds surfaced in the hub as Community Lagoon portals, visibly credited to their author. SECURITY MODEL: community worlds are GDScript modules exactly like official worlds — the code-authoring premise applies to everyone, and there is no separate data-only contributor path. Safety therefore comes from two controls rather than from forbidding code: automated static analysis that rejects any world script reaching outside the sanctioned world API surface defined by the Level Contract (no filesystem, network, OS-execution, or dynamic-evaluation calls), and mandatory human maintainer review before merge. Both stages are required; there is no automated-only merge path. This gating is load-bearing rather than a nicety — this is a game marketed to families with an AI-agent-authored contribution pipeline, and an ungated path would be the project's largest risk. Tiering is Official, Community, and Experimental Lagoons.
+POST-MVP, and strictly sequenced: this opens only after Level Contract v1 is frozen. Opening earlier means every core update breaks early contributor levels and burns exactly the goodwill the project depends on.
+
+WHAT IS BEING SUBMITTED IS A LEVEL FOR THIS GAME, not a fork and not a game of someone's own. It stars our axolotl, uses our movement verbs, our machines and our assets, and appears in our hub alongside the official worlds, credited to its author. That framing is the point: the contribution surface is exactly as wide as adding a level, and no wider.
+
+Contributors submit by pull request; accepted levels become packaged community worlds surfaced in the hub as Community Lagoon portals. SECURITY MODEL: community levels are GDScript modules exactly like official ones — the code-authoring premise applies to everyone, and there is no separate data-only contributor path. Safety therefore comes from two controls rather than from forbidding code: automated static analysis that rejects any world script reaching outside the sanctioned world API surface defined by the Level Contract (no filesystem, network, OS-execution, or dynamic-evaluation calls), and mandatory human maintainer review before merge. Both stages are required; there is no automated-only merge path. This gating is load-bearing rather than a nicety — this is a game marketed to families with an open contribution pipeline, and an ungated path would be the project's largest risk. Tiering is Official, Community, and Experimental Lagoons.
+
+Note the ordering this now sits behind: the licensing grant (REQ-021) has to exist before anyone is invited to build with our assets, and the editor-first on-ramp (REQ-017, REQ-029) has to be walkable before "submit a level" is a reasonable ask.
 
 **Acceptance criteria — your task boxes:**
 - [ ] Every submission passes automated contract-compliance and content-policy pre-screening before human review
@@ -253,6 +241,8 @@ POST-MVP, and strictly sequenced: this opens only after Level Contract v1 is fro
   → covered by Task T26
 - [ ] Content guidelines and the maintainer review checklist are documented for a family-audience bar (manual)
   → covered by Task T27
+- [ ] The submission guide states that a submission is a level for this game rather than a fork, and names the asset-reuse terms it is accepted under (manual)
+  → covered by Task T28
 
 ### REQ-030: No Multiplayer — Enforced Single-Player Constraint
 Category: technical | Status: in-progress
@@ -266,7 +256,7 @@ Category: technical | Status: in-progress
 - [x] A fixture file exercising each forbidden multiplayer API class is rejected by the check, with output naming the specific API and file
   → THIS NODE: internal logic — possible coordination point: Contract "Shared Test Fixtures" (dependency) to Test Harness and Fixtures (keyword signal only)
 - [ ] The check runs as a required CI check and a pull request introducing any forbidden multiplayer API cannot merge
-  → covered by Task T28
+  → covered by Task T29
 - [x] project.godot declares no networking or multiplayer autoloads, peer configuration, or network-related project settings
   → THIS NODE: internal logic — possible coordination point: Contract "Engine Feature Policy" (dependency) to Player HUD (keyword signal only)
 - [x] No architecture node is a game server, and no networking or multiplayer service appears anywhere in the project's technology set
@@ -274,7 +264,7 @@ Category: technical | Status: in-progress
 - [x] The Level Contract's sanctioned world API surface lists every multiplayer API as forbidden, so world modules are covered by the same ban as core
   → THIS NODE: internal logic — possible coordination point: Contract "Sanctioned World API Surface" (dependency) to World: Coral Cove (keyword signal only)
 - [ ] Contributor documentation states the project is single-player only and warns that general Godot multiplayer guidance and engine sample code do not apply here (manual)
-  → covered by Task T29
+  → covered by Task T30
 
 ## Interface Contracts
 
@@ -1949,9 +1939,12 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 | File | Kind | Language | Status |
 |------|------|----------|--------|
+| `tools/shell_terrain.py` | source | --- | draft |
 | `contracts/engine_feature_policy.v1.json` | schema | --- | draft |
+| `tools/gameplay_snapshot.py` | source | --- | draft |
 | `tools/gdscript_scan.py` | source | --- | draft |
 | `tools/static_gate.py` | source | --- | draft |
 | `tools/test_static_gate.py` | source | --- | draft |
+| `tools/scatter_props.py` | source | --- | draft |
 | `.nodespec/tests/req-020.tests.md` - Test plan for requirement: Community Lagoon Submission Pipeline (Post-MVP) | test-plan | markdown | draft |
 | `.nodespec/tests/req-030.tests.md` - Test plan for requirement: No Multiplayer — Enforced Single-Player Constraint | test-plan | markdown | draft |

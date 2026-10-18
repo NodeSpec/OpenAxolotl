@@ -13,6 +13,10 @@
 
 **Working code for this component**, honoring the contracts and criteria below, plus its configuration artifacts and tests.
 
+## Constraints That Apply Here
+
+None recorded for this node. Standing conditions the build must honour (security, compliance, cost, technology and the like) can be filed with a `create_constraint` patch.
+
 ## Implementation Context
 
 > ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
@@ -115,7 +119,7 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
 
-**Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Technology Guidance, and node context as your references. Record the expanded list in this section via update_artifact (propose_patches) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
+**Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Existing Implementation, Technology Guidance, and node context as your references. Write each work order's steps under its task line as indented checkbox lines (`  - [ ] <step>`), one action each, naming the file, setting or interface it changes, and send them with update_artifact (propose_patches, passing base_sequence) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact; the steps stay with their work order when this doc regenerates. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
 
 ## Configuration
 
@@ -126,36 +130,9 @@ User-selected configuration for this component (honor these choices):
 - **language:** GDScript
 - **rationale:** One language keeps the contribution surface narrow for humans and AI agents alike; a second toolchain doubles build, review and static-gate parser burden for no gameplay gain.
 
-## Project Context
+## Vision This Node Serves
 
-OpenAxolotl — Play it. Fork it. Build a world.
-
-A colorful 3D action-platformer in Godot where a tiny axolotl explores strange aquatic worlds, restoring damaged habitats and rescuing creatures. Every world is a self-contained module anyone — human or AI coding agent — can fork, replace, or extend. Open source is a gameplay feature, not a line in the README.
-
-FOUR PILLARS
-
-1. Regeneration is the constant loop; lives are the hard failure state. Damage strips a capability — tail, gill, leg — with comedic pop-and-sparkle framing rather than draining a health bar, and never ends a run on its own. A separate limited life count is spent only on catastrophic events and returns the player to the last checkpoint. Regeneration stays expressive and ever-present; lives supply the stakes.
-
-2. Two movement grammars, one axolotl. Water and land are mechanically distinct, joined by a water-powered dash as the signature transition skill. This is the answer to "why is this not a cute skin on generic platformer mechanics."
-
-3. The world regenerates with you. Regions progress barren, resourced, restored — opening real traversal paths rather than swapping visuals — and Drift Fleet dredgers can undo that progress. This carries the open-source metaphor mechanically, without a child ever needing to notice it.
-
-4. The repo is the game. Every world conforms to a versioned Level Contract published as a machine-readable schema. A contributor never needs to understand the whole game, only the contract. The project is effectively an open-source platformer SDK.
-
-ANTAGONISTS
-The Drift Fleet: faceless industrial extraction machinery, deliberately never human characters. Nets, hooks, dredges and pollution, with no gore and no humanized violence — the same machinery that broke the habitat is what the player disables to heal it.
-
-MVP SCOPE
-PC only. Two official worlds plus a minimal reference template. Three Gill Mods — Bubble, Jet, Glow — built to depth rather than breadth; Electric, Frost and Giant are post-MVP and double as the reference example for community-built mods. Contract compliance, asset conformance, and world static analysis are automated and merge-blocking, so an AI agent can verify its own work before submitting.
-
-COMMUNITY (post-MVP)
-Opens only once Level Contract v1 is frozen; opening earlier means every core update breaks early contributor worlds. Community worlds ship code like any other world — safety comes from static analysis against the sanctioned world API surface plus mandatory human review, never an automated-only merge path. This is a family game with an agent-authored contribution pipeline, so that gate is load-bearing.
-
-NON-GOALS (firm, not deferrals)
-No multiplayer, in any phase. No console certification. No level-editor GUI, ever — worlds are authored as code and Godot scenes only, so humans and AI agents build the same way and the contract surface stays narrow enough to check.
-
-OPEN ITEMS
-Licensing split between code and official art/audio, entangled with AI-generation provenance. Save-compatibility policy for forked and divergent worlds.
+No outcome behind this node's requirements cites the vision, so no sentence is carried here. The whole vision is one read away: get_outcome_board lists every sentence with its id.
 
 ## Requirements — Your Scope
 
@@ -178,6 +155,35 @@ The control scheme is the concern that drove the PC-only platform decision and u
   → THIS NODE: internal logic — possible coordination point: Contract "Player Input Interface" (dependency) to Axolotl Controller (keyword signal only)
 - [ ] The full verb set is playable without modal overload or uncomfortable finger contortion (manual)
   → covered by Task T5
+
+### REQ-037: Platformer jump feel and climb robustness
+Category: functional | Status: pending
+_Shared with: Axolotl Controller, Balance and Tuning Data — their slices live in their own task docs._
+The jump must feel fair and the climb must survive contact noise, because a platforming level is only as good as the forgiveness under it. None of these rules change where the axolotl CAN go on a perfectly-timed input; they change how much timing precision the player is asked for.
+
+THREE FORGIVENESS RULES live in a JumpFeel class apart from the controller, pure arithmetic over time provable frame by frame with no scene: COYOTE TIME (a press just after the ledge still hops, the window expires, and firing spends it so it cannot chain into a double jump), JUMP BUFFERING (a press while falling is remembered on the rising edge only and fires on landing), and VARIABLE HEIGHT (releasing the button mid-rise cuts the climb, so one button expresses a range of arcs).
+
+VARIABLE HEIGHT NEEDED A NEW INPUT FACT. Verbs are edge-triggered, so the hop verb is gone by the frame after launch, and a cut reading it would cut EVERY jump — measured in the greybox as a 2.02 m arc landing at 0.23 m. PlayerIntent therefore carries a second set, `sustained`, holding the verbs whose physical input is still down. It is re-resolved against the live grammar every frame, dropped on a device switch, and cleared on respawn, the same rules the held direction set follows.
+
+THE CLIMB had two scene-tree bugs no unit test could see. Moving purely ALONG a wall generates no contact, so the climb detached on its second frame; the climber now presses into the wall at a tuned adhesion that move_and_slide absorbs. And losing the wall for a single frame — a seam, or the moment of cresting a lip — dropped the climber the whole way down; the controller now keeps the wall for a tuned contact grace after the body reports losing it.
+
+THE ARC is retuned for platforming (impulse 9 m/s against 20 m/s² gravity, waddle 4.2 m/s) and measured in the live greybox: 1.81 m standing jump, 3.15 m running gap, the envelope every official level's geometry is derived from. Every window, the cut ratio, the adhesion and the grace are tuning keys with documented units and ranges (REQ-025); at zero each rule disables itself and the strict behaviour returns.
+
+**Acceptance criteria — your task boxes:**
+- [x] Coyote time forgives a hop pressed just after leaving a ledge, expires after the tuned window, and is spent by firing so a hop can never chain into a mid-air ascent
+  → owner unresolved — this node or a sharing node (Axolotl Controller, Balance and Tuning Data): no contract evidence; assign via the requirement mapping
+- [x] A hop pressed in mid-air is buffered on the rising edge only and fires on touchdown; the buffer expires rather than firing late, and holding the button does not refill it
+  → owner unresolved — this node or a sharing node (Axolotl Controller, Balance and Tuning Data): no contract evidence; assign via the requirement mapping
+- [x] Releasing the hop mid-rise cuts the vertical speed by the tuned ratio; the cut never touches a descent, a rise the hop did not start, or a rise whose button is still held — proven through the real controller, where a tapped jump measurably rises less than a held one
+  → THIS NODE via Contract "Player Input Interface" (dependency) to Axolotl Controller — coordinate with Axolotl Controller
+- [x] PlayerIntent carries a sustained verb set alongside the edge-triggered one: a held key sustains its verb until release, re-resolves under the live grammar (SPACE held through the water/land seam sustains what it means now), and is dropped on a device switch and on clear()
+  → THIS NODE via Contract "Player Input Interface" (dependency) to Axolotl Controller — coordinate with Axolotl Controller
+- [x] A climber presses into the wall at the tuned adhesion on every frame — steering up, sideways, and clinging still — so motion along the surface cannot end the climb by starving it of contact, and the greybox smoke proves the climb rises in a real scene
+  → owner unresolved — this node or a sharing node (Axolotl Controller, Balance and Tuning Data): no contract evidence; assign via the requirement mapping
+- [x] Losing wall contact for less than the tuned grace does not end a climb and regaining the wall resets the window; contact lost past the grace releases exactly once
+  → owner unresolved — this node or a sharing node (Axolotl Controller, Balance and Tuning Data): no contract evidence; assign via the requirement mapping
+- [x] Every window, ratio and speed above is a tuning key with documented unit and range, and the greybox smoke and coral walk complete against the retuned arc
+  → owner unresolved — this node or a sharing node (Axolotl Controller, Balance and Tuning Data): no contract evidence; assign via the requirement mapping
 
 ## Interface Contracts
 

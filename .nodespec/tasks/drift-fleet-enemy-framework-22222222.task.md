@@ -13,6 +13,10 @@
 
 **Working code for this component**, honoring the contracts and criteria below, plus its configuration artifacts and tests.
 
+## Constraints That Apply Here
+
+None recorded for this node. Standing conditions the build must honour (security, compliance, cost, technology and the like) can be filed with a `create_constraint` patch.
+
 ## Implementation Context
 
 > ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
@@ -129,13 +133,16 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T10 — Implement: "Runoff Drone encounters make land routes read as the favorable path in hands-on play" (REQ-012).** <!-- t:a13cf8f3 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-012 "Runoff Drone encounters make land routes read as the favorable path in hands-on play" — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Regeneration and Capability System (keyword signal only)
-- [ ] **T11 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T11 — Implement: "Whacking a machine reads as satisfying and readable to the maintainer in hands-on play: the stagger is visible, the defeat is unmistakable, and the durability differences are felt without being counted" (REQ-012).** <!-- t:eba267a8 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-012 "Whacking a machine reads as satisfying and readable to the maintainer in hands-on play: the stagger is visible, the defeat is unmistakable, and the durability differences are felt without being counted" — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Regeneration and Capability System (keyword signal only)
+- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
 
-**Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Technology Guidance, and node context as your references. Record the expanded list in this section via update_artifact (propose_patches) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
+**Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Existing Implementation, Technology Guidance, and node context as your references. Write each work order's steps under its task line as indented checkbox lines (`  - [ ] <step>`), one action each, naming the file, setting or interface it changes, and send them with update_artifact (propose_patches, passing base_sequence) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact; the steps stay with their work order when this doc regenerates. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
 
 ## Configuration
 
@@ -146,42 +153,21 @@ User-selected configuration for this component (honor these choices):
 - **language:** GDScript
 - **rationale:** One language keeps the contribution surface narrow for humans and AI agents alike; a second toolchain doubles build, review and static-gate parser burden for no gameplay gain.
 
-## Project Context
+## Vision This Node Serves
 
-OpenAxolotl — Play it. Fork it. Build a world.
-
-A colorful 3D action-platformer in Godot where a tiny axolotl explores strange aquatic worlds, restoring damaged habitats and rescuing creatures. Every world is a self-contained module anyone — human or AI coding agent — can fork, replace, or extend. Open source is a gameplay feature, not a line in the README.
-
-FOUR PILLARS
-
-1. Regeneration is the constant loop; lives are the hard failure state. Damage strips a capability — tail, gill, leg — with comedic pop-and-sparkle framing rather than draining a health bar, and never ends a run on its own. A separate limited life count is spent only on catastrophic events and returns the player to the last checkpoint. Regeneration stays expressive and ever-present; lives supply the stakes.
-
-2. Two movement grammars, one axolotl. Water and land are mechanically distinct, joined by a water-powered dash as the signature transition skill. This is the answer to "why is this not a cute skin on generic platformer mechanics."
-
-3. The world regenerates with you. Regions progress barren, resourced, restored — opening real traversal paths rather than swapping visuals — and Drift Fleet dredgers can undo that progress. This carries the open-source metaphor mechanically, without a child ever needing to notice it.
-
-4. The repo is the game. Every world conforms to a versioned Level Contract published as a machine-readable schema. A contributor never needs to understand the whole game, only the contract. The project is effectively an open-source platformer SDK.
-
-ANTAGONISTS
-The Drift Fleet: faceless industrial extraction machinery, deliberately never human characters. Nets, hooks, dredges and pollution, with no gore and no humanized violence — the same machinery that broke the habitat is what the player disables to heal it.
-
-MVP SCOPE
-PC only. Two official worlds plus a minimal reference template. Three Gill Mods — Bubble, Jet, Glow — built to depth rather than breadth; Electric, Frost and Giant are post-MVP and double as the reference example for community-built mods. Contract compliance, asset conformance, and world static analysis are automated and merge-blocking, so an AI agent can verify its own work before submitting.
-
-COMMUNITY (post-MVP)
-Opens only once Level Contract v1 is frozen; opening earlier means every core update breaks early contributor worlds. Community worlds ship code like any other world — safety comes from static analysis against the sanctioned world API surface plus mandatory human review, never an automated-only merge path. This is a family game with an agent-authored contribution pipeline, so that gate is load-bearing.
-
-NON-GOALS (firm, not deferrals)
-No multiplayer, in any phase. No console certification. No level-editor GUI, ever — worlds are authored as code and Godot scenes only, so humans and AI agents build the same way and the contract surface stays narrow enough to check.
-
-OPEN ITEMS
-Licensing split between code and official art/audio, entangled with AI-generation provenance. Save-compatibility policy for forked and divergent worlds.
+No outcome behind this node's requirements cites the vision, so no sentence is carried here. The whole vision is one read away: get_outcome_board lists every sentence with its id.
 
 ## Requirements — Your Scope
 
 ### REQ-012: Drift Fleet Enemy Roster
 Category: functional | Status: in-progress
 The antagonist faction: faceless industrial extraction machinery, deliberately NOT human characters. This preserves every intended gameplay hook — nets, hooks, dredging, pollution — without making a real profession the villain, and it fits the restoration theme better, since the machinery that broke the habitat is exactly what the player disables to heal it. Each enemy is designed against a specific capability or system rather than being a generic damage-dealer. NETBOTS: drifting drone trawlers dragging ghost nets that entangle and strip swim-speed capability; countered with Jet Gills. HOOKLINE RIGS: patrolling barbed-lure rigs that snag and briefly strip the equipped Gill Mod; countered by spotting the line in murk with Glow Gills. DREDGERS: heavy bottom-scrapers that revert restored terrain to barren, with area-wipe attacks that cost a life. RUNOFF DRONES: toxin sprayers that cloud water, debuffing vision and gill recharge to push the player onto land routes and exercise the second movement grammar. Enemies are an optional Level Contract element and are registered extensibly so a world can supply its own.
+
+THE PLAYER CAN FIGHT BACK, and the machines differ in how much fighting they take. Every unit declares a DURABILITY — how many strikes defeat it — so the roster reads as a range rather than as one health value: the Netbot falls to a single hit, the middle machines take two or three, and the Dredger, the only unit that can cost a life, is the toughest. A strike that does not finish a unit STAGGERS it: its effect is refused for a window and whatever it was already doing to the player is released, so the swing that lands on a Netbot is also how you get out of its net. The strike that reaches its durability DEFEATS it, and a defeated machine is inert for the rest of the attempt.
+
+DEFEAT IS A KNOCK-OUT, NOT A DESTRUCTION, and that is a constraint rather than an unfinished edge. REQ-019 forbids depicting violence done to anything that reads as alive; these are machines, and one knocked over and left inert is the family-appropriate reading of the same beat. It also keeps a level a route problem: defeats reset when the player respawns at a checkpoint, so a level cannot be permanently emptied and then walked unopposed.
+
+Durability is roster DATA like every other enemy property, so a world supplying its own machine picks its own without touching the enemy system core — the same extensibility claim AC-5 already rests on.
 
 **Acceptance criteria — your task boxes:**
 - [x] Netbots entangle the player and strip swim-speed capability, and Jet Gills provide a functioning counter
@@ -196,8 +182,18 @@ The antagonist faction: faceless industrial extraction machinery, deliberately N
   → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Regeneration and Capability System (keyword signal only)
 - [x] A world declaring no enemies remains contract-valid and fully completable
   → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Regeneration and Capability System (keyword signal only)
+- [x] Every Drift Fleet unit declares its durability in the roster, exactly one shipped unit falls to a single strike, and the shipped roster spans a range rather than sharing one value
+  → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Regeneration and Capability System (keyword signal only)
+- [x] A strike below a unit's durability staggers it rather than defeating it: its effect is refused for the stagger window, whatever it was already doing to the player is released, and it recovers with the strikes it has taken remembered
+  → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Regeneration and Capability System (keyword signal only)
+- [x] The strike that reaches a unit's durability defeats it, and a defeated unit refuses every effect lane for the rest of the attempt rather than recovering on a timer
+  → THIS NODE: internal logic — possible coordination point: Contract "Capability Modifier Interface" (dependency) to Regeneration and Capability System (keyword signal only)
+- [x] Defeats reset when the player respawns at a checkpoint, so a level cannot be permanently emptied
+  → THIS NODE: internal logic — possible coordination point: Contract "Checkpoint and Life Interface" (dependency) to Lives and Checkpoint System (keyword signal only)
 - [ ] Runoff Drone encounters make land routes read as the favorable path in hands-on play (manual)
   → covered by Task T10
+- [ ] Whacking a machine reads as satisfying and readable to the maintainer in hands-on play: the stagger is visible, the defeat is unmistakable, and the durability differences are felt without being counted (manual)
+  → covered by Task T11
 
 ### REQ-036: Drift Fleet and Flagship reachable from a world
 Category: functional | Status: pending
@@ -440,11 +436,19 @@ Startup/initialization order based on edge directions and interaction patterns.
 | `core/enemies/roster/runoff_drone.json` | config | --- | draft |
 | `core/enemies/roster/netbot.json` | config | --- | draft |
 | `core/enemies/enemy_error.gd` | source | --- | draft |
+| `assets/prop/hookline_rig/hookline_rig.glb` | design | --- | draft |
+| `assets/prop/dredger/provenance.json` | config | --- | draft |
 | `core/enemies/enemy_def.gd` | source | --- | draft |
 | `.nodespec/tests/req-012.tests.md` - Test plan for requirement: Drift Fleet Enemy Roster | test-plan | markdown | draft |
+| `assets/prop/netbot/provenance.json` | config | --- | draft |
 | `core/enemies/enemy_registry.gd` | source | --- | draft |
 | `docs/enemies.md` | doc | --- | draft |
 | `test/core/enemies/test_drift_fleet.gd` | source | --- | draft |
+| `assets/prop/runoff_drone/provenance.json` | config | --- | draft |
 | `core/enemies/drift_fleet_system.gd` | source | --- | draft |
+| `assets/prop/hookline_rig/provenance.json` | config | --- | draft |
 | `core/enemies/roster/hookline_rig.json` | config | --- | draft |
+| `assets/prop/netbot/netbot.glb` | design | --- | draft |
+| `assets/prop/runoff_drone/runoff_drone.glb` | design | --- | draft |
 | `core/enemies/roster/dredger.json` | config | --- | draft |
+| `assets/prop/dredger/dredger.glb` | design | --- | draft |
