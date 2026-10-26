@@ -7,127 +7,46 @@ component inventory, connection topology, and links to per-component task docume
 
 | Component | Role | Technology | Parent | Task Document | Test Plan |
 |-----------|------|------------|--------|---------------|-----------|
-| OpenAxolotl Game Client | game-client | godot | --- | [`.nodespec/tasks/openaxolotl-game-client-22222222.task.md`](./.nodespec/tasks/openaxolotl-game-client-22222222.task.md) | [`.nodespec/tests/req-017.tests.md`](./.nodespec/tests/req-017.tests.md) |
-| Axolotl Controller | shared-library | godot | --- | [`.nodespec/tasks/axolotl-controller-22222222.task.md`](./.nodespec/tasks/axolotl-controller-22222222.task.md) | [`.nodespec/tests/req-001.tests.md`](./.nodespec/tests/req-001.tests.md) |
-| Camera System | shared-library | godot | --- | [`.nodespec/tasks/camera-system-22222222.task.md`](./.nodespec/tasks/camera-system-22222222.task.md) | [`.nodespec/tests/req-005.tests.md`](./.nodespec/tests/req-005.tests.md) |
-| Regeneration and Capability System | shared-library | godot | --- | [`.nodespec/tasks/regeneration-and-capability-system-22222222.task.md`](./.nodespec/tasks/regeneration-and-capability-system-22222222.task.md) | [`.nodespec/tests/req-019.tests.md`](./.nodespec/tests/req-019.tests.md) |
-| Lives and Checkpoint System | shared-library | godot | --- | [`.nodespec/tasks/lives-and-checkpoint-system-22222222.task.md`](./.nodespec/tasks/lives-and-checkpoint-system-22222222.task.md) | [`.nodespec/tests/req-003.tests.md`](./.nodespec/tests/req-003.tests.md) |
-| Gill Mod Ability Framework | shared-library | godot | --- | [`.nodespec/tasks/gill-mod-ability-framework-22222222.task.md`](./.nodespec/tasks/gill-mod-ability-framework-22222222.task.md) | [`.nodespec/tests/req-004.tests.md`](./.nodespec/tests/req-004.tests.md) |
-| Save System | shared-library | godot | --- | [`.nodespec/tasks/save-system-22222222.task.md`](./.nodespec/tasks/save-system-22222222.task.md) | [`.nodespec/tests/req-014.tests.md`](./.nodespec/tests/req-014.tests.md) |
-| Restoration State System | shared-library | godot | --- | [`.nodespec/tasks/restoration-state-system-22222222.task.md`](./.nodespec/tasks/restoration-state-system-22222222.task.md) | [`.nodespec/tests/req-008.tests.md`](./.nodespec/tests/req-008.tests.md) |
-| Collectibles System | shared-library | godot | --- | [`.nodespec/tasks/collectibles-system-22222222.task.md`](./.nodespec/tasks/collectibles-system-22222222.task.md) | [`.nodespec/tests/req-010.tests.md`](./.nodespec/tests/req-010.tests.md) |
-| Drift Fleet Enemy Framework | shared-library | godot | --- | [`.nodespec/tasks/drift-fleet-enemy-framework-22222222.task.md`](./.nodespec/tasks/drift-fleet-enemy-framework-22222222.task.md) | [`.nodespec/tests/req-012.tests.md`](./.nodespec/tests/req-012.tests.md) |
-| World: Coral Cove | shared-library | godot | --- | [`.nodespec/tasks/world-coral-cove-22222222.task.md`](./.nodespec/tasks/world-coral-cove-22222222.task.md) | [`.nodespec/tests/req-011.tests.md`](./.nodespec/tests/req-011.tests.md) |
-| World: Bubble Bay | shared-library | godot | --- | [`.nodespec/tasks/world-bubble-bay-22222222.task.md`](./.nodespec/tasks/world-bubble-bay-22222222.task.md) | [`.nodespec/tests/req-028.tests.md`](./.nodespec/tests/req-028.tests.md) |
-| Level Contract Compliance Checker | cli-tool | python-backend | --- | [`.nodespec/tasks/level-contract-compliance-checker-22222222.task.md`](./.nodespec/tasks/level-contract-compliance-checker-22222222.task.md) | [`.nodespec/tests/req-007.tests.md`](./.nodespec/tests/req-007.tests.md) |
-| Asset Contract Validator | cli-tool | python-backend | --- | [`.nodespec/tasks/asset-contract-validator-22222222.task.md`](./.nodespec/tasks/asset-contract-validator-22222222.task.md) | [`.nodespec/tests/req-015.tests.md`](./.nodespec/tests/req-015.tests.md) |
-| CI Pipeline | ci-cd-pipeline | github-actions | --- | [`.nodespec/tasks/ci-pipeline-22222222.task.md`](./.nodespec/tasks/ci-pipeline-22222222.task.md) | [`.nodespec/tests/req-018.tests.md`](./.nodespec/tests/req-018.tests.md) |
-| Player HUD | shared-library | godot | --- | [`.nodespec/tasks/player-hud-22222222.task.md`](./.nodespec/tasks/player-hud-22222222.task.md) | [`.nodespec/tests/req-022.tests.md`](./.nodespec/tests/req-022.tests.md) |
-| Audio System | shared-library | godot | --- | [`.nodespec/tasks/audio-system-22222222.task.md`](./.nodespec/tasks/audio-system-22222222.task.md) | [`.nodespec/tests/req-023.tests.md`](./.nodespec/tests/req-023.tests.md) |
-| Input System | shared-library | godot | --- | [`.nodespec/tasks/input-system-22222222.task.md`](./.nodespec/tasks/input-system-22222222.task.md) | [`.nodespec/tests/req-024.tests.md`](./.nodespec/tests/req-024.tests.md) |
-| Balance and Tuning Data | shared-library | godot | --- | [`.nodespec/tasks/balance-and-tuning-data-22222222.task.md`](./.nodespec/tasks/balance-and-tuning-data-22222222.task.md) | [`.nodespec/tests/req-025.tests.md`](./.nodespec/tests/req-025.tests.md) |
-| Test Harness and Fixtures | cli-tool | python-backend | --- | [`.nodespec/tasks/test-harness-and-fixtures-22222222.task.md`](./.nodespec/tasks/test-harness-and-fixtures-22222222.task.md) | [`.nodespec/tests/req-026.tests.md`](./.nodespec/tests/req-026.tests.md) |
-| Flagship Boss Encounter | shared-library | godot | --- | [`.nodespec/tasks/flagship-boss-encounter-22222222.task.md`](./.nodespec/tasks/flagship-boss-encounter-22222222.task.md) | [`.nodespec/tests/req-013.tests.md`](./.nodespec/tests/req-013.tests.md) |
-| World Static Analysis Gate | cli-tool | python-backend | --- | [`.nodespec/tasks/world-static-analysis-gate-22222222.task.md`](./.nodespec/tasks/world-static-analysis-gate-22222222.task.md) | [`.nodespec/tests/req-020.tests.md`](./.nodespec/tests/req-020.tests.md) |
-| World: Reference Template | shared-library | godot | --- | [`.nodespec/tasks/world-reference-template-22222222.task.md`](./.nodespec/tasks/world-reference-template-22222222.task.md) | [`.nodespec/tests/req-029.tests.md`](./.nodespec/tests/req-029.tests.md) |
-| Blender (headless) | external-service | blender | --- | --- | --- |
-| Model Refinement Pipeline | cli-tool | python-backend | --- | --- | --- |
+| OpenAxolotl Game Shell | game-client | godot | --- | [`.nodespec/tasks/openaxolotl-game-shell-b0c02000.task.md`](./.nodespec/tasks/openaxolotl-game-shell-b0c02000.task.md) | [`.nodespec/tests/req-001.tests.md`](./.nodespec/tests/req-001.tests.md) |
+| Hero Motion & Animation | shared-library | godot | --- | [`.nodespec/tasks/hero-motion-animation-b0c02000.task.md`](./.nodespec/tasks/hero-motion-animation-b0c02000.task.md) | [`test/core/rendering/test_hero_animator.gd`](./test/core/rendering/test_hero_animator.gd) |
+| Input, Camera & Accessibility | shared-library | godot | --- | [`.nodespec/tasks/input-camera-accessibility-b0c02000.task.md`](./.nodespec/tasks/input-camera-accessibility-b0c02000.task.md) | [`.nodespec/tests/req-003.tests.md`](./.nodespec/tests/req-003.tests.md) |
+| Drift Fleet Encounters | shared-library | godot | --- | [`.nodespec/tasks/drift-fleet-encounters-b0c02000.task.md`](./.nodespec/tasks/drift-fleet-encounters-b0c02000.task.md) | [`test/hub/test_world_drift_fleet.gd`](./test/hub/test_world_drift_fleet.gd) |
+| Progress, Recovery & Rewards | shared-library | godot | --- | [`.nodespec/tasks/progress-recovery-rewards-b0c02000.task.md`](./.nodespec/tasks/progress-recovery-rewards-b0c02000.task.md) | --- |
+| Versioned World Runtime API | shared-library | godot | --- | [`.nodespec/tasks/versioned-world-runtime-api-b0c02000.task.md`](./.nodespec/tasks/versioned-world-runtime-api-b0c02000.task.md) | --- |
+| Reusable Level & Asset Kit | shared-library | godot | --- | [`.nodespec/tasks/reusable-level-asset-kit-b0c02000.task.md`](./.nodespec/tasks/reusable-level-asset-kit-b0c02000.task.md) | --- |
+| Official Adventure: Lagoon & Living Cascade | shared-library | godot | --- | [`.nodespec/tasks/official-adventure-lagoon-living-cascade-b0c02000.task.md`](./.nodespec/tasks/official-adventure-lagoon-living-cascade-b0c02000.task.md) | --- |
+| Family Workshop & Starter | cli-tool | python-backend | --- | [`.nodespec/tasks/family-workshop-starter-b0c02000.task.md`](./.nodespec/tasks/family-workshop-starter-b0c02000.task.md) | --- |
+| Content Export & Conformance | cli-tool | python-backend | --- | [`.nodespec/tasks/content-export-conformance-b0c02000.task.md`](./.nodespec/tasks/content-export-conformance-b0c02000.task.md) | --- |
+| Curated Review & Release | cli-tool | python-backend | --- | [`.nodespec/tasks/curated-review-release-b0c02000.task.md`](./.nodespec/tasks/curated-review-release-b0c02000.task.md) | --- |
+| Adventure Catalog & Installation | shared-library | godot | --- | [`.nodespec/tasks/adventure-catalog-installation-b0c02000.task.md`](./.nodespec/tasks/adventure-catalog-installation-b0c02000.task.md) | --- |
+| Quality Evidence & Migration Gates | cli-tool | python-backend | --- | [`.nodespec/tasks/quality-evidence-migration-gates-b0c02000.task.md`](./.nodespec/tasks/quality-evidence-migration-gates-b0c02000.task.md) | --- |
 
 ## Connection Topology
 
 | Source | Target | Protocol | Contract |
 |--------|--------|----------|----------|
-| OpenAxolotl Game Client | Axolotl Controller | dependency | Axolotl Controller Interface |
-| OpenAxolotl Game Client | Camera System | dependency | Core Module Dependency |
-| OpenAxolotl Game Client | Save System | dependency | Save Integration Interface |
-| OpenAxolotl Game Client | Lives and Checkpoint System | dependency | Checkpoint and Life Interface |
-| OpenAxolotl Game Client | World: Coral Cove | dependency | Level Contract v1 |
-| OpenAxolotl Game Client | World: Bubble Bay | dependency | Level Contract v1 |
-| Regeneration and Capability System | Axolotl Controller | dependency | Capability Modifier Interface |
-| Gill Mod Ability Framework | Axolotl Controller | dependency | Axolotl Controller Interface |
-| Regeneration and Capability System | Gill Mod Ability Framework | dependency | Capability Modifier Interface |
-| Lives and Checkpoint System | Regeneration and Capability System | dependency | Capability Modifier Interface |
-| Lives and Checkpoint System | Save System | dependency | Save Integration Interface |
-| Restoration State System | Save System | dependency | Save Integration Interface |
-| Collectibles System | Restoration State System | dependency | Restoration Region Interface |
-| Collectibles System | Save System | dependency | Save Integration Interface |
-| Drift Fleet Enemy Framework | Regeneration and Capability System | dependency | Capability Modifier Interface |
-| Drift Fleet Enemy Framework | Lives and Checkpoint System | dependency | Checkpoint and Life Interface |
-| Drift Fleet Enemy Framework | Restoration State System | dependency | Restoration Region Interface |
-| World: Coral Cove | Restoration State System | dependency | Restoration Region Interface |
-| World: Coral Cove | Drift Fleet Enemy Framework | dependency | Enemy Registration Interface |
-| World: Coral Cove | Gill Mod Ability Framework | dependency | Gill Mod Registration Interface |
-| World: Coral Cove | Collectibles System | dependency | Collectible Registration Interface |
-| World: Bubble Bay | Restoration State System | dependency | Restoration Region Interface |
-| World: Bubble Bay | Drift Fleet Enemy Framework | dependency | Enemy Registration Interface |
-| World: Bubble Bay | Gill Mod Ability Framework | dependency | Gill Mod Registration Interface |
-| World: Bubble Bay | Collectibles System | dependency | Collectible Registration Interface |
-| Level Contract Compliance Checker | World: Coral Cove | dependency | Level Contract v1 |
-| Level Contract Compliance Checker | World: Bubble Bay | dependency | Level Contract v1 |
-| Asset Contract Validator | OpenAxolotl Game Client | custom | Asset Contract v1 |
-| CI Pipeline | Level Contract Compliance Checker | ipc | Validator CLI Invocation |
-| CI Pipeline | Asset Contract Validator | ipc | Validator CLI Invocation |
-| CI Pipeline | OpenAxolotl Game Client | dependency | Core Module Dependency |
-| OpenAxolotl Game Client | Player HUD | dependency | HUD State Interface |
-| Player HUD | Regeneration and Capability System | dependency | HUD State Interface |
-| Player HUD | Lives and Checkpoint System | dependency | HUD State Interface |
-| Player HUD | Gill Mod Ability Framework | dependency | HUD State Interface |
-| Player HUD | Restoration State System | dependency | HUD State Interface |
-| Player HUD | Axolotl Controller | dependency | HUD State Interface |
-| OpenAxolotl Game Client | Audio System | dependency | Audio Event Interface |
-| Regeneration and Capability System | Audio System | dependency | Audio Event Interface |
-| Gill Mod Ability Framework | Audio System | dependency | Audio Event Interface |
-| Restoration State System | Audio System | dependency | Audio Event Interface |
-| Axolotl Controller | Audio System | dependency | Audio Event Interface |
-| OpenAxolotl Game Client | Input System | dependency | Player Input Interface |
-| Input System | Axolotl Controller | dependency | Player Input Interface |
-| Axolotl Controller | Balance and Tuning Data | dependency | Tuning Data Interface |
-| Regeneration and Capability System | Balance and Tuning Data | dependency | Tuning Data Interface |
-| Lives and Checkpoint System | Balance and Tuning Data | dependency | Tuning Data Interface |
-| Gill Mod Ability Framework | Balance and Tuning Data | dependency | Tuning Data Interface |
-| Drift Fleet Enemy Framework | Balance and Tuning Data | dependency | Tuning Data Interface |
-| Restoration State System | Balance and Tuning Data | dependency | Tuning Data Interface |
-| Flagship Boss Encounter | Drift Fleet Enemy Framework | dependency | Enemy Registration Interface |
-| Flagship Boss Encounter | Restoration State System | dependency | Restoration Region Interface |
-| Flagship Boss Encounter | Lives and Checkpoint System | dependency | Checkpoint and Life Interface |
-| World: Coral Cove | Flagship Boss Encounter | dependency | Enemy Registration Interface |
-| World Static Analysis Gate | World: Coral Cove | dependency | Sanctioned World API Surface |
-| World Static Analysis Gate | World: Bubble Bay | dependency | Sanctioned World API Surface |
-| CI Pipeline | World Static Analysis Gate | ipc | Validator CLI Invocation |
-| CI Pipeline | Test Harness and Fixtures | ipc | Validator CLI Invocation |
-| Test Harness and Fixtures | OpenAxolotl Game Client | dependency | Core Module Dependency |
-| Asset Contract Validator | Audio System | custom | Asset Contract v1 |
-| World: Coral Cove | Camera System | dependency | Camera Hint Interface |
-| World: Bubble Bay | Camera System | dependency | Camera Hint Interface |
-| Camera System | Balance and Tuning Data | dependency | Tuning Data Interface |
-| World: Coral Cove | Save System | dependency | Save Integration Interface |
-| World: Bubble Bay | Save System | dependency | Save Integration Interface |
-| World: Coral Cove | Audio System | dependency | Audio Event Interface |
-| World: Bubble Bay | Audio System | dependency | Audio Event Interface |
-| Level Contract Compliance Checker | Test Harness and Fixtures | dependency | Shared Test Fixtures |
-| Asset Contract Validator | Test Harness and Fixtures | dependency | Shared Test Fixtures |
-| World Static Analysis Gate | Test Harness and Fixtures | dependency | Shared Test Fixtures |
-| OpenAxolotl Game Client | World: Reference Template | dependency | Level Contract v1 |
-| Level Contract Compliance Checker | World: Reference Template | dependency | Level Contract v1 |
-| World Static Analysis Gate | World: Reference Template | dependency | Sanctioned World API Surface |
-| World: Reference Template | Save System | dependency | Save Integration Interface |
-| World Static Analysis Gate | OpenAxolotl Game Client | dependency | Engine Feature Policy |
-| World Static Analysis Gate | Axolotl Controller | dependency | Engine Feature Policy |
-| World Static Analysis Gate | Input System | dependency | Engine Feature Policy |
-| World Static Analysis Gate | Save System | dependency | Engine Feature Policy |
-| World Static Analysis Gate | Camera System | dependency | Engine Feature Policy |
-| World Static Analysis Gate | Regeneration and Capability System | dependency | Engine Feature Policy |
-| World Static Analysis Gate | Lives and Checkpoint System | dependency | Engine Feature Policy |
-| World Static Analysis Gate | Gill Mod Ability Framework | dependency | Engine Feature Policy |
-| World Static Analysis Gate | Restoration State System | dependency | Engine Feature Policy |
-| World Static Analysis Gate | Collectibles System | dependency | Engine Feature Policy |
-| World Static Analysis Gate | Drift Fleet Enemy Framework | dependency | Engine Feature Policy |
-| World Static Analysis Gate | Player HUD | dependency | Engine Feature Policy |
-| World Static Analysis Gate | Audio System | dependency | Engine Feature Policy |
-| World Static Analysis Gate | Balance and Tuning Data | dependency | Engine Feature Policy |
-| World Static Analysis Gate | Flagship Boss Encounter | dependency | Engine Feature Policy |
-| Model Refinement Pipeline | Blender (headless) | dependency | Blender Headless CLI |
-| Model Refinement Pipeline | Asset Contract Validator | dependency | GLB Header Reader |
+| Hero Motion & Animation | Input, Camera & Accessibility | dependency | Semantic Input Frame v1 |
+| Drift Fleet Encounters | Hero Motion & Animation | dependency | Hero Motion and Action Snapshot v1 |
+| Versioned World Runtime API | Hero Motion & Animation | dependency | Hero Motion and Action Snapshot v1 |
+| Versioned World Runtime API | Drift Fleet Encounters | dependency | Declarative World Definition v1 |
+| Versioned World Runtime API | Progress, Recovery & Rewards | dependency | Progress Snapshot v1 |
+| Versioned World Runtime API | Reusable Level & Asset Kit | dependency | Approved Kit Entry v1 |
+| Hero Motion & Animation | Reusable Level & Asset Kit | dependency | Approved Kit Entry v1 |
+| Official Adventure: Lagoon & Living Cascade | Versioned World Runtime API | dependency | Declarative World Definition v1 |
+| Official Adventure: Lagoon & Living Cascade | Reusable Level & Asset Kit | dependency | Approved Kit Entry v1 |
+| OpenAxolotl Game Shell | Versioned World Runtime API | dependency | Declarative World Definition v1 |
+| OpenAxolotl Game Shell | Input, Camera & Accessibility | dependency | Semantic Input Frame v1 |
+| OpenAxolotl Game Shell | Official Adventure: Lagoon & Living Cascade | dependency | Declarative World Definition v1 |
+| OpenAxolotl Game Shell | Adventure Catalog & Installation | dependency | Installed Adventure State v1 |
+| Family Workshop & Starter | Content Export & Conformance | dependency | Data-only Level Package Manifest v1 |
+| Family Workshop & Starter | Reusable Level & Asset Kit | dependency | Approved Kit Entry v1 |
+| Content Export & Conformance | Versioned World Runtime API | dependency | Declarative World Definition v1 |
+| Content Export & Conformance | Reusable Level & Asset Kit | dependency | Approved Kit Entry v1 |
+| Curated Review & Release | Content Export & Conformance | dependency | Conformance Evidence v1 |
+| Adventure Catalog & Installation | Curated Review & Release | dependency | Signed Catalog Release v1 |
+| Adventure Catalog & Installation | Progress, Recovery & Rewards | dependency | Progress Snapshot v1 |
+| Quality Evidence & Migration Gates | OpenAxolotl Game Shell | dependency | Quality Run Record v1 |
+| Quality Evidence & Migration Gates | Content Export & Conformance | dependency | Conformance Evidence v1 |
 
 ## Task Documents
 
@@ -135,64 +54,27 @@ Each component has a task document containing the full implementation context:
 requirements, contracts, technology guidance, and connected components.
 Use these as the primary brief when implementing or modifying a component.
 
-- **Gill Mod Ability Framework**: [`.nodespec/tasks/gill-mod-ability-framework-22222222.task.md`](./.nodespec/tasks/gill-mod-ability-framework-22222222.task.md)
-- **Collectibles System**: [`.nodespec/tasks/collectibles-system-22222222.task.md`](./.nodespec/tasks/collectibles-system-22222222.task.md)
-- **Lives and Checkpoint System**: [`.nodespec/tasks/lives-and-checkpoint-system-22222222.task.md`](./.nodespec/tasks/lives-and-checkpoint-system-22222222.task.md)
-- **Save System**: [`.nodespec/tasks/save-system-22222222.task.md`](./.nodespec/tasks/save-system-22222222.task.md)
-- **Restoration State System**: [`.nodespec/tasks/restoration-state-system-22222222.task.md`](./.nodespec/tasks/restoration-state-system-22222222.task.md)
-- **CI Pipeline**: [`.nodespec/tasks/ci-pipeline-22222222.task.md`](./.nodespec/tasks/ci-pipeline-22222222.task.md)
-- **Test Harness and Fixtures**: [`.nodespec/tasks/test-harness-and-fixtures-22222222.task.md`](./.nodespec/tasks/test-harness-and-fixtures-22222222.task.md)
-- **Asset Contract Validator**: [`.nodespec/tasks/asset-contract-validator-22222222.task.md`](./.nodespec/tasks/asset-contract-validator-22222222.task.md)
-- **Player HUD**: [`.nodespec/tasks/player-hud-22222222.task.md`](./.nodespec/tasks/player-hud-22222222.task.md)
-- **Camera System**: [`.nodespec/tasks/camera-system-22222222.task.md`](./.nodespec/tasks/camera-system-22222222.task.md)
-- **World: Reference Template**: [`.nodespec/tasks/world-reference-template-22222222.task.md`](./.nodespec/tasks/world-reference-template-22222222.task.md)
-- **Balance and Tuning Data**: [`.nodespec/tasks/balance-and-tuning-data-22222222.task.md`](./.nodespec/tasks/balance-and-tuning-data-22222222.task.md)
-- **Input System**: [`.nodespec/tasks/input-system-22222222.task.md`](./.nodespec/tasks/input-system-22222222.task.md)
-- **Audio System**: [`.nodespec/tasks/audio-system-22222222.task.md`](./.nodespec/tasks/audio-system-22222222.task.md)
-- **Regeneration and Capability System**: [`.nodespec/tasks/regeneration-and-capability-system-22222222.task.md`](./.nodespec/tasks/regeneration-and-capability-system-22222222.task.md)
-- **Axolotl Controller**: [`.nodespec/tasks/axolotl-controller-22222222.task.md`](./.nodespec/tasks/axolotl-controller-22222222.task.md)
-- **Drift Fleet Enemy Framework**: [`.nodespec/tasks/drift-fleet-enemy-framework-22222222.task.md`](./.nodespec/tasks/drift-fleet-enemy-framework-22222222.task.md)
-- **Flagship Boss Encounter**: [`.nodespec/tasks/flagship-boss-encounter-22222222.task.md`](./.nodespec/tasks/flagship-boss-encounter-22222222.task.md)
-- **World Static Analysis Gate**: [`.nodespec/tasks/world-static-analysis-gate-22222222.task.md`](./.nodespec/tasks/world-static-analysis-gate-22222222.task.md)
-- **World: Bubble Bay**: [`.nodespec/tasks/world-bubble-bay-22222222.task.md`](./.nodespec/tasks/world-bubble-bay-22222222.task.md)
-- **OpenAxolotl Game Client**: [`.nodespec/tasks/openaxolotl-game-client-22222222.task.md`](./.nodespec/tasks/openaxolotl-game-client-22222222.task.md)
-- **World: Coral Cove**: [`.nodespec/tasks/world-coral-cove-22222222.task.md`](./.nodespec/tasks/world-coral-cove-22222222.task.md)
-- **Level Contract Compliance Checker**: [`.nodespec/tasks/level-contract-compliance-checker-22222222.task.md`](./.nodespec/tasks/level-contract-compliance-checker-22222222.task.md)
+- **Adventure Catalog & Installation**: [`.nodespec/tasks/adventure-catalog-installation-b0c02000.task.md`](./.nodespec/tasks/adventure-catalog-installation-b0c02000.task.md)
+- **OpenAxolotl Game Shell**: [`.nodespec/tasks/openaxolotl-game-shell-b0c02000.task.md`](./.nodespec/tasks/openaxolotl-game-shell-b0c02000.task.md)
+- **Progress, Recovery & Rewards**: [`.nodespec/tasks/progress-recovery-rewards-b0c02000.task.md`](./.nodespec/tasks/progress-recovery-rewards-b0c02000.task.md)
+- **Curated Review & Release**: [`.nodespec/tasks/curated-review-release-b0c02000.task.md`](./.nodespec/tasks/curated-review-release-b0c02000.task.md)
+- **Reusable Level & Asset Kit**: [`.nodespec/tasks/reusable-level-asset-kit-b0c02000.task.md`](./.nodespec/tasks/reusable-level-asset-kit-b0c02000.task.md)
+- **Content Export & Conformance**: [`.nodespec/tasks/content-export-conformance-b0c02000.task.md`](./.nodespec/tasks/content-export-conformance-b0c02000.task.md)
+- **Drift Fleet Encounters**: [`.nodespec/tasks/drift-fleet-encounters-b0c02000.task.md`](./.nodespec/tasks/drift-fleet-encounters-b0c02000.task.md)
+- **Hero Motion & Animation**: [`.nodespec/tasks/hero-motion-animation-b0c02000.task.md`](./.nodespec/tasks/hero-motion-animation-b0c02000.task.md)
+- **Family Workshop & Starter**: [`.nodespec/tasks/family-workshop-starter-b0c02000.task.md`](./.nodespec/tasks/family-workshop-starter-b0c02000.task.md)
+- **Official Adventure: Lagoon & Living Cascade**: [`.nodespec/tasks/official-adventure-lagoon-living-cascade-b0c02000.task.md`](./.nodespec/tasks/official-adventure-lagoon-living-cascade-b0c02000.task.md)
+- **Input, Camera & Accessibility**: [`.nodespec/tasks/input-camera-accessibility-b0c02000.task.md`](./.nodespec/tasks/input-camera-accessibility-b0c02000.task.md)
+- **Versioned World Runtime API**: [`.nodespec/tasks/versioned-world-runtime-api-b0c02000.task.md`](./.nodespec/tasks/versioned-world-runtime-api-b0c02000.task.md)
+- **Quality Evidence & Migration Gates**: [`.nodespec/tasks/quality-evidence-migration-gates-b0c02000.task.md`](./.nodespec/tasks/quality-evidence-migration-gates-b0c02000.task.md)
 
 ## Test Plans
 
 Each requirement has a test plan documenting acceptance criteria assessments,
 recommended test types, framework suggestions, and test scenarios.
 
-- **Input System**: [`.nodespec/tests/req-024.tests.md`](./.nodespec/tests/req-024.tests.md)
-- **Regeneration and Capability System**: [`.nodespec/tests/req-019.tests.md`](./.nodespec/tests/req-019.tests.md)
-- **OpenAxolotl Game Client**: [`.nodespec/tests/req-017.tests.md`](./.nodespec/tests/req-017.tests.md)
-- **Flagship Boss Encounter**: [`.nodespec/tests/req-013.tests.md`](./.nodespec/tests/req-013.tests.md)
-- **OpenAxolotl Game Client**: [`.nodespec/tests/req-006.tests.md`](./.nodespec/tests/req-006.tests.md)
-- **Axolotl Controller**: [`.nodespec/tests/req-001.tests.md`](./.nodespec/tests/req-001.tests.md)
-- **Camera System**: [`.nodespec/tests/req-005.tests.md`](./.nodespec/tests/req-005.tests.md)
-- **Asset Contract Validator**: [`.nodespec/tests/req-015.tests.md`](./.nodespec/tests/req-015.tests.md)
-- **Drift Fleet Enemy Framework**: [`.nodespec/tests/req-012.tests.md`](./.nodespec/tests/req-012.tests.md)
-- **Lives and Checkpoint System**: [`.nodespec/tests/req-003.tests.md`](./.nodespec/tests/req-003.tests.md)
-- **Test Harness and Fixtures**: [`.nodespec/tests/req-026.tests.md`](./.nodespec/tests/req-026.tests.md)
-- **OpenAxolotl Game Client**: [`.nodespec/tests/req-021.tests.md`](./.nodespec/tests/req-021.tests.md)
-- **Level Contract Compliance Checker**: [`.nodespec/tests/req-007.tests.md`](./.nodespec/tests/req-007.tests.md)
-- **Collectibles System**: [`.nodespec/tests/req-010.tests.md`](./.nodespec/tests/req-010.tests.md)
-- **World: Coral Cove**: [`.nodespec/tests/req-011.tests.md`](./.nodespec/tests/req-011.tests.md)
-- **World: Bubble Bay**: [`.nodespec/tests/req-028.tests.md`](./.nodespec/tests/req-028.tests.md)
-- **Gill Mod Ability Framework**: [`.nodespec/tests/req-004.tests.md`](./.nodespec/tests/req-004.tests.md)
-- **CI Pipeline**: [`.nodespec/tests/req-018.tests.md`](./.nodespec/tests/req-018.tests.md)
-- **Audio System**: [`.nodespec/tests/req-023.tests.md`](./.nodespec/tests/req-023.tests.md)
-- **Player HUD**: [`.nodespec/tests/req-022.tests.md`](./.nodespec/tests/req-022.tests.md)
-- **World: Coral Cove**: [`test/hub/test_world_drift_fleet.gd`](./test/hub/test_world_drift_fleet.gd)
-- **Save System**: [`.nodespec/tests/req-014.tests.md`](./.nodespec/tests/req-014.tests.md)
-- **OpenAxolotl Game Client**: [`.nodespec/tests/req-027.tests.md`](./.nodespec/tests/req-027.tests.md)
-- **World: Reference Template**: [`.nodespec/tests/req-029.tests.md`](./.nodespec/tests/req-029.tests.md)
-- **World Static Analysis Gate**: [`.nodespec/tests/req-020.tests.md`](./.nodespec/tests/req-020.tests.md)
-- **World Static Analysis Gate**: [`.nodespec/tests/req-030.tests.md`](./.nodespec/tests/req-030.tests.md)
-- **Asset Contract Validator**: [`.nodespec/tests/req-016.tests.md`](./.nodespec/tests/req-016.tests.md)
-- **Restoration State System**: [`.nodespec/tests/req-008.tests.md`](./.nodespec/tests/req-008.tests.md)
-- **OpenAxolotl Game Client**: [`.nodespec/tests/req-009.tests.md`](./.nodespec/tests/req-009.tests.md)
-- **OpenAxolotl Game Client**: [`test/core/rendering/test_hero_animator.gd`](./test/core/rendering/test_hero_animator.gd)
-- **Regeneration and Capability System**: [`.nodespec/tests/req-002.tests.md`](./.nodespec/tests/req-002.tests.md)
-- **Balance and Tuning Data**: [`.nodespec/tests/req-025.tests.md`](./.nodespec/tests/req-025.tests.md)
+- **Drift Fleet Encounters**: [`test/hub/test_world_drift_fleet.gd`](./test/hub/test_world_drift_fleet.gd)
+- **OpenAxolotl Game Shell**: [`.nodespec/tests/req-001.tests.md`](./.nodespec/tests/req-001.tests.md)
+- **Input, Camera & Accessibility**: [`.nodespec/tests/req-003.tests.md`](./.nodespec/tests/req-003.tests.md)
+- **Hero Motion & Animation**: [`test/core/rendering/test_hero_animator.gd`](./test/core/rendering/test_hero_animator.gd)
+- **Hero Motion & Animation**: [`.nodespec/tests/req-002.tests.md`](./.nodespec/tests/req-002.tests.md)
