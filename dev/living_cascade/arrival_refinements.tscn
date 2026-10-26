@@ -1,0 +1,76 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://core/controller/water_volume.gd" id="water"]
+[ext_resource type="Material" path="res://core/rendering/water_surface.tres" id="watermat"]
+
+[sub_resource type="StandardMaterial3D" id="R_1"]
+albedo_color = Color(0.25, 0.36, 0.25, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="R_2"]
+albedo_color = Color(0.64, 0.6, 0.43, 1)
+
+[sub_resource type="StandardMaterial3D" id="R_3"]
+albedo_color = Color(0.15, 0.8, 0.9, 1)
+emission_enabled = true
+emission = Color(0.1, 0.6, 0.85, 1)
+
+[sub_resource type="BoxMesh" id="R_4"]
+size = Vector3(4, 1, 6)
+
+[sub_resource type="BoxShape3D" id="R_5"]
+size = Vector3(4, 1, 6)
+
+[sub_resource type="BoxMesh" id="R_6"]
+size = Vector3(4.346262762420146, 0.5, 4)
+
+[sub_resource type="BoxShape3D" id="R_7"]
+size = Vector3(4.346262762420146, 0.5, 4)
+
+[sub_resource type="BoxMesh" id="R_8"]
+size = Vector3(4, 0.5, 4.060788100849391)
+
+[sub_resource type="BoxShape3D" id="R_9"]
+size = Vector3(4, 0.5, 4.060788100849391)
+
+[node name="ArrivalRefinements" type="Node3D"]
+
+
+[node name="ShallowShelf" type="StaticBody3D" parent="."]
+position = Vector3(-8, -0.8, -5)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="ShallowShelf"]
+mesh = SubResource("R_4")
+material_override = SubResource("R_2")
+
+[node name="Collision" type="CollisionShape3D" parent="ShallowShelf"]
+shape = SubResource("R_5")
+
+[node name="ShelfAccessRamp" type="StaticBody3D" parent="."]
+position = Vector3(-4.097785160086213, -1.3800827296146185, -4)
+rotation = Vector3(0, 0, -0.4018706474404565)
+
+[node name="Mesh" type="MeshInstance3D" parent="ShelfAccessRamp"]
+mesh = SubResource("R_6")
+material_override = SubResource("R_2")
+
+[node name="Collision" type="CollisionShape3D" parent="ShelfAccessRamp"]
+shape = SubResource("R_7")
+
+[node name="SecondShoreRamp" type="StaticBody3D" parent="."]
+position = Vector3(-8, -0.19625761678892603, -10.043095082938063)
+rotation = Vector3(0.17324566645236494, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="SecondShoreRamp"]
+mesh = SubResource("R_8")
+material_override = SubResource("R_2")
+
+[node name="Collision" type="CollisionShape3D" parent="SecondShoreRamp"]
+shape = SubResource("R_9")
+
+[node name="ShallowLabel" type="Label3D" parent="."]
+position = Vector3(-8, 1.5, -4)
+text = "SHALLOWS / SECOND SHORE EXIT"
+billboard = 1
+pixel_size = 0.009

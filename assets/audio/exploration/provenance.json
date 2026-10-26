@@ -1,0 +1,7 @@
+{
+  "author": "OpenAxolotl project; original composition and arrangement authored with Codex",
+  "generationMethod": "ai-generated",
+  "tool": "Python, NumPy, SciPy and libsndfile; offline multisample arrangement",
+  "prompt": "Make the existing hip-hop background music more poppy and upbeat, with a brighter hook and punchier rhythm, while retaining moderate speed, quiet gameplay playback and a separate shuffle song.",
+  "licenseTerms": "Original arrangement under the project Apache-2.0 license. Underlying recordings: VSCO 2 Community Edition and VCSL by Versilian Studios, both CC0-1.0. VSCO recordings by Sam Gossner and Simon Dalzell; sample cutting by Elan Hickler/Soundemote. See both pinned manifests and licenses in the source folder."
+}

@@ -1,0 +1,72 @@
+{
+  "input": "C:\\Users\\ltben\\Documents\\OpenAxolotl-main\\asset_inbox\\Meshy_AI_Coral_Reef_Ledge_0913195229_texture-optimized.glb",
+  "output": "C:\\Users\\ltben\\Documents\\Codex\\2026-09-11\\ana\\work\\cascade-assets\\reef_ledge\\reef_ledge.glb",
+  "budget": 24000,
+  "meshes": 1,
+  "diagonal": 2.9998950145153436,
+  "weld": {
+    "distance": 2.999895014515344e-05,
+    "merged": 1001045,
+    "openEdgesBefore": 1697402,
+    "openEdgesAfter": 28982,
+    "openEdgesAfterDecimation": 7564
+  },
+  "reduction": {
+    "ratio": 0.010259707393145148,
+    "trianglesBefore": 2339248,
+    "trianglesAfter": 24000,
+    "skipped": false
+  },
+  "deviation": [
+    {
+      "direction": "decimated_to_original",
+      "samples": 12000,
+      "mean": 0.0024327938668239173,
+      "p95": 0.0068284424720332,
+      "max": 0.021880030632019043,
+      "worstAt": [
+        0.061,
+        -0.903,
+        0.1348
+      ],
+      "maxAsFractionOfDiagonal": 0.007293598784674114,
+      "p95AsFractionOfDiagonal": 0.0022762271476144936
+    },
+    {
+      "direction": "original_to_decimated",
+      "samples": 12000,
+      "mean": 0.002711702293201553,
+      "p95": 0.0075033380184322575,
+      "max": 0.021970059722661972,
+      "worstAt": [
+        -0.7671,
+        0.652,
+        -0.0035
+      ],
+      "maxAsFractionOfDiagonal": 0.007323609531786034,
+      "p95AsFractionOfDiagonal": 0.0025012002027159207
+    }
+  ],
+  "images": [],
+  "imagesRenamed": [
+    {
+      "image": "Image_0",
+      "to": "base_color",
+      "role": "base_color"
+    },
+    {
+      "image": "Image_2",
+      "to": "normal",
+      "role": "normal"
+    },
+    {
+      "image": "Image_1",
+      "to": "metallic_roughness",
+      "role": "metallic_roughness"
+    }
+  ],
+  "blender": "4.5.3 LTS",
+  "asset": "reef_ledge",
+  "final_bytes": 7606648,
+  "final_sha256": "d2bd629fbb5d573bcfa148f6d513d838e1b2520d1021f3732bb89f80886f8231"
+}

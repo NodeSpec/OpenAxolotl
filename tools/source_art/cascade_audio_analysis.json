@@ -1,0 +1,176 @@
+{
+  "cascade_exploration": {
+    "seconds": 40.0,
+    "peak": 0.2811,
+    "rms": 0.0574,
+    "loop": true
+  },
+  "crayfish_groove": {
+    "seconds": 17.1429,
+    "peak": 0.4562,
+    "rms": 0.103,
+    "loop": false
+  },
+  "crayfish_pickup": {
+    "seconds": 1.07,
+    "peak": 0.5112,
+    "rms": 0.1164,
+    "loop": false
+  },
+  "dance_unlocked": {
+    "seconds": 1.25,
+    "peak": 0.6246,
+    "rms": 0.1393,
+    "loop": false
+  },
+  "checkpoint": {
+    "seconds": 1.07,
+    "peak": 0.5015,
+    "rms": 0.1165,
+    "loop": false
+  },
+  "net_escape": {
+    "seconds": 1.07,
+    "peak": 0.5226,
+    "rms": 0.1164,
+    "loop": false
+  },
+  "net_caught": {
+    "seconds": 1.07,
+    "peak": 0.5186,
+    "rms": 0.1167,
+    "loop": false
+  },
+  "tail_whack": {
+    "seconds": 0.25,
+    "peak": 0.35,
+    "rms": 0.0716,
+    "loop": false
+  },
+  "spin_charge": {
+    "seconds": 0.55,
+    "peak": 0.2135,
+    "rms": 0.0389,
+    "loop": false
+  },
+  "slide": {
+    "seconds": 0.42,
+    "peak": 0.1599,
+    "rms": 0.0168,
+    "loop": false
+  },
+  "movement_swim_stroke": {
+    "seconds": 0.22,
+    "peak": 0.1822,
+    "rms": 0.0393,
+    "loop": false
+  },
+  "movement_dive": {
+    "seconds": 0.4,
+    "peak": 0.2188,
+    "rms": 0.0412,
+    "loop": false
+  },
+  "movement_waddle_step": {
+    "seconds": 0.085,
+    "peak": 0.0875,
+    "rms": 0.0175,
+    "loop": false
+  },
+  "movement_hop": {
+    "seconds": 0.17,
+    "peak": 0.11,
+    "rms": 0.0476,
+    "loop": false
+  },
+  "landing": {
+    "seconds": 0.14,
+    "peak": 0.1258,
+    "rms": 0.0143,
+    "loop": false
+  },
+  "capability_lost_tail": {
+    "seconds": 1.07,
+    "peak": 0.4902,
+    "rms": 0.1168,
+    "loop": false
+  },
+  "capability_regrown_tail": {
+    "seconds": 1.07,
+    "peak": 0.4931,
+    "rms": 0.1167,
+    "loop": false
+  },
+  "capability_lost_gill": {
+    "seconds": 1.07,
+    "peak": 0.4963,
+    "rms": 0.1165,
+    "loop": false
+  },
+  "capability_regrown_gill": {
+    "seconds": 1.07,
+    "peak": 0.5002,
+    "rms": 0.1165,
+    "loop": false
+  },
+  "capability_lost_leg": {
+    "seconds": 1.07,
+    "peak": 0.4951,
+    "rms": 0.1167,
+    "loop": false
+  },
+  "capability_regrown_leg": {
+    "seconds": 1.07,
+    "peak": 0.5241,
+    "rms": 0.1167,
+    "loop": false
+  },
+  "gill_mod_bubble_activated": {
+    "seconds": 1.01,
+    "peak": 0.5294,
+    "rms": 0.1199,
+    "loop": false
+  },
+  "gill_mod_jet_activated": {
+    "seconds": 1.01,
+    "peak": 0.5178,
+    "rms": 0.1183,
+    "loop": false
+  },
+  "gill_mod_glow_activated": {
+    "seconds": 1.08,
+    "peak": 0.6119,
+    "rms": 0.1342,
+    "loop": false
+  },
+  "grammar_land": {
+    "seconds": 8.0,
+    "peak": 0.0496,
+    "rms": 0.0104,
+    "loop": true
+  },
+  "grammar_water": {
+    "seconds": 8.0,
+    "peak": 0.0521,
+    "rms": 0.0125,
+    "loop": true
+  },
+  "region_barren": {
+    "seconds": 8.0,
+    "peak": 0.036,
+    "rms": 0.0119,
+    "loop": true
+  },
+  "region_resourced": {
+    "seconds": 8.0,
+    "peak": 0.0356,
+    "rms": 0.0119,
+    "loop": true
+  },
+  "region_restored": {
+    "seconds": 8.0,
+    "peak": 0.0358,
+    "rms": 0.0119,
+    "loop": true
+  }
+}

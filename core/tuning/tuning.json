@@ -272,7 +272,7 @@
       "unit": "meters_per_second_squared",
       "min": 1.0,
       "max": 200.0,
-      "description": "How fast a dive or a surface reaches its target vertical speed. A dive used to SET velocity.y outright, which snapped the axolotl downward in one frame and read as a teleport rather than a movement; easing into it is what makes the descent a glide. At this rate full dive speed arrives in about an eighth of a second — visibly a movement, and quick enough that the flown Coral Cove route still makes every jump. THERE IS A FLOOR HERE AND IT IS MEASURED: at 22 the swim timing shifted enough to compound into a missed lateral jump forty legs later, and the route lost a life to the gorge. Lower this and re-fly the coral walk before believing it."
+      "description": "How fast a dive or a surface reaches its target vertical speed. A dive used to SET velocity.y outright, which snapped the axolotl downward in one frame and read as a teleport rather than a movement; easing into it is what makes the descent a glide. At this rate full dive speed arrives in about an eighth of a second \u2014 visibly a movement, and quick enough that the flown Coral Cove route still makes every jump. THERE IS A FLOOR HERE AND IT IS MEASURED: at 22 the swim timing shifted enough to compound into a missed lateral jump forty legs later, and the route lost a life to the gorge. Lower this and re-fly the coral walk before believing it."
     },
     "controller.dive.speed_m_per_s": {
       "value": 5.0,
@@ -419,7 +419,7 @@
       "unit": "meters_per_second",
       "min": 1.0,
       "max": 60.0,
-      "description": "Speed of the underwater spin sprint. Above the bubble boost's peak, because the boost is a sustained cruise and this is a lunge — and because it is the water grammar's strike, so it has to close distance on a machine that is holding station."
+      "description": "Speed of the underwater spin sprint. Above the bubble boost's peak, because the boost is a sustained cruise and this is a lunge \u2014 and because it is the water grammar's strike, so it has to close distance on a machine that is holding station."
     },
     "controller.squash.hop_stretch": {
       "value": 0.25,
@@ -489,7 +489,7 @@
       "unit": "seconds",
       "min": 0.2,
       "max": 20.0,
-      "description": "How long a Drift Fleet machine reels from a strike that did not finish it: its effect is refused and whatever it was doing to the player is released, then it works again. Short on purpose — a stagger is the feedback that the hit landed, not the reward, and the reward is the strike that reaches the machine's declared durability and puts it down for the attempt. At six seconds, which is what this was when a single strike disabled a machine outright, a durability-4 Dredger would spend most of the fight lying still and the exchange would read as waiting rather than as fighting."
+      "description": "How long a Drift Fleet machine reels from a strike that did not finish it: its effect is refused and whatever it was doing to the player is released, then it works again. Short on purpose \u2014 a stagger is the feedback that the hit landed, not the reward, and the reward is the strike that reaches the machine's declared durability and puts it down for the attempt. At six seconds, which is what this was when a single strike disabled a machine outright, a durability-4 Dredger would spend most of the fight lying still and the exchange would read as waiting rather than as fighting."
     },
     "enemy.hookline.mod_strip_seconds": {
       "value": 8.0,
@@ -609,6 +609,34 @@
       "min": 1,
       "max": 999,
       "description": "Restoration resources consumed to advance a region from resourced to restored."
+    },
+    "controller.waddle.acceleration_m_per_s2": {
+      "value": 36.0,
+      "unit": "meters_per_second_squared",
+      "min": 1.0,
+      "max": 200.0,
+      "description": "Ground steering acceleration; reaches full base speed in about 0.12 seconds."
+    },
+    "controller.hop.air_acceleration_m_per_s2": {
+      "value": 24.0,
+      "unit": "meters_per_second_squared",
+      "min": 1.0,
+      "max": 200.0,
+      "description": "Air steering acceleration; preserves the authored jump impulse and top speed."
+    },
+    "controller.swim.acceleration_m_per_s2": {
+      "value": 24.0,
+      "unit": "meters_per_second_squared",
+      "min": 1.0,
+      "max": 200.0,
+      "description": "Horizontal swim acceleration; full base speed in 0.25 seconds with continuous steering."
+    },
+    "controller.facing.reversal_brake_ratio": {
+      "value": 1.5,
+      "unit": "ratio",
+      "min": 1.0,
+      "max": 3.0,
+      "description": "Extra braking when steering against current motion; keeps reversals responsive."
     }
   }
 }

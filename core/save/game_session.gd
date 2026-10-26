@@ -18,6 +18,8 @@ func _ready() -> void:
 			push_warning("Could not load your save. Playing a temporary session; the existing file will be preserved.")
 	var hub := get_node("OpenLagoon") as OpenLagoon
 	hub.set_save_system(_save)
+	var body:=get_tree().get_first_node_in_group("player") as AxolotlBody
+	if body!=null:body.set_crayfish_count(int(_save.load_section("crayfish_dance").get("count",0)))
 	hub.world_completed.connect(func(_world_id: String) -> void: save_progress())
 	var timer := Timer.new()
 	timer.wait_time = 5.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=19 format=3]
 
 ; THE OPEN LAGOON (REQ-009) — the hub, as a scene, and the game's main scene.
 ;
@@ -17,6 +17,10 @@
 ; under the subtree the hub switches off.
 
 [ext_resource type="Script" path="res://hub/open_lagoon.gd" id="1_hub"]
+[ext_resource type="Script" path="res://hub/lagoon_art.gd" id="lagoon_art"]
+[ext_resource type="PackedScene" path="res://hub/lagoon_imported_dressing.tscn" id="imported_dressing"]
+[ext_resource type="Script" path="res://hub/lagoon_hydrology.gd" id="lagoon_hydrology"]
+[ext_resource type="Script" path="res://hub/lagoon_stream.gd" id="lagoon_stream"]
 [ext_resource type="Script" path="res://core/save/game_session.gd" id="9_session"]
 [ext_resource type="PackedScene" path="res://core/controller/axolotl_body.tscn" id="2_axolotl"]
 [ext_resource type="Script" path="res://core/camera/camera_follow.gd" id="3_camera"]
@@ -54,9 +58,11 @@ mesh = SubResource("BoxMesh_ground")
 surface_material_override/0 = SubResource("Material_ground")
 
 [node name="Collision" type="CollisionShape3D" parent="OpenLagoon/Ground"]
+disabled = true
 shape = SubResource("BoxShape3D_ground")
 
 [node name="Shell" type="Node3D" parent="OpenLagoon/Ground"]
+visible = false
 script = ExtResource("terrain_shell_script")
 surface_material = ExtResource("terrain_river_sand")
 shell_seed = 3578
@@ -74,6 +80,19 @@ script = ExtResource("3_camera")
 target_path = NodePath("../Axolotl")
 
 [node name="Dressing" type="Node3D" parent="OpenLagoon"]
+visible = false
+
+[node name="LagoonArt" type="Node3D" parent="OpenLagoon"]
+script = ExtResource("lagoon_art")
+
+[node name="ImportedModels" parent="OpenLagoon/LagoonArt" instance=ExtResource("imported_dressing")]
+
+[node name="Hydrology" type="Node3D" parent="OpenLagoon"]
+script = ExtResource("lagoon_hydrology")
+continuous_stream = true
+
+[node name="DownstreamPassage" type="Area3D" parent="OpenLagoon"]
+script = ExtResource("lagoon_stream")
 
 [node name="RockCluster1" parent="OpenLagoon/Dressing" instance=ExtResource("5_kit_rock_cluster")]
 transform = Transform3D(-0.395, 0, -1.150, 0, 1.216, 0, 1.150, 0, -0.395, -15.18, 0, -4.32)

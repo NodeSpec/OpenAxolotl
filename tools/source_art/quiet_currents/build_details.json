@@ -1,0 +1,14 @@
+{
+  "author": "OpenAxolotl project; original composition and arrangement authored with Codex",
+  "generationMethod": "ai-generated",
+  "tool": "Python, NumPy, SciPy and libsndfile; offline multisample arrangement",
+  "prompt": "Make the existing hip-hop background music more poppy and upbeat, with a brighter hook and punchier rhythm, while retaining moderate speed, quiet gameplay playback and a separate shuffle song.",
+  "licenseTerms": "Original arrangement under the project Apache-2.0 license. Underlying recordings: VSCO 2 Community Edition and VCSL by Versilian Studios, both CC0-1.0. VSCO recordings by Sam Gossner and Simon Dalzell; sample cutting by Elan Hickler/Soundemote. See both pinned manifests and licenses in the source folder.",
+  "source": "https://github.com/sgossner/VSCO-2-CE",
+  "revision": "440300901dfe9275fd84e0b7763af1f8443ae62e",
+  "description": "Quiet Currents, bright pop groove: 48 bars, 104 BPM, D major, 110.769 seconds. Near-straight drums, snappy layered snare, octave bass, short piano chords and a repeating bright piano/marimba hook. Less swing, shorter releases and less reverb than the hip-hop version. No flute or vocals.",
+  "build": "tools/source_art/quiet_currents/compose_exploration.py",
+  "sha256": "0d635617bd2b068331b137aa8d9c1e1e3774ab3eede063f2369d99d9d0a70eaa",
+  "drum_source": "https://github.com/sgossner/VCSL",
+  "drum_revision": "c1ea7bcc3c7309650ab0da9d15c9cd1fbc4a4c7e"
+}

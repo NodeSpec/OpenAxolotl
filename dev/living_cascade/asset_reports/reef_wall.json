@@ -1,0 +1,72 @@
+{
+  "input": "C:\\Users\\ltben\\Documents\\OpenAxolotl-main\\asset_inbox\\Meshy_AI_Coral_Reef_Ruins_0913200130_texture-optimized.glb",
+  "output": "C:\\Users\\ltben\\Documents\\Codex\\2026-09-11\\ana\\work\\cascade-assets\\reef_wall\\reef_wall.glb",
+  "budget": 24000,
+  "meshes": 1,
+  "diagonal": 2.5567201874478376,
+  "weld": {
+    "distance": 2.5567201874478378e-05,
+    "merged": 129958,
+    "openEdgesBefore": 266807,
+    "openEdgesAfter": 23252,
+    "openEdgesAfterDecimation": 6566
+  },
+  "reduction": {
+    "ratio": 0.010260786437976538,
+    "trianglesBefore": 2339002,
+    "trianglesAfter": 24000,
+    "skipped": false
+  },
+  "deviation": [
+    {
+      "direction": "decimated_to_original",
+      "samples": 12000,
+      "mean": 0.0016503457647926625,
+      "p95": 0.004928920231759541,
+      "max": 0.013298592530190945,
+      "worstAt": [
+        0.725,
+        0.0332,
+        0.5165
+      ],
+      "maxAsFractionOfDiagonal": 0.005201426654148584,
+      "p95AsFractionOfDiagonal": 0.0019278293557339471
+    },
+    {
+      "direction": "original_to_decimated",
+      "samples": 12000,
+      "mean": 0.0017803188302827906,
+      "p95": 0.005348644847981632,
+      "max": 0.014295772649347782,
+      "worstAt": [
+        0.5179,
+        -0.1108,
+        0.4117
+      ],
+      "maxAsFractionOfDiagonal": 0.005591449826826013,
+      "p95AsFractionOfDiagonal": 0.00209199460865553
+    }
+  ],
+  "images": [],
+  "imagesRenamed": [
+    {
+      "image": "Image_0",
+      "to": "base_color",
+      "role": "base_color"
+    },
+    {
+      "image": "Image_2",
+      "to": "normal",
+      "role": "normal"
+    },
+    {
+      "image": "Image_1",
+      "to": "metallic_roughness",
+      "role": "metallic_roughness"
+    }
+  ],
+  "blender": "4.5.3 LTS",
+  "asset": "reef_wall",
+  "final_bytes": 7289204,
+  "final_sha256": "7a3a14dda3c5ad28b5bdd06409252c0f6d8ab58d1df68495eb07e4ce369e65b3"
+}

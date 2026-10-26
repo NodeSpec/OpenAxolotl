@@ -76,15 +76,11 @@ static func erupt(host: Node, at: Vector3, speed: float,
 		parent = host
 
 	var crown := crown_for(force, plunging)
-	parent.add_child(crown)
-	crown.global_position = at
-	crown.emitting = true
+	start_particles(parent,crown,at)
 	made.append(crown)
 
 	var ring := ring_for(force)
-	parent.add_child(ring)
-	ring.global_position = at
-	ring.emitting = true
+	start_particles(parent,ring,at)
 	made.append(ring)
 
 	_reap(host, crown, DROP_LIFETIME)
@@ -109,6 +105,7 @@ static func force_of(speed: float) -> float:
 ## erupt() would mean testing it nowhere.
 static func crown_for(force: float, plunging: bool) -> CPUParticles3D:
 	var drops := CPUParticles3D.new()
+	drops.emitting = false
 	drops.name = "SplashCrown"
 	drops.one_shot = true
 	drops.explosiveness = 1.0
@@ -136,6 +133,7 @@ static func crown_for(force: float, plunging: bool) -> CPUParticles3D:
 ## The flat ring leaving across the surface.
 static func ring_for(force: float) -> CPUParticles3D:
 	var ring := CPUParticles3D.new()
+	ring.emitting = false
 	ring.name = "SplashRing"
 	ring.one_shot = true
 	ring.explosiveness = 1.0
@@ -174,7 +172,59 @@ static func _droplet() -> Mesh:
 	mesh.height = 1.0
 	mesh.radial_segments = 6
 	mesh.rings = 3
+	var material := StandardMaterial3D.new()
+	material.vertex_color_use_as_albedo = true
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.roughness = 0.16
+	mesh.material = material
 	return mesh
+
+
+static func trail(host: Node, at: Vector3, velocity: Vector3, swimming: bool) -> void:
+	if not host.is_inside_tree():
+		return
+	var parent: Node = host.get_tree().current_scene
+	if parent == null:
+		parent = host
+	var ripple := MeshInstance3D.new()
+	ripple.name = "MotionRipple"
+	var plane := PlaneMesh.new()
+	plane.size = Vector2.ONE*(2.6 if swimming else 1.5)
+	var material := ShaderMaterial.new()
+	material.shader = preload("res://core/rendering/water_ripple.gdshader")
+	ripple.mesh = plane
+	ripple.material_override = material
+	ripple.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	parent.add_child(ripple)
+	ripple.global_position = at
+	var tween := ripple.create_tween()
+	tween.tween_method(func(age: float) -> void: material.set_shader_parameter("age",age),0.0,1.0,0.9)
+	tween.tween_callback(ripple.queue_free)
+	if swimming:
+		return
+	var drops := crown_for(force_of(velocity.length()*0.3),false)
+	drops.name = "RunningSpray"
+	drops.amount = 6
+	drops.lifetime = 0.32
+	drops.initial_velocity_min = 0.8
+	drops.initial_velocity_max = 2.1
+	drops.scale_amount_min = 0.025
+	drops.scale_amount_max = 0.055
+	drops.gravity = Vector3(0,-15,0)
+	start_particles(parent,drops,at)
+	_reap(host,drops,0.32)
+
+
+static func start_particles(parent: Node, particles: CPUParticles3D, at: Vector3) -> void:
+	# CPU particles can emit on tree entry. Establish world space before that happens.
+	particles.emitting = false
+	particles.top_level = true
+	particles.local_coords = false
+	particles.position = at
+	particles.set_meta("emission_origin",at)
+	parent.add_child(particles)
+	particles.restart()
+	particles.emitting = true
 
 
 ## Frees an effect once it has finished, through the host's tree.
@@ -188,7 +238,9 @@ static func _reap(host: Node, effect: Node, lifetime: float) -> void:
 	if tree == null:
 		effect.queue_free()
 		return
+	var reference: WeakRef = weakref(effect)
 	tree.create_timer(lifetime + 0.25).timeout.connect(
 		func() -> void:
-			if is_instance_valid(effect):
-				effect.queue_free())
+			var remaining := reference.get_ref() as Node
+			if is_instance_valid(remaining):
+				remaining.queue_free())

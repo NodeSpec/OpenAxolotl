@@ -47,6 +47,10 @@ const TURN_RATE_KEY := "controller.facing.turn_rate_deg_per_s"
 ## direction, and the arbitrary atan2 it would yield spins a standing axolotl
 ## on the spot — the camera guards against the same thing with its own bound.
 const HEADING_HOLD_SPEED := 0.25
+const LAND_ACCEL_KEY := "controller.waddle.acceleration_m_per_s2"
+const AIR_ACCEL_KEY := "controller.hop.air_acceleration_m_per_s2"
+const WATER_ACCEL_KEY := "controller.swim.acceleration_m_per_s2"
+const REVERSE_BRAKE_KEY := "controller.facing.reversal_brake_ratio"
 
 ## Emitted on the SAME frame the grammar changes, before movement integration.
 signal grammar_changed(grammar: MovementGrammar.Grammar)
@@ -152,6 +156,15 @@ func _init(tuning: TuningData) -> void:
 ## the boundary is already integrated under the new grammar. Reacting to an
 ## Area3D `body_entered` signal instead would land a frame late and render one
 ## frame in the previous grammar — exactly what the criterion forbids.
+var net_captured := false
+
+func set_net_captured(value: bool) -> void:
+	net_captured=value
+	_velocity=Vector3.ZERO
+	if value:
+		_whack_window=0.0;_whack_cooldown=0.0
+		_end_climb();release_grapple()
+
 func physics_step(delta: float, is_in_water: bool, intent: PlayerIntent) -> void:
 	_apply_water_state(is_in_water)
 	_dash.tick(delta, is_in_water)
@@ -159,6 +172,10 @@ func physics_step(delta: float, is_in_water: bool, intent: PlayerIntent) -> void
 	_roll.tick(delta)
 	_spin.tick(delta)
 	_tick_whack(delta)
+	if net_captured:
+		_velocity=Vector3.ZERO
+		if intent.wants(MovementGrammar.Verb.TAIL_WHACK): _try_whack()
+		return
 	_integrate(delta, intent)
 	_update_heading(delta)
 	_update_pitch(delta)
@@ -347,13 +364,13 @@ func _integrate_water(delta: float, intent: PlayerIntent) -> void:
 		_velocity = _spin.velocity()
 		return
 
-	# Steering OVERRIDES momentum; absence of steering PRESERVES it. Overwriting
+	# Steering approaches a target; absence of steering PRESERVES momentum. Overwriting
 	# unconditionally would zero the velocity every frame the player is not
 	# holding a direction — which would silently undo the retention applied in
 	# _apply_water_state and make AC-1's momentum carry unobservable.
 	var target: Vector3
 	if not direction.is_zero_approx():
-		target = direction.normalized() * _swim_speed()
+		target = direction.limit_length(1.0) * _swim_speed()
 	else:
 		# Momentum is PRESERVED but not forever. Water glides, so the drag here
 		# is gentle — but without any the axolotl would coast at its entry speed
@@ -372,16 +389,24 @@ func _integrate_water(delta: float, intent: PlayerIntent) -> void:
 			or intent.sustains(MovementGrammar.Verb.DIVE):
 		target.y = -_tuning.get_number(DIVE_SPEED_KEY)
 
-	# THE GLIDE. Horizontal steering stays immediate — that is the swim's
-	# responsiveness and every route was measured against it — but the VERTICAL
-	# component is eased into. Setting velocity.y outright moved the axolotl
-	# from level flight to five metres a second downward between two rendered
-	# frames, which is not a dive: it is a cut. Easing gives the descent and the
-	# rise a shape the player can see beginning, and it is what _update_pitch
-	# above has to work with.
-	_velocity.x = target.x
-	_velocity.z = target.z
+	# Steering accelerates into a new heading; unsteered water still glides.
+	if not direction.is_zero_approx():
+		_steer_horizontal(Vector3(target.x, 0.0, target.z), _tuning.get_number(WATER_ACCEL_KEY), delta)
+	else:
+		_velocity.x = target.x
+		_velocity.z = target.z
 	_velocity.y = _glide(_velocity.y, target.y, delta)
+
+
+## Bounded, frame-rate independent acceleration. Braking into a reversal is
+## stronger than starting, so smooth movement does not become sluggish input.
+func _steer_horizontal(target: Vector3, acceleration: float, delta: float) -> void:
+	var current := Vector3(_velocity.x, 0.0, _velocity.z)
+	if current.dot(target) < 0.0:
+		acceleration *= _tuning.get_number(REVERSE_BRAKE_KEY)
+	var next := current.move_toward(target, acceleration * maxf(0.0, delta))
+	_velocity.x = next.x
+	_velocity.z = next.z
 
 
 ## Eases a vertical speed toward its target, downward faster than upward.
@@ -441,10 +466,11 @@ func _integrate_land(delta: float, intent: PlayerIntent) -> void:
 		_velocity = Vector3(driven.x, _velocity.y, driven.z)
 		return
 	if not direction.is_zero_approx():
-		var waddle := direction.normalized() \
+		var waddle := direction.limit_length(1.0) \
 			* _tuning.get_number(WADDLE_SPEED_KEY) \
 			* _modifiers.combined(CapabilityModifiers.Target.WADDLE_SPEED)
-		_velocity = Vector3(waddle.x, _velocity.y, waddle.z)
+		var acceleration := _tuning.get_number(LAND_ACCEL_KEY if _is_grounded else AIR_ACCEL_KEY)
+		_steer_horizontal(waddle, acceleration, delta)
 	else:
 		# Horizontal only: the vertical component is gravity and the hop, and
 		# dragging it would make the axolotl float down. Land drag is brisk, so
@@ -568,7 +594,7 @@ func max_climb_height() -> float:
 ## grammar does not own, so a land verb underwater neither swings nor spends
 ## anything.
 func _open_strike(kind: CombatStrike.Kind) -> bool:
-	if not CombatStrike.allowed_in(kind, _grammar):
+	if not CombatStrike.allowed_in(kind, _grammar) and not (net_captured and kind == CombatStrike.Kind.TAIL_WHACK):
 		return false
 	strike_opened.emit(kind, _tuning.get_number(CombatStrike.reach_key(kind)))
 	return true
@@ -580,7 +606,7 @@ func _try_whack() -> bool:
 	if not _open_strike(CombatStrike.Kind.TAIL_WHACK):
 		return false
 	_whack_window = _tuning.get_number(WHACK_WINDOW_KEY)
-	_whack_cooldown = _whack_window + _tuning.get_number(WHACK_COOLDOWN_KEY)
+	_whack_cooldown = 0.38 if net_captured else _whack_window + _tuning.get_number(WHACK_COOLDOWN_KEY)
 	return true
 
 

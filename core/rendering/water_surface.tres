@@ -5,8 +5,8 @@
 ; One material for all water, owned by the client like the rest of the look:
 ; worlds reference this resource instead of carrying their own tint, so the
 ; body of water in the greybox, Coral Cove and Bubble Bay is visibly the same
-; water. The behaviour lives in water_surface.gdshader (an unshaded, animated
-; shimmer with fresnel transparency — see the rationale there); this file
+; water. The shader combines lit ripples, refraction, depth absorption,
+; shoreline foam and movement-driven wakes. This file
 ; only binds the shader so scene references stay stable if the shader is
 ; ever rewritten.
 

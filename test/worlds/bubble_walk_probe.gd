@@ -230,7 +230,7 @@ func _elapsed_seconds() -> float:
 ## Every node the world put in the `checkpoint` group, in route order.
 func _collect_checkpoints() -> void:
 	var zs: Array[float] = []
-	for node: Node in get_tree().get_nodes_in_group("checkpoint"):
+	for node: Node in WorldLoader._in_group(_hub.get_active_world(),"checkpoint"):
 		if node is Node3D:
 			zs.append((node as Node3D).global_position.z)
 	zs.sort()

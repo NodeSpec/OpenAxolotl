@@ -307,12 +307,7 @@ func _key(keycode: Key, pressed: bool) -> void:
 	Input.parse_input_event(event)
 
 
-## The active world's placement offset: the spawn marker is a direct child
-## of the world root, so its parent's global position is the offset the
-## route's level-space waypoints need (the same resolution the walk uses).
+## The active world's placement offset, excluding any preloaded neighbor.
 func _world_origin() -> Vector3:
-	var spawn := get_tree().get_first_node_in_group("spawn_point")
-	if spawn == null:
-		return Vector3.ZERO
-	var world_root := (spawn as Node).get_parent() as Node3D
+	var world_root := _hub.get_active_world()
 	return world_root.global_position if world_root != null else Vector3.ZERO

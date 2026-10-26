@@ -62,7 +62,8 @@ extends Node
 ## anchor: a life is spent, and at zero the count refills (a setback, never a
 ## restart). Entry into a world ALWAYS starts at the spawn point even when the
 ## profile remembers a later checkpoint. Restoration and discoveries persist,
-## but temporary Gill Mods and resource pickup placement reset on entry, so
+## but temporary Gill Mods reset on entry; resource pickups with stable instance
+## ids remain collected. Therefore
 ## checkpoint-based session resume remains a separate task (friction
 ## F-10). Every loss and regrowth asks for feedback through
 ## [signal feedback_requested] and gets a small sparkle burst at the player
@@ -102,6 +103,7 @@ signal boss_defeated(region_id: String)
 const GROUP_SPAWN := "spawn_point"
 const GROUP_CHECKPOINT := "checkpoint"
 const GROUP_PIT := "pit_volume"
+const GROUP_SAFE_RETURN := "safe_return_volume"
 const GROUP_CRUSH := "crush_hazard"
 const GROUP_HAZARD := "hazard"
 const GROUP_REGEN_STATION := "regen_station"
@@ -171,6 +173,7 @@ var _checkpoint_nodes: Array[Node3D] = []
 
 ## Every enemy node the scene placed, kept so a strike can be resolved against
 ## positions rather than by walking the tree on the frame of a swing.
+var _encounter_strikes: Array[Dictionary] = []
 var _enemy_nodes: Array[Node3D] = []
 
 ## Each enemy node's transform as the world author placed it, taken at wiring
@@ -187,6 +190,9 @@ var _spawn_position: Vector3 = Vector3.ZERO
 
 
 var _wired := false
+var _resource_instances: Dictionary = {}
+var _camera_rig: CameraRig
+var _camera_hint_ids: Array[String] = []
 
 
 func _ready() -> void:
@@ -202,6 +208,8 @@ func wire() -> void:
 	if _wired or get_parent() == null:
 		return
 	_wired = true
+	if save_system != null:
+		_resource_instances = save_system.get_world_data(world_id).get("resourceInstances",{}) as Dictionary
 	add_to_group("world_systems")
 
 	_tuning = TuningData.load_from_file(TUNING_PATH)
@@ -258,6 +266,8 @@ func wire() -> void:
 	_wire_drift_fleet()
 	_wire_flagship()
 	_wire_scene()
+	if is_inside_tree():
+		_wire_camera_hints.call_deferred()
 	# Scene gates must be bound before loading can emit traversal changes.
 	_restoration.load_saved()
 	_open_lives()
@@ -306,6 +316,8 @@ func _wire_collectibles() -> void:
 ## The system is built even when the world declares no enemies, so the
 ## accessor never hands back null and the tick loop needs no special case;
 ## with nothing declared it simply has nothing to do.
+var _net_capture := preload("res://core/enemies/net_capture.gd").new()
+
 func _wire_drift_fleet() -> void:
 	var registry := EnemyRegistry.new(_tuning)
 	var roster_errors: Array[EnemyError] = []
@@ -313,6 +325,8 @@ func _wire_drift_fleet() -> void:
 	for error: EnemyError in roster_errors:
 		push_warning("WorldSystems: enemy roster: %s" % str(error))
 
+	_net_capture.escaped.connect(_finish_net_escape)
+	_net_capture.captured.connect(_finish_net_capture)
 	_fleet = DriftFleetSystem.new(_tuning, registry)
 	_fleet.set_gill_mods(_mods)
 	_fleet.set_restoration(_restoration)
@@ -482,6 +496,12 @@ func get_tuning() -> TuningData:
 
 func _physics_process(delta: float) -> void:
 	_bind_player_strikes()
+	_tick_encounter_strikes(delta)
+	_net_capture.tick(delta)
+	if _net_capture.active():
+		var captured_body := _player() as AxolotlBody
+		if captured_body != null: captured_body.show_net_capture(_net_capture.remaining,_net_capture.whacks)
+		else: _cancel_net_capture()
 	if _mods != null:
 		_mods.tick(delta)
 	if _regen != null:
@@ -498,6 +518,7 @@ func _physics_process(delta: float) -> void:
 ## Called on tree exit, and explicitly by the hub before it frees a finished
 ## world so the release never depends on teardown order.
 func release_player_factors() -> void:
+	_cancel_net_capture()
 	var controller := _player_controller()
 	if controller == null:
 		return
@@ -508,7 +529,15 @@ func release_player_factors() -> void:
 
 
 func _exit_tree() -> void:
+	if _camera_rig != null:
+		for id: String in _camera_hint_ids:
+			_camera_rig.remove_hint(id)
+	_camera_rig = null
 	release_player_factors()
+	if _collectibles != null:
+		_collectibles.set_restoration(null)
+	if _restoration != null:
+		_restoration.declare_from_manifest({})
 
 
 # --- Scene wiring -----------------------------------------------------------
@@ -529,6 +558,9 @@ func _wire_scene() -> void:
 			_spawn_position = _world_position_of(node as Node3D)
 		elif node.is_in_group(GROUP_CHECKPOINT) and node is Node3D:
 			_wire_checkpoint_node(node as Node3D)
+		elif node.is_in_group(GROUP_SAFE_RETURN) and node is Area3D:
+			(node as Area3D).body_entered.connect(
+				_on_pickup_touched.bind(node, _on_safe_return_touched))
 		elif node.is_in_group(GROUP_PIT) and node is Area3D:
 			(node as Area3D).body_entered.connect(
 				_on_pickup_touched.bind(node, _on_catastrophe_touched))
@@ -583,7 +615,7 @@ func _wire_checkpoint_node(node: Node3D) -> void:
 ## a number. Everything else waits for the player.
 func _wire_collectible_node(node: Area3D) -> void:
 	var id := String(node.get_meta(META_COLLECTIBLE_ID, ""))
-	if _collectibles != null and _collectibles.is_collected(id):
+	if (_collectibles != null and _collectibles.is_collected(id)) or _resource_instances.has(String(node.get_meta("resource_instance_id",""))):
 		node.queue_free()
 		return
 	node.body_entered.connect(_on_pickup_touched.bind(node, collect_node))
@@ -623,6 +655,11 @@ func _wire_enemy_node(node: Area3D) -> void:
 	# is harmless.
 	_enemy_nodes.append(node)
 	_enemy_poses[node] = node.transform
+	if node is FleetEncounter:
+		(node as FleetEncounter).bind_encounter(self, _fleet)
+		node.body_entered.connect(func(body: Node3D) -> void:
+			if body.is_in_group(PLAYER_GROUP) and not _fleet.is_inert(String(node.name)): _stomped.call_deferred(node))
+		return # Awareness never acts as a damaging contact volume.
 
 	match enemy.behavior:
 		EnemyDef.Behavior.TOXIN_AURA:
@@ -668,7 +705,35 @@ func _on_enemy_contact(enemy_node: Node) -> void:
 	var enemy_id := _declared_unit_of(enemy_node)
 	if enemy_id.is_empty() or _stomped(enemy_node):
 		return
-	_fleet.contact(enemy_id)
+	var is_netbot := String(enemy_node.get_meta(META_ENEMY_ID,"")) == "netbot"
+	if is_netbot and (_net_capture.active() or _net_capture.grace_remaining > 0.0): return
+	if _fleet.contact(enemy_id) and is_netbot:
+		var body := _player() as AxolotlBody
+		if body != null and _net_capture.begin(enemy_id):
+			body.play_sound(&"net_caught")
+			body.set_net_captured(true)
+			body.show_net_capture(_net_capture.remaining,0)
+
+func _cancel_net_capture() -> void:
+	var id: String = _net_capture.unit_id
+	_net_capture.clear()
+	if _fleet != null and not id.is_empty(): _fleet.release_entanglement(id)
+	var body := _player() as AxolotlBody
+	if body != null: body.set_net_captured(false)
+
+func _finish_net_escape(id: String) -> void:
+	var hero:=_player() as AxolotlBody
+	if hero!=null:hero.play_sound(&"net_escape")
+	if _fleet != null: _fleet.release_entanglement(id)
+	var body := _player() as AxolotlBody
+	if body != null: body.set_net_captured(false)
+
+func _finish_net_capture(id: String) -> void:
+	if _fleet!=null:_fleet.release_entanglement(id)
+	_cancel_net_capture()
+	# Capture is a checkpoint retry, not an unrequested life penalty.
+	if _lives != null:
+		_return_player_to(_lives.get_respawn_position(),_lives.get_active_checkpoint())
 
 
 # --- Striking back -----------------------------------------------------------
@@ -685,6 +750,8 @@ func _bind_player_strikes() -> void:
 	if body == null:
 		return
 	_strikes_bound = true
+	_sync_crayfish_progress()
+	if not audio_cue_requested.is_connected(body.play_sound):audio_cue_requested.connect(body.play_sound)
 	if not body.strike_opened.is_connected(_on_strike_opened):
 		body.strike_opened.connect(_on_strike_opened)
 
@@ -714,10 +781,17 @@ func _on_strike_opened(kind: CombatStrike.Kind, origin: Vector3,
 		reach: float) -> void:
 	if _fleet == null:
 		return
+	if _net_capture.active():
+		if kind == CombatStrike.Kind.TAIL_WHACK: _net_capture.tail_whack()
+		return # Escape swings tear the net; they cannot defeat the nearby bot.
+	var hero := _player() as AxolotlBody
+	if hero != null:
+		_encounter_strikes.append({"kind":kind,"age":0.0,"previous":origin,"hit":{},"yaw":hero.get_controller().get_heading_yaw()})
 	var kind_id := CombatStrike.kind_id(kind)
 	for node: Node3D in _enemy_nodes:
 		if not is_instance_valid(node):
 			continue
+		if node is FleetEncounter: continue
 		var enemy_id := _declared_unit_of(node)
 		if enemy_id.is_empty():
 			continue
@@ -748,8 +822,13 @@ const DEFEATED_SINK_M := 0.45
 ## walks back through where it used to be. The runtime already refuses that
 ## call — this only means the call is never made.
 func _on_enemy_defeated(enemy_id: String, _kind: String) -> void:
+	if _net_capture.unit_id == enemy_id: _cancel_net_capture()
 	for node: Node3D in _enemy_nodes:
 		if not is_instance_valid(node) or _declared_unit_of(node) != enemy_id:
+			continue
+		if node is FleetEncounter:
+			var hero := _player()
+			(node as FleetEncounter).defeat((node.global_position-hero.global_position).normalized() if hero!=null else Vector3.UP)
 			continue
 		var pose: Transform3D = _enemy_poses.get(node, node.transform)
 		var beaten := pose
@@ -768,8 +847,12 @@ func _on_enemy_defeated(enemy_id: String, _kind: String) -> void:
 ## scene cannot drift out of step with the runtime: whatever puts the machines
 ## back on their feet in the model puts them back on their feet here.
 func _on_defeats_reset() -> void:
+	_cancel_net_capture()
 	for node: Node3D in _enemy_nodes:
 		if not is_instance_valid(node) or not _enemy_poses.has(node):
+			continue
+		if node is FleetEncounter:
+			(node as FleetEncounter).reset_encounter()
 			continue
 		node.transform = _enemy_poses[node]
 		var area := node as Area3D
@@ -782,6 +865,7 @@ func _on_defeats_reset() -> void:
 ## movement verbs go to the controller through PlayerIntent, and the mod
 ## system is the one thing outside the controller a button can reach.
 func _on_ability_verb(verb_id: String) -> void:
+	if _net_capture.active(): return
 	if _mods == null:
 		return
 	# Only activate is wired: the Gill Mod system has no cycle call yet, so
@@ -804,6 +888,10 @@ func _stomped(enemy_node: Node) -> bool:
 	var body := _player() as AxolotlBody
 	var target := enemy_node as Node3D
 	if body == null or target == null or _fleet == null or _tuning == null:
+		return false
+	if body.is_in_water():
+		return false
+	if enemy_node is FleetEncounter and (body.velocity.y > -1.0 or body.global_position.y-target.global_position.y < .65):
 		return false
 	if body.velocity.y >= 0.0:
 		return false
@@ -906,9 +994,19 @@ func _collect_mod(pickup: Node) -> void:
 ## false, leaving the node in place, for an undeclared id.
 func collect_node(pickup: Node) -> bool:
 	var id := String(pickup.get_meta(META_COLLECTIBLE_ID, ""))
+	var instance_id := String(pickup.get_meta("resource_instance_id",""))
+	if not instance_id.is_empty() and _resource_instances.has(instance_id):
+		return false
 	if _collectibles == null or not _collectibles.collect(id):
 		push_warning("WorldSystems: pickup names unknown collectible '%s'" % id)
 		return false
+	if not instance_id.is_empty():
+		_resource_instances[instance_id] = true
+	if pickup.is_in_group("dance_crayfish"):
+		_sync_crayfish_progress(true)
+		var body:=_player() as AxolotlBody
+		if body!=null:body.play_sound(&"crayfish_pickup")
+	persist_progress()
 	pickup.queue_free()
 	return true
 
@@ -930,11 +1028,20 @@ func _on_collection_completed() -> void:
 func activate_checkpoint_node(node: Node) -> bool:
 	if _lives == null or _lives.get_active_checkpoint() == node.name:
 		return false
-	return _lives.activate_checkpoint(node.name)
+	var activated:=_lives.activate_checkpoint(node.name)
+	var body:=_player() as AxolotlBody
+	if activated and body!=null:body.play_sound(&"checkpoint")
+	return activated
 
 
-## A pit or crush volume: the closed catastrophic set decides whether a life
-## is spent, and any spent life returns the player to the last anchor.
+## An unintended escape returns to the last anchor without spending a life.
+func _on_safe_return_touched(_volume: Node) -> void:
+	# Recover an escaped player without charging a life or altering progression.
+	# Defer placement until physics has finished dispatching overlap signals.
+	if _lives != null:
+		_return_player_to.call_deferred(_lives.get_respawn_position(),_lives.get_active_checkpoint())
+
+## Intentional catastrophic hazards use the separate life-costing lane.
 func _on_catastrophe_touched(volume: Node) -> void:
 	var source_id := CatastrophicSource.id(CatastrophicSource.Kind.CRUSH_HAZARD) \
 		if volume.is_in_group(GROUP_CRUSH) \
@@ -994,17 +1101,26 @@ static func _capability_from_id(text: String) -> int:
 ## the catastrophe: arriving back already moving is how a respawn becomes a
 ## second fall (the greybox fall guard learned this first).
 func _return_player_to(position: Vector3, checkpoint_id: String) -> void:
+	_encounter_strikes.clear()
+	if _fleet != null: _fleet.reset_defeats()
+	for enemy: Node3D in _enemy_nodes:
+		if is_instance_valid(enemy) and enemy is FleetEncounter: enemy.reset_encounter()
+	_cancel_net_capture()
+	var dancer:=_player() as AxolotlBody
+	if dancer!=null:dancer.stop_dance()
 	var player := _player()
 	if player != null:
 		_place_at(player, position)
 		var body := player as AxolotlBody
 		if body != null:
+			body.clear_water_contacts()
 			body.velocity = Vector3.ZERO
 			if body.get_input_system() != null:
 				body.get_input_system().clear()
 			if body.get_controller() != null:
 				body.get_controller().set_velocity(Vector3.ZERO)
 				body.get_controller().sync_body_position(position)
+			body.resample_water_contacts()
 	returned_to_anchor.emit(position, checkpoint_id)
 
 
@@ -1125,6 +1241,8 @@ func _on_mod_equipped(mod_id: String) -> void:
 func persist_progress() -> void:
 	if _restoration != null:
 		_restoration.save()
+	if save_system != null:
+		save_system.put_world_data(world_id,{"resourceInstances":_resource_instances.duplicate()})
 
 
 ## An affordance gate is open exactly while the equipped mod grants its named
@@ -1157,3 +1275,55 @@ func _set_barrier_open(barrier: Node3D, open: bool) -> bool:
 		(child as CollisionShape3D).set_deferred("disabled", open)
 	barrier.visible = not open
 	return changed
+
+func _wire_camera_hints() -> void:
+	var body := _player() as AxolotlBody
+	if body == null or body.get_camera() == null:
+		return
+	_camera_rig=body.get_camera().get_rig()
+	for volume: CameraHintVolume in _world_root().find_children("*","CameraHintVolume",true,false):
+		_camera_hint_ids.append(volume.hint_id())
+		volume.hint_entered.connect(_camera_rig.add_hint)
+		volume.hint_exited.connect(_camera_rig.remove_hint)
+		# A streamed scene may already overlap the swimmer when it activates.
+		if volume.overlaps_body(body):
+			_camera_rig.add_hint(volume.to_hint())
+
+
+func _sync_crayfish_progress(celebrate: bool=false) -> void:
+	if _collectibles==null:return
+	var count:=0
+	for id: String in _collectibles.get_collected_ids():
+		if id.begins_with("glow_crayfish_"):count+=1
+	var body:=_player() as AxolotlBody
+	if body!=null:body.set_crayfish_count(count,celebrate)
+	if save_system!=null:
+		var previous:=int(save_system.load_section("crayfish_dance").get("count",0))
+		if count>previous:save_system.save_section("crayfish_dance",{"count":count})
+
+
+## Animated machines are hit during contact, once per strike, with wall occlusion.
+func _tick_encounter_strikes(delta: float) -> void:
+	var hero := _player() as AxolotlBody
+	if hero==null or _fleet==null or _net_capture.active():
+		_encounter_strikes.clear(); return
+	for swing: Dictionary in _encounter_strikes.duplicate():
+		swing.age+=delta
+		var spin: bool=swing.kind==CombatStrike.Kind.SPIN_SPRINT
+		if (spin and not hero.get_controller().get_spin_sprint().is_active()) or (not spin and swing.age>.40):
+			_encounter_strikes.erase(swing); continue
+		if not spin and swing.age<.12: continue
+		var heading:=Basis(Vector3.UP,float(swing.yaw)) * Vector3.FORWARD
+		var point:=hero.global_position if spin else hero.global_position+heading*.65
+		var previous: Vector3=swing.previous if spin else point
+		if previous.distance_to(point)>5.0: # A checkpoint teleport is never a charge sweep.
+			_encounter_strikes.erase(swing); continue
+		for node: Node3D in _enemy_nodes:
+			if not is_instance_valid(node) or not node is FleetEncounter or swing.hit.has(node.name) or _fleet.is_defeated(String(node.name)): continue
+			var closest:=Geometry3D.get_closest_point_to_segment(node.global_position,previous,point)
+			if node.global_position.distance_to(closest)>(.95 if spin else .85): continue
+			if not spin and (node.global_position-hero.global_position).dot(heading)<-.1: continue
+			if not (node as FleetEncounter).clear_line(hero.global_position,node.global_position) or not (node as FleetEncounter).clear_line(closest,node.global_position): continue
+			swing.hit[node.name]=true
+			_fleet.strike(String(node.name),CombatStrike.kind_id(swing.kind))
+		swing.previous=point

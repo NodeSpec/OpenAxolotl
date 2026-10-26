@@ -1,0 +1,72 @@
+{
+  "input": "C:\\Users\\ltben\\Documents\\OpenAxolotl-main\\asset_inbox\\Meshy_AI_Enchanted_Bloom_Arch_0913173256_texture-optimized.glb",
+  "output": "C:\\Users\\ltben\\Documents\\Codex\\2026-09-11\\ana\\work\\cascade-assets\\crown_arch\\crown_arch.glb",
+  "budget": 32000,
+  "meshes": 1,
+  "diagonal": 2.6479788864192937,
+  "weld": {
+    "distance": 2.6479788864192938e-05,
+    "merged": 163083,
+    "openEdgesBefore": 331589,
+    "openEdgesAfter": 32713,
+    "openEdgesAfterDecimation": 8871
+  },
+  "reduction": {
+    "ratio": 0.013684137604266714,
+    "trianglesBefore": 2338474,
+    "trianglesAfter": 32000,
+    "skipped": false
+  },
+  "deviation": [
+    {
+      "direction": "decimated_to_original",
+      "samples": 12000,
+      "mean": 0.0022728840022467503,
+      "p95": 0.006155432621017089,
+      "max": 0.015550541691482067,
+      "worstAt": [
+        -0.1672,
+        0.4245,
+        -0.3585
+      ],
+      "maxAsFractionOfDiagonal": 0.005872607886428487,
+      "p95AsFractionOfDiagonal": 0.0023245776817128324
+    },
+    {
+      "direction": "original_to_decimated",
+      "samples": 12000,
+      "mean": 0.002530736916945744,
+      "p95": 0.007018342870287595,
+      "max": 0.01963094435632229,
+      "worstAt": [
+        0.7097,
+        0.0683,
+        -0.4378
+      ],
+      "maxAsFractionOfDiagonal": 0.007413557735299038,
+      "p95AsFractionOfDiagonal": 0.002650452730677958
+    }
+  ],
+  "images": [],
+  "imagesRenamed": [
+    {
+      "image": "Image_0",
+      "to": "base_color",
+      "role": "base_color"
+    },
+    {
+      "image": "Image_2",
+      "to": "normal",
+      "role": "normal"
+    },
+    {
+      "image": "Image_1",
+      "to": "metallic_roughness",
+      "role": "metallic_roughness"
+    }
+  ],
+  "blender": "4.5.3 LTS",
+  "asset": "crown_arch",
+  "final_bytes": 7375068,
+  "final_sha256": "a9bedfab6afbb7471e1266e376e8d1b39d7fb5644f5a4a5b9f812e9ff9333770"
+}

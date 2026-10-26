@@ -1,0 +1,8 @@
+{
+  "author": "OpenAxolotl project; original procedural synthesis authored in Codex",
+  "generationMethod": "procedural",
+  "tool": "Python and NumPy, deterministic oscillator and noise synthesis",
+  "licenseTerms": "Original generated composition and waveforms; no third-party recordings or sampled music. Project Apache-2.0 licence.",
+  "description": "96 BPM D-minor exploration loop; 112 BPM funk dance cue; synthesized movement, pickup and restoration sounds.",
+  "source": "tools/make_cascade_audio.py"
+}

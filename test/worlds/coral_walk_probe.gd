@@ -328,7 +328,7 @@ func _elapsed_seconds() -> float:
 ## Every node the world put in the `checkpoint` group, in route order.
 func _collect_checkpoints() -> void:
 	var zs: Array[float] = []
-	for node: Node in get_tree().get_nodes_in_group("checkpoint"):
+	for node: Node in WorldLoader._in_group(_hub.get_active_world(),"checkpoint"):
 		if node is Node3D:
 			zs.append((node as Node3D).global_position.z)
 	zs.sort()
@@ -375,14 +375,11 @@ func _check_checkpoint_spacing() -> void:
 
 ## The route itself lives in CoralRoute — the perf gate flies the same
 ## waypoints, and two copies would drift. The hub instances an active world
-## at an offset; the spawn marker is a direct child of the world root, so
-## its parent's global position is that offset.
+## at an offset. Only the active world owns this route; a preloaded neighbor
+## may also have spawn and checkpoint markers in the tree.
 func _world_origin() -> Vector3:
-	var spawn := get_tree().get_first_node_in_group("spawn_point")
-	if spawn == null:
-		return Vector3.ZERO
-	var root := (spawn as Node).get_parent() as Node3D
-	return root.global_position if root != null else Vector3.ZERO
+	var world := _hub.get_active_world()
+	return world.global_position if world != null else Vector3.ZERO
 
 
 func _route() -> Array[RoutePilot.Waypoint]:

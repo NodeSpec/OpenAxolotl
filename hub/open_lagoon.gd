@@ -12,9 +12,9 @@ extends Node3D
 ## dimmed and labelled, with no entry volume: a broken world is shown, never
 ## hidden and never fatal (AC-4).
 ##
-## Entering a portal loads that world at its spawn point; completing its finish
-## condition returns the player here (AC-2). The hub is HIDDEN while a world is
-## active rather than freed, so returning restores it exactly as it was.
+## Side portals load at the world's spawn and hide the hub (AC-2). A middle
+## world with a stream_entry landmark is instead joined to the lagoon before
+## play and activated in place. Completion still returns to the hub.
 ##
 ## Completion and restoration progress are read through the Save Integration
 ## Interface when a SaveSystem is attached (AC-6); the hub never opens the
@@ -56,6 +56,9 @@ var _portals_root: Node3D
 var _active_world: Node3D
 var _active_world_id: String = ""
 var _hud: PlayerHud
+var _stream_world: Node3D
+var _stream_world_id: String = ""
+var _continuous_active: bool = false
 
 
 func _ready() -> void:
@@ -106,11 +109,110 @@ func refresh() -> void:
 		child.queue_free()
 
 	var portals := _registry.get_portals()
+	# Authored presentation order is independent of directory discovery order.
+	portals.sort_custom(func(a: WorldPortal,b: WorldPortal) -> bool:
+		var a_order := int((_read_manifest(a.module_dir).get("hubEntry",{}) as Dictionary).get("order",1000))
+		var b_order := int((_read_manifest(b.module_dir).get("hubEntry",{}) as Dictionary).get("order",1000))
+		return a_order<b_order if a_order!=b_order else a.world_id<b.world_id)
+	_prepare_stream_world(portals)
 	var spacing := 6.0
 	var offset := (portals.size() - 1) * spacing * 0.5
+	var centers: Array[float] = []
 	for index: int in portals.size():
+		centers.append(index * spacing - offset)
 		_portals_root.add_child(
-			_build_pedestal(portals[index], index * spacing - offset))
+			_build_pedestal(portals[index], index * spacing - offset, index))
+	var hydrology := get_node_or_null("Hydrology") as LagoonHydrology
+	if hydrology != null:
+		var passage := get_node_or_null("DownstreamPassage") as Node3D
+		hydrology.configure_tunnels(centers,_stream_world != null,passage.position.x if passage != null else 0.0)
+
+
+func is_continuous_world() -> bool:
+	return _continuous_active
+
+
+func _prepare_stream_world(portals: Array[WorldPortal]) -> void:
+	var passage := get_node_or_null("DownstreamPassage") as LagoonStream
+	if passage == null or _continuous_active:
+		return
+	var portal: WorldPortal
+	for candidate: WorldPortal in portals:
+		var entry := _read_manifest(candidate.module_dir).get("hubEntry",{}) as Dictionary
+		if bool(entry.get("continuous",false)):
+			portal=candidate
+			break
+	if portal == null and portals.size()%2 == 1:
+		portal = portals[portals.size()/2]
+	if portal != null:
+		passage.position.x=float(portals.find(portal))*6.0-float(portals.size()-1)*3.0
+	if _stream_world != null:
+		if portal != null and portal.available and portal.world_id == _stream_world_id:
+			var old_entry := WorldLoader._in_group(_stream_world,"stream_entry")[0] as Node3D
+			_stream_world.global_position += passage.to_global(LagoonStreamPath.exit_position())-old_entry.global_position
+			return
+		remove_child(_stream_world)
+		_stream_world.queue_free()
+		_stream_world = null
+		_stream_world_id = ""
+	passage.visible = false
+	passage.process_mode = Node.PROCESS_MODE_DISABLED
+	if portal == null or not portal.available:
+		return
+	var errors: Array[HubError] = []
+	var world: Node3D = _loader.instantiate_world(portal.module_dir,errors)
+	if world == null:
+		return
+	var anchors: Array[Node] = WorldLoader._in_group(world,"stream_entry")
+	if anchors.size() != 1 or not anchors[0] is Node3D:
+		world.free()
+		return
+	var anchor := anchors[0] as Node3D
+	var entry: Vector3 = anchor.position
+	var ancestor: Node = anchor.get_parent()
+	while ancestor != world and ancestor is Node3D:
+		entry = (ancestor as Node3D).transform*entry
+		ancestor = ancestor.get_parent()
+	# Both scenes occupy the same physics space before the swimmer arrives.
+	world.position = passage.position+LagoonStreamPath.exit_position()-entry
+	world.name = "ConnectedWorld"
+	add_child(world)
+	_stream_world = world
+	_stream_world_id = portal.world_id
+	passage.visible = true
+	passage.process_mode = Node.PROCESS_MODE_INHERIT
+
+
+func _activate_stream_world() -> void:
+	if _active_world != null or not is_instance_valid(_stream_world):
+		return
+	var portal: WorldPortal = _registry.get_portal(_stream_world_id)
+	if portal == null or not portal.available:
+		return
+	var errors: Array[HubError] = []
+	_loader.wire_finish_condition(_stream_world,_finish_kind(portal.module_dir),_on_world_finished,errors)
+	if not errors.is_empty():
+		push_warning("Connected world could not activate: %s" % errors)
+		return
+	_active_world = _stream_world
+	_active_world_id = _stream_world_id
+	_continuous_active = true
+	_start_world_systems(_active_world,portal)
+	# No teleport, water-contact reset, camera reset, or hub teardown here.
+	world_entered.emit(_active_world_id)
+
+
+func _start_world_systems(world: Node3D, portal: WorldPortal) -> void:
+	var manifest := _read_manifest(portal.module_dir)
+	if _save != null:
+		_save.open_world(portal.world_id,manifest)
+	var systems := WorldSystems.new()
+	systems.manifest = manifest
+	systems.world_id = portal.world_id
+	systems.save_system = _save
+	systems.on_finish_condition = _on_world_finished
+	world.add_child(systems)
+	_wire_hud_to(systems,manifest)
 
 
 ## Enters a world by id. Failures surface as an unavailable portal on refresh
@@ -135,23 +237,7 @@ func enter_world(world_id: String) -> bool:
 		if errors.is_empty():
 			_active_world = world
 			_active_world_id = world_id
-			var manifest := _read_manifest(portal.module_dir)
-			# The world's save namespace must exist BEFORE its runtime wires:
-			# the collectibles system reads what the profile already records
-			# for this world at wire time, and writes into that namespace at
-			# every pickup.
-			if _save != null:
-				_save.open_world(world_id, manifest)
-			# The runtime the world's declarations bind to: Gill Mods,
-			# restoration, collectibles, tuning overrides. A child of the
-			# world, so it lives and dies with the world it serves.
-			var systems := WorldSystems.new()
-			systems.manifest = manifest
-			systems.world_id = world_id
-			systems.save_system = _save
-			systems.on_finish_condition = _on_world_finished
-			world.add_child(systems)
-			_wire_hud_to(systems, manifest)
+			_start_world_systems(world,portal)
 			_move_player_to(spawn)
 			_set_hub_active(false)
 			world_entered.emit(world_id)
@@ -220,6 +306,10 @@ func _on_world_finished() -> void:
 	for systems: Node in _active_world.find_children("*", "WorldSystems", true, false):
 		(systems as WorldSystems).persist_progress()
 		(systems as WorldSystems).release_player_factors()
+	if _active_world == _stream_world:
+		_stream_world = null
+		_stream_world_id = ""
+	_continuous_active = false
 	_active_world.queue_free()
 	_active_world = null
 	_active_world_id = ""
@@ -236,12 +326,17 @@ func is_in_world() -> bool:
 	return _active_world != null
 
 
+func get_active_world() -> Node3D:
+	return _active_world
+
+
 # --- Pedestals --------------------------------------------------------------
 
-func _build_pedestal(portal: WorldPortal, x: float) -> Node3D:
+func _build_pedestal(portal: WorldPortal, x: float, art_index: int = 0) -> Node3D:
 	var pedestal := Node3D.new()
 	pedestal.name = "Portal_%s" % portal.world_id
-	pedestal.position = Vector3(x, 0.0, -8.0)
+	pedestal.position = Vector3(x, LagoonHydrology.TUNNEL_Y, -8.0)
+	pedestal.add_child(LagoonArt.make_tunnel(art_index))
 
 	var mesh := MeshInstance3D.new()
 	mesh.mesh = _mesh_for_shape(PortalTier.shape_id(portal.tier))
@@ -251,12 +346,19 @@ func _build_pedestal(portal: WorldPortal, x: float) -> Node3D:
 	# carries the state alone.
 	material.albedo_color = tint if portal.available else tint.darkened(0.6)
 	mesh.material_override = material
-	mesh.position = Vector3(0.0, 1.5, 0.0)
+	# Tier silhouette becomes a small crest on the arch's keystone.
+	mesh.position = Vector3(0.0, 4.35, 0.68)
+	mesh.scale = Vector3.ONE * 0.13
 	pedestal.add_child(mesh)
 
 	var label := Label3D.new()
 	label.text = portal.portal_label()
-	label.position = Vector3(0.0, 3.4, 0.0)
+	label.position = Vector3(0.0, 4.9, 0.3)
+	label.font_size = 32
+	label.pixel_size = 0.007
+	label.modulate = Color(1.0, 0.94, 0.76)
+	label.outline_size = 7
+	label.visibility_range_end = 17.0
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	pedestal.add_child(label)
 
@@ -265,16 +367,18 @@ func _build_pedestal(portal: WorldPortal, x: float) -> Node3D:
 		var area := Area3D.new()
 		var shape := CollisionShape3D.new()
 		var box := BoxShape3D.new()
-		box.size = Vector3(3.0, 3.0, 3.0)
+		box.size = Vector3(3.0, 3.0, 1.0)
 		shape.shape = box
 		area.add_child(shape)
-		area.position = Vector3(0.0, 1.5, 0.0)
+		area.position = Vector3(0.0, 0.15, -2.3)
 		# Deferred: body_entered fires while the physics space is being
 		# flushed, and entering a world adds a scene to the tree — doing that
 		# mid-flush is an error. The deferral lands the same frame.
 		area.body_entered.connect(
 			func(body: Node3D) -> void:
-				if body.is_in_group(PLAYER_GROUP):
+				if portal.world_id == _stream_world_id:
+					return
+				if body.is_in_group(PLAYER_GROUP) and body is AxolotlBody and (body as AxolotlBody).is_in_water():
 					enter_world.call_deferred(portal.world_id))
 		pedestal.add_child(area)
 
@@ -309,6 +413,9 @@ func _mesh_for_shape(shape_id: String) -> Mesh:
 ## gates processing and physics, not incoming calls — which is how the finish
 ## callback wakes the hub back up.
 func _set_hub_active(active: bool) -> void:
+	var passage := get_node_or_null("DownstreamPassage") as LagoonStream
+	if not active and passage != null:
+		passage.release_camera_hint()
 	visible = active
 	process_mode = Node.PROCESS_MODE_INHERIT if active \
 		else Node.PROCESS_MODE_DISABLED
@@ -356,6 +463,11 @@ func _recover_fallen_player() -> void:
 
 func _physics_process(_delta: float) -> void:
 	_recover_fallen_player()
+	if _active_world == null and _stream_world != null:
+		var player := get_tree().get_first_node_in_group(PLAYER_GROUP) as AxolotlBody
+		var passage := get_node_or_null("DownstreamPassage") as LagoonStream
+		if player != null and passage != null and player.global_position.z < -47.0 and passage.contains_point(player.global_position):
+			_activate_stream_world.call_deferred()
 
 
 ## Put the player somewhere, and make sure they ARRIVE there at rest.
@@ -377,6 +489,9 @@ func _move_player_to(position_3d: Vector3) -> void:
 	var body := player as AxolotlBody
 	if body == null:
 		return
+	body.clear_water_contacts()
+	body.reset_visual_motion()
+	body.resample_water_contacts.call_deferred()
 	body.velocity = Vector3.ZERO
 	var controller := body.get_controller()
 	if controller != null:

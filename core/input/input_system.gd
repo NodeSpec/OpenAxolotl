@@ -146,13 +146,18 @@ func _handle_axis(event: InputEventJoypadMotion) -> bool:
 	var positive := ids[0]
 	var negative := ids[1]
 
-	if not InputDevice.is_pressed(event):
+	var steering := _bindings.direction_for(_device, _grammar, positive) != Vector3.ZERO or _bindings.direction_for(_device, _grammar, negative) != Vector3.ZERO
+	var deadzone := 0.18 if steering else InputDevice.AXIS_DEADZONE
+	if absf(event.axis_value) <= deadzone:
 		var released := _release(positive)
 		return _release(negative) or released
 
 	var active := positive if event.axis_value >= 0.0 else negative
 	_release(negative if active == positive else positive)
-	return _press(active)
+	var handled := _press(active)
+	if steering and _held.has(active):
+		_held[active] = clampf((absf(event.axis_value) - deadzone) / (1.0 - deadzone), 0.0, 1.0)
+	return handled
 
 
 func _press(physical: String) -> bool:
@@ -160,7 +165,7 @@ func _press(physical: String) -> bool:
 
 	# A directional component is held state, not a press.
 	if _bindings.direction_for(_device, _grammar, physical) != Vector3.ZERO:
-		_held[physical] = true
+		_held[physical] = 1.0
 		handled = true
 
 	var verb := _bindings.resolve_press(_device, _grammar, physical)
@@ -196,23 +201,23 @@ func _release(physical: String) -> bool:
 
 ## The intent for this frame, draining the edge-triggered set.
 ##
-## Direction is summed from the held components and normalised HERE rather than
+## Direction preserves analog magnitude and is capped to unit length HERE rather than
 ## in the controller, so a diagonal is not faster than a straight line no matter
 ## which scheme produced it — a keyboard's two full-deflection keys and a stick's
 ## single deflection must feel the same.
 func poll_intent() -> PlayerIntent:
 	var direction := Vector3.ZERO
 	for physical: String in _held:
-		direction += _bindings.direction_for(_device, _grammar, physical)
+		direction += _bindings.direction_for(_device, _grammar, physical) * float(_held[physical])
 
-	if direction.length_squared() > 0.0:
+	if direction.length_squared() > 1.0:
 		direction = direction.normalized()
 
 	# The land grammar is planar; a held swim-up carried onto land would push the
 	# axolotl into the ground rather than doing nothing.
 	if _grammar == MovementGrammar.Grammar.LAND:
 		direction.y = 0.0
-		if direction.length_squared() > 0.0:
+		if direction.length_squared() > 1.0:
 			direction = direction.normalized()
 
 	# Resolved fresh every frame rather than cached at press time, so a key held

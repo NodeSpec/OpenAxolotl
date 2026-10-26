@@ -180,7 +180,7 @@ func test_req_024_the_shipped_defaults_hold_no_conflicts() -> void:
 	# is for: F is the whack on land and the sprint in water, and SHIFT is the
 	# roll on land while it is already swim-down in water, so both would be
 	# conflicts if contexts were not doing their job.
-	assert_int(table.size()).is_equal(28)
+	assert_int(table.size()).is_equal(30)  # Includes the dance on both devices.
 
 
 func test_req_024_sharing_an_input_inside_one_context_is_refused() -> void:

@@ -22,6 +22,7 @@ func _init(root: Node) -> void:
 
 
 func play_oneshot(stream_path: String, bus: String) -> void:
+	if not is_instance_valid(_root) or not _root.is_inside_tree() or _root.is_queued_for_deletion(): return
 	var stream := _load_stream(stream_path)
 	if stream == null:
 		return
@@ -34,6 +35,7 @@ func play_oneshot(stream_path: String, bus: String) -> void:
 
 
 func set_bed(channel: AudioEvent.Channel, stream_path: String, bus: String) -> void:
+	if not is_instance_valid(_root) or not _root.is_inside_tree() or _root.is_queued_for_deletion(): return
 	if String(_bed_paths.get(channel, "")) == stream_path:
 		return  # already playing this bed on this channel
 
@@ -42,6 +44,11 @@ func set_bed(channel: AudioEvent.Channel, stream_path: String, bus: String) -> v
 		return
 
 	var outgoing: AudioStreamPlayer = _bed_players.get(channel, null) as AudioStreamPlayer
+	if stream is AudioStreamWAV:
+		stream=stream.duplicate()
+		var wav:=stream as AudioStreamWAV
+		wav.loop_mode=AudioStreamWAV.LOOP_FORWARD
+		wav.loop_end=roundi(wav.get_length()*wav.mix_rate)
 	var incoming := AudioStreamPlayer.new()
 	incoming.stream = stream
 	incoming.bus = bus

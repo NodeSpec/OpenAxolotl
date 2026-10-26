@@ -44,6 +44,10 @@ func _ready() -> void:
 	if not override.is_empty():
 		_quality = RenderQuality.level_from_name(override)
 	set_quality(_quality)
+	var depth_lighting := WaterDepthLighting.new()
+	depth_lighting.name = "WaterDepthLighting"
+	depth_lighting.lighting = self
+	add_child(depth_lighting)
 
 
 func get_world_environment() -> WorldEnvironment:

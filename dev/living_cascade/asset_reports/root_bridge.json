@@ -1,0 +1,72 @@
+{
+  "input": "C:\\Users\\ltben\\Documents\\OpenAxolotl-main\\asset_inbox\\Meshy_AI_Blooming_Woodland_Arc_0913173247_texture-optimized.glb",
+  "output": "C:\\Users\\ltben\\Documents\\Codex\\2026-09-11\\ana\\work\\cascade-assets\\root_bridge\\root_bridge.glb",
+  "budget": 36000,
+  "meshes": 1,
+  "diagonal": 2.6378681079655344,
+  "weld": {
+    "distance": 2.6378681079655348e-05,
+    "merged": 1407581,
+    "openEdgesBefore": 2297196,
+    "openEdgesAfter": 50257,
+    "openEdgesAfterDecimation": 12904
+  },
+  "reduction": {
+    "ratio": 0.015603633045894186,
+    "trianglesBefore": 2307155,
+    "trianglesAfter": 36000,
+    "skipped": false
+  },
+  "deviation": [
+    {
+      "direction": "decimated_to_original",
+      "samples": 12000,
+      "mean": 0.004120193072683127,
+      "p95": 0.01147510791197419,
+      "max": 0.037937723100185394,
+      "worstAt": [
+        -0.9024,
+        0.2364,
+        -0.4916
+      ],
+      "maxAsFractionOfDiagonal": 0.014381963596142418,
+      "p95AsFractionOfDiagonal": 0.0043501446783191944
+    },
+    {
+      "direction": "original_to_decimated",
+      "samples": 12000,
+      "mean": 0.005535482240427943,
+      "p95": 0.01559233944863078,
+      "max": 0.05789312720298767,
+      "worstAt": [
+        -0.6744,
+        0.4829,
+        0.0562
+      ],
+      "maxAsFractionOfDiagonal": 0.021946937766967416,
+      "p95AsFractionOfDiagonal": 0.0059109624933660655
+    }
+  ],
+  "images": [],
+  "imagesRenamed": [
+    {
+      "image": "Image_0",
+      "to": "base_color",
+      "role": "base_color"
+    },
+    {
+      "image": "Image_2",
+      "to": "normal",
+      "role": "normal"
+    },
+    {
+      "image": "Image_1",
+      "to": "metallic_roughness",
+      "role": "metallic_roughness"
+    }
+  ],
+  "blender": "4.5.3 LTS",
+  "asset": "root_bridge",
+  "final_bytes": 8653416,
+  "final_sha256": "040bbb0fa86a98903bcb8a3437de613e8f56a52a3dcd551c196d68661ef64bf6"
+}

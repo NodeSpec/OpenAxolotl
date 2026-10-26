@@ -1,0 +1,72 @@
+{
+  "input": "C:\\Users\\ltben\\Documents\\OpenAxolotl-main\\asset_inbox\\Meshy_AI_Blooming_Stone_Ruins_0913173308_texture-optimized.glb",
+  "output": "C:\\Users\\ltben\\Documents\\Codex\\2026-09-11\\ana\\work\\cascade-assets\\stone_ruins\\stone_ruins.glb",
+  "budget": 33206,
+  "meshes": 1,
+  "diagonal": 2.634894546736698,
+  "weld": {
+    "distance": 2.6348945467366984e-05,
+    "merged": 1058986,
+    "openEdgesBefore": 1789407,
+    "openEdgesAfter": 37468,
+    "openEdgesAfterDecimation": 9935
+  },
+  "reduction": {
+    "ratio": 0.014674246401482008,
+    "trianglesBefore": 2262876,
+    "trianglesAfter": 33205,
+    "skipped": false
+  },
+  "deviation": [
+    {
+      "direction": "decimated_to_original",
+      "samples": 12000,
+      "mean": 0.00228439290264144,
+      "p95": 0.00620676390826702,
+      "max": 0.019768333062529564,
+      "worstAt": [
+        -0.0468,
+        0.1511,
+        0.052
+      ],
+      "maxAsFractionOfDiagonal": 0.007502513938181144,
+      "p95AsFractionOfDiagonal": 0.002355602396290987
+    },
+    {
+      "direction": "original_to_decimated",
+      "samples": 12000,
+      "mean": 0.0026405497370028475,
+      "p95": 0.007391477446071802,
+      "max": 0.018598778173327446,
+      "worstAt": [
+        -0.357,
+        -0.0576,
+        -0.3998
+      ],
+      "maxAsFractionOfDiagonal": 0.00705864232644981,
+      "p95AsFractionOfDiagonal": 0.0028052270460789805
+    }
+  ],
+  "images": [],
+  "imagesRenamed": [
+    {
+      "image": "Image_0",
+      "to": "base_color",
+      "role": "base_color"
+    },
+    {
+      "image": "Image_2",
+      "to": "normal",
+      "role": "normal"
+    },
+    {
+      "image": "Image_1",
+      "to": "metallic_roughness",
+      "role": "metallic_roughness"
+    }
+  ],
+  "blender": "4.5.3 LTS",
+  "asset": "stone_ruins",
+  "final_bytes": 7606620,
+  "final_sha256": "c854d898659a3a28854562d0759880e49a62b363a224d5795d9c843ec0f7880e"
+}

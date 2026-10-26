@@ -1,0 +1,7 @@
+{
+  "author": "OpenAxolotl project; original mesh authored in Codex",
+  "generationMethod": "ai-generated",
+  "tool": "Blender 4.5 Python mesh construction",
+  "licenseTerms": "Original geometry and vertex colours; Apache-2.0 with this project. No external images, textures or generated third-party models.",
+  "prompt": "Refine the original blue collectible crayfish with more anatomical detail, articulated legs, pincers, eyes, antennae and segmented tail, plus subtle shell surface variation. Original procedural modeling and shader work, no external source assets."
+}

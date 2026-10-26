@@ -16,7 +16,7 @@ var checkpoints: PackedStringArray = []
 
 static func from_dictionary(source: Dictionary) -> WorldContractShape:
 	var shape := WorldContractShape.new()
-	shape.regions = _sorted_ids(source.get("regions", []))
+	shape.regions = _sorted_ids(source.get("regions", source.get("restorableRegions", [])))
 	shape.collectibles = _sorted_ids(source.get("collectibles", []))
 	shape.checkpoints = _sorted_ids(source.get("checkpoints", []))
 	return shape

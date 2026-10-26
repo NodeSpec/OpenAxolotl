@@ -1,0 +1,4126 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://dev/living_cascade/chute_water.gd" id="water"]
+[ext_resource type="Material" path="res://core/rendering/water_surface.tres" id="watermat"]
+[ext_resource type="Script" path="res://core/controller/water_volume.gd" id="poolwater"]
+
+[sub_resource type="StandardMaterial3D" id="C1"]
+albedo_color = Color(0.62,0.67,0.49,1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="C2"]
+albedo_color = Color(0.35,0.47,0.36,1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="C3"]
+albedo_color = Color(0.97,0.75,0.3,1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="C4"]
+albedo_color = Color(0.66,0.93,0.97,1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="C5"]
+size = Vector3(1.2320805406023285,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C6"]
+size = Vector3(1.2320805406023285,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C7"]
+size = Vector3(1.2320805406023285,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C8"]
+size = Vector3(1.2320805406023285,6.6,1)
+
+[sub_resource type="BoxMesh" id="C9"]
+size = Vector3(1.2320805406023285,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C10"]
+size = Vector3(1.2320805406023285,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C11"]
+size = Vector3(1.5308802290397638,3.450953182640299,8.25)
+
+[sub_resource type="PlaneMesh" id="C12"]
+size = Vector2(1.1220805406023286,8)
+
+[sub_resource type="BoxMesh" id="C13"]
+size = Vector3(1.2320805406023285,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C14"]
+size = Vector3(1.2320805406023285,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C15"]
+size = Vector3(1.2320805406023285,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C16"]
+size = Vector3(1.2320805406023285,6.6,1)
+
+[sub_resource type="BoxMesh" id="C17"]
+size = Vector3(1.2320805406023285,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C18"]
+size = Vector3(1.2320805406023285,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C19"]
+size = Vector3(1.5308802290397638,3.450953182640299,8.25)
+
+[sub_resource type="PlaneMesh" id="C20"]
+size = Vector2(1.1220805406023286,8)
+
+[sub_resource type="BoxMesh" id="C21"]
+size = Vector3(1.232080540602318,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C22"]
+size = Vector3(1.232080540602318,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C23"]
+size = Vector3(1.2320805406023183,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C24"]
+size = Vector3(1.2320805406023183,6.6,1)
+
+[sub_resource type="BoxMesh" id="C25"]
+size = Vector3(1.2320805406023183,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C26"]
+size = Vector3(1.2320805406023183,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C27"]
+size = Vector3(1.5308802290397534,3.450953182640298,8.25)
+
+[sub_resource type="PlaneMesh" id="C28"]
+size = Vector2(1.1220805406023182,8)
+
+[sub_resource type="BoxMesh" id="C29"]
+size = Vector3(1.232080540602328,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C30"]
+size = Vector3(1.232080540602328,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C31"]
+size = Vector3(1.232080540602328,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C32"]
+size = Vector3(1.232080540602328,6.6,1)
+
+[sub_resource type="BoxMesh" id="C33"]
+size = Vector3(1.232080540602328,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C34"]
+size = Vector3(1.232080540602328,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C35"]
+size = Vector3(1.5308802290397634,3.450953182640299,8.25)
+
+[sub_resource type="PlaneMesh" id="C36"]
+size = Vector2(1.1220805406023282,8)
+
+[sub_resource type="BoxMesh" id="C37"]
+size = Vector3(1.2320805406023287,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C38"]
+size = Vector3(1.2320805406023287,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C39"]
+size = Vector3(1.2320805406023287,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C40"]
+size = Vector3(1.2320805406023287,6.6,1)
+
+[sub_resource type="BoxMesh" id="C41"]
+size = Vector3(1.2320805406023287,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C42"]
+size = Vector3(1.2320805406023287,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C43"]
+size = Vector3(1.530880229039764,3.450953182640299,8.25)
+
+[sub_resource type="PlaneMesh" id="C44"]
+size = Vector2(1.1220805406023289,8)
+
+[sub_resource type="BoxMesh" id="C45"]
+size = Vector3(1.232080540602328,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C46"]
+size = Vector3(1.232080540602328,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C47"]
+size = Vector3(1.232080540602328,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C48"]
+size = Vector3(1.232080540602328,6.6,1)
+
+[sub_resource type="BoxMesh" id="C49"]
+size = Vector3(1.232080540602328,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C50"]
+size = Vector3(1.232080540602328,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C51"]
+size = Vector3(1.5308802290397634,3.450953182640299,8.25)
+
+[sub_resource type="PlaneMesh" id="C52"]
+size = Vector2(1.1220805406023282,8)
+
+[sub_resource type="BoxMesh" id="C53"]
+size = Vector3(0.6492370039621979,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C54"]
+size = Vector3(0.6492370039621979,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C55"]
+size = Vector3(0.6492370039621977,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C56"]
+size = Vector3(0.6492370039621977,6.6,1)
+
+[sub_resource type="BoxMesh" id="C57"]
+size = Vector3(0.6492370039621977,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C58"]
+size = Vector3(0.6492370039621977,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C59"]
+size = Vector3(0.948494313906968,3.427221409360516,8.25)
+
+[sub_resource type="PlaneMesh" id="C60"]
+size = Vector2(0.5392370039621979,8)
+
+[sub_resource type="BoxMesh" id="C61"]
+size = Vector3(0.647275579234653,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C62"]
+size = Vector3(0.647275579234653,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C63"]
+size = Vector3(0.6472755792346531,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C64"]
+size = Vector3(0.6472755792346531,6.6,1)
+
+[sub_resource type="BoxMesh" id="C65"]
+size = Vector3(0.6472755792346531,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C66"]
+size = Vector3(0.6472755792346531,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C67"]
+size = Vector3(0.9460757105459734,3.434523776002447,8.25)
+
+[sub_resource type="PlaneMesh" id="C68"]
+size = Vector2(0.537275579234653,8)
+
+[sub_resource type="BoxMesh" id="C69"]
+size = Vector3(0.6462226212762527,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C70"]
+size = Vector3(0.6462226212762527,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C71"]
+size = Vector3(0.6462226212762527,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C72"]
+size = Vector3(0.6462226212762527,6.6,1)
+
+[sub_resource type="BoxMesh" id="C73"]
+size = Vector3(0.6462226212762527,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C74"]
+size = Vector3(0.6462226212762527,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C75"]
+size = Vector3(0.944456735880671,3.4418261426443766,8.25)
+
+[sub_resource type="PlaneMesh" id="C76"]
+size = Vector2(0.5362226212762528,8)
+
+[sub_resource type="BoxMesh" id="C77"]
+size = Vector3(0.6460839148919247,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C78"]
+size = Vector3(0.6460839148919247,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C79"]
+size = Vector3(0.6460839148919246,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C80"]
+size = Vector3(0.6460839148919246,6.6,1)
+
+[sub_resource type="BoxMesh" id="C81"]
+size = Vector3(0.6460839148919246,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C82"]
+size = Vector3(0.6460839148919246,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C83"]
+size = Vector3(0.9436452574367585,3.4491285092863078,8.25)
+
+[sub_resource type="PlaneMesh" id="C84"]
+size = Vector2(0.5360839148919248,8)
+
+[sub_resource type="BoxMesh" id="C85"]
+size = Vector3(0.6468602257655938,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C86"]
+size = Vector3(0.6468602257655938,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C87"]
+size = Vector3(0.6468602257655939,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C88"]
+size = Vector3(0.6468602257655939,6.6,1)
+
+[sub_resource type="BoxMesh" id="C89"]
+size = Vector3(0.6468602257655939,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C90"]
+size = Vector3(0.6468602257655939,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C91"]
+size = Vector3(0.9436452574367638,3.4564308759282363,8.25)
+
+[sub_resource type="PlaneMesh" id="C92"]
+size = Vector2(0.5368602257655938,8)
+
+[sub_resource type="BoxMesh" id="C93"]
+size = Vector3(0.6485472794693418,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C94"]
+size = Vector3(0.6485472794693418,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C95"]
+size = Vector3(0.6485472794693419,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C96"]
+size = Vector3(0.6485472794693419,6.6,1)
+
+[sub_resource type="BoxMesh" id="C97"]
+size = Vector3(0.6485472794693419,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C98"]
+size = Vector3(0.6485472794693419,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C99"]
+size = Vector3(0.9444567358806777,3.4637332425701666,8.25)
+
+[sub_resource type="PlaneMesh" id="C100"]
+size = Vector2(0.5385472794693418,8)
+
+[sub_resource type="BoxMesh" id="C101"]
+size = Vector3(0.6511358781506464,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C102"]
+size = Vector3(0.6511358781506464,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C103"]
+size = Vector3(0.6511358781506462,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C104"]
+size = Vector3(0.6511358781506462,6.6,1)
+
+[sub_resource type="BoxMesh" id="C105"]
+size = Vector3(0.6511358781506462,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C106"]
+size = Vector3(0.6511358781506462,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C107"]
+size = Vector3(0.9460757105459666,3.4710356092120978,8.25)
+
+[sub_resource type="PlaneMesh" id="C108"]
+size = Vector2(0.5411358781506465,8)
+
+[sub_resource type="BoxMesh" id="C109"]
+size = Vector3(0.6546121475534303,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C110"]
+size = Vector3(0.6546121475534303,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C111"]
+size = Vector3(0.6546121475534304,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C112"]
+size = Vector3(0.6546121475534304,6.6,1)
+
+[sub_resource type="BoxMesh" id="C113"]
+size = Vector3(0.6546121475534304,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C114"]
+size = Vector3(0.6546121475534304,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C115"]
+size = Vector3(0.948494313906968,3.478337975854027,8.25)
+
+[sub_resource type="PlaneMesh" id="C116"]
+size = Vector2(0.5446121475534303,8)
+
+[sub_resource type="BoxMesh" id="C117"]
+size = Vector3(1.317140016253312,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C118"]
+size = Vector3(1.317140016253312,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C119"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C120"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxMesh" id="C121"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C122"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C123"]
+size = Vector3(1.6017579855355777,3.5888633376142898,8.25)
+
+[sub_resource type="PlaneMesh" id="C124"]
+size = Vector2(1.2071400162533121,8)
+
+[sub_resource type="BoxMesh" id="C125"]
+size = Vector3(1.317140016253312,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C126"]
+size = Vector3(1.317140016253312,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C127"]
+size = Vector3(1.3171400162533122,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C128"]
+size = Vector3(1.3171400162533122,6.6,1)
+
+[sub_resource type="BoxMesh" id="C129"]
+size = Vector3(1.3171400162533122,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C130"]
+size = Vector3(1.3171400162533122,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C131"]
+size = Vector3(1.6017579855355777,3.5888633376142907,8.25)
+
+[sub_resource type="PlaneMesh" id="C132"]
+size = Vector2(1.2071400162533121,8)
+
+[sub_resource type="BoxMesh" id="C133"]
+size = Vector3(1.317140016253312,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C134"]
+size = Vector3(1.317140016253312,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C135"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C136"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxMesh" id="C137"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C138"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C139"]
+size = Vector3(1.6017579855355777,3.5888633376142898,8.25)
+
+[sub_resource type="PlaneMesh" id="C140"]
+size = Vector2(1.2071400162533121,8)
+
+[sub_resource type="BoxMesh" id="C141"]
+size = Vector3(1.3171400162533176,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C142"]
+size = Vector3(1.3171400162533176,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C143"]
+size = Vector3(1.3171400162533176,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C144"]
+size = Vector3(1.3171400162533176,6.6,1)
+
+[sub_resource type="BoxMesh" id="C145"]
+size = Vector3(1.3171400162533176,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C146"]
+size = Vector3(1.3171400162533176,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C147"]
+size = Vector3(1.6017579855355835,3.5888633376142898,8.25)
+
+[sub_resource type="PlaneMesh" id="C148"]
+size = Vector2(1.2071400162533177,8)
+
+[sub_resource type="BoxMesh" id="C149"]
+size = Vector3(1.317140016253312,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C150"]
+size = Vector3(1.317140016253312,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C151"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C152"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxMesh" id="C153"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C154"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C155"]
+size = Vector3(1.6017579855355777,3.5888633376142898,8.25)
+
+[sub_resource type="PlaneMesh" id="C156"]
+size = Vector2(1.2071400162533121,8)
+
+[sub_resource type="BoxMesh" id="C157"]
+size = Vector3(1.317140016253312,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C158"]
+size = Vector3(1.317140016253312,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C159"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C160"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxMesh" id="C161"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C162"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C163"]
+size = Vector3(1.6017579855355777,3.5888633376142898,8.25)
+
+[sub_resource type="PlaneMesh" id="C164"]
+size = Vector2(1.2071400162533121,8)
+
+[sub_resource type="BoxMesh" id="C165"]
+size = Vector3(1.317140016253313,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C166"]
+size = Vector3(1.317140016253313,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C167"]
+size = Vector3(1.3171400162533127,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C168"]
+size = Vector3(1.3171400162533127,6.6,1)
+
+[sub_resource type="BoxMesh" id="C169"]
+size = Vector3(1.3171400162533127,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C170"]
+size = Vector3(1.3171400162533127,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C171"]
+size = Vector3(1.6017579855355786,3.5888633376142907,8.25)
+
+[sub_resource type="PlaneMesh" id="C172"]
+size = Vector2(1.207140016253313,8)
+
+[sub_resource type="BoxMesh" id="C173"]
+size = Vector3(1.3171400162533105,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C174"]
+size = Vector3(1.3171400162533105,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C175"]
+size = Vector3(1.3171400162533105,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C176"]
+size = Vector3(1.3171400162533105,6.6,1)
+
+[sub_resource type="BoxMesh" id="C177"]
+size = Vector3(1.3171400162533105,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C178"]
+size = Vector3(1.3171400162533105,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C179"]
+size = Vector3(1.6017579855355761,3.5888633376142898,8.25)
+
+[sub_resource type="PlaneMesh" id="C180"]
+size = Vector2(1.2071400162533106,8)
+
+[sub_resource type="BoxMesh" id="C181"]
+size = Vector3(1.3171400162533138,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C182"]
+size = Vector3(1.3171400162533138,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C183"]
+size = Vector3(1.3171400162533136,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C184"]
+size = Vector3(1.3171400162533136,6.6,1)
+
+[sub_resource type="BoxMesh" id="C185"]
+size = Vector3(1.3171400162533136,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C186"]
+size = Vector3(1.3171400162533136,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C187"]
+size = Vector3(1.6017579855355795,3.58886333761429,8.25)
+
+[sub_resource type="PlaneMesh" id="C188"]
+size = Vector2(1.207140016253314,8)
+
+[sub_resource type="BoxMesh" id="C189"]
+size = Vector3(1.3171400162533105,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C190"]
+size = Vector3(1.3171400162533105,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C191"]
+size = Vector3(1.3171400162533105,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C192"]
+size = Vector3(1.3171400162533105,6.6,1)
+
+[sub_resource type="BoxMesh" id="C193"]
+size = Vector3(1.3171400162533105,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C194"]
+size = Vector3(1.3171400162533105,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C195"]
+size = Vector3(1.6017579855355761,3.5888633376142898,8.25)
+
+[sub_resource type="PlaneMesh" id="C196"]
+size = Vector2(1.2071400162533106,8)
+
+[sub_resource type="BoxMesh" id="C197"]
+size = Vector3(1.3171400162533182,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C198"]
+size = Vector3(1.3171400162533182,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C199"]
+size = Vector3(1.3171400162533182,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C200"]
+size = Vector3(1.3171400162533182,6.6,1)
+
+[sub_resource type="BoxMesh" id="C201"]
+size = Vector3(1.3171400162533182,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C202"]
+size = Vector3(1.3171400162533182,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C203"]
+size = Vector3(1.6017579855355841,3.5888633376142898,8.25)
+
+[sub_resource type="PlaneMesh" id="C204"]
+size = Vector2(1.2071400162533183,8)
+
+[sub_resource type="BoxMesh" id="C205"]
+size = Vector3(1.317140016253312,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C206"]
+size = Vector3(1.317140016253312,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C207"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C208"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxMesh" id="C209"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C210"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C211"]
+size = Vector3(1.6017579855355777,3.58886333761429,8.25)
+
+[sub_resource type="PlaneMesh" id="C212"]
+size = Vector2(1.2071400162533121,8)
+
+[sub_resource type="BoxMesh" id="C213"]
+size = Vector3(1.317140016253312,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C214"]
+size = Vector3(1.317140016253312,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C215"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C216"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxMesh" id="C217"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C218"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C219"]
+size = Vector3(1.6017579855355777,3.58886333761429,8.25)
+
+[sub_resource type="PlaneMesh" id="C220"]
+size = Vector2(1.2071400162533121,8)
+
+[sub_resource type="BoxMesh" id="C221"]
+size = Vector3(1.317140016253312,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C222"]
+size = Vector3(1.317140016253312,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C223"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C224"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxMesh" id="C225"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C226"]
+size = Vector3(1.317140016253312,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C227"]
+size = Vector3(1.6017579855355777,3.5888633376142898,8.25)
+
+[sub_resource type="PlaneMesh" id="C228"]
+size = Vector2(1.2071400162533121,8)
+
+[sub_resource type="BoxMesh" id="C229"]
+size = Vector3(0.6365131301912371,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C230"]
+size = Vector3(0.6365131301912371,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C231"]
+size = Vector3(0.636513130191237,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C232"]
+size = Vector3(0.636513130191237,6.6,1)
+
+[sub_resource type="BoxMesh" id="C233"]
+size = Vector3(0.636513130191237,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C234"]
+size = Vector3(0.636513130191237,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C235"]
+size = Vector3(0.9295493825796528,3.4820208236727073,8.25)
+
+[sub_resource type="PlaneMesh" id="C236"]
+size = Vector2(0.5265131301912371,8)
+
+[sub_resource type="BoxMesh" id="C237"]
+size = Vector3(0.6023865548221,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C238"]
+size = Vector3(0.6023865548221,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C239"]
+size = Vector3(0.6023865548221,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C240"]
+size = Vector3(0.6023865548221,6.6,1)
+
+[sub_resource type="BoxMesh" id="C241"]
+size = Vector3(0.6023865548221,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C242"]
+size = Vector3(0.6023865548221,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C243"]
+size = Vector3(0.8948772716880049,3.4820841526681368,8.25)
+
+[sub_resource type="PlaneMesh" id="C244"]
+size = Vector2(0.49238655482210003,8)
+
+[sub_resource type="BoxMesh" id="C245"]
+size = Vector3(0.5781309534432852,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C246"]
+size = Vector3(0.5781309534432852,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C247"]
+size = Vector3(0.5781309534432852,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C248"]
+size = Vector3(0.5781309534432852,6.6,1)
+
+[sub_resource type="BoxMesh" id="C249"]
+size = Vector3(0.5781309534432852,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C250"]
+size = Vector3(0.5781309534432852,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C251"]
+size = Vector3(0.8701760399553864,3.4821474816635667,8.25)
+
+[sub_resource type="PlaneMesh" id="C252"]
+size = Vector2(0.4681309534432852,8)
+
+[sub_resource type="BoxMesh" id="C253"]
+size = Vector3(0.5654787368636485,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C254"]
+size = Vector3(0.5654787368636485,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C255"]
+size = Vector3(0.5654787368636485,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C256"]
+size = Vector3(0.5654787368636485,6.6,1)
+
+[sub_resource type="BoxMesh" id="C257"]
+size = Vector3(0.5654787368636485,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C258"]
+size = Vector3(0.5654787368636485,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C259"]
+size = Vector3(0.8572639971770197,3.482210810658996,8.25)
+
+[sub_resource type="PlaneMesh" id="C260"]
+size = Vector2(0.4554787368636484,8)
+
+[sub_resource type="BoxMesh" id="C261"]
+size = Vector3(0.565491272414329,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C262"]
+size = Vector3(0.565491272414329,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C263"]
+size = Vector3(0.565491272414329,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C264"]
+size = Vector3(0.565491272414329,6.6,1)
+
+[sub_resource type="BoxMesh" id="C265"]
+size = Vector3(0.565491272414329,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C266"]
+size = Vector3(0.565491272414329,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C267"]
+size = Vector3(0.8572639971770178,3.4822741396544266,8.25)
+
+[sub_resource type="PlaneMesh" id="C268"]
+size = Vector2(0.4554912724143289,8)
+
+[sub_resource type="BoxMesh" id="C269"]
+size = Vector3(0.5781674477307379,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C270"]
+size = Vector3(0.5781674477307379,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C271"]
+size = Vector3(0.5781674477307379,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C272"]
+size = Vector3(0.5781674477307379,6.6,1)
+
+[sub_resource type="BoxMesh" id="C273"]
+size = Vector3(0.5781674477307379,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C274"]
+size = Vector3(0.5781674477307379,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C275"]
+size = Vector3(0.8701760399553837,3.4823374686498556,8.25)
+
+[sub_resource type="PlaneMesh" id="C276"]
+size = Vector2(0.46816744773073793,8)
+
+[sub_resource type="BoxMesh" id="C277"]
+size = Vector3(0.6024441162366263,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C278"]
+size = Vector3(0.6024441162366263,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C279"]
+size = Vector3(0.6024441162366261,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C280"]
+size = Vector3(0.6024441162366261,6.6,1)
+
+[sub_resource type="BoxMesh" id="C281"]
+size = Vector3(0.6024441162366261,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C282"]
+size = Vector3(0.6024441162366261,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C283"]
+size = Vector3(0.8948772716880045,3.4824007976452855,8.25)
+
+[sub_resource type="PlaneMesh" id="C284"]
+size = Vector2(0.49244411623662626,8)
+
+[sub_resource type="BoxMesh" id="C285"]
+size = Vector3(0.6365880624461976,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C286"]
+size = Vector3(0.6365880624461976,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C287"]
+size = Vector3(0.6365880624461977,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C288"]
+size = Vector3(0.6365880624461977,6.6,1)
+
+[sub_resource type="BoxMesh" id="C289"]
+size = Vector3(0.6365880624461977,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C290"]
+size = Vector3(0.6365880624461977,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C291"]
+size = Vector3(0.9295493825796555,3.482464126640716,8.25)
+
+[sub_resource type="PlaneMesh" id="C292"]
+size = Vector2(0.5265880624461976,8)
+
+[sub_resource type="BoxMesh" id="C293"]
+size = Vector3(1.3190851226309397,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C294"]
+size = Vector3(1.3190851226309397,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C295"]
+size = Vector3(1.3190851226309397,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C296"]
+size = Vector3(1.3190851226309397,6.6,1)
+
+[sub_resource type="BoxMesh" id="C297"]
+size = Vector3(1.3190851226309397,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C298"]
+size = Vector3(1.3190851226309397,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C299"]
+size = Vector3(1.6034902576697359,3.590316182753873,8.25)
+
+[sub_resource type="PlaneMesh" id="C300"]
+size = Vector2(1.2090851226309398,8)
+
+[sub_resource type="BoxMesh" id="C301"]
+size = Vector3(1.3190851226309275,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C302"]
+size = Vector3(1.3190851226309275,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C303"]
+size = Vector3(1.3190851226309273,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C304"]
+size = Vector3(1.3190851226309273,6.6,1)
+
+[sub_resource type="BoxMesh" id="C305"]
+size = Vector3(1.3190851226309273,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C306"]
+size = Vector3(1.3190851226309273,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C307"]
+size = Vector3(1.6034902576697234,3.590316182753873,8.25)
+
+[sub_resource type="PlaneMesh" id="C308"]
+size = Vector2(1.2090851226309276,8)
+
+[sub_resource type="BoxMesh" id="C309"]
+size = Vector3(1.3190851226309397,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C310"]
+size = Vector3(1.3190851226309397,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C311"]
+size = Vector3(1.3190851226309397,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C312"]
+size = Vector3(1.3190851226309397,6.6,1)
+
+[sub_resource type="BoxMesh" id="C313"]
+size = Vector3(1.3190851226309397,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C314"]
+size = Vector3(1.3190851226309397,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C315"]
+size = Vector3(1.6034902576697359,3.590316182753873,8.25)
+
+[sub_resource type="PlaneMesh" id="C316"]
+size = Vector2(1.2090851226309398,8)
+
+[sub_resource type="BoxMesh" id="C317"]
+size = Vector3(1.3190851226309397,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C318"]
+size = Vector3(1.3190851226309397,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C319"]
+size = Vector3(1.3190851226309397,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C320"]
+size = Vector3(1.3190851226309397,6.6,1)
+
+[sub_resource type="BoxMesh" id="C321"]
+size = Vector3(1.3190851226309397,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C322"]
+size = Vector3(1.3190851226309397,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C323"]
+size = Vector3(1.6034902576697359,3.590316182753873,8.25)
+
+[sub_resource type="PlaneMesh" id="C324"]
+size = Vector2(1.2090851226309398,8)
+
+[sub_resource type="BoxMesh" id="C325"]
+size = Vector3(1.3190851226309375,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C326"]
+size = Vector3(1.3190851226309375,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C327"]
+size = Vector3(1.3190851226309375,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C328"]
+size = Vector3(1.3190851226309375,6.6,1)
+
+[sub_resource type="BoxMesh" id="C329"]
+size = Vector3(1.3190851226309375,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C330"]
+size = Vector3(1.3190851226309375,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C331"]
+size = Vector3(1.6034902576697334,3.590316182753873,8.25)
+
+[sub_resource type="PlaneMesh" id="C332"]
+size = Vector2(1.2090851226309376,8)
+
+[sub_resource type="BoxMesh" id="C333"]
+size = Vector3(1.3190851226309397,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C334"]
+size = Vector3(1.3190851226309397,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C335"]
+size = Vector3(1.3190851226309397,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C336"]
+size = Vector3(1.3190851226309397,6.6,1)
+
+[sub_resource type="BoxMesh" id="C337"]
+size = Vector3(1.3190851226309397,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C338"]
+size = Vector3(1.3190851226309397,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C339"]
+size = Vector3(1.6034902576697359,3.590316182753873,8.25)
+
+[sub_resource type="PlaneMesh" id="C340"]
+size = Vector2(1.2090851226309398,8)
+
+[sub_resource type="BoxMesh" id="C341"]
+size = Vector3(1.3190851226309297,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C342"]
+size = Vector3(1.3190851226309297,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C343"]
+size = Vector3(1.3190851226309297,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C344"]
+size = Vector3(1.3190851226309297,6.6,1)
+
+[sub_resource type="BoxMesh" id="C345"]
+size = Vector3(1.3190851226309297,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C346"]
+size = Vector3(1.3190851226309297,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C347"]
+size = Vector3(1.6034902576697259,3.590316182753873,8.25)
+
+[sub_resource type="PlaneMesh" id="C348"]
+size = Vector2(1.2090851226309298,8)
+
+[sub_resource type="BoxMesh" id="C349"]
+size = Vector3(1.3190851226309375,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C350"]
+size = Vector3(1.3190851226309375,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C351"]
+size = Vector3(1.3190851226309375,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C352"]
+size = Vector3(1.3190851226309375,6.6,1)
+
+[sub_resource type="BoxMesh" id="C353"]
+size = Vector3(1.3190851226309375,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C354"]
+size = Vector3(1.3190851226309375,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C355"]
+size = Vector3(1.6034902576697334,3.590316182753873,8.25)
+
+[sub_resource type="PlaneMesh" id="C356"]
+size = Vector2(1.2090851226309376,8)
+
+[sub_resource type="BoxMesh" id="C357"]
+size = Vector3(0.5253931075316071,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C358"]
+size = Vector3(0.5253931075316071,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C359"]
+size = Vector3(0.5253931075316071,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C360"]
+size = Vector3(0.5253931075316071,6.6,1)
+
+[sub_resource type="BoxMesh" id="C361"]
+size = Vector3(0.5253931075316071,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C362"]
+size = Vector3(0.5253931075316071,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C363"]
+size = Vector3(0.8208846480968921,3.458004853144209,8.25)
+
+[sub_resource type="PlaneMesh" id="C364"]
+size = Vector2(0.415393107531607,8)
+
+[sub_resource type="BoxMesh" id="C365"]
+size = Vector3(0.5176564406464675,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C366"]
+size = Vector3(0.5176564406464675,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C367"]
+size = Vector3(0.5176564406464677,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C368"]
+size = Vector3(0.5176564406464677,6.6,1)
+
+[sub_resource type="BoxMesh" id="C369"]
+size = Vector3(0.5176564406464677,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C370"]
+size = Vector3(0.5176564406464677,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C371"]
+size = Vector3(0.8142033740979047,3.450270872724981,8.25)
+
+[sub_resource type="PlaneMesh" id="C372"]
+size = Vector2(0.40765644064646755,8)
+
+[sub_resource type="BoxMesh" id="C373"]
+size = Vector3(0.5121867868722921,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C374"]
+size = Vector3(0.5121867868722921,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C375"]
+size = Vector3(0.512186786872292,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C376"]
+size = Vector3(0.512186786872292,6.6,1)
+
+[sub_resource type="BoxMesh" id="C377"]
+size = Vector3(0.512186786872292,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C378"]
+size = Vector3(0.512186786872292,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C379"]
+size = Vector3(0.8096802488014097,3.4425368923057533,8.25)
+
+[sub_resource type="PlaneMesh" id="C380"]
+size = Vector2(0.4021867868722921,8)
+
+[sub_resource type="BoxMesh" id="C381"]
+size = Vector3(0.5090877551384987,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C382"]
+size = Vector3(0.5090877551384987,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C383"]
+size = Vector3(0.5090877551384987,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C384"]
+size = Vector3(0.5090877551384987,6.6,1)
+
+[sub_resource type="BoxMesh" id="C385"]
+size = Vector3(0.5090877551384987,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C386"]
+size = Vector3(0.5090877551384987,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C387"]
+size = Vector3(0.8073972204909059,3.4348029118865253,8.25)
+
+[sub_resource type="PlaneMesh" id="C388"]
+size = Vector2(0.39908775513849865,8)
+
+[sub_resource type="BoxMesh" id="C389"]
+size = Vector3(0.5084208423981665,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C390"]
+size = Vector3(0.5084208423981665,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C391"]
+size = Vector3(0.5084208423981665,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C392"]
+size = Vector3(0.5084208423981665,6.6,1)
+
+[sub_resource type="BoxMesh" id="C393"]
+size = Vector3(0.5084208423981665,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C394"]
+size = Vector3(0.5084208423981665,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C395"]
+size = Vector3(0.8073972204909128,3.4270689314672973,8.25)
+
+[sub_resource type="PlaneMesh" id="C396"]
+size = Vector2(0.39842084239816655,8)
+
+[sub_resource type="BoxMesh" id="C397"]
+size = Vector3(0.5101995581755732,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C398"]
+size = Vector3(0.5101995581755732,0.6,8.15)
+
+[sub_resource type="BoxMesh" id="C399"]
+size = Vector3(0.5101995581755732,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C400"]
+size = Vector3(0.5101995581755732,6.6,1)
+
+[sub_resource type="BoxMesh" id="C401"]
+size = Vector3(0.5101995581755732,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C402"]
+size = Vector3(0.5101995581755732,6.6,1)
+
+[sub_resource type="BoxShape3D" id="C403"]
+size = Vector3(0.8096802488014136,3.4193349510480697,8.25)
+
+[sub_resource type="PlaneMesh" id="C404"]
+size = Vector2(0.4001995581755731,8)
+
+[sub_resource type="BoxMesh" id="C405"]
+size = Vector3(0.5143880901234674,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C406"]
+size = Vector3(0.5143880901234674,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C407"]
+size = Vector3(0.8142033740979029,3.4116009706288417,8.25)
+
+[sub_resource type="PlaneMesh" id="C408"]
+size = Vector2(0.4043880901234674,8)
+
+[sub_resource type="BoxMesh" id="C409"]
+size = Vector3(0.5209048069346612,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C410"]
+size = Vector3(0.5209048069346612,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C411"]
+size = Vector3(0.8208846480968943,3.4038669902096137,8.25)
+
+[sub_resource type="PlaneMesh" id="C412"]
+size = Vector2(0.41090480693466125,8)
+
+[sub_resource type="BoxMesh" id="C413"]
+size = Vector3(1.2956906325745532,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C414"]
+size = Vector3(1.2956906325745532,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C415"]
+size = Vector3(1.5956906325745532,3.4,8.25)
+
+[sub_resource type="PlaneMesh" id="C416"]
+size = Vector2(1.1856906325745533,8)
+
+[sub_resource type="BoxMesh" id="C417"]
+size = Vector3(1.2956906325745527,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C418"]
+size = Vector3(1.2956906325745527,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C419"]
+size = Vector3(1.5956906325745528,3.4,8.25)
+
+[sub_resource type="PlaneMesh" id="C420"]
+size = Vector2(1.1856906325745529,8)
+
+[sub_resource type="BoxMesh" id="C421"]
+size = Vector3(1.2956906325745527,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C422"]
+size = Vector3(1.2956906325745527,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C423"]
+size = Vector3(1.5956906325745528,3.4,8.25)
+
+[sub_resource type="PlaneMesh" id="C424"]
+size = Vector2(1.1856906325745529,8)
+
+[sub_resource type="BoxMesh" id="C425"]
+size = Vector3(1.2956906325745532,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C426"]
+size = Vector3(1.2956906325745532,0.6,8.15)
+
+[sub_resource type="BoxShape3D" id="C427"]
+size = Vector3(1.5956906325745532,3.4,8.25)
+
+[sub_resource type="PlaneMesh" id="C428"]
+size = Vector2(1.1856906325745533,8)
+
+[sub_resource type="BoxMesh" id="C429"]
+size = Vector3(5.5988530903301115,0.5,4)
+
+[sub_resource type="BoxShape3D" id="C430"]
+size = Vector3(5.5988530903301115,0.5,4)
+
+[sub_resource type="BoxMesh" id="C431"]
+size = Vector3(0.35,5,10)
+
+[sub_resource type="BoxShape3D" id="C432"]
+size = Vector3(0.35,5,10)
+
+[sub_resource type="SphereMesh" id="C433"]
+radius = 0.15
+height = 0.3
+
+[sub_resource type="SphereMesh" id="C434"]
+radius = 0.15
+height = 0.3
+
+[sub_resource type="SphereMesh" id="C435"]
+radius = 0.15
+height = 0.3
+
+[sub_resource type="BoxMesh" id="C436"]
+size = Vector3(12,0.8000000000000003,11)
+
+[sub_resource type="BoxShape3D" id="C437"]
+size = Vector3(12,0.8000000000000003,11)
+
+[sub_resource type="BoxShape3D" id="C438"]
+size = Vector3(12,2.8,10)
+
+[sub_resource type="PlaneMesh" id="C439"]
+size = Vector2(12,10)
+
+[sub_resource type="BoxMesh" id="C440"]
+size = Vector3(14,8.2,2)
+
+[sub_resource type="BoxShape3D" id="C441"]
+size = Vector3(14,8.2,2)
+
+[sub_resource type="BoxMesh" id="C442"]
+size = Vector3(2,8.2,13)
+
+[sub_resource type="BoxShape3D" id="C443"]
+size = Vector3(2,8.2,13)
+
+[sub_resource type="BoxMesh" id="C444"]
+size = Vector3(3,8.2,2)
+
+[sub_resource type="BoxShape3D" id="C445"]
+size = Vector3(3,8.2,2)
+
+[sub_resource type="BoxMesh" id="C446"]
+size = Vector3(7.046375859826668,0.5,4)
+
+[sub_resource type="BoxShape3D" id="C447"]
+size = Vector3(7.046375859826668,0.5,4)
+
+[sub_resource type="BoxMesh" id="C448"]
+size = Vector3(6,4.2,14)
+
+[sub_resource type="BoxShape3D" id="C449"]
+size = Vector3(6,4.2,14)
+
+[sub_resource type="BoxMesh" id="C450"]
+size = Vector3(1,8.2,5.5)
+
+[sub_resource type="BoxShape3D" id="C451"]
+size = Vector3(1,8.2,5.5)
+
+[sub_resource type="BoxMesh" id="C452"]
+size = Vector3(6,8.2,2)
+
+[sub_resource type="BoxShape3D" id="C453"]
+size = Vector3(6,8.2,2)
+
+[sub_resource type="BoxShape3D" id="C454"]
+size = Vector3(4,6,1.5)
+
+[sub_resource type="SphereShape3D" id="C455"]
+radius = 0.65
+
+[sub_resource type="SphereMesh" id="C456"]
+radius = 0.3
+height = 0.6
+
+[node name="Chute" type="Node3D"]
+
+[node name="Bed0" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220156,-0.03329635791060134,0.7071067811865487,-0.0470881609348012,0.9988907373180405,0,-0.706322414022018,-0.03329635791060146,-0.7071067811865462,5.627840037570938,3.0748561874844387,-104.37215996242907)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed0"]
+mesh = SubResource("C5")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed0"]
+shape = SubResource("C6")
+
+[node name="Bank0_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220156,-0.03329635791060134,0.7071067811865487,-0.0470881609348012,0.9988907373180405,0,-0.706322414022018,-0.03329635791060146,-0.7071067811865462,2.545748595963274,6.678183975530317,-101.0902903733578)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank0_R"]
+mesh = SubResource("C7")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank0_R"]
+shape = SubResource("C8")
+
+[node name="Bank0_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220156,-0.03329635791060134,0.7071067811865487,-0.0470881609348012,0.9988907373180405,0,-0.706322414022018,-0.03329635791060146,-0.7071067811865462,8.909709626642211,6.678183975530317,-107.45425140403673)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank0_L"]
+mesh = SubResource("C9")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank0_L"]
+shape = SubResource("C10")
+
+[node name="Water0" type="Area3D" parent="."]
+position = Vector3(5.617851130197758,4.774523408679851,-104.38214886980225)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 100
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water0"]
+rotation = Vector3(0,2.356194490192343,0)
+shape = SubResource("C11")
+
+[node name="Surface0" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.7063224140220156,-0.03329635791060134,0.7071067811865487,-0.0470881609348012,0.9988907373180405,0,-0.706322414022018,-0.03329635791060146,-0.7071067811865462,5.617851130197758,6.174523408679851,-104.38214886980225)
+mesh = SubResource("C12")
+material_override = ExtResource("watermat")
+
+[node name="Bed1" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220156,-0.03329635791060134,0.7071067811865487,-0.0470881609348012,0.9988907373180405,0,-0.706322414022018,-0.03329635791060146,-0.7071067811865462,4.863542297966453,3.0239030048441395,-105.13645770203354)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed1"]
+mesh = SubResource("C13")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed1"]
+shape = SubResource("C14")
+
+[node name="Bank1_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220156,-0.03329635791060134,0.7071067811865487,-0.0470881609348012,0.9988907373180405,0,-0.706322414022018,-0.03329635791060146,-0.7071067811865462,1.7814508563587887,6.627230792890018,-101.85458811296228)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank1_R"]
+mesh = SubResource("C15")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank1_R"]
+shape = SubResource("C16")
+
+[node name="Bank1_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220156,-0.03329635791060134,0.7071067811865487,-0.0470881609348012,0.9988907373180405,0,-0.706322414022018,-0.03329635791060146,-0.7071067811865462,8.145411887037728,6.627230792890018,-108.2185491436412)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank1_L"]
+mesh = SubResource("C17")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank1_L"]
+shape = SubResource("C18")
+
+[node name="Water1" type="Area3D" parent="."]
+position = Vector3(4.853553390593273,4.723570226039552,-105.14644660940672)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 101
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water1"]
+rotation = Vector3(0,2.356194490192343,0)
+shape = SubResource("C19")
+
+[node name="Surface1" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.7063224140220156,-0.03329635791060134,0.7071067811865487,-0.0470881609348012,0.9988907373180405,0,-0.706322414022018,-0.03329635791060146,-0.7071067811865462,4.853553390593273,6.1235702260395515,-105.14644660940672)
+mesh = SubResource("C20")
+material_override = ExtResource("watermat")
+
+[node name="Bed2" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220219,-0.03329635791060139,0.7071067811865424,-0.04708816093480083,0.9988907373180405,0,-0.7063224140220117,-0.033296357910600906,-0.7071067811865527,4.09924455836197,2.972949822203841,-105.90075544163803)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed2"]
+mesh = SubResource("C21")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed2"]
+shape = SubResource("C22")
+
+[node name="Bank2_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220218,-0.03329635791060196,0.7071067811865424,-0.04708816093480164,0.9988907373180402,0,-0.7063224140220116,-0.03329635791060148,-0.7071067811865527,1.0171531167543355,6.576277610249719,-102.61888585256673)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank2_R"]
+mesh = SubResource("C23")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank2_R"]
+shape = SubResource("C24")
+
+[node name="Bank2_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220218,-0.03329635791060196,0.7071067811865424,-0.04708816093480164,0.9988907373180402,0,-0.7063224140220116,-0.03329635791060148,-0.7071067811865527,7.381114147433217,6.576277610249719,-108.98284688324571)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank2_L"]
+mesh = SubResource("C25")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank2_L"]
+shape = SubResource("C26")
+
+[node name="Water2" type="Area3D" parent="."]
+position = Vector3(4.08925565098879,4.672617043399253,-105.91074434901121)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 102
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water2"]
+rotation = Vector3(0,2.356194490192352,0)
+shape = SubResource("C27")
+
+[node name="Surface2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.7063224140220219,-0.03329635791060139,0.7071067811865424,-0.04708816093480083,0.9988907373180405,0,-0.7063224140220117,-0.033296357910600906,-0.7071067811865527,4.08925565098879,6.072617043399253,-105.91074434901121)
+mesh = SubResource("C28")
+material_override = ExtResource("watermat")
+
+[node name="Bed3" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220155,-0.03329635791060136,0.707106781186549,-0.04708816093480122,0.9988907373180405,0,-0.7063224140220182,-0.03329635791060149,-0.7071067811865461,3.3349468187574858,2.921996639563542,-106.66505318124251)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed3"]
+mesh = SubResource("C29")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed3"]
+shape = SubResource("C30")
+
+[node name="Bank3_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220155,-0.03329635791060136,0.707106781186549,-0.04708816093480122,0.9988907373180405,0,-0.7063224140220182,-0.03329635791060149,-0.7071067811865461,0.2528553771498192,6.525324427609419,-103.38318359217125)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank3_R"]
+mesh = SubResource("C31")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank3_R"]
+shape = SubResource("C32")
+
+[node name="Bank3_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220155,-0.03329635791060136,0.707106781186549,-0.04708816093480122,0.9988907373180405,0,-0.7063224140220182,-0.03329635791060149,-0.7071067811865461,6.61681640782876,6.525324427609419,-109.74714462285017)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank3_L"]
+mesh = SubResource("C33")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank3_L"]
+shape = SubResource("C34")
+
+[node name="Water3" type="Area3D" parent="."]
+position = Vector3(3.3249579113843053,4.621663860758954,-106.6750420886157)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 103
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water3"]
+rotation = Vector3(0,2.356194490192343,0)
+shape = SubResource("C35")
+
+[node name="Surface3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.7063224140220155,-0.03329635791060136,0.707106781186549,-0.04708816093480122,0.9988907373180405,0,-0.7063224140220182,-0.03329635791060149,-0.7071067811865461,3.3249579113843053,6.021663860758954,-106.6750420886157)
+mesh = SubResource("C36")
+material_override = ExtResource("watermat")
+
+[node name="Bed4" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220158,-0.03329635791060135,0.7071067811865486,-0.04708816093480119,0.9988907373180405,0,-0.7063224140220178,-0.03329635791060145,-0.7071067811865466,2.5706490791530014,2.871043456923243,-107.42935092084699)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed4"]
+mesh = SubResource("C37")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed4"]
+shape = SubResource("C38")
+
+[node name="Bank4_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220158,-0.03329635791060135,0.7071067811865486,-0.04708816093480119,0.9988907373180405,0,-0.7063224140220178,-0.03329635791060145,-0.7071067811865466,-0.5114423624546633,6.47437124496912,-104.14748133177572)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank4_R"]
+mesh = SubResource("C39")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank4_R"]
+shape = SubResource("C40")
+
+[node name="Bank4_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220158,-0.03329635791060135,0.7071067811865486,-0.04708816093480119,0.9988907373180405,0,-0.7063224140220178,-0.03329635791060145,-0.7071067811865466,5.852518668224274,6.47437124496912,-110.51144236245464)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank4_L"]
+mesh = SubResource("C41")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank4_L"]
+shape = SubResource("C42")
+
+[node name="Water4" type="Area3D" parent="."]
+position = Vector3(2.560660171779821,4.570710678118655,-107.43933982822017)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 104
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water4"]
+rotation = Vector3(0,2.3561944901923435,0)
+shape = SubResource("C43")
+
+[node name="Surface4" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.7063224140220158,-0.03329635791060135,0.7071067811865486,-0.04708816093480119,0.9988907373180405,0,-0.7063224140220178,-0.03329635791060145,-0.7071067811865466,2.560660171779821,5.970710678118655,-107.43933982822017)
+mesh = SubResource("C44")
+material_override = ExtResource("watermat")
+
+[node name="Bed5" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220155,-0.03329635791060136,0.707106781186549,-0.04708816093480122,0.9988907373180405,0,-0.7063224140220182,-0.03329635791060149,-0.7071067811865461,1.8063513395485173,2.820090274282944,-108.19364866045149)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed5"]
+mesh = SubResource("C45")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed5"]
+shape = SubResource("C46")
+
+[node name="Bank5_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220155,-0.03329635791060136,0.707106781186549,-0.04708816093480122,0.9988907373180405,0,-0.7063224140220182,-0.03329635791060149,-0.7071067811865461,-1.2757401020591492,6.423418062328821,-104.91177907138022)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank5_R"]
+mesh = SubResource("C47")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank5_R"]
+shape = SubResource("C48")
+
+[node name="Bank5_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7063224140220155,-0.03329635791060136,0.707106781186549,-0.04708816093480122,0.9988907373180405,0,-0.7063224140220182,-0.03329635791060149,-0.7071067811865461,5.0882209286197915,6.423418062328821,-111.27574010205915)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank5_L"]
+mesh = SubResource("C49")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank5_L"]
+shape = SubResource("C50")
+
+[node name="Water5" type="Area3D" parent="."]
+position = Vector3(1.7963624321753369,4.5197574954783555,-108.20363756782467)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 105
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water5"]
+rotation = Vector3(0,2.356194490192343,0)
+shape = SubResource("C51")
+
+[node name="Surface5" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.7063224140220155,-0.03329635791060136,0.707106781186549,-0.04708816093480122,0.9988907373180405,0,-0.7063224140220182,-0.03329635791060149,-0.7071067811865461,1.7963624321753369,5.919757495478356,-108.20363756782467)
+mesh = SubResource("C52")
+material_override = ExtResource("watermat")
+
+[node name="Bed6" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7199128881623446,-0.03931247134793986,0.692950188003632,-0.054526025003101115,0.9985123497470431,0,-0.6919193204811618,-0.03778381927698966,-0.7209854623678142,1.2463037270775061,2.7811164945538356,-108.7471671561141)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed6"]
+mesh = SubResource("C53")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed6"]
+shape = SubResource("C54")
+
+[node name="Bank6_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7199128881623447,-0.0393124713479373,0.692950188003632,-0.05452602500309757,0.9985123497470433,0,-0.691919320481162,-0.0377838192769872,-0.7209854623678142,-1.7540347048950267,6.385579445312706,-105.38938111762798)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank6_R"]
+mesh = SubResource("C55")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank6_R"]
+shape = SubResource("C56")
+
+[node name="Bank6_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7199128881623447,-0.0393124713479373,0.692950188003632,-0.05452602500309757,0.9985123497470433,0,-0.691919320481162,-0.0377838192769872,-0.7209854623678142,4.482516987137661,6.385579445312706,-111.87825027893831)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank6_L"]
+mesh = SubResource("C57")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank6_L"]
+shape = SubResource("C58")
+
+[node name="Junction6" type="Area3D" parent="."]
+position = Vector3(1.234509985673124,4.480670199477949,-108.7585023018972)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 106
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction6"]
+rotation = Vector3(0,2.3760197214663017,0)
+shape = SubResource("C59")
+
+[node name="Surface6" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.7199128881623446,-0.03931247134793986,0.692950188003632,-0.054526025003101115,0.9985123497470431,0,-0.6919193204811618,-0.03778381927698966,-0.7209854623678142,1.234509985673124,5.880670199477948,-108.7585023018972)
+mesh = SubResource("C60")
+material_override = ExtResource("watermat")
+
+[node name="Bed7" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7462958056063244,-0.051937534284761,0.6635850081691318,-0.06942584241836716,0.9975871151957106,0,-0.6619838539865662,-0.046069948208341024,-0.7481008868683243,0.8848303297519431,2.750521472237754,-109.08199138392256)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed7"]
+mesh = SubResource("C61")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed7"]
+shape = SubResource("C62")
+
+[node name="Bank7_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7462958056063241,-0.05193753428476233,0.6635850081691318,-0.06942584241836894,0.9975871151957104,0,-0.6619838539865661,-0.046069948208342204,-0.7481008868683243,-1.9454896041548624,6.357760126650623,-105.57732754839006)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank7_R"]
+mesh = SubResource("C63")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank7_R"]
+shape = SubResource("C64")
+
+[node name="Bank7_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7462958056063241,-0.05193753428476233,0.6635850081691318,-0.06942584241836894,0.9975871151957104,0,-0.6619838539865661,-0.046069948208342204,-0.7481008868683243,4.0267754693673234,6.357760126650623,-112.31023553020498)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank7_L"]
+mesh = SubResource("C65")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank7_L"]
+shape = SubResource("C66")
+
+[node name="Junction7" type="Area3D" parent="."]
+position = Vector3(0.8692490694665148,4.449797606796467,-109.09581236838505)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 107
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction7"]
+rotation = Vector3(0,2.415991871283915,0)
+shape = SubResource("C67")
+
+[node name="Surface7" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.7462958056063244,-0.051937534284761,0.6635850081691318,-0.06942584241836716,0.9975871151957106,0,-0.6619838539865662,-0.046069948208341024,-0.7481008868683243,0.8692490694665148,5.849797606796466,-109.09581236838505)
+mesh = SubResource("C68")
+material_override = ExtResource("watermat")
+
+[node name="Bed8" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.77147269836675,-0.06525894944207446,0.6329069008886238,-0.08428906875870053,0.9964413444291597,0,-0.6306546032199531,-0.05334713328685727,-0.7742279088275994,0.5118583124791924,2.712690244144307,-109.40087497078146)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed8"]
+mesh = SubResource("C69")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed8"]
+shape = SubResource("C70")
+
+[node name="Bank8_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.77147269836675,-0.06525894944207446,0.6329069008886238,-0.08428906875870053,0.9964413444291597,0,-0.6306546032199531,-0.05334713328685727,-0.7742279088275994,-2.140445893193391,6.323366210856829,-105.75680798119669)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank8_R"]
+mesh = SubResource("C71")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank8_R"]
+shape = SubResource("C72")
+
+[node name="Bank8_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.77147269836675,-0.06525894944207446,0.6329069008886238,-0.08428906875870053,0.9964413444291597,0,-0.6306546032199531,-0.05334713328685727,-0.7742279088275994,3.5557162148042227,6.323366210856829,-112.72485916064508)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank8_L"]
+mesh = SubResource("C73")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank8_L"]
+shape = SubResource("C74")
+
+[node name="Junction8" type="Area3D" parent="."]
+position = Vector3(0.4922806276465701,4.411622647473054,-109.41687911076751)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 108
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction8"]
+rotation = Vector3(0,2.4562905971791116,0)
+shape = SubResource("C75")
+
+[node name="Surface8" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.77147269836675,-0.06525894944207446,0.6329069008886238,-0.08428906875870053,0.9964413444291597,0,-0.6306546032199531,-0.05334713328685727,-0.7742279088275994,0.4922806276465701,5.811622647473055,-109.41687911076751)
+mesh = SubResource("C76")
+material_override = ExtResource("watermat")
+
+[node name="Bed9" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7952882937675956,-0.07914859453634825,0.6010424525598398,-0.09903265921655781,0.9950841835787045,0,-0.5980878382016505,-0.059522832379042726,-0.7992170983036166,0.1273492385741943,2.667620066434101,-109.70384567933083)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed9"]
+mesh = SubResource("C77")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed9"]
+shape = SubResource("C78")
+
+[node name="Bank9_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7952882937675958,-0.07914859453634684,0.6010424525598398,-0.09903265921655605,0.9950841835787048,0,-0.5980878382016506,-0.059522832379041664,-0.7992170983036166,-2.3398960143360448,6.282367515697986,-105.92880023982741)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank9_R"]
+mesh = SubResource("C79")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank9_R"]
+shape = SubResource("C80")
+
+[node name="Bank9_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7952882937675958,-0.07914859453634684,0.6010424525598398,-0.09903265921655605,0.9950841835787048,0,-0.5980878382016506,-0.059522832379041664,-0.7992170983036166,3.0694860587025135,6.282367515697986,-113.12175412455997)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank9_L"]
+mesh = SubResource("C81")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank9_L"]
+shape = SubResource("C82")
+
+[node name="Junction9" type="Area3D" parent="."]
+position = Vector3(0.10360466021328985,4.366145321507712,-109.72170252904453)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 109
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction9"]
+rotation = Vector3(0,2.496787841361502,0)
+shape = SubResource("C83")
+
+[node name="Surface9" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.7952882937675956,-0.07914859453634825,0.6010424525598398,-0.09903265921655781,0.9950841835787045,0,-0.5980878382016505,-0.059522832379042726,-0.7992170983036166,0.10360466021328985,5.766145321507713,-109.72170252904453)
+mesh = SubResource("C84")
+material_override = ExtResource("watermat")
+
+[node name="Bed10" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8176087253257742,-0.09346464053209831,0.5681376006227438,-0.11357495126780191,0.9935294310912568,0,-0.5644614271282663,-0.06452620030413403,-0.8229335737218599,-0.26873944067369643,2.6153067995730632,-109.99092476312494)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed10"]
+mesh = SubResource("C85")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed10"]
+shape = SubResource("C86")
+
+[node name="Bank10_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8176087253257741,-0.09346464053209975,0.5681376006227438,-0.11357495126780368,0.9935294310912566,0,-0.5644614271282662,-0.06452620030413503,-0.8229335737218599,-2.5449647218797438,6.234718506299295,-106.09414508046414)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank10_R"]
+mesh = SubResource("C87")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank10_R"]
+shape = SubResource("C88")
+
+[node name="Bank10_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8176087253257741,-0.09346464053209975,0.5681376006227438,-0.11357495126780368,0.9935294310912566,0,-0.5644614271282662,-0.06452620030413503,-0.8229335737218599,2.56827368372495,6.234718506299295,-113.5005472439609)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank10_L"]
+mesh = SubResource("C89")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank10_L"]
+shape = SubResource("C90")
+
+[node name="Junction10" type="Area3D" parent="."]
+position = Vector3(-0.2967788328333259,4.31336562890044,-110.01028262321617)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 110
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction10"]
+rotation = Vector3(0,2.5373516934198466,0)
+shape = SubResource("C91")
+
+[node name="Surface10" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8176087253257742,-0.09346464053209831,0.5681376006227438,-0.11357495126780191,0.9935294310912568,0,-0.5644614271282663,-0.06452620030413403,-0.8229335737218599,-0.2967788328333259,5.713365628900441,-110.01028262321617)
+mesh = SubResource("C92")
+material_override = ExtResource("watermat")
+
+[node name="Bed11" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8383252675884288,-0.10805634498385465,0.534354350624676,-0.12783791065514366,0.9917950738934568,0,-0.5299700126630906,-0.06831074373334464,-0.8452605680903852,-0.6764529479981208,2.5557450474832017,-110.26212617016238)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed11"]
+mesh = SubResource("C93")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed11"]
+shape = SubResource("C94")
+
+[node name="Bank11_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8383252675884286,-0.10805634498385615,0.534354350624676,-0.12783791065514544,0.9917950738934566,0,-0.5299700126630905,-0.06831074373334559,-0.8452605680903852,-2.756878490857594,6.180359825802831,-106.25352138255559)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank11_R"]
+mesh = SubResource("C95")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank11_R"]
+shape = SubResource("C96")
+
+[node name="Bank11_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8383252675884286,-0.10805634498385615,0.534354350624676,-0.12783791065514544,0.9917950738934566,0,-0.5299700126630905,-0.06831074373334559,-0.8452605680903852,2.05231066476449,6.180359825802831,-113.86086649536907)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank11_L"]
+mesh = SubResource("C97")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank11_L"]
+shape = SubResource("C98")
+
+[node name="Junction11" type="Area3D" parent="."]
+position = Vector3(-0.7088698514932772,4.253283569651239,-110.28261939328237)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 111
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction11"]
+rotation = Vector3(0,2.577848937602213,0)
+shape = SubResource("C99")
+
+[node name="Surface11" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8383252675884288,-0.10805634498385465,0.534354350624676,-0.12783791065514366,0.9917950738934568,0,-0.5299700126630906,-0.06831074373334464,-0.8452605680903852,-0.7088698514932772,5.653283569651238,-110.28261939328237)
+mesh = SubResource("C100")
+material_override = ExtResource("watermat")
+
+[node name="Bed12" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8573569082012463,-0.12276930515152261,0.4998668119331508,-0.14174919878864436,0.9899026036145058,0,-0.49481945859310844,-0.0708557200925581,-0.8661022862963635,-1.0958376042211073,2.488928362675755,-110.51745612321541)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed12"]
+mesh = SubResource("C101")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed12"]
+shape = SubResource("C102")
+
+[node name="Bank12_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8573569082012467,-0.1227693051515196,0.4998668119331508,-0.1417491987886409,0.9899026036145062,0,-0.49481945859310866,-0.07085572009255636,-0.8661022862963635,-2.976930342465728,6.119220551832235,-106.4074286746041)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank12_R"]
+mesh = SubResource("C103")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank12_R"]
+shape = SubResource("C104")
+
+[node name="Bank12_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8573569082012467,-0.1227693051515196,0.4998668119331508,-0.1417491987886409,0.9899026036145062,0,-0.49481945859310866,-0.07085572009255636,-0.8661022862963635,1.5218709649326287,6.119220551832235,-114.20234925127137)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank12_L"]
+mesh = SubResource("C105")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank12_L"]
+shape = SubResource("C106")
+
+[node name="Junction12" type="Area3D" parent="."]
+position = Vector3(-1.1326683957665642,4.185899143760107,-110.53871283924317)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 112
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction12"]
+rotation = Vector3(0,2.618147663497435,0)
+shape = SubResource("C107")
+
+[node name="Surface12" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8573569082012463,-0.12276930515152261,0.4998668119331508,-0.14174919878864436,0.9899026036145058,0,-0.49481945859310844,-0.0708557200925581,-0.8661022862963635,-1.1326683957665642,5.585899143760106,-110.53871283924317)
+mesh = SubResource("C108")
+material_override = ExtResource("watermat")
+
+[node name="Bed13" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8746516207213526,-0.13745079057720694,0.46485677637226247,-0.1552439358304043,0.9878761665248764,0,-0.4592209302257424,-0.07216619556146411,-0.8853858918351862,-1.5269392284800245,2.414849501269581,-110.75691310243013)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed13"]
+mesh = SubResource("C109")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed13"]
+shape = SubResource("C110")
+
+[node name="Bank13_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8746516207213524,-0.13745079057720846,0.46485677637226247,-0.15524393583040602,0.9878761665248762,0,-0.4592209302257423,-0.07216619556146492,-0.8853858918351862,-3.20644235042358,6.0512210016949535,-106.5561780024874)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank13_R"]
+mesh = SubResource("C111")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank13_R"]
+shape = SubResource("C112")
+
+[node name="Bank13_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8746516207213524,-0.13745079057720846,0.46485677637226247,-0.15524393583040602,0.9878761665248762,0,-0.4592209302257423,-0.07216619556146492,-0.8853858918351862,0.9772686369267822,6.0512210016949535,-114.52465102900408)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank13_L"]
+mesh = SubResource("C113")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank13_L"]
+shape = SubResource("C114")
+
+[node name="Junction13" type="Area3D" parent="."]
+position = Vector3(-1.5681744656531866,4.111212351227044,-110.77856296109857)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 113
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction13"]
+rotation = Vector3(0,2.658119813315001,0)
+shape = SubResource("C115")
+
+[node name="Surface13" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8746516207213526,-0.13745079057720694,0.46485677637226247,-0.1552439358304043,0.9878761665248764,0,-0.4592209302257424,-0.07216619556146411,-0.8853858918351862,-1.5681744656531866,5.511212351227044,-110.77856296109857)
+mesh = SubResource("C116")
+material_override = ExtResource("watermat")
+
+[node name="Bed14" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382742,-0.14473370991724732,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.8944271909999167,-2.260516098881812,2.2815654696621523,-111.1302580494409)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed14"]
+mesh = SubResource("C117")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed14"]
+shape = SubResource("C118")
+
+[node name="Bank14_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382742,-0.14473370991724732,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.8944271909999167,-3.838776148879873,5.921103221354823,-106.8882351250654)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank14_R"]
+mesh = SubResource("C119")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank14_R"]
+shape = SubResource("C120")
+
+[node name="Bank14_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382742,-0.14473370991724732,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.8944271909999167,0.18614621061973247,5.921103221354823,-114.93807984406466)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank14_L"]
+mesh = SubResource("C121")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank14_L"]
+shape = SubResource("C122")
+
+[node name="Water14" type="Area3D" parent="."]
+position = Vector3(-2.3039362118569864,3.9776116944928854,-111.15196810592849)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 114
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water14"]
+rotation = Vector3(0,2.677945044588989,0)
+shape = SubResource("C123")
+
+[node name="Surface14" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8826393109382742,-0.14473370991724732,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.8944271909999167,-2.3039362118569864,5.377611694492885,-111.15196810592849)
+mesh = SubResource("C124")
+material_override = ExtResource("watermat")
+
+[node name="Bed15" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724804,0.44721359549995615,-0.16181720700535085,0.9868207494357765,0,-0.44131965546913493,-0.07236685495862365,-0.894427190999917,-3.290679758596122,2.0927021320478625,-111.64533987929806)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed15"]
+mesh = SubResource("C125")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed15"]
+shape = SubResource("C126")
+
+[node name="Bank15_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382742,-0.14473370991724868,0.44721359549995615,-0.16181720700535157,0.9868207494357762,0,-0.4413196554691348,-0.07236685495862397,-0.894427190999917,-4.868939808594178,5.732239883740534,-107.40331695492257)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank15_R"]
+mesh = SubResource("C127")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank15_R"]
+shape = SubResource("C128")
+
+[node name="Bank15_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382742,-0.14473370991724868,0.44721359549995615,-0.16181720700535157,0.9868207494357762,0,-0.4413196554691348,-0.07236685495862397,-0.894427190999917,-0.8440174490945731,5.732239883740534,-115.45316167392183)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank15_L"]
+mesh = SubResource("C129")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank15_L"]
+shape = SubResource("C130")
+
+[node name="Water15" type="Area3D" parent="."]
+position = Vector3(-3.334099871571296,3.788748356878595,-111.66704993578566)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 115
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water15"]
+rotation = Vector3(0,2.677945044588989,0)
+shape = SubResource("C131")
+
+[node name="Surface15" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724804,0.44721359549995615,-0.16181720700535085,0.9868207494357765,0,-0.44131965546913493,-0.07236685495862365,-0.894427190999917,-3.334099871571296,5.188748356878595,-111.66704993578566)
+mesh = SubResource("C132")
+material_override = ExtResource("watermat")
+
+[node name="Bed16" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724735,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.894427190999917,-4.320843418310432,1.903838794433572,-112.1604217091552)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed16"]
+mesh = SubResource("C133")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed16"]
+shape = SubResource("C134")
+
+[node name="Bank16_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724735,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.894427190999917,-5.899103468308493,5.543376546126241,-107.91839878477971)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank16_R"]
+mesh = SubResource("C135")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank16_R"]
+shape = SubResource("C136")
+
+[node name="Bank16_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724735,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.894427190999917,-1.8741811088088869,5.543376546126241,-115.96824350377896)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank16_L"]
+mesh = SubResource("C137")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank16_L"]
+shape = SubResource("C138")
+
+[node name="Water16" type="Area3D" parent="."]
+position = Vector3(-4.364263531285606,3.599885019264305,-112.1821317656428)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 116
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water16"]
+rotation = Vector3(0,2.677945044588989,0)
+shape = SubResource("C139")
+
+[node name="Surface16" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724735,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.894427190999917,-4.364263531285606,4.999885019264305,-112.1821317656428)
+mesh = SubResource("C140")
+material_override = ExtResource("watermat")
+
+[node name="Bed17" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382694,-0.14473370991724582,0.44721359549996625,-0.16181720700534932,0.9868207494357767,0,-0.441319655469145,-0.07236685495862459,-0.8944271909999117,-5.351007078024741,1.714975456819282,-112.67550353901237)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed17"]
+mesh = SubResource("C141")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed17"]
+shape = SubResource("C142")
+
+[node name="Bank17_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382694,-0.14473370991724582,0.44721359549996625,-0.16181720700534932,0.9868207494357767,0,-0.441319655469145,-0.07236685495862459,-0.8944271909999117,-6.929267128022851,5.354513208511952,-108.4334806146369)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank17_R"]
+mesh = SubResource("C143")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank17_R"]
+shape = SubResource("C144")
+
+[node name="Bank17_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382694,-0.14473370991724582,0.44721359549996625,-0.16181720700534932,0.9868207494357767,0,-0.441319655469145,-0.07236685495862459,-0.8944271909999117,-2.9043447685231554,5.354513208511952,-116.4833253336361)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank17_L"]
+mesh = SubResource("C145")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank17_L"]
+shape = SubResource("C146")
+
+[node name="Water17" type="Area3D" parent="."]
+position = Vector3(-5.394427190999915,3.411021681650015,-112.69721359549996)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 117
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water17"]
+rotation = Vector3(0,2.6779450445889776,0)
+shape = SubResource("C147")
+
+[node name="Surface17" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8826393109382694,-0.14473370991724582,0.44721359549996625,-0.16181720700534932,0.9868207494357767,0,-0.441319655469145,-0.07236685495862459,-0.8944271909999117,-5.394427190999915,4.811021681650015,-112.69721359549996)
+mesh = SubResource("C148")
+material_override = ExtResource("watermat")
+
+[node name="Bed18" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724735,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.894427190999917,-6.38117073773905,1.5261121192049922,-113.19058536886953)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed18"]
+mesh = SubResource("C149")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed18"]
+shape = SubResource("C150")
+
+[node name="Bank18_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724735,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.894427190999917,-7.959430787737111,5.165649870897662,-108.94856244449404)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank18_R"]
+mesh = SubResource("C151")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank18_R"]
+shape = SubResource("C152")
+
+[node name="Bank18_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724735,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.894427190999917,-3.934508428237506,5.165649870897662,-116.9984071634933)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank18_L"]
+mesh = SubResource("C153")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank18_L"]
+shape = SubResource("C154")
+
+[node name="Water18" type="Area3D" parent="."]
+position = Vector3(-6.424590850714225,3.222158344035725,-113.21229542535713)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 118
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water18"]
+rotation = Vector3(0,2.677945044588989,0)
+shape = SubResource("C155")
+
+[node name="Surface18" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724735,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.894427190999917,-6.424590850714225,4.622158344035725,-113.21229542535713)
+mesh = SubResource("C156")
+material_override = ExtResource("watermat")
+
+[node name="Bed19" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724735,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.894427190999917,-7.41133439745336,1.3372487815907024,-113.70566719872667)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed19"]
+mesh = SubResource("C157")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed19"]
+shape = SubResource("C158")
+
+[node name="Bank19_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724735,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.894427190999917,-8.98959444745142,4.976786533283372,-109.46364427435118)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank19_R"]
+mesh = SubResource("C159")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank19_R"]
+shape = SubResource("C160")
+
+[node name="Bank19_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724735,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.894427190999917,-4.964672087951816,4.976786533283372,-117.51348899335044)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank19_L"]
+mesh = SubResource("C161")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank19_L"]
+shape = SubResource("C162")
+
+[node name="Water19" type="Area3D" parent="."]
+position = Vector3(-7.454754510428534,3.0332950064214352,-113.72737725521426)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 119
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water19"]
+rotation = Vector3(0,2.677945044588989,0)
+shape = SubResource("C163")
+
+[node name="Surface19" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724735,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.894427190999917,-7.454754510428534,4.433295006421435,-113.72737725521426)
+mesh = SubResource("C164")
+material_override = ExtResource("watermat")
+
+[node name="Bed20" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382745,-0.14473370991724793,0.4472135954999558,-0.1618172070053507,0.9868207494357765,0,-0.4413196554691346,-0.07236685495862354,-0.8944271909999171,-8.441498057167669,1.148385443976412,-114.22074902858384)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed20"]
+mesh = SubResource("C165")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed20"]
+shape = SubResource("C166")
+
+[node name="Bank20_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382746,-0.1447337099172473,0.4472135954999558,-0.16181720700535,0.9868207494357766,0,-0.44131965546913465,-0.0723668549586232,-0.8944271909999171,-10.019758107165728,4.787923195669082,-109.97872610420835)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank20_R"]
+mesh = SubResource("C167")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank20_R"]
+shape = SubResource("C168")
+
+[node name="Bank20_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382746,-0.1447337099172473,0.4472135954999558,-0.16181720700535,0.9868207494357766,0,-0.44131965546913465,-0.0723668549586232,-0.8944271909999171,-5.9948357476661265,4.787923195669082,-118.0285708232076)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank20_L"]
+mesh = SubResource("C169")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank20_L"]
+shape = SubResource("C170")
+
+[node name="Water20" type="Area3D" parent="."]
+position = Vector3(-8.484918170142844,2.844431668807145,-114.24245908507143)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 120
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water20"]
+rotation = Vector3(0,2.6779450445889896,0)
+shape = SubResource("C171")
+
+[node name="Surface20" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8826393109382745,-0.14473370991724793,0.4472135954999558,-0.1618172070053507,0.9868207494357765,0,-0.4413196554691346,-0.07236685495862354,-0.8944271909999171,-8.484918170142844,4.244431668807145,-114.24245908507143)
+mesh = SubResource("C172")
+material_override = ExtResource("watermat")
+
+[node name="Bed21" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382741,-0.1447337099172475,0.44721359549995676,-0.1618172070053503,0.9868207494357765,0,-0.4413196554691355,-0.07236685495862351,-0.8944271909999166,-9.47166171688198,0.9595221063621218,-114.73583085844098)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed21"]
+mesh = SubResource("C173")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed21"]
+shape = SubResource("C174")
+
+[node name="Bank21_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382741,-0.1447337099172475,0.44721359549995676,-0.1618172070053503,0.9868207494357765,0,-0.4413196554691355,-0.07236685495862351,-0.8944271909999166,-11.049921766880043,4.599059858054792,-110.49380793406549)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank21_R"]
+mesh = SubResource("C175")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank21_R"]
+shape = SubResource("C176")
+
+[node name="Bank21_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382741,-0.1447337099172475,0.44721359549995676,-0.1618172070053503,0.9868207494357765,0,-0.4413196554691355,-0.07236685495862351,-0.8944271909999166,-7.024999407380432,4.599059858054792,-118.54365265306474)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank21_L"]
+mesh = SubResource("C177")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank21_L"]
+shape = SubResource("C178")
+
+[node name="Water21" type="Area3D" parent="."]
+position = Vector3(-9.515081829857154,2.6555683311928546,-114.75754091492857)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 121
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water21"]
+rotation = Vector3(0,2.6779450445889883,0)
+shape = SubResource("C179")
+
+[node name="Surface21" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8826393109382741,-0.1447337099172475,0.44721359549995676,-0.1618172070053503,0.9868207494357765,0,-0.4413196554691355,-0.07236685495862351,-0.8944271909999166,-9.515081829857154,4.0555683311928545,-114.75754091492857)
+mesh = SubResource("C180")
+material_override = ExtResource("watermat")
+
+[node name="Bed22" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382746,-0.1447337099172475,0.4472135954999555,-0.1618172070053502,0.9868207494357765,0,-0.44131965546913426,-0.07236685495862326,-0.8944271909999171,-10.50182537659629,0.7706587687478317,-115.25091268829814)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed22"]
+mesh = SubResource("C181")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed22"]
+shape = SubResource("C182")
+
+[node name="Bank22_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382747,-0.1447337099172472,0.4472135954999555,-0.16181720700534988,0.9868207494357767,0,-0.4413196554691343,-0.0723668549586231,-0.8944271909999171,-12.080085426594348,4.410196520440502,-111.00888976392265)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank22_R"]
+mesh = SubResource("C183")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank22_R"]
+shape = SubResource("C184")
+
+[node name="Bank22_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382747,-0.1447337099172472,0.4472135954999555,-0.16181720700534988,0.9868207494357767,0,-0.4413196554691343,-0.0723668549586231,-0.8944271909999171,-8.05516306709475,4.410196520440502,-119.0587344829219)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank22_L"]
+mesh = SubResource("C185")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank22_L"]
+shape = SubResource("C186")
+
+[node name="Water22" type="Area3D" parent="."]
+position = Vector3(-10.545245489571464,2.4667049935785643,-115.27262274478574)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 122
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water22"]
+rotation = Vector3(0,2.6779450445889896,0)
+shape = SubResource("C187")
+
+[node name="Surface22" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8826393109382746,-0.1447337099172475,0.4472135954999555,-0.1618172070053502,0.9868207494357765,0,-0.44131965546913426,-0.07236685495862326,-0.8944271909999171,-10.545245489571464,3.8667049935785647,-115.27262274478574)
+mesh = SubResource("C188")
+material_override = ExtResource("watermat")
+
+[node name="Bed23" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382741,-0.1447337099172475,0.44721359549995676,-0.1618172070053503,0.9868207494357765,0,-0.4413196554691355,-0.07236685495862351,-0.8944271909999166,-11.5319890363106,0.5817954311335416,-115.76599451815528)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed23"]
+mesh = SubResource("C189")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed23"]
+shape = SubResource("C190")
+
+[node name="Bank23_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382741,-0.1447337099172475,0.44721359549995676,-0.1618172070053503,0.9868207494357765,0,-0.4413196554691355,-0.07236685495862351,-0.8944271909999166,-13.110249086308663,4.221333182826212,-111.52397159377979)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank23_R"]
+mesh = SubResource("C191")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank23_R"]
+shape = SubResource("C192")
+
+[node name="Bank23_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382741,-0.1447337099172475,0.44721359549995676,-0.1618172070053503,0.9868207494357765,0,-0.4413196554691355,-0.07236685495862351,-0.8944271909999166,-9.08532672680905,4.221333182826212,-119.57381631277904)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank23_L"]
+mesh = SubResource("C193")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank23_L"]
+shape = SubResource("C194")
+
+[node name="Water23" type="Area3D" parent="."]
+position = Vector3(-11.575409149285774,2.2778416559642745,-115.78770457464287)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 123
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water23"]
+rotation = Vector3(0,2.6779450445889883,0)
+shape = SubResource("C195")
+
+[node name="Surface23" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8826393109382741,-0.1447337099172475,0.44721359549995676,-0.1618172070053503,0.9868207494357765,0,-0.4413196554691355,-0.07236685495862351,-0.8944271909999166,-11.575409149285774,3.6778416559642744,-115.78770457464287)
+mesh = SubResource("C196")
+material_override = ExtResource("watermat")
+
+[node name="Bed24" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382697,-0.1447337099172458,0.44721359549996603,-0.1618172070053492,0.9868207494357767,0,-0.44131965546914476,-0.07236685495862451,-0.894427190999912,-12.56215269602491,0.3929320935192517,-116.28107634801245)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed24"]
+mesh = SubResource("C197")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed24"]
+shape = SubResource("C198")
+
+[node name="Bank24_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382697,-0.1447337099172458,0.44721359549996603,-0.1618172070053492,0.9868207494357767,0,-0.44131965546914476,-0.07236685495862451,-0.894427190999912,-14.140412746023019,4.0324698452119225,-112.03905342363699)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank24_R"]
+mesh = SubResource("C199")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank24_R"]
+shape = SubResource("C200")
+
+[node name="Bank24_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382697,-0.1447337099172458,0.44721359549996603,-0.1618172070053492,0.9868207494357767,0,-0.44131965546914476,-0.07236685495862451,-0.894427190999912,-10.115490386523325,4.0324698452119225,-120.08889814263618)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank24_L"]
+mesh = SubResource("C201")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank24_L"]
+shape = SubResource("C202")
+
+[node name="Water24" type="Area3D" parent="."]
+position = Vector3(-12.605572809000083,2.0889783183499846,-116.30278640450004)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 124
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water24"]
+rotation = Vector3(0,2.677945044588978,0)
+shape = SubResource("C203")
+
+[node name="Surface24" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8826393109382697,-0.1447337099172458,0.44721359549996603,-0.1618172070053492,0.9868207494357767,0,-0.44131965546914476,-0.07236685495862451,-0.894427190999912,-12.605572809000083,3.4889783183499845,-116.30278640450004)
+mesh = SubResource("C204")
+material_override = ExtResource("watermat")
+
+[node name="Bed25" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.1447337099172477,0.44721359549995615,-0.16181720700535046,0.9868207494357765,0,-0.44131965546913493,-0.07236685495862348,-0.894427190999917,-13.592316355739218,0.20406875590496165,-116.79615817786961)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed25"]
+mesh = SubResource("C205")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed25"]
+shape = SubResource("C206")
+
+[node name="Bank25_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724804,0.44721359549995615,-0.16181720700535085,0.9868207494357765,0,-0.44131965546913493,-0.07236685495862365,-0.894427190999917,-15.170576405737275,3.8436065075976327,-112.55413525349412)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank25_R"]
+mesh = SubResource("C207")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank25_R"]
+shape = SubResource("C208")
+
+[node name="Bank25_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724804,0.44721359549995615,-0.16181720700535085,0.9868207494357765,0,-0.44131965546913493,-0.07236685495862365,-0.894427190999917,-11.14565404623767,3.8436065075976327,-120.60397997249338)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank25_L"]
+mesh = SubResource("C209")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank25_L"]
+shape = SubResource("C210")
+
+[node name="Water25" type="Area3D" parent="."]
+position = Vector3(-13.635736468714391,1.9001149807356945,-116.8178682343572)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 125
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water25"]
+rotation = Vector3(0,2.677945044588989,0)
+shape = SubResource("C211")
+
+[node name="Surface25" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.1447337099172477,0.44721359549995615,-0.16181720700535046,0.9868207494357765,0,-0.44131965546913493,-0.07236685495862348,-0.894427190999917,-13.635736468714391,3.300114980735694,-116.8178682343572)
+mesh = SubResource("C212")
+material_override = ExtResource("watermat")
+
+[node name="Bed26" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.1447337099172477,0.44721359549995615,-0.16181720700535046,0.9868207494357765,0,-0.44131965546913493,-0.07236685495862348,-0.894427190999917,-14.62248001545353,0.015205418290671346,-117.31124000772675)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed26"]
+mesh = SubResource("C213")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed26"]
+shape = SubResource("C214")
+
+[node name="Bank26_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724804,0.44721359549995615,-0.16181720700535085,0.9868207494357765,0,-0.44131965546913493,-0.07236685495862365,-0.894427190999917,-16.200740065451587,3.654743169983341,-113.06921708335126)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank26_R"]
+mesh = SubResource("C215")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank26_R"]
+shape = SubResource("C216")
+
+[node name="Bank26_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724804,0.44721359549995615,-0.16181720700535085,0.9868207494357765,0,-0.44131965546913493,-0.07236685495862365,-0.894427190999917,-12.175817705951982,3.654743169983341,-121.11906180235052)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank26_L"]
+mesh = SubResource("C217")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank26_L"]
+shape = SubResource("C218")
+
+[node name="Water26" type="Area3D" parent="."]
+position = Vector3(-14.665900128428703,1.7112516431214042,-117.33295006421434)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 126
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water26"]
+rotation = Vector3(0,2.677945044588989,0)
+shape = SubResource("C219")
+
+[node name="Surface26" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.1447337099172477,0.44721359549995615,-0.16181720700535046,0.9868207494357765,0,-0.44131965546913493,-0.07236685495862348,-0.894427190999917,-14.665900128428703,3.1112516431214043,-117.33295006421434)
+mesh = SubResource("C220")
+material_override = ExtResource("watermat")
+
+[node name="Bed27" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724735,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.894427190999917,-15.652643675167838,-0.17365791932361874,-117.82632183758392)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed27"]
+mesh = SubResource("C221")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed27"]
+shape = SubResource("C222")
+
+[node name="Bank27_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724735,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.894427190999917,-17.230903725165895,3.465879832369051,-113.58429891320843)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank27_R"]
+mesh = SubResource("C223")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank27_R"]
+shape = SubResource("C224")
+
+[node name="Bank27_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724735,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.894427190999917,-13.205981365666291,3.465879832369051,-121.63414363220768)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank27_L"]
+mesh = SubResource("C225")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank27_L"]
+shape = SubResource("C226")
+
+[node name="Water27" type="Area3D" parent="."]
+position = Vector3(-15.696063788143011,1.5223883055071141,-117.84803189407151)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 127
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water27"]
+rotation = Vector3(0,2.677945044588989,0)
+shape = SubResource("C227")
+
+[node name="Surface27" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8826393109382744,-0.14473370991724735,0.44721359549995615,-0.16181720700535007,0.9868207494357765,0,-0.44131965546913493,-0.0723668549586233,-0.894427190999917,-15.696063788143011,2.922388305507114,-117.84803189407151)
+mesh = SubResource("C228")
+material_override = ExtResource("watermat")
+
+[node name="Bed28" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.9071899714603843,-0.1551633082844005,0.3910635542260965,-0.16858912654724623,0.9856864138305025,0,-0.3854660323449313,-0.06592906303143926,-0.9203636762476303,-16.385276541861494,-0.30875969928553515,-118.17956123307991)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed28"]
+mesh = SubResource("C229")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed28"]
+shape = SubResource("C230")
+
+[node name="Bank28_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.9071899714603845,-0.1551633082843997,0.3910635542260965,-0.16858912654724537,0.9856864138305027,0,-0.3854660323449314,-0.06592906303143893,-0.9203636762476303,-17.67957261102573,3.3341810592229564,-113.84013750087126)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank28_R"]
+mesh = SubResource("C231")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank28_R"]
+shape = SubResource("C232")
+
+[node name="Bank28_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.9071899714603845,-0.1551633082843997,0.3910635542260965,-0.16858912654724537,0.9856864138305027,0,-0.3854660323449314,-0.06592906303143893,-0.9203636762476303,-14.16000062299086,3.3341810592229564,-122.12341058709993)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank28_L"]
+mesh = SubResource("C233")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank28_L"]
+shape = SubResource("C234")
+
+[node name="Junction28" type="Area3D" parent="."]
+position = Vector3(-16.431825534346814,1.3869462248636155,-118.19933995198934)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 128
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction28"]
+rotation = Vector3(0,2.7398057637905358,0)
+shape = SubResource("C235")
+
+[node name="Surface28" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.9071899714603843,-0.1551633082844005,0.3910635542260965,-0.16858912654724623,0.9856864138305025,0,-0.3854660323449313,-0.06592906303143926,-0.9203636762476303,-16.431825534346814,2.786946224863615,-118.19933995198934)
+mesh = SubResource("C236")
+material_override = ExtResource("watermat")
+
+[node name="Bed29" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.9497459694594923,-0.1752373027672535,0.25937324691322144,-0.18144693248104213,0.9834007375903376,0,-0.25506784232566276,-0.04706248002005197,-0.9657771579332848,-16.81476041340326,-0.39012648458390775,-118.3366829821904)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed29"]
+mesh = SubResource("C237")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed29"]
+shape = SubResource("C238")
+
+[node name="Bank29_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.9497459694594923,-0.1752373027672535,0.25937324691322144,-0.18144693248104213,0.9834007375903376,0,-0.25506784232566276,-0.04706248002005197,-0.9657771579332848,-17.456228116210994,3.2596713026450788,-113.84949833143045)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank29_R"]
+mesh = SubResource("C239")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank29_R"]
+shape = SubResource("C240")
+
+[node name="Bank29_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.9497459694594923,-0.1752373027672535,0.25937324691322144,-0.18144693248104213,0.9834007375903376,0,-0.25506784232566276,-0.04706248002005197,-0.9657771579332848,-15.121868893992001,3.2596713026450788,-122.54149275283001)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank29_L"]
+mesh = SubResource("C241")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank29_L"]
+shape = SubResource("C242")
+
+[node name="Junction29" type="Area3D" parent="."]
+position = Vector3(-16.867331604233435,1.3048937366931934,-118.35080172619641)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 129
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction29"]
+rotation = Vector3(0,2.879219469715345,0)
+shape = SubResource("C243")
+
+[node name="Surface29" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.9497459694594923,-0.1752373027672535,0.25937324691322144,-0.18144693248104213,0.9834007375903376,0,-0.25506784232566276,-0.04706248002005197,-0.9657771579332848,-16.867331604233435,2.7048937366931933,-118.35080172619641)
+mesh = SubResource("C244")
+material_override = ExtResource("watermat")
+
+[node name="Bed30" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.9762078123650201,-0.19085575030551696,0.10291933566060325,-0.19187466125232852,0.9814194385528056,0,-0.10100703662025699,-0.019747612666192942,-0.9946897055600707,-17.23387342341507,-0.4716479120385,-118.42419419306071)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed30"]
+mesh = SubResource("C245")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed30"]
+shape = SubResource("C246")
+
+[node name="Bank30_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.9762078123650201,-0.19085575030551696,0.10291933566060325,-0.19187466125232852,0.9814194385528056,0,-0.10100703662025699,-0.019747612666192942,-0.9946897055600707,-17.12444318297123,3.184093772303083,-113.88884768004182)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank30_R"]
+mesh = SubResource("C247")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank30_R"]
+shape = SubResource("C248")
+
+[node name="Bank30_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.9762078123650201,-0.19085575030551696,0.10291933566060325,-0.19187466125232852,0.9814194385528056,0,-0.10100703662025699,-0.019747612666192942,-0.9946897055600707,-16.198169162025803,3.184093772303083,-122.84105503008244)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank30_L"]
+mesh = SubResource("C249")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank30_L"]
+shape = SubResource("C250")
+
+[node name="Junction30" type="Area3D" parent="."]
+position = Vector3(-17.291130148506724,1.2227779195273416,-118.43011847686057)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 130
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction30"]
+rotation = Vector3(0,3.0384907527550316,0)
+shape = SubResource("C251")
+
+[node name="Surface30" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.9762078123650201,-0.19085575030551696,0.10291933566060325,-0.19187466125232852,0.9814194385528056,0,-0.10100703662025699,-0.019747612666192942,-0.9946897055600707,-17.291130148506724,2.6227779195273415,-118.43011847686057)
+mesh = SubResource("C252")
+material_override = ExtResource("watermat")
+
+[node name="Bed31" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.9777570301668722,-0.19737123495994333,-0.07096326915837937,-0.19787007941630516,0.9802282548834149,0,0.06956020148794027,0.014041507704009165,-0.997478929316482,-17.64400979667869,-0.5534697030989644,-118.44150265629304)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed31"]
+mesh = SubResource("C253")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed31"]
+shape = SubResource("C254")
+
+[node name="Bank31_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.9777570301668721,-0.19737123495994435,-0.07096326915837937,-0.1978700794163062,0.9802282548834148,0,0.06956020148794026,0.014041507704009236,-0.997478929316482,-16.73256138058615,3.1058455322507905,-113.99497199748089)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank31_R"]
+mesh = SubResource("C255")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank31_R"]
+shape = SubResource("C256")
+
+[node name="Bank31_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.9777570301668721,-0.19737123495994435,-0.07096326915837937,-0.1978700794163062,0.9802282548834148,0,0.06956020148794026,0.014041507704009236,-0.997478929316482,-17.371230803011567,3.1058455322507905,-122.97228236132923)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank31_L"]
+mesh = SubResource("C257")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank31_L"]
+shape = SubResource("C258")
+
+[node name="Junction31" type="Area3D" parent="."]
+position = Vector3(-17.703221167166674,1.14059877336606,-118.43729020398183)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 131
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction31"]
+rotation = Vector3(0,-3.070569689756783,0)
+shape = SubResource("C259")
+
+[node name="Surface31" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.9777570301668722,-0.19737123495994333,-0.07096326915837937,-0.19787007941630516,0.9802282548834149,0,0.06956020148794027,0.014041507704009165,-0.997478929316482,-17.703221167166674,2.54059877336606,-118.43729020398183)
+mesh = SubResource("C260")
+material_override = ExtResource("watermat")
+
+[node name="Bed32" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.9495499819946226,-0.19182497929844616,-0.24810886524097137,-0.19801652914716983,0.9801986809746828,0,0.24319598244732546,0.049129656345660036,-0.9687321564750689,-18.046057166423758,-0.6357033060830561,-118.38705580446388)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed32"]
+mesh = SubResource("C261")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed32"]
+shape = SubResource("C262")
+
+[node name="Bank32_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.9495499819946226,-0.19182497929844616,-0.24810886524097137,-0.19801652914716983,0.9801986809746828,0,0.24319598244732546,0.049129656345660036,-0.9687321564750689,-16.35409233494405,3.023700650992895,-114.17515006936306)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank32_R"]
+mesh = SubResource("C263")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank32_R"]
+shape = SubResource("C264")
+
+[node name="Bank32_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.9495499819946226,-0.19182497929844616,-0.24810886524097137,-0.19801652914716983,0.9801986809746828,0,0.24319598244732546,0.049129656345660036,-0.9687321564750689,-18.587072122112794,3.023700650992895,-122.89373947763868)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank32_L"]
+mesh = SubResource("C265")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank32_L"]
+shape = SubResource("C266")
+
+[node name="Junction32" type="Area3D" parent="."]
+position = Vector3(-18.103604660213293,1.0583562982093486,-118.37231690756019)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 132
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction32"]
+rotation = Vector3(0,-2.8908650630261916,0)
+shape = SubResource("C267")
+
+[node name="Surface32" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.9495499819946226,-0.19182497929844616,-0.24810886524097137,-0.19801652914716983,0.9801986809746828,0,0.24319598244732546,0.049129656345660036,-0.9687321564750689,-18.103604660213293,2.4583562982093485,-118.37231690756019)
+mesh = SubResource("C268")
+material_override = ExtResource("watermat")
+
+[node name="Bed33" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8940946040049164,-0.17520629314102965,-0.4121863582568826,-0.19230202829813287,0.9813357885619091,0,0.4044932249144795,0.07926427272961938,-0.9110995588117299,-18.43971873970426,-0.7183502425113651,-118.25897786941454)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed33"]
+mesh = SubResource("C269")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed33"]
+shape = SubResource("C270")
+
+[node name="Bank33_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8940946040049164,-0.17520629314102965,-0.4121863582568826,-0.19230202829813287,0.9813357885619091,0,0.4044932249144795,0.07926427272961938,-0.9110995588117299,-16.0592612481252,2.937642391802907,-114.3968226729506)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank33_R"]
+mesh = SubResource("C271")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank33_R"]
+shape = SubResource("C272")
+
+[node name="Bank33_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8940946040049164,-0.17520629314102965,-0.4121863582568826,-0.19230202829813287,0.9813357885619091,0,0.4044932249144795,0.07926427272961938,-0.9110995588117299,-19.768938472437146,2.937642391802907,-122.59671870225617)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank33_L"]
+mesh = SubResource("C273")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank33_L"]
+shape = SubResource("C274")
+
+[node name="Junction33" type="Area3D" parent="."]
+position = Vector3(-18.492280627646572,0.9760504940572075,-118.23519858759565)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 133
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction33"]
+rotation = Vector3(0,-2.7167401983583828,0)
+shape = SubResource("C275")
+
+[node name="Surface33" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8940946040049164,-0.17520629314102965,-0.4121863582568826,-0.19230202829813287,0.9813357885619091,0,0.4044932249144795,0.07926427272961938,-0.9110995588117299,-18.492280627646572,2.3760504940572074,-118.23519858759565)
+mesh = SubResource("C276")
+material_override = ExtResource("watermat")
+
+[node name="Bed34" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.820244237233459,-0.15192679804821857,-0.5514686204310423,-0.18212370254847202,0.9832756261445901,0,0.5422456530534264,0.10043550699219936,-0.8341956369340967,-18.823671030052047,-0.8013013269337401,-118.05606589618584)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed34"]
+mesh = SubResource("C277")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed34"]
+shape = SubResource("C278")
+
+[node name="Bank34_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8202442372334593,-0.15192679804821702,-0.5514686204310423,-0.18212370254847013,0.9832756261445904,0,0.5422456530534265,0.10043550699219833,-0.8341956369340967,-15.886281843967707,2.848871794632488,-114.603492050959)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank34_R"]
+mesh = SubResource("C279")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank34_R"]
+shape = SubResource("C280")
+
+[node name="Bank34_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8202442372334593,-0.15192679804821702,-0.5514686204310423,-0.18212370254847013,0.9832756261445904,0,0.5422456530534265,0.10043550699219833,-0.8341956369340967,-20.849499427847086,2.848871794632488,-122.11125278336587)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank34_L"]
+mesh = SubResource("C281")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank34_L"]
+shape = SubResource("C282")
+
+[node name="Junction34" type="Area3D" parent="."]
+position = Vector3(-18.869249069466512,0.8936813609096368,-118.02593524408819)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 134
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction34"]
+rotation = Vector3(0,-2.5574689153186982,0)
+shape = SubResource("C283")
+
+[node name="Surface34" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.820244237233459,-0.15192679804821857,-0.5514686204310423,-0.18212370254847202,0.9832756261445901,0,0.5422456530534264,0.10043550699219936,-0.8341956369340967,-18.869249069466512,2.2936813609096367,-118.02593524408819)
+mesh = SubResource("C284")
+material_override = ExtResource("watermat")
+
+[node name="Bed35" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7386271492011427,-0.12701557959336252,-0.6620400116334019,-0.16947420827824794,0.9855346227953948,0,0.6524633531405835,0.11219870682009284,-0.7494684936649738,-19.196405311795115,-0.8844114880719824,-117.77818648908385)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed35"]
+mesh = SubResource("C285")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed35"]
+shape = SubResource("C286")
+
+[node name="Bank35_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7386271492011426,-0.12701557959336315,-0.6620400116334019,-0.1694742082782488,0.9855346227953946,0,0.6524633531405833,0.1121987068200934,-0.7494684936649738,-15.836178520664717,2.7589846435418344,-114.74217438805175)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank35_R"]
+mesh = SubResource("C287")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank35_R"]
+shape = SubResource("C288")
+
+[node name="Bank35_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7386271492011426,-0.12701557959336315,-0.6620400116334019,-0.1694742082782488,0.9855346227953946,0,0.6524633531405833,0.1121987068200934,-0.7494684936649738,-21.794538625365334,2.7589846435418344,-121.48739083103652)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank35_L"]
+mesh = SubResource("C289")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank35_L"]
+shape = SubResource("C290")
+
+[node name="Junction35" type="Area3D" parent="."]
+position = Vector3(-19.234509985673125,0.811248898766636,-117.74452687703783)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 135
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction35"]
+rotation = Vector3(0,-2.418055209393893,0)
+shape = SubResource("C291")
+
+[node name="Surface35" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.7386271492011427,-0.12701557959336252,-0.6620400116334019,-0.16947420827824794,0.9855346227953948,0,0.6524633531405835,0.11219870682009284,-0.7494684936649738,-19.234509985673125,2.2112488987666357,-117.74452687703783)
+mesh = SubResource("C292")
+material_override = ExtResource("watermat")
+
+[node name="Bed36" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6976744186046497,-0.1151104062396699,-0.7071067811865491,-0.16279069767441806,0.9866606249114617,0,0.6976744186046527,0.1151104062396704,-0.707106781186546,-19.787500832116635,-1.021139443404097,-117.21249916788337)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed36"]
+mesh = SubResource("C293")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed36"]
+shape = SubResource("C294")
+
+[node name="Bank36_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6976744186046497,-0.11511040623967003,-0.7071067811865491,-0.16279069767441826,0.9866606249114617,0,0.6976744186046527,0.11511040623967053,-0.707106781186546,-16.260189098058156,2.6188786818615175,-114.37584987126291)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank36_R"]
+mesh = SubResource("C295")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank36_R"]
+shape = SubResource("C296")
+
+[node name="Bank36_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6976744186046497,-0.11511040623967003,-0.7071067811865491,-0.16279069767441826,0.9866606249114617,0,0.6976744186046527,0.11511040623967053,-0.707106781186546,-22.6241501287371,2.6188786818615175,-120.73981090194184)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank36_L"]
+mesh = SubResource("C297")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank36_L"]
+shape = SubResource("C298")
+
+[node name="Water36" type="Area3D" parent="."]
+position = Vector3(-19.822033953988537,0.6748587440693412,-117.17796604601146)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 136
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water36"]
+rotation = Vector3(0,-2.3561944901923426,0)
+shape = SubResource("C299")
+
+[node name="Surface36" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.6976744186046497,-0.1151104062396699,-0.7071067811865491,-0.16279069767441806,0.9866606249114617,0,0.6976744186046527,0.1151104062396704,-0.707106781186546,-19.822033953988537,2.074858744069341,-117.17796604601146)
+mesh = SubResource("C300")
+material_override = ExtResource("watermat")
+
+[node name="Bed37" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.697674418604654,-0.11511040623967185,-0.7071067811865444,-0.16279069767441978,0.9866606249114613,0,0.6976744186046479,0.11511040623967084,-0.7071067811865506,-20.60314161534752,-1.2114556261579703,-116.39685838465249)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed37"]
+mesh = SubResource("C301")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed37"]
+shape = SubResource("C302")
+
+[node name="Bank37_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6976744186046541,-0.11511040623967146,-0.7071067811865444,-0.16279069767441923,0.9866606249114616,0,0.697674418604648,0.11511040623967045,-0.7071067811865506,-17.075829881289057,2.4285624991076444,-113.56020908803202)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank37_R"]
+mesh = SubResource("C303")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank37_R"]
+shape = SubResource("C304")
+
+[node name="Bank37_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6976744186046541,-0.11511040623967146,-0.7071067811865444,-0.16279069767441923,0.9866606249114616,0,0.697674418604648,0.11511040623967045,-0.7071067811865506,-23.439790911967957,2.4285624991076444,-119.92417011871098)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank37_L"]
+mesh = SubResource("C305")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank37_L"]
+shape = SubResource("C306")
+
+[node name="Water37" type="Area3D" parent="."]
+position = Vector3(-20.637674737219424,0.48454256131546813,-116.36232526278059)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 137
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water37"]
+rotation = Vector3(0,-2.3561944901923493,0)
+shape = SubResource("C307")
+
+[node name="Surface37" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.697674418604654,-0.11511040623967185,-0.7071067811865444,-0.16279069767441978,0.9866606249114613,0,0.6976744186046479,0.11511040623967084,-0.7071067811865506,-20.637674737219424,1.884542561315468,-116.36232526278059)
+mesh = SubResource("C308")
+material_override = ExtResource("watermat")
+
+[node name="Bed38" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6976744186046497,-0.1151104062396699,-0.7071067811865491,-0.16279069767441806,0.9866606249114617,0,0.6976744186046527,0.1151104062396704,-0.707106781186546,-21.418782398578408,-1.4017718089118438,-115.5812176014216)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed38"]
+mesh = SubResource("C309")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed38"]
+shape = SubResource("C310")
+
+[node name="Bank38_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6976744186046497,-0.11511040623967003,-0.7071067811865491,-0.16279069767441826,0.9866606249114617,0,0.6976744186046527,0.11511040623967053,-0.707106781186546,-17.89147066451993,2.2382463163537714,-112.74456830480115)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank38_R"]
+mesh = SubResource("C311")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank38_R"]
+shape = SubResource("C312")
+
+[node name="Bank38_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6976744186046497,-0.11511040623967003,-0.7071067811865491,-0.16279069767441826,0.9866606249114617,0,0.6976744186046527,0.11511040623967053,-0.707106781186546,-24.255431695198872,2.2382463163537714,-119.10852933548007)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank38_L"]
+mesh = SubResource("C313")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank38_L"]
+shape = SubResource("C314")
+
+[node name="Water38" type="Area3D" parent="."]
+position = Vector3(-21.45331552045031,0.2942263785615946,-115.5466844795497)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 138
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water38"]
+rotation = Vector3(0,-2.3561944901923426,0)
+shape = SubResource("C315")
+
+[node name="Surface38" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.6976744186046497,-0.1151104062396699,-0.7071067811865491,-0.16279069767441806,0.9866606249114617,0,0.6976744186046527,0.1151104062396704,-0.707106781186546,-21.45331552045031,1.6942263785615945,-115.5466844795497)
+mesh = SubResource("C316")
+material_override = ExtResource("watermat")
+
+[node name="Bed39" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6976744186046497,-0.1151104062396699,-0.7071067811865491,-0.16279069767441806,0.9866606249114617,0,0.6976744186046527,0.1151104062396704,-0.707106781186546,-22.23442318180929,-1.592087991665717,-114.76557681819071)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed39"]
+mesh = SubResource("C317")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed39"]
+shape = SubResource("C318")
+
+[node name="Bank39_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6976744186046497,-0.11511040623967003,-0.7071067811865491,-0.16279069767441826,0.9866606249114617,0,0.6976744186046527,0.11511040623967053,-0.707106781186546,-18.707111447750812,2.047930133599898,-111.92892752157026)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank39_R"]
+mesh = SubResource("C319")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank39_R"]
+shape = SubResource("C320")
+
+[node name="Bank39_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6976744186046497,-0.11511040623967003,-0.7071067811865491,-0.16279069767441826,0.9866606249114617,0,0.6976744186046527,0.11511040623967053,-0.707106781186546,-25.071072478429755,2.047930133599898,-118.29288855224918)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank39_L"]
+mesh = SubResource("C321")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank39_L"]
+shape = SubResource("C322")
+
+[node name="Water39" type="Area3D" parent="."]
+position = Vector3(-22.268956303681193,0.10391019580772154,-114.7310436963188)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 139
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water39"]
+rotation = Vector3(0,-2.3561944901923426,0)
+shape = SubResource("C323")
+
+[node name="Surface39" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.6976744186046497,-0.1151104062396699,-0.7071067811865491,-0.16279069767441806,0.9866606249114617,0,0.6976744186046527,0.1151104062396704,-0.707106781186546,-22.268956303681193,1.5039101958077215,-114.7310436963188)
+mesh = SubResource("C324")
+material_override = ExtResource("watermat")
+
+[node name="Bed40" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.697674418604648,-0.11511040623966987,-0.7071067811865506,-0.1627906976744184,0.9866606249114614,0,0.6976744186046541,0.11511040623967088,-0.7071067811865445,-23.050063965040177,-1.7824041744195904,-113.94993603495982)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed40"]
+mesh = SubResource("C325")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed40"]
+shape = SubResource("C326")
+
+[node name="Bank40_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.697674418604648,-0.11511040623966999,-0.7071067811865506,-0.16279069767441856,0.9866606249114614,0,0.6976744186046541,0.11511040623967099,-0.7071067811865445,-19.52275223098169,1.8576139508460252,-111.11328673833938)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank40_R"]
+mesh = SubResource("C327")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank40_R"]
+shape = SubResource("C328")
+
+[node name="Bank40_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.697674418604648,-0.11511040623966999,-0.7071067811865506,-0.16279069767441856,0.9866606249114614,0,0.6976744186046541,0.11511040623967099,-0.7071067811865445,-25.88671326166065,1.8576139508460252,-117.47724776901828)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank40_L"]
+mesh = SubResource("C329")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank40_L"]
+shape = SubResource("C330")
+
+[node name="Water40" type="Area3D" parent="."]
+position = Vector3(-23.08459708691208,-0.08640598694615198,-113.91540291308792)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 140
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water40"]
+rotation = Vector3(0,-2.3561944901923404,0)
+shape = SubResource("C331")
+
+[node name="Surface40" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.697674418604648,-0.11511040623966987,-0.7071067811865506,-0.1627906976744184,0.9866606249114614,0,0.6976744186046541,0.11511040623967088,-0.7071067811865445,-23.08459708691208,1.313594013053848,-113.91540291308792)
+mesh = SubResource("C332")
+material_override = ExtResource("watermat")
+
+[node name="Bed41" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6976744186046497,-0.1151104062396699,-0.7071067811865491,-0.16279069767441806,0.9866606249114617,0,0.6976744186046527,0.1151104062396704,-0.707106781186546,-23.865704748271064,-1.9727203571734635,-113.13429525172893)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed41"]
+mesh = SubResource("C333")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed41"]
+shape = SubResource("C334")
+
+[node name="Bank41_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6976744186046497,-0.11511040623967003,-0.7071067811865491,-0.16279069767441826,0.9866606249114617,0,0.6976744186046527,0.11511040623967053,-0.707106781186546,-20.338393014212585,1.6672977680921508,-110.29764595510848)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank41_R"]
+mesh = SubResource("C335")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank41_R"]
+shape = SubResource("C336")
+
+[node name="Bank41_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6976744186046497,-0.11511040623967003,-0.7071067811865491,-0.16279069767441826,0.9866606249114617,0,0.6976744186046527,0.11511040623967053,-0.707106781186546,-26.70235404489153,1.6672977680921508,-116.6616069857874)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank41_L"]
+mesh = SubResource("C337")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank41_L"]
+shape = SubResource("C338")
+
+[node name="Water41" type="Area3D" parent="."]
+position = Vector3(-23.900237870142966,-0.27672216970002506,-113.09976212985703)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 141
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water41"]
+rotation = Vector3(0,-2.3561944901923426,0)
+shape = SubResource("C339")
+
+[node name="Surface41" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.6976744186046497,-0.1151104062396699,-0.7071067811865491,-0.16279069767441806,0.9866606249114617,0,0.6976744186046527,0.1151104062396704,-0.707106781186546,-23.900237870142966,1.1232778302999749,-113.09976212985703)
+mesh = SubResource("C340")
+material_override = ExtResource("watermat")
+
+[node name="Bed42" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6976744186046556,-0.11511040623967189,-0.7071067811865429,-0.16279069767441948,0.9866606249114616,0,0.6976744186046465,0.11511040623967038,-0.7071067811865521,-24.681345531501947,-2.163036539927337,-112.31865446849804)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed42"]
+mesh = SubResource("C341")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed42"]
+shape = SubResource("C342")
+
+[node name="Bank42_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6976744186046556,-0.11511040623967149,-0.7071067811865429,-0.1627906976744189,0.9866606249114616,0,0.6976744186046465,0.11511040623966996,-0.7071067811865521,-21.15403379744349,1.4769815853382786,-109.48200517187756)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank42_R"]
+mesh = SubResource("C343")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank42_R"]
+shape = SubResource("C344")
+
+[node name="Bank42_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6976744186046556,-0.11511040623967149,-0.7071067811865429,-0.1627906976744189,0.9866606249114616,0,0.6976744186046465,0.11511040623966996,-0.7071067811865521,-27.517994828122376,1.4769815853382786,-115.84596620255654)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank42_L"]
+mesh = SubResource("C345")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank42_L"]
+shape = SubResource("C346")
+
+[node name="Water42" type="Area3D" parent="."]
+position = Vector3(-24.71587865337385,-0.4670383524538986,-112.28412134662614)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 142
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water42"]
+rotation = Vector3(0,-2.3561944901923515,0)
+shape = SubResource("C347")
+
+[node name="Surface42" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.6976744186046556,-0.11511040623967189,-0.7071067811865429,-0.16279069767441948,0.9866606249114616,0,0.6976744186046465,0.11511040623967038,-0.7071067811865521,-24.71587865337385,0.9329616475461014,-112.28412134662614)
+mesh = SubResource("C348")
+material_override = ExtResource("watermat")
+
+[node name="Bed43" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.697674418604648,-0.11511040623966987,-0.7071067811865506,-0.1627906976744184,0.9866606249114614,0,0.6976744186046541,0.11511040623967088,-0.7071067811865445,-25.496986314732833,-2.35335272268121,-111.50301368526716)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed43"]
+mesh = SubResource("C349")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed43"]
+shape = SubResource("C350")
+
+[node name="Bank43_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.697674418604648,-0.11511040623966999,-0.7071067811865506,-0.16279069767441856,0.9866606249114614,0,0.6976744186046541,0.11511040623967099,-0.7071067811865445,-21.969674580674347,1.2866654025844055,-108.66636438864673)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank43_R"]
+mesh = SubResource("C351")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank43_R"]
+shape = SubResource("C352")
+
+[node name="Bank43_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.697674418604648,-0.11511040623966999,-0.7071067811865506,-0.16279069767441856,0.9866606249114614,0,0.6976744186046541,0.11511040623967099,-0.7071067811865445,-28.333635611353305,1.2866654025844055,-115.03032541932562)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank43_L"]
+mesh = SubResource("C353")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank43_L"]
+shape = SubResource("C354")
+
+[node name="Junction43" type="Area3D" parent="."]
+position = Vector3(-25.531519436604736,-0.6573545352077717,-111.46848056339526)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 143
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction43"]
+rotation = Vector3(0,-2.3561944901923404,0)
+shape = SubResource("C355")
+
+[node name="Surface43" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.697674418604648,-0.11511040623966987,-0.7071067811865506,-0.1627906976744184,0.9866606249114614,0,0.6976744186046541,0.11511040623967088,-0.7071067811865445,-25.531519436604736,0.7426454647922281,-111.46848056339526)
+mesh = SubResource("C356")
+material_override = ExtResource("watermat")
+
+[node name="Bed44" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6724825894801825,-0.10517354666738561,-0.7326020010397402,-0.15451762960065843,0.987990031398391,0,0.723803474009777,0.11319992464135974,-0.6806572618231355,-26.034010428732895,-2.4779120625763302,-110.95876473149687)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed44"]
+mesh = SubResource("C357")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed44"]
+shape = SubResource("C358")
+
+[node name="Bank44_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6724825894801825,-0.10517354666738561,-0.7326020010397402,-0.15451762960065843,0.987990031398391,0,0.723803474009777,0.11319992464135974,-0.6806572618231355,-22.421780784051908,1.1581178432284962,-108.23540682721683)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank44_R"]
+mesh = SubResource("C359")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank44_R"]
+shape = SubResource("C360")
+
+[node name="Bank44_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6724825894801825,-0.10517354666738561,-0.7326020010397402,-0.15451762960065843,0.987990031398391,0,0.723803474009777,0.11319992464135974,-0.6806572618231355,-29.01519879340957,1.1581178432284962,-114.36132218362506)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank44_L"]
+mesh = SubResource("C361")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank44_L"]
+shape = SubResource("C362")
+
+[node name="Junction44" type="Area3D" parent="."]
+position = Vector3(-26.06556249273311,-0.7815150531568129,-110.92480475410446)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 144
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction44"]
+rotation = Vector3(0,-2.3194557488081404,0)
+shape = SubResource("C363")
+
+[node name="Surface44" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.6724825894801825,-0.10517354666738561,-0.7326020010397402,-0.15451762960065843,0.987990031398391,0,0.723803474009777,0.11319992464135974,-0.6806572618231355,-26.06556249273311,0.618484946843187,-110.92480475410446)
+mesh = SubResource("C364")
+material_override = ExtResource("watermat")
+
+[node name="Bed45" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6174402950442699,-0.08522508217922567,-0.7819873192214752,-0.13673328457564174,0.9906078986607955,0,0.7746428150733742,0.10692369465365316,-0.6232943386369002,-26.27972058318612,-2.5328352856896466,-110.67862523474409)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed45"]
+mesh = SubResource("C365")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed45"]
+shape = SubResource("C366")
+
+[node name="Bank45_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6174402950442697,-0.0852250821792264,-0.7819873192214752,-0.1367332845756429,0.9906078986607951,0,0.774642815073374,0.10692369465365407,-0.6232943386369002,-22.5051024001518,1.095341018327968,-108.194571794839)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank45_R"]
+mesh = SubResource("C367")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank45_R"]
+shape = SubResource("C368")
+
+[node name="Bank45_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6174402950442697,-0.0852250821792264,-0.7819873192214752,-0.1367332845756429,0.9906078986607951,0,0.774642815073374,0.10692369465365407,-0.6232943386369002,-29.542988273145077,1.095341018327968,-113.8042208425711)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank45_L"]
+mesh = SubResource("C369")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank45_L"]
+shape = SubResource("C370")
+
+[node name="Junction45" type="Area3D" parent="."]
+position = Vector3(-26.305288107839885,-0.8356529160914081,-110.646548126348)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 145
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction45"]
+rotation = Vector3(0,-2.2437447706345126,0)
+shape = SubResource("C371")
+
+[node name="Surface45" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.6174402950442699,-0.08522508217922567,-0.7819873192214752,-0.13673328457564174,0.9906078986607955,0,0.7746428150733742,0.10692369465365316,-0.6232943386369002,-26.305288107839885,0.564347083908592,-110.646548126348)
+mesh = SubResource("C372")
+material_override = ExtResource("watermat")
+
+[node name="Bed46" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.5565263026024686,-0.06581651196585686,-0.8282189693941295,-0.11744462759971423,0.9930794325973953,0,0.8224872241923217,0.09726986843151265,-0.560404620551728,-26.49982934151872,-2.579980628385994,-110.38438087430947)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed46"]
+mesh = SubResource("C373")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed46"]
+shape = SubResource("C374")
+
+[node name="Bank46_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.5565263026024688,-0.0658165119658562,-0.8282189693941295,-0.11744462759971304,0.9930794325973956,0,0.8224872241923219,0.09726986843151167,-0.560404620551728,-22.57539444334757,1.0407810738218188,-108.15436968712123)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank46_R"]
+mesh = SubResource("C375")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank46_R"]
+shape = SubResource("C376")
+
+[node name="Bank46_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.5565263026024688,-0.0658165119658562,-0.8282189693941295,-0.11744462759971304,0.9930794325973956,0,0.8224872241923219,0.09726986843151167,-0.560404620551728,-30.02936516789473,1.0407810738218188,-113.19801127208677)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank46_L"]
+mesh = SubResource("C377")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank46_L"]
+shape = SubResource("C378")
+
+[node name="Junction46" type="Area3D" parent="."]
+position = Vector3(-26.519574295108477,-0.8820567986067753,-110.35519991378001)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 146
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction46"]
+rotation = Vector3(0,-2.165670589059912,0)
+shape = SubResource("C379")
+
+[node name="Surface46" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.5565263026024686,-0.06581651196585686,-0.8282189693941295,-0.11744462759971423,0.9930794325973953,0,0.8224872241923217,0.09726986843151265,-0.560404620551728,-26.519574295108477,0.5179432013932249,-110.35519991378001)
+mesh = SubResource("C380")
+material_override = ExtResource("watermat")
+
+[node name="Bed47" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.4904846879097576,-0.04776280954722077,-0.8701399226275184,-0.09692035272297732,0.9952921406441698,0,0.8660434262518951,0.08433426821940328,-0.4928047433312471,-26.694092211674725,-2.6193143428961654,-110.07606039686635)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed47"]
+mesh = SubResource("C381")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed47"]
+shape = SubResource("C382")
+
+[node name="Bank47_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.4904846879097576,-0.04776280954722077,-0.8701399226275184,-0.09692035272297732,0.9952921406441698,0,0.8660434262518951,0.08433426821940328,-0.4928047433312471,-22.635174131209233,0.9948092351713247,-108.11144185653394)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank47_R"]
+mesh = SubResource("C383")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank47_R"]
+shape = SubResource("C384")
+
+[node name="Bank47_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.4904846879097576,-0.04776280954722077,-0.8701399226275184,-0.09692035272297732,0.9952921406441698,0,0.8660434262518951,0.08433426821940328,-0.4928047433312471,-30.466433434856896,0.9948092351713247,-112.54668454651518)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank47_L"]
+mesh = SubResource("C385")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank47_L"]
+shape = SubResource("C386")
+
+[node name="Junction47" type="Area3D" parent="."]
+position = Vector3(-26.708421054538892,-0.9207267007029145,-110.05076011640053)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 147
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction47"]
+rotation = Vector3(0,-2.086106473003383,0)
+shape = SubResource("C387")
+
+[node name="Surface47" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.4904846879097576,-0.04776280954722077,-0.8701399226275184,-0.09692035272297732,0.9952921406441698,0,0.8660434262518951,0.08433426821940328,-0.4928047433312471,-26.708421054538892,0.4792732992970856,-110.05076011640053)
+mesh = SubResource("C388")
+material_override = ExtResource("watermat")
+
+[node name="Bed48" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.4204209126481123,-0.031842287011238056,-0.9067702713289746,-0.07552276057994069,0.99714407817245,0,0.9041806063185127,0.06848179410258601,-0.42162504080518953,-26.86227570002775,-2.650805845831561,-109.7537732724403)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed48"]
+mesh = SubResource("C389")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed48"]
+shape = SubResource("C390")
+
+[node name="Bank48_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.4204209126481124,-0.031842287011237536,-0.9067702713289746,-0.07552276057993945,0.9971440781724501,0,0.9041806063185128,0.06848179410258488,-0.42162504080518953,-22.686282618013657,0.9577619196510891,-108.06190597112469)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank48_R"]
+mesh = SubResource("C391")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank48_R"]
+shape = SubResource("C392")
+
+[node name="Bank48_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.4204209126481124,-0.031842287011237536,-0.9067702713289746,-0.07552276057993945,0.9971440781724501,0,0.9041806063185128,0.06848179410258488,-0.42162504080518953,-30.847215059974424,0.9577619196510891,-111.8565313383714)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank48_L"]
+mesh = SubResource("C393")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank48_L"]
+shape = SubResource("C394")
+
+[node name="Junction48" type="Area3D" parent="."]
+position = Vector3(-26.871828386131124,-0.9516626223798261,-109.73322873420952)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 148
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction48"]
+rotation = Vector3(0,-2.0060330213984807,0)
+shape = SubResource("C395")
+
+[node name="Surface48" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.4204209126481123,-0.031842287011238056,-0.9067702713289746,-0.07552276057994069,0.99714407817245,0,0.9041806063185127,0.06848179410258601,-0.42162504080518953,-26.871828386131124,0.44833737762017417,-109.73322873420952)
+mesh = SubResource("C396")
+material_override = ExtResource("watermat")
+
+[node name="Bed49" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.34771888802237017,-0.01869195681666069,-0.9374124949363811,-0.05367844187816944,0.998558273150612,0,0.9360610021734794,0.050318842125312346,-0.3482209274830413,-27.004188702840175,-2.674432045582693,-109.4177014198446)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed49"]
+mesh = SubResource("C397")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed49"]
+shape = SubResource("C398")
+
+[node name="Bank49_R" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.3477188880223701,-0.018691956816661116,-0.9374124949363811,-0.05367844187817067,0.9985582731506117,0,0.9360610021734793,0.05031884212531349,-0.3482209274830413,-22.729756605176476,0.9298931349654724,-108.00166377254685)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank49_R"]
+mesh = SubResource("C399")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank49_R"]
+shape = SubResource("C400")
+
+[node name="Bank49_L" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.3477188880223701,-0.018691956816661116,-0.9374124949363811,-0.05367844187817067,0.9985582731506117,0,0.9360610021734793,0.05031884212531349,-0.3482209274830413,-31.166469059603905,0.9298931349654724,-111.13565211989423)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bank49_L"]
+mesh = SubResource("C401")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="Bank49_L"]
+shape = SubResource("C402")
+
+[node name="Junction49" type="Area3D" parent="."]
+position = Vector3(-27.009796289885173,-0.9748645636375097,-109.402605767207)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 149
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction49"]
+rotation = Vector3(0,-1.9264689053419712,0)
+shape = SubResource("C403")
+
+[node name="Surface49" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.34771888802237017,-0.01869195681666069,-0.9374124949363811,-0.05367844187816944,0.998558273150612,0,0.9360610021734794,0.050318842125312346,-0.3482209274830413,-27.009796289885173,0.42513543636249057,-109.402605767207)
+mesh = SubResource("C404")
+material_override = ExtResource("watermat")
+
+[node name="Bed50" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.273907860059215,-0.008724787482890151,-0.9617163626980461,-0.031836854560505924,0.9994930788613263,0,0.961228848344386,0.030618023967676457,-0.2740467801650662,-27.119707329556178,-2.6901804481343627,-109.06807662258328)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed50"]
+mesh = SubResource("C405")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed50"]
+shape = SubResource("C406")
+
+[node name="Junction50" type="Area3D" parent="."]
+position = Vector3(-27.122324765801046,-0.9903325244759649,-109.05889121539298)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 150
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction50"]
+rotation = Vector3(0,-1.848394723767332,0)
+shape = SubResource("C407")
+
+[node name="Surface50" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.273907860059215,-0.008724787482890151,-0.9617163626980461,-0.031836854560505924,0.9994930788613263,0,0.961228848344386,0.030618023967676457,-0.2740467801650662,-27.122324765801046,0.4096674755240348,-109.05889121539298)
+mesh = SubResource("C408")
+material_override = ExtResource("watermat")
+
+[node name="Bed51" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.20050787363264783,-0.002090574490657946,-0.9796898601647426,-0.010425829316079584,0.999945649564551,0,0.9796366135942377,0.010214079264771482,-0.2005187719152171,-27.20878664153154,-2.698050199764558,-108.70514930254686)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed51"]
+mesh = SubResource("C409")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed51"]
+shape = SubResource("C410")
+
+[node name="Junction51" type="Area3D" parent="."]
+position = Vector3(-27.209413813878736,-0.9980665048951929,-108.70208507876742)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 151
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction51"]
+rotation = Vector3(0,-1.772683745593743,0)
+shape = SubResource("C411")
+
+[node name="Surface51" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.20050787363264783,-0.002090574490657946,-0.9796898601647426,-0.010425829316079584,0.999945649564551,0,0.9796366135942377,0.010214079264771482,-0.2005187719152171,-27.209413813878736,0.401933495104807,-108.70208507876742)
+mesh = SubResource("C412")
+material_override = ExtResource("watermat")
+
+[node name="Bed52" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.16439898730535932,0,-0.9863939238321435,0,1,0,0.9863939238321435,0,-0.16439898730535932,-27.34077367083828,-2.6999999999999997,-107.9553579749703)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed52"]
+mesh = SubResource("C413")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed52"]
+shape = SubResource("C414")
+
+[node name="Junction52" type="Area3D" parent="."]
+position = Vector3(-27.34077367083828,-1,-107.9553579749703)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 152
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Junction52"]
+rotation = Vector3(0,-1.7359450042095257,0)
+shape = SubResource("C415")
+
+[node name="Surface52" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.16439898730535932,0,-0.9863939238321435,0,1,0,0.9863939238321435,0,-0.16439898730535932,-27.34077367083828,0.4,-107.9553579749703)
+mesh = SubResource("C416")
+material_override = ExtResource("watermat")
+
+[node name="Bed53" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.1643989873053563,0,-0.9863939238321439,0,1,0,0.9863939238321439,0,-0.1643989873053563,-27.529124050598774,-2.6999999999999997,-106.82525569640737)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed53"]
+mesh = SubResource("C417")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed53"]
+shape = SubResource("C418")
+
+[node name="Water53" type="Area3D" parent="."]
+position = Vector3(-27.529124050598774,-1,-106.82525569640737)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 153
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water53"]
+rotation = Vector3(0,-1.7359450042095226,0)
+shape = SubResource("C419")
+
+[node name="Surface53" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.1643989873053563,0,-0.9863939238321439,0,1,0,0.9863939238321439,0,-0.1643989873053563,-27.529124050598774,0.4,-106.82525569640737)
+mesh = SubResource("C420")
+material_override = ExtResource("watermat")
+
+[node name="Bed54" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.1643989873053563,0,-0.9863939238321439,0,1,0,0.9863939238321439,0,-0.1643989873053563,-27.71747443035926,-2.6999999999999997,-105.69515341784441)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed54"]
+mesh = SubResource("C421")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed54"]
+shape = SubResource("C422")
+
+[node name="Water54" type="Area3D" parent="."]
+position = Vector3(-27.71747443035926,-1,-105.69515341784441)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 154
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water54"]
+rotation = Vector3(0,-1.7359450042095226,0)
+shape = SubResource("C423")
+
+[node name="Surface54" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.1643989873053563,0,-0.9863939238321439,0,1,0,0.9863939238321439,0,-0.1643989873053563,-27.71747443035926,0.4,-105.69515341784441)
+mesh = SubResource("C424")
+material_override = ExtResource("watermat")
+
+[node name="Bed55" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.16439898730535932,0,-0.9863939238321435,0,1,0,0.9863939238321435,0,-0.16439898730535932,-27.905824810119753,-2.6999999999999997,-104.56505113928148)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bed55"]
+mesh = SubResource("C425")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="Bed55"]
+shape = SubResource("C426")
+
+[node name="Water55" type="Area3D" parent="."]
+position = Vector3(-27.905824810119753,-1,-104.56505113928148)
+script = ExtResource("water")
+explicit_surface = true
+shallow_wading_enabled = true
+water_priority = 155
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Water55"]
+rotation = Vector3(0,-1.7359450042095257,0)
+shape = SubResource("C427")
+
+[node name="Surface55" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.16439898730535932,0,-0.9863939238321435,0,1,0,0.9863939238321435,0,-0.16439898730535932,-27.905824810119753,0.4,-104.56505113928148)
+mesh = SubResource("C428")
+material_override = ExtResource("watermat")
+
+[node name="IntakeRamp" type="StaticBody3D" parent="."]
+transform = Transform3D(0.7340994395864077,-0.6790419816174271,0,0.6790419816174271,0.7340994395864077,0,0,0,1,4.169760495404357,4.966475140103398,-104)
+
+[node name="Mesh" type="MeshInstance3D" parent="IntakeRamp"]
+mesh = SubResource("C429")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="IntakeRamp"]
+shape = SubResource("C430")
+
+[node name="DiveBar" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8944271909999159,0,0.4472135954999579,0,1,0,-0.4472135954999579,0,-0.8944271909999159,-12,5.5,-116)
+
+[node name="Mesh" type="MeshInstance3D" parent="DiveBar"]
+mesh = SubResource("C431")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="DiveBar"]
+shape = SubResource("C432")
+
+[node name="DiveWarning" type="Label3D" parent="."]
+position = Vector3(-1,8,-110)
+text = "DIVE AHEAD\nFollow the lights beneath the root."
+billboard = 1
+pixel_size = 0.012
+font_size = 32
+
+[node name="DiveLight0" type="MeshInstance3D" parent="."]
+position = Vector3(-9,2.5,-114.5)
+mesh = SubResource("C433")
+material_override = SubResource("C4")
+
+[node name="DiveLight1" type="MeshInstance3D" parent="."]
+position = Vector3(-12,1.9,-116)
+mesh = SubResource("C434")
+material_override = SubResource("C4")
+
+[node name="DiveLight2" type="MeshInstance3D" parent="."]
+position = Vector3(-15,1.35,-117.5)
+mesh = SubResource("C435")
+material_override = SubResource("C4")
+
+[node name="RewardBed" type="StaticBody3D" parent="."]
+position = Vector3(-28,-2.8,-104.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="RewardBed"]
+mesh = SubResource("C436")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="RewardBed"]
+shape = SubResource("C437")
+
+[node name="RewardWater" type="Area3D" parent="."]
+position = Vector3(-28,-1,-104)
+script = ExtResource("poolwater")
+explicit_surface = true
+surface_height = 1.4
+shallow_wading_enabled = true
+water_priority = 500
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="RewardWater"]
+shape = SubResource("C438")
+
+[node name="Surface" type="MeshInstance3D" parent="RewardWater"]
+position = Vector3(0,1.4,0)
+mesh = SubResource("C439")
+material_override = ExtResource("watermat")
+
+[node name="RewardNorthBank" type="StaticBody3D" parent="."]
+position = Vector3(-28,0.8999999999999999,-98)
+
+[node name="Mesh" type="MeshInstance3D" parent="RewardNorthBank"]
+mesh = SubResource("C440")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="RewardNorthBank"]
+shape = SubResource("C441")
+
+[node name="RewardEastBank" type="StaticBody3D" parent="."]
+position = Vector3(-21,0.8999999999999999,-103.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="RewardEastBank"]
+mesh = SubResource("C442")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="RewardEastBank"]
+shape = SubResource("C443")
+
+[node name="RewardSouthWestBank" type="StaticBody3D" parent="."]
+position = Vector3(-33.5,0.8999999999999999,-110)
+
+[node name="Mesh" type="MeshInstance3D" parent="RewardSouthWestBank"]
+mesh = SubResource("C444")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="RewardSouthWestBank"]
+shape = SubResource("C445")
+
+[node name="RewardExitRamp" type="StaticBody3D" parent="."]
+transform = Transform3D(0.8700221858486122,0.4930125719808803,0,-0.4930125719808803,0.8700221858486122,0,0,0,1,-31.12325314299522,-0.917505546462153,-106)
+
+[node name="Mesh" type="MeshInstance3D" parent="RewardExitRamp"]
+mesh = SubResource("C446")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="RewardExitRamp"]
+shape = SubResource("C447")
+
+[node name="RewardWestBank" type="StaticBody3D" parent="."]
+position = Vector3(-37,-1.1,-105)
+
+[node name="Mesh" type="MeshInstance3D" parent="RewardWestBank"]
+mesh = SubResource("C448")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="RewardWestBank"]
+shape = SubResource("C449")
+
+[node name="ExitLaneEast" type="StaticBody3D" parent="."]
+position = Vector3(-35.5,0.8999999999999999,-110.25)
+
+[node name="Mesh" type="MeshInstance3D" parent="ExitLaneEast"]
+mesh = SubResource("C450")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="ExitLaneEast"]
+shape = SubResource("C451")
+
+[node name="ExitEnd" type="StaticBody3D" parent="."]
+position = Vector3(-38,0.8999999999999999,-112)
+
+[node name="Mesh" type="MeshInstance3D" parent="ExitEnd"]
+mesh = SubResource("C452")
+material_override = SubResource("C2")
+
+[node name="Collision" type="CollisionShape3D" parent="ExitEnd"]
+shape = SubResource("C453")
+
+[node name="Finish" type="Area3D" parent="." groups=["finish_volume"]]
+position = Vector3(-38,4,-108.5)
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Finish"]
+shape = SubResource("C454")
+
+[node name="FinishLabel" type="Label3D" parent="."]
+position = Vector3(-38,4,-110)
+text = "LIVING CASCADE\nReach the final bank."
+billboard = 1
+pixel_size = 0.012
+font_size = 32
+
+[node name="TidePearl" type="Area3D" parent="."]
+position = Vector3(-36,1.75,-102)
+collision_layer = 0
+collision_mask = 1
+metadata/collectible_id = "tide_pearl"
+
+[node name="Collision" type="CollisionShape3D" parent="TidePearl"]
+shape = SubResource("C455")
+
+[node name="Mesh" type="MeshInstance3D" parent="TidePearl"]
+mesh = SubResource("C456")
+material_override = SubResource("C4")
+
+[node name="PearlLabel" type="Label3D" parent="."]
+position = Vector3(-36,3.2,-102)
+text = "OPTIONAL / TIDE PEARL"
+billboard = 1
+pixel_size = 0.012
+font_size = 32

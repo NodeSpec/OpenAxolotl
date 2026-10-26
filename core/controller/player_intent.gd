@@ -10,7 +10,7 @@ extends RefCounted
 ## can mean DIVE in water and HOP on land because the Input System resolves it
 ## against the active grammar before the controller ever sees it.
 
-## Desired movement direction, already normalised by the Input System. Full 3D
+## Desired movement direction, capped to unit length by the Input System (analog magnitude retained). Full 3D
 ## in water; the vertical component is ignored by the land grammar.
 var direction: Vector3 = Vector3.ZERO
 

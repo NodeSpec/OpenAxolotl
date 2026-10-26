@@ -1,0 +1,72 @@
+{
+  "input": "C:\\Users\\ltben\\Documents\\OpenAxolotl-main\\asset_inbox\\Meshy_AI_Verdant_Cliff_Garden_0913173327_texture-optimized.glb",
+  "output": "C:\\Users\\ltben\\Documents\\Codex\\2026-09-11\\ana\\work\\cascade-assets\\cliff_garden\\cliff_garden.glb",
+  "budget": 146500,
+  "meshes": 1,
+  "diagonal": 2.86128894141126,
+  "weld": {
+    "distance": 2.8612889414112604e-05,
+    "merged": 1781535,
+    "openEdgesBefore": 2760112,
+    "openEdgesAfter": 42649,
+    "openEdgesAfterDecimation": 18383
+  },
+  "reduction": {
+    "ratio": 0.0645631564288157,
+    "trianglesBefore": 2269096,
+    "trianglesAfter": 146500,
+    "skipped": false
+  },
+  "deviation": [
+    {
+      "direction": "decimated_to_original",
+      "samples": 12000,
+      "mean": 0.0010515542967859254,
+      "p95": 0.003071194840595126,
+      "max": 0.011055275797843933,
+      "worstAt": [
+        0.3823,
+        0.3983,
+        0.6313
+      ],
+      "maxAsFractionOfDiagonal": 0.003863739742548053,
+      "p95AsFractionOfDiagonal": 0.0010733606089709817
+    },
+    {
+      "direction": "original_to_decimated",
+      "samples": 12000,
+      "mean": 0.0012782198249947651,
+      "p95": 0.0035591905703768107,
+      "max": 0.009440616704523563,
+      "worstAt": [
+        -0.1969,
+        0.248,
+        0.7193
+      ],
+      "maxAsFractionOfDiagonal": 0.003299427949372779,
+      "p95AsFractionOfDiagonal": 0.0012439116227881998
+    }
+  ],
+  "images": [],
+  "imagesRenamed": [
+    {
+      "image": "Image_0",
+      "to": "base_color",
+      "role": "base_color"
+    },
+    {
+      "image": "Image_2",
+      "to": "normal",
+      "role": "normal"
+    },
+    {
+      "image": "Image_1",
+      "to": "metallic_roughness",
+      "role": "metallic_roughness"
+    }
+  ],
+  "blender": "4.5.3 LTS",
+  "asset": "cliff_garden",
+  "final_bytes": 15070912,
+  "final_sha256": "0c40b85075fd2d7a800128d1d85973213d12ccbede0e2be3ed5bdcc3a4f3af8d"
+}

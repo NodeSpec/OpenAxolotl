@@ -1,0 +1,594 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://core/controller/water_volume.gd" id="water"]
+[ext_resource type="Material" path="res://core/rendering/water_surface.tres" id="watermat"]
+
+[sub_resource type="StandardMaterial3D" id="R1"]
+albedo_color = Color(0.40,0.43,0.32,1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="R2"]
+albedo_color = Color(0.63,0.63,0.44,1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="R3"]
+albedo_color = Color(0.30,0.39,0.32,1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="R4"]
+albedo_color = Color(0.98,0.73,0.25,1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="R5"]
+albedo_color = Color(0.3,0.75,0.65,1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="R6"]
+size = Vector3(18,2.5999999999999996,4.5)
+
+[sub_resource type="BoxShape3D" id="R7"]
+size = Vector3(18,2.5999999999999996,4.5)
+
+[sub_resource type="BoxMesh" id="R8"]
+size = Vector3(10,2.5999999999999996,12)
+
+[sub_resource type="BoxShape3D" id="R9"]
+size = Vector3(10,2.5999999999999996,12)
+
+[sub_resource type="BoxMesh" id="R10"]
+size = Vector3(8,2.5999999999999996,6)
+
+[sub_resource type="BoxShape3D" id="R11"]
+size = Vector3(8,2.5999999999999996,6)
+
+[sub_resource type="BoxMesh" id="R12"]
+size = Vector3(7,2.8,16)
+
+[sub_resource type="BoxShape3D" id="R13"]
+size = Vector3(7,2.8,16)
+
+[sub_resource type="BoxMesh" id="R14"]
+size = Vector3(2.009975124224178,0.5,16)
+
+[sub_resource type="BoxShape3D" id="R15"]
+size = Vector3(2.009975124224178,0.5,16)
+
+[sub_resource type="BoxMesh" id="R16"]
+size = Vector3(8,1,6)
+
+[sub_resource type="BoxShape3D" id="R17"]
+size = Vector3(8,1,6)
+
+[sub_resource type="BoxShape3D" id="R18"]
+size = Vector3(8,2,6)
+
+[sub_resource type="PlaneMesh" id="R19"]
+size = Vector2(8,6)
+
+[sub_resource type="BoxMesh" id="R20"]
+size = Vector3(4.770744176750625,0.5,4)
+
+[sub_resource type="BoxShape3D" id="R21"]
+size = Vector3(4.770744176750625,0.5,4)
+
+[sub_resource type="BoxMesh" id="R22"]
+size = Vector3(4.770744176750625,0.5,4)
+
+[sub_resource type="BoxShape3D" id="R23"]
+size = Vector3(4.770744176750625,0.5,4)
+
+[sub_resource type="BoxMesh" id="R24"]
+size = Vector3(4,0.019999999999999574,4)
+
+[sub_resource type="BoxShape3D" id="R25"]
+size = Vector3(4,0.019999999999999574,4)
+
+[sub_resource type="BoxMesh" id="R26"]
+size = Vector3(13.5,16.2,1)
+
+[sub_resource type="BoxShape3D" id="R27"]
+size = Vector3(13.5,16.2,1)
+
+[sub_resource type="BoxMesh" id="R28"]
+size = Vector3(12,16.2,1)
+
+[sub_resource type="BoxShape3D" id="R29"]
+size = Vector3(12,16.2,1)
+
+[sub_resource type="BoxMesh" id="R30"]
+size = Vector3(2,16.2,17.5)
+
+[sub_resource type="BoxShape3D" id="R31"]
+size = Vector3(2,16.2,17.5)
+
+[sub_resource type="BoxMesh" id="R32"]
+size = Vector3(29.5,16.2,1)
+
+[sub_resource type="BoxShape3D" id="R33"]
+size = Vector3(29.5,16.2,1)
+
+[sub_resource type="BoxMesh" id="R34"]
+size = Vector3(1,16.2,8)
+
+[sub_resource type="BoxShape3D" id="R35"]
+size = Vector3(1,16.2,8)
+
+[sub_resource type="BoxMesh" id="R36"]
+size = Vector3(1,16.2,5)
+
+[sub_resource type="BoxShape3D" id="R37"]
+size = Vector3(1,16.2,5)
+
+[sub_resource type="BoxMesh" id="R38"]
+size = Vector3(6,11.2,4)
+
+[sub_resource type="BoxShape3D" id="R39"]
+size = Vector3(6,11.2,4)
+
+[sub_resource type="BoxMesh" id="R40"]
+size = Vector3(4.5,16.2,1)
+
+[sub_resource type="BoxShape3D" id="R41"]
+size = Vector3(4.5,16.2,1)
+
+[sub_resource type="BoxMesh" id="R42"]
+size = Vector3(4.5,16.2,1)
+
+[sub_resource type="BoxShape3D" id="R43"]
+size = Vector3(4.5,16.2,1)
+
+[sub_resource type="BoxMesh" id="R44"]
+size = Vector3(1,16.2,4)
+
+[sub_resource type="BoxShape3D" id="R45"]
+size = Vector3(1,16.2,4)
+
+[sub_resource type="BoxMesh" id="R46"]
+size = Vector3(1,16.2,6)
+
+[sub_resource type="BoxShape3D" id="R47"]
+size = Vector3(1,16.2,6)
+
+[sub_resource type="SphereShape3D" id="R48"]
+radius = 0.65
+
+[sub_resource type="SphereMesh" id="R49"]
+radius = 0.22
+height = 0.44
+
+[sub_resource type="SphereShape3D" id="R50"]
+radius = 0.65
+
+[sub_resource type="SphereMesh" id="R51"]
+radius = 0.22
+height = 0.44
+
+[sub_resource type="SphereShape3D" id="R52"]
+radius = 0.65
+
+[sub_resource type="SphereMesh" id="R53"]
+radius = 0.22
+height = 0.44
+
+[sub_resource type="SphereShape3D" id="R54"]
+radius = 0.65
+
+[sub_resource type="SphereMesh" id="R55"]
+radius = 0.22
+height = 0.44
+
+[sub_resource type="SphereShape3D" id="R56"]
+radius = 0.65
+
+[sub_resource type="SphereMesh" id="R57"]
+radius = 0.22
+height = 0.44
+
+[sub_resource type="SphereShape3D" id="R58"]
+radius = 0.65
+
+[sub_resource type="SphereMesh" id="R59"]
+radius = 0.22
+height = 0.44
+
+[sub_resource type="SphereShape3D" id="R60"]
+radius = 0.65
+
+[sub_resource type="SphereMesh" id="R61"]
+radius = 0.22
+height = 0.44
+
+[sub_resource type="SphereMesh" id="R62"]
+radius = 0.65
+height = 1.3
+
+[sub_resource type="SphereMesh" id="R63"]
+radius = 0.65
+height = 1.3
+
+[sub_resource type="SphereMesh" id="R64"]
+radius = 0.65
+height = 1.3
+
+[sub_resource type="SphereMesh" id="R65"]
+radius = 0.65
+height = 1.3
+
+[sub_resource type="SphereMesh" id="R66"]
+radius = 0.65
+height = 1.3
+
+[sub_resource type="SphereMesh" id="R67"]
+radius = 0.65
+height = 1.3
+
+[node name="RestorationGarden" type="Node3D"]
+
+[node name="NorthBank" type="StaticBody3D" parent="."]
+position = Vector3(27,5.5,-95.75)
+rotation = Vector3(0,0,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="NorthBank"]
+mesh = SubResource("R6")
+material_override = SubResource("R2")
+
+[node name="Collision" type="CollisionShape3D" parent="NorthBank"]
+shape = SubResource("R7")
+
+[node name="EastBank" type="StaticBody3D" parent="."]
+position = Vector3(31,5.5,-104)
+rotation = Vector3(0,0,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="EastBank"]
+mesh = SubResource("R8")
+material_override = SubResource("R2")
+
+[node name="Collision" type="CollisionShape3D" parent="EastBank"]
+shape = SubResource("R9")
+
+[node name="SouthBank" type="StaticBody3D" parent="."]
+position = Vector3(22,5.5,-107)
+rotation = Vector3(0,0,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="SouthBank"]
+mesh = SubResource("R10")
+material_override = SubResource("R2")
+
+[node name="Collision" type="CollisionShape3D" parent="SouthBank"]
+shape = SubResource("R11")
+
+[node name="WestBank" type="StaticBody3D" parent="."]
+position = Vector3(12.5,5.6,-102)
+rotation = Vector3(0,0,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="WestBank"]
+mesh = SubResource("R12")
+material_override = SubResource("R2")
+
+[node name="Collision" type="CollisionShape3D" parent="WestBank"]
+shape = SubResource("R13")
+
+[node name="WestBankTransition" type="StaticBody3D" parent="."]
+position = Vector3(16.97512407024475,6.651240702447503,-102)
+rotation = Vector3(0,0,-0.09966865249116212)
+
+[node name="Mesh" type="MeshInstance3D" parent="WestBankTransition"]
+mesh = SubResource("R14")
+material_override = SubResource("R2")
+
+[node name="Collision" type="CollisionShape3D" parent="WestBankTransition"]
+shape = SubResource("R15")
+
+[node name="BasinBed" type="StaticBody3D" parent="."]
+position = Vector3(22,3.7,-101)
+rotation = Vector3(0,0,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasinBed"]
+mesh = SubResource("R16")
+material_override = SubResource("R1")
+
+[node name="Collision" type="CollisionShape3D" parent="BasinBed"]
+shape = SubResource("R17")
+
+[node name="Basin" type="Area3D" parent="."]
+position = Vector3(22,5.2,-101)
+script = ExtResource("water")
+explicit_surface = true
+surface_height = 1
+shallow_wading_enabled = true
+water_priority = 30
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="Basin"]
+shape = SubResource("R18")
+
+[node name="Surface" type="MeshInstance3D" parent="Basin"]
+position = Vector3(0,1,0)
+mesh = SubResource("R19")
+material_override = ExtResource("watermat")
+
+[node name="BasinWestExit" type="StaticBody3D" parent="."]
+position = Vector3(19.863752912351146,5.290389095924841,-101)
+rotation = Vector3(0,0,-0.5763752205911836)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasinWestExit"]
+mesh = SubResource("R20")
+material_override = SubResource("R2")
+
+[node name="Collision" type="CollisionShape3D" parent="BasinWestExit"]
+shape = SubResource("R21")
+
+[node name="BasinEastExit" type="StaticBody3D" parent="."]
+position = Vector3(24.136247087648854,5.290389095924841,-101)
+rotation = Vector3(0,0,0.5763752205911836)
+
+[node name="Mesh" type="MeshInstance3D" parent="BasinEastExit"]
+mesh = SubResource("R22")
+material_override = SubResource("R2")
+
+[node name="Collision" type="CollisionShape3D" parent="BasinEastExit"]
+shape = SubResource("R23")
+
+[node name="CheckpointPad" type="StaticBody3D" parent="."]
+position = Vector3(24,6.79,-94)
+rotation = Vector3(0,0,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="CheckpointPad"]
+mesh = SubResource("R24")
+material_override = SubResource("R5")
+
+[node name="Collision" type="CollisionShape3D" parent="CheckpointPad"]
+shape = SubResource("R25")
+
+[node name="NorthRidgeWest" type="StaticBody3D" parent="."]
+position = Vector3(15.25,3.9,-94)
+rotation = Vector3(0,0,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="NorthRidgeWest"]
+mesh = SubResource("R26")
+material_override = SubResource("R3")
+
+[node name="Collision" type="CollisionShape3D" parent="NorthRidgeWest"]
+shape = SubResource("R27")
+
+[node name="NorthRidgeEast" type="StaticBody3D" parent="."]
+position = Vector3(32,3.9,-94)
+rotation = Vector3(0,0,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="NorthRidgeEast"]
+mesh = SubResource("R28")
+material_override = SubResource("R3")
+
+[node name="Collision" type="CollisionShape3D" parent="NorthRidgeEast"]
+shape = SubResource("R29")
+
+[node name="EastRidge" type="StaticBody3D" parent="."]
+position = Vector3(37,3.9,-102.25)
+rotation = Vector3(0,0,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="EastRidge"]
+mesh = SubResource("R30")
+material_override = SubResource("R3")
+
+[node name="Collision" type="CollisionShape3D" parent="EastRidge"]
+shape = SubResource("R31")
+
+[node name="SouthRidge" type="StaticBody3D" parent="."]
+position = Vector3(23.25,3.9,-110.5)
+rotation = Vector3(0,0,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="SouthRidge"]
+mesh = SubResource("R32")
+material_override = SubResource("R3")
+
+[node name="Collision" type="CollisionShape3D" parent="SouthRidge"]
+shape = SubResource("R33")
+
+[node name="WestRidgeNorth" type="StaticBody3D" parent="."]
+position = Vector3(9,3.9,-98)
+rotation = Vector3(0,0,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="WestRidgeNorth"]
+mesh = SubResource("R34")
+material_override = SubResource("R3")
+
+[node name="Collision" type="CollisionShape3D" parent="WestRidgeNorth"]
+shape = SubResource("R35")
+
+[node name="WestRidgeSouth" type="StaticBody3D" parent="."]
+position = Vector3(9,3.9,-108.5)
+rotation = Vector3(0,0,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="WestRidgeSouth"]
+mesh = SubResource("R36")
+material_override = SubResource("R3")
+
+[node name="Collision" type="CollisionShape3D" parent="WestRidgeSouth"]
+shape = SubResource("R37")
+
+[node name="GateFloor" type="StaticBody3D" parent="."]
+position = Vector3(9,1.4,-104)
+rotation = Vector3(0,0,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="GateFloor"]
+mesh = SubResource("R38")
+material_override = SubResource("R2")
+
+[node name="Collision" type="CollisionShape3D" parent="GateFloor"]
+shape = SubResource("R39")
+
+[node name="GateNorthSide" type="StaticBody3D" parent="."]
+position = Vector3(7.25,3.9,-101.5)
+rotation = Vector3(0,0,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="GateNorthSide"]
+mesh = SubResource("R40")
+material_override = SubResource("R3")
+
+[node name="Collision" type="CollisionShape3D" parent="GateNorthSide"]
+shape = SubResource("R41")
+
+[node name="GateSouthSide" type="StaticBody3D" parent="."]
+position = Vector3(7.25,3.9,-106.5)
+rotation = Vector3(0,0,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="GateSouthSide"]
+mesh = SubResource("R42")
+material_override = SubResource("R3")
+
+[node name="Collision" type="CollisionShape3D" parent="GateSouthSide"]
+shape = SubResource("R43")
+
+[node name="Gate" type="StaticBody3D" parent="."]
+position = Vector3(9,3.9,-104)
+rotation = Vector3(0,0,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Gate"]
+mesh = SubResource("R44")
+material_override = SubResource("R4")
+
+[node name="Collision" type="CollisionShape3D" parent="Gate"]
+shape = SubResource("R45")
+
+[node name="Seed1" type="Area3D" parent="."]
+position = Vector3(27,7.55,-95)
+collision_layer = 0
+collision_mask = 1
+metadata/collectible_id = "kelp_seed"
+
+[node name="Collision" type="CollisionShape3D" parent="Seed1"]
+shape = SubResource("R48")
+
+[node name="Mesh" type="MeshInstance3D" parent="Seed1"]
+mesh = SubResource("R49")
+material_override = SubResource("R4")
+
+[node name="Seed2" type="Area3D" parent="."]
+position = Vector3(31,7.55,-99)
+collision_layer = 0
+collision_mask = 1
+metadata/collectible_id = "kelp_seed"
+
+[node name="Collision" type="CollisionShape3D" parent="Seed2"]
+shape = SubResource("R50")
+
+[node name="Mesh" type="MeshInstance3D" parent="Seed2"]
+mesh = SubResource("R51")
+material_override = SubResource("R4")
+
+[node name="Seed3" type="Area3D" parent="."]
+position = Vector3(29,7.55,-105)
+collision_layer = 0
+collision_mask = 1
+metadata/collectible_id = "kelp_seed"
+
+[node name="Collision" type="CollisionShape3D" parent="Seed3"]
+shape = SubResource("R52")
+
+[node name="Mesh" type="MeshInstance3D" parent="Seed3"]
+mesh = SubResource("R53")
+material_override = SubResource("R4")
+
+[node name="Seed4" type="Area3D" parent="."]
+position = Vector3(21,7.55,-107)
+collision_layer = 0
+collision_mask = 1
+metadata/collectible_id = "kelp_seed"
+
+[node name="Collision" type="CollisionShape3D" parent="Seed4"]
+shape = SubResource("R54")
+
+[node name="Mesh" type="MeshInstance3D" parent="Seed4"]
+mesh = SubResource("R55")
+material_override = SubResource("R4")
+
+[node name="Seed5" type="Area3D" parent="."]
+position = Vector3(13,7.75,-103)
+collision_layer = 0
+collision_mask = 1
+metadata/collectible_id = "kelp_seed"
+
+[node name="Collision" type="CollisionShape3D" parent="Seed5"]
+shape = SubResource("R56")
+
+[node name="Mesh" type="MeshInstance3D" parent="Seed5"]
+mesh = SubResource("R57")
+material_override = SubResource("R4")
+
+[node name="Seed6" type="Area3D" parent="."]
+position = Vector3(16,7.75,-97)
+collision_layer = 0
+collision_mask = 1
+metadata/collectible_id = "kelp_seed"
+
+[node name="Collision" type="CollisionShape3D" parent="Seed6"]
+shape = SubResource("R58")
+
+[node name="Mesh" type="MeshInstance3D" parent="Seed6"]
+mesh = SubResource("R59")
+material_override = SubResource("R4")
+
+[node name="Seed7" type="Area3D" parent="."]
+position = Vector3(12,7.75,-101)
+collision_layer = 0
+collision_mask = 1
+metadata/collectible_id = "kelp_seed"
+
+[node name="Collision" type="CollisionShape3D" parent="Seed7"]
+shape = SubResource("R60")
+
+[node name="Mesh" type="MeshInstance3D" parent="Seed7"]
+mesh = SubResource("R61")
+material_override = SubResource("R4")
+
+[node name="Status" type="Label3D" parent="."]
+position = Vector3(22,10.5,-101)
+text = "RESTORATION GARDEN\nGather kelp seeds to restore the crown."
+billboard = 1
+pixel_size = 0.012
+font_size = 32
+
+[node name="CheckpointLabel" type="Label3D" parent="."]
+position = Vector3(24,8.6,-94)
+text = "CHECKPOINT / GARDEN"
+billboard = 1
+pixel_size = 0.012
+font_size = 32
+
+[node name="ExitLabel" type="Label3D" parent="."]
+position = Vector3(8,9.6,-104)
+text = "JOIN 56 / WATERFALL RUN\nSwim downstream; dive beneath the root."
+billboard = 1
+pixel_size = 0.012
+font_size = 32
+
+[node name="Crown0" type="MeshInstance3D" parent="."]
+position = Vector3(23.7,11.8,-101)
+mesh = SubResource("R62")
+material_override = SubResource("R1")
+
+[node name="Crown1" type="MeshInstance3D" parent="."]
+position = Vector3(22.85,12.059807621135333,-99.52775681356646)
+mesh = SubResource("R63")
+material_override = SubResource("R1")
+
+[node name="Crown2" type="MeshInstance3D" parent="."]
+position = Vector3(21.15,12.059807621135333,-99.52775681356646)
+mesh = SubResource("R64")
+material_override = SubResource("R1")
+
+[node name="Crown3" type="MeshInstance3D" parent="."]
+position = Vector3(20.3,11.8,-101)
+mesh = SubResource("R65")
+material_override = SubResource("R1")
+
+[node name="Crown4" type="MeshInstance3D" parent="."]
+position = Vector3(21.15,11.540192378864669,-102.47224318643354)
+mesh = SubResource("R66")
+material_override = SubResource("R1")
+
+[node name="Crown5" type="MeshInstance3D" parent="."]
+position = Vector3(22.85,11.540192378864669,-102.47224318643354)
+mesh = SubResource("R67")
+material_override = SubResource("R1")

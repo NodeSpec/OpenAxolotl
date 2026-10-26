@@ -1,0 +1,121 @@
+[gd_scene format=3]
+
+
+
+[sub_resource type="StandardMaterial3D" id="C1"]
+albedo_color = Color(0.28,0.34,0.29,1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="C2"]
+size = Vector3(82,2,133)
+
+[sub_resource type="BoxShape3D" id="C3"]
+size = Vector3(82,2,133)
+
+[sub_resource type="BoxMesh" id="C4"]
+size = Vector3(1,22.2,135)
+
+[sub_resource type="BoxShape3D" id="C5"]
+size = Vector3(1,22.2,135)
+
+[sub_resource type="BoxMesh" id="C6"]
+size = Vector3(1,22.2,135)
+
+[sub_resource type="BoxShape3D" id="C7"]
+size = Vector3(1,22.2,135)
+
+[sub_resource type="BoxMesh" id="C8"]
+size = Vector3(84,22.2,1)
+
+[sub_resource type="BoxShape3D" id="C9"]
+size = Vector3(84,22.2,1)
+
+[sub_resource type="BoxMesh" id="C10"]
+size = Vector3(84,22.2,1)
+
+[sub_resource type="BoxShape3D" id="C11"]
+size = Vector3(84,22.2,1)
+
+[sub_resource type="BoxMesh" id="C12"]
+size = Vector3(8,9,1)
+
+[sub_resource type="BoxShape3D" id="C13"]
+size = Vector3(8,9,1)
+
+[sub_resource type="BoxMesh" id="C14"]
+size = Vector3(2,9.2,15)
+
+[sub_resource type="BoxShape3D" id="C15"]
+size = Vector3(2,9.2,15)
+
+[node name="Containment" type="Node3D"]
+
+[node name="ContinuousFoundation" type="StaticBody3D" parent="."]
+position = Vector3(-1,-5.2,-60.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="ContinuousFoundation"]
+mesh = SubResource("C2")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="ContinuousFoundation"]
+shape = SubResource("C3")
+
+[node name="OuterWest" type="StaticBody3D" parent="."]
+position = Vector3(-42.5,4.9,-60.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="OuterWest"]
+mesh = SubResource("C4")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="OuterWest"]
+shape = SubResource("C5")
+
+[node name="OuterEast" type="StaticBody3D" parent="."]
+position = Vector3(40.5,4.9,-60.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="OuterEast"]
+mesh = SubResource("C6")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="OuterEast"]
+shape = SubResource("C7")
+
+[node name="OuterNorth" type="StaticBody3D" parent="."]
+position = Vector3(-1,4.9,6.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="OuterNorth"]
+mesh = SubResource("C8")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="OuterNorth"]
+shape = SubResource("C9")
+
+[node name="OuterSouth" type="StaticBody3D" parent="."]
+position = Vector3(-1,4.9,-127.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="OuterSouth"]
+mesh = SubResource("C10")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="OuterSouth"]
+shape = SubResource("C11")
+
+[node name="InletEnd" type="StaticBody3D" parent="."]
+position = Vector3(0,0.2999999999999998,4)
+
+[node name="Mesh" type="MeshInstance3D" parent="InletEnd"]
+mesh = SubResource("C12")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="InletEnd"]
+shape = SubResource("C13")
+
+[node name="FinishLaneWest" type="StaticBody3D" parent="."]
+position = Vector3(-41,0.3999999999999999,-105.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="FinishLaneWest"]
+mesh = SubResource("C14")
+material_override = SubResource("C1")
+
+[node name="Collision" type="CollisionShape3D" parent="FinishLaneWest"]
+shape = SubResource("C15")

@@ -1,0 +1,39 @@
+{
+  "triangles": 19918,
+  "vertices": 10743,
+  "materials": 7,
+  "bone_names": [
+    "spine",
+    "leg_br",
+    "root",
+    "leg_bl",
+    "leg_fl",
+    "leg_fr",
+    "head"
+  ],
+  "hero_sha256": "ed167e1f2a1fd1c54bcb91524211f9af57cfe985a7b92cd4083757c58060dd5d",
+  "profile_revision": {
+    "canvas_depth_scale": 0.4,
+    "depth_reduction_percent": 60,
+    "saddle_pad_thickness": 0.024,
+    "original_body_z_bounds": [
+      0.6644999980926514,
+      1.0694999694824219
+    ],
+    "fitted_body_z_bounds": [
+      0.5598546266555786,
+      0.8517829179763794
+    ],
+    "footprint_changed": false,
+    "hardware_proportions_preserved": true
+  },
+  "date": "2026-09-19",
+  "type": "Custom accessory fitted to existing hero",
+  "source": "Four user-provided hero backpack reference images, September 15, 2026",
+  "materials_description": "Olive canvas and saddle leather with baked 1024px colour/normal/roughness maps; metal, parchment, stitch and ink surfaces",
+  "original_character_unchanged": true,
+  "glb_sha256": "fe50b9ee6d32b7d47387514b136b2b7f47ced973ddb25dbe63fd5c3000906e09",
+  "runtime": "core/rendering/hero_backpack.gd; one mesh bound to the existing hero skeleton; flexible harness weights transferred from torso",
+  "texture_source": "Procedural Blender material bakes created for this accessory; no external image downloads",
+  "compass": "Geometry follows the pack; no independent pendulum simulation or compass gameplay"
+}

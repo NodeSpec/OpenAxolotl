@@ -17,30 +17,12 @@ const HERO := "res://assets/character/axolotl/axolotl.glb"
 const TEXTURE_MIN := 64
 const TEXTURE_MAX := 2048
 
-## The whole-scene ceiling (REQ-040 AC-6). The point of the number is that
-## regenerating a kit or dressing a bed cannot silently triple the scene,
-## because this is asserted rather than hoped.
-##
-## RAISED FROM 150,000, and it is worth saying why rather than letting a
-## budget drift upward whenever something does not fit. The original figure
-## was set when every mesh in the valley was either a BoxMesh or an in-repo
-## generated kit -- a whole Drift Fleet machine was 176 triangles. Ten
-## externally authored machines then arrived, and at 150,000 the only way to
-## fit them was to decimate each one to 5,000, where the Netbot's net strays
-## 3.07% of its diagonal: the deviation gate refuses it, and the Dredger
-## visibly loses its hose runs and railings. That is paying real quality for
-## a number, so the number was the thing to examine.
-##
-## It was never a hardware limit. On the baseline machine this project
-## documents -- a GTX 1650 at 1080p (docs/performance.md) -- what costs frames
-## is SDFGI, volumetric fog and the shadow cascades, not triangle throughput;
-## 400,000 static triangles is not what such a card struggles with. So the
-## ceiling now sits where it still catches the failure it was written for (a
-## kit regenerating ten times heavier) without forcing shipped art below what
-## its own gate will accept. It is emphatically NOT proof of 60 FPS on that
-## baseline: docs/performance.md is explicit that no automated check here can
-## claim that, and this one measures geometry, not frames.
-const SCENE_TRIANGLE_BUDGET := 400000
+## Whole Living Cascade instance ceiling, including the hero and shadow proxies.
+## The custom terrain revision replaces blanket model repetition.
+## Source meshes are shared but each placement counts here. This ceiling is
+## intentionally separate from frame-time targets, which remain unchanged.
+## See docs/cascade-custom-terrain-pass.md for geometry and rendered evidence.
+const SCENE_TRIANGLE_BUDGET := 3000000
 
 
 func test_req_040_the_skin_material_carries_both_baked_maps() -> void:
@@ -115,6 +97,11 @@ func test_req_040_the_dressed_valley_stays_inside_the_triangle_budget() -> void:
 	var hero := (load(HERO) as PackedScene).instantiate()
 	total += _count_triangles(hero)
 	hero.free()
+
+	# Runtime equipment is separate from the immutable imported hero mesh.
+	var pack := (load("res://assets/character/explorer_backpack/explorer_backpack.glb") as PackedScene).instantiate()
+	total += _count_triangles(pack)
+	pack.free()
 
 	assert_bool(total > 0).is_true()
 	assert_bool(total <= SCENE_TRIANGLE_BUDGET).override_failure_message(

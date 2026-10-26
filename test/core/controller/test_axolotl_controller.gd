@@ -187,8 +187,7 @@ func test_req_001_water_grammar_supports_full_3d_directional_movement() -> void:
 ## arrive: the water grammar eases into a climb or a descent instead of
 ## snapping to it, because a body that goes from level to five metres a second
 ## downward between two rendered frames has not dived, it has cut. Horizontal
-## steering is unchanged and still immediate — that is the swim's
-## responsiveness, and every measured route depends on it.
+## steering now accelerates as well; full speed is checked after settling.
 ##
 ## What the criterion actually says is that water movement is full 3D at the
 ## tuned speed. It still is, on every axis; the vertical two are simply
@@ -210,7 +209,7 @@ func test_req_001_swimming_moves_at_the_tuned_speed_in_any_of_three_axes() -> vo
 		).is_equal_approx(speed, 0.0001)
 
 
-func test_req_001_horizontal_steering_is_immediate_and_vertical_is_eased() -> void:
+func test_req_001_horizontal_and_vertical_steering_begin_without_snapping() -> void:
 	# The two halves of the same decision, held apart so neither can quietly
 	# become the other: a glide applied to the whole vector would make the
 	# swim mushy, and no glide at all is what made a dive read as a cut.
@@ -219,9 +218,9 @@ func test_req_001_horizontal_steering_is_immediate_and_vertical_is_eased() -> vo
 	var controller := AxolotlController.new(tuning)
 
 	controller.physics_step(0.016, true, _intent(Vector3.RIGHT))
-	assert_float(controller.get_velocity().x).override_failure_message(
-		"horizontal steering must still arrive on the first frame"
-	).is_equal_approx(speed, 0.0001)
+	assert_bool(controller.get_velocity().x > 0.0 and controller.get_velocity().x < speed).override_failure_message(
+		"horizontal steering begins immediately and accelerates toward full speed"
+	).is_true()
 
 	controller.set_velocity(Vector3.ZERO)
 	controller.physics_step(0.016, true, _intent(Vector3.UP))
@@ -348,12 +347,15 @@ func test_req_001_bubble_boost_multiplies_swim_speed_while_active() -> void:
 	var multiplier := tuning.get_number("controller.bubble_boost.speed_multiplier")
 	var controller := AxolotlController.new(tuning)
 
-	controller.physics_step(0.016, true, _intent(Vector3.RIGHT))
+	for tick in 60:
+		controller.physics_step(0.016, true, _intent(Vector3.RIGHT))
 	var unboosted := controller.get_velocity().length()
 
 	controller.physics_step(0.016, true, _intent(Vector3.RIGHT,
 		[MovementGrammar.Verb.BUBBLE_BOOST]))
 
+	for tick in 30:
+		controller.physics_step(0.016, true, _intent(Vector3.RIGHT))
 	assert_bool(controller.get_bubble_boost().is_active()).is_true()
 	assert_float(controller.get_velocity().length()).is_equal_approx(
 		unboosted * multiplier, 0.001)
@@ -458,7 +460,8 @@ func test_req_001_waddle_moves_at_the_tuned_land_speed_in_the_plane() -> void:
 	var waddle := tuning.get_number("controller.waddle.base_speed_m_per_s")
 	var controller := AxolotlController.new(tuning)
 
-	controller.physics_step(0.016, false, _intent(Vector3(1.0, 0.0, 1.0)))
+	for tick in 60:
+		controller.physics_step(0.016, false, _intent(Vector3(1.0, 0.0, 1.0)))
 
 	var velocity := controller.get_velocity()
 	assert_float(velocity.y).is_equal_approx(0.0, 0.0001)
@@ -894,11 +897,13 @@ func test_req_001_movement_state_is_readable_without_touching_internals() -> voi
 
 func test_req_001_capability_modifiers_are_consumed_multiplicatively() -> void:
 	var controller := _controller()
-	controller.physics_step(0.016, true, _intent(Vector3(1.0, 0.0, 0.0)))
+	for tick in 60:
+		controller.physics_step(0.016, true, _intent(Vector3(1.0, 0.0, 0.0)))
 	var full := controller.get_velocity().length()
 
 	controller.get_capability_modifiers().set_factor("tail_lost", 0.5)
-	controller.physics_step(0.016, true, _intent(Vector3(1.0, 0.0, 0.0)))
+	for tick in 60:
+		controller.physics_step(0.016, true, _intent(Vector3(1.0, 0.0, 0.0)))
 
 	assert_float(controller.get_velocity().length()).is_equal_approx(full * 0.5, 0.0001)
 

@@ -289,53 +289,13 @@ func test_req_013_without_a_checkpoint_the_resume_anchor_is_phase_zero() -> void
 
 # --- AC-6: a world declaring no boss stays valid and completable -------------
 
-func test_req_013_exactly_one_installed_world_declares_a_boss() -> void:
-	"""The MVP has ONE boss, at the end of ONE level, and that is checked here.
-
-	This used to assert that NO world declared one, which was true while the
-	encounter existed only in fixtures — and a boss verified only in fixtures
-	is not a boss. Coral Cove now ends with the Flagship; Bubble Bay ends on
-	traversal instead, deliberately, so the two official worlds do not share a
-	shape; and the template declares no optional element at all.
-
-	The scarcity is the point rather than an accident of what got built: one
-	Flagship reads as the climax of the game, and a Flagship in every world
-	would read as a recurring level feature.
-	"""
-	var dir := DirAccess.open("res://worlds")
-	assert_object(dir).is_not_null()
-	var modules := dir.get_directories()
-	assert_int(modules.size()).is_greater_equal(3)
-
-	var with_boss: Array[String] = []
-	for module: String in modules:
-		var handle := FileAccess.open(
-			"res://worlds/%s/world.json" % module, FileAccess.READ)
-		var manifest: Variant = JSON.parse_string(handle.get_as_text())
-		handle.close()
-		assert_bool(manifest is Dictionary).is_true()
-		if (manifest as Dictionary).has("boss"):
-			with_boss.append(module)
-
-	assert_array(with_boss).override_failure_message(
-		"exactly one installed world declares a boss, and it is coral_cove "
-		+ "(got %s)" % str(with_boss)).contains(["coral_cove"])
-	assert_int(with_boss.size()).override_failure_message(
-		"a second boss would make the encounter a level feature rather than "
-		+ "the end of the game (got %s)" % str(with_boss)).is_equal(1)
-
-	# And the world that declares one declares a VALID encounter: three phases,
-	# one water-only, one land-only, one affordance-gated. The declaration is
-	# refused without all three, so this also pins that the level's fight
-	# exercises both grammars and its world's mod (REQ-013 AC-3, AC-4).
-	var coral := FileAccess.open(
-		"res://worlds/coral_cove/world.json", FileAccess.READ)
-	var declared: Dictionary = JSON.parse_string(coral.get_as_text())
-	coral.close()
+func test_cascade_ends_on_traversal_and_archived_boss_remains_valid() -> void:
+	var declared: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://worlds/coral_cove/world.json")) as Dictionary
+	assert_bool(declared.has("boss")).is_false()
+	assert_str(String((declared["finishCondition"] as Dictionary)["kind"])).is_equal("reach_volume")
+	var archived: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://dev/archive/coral_cove_before_cascade/world.json")) as Dictionary
 	var errors: Array[FlagshipError] = []
-	var encounter := FlagshipEncounter.from_declaration(
-		declared["boss"] as Dictionary, errors)
-	assert_array(errors).override_failure_message(
-		"coral_cove's boss declaration is refused: %s" % str(errors)).is_empty()
+	var encounter := FlagshipEncounter.from_declaration(archived["boss"] as Dictionary, errors)
+	assert_array(errors).is_empty()
 	assert_object(encounter).is_not_null()
 	assert_int(encounter.phase_count()).is_equal(3)

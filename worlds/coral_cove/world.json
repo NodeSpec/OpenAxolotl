@@ -1,106 +1,137 @@
 {
+  "checkpoints": [
+    "CP_01",
+    "CP_02",
+    "CP_03"
+  ],
+  "collectibles": [
+    {
+      "collectibleId": "kelp_seed",
+      "displayName": "Kelp seed",
+      "kind": "resource",
+      "regionId": "coral_shelf"
+    },
+    {
+      "collectibleId": "hermit_snail",
+      "displayName": "Hermit snail",
+      "kind": "discovery"
+    },
+    {
+      "collectibleId": "lantern_shrimp",
+      "displayName": "Lantern shrimp",
+      "kind": "discovery"
+    },
+    {
+      "collectibleId": "tide_pearl",
+      "displayName": "Tide pearl",
+      "kind": "discovery"
+    },
+    {
+      "collectibleId": "glow_crayfish_root_0",
+      "displayName": "Glowing crayfish",
+      "kind": "discovery"
+    },
+    {
+      "collectibleId": "glow_crayfish_root_1",
+      "displayName": "Glowing crayfish",
+      "kind": "discovery"
+    },
+    {
+      "collectibleId": "glow_crayfish_root_2",
+      "displayName": "Glowing crayfish",
+      "kind": "discovery"
+    },
+    {
+      "collectibleId": "glow_crayfish_root_3",
+      "displayName": "Glowing crayfish",
+      "kind": "discovery"
+    },
+    {
+      "collectibleId": "glow_crayfish_root_4",
+      "displayName": "Glowing crayfish",
+      "kind": "discovery"
+    },
+    {
+      "collectibleId": "glow_crayfish_root_5",
+      "displayName": "Glowing crayfish",
+      "kind": "discovery"
+    },
+    {
+      "collectibleId": "glow_crayfish_chute_0",
+      "displayName": "Glowing crayfish",
+      "kind": "discovery"
+    },
+    {
+      "collectibleId": "glow_crayfish_chute_1",
+      "displayName": "Glowing crayfish",
+      "kind": "discovery"
+    },
+    {
+      "collectibleId": "glow_crayfish_chute_2",
+      "displayName": "Glowing crayfish",
+      "kind": "discovery"
+    },
+    {
+      "collectibleId": "glow_crayfish_arrival_a",
+      "displayName": "Glowing crayfish",
+      "kind": "discovery"
+    },
+    {
+      "collectibleId": "glow_crayfish_arrival_b",
+      "displayName": "Glowing crayfish",
+      "kind": "discovery"
+    },
+    {
+      "collectibleId": "glow_crayfish_garden_bank",
+      "displayName": "Glowing crayfish",
+      "kind": "discovery"
+    },
+    {
+      "collectibleId": "glow_crayfish_terrace_bank",
+      "displayName": "Glowing crayfish",
+      "kind": "discovery"
+    }
+  ],
   "contractVersion": "1.0",
-  "worldId": "coral_cove",
-  "displayName": "Coral Cove",
   "controllerCompatibility": "1.0",
+  "displayName": "Coral Cove — The Living Cascade",
   "finishCondition": {
     "kind": "reach_volume"
   },
+  "hubEntry": {
+    "continuous": true,
+    "order": 0.0
+  },
+  "layoutRevision": "living_cascade_v1",
+  "restorableRegions": [
+    {
+      "regionId": "coral_shelf",
+      "traversalGates": [
+        {
+          "gateId": "cascade_finale",
+          "opensAt": "restored"
+        }
+      ],
+      "unlockedBy": "entry"
+    }
+  ],
+  "retainKnownProgressOnRedesign": true,
   "saveIntegration": {
     "keys": [
       "coral_cove.completed"
     ]
   },
-  "restorableRegions": [
-    {
-      "regionId": "coral_shelf",
-      "unlockedBy": "entry",
-      "traversalGates": [
-        {
-          "gateId": "shelf_wall",
-          "opensAt": "restored"
-        }
-      ]
-    },
-    {
-      "regionId": "open_sea",
-      "unlockedBy": "boss",
-      "traversalGates": [
-        {
-          "gateId": "sea_gate",
-          "opensAt": "restored"
-        }
-      ]
-    }
-  ],
   "tuningOverrides": {
-    "restoration.resourced.resource_cost": 3,
-    "restoration.restored.resource_cost": 4
+    "restoration.resourced.resource_cost": 3.0,
+    "restoration.restored.resource_cost": 4.0
   },
-  "collectibles": [
-    {
-      "collectibleId": "kelp_seed",
-      "kind": "resource",
-      "regionId": "coral_shelf",
-      "displayName": "Kelp seed"
-    },
-    {
-      "collectibleId": "fleet_core",
-      "kind": "resource",
-      "regionId": "open_sea",
-      "displayName": "Fleet core"
-    },
-    {
-      "collectibleId": "hermit_snail",
-      "kind": "discovery",
-      "displayName": "Hermit snail"
-    },
-    {
-      "collectibleId": "lantern_shrimp",
-      "kind": "discovery",
-      "displayName": "Lantern shrimp"
-    },
-    {
-      "collectibleId": "tide_pearl",
-      "kind": "discovery",
-      "displayName": "Tide pearl"
-    },
-    {
-      "collectibleId": "fleet_beacon",
-      "kind": "discovery",
-      "displayName": "Fleet beacon"
-    }
-  ],
+  "worldId": "coral_cove",
   "enemies": [
-    {
-      "enemyId": "hookline_rig"
-    },
     {
       "enemyId": "netbot"
     },
     {
-      "enemyId": "runoff_drone"
-    },
-    {
-      "enemyId": "dredger"
+      "enemyId": "hookline_rig"
     }
-  ],
-  "boss": {
-    "regionId": "open_sea",
-    "phases": [
-      {
-        "phaseId": "hull_breach",
-        "grammar": "water"
-      },
-      {
-        "phaseId": "deck_assault",
-        "grammar": "land"
-      },
-      {
-        "phaseId": "core_purge",
-        "grammar": "any",
-        "requiresAffordance": "bubble_platform"
-      }
-    ]
-  }
+  ]
 }

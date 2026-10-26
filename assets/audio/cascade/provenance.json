@@ -1,0 +1,7 @@
+{
+  "author": "OpenAxolotl project; original procedural synthesis authored in Codex",
+  "generationMethod": "ai-generated",
+  "tool": "Python and NumPy, deterministic oscillator and noise synthesis",
+  "licenseTerms": "Original generated composition and waveforms; no third-party recordings or sampled music. Project Apache-2.0 licence.",
+  "prompt": "Create original glowing blue crayfish pickups, a gentle exploration score, groovy dance music and gameplay sound effects for OpenAxolotl using procedural mesh construction and audio synthesis."
+}

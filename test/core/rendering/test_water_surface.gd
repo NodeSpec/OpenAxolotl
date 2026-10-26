@@ -61,14 +61,26 @@ func test_req_034_every_water_surface_is_subdivided_enough_to_ripple() -> void:
 			"%s declares no water mesh" % path).is_greater_equal(1)
 
 		for mesh_node: MeshInstance3D in meshes:
-			var box := mesh_node.mesh as BoxMesh
-			assert_object(box).override_failure_message(
-				"%s: water must stay a BoxMesh" % path).is_not_null()
-			if box == null:
+			if mesh_node.mesh is ArrayMesh:
+				var arrays := mesh_node.mesh.surface_get_arrays(0)
+				var verts: PackedVector3Array=arrays[Mesh.ARRAY_VERTEX]
+				var ids: PackedInt32Array=arrays[Mesh.ARRAY_INDEX]
+				for i in range(0,ids.size(),3):
+					for edge in range(3):
+						var a := mesh_node.transform*verts[ids[i+edge]]
+						var b := mesh_node.transform*verts[ids[i+(edge+1)%3]]
+						assert_float(Vector2(a.x-b.x,a.z-b.z).length()).is_less_equal(MAX_CELL_M)
 				continue
-			# The cell size the subdivision actually produces, in metres.
-			var cell_x := box.size.x / float(box.subdivide_width + 1)
-			var cell_z := box.size.z / float(box.subdivide_depth + 1)
+			var box := mesh_node.mesh as BoxMesh
+			var plane := mesh_node.mesh as PlaneMesh
+			assert_bool(box != null or plane != null).is_true()
+			if box == null and plane == null:
+				continue
+			var cell_x := box.size.x / float(box.subdivide_width + 1) if box != null else plane.size.x / float(plane.subdivide_width + 1)
+			var cell_z := box.size.z / float(box.subdivide_depth + 1) if box != null else plane.size.y / float(plane.subdivide_depth + 1)
+			if plane != null:
+				var material := mesh_node.get_active_material(0) as ShaderMaterial
+				assert_bool(bool(material.get_shader_parameter("mesh_is_surface"))).is_true()
 			assert_float(maxf(cell_x, cell_z)).override_failure_message(
 				("%s/%s: %.1f m surface cells are too coarse to carry a wave "
 				+ "— an unsubdivided water box has four corners on its top "

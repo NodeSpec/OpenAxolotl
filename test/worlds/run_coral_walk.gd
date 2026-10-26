@@ -1,56 +1,52 @@
 extends SceneTree
-
-## Headless entry point for the Coral Cove playthrough check.
-##
-##   godot --headless --audio-driver Dummy --path . \
-##       --script test/worlds/run_coral_walk.gd
-##
-## Proves REQ-011's per-world claims for coral_cove end to end: both grammars,
-## both mod gates, the restorable region, and completion back to the hub.
-## Exit status is the probe's, so this is CI-shaped.
-
-const HUB_PATH := "res://hub/open_lagoon.tscn"
-const PROBE_PATH := "res://test/worlds/coral_walk_probe.gd"
-
-## A frame ceiling, so a probe that never completes fails the run instead of
-## hanging a CI job. Coral Cove's route is the longest in the game so far, and
-## it now stops to FIGHT eight times: closing on a machine, swinging on a
-## cadence, and waiting out the stagger between strikes is real time the old
-## budget had no room for. Raised once, from a measured run, rather than
-## guessed at — see the walk's own reported frame count.
-const FRAME_BUDGET := 14000
-
-
+var failures: PackedStringArray=[]
+var finished := false
 func _initialize() -> void:
-	var packed: PackedScene = load(HUB_PATH)
-	if packed == null:
-		print("CORAL WALK: could not load %s" % HUB_PATH)
+	run.call_deferred()
+func run() -> void:
+	var stage := load("res://hub/open_lagoon.tscn").instantiate() as GameSession
+	stage.profile_path=""
+	root.add_child(stage)
+	current_scene=stage
+	for i in range(5):
+		await physics_frame
+	var hub := stage.get_node("OpenLagoon") as OpenLagoon
+	var body := stage.get_node("Axolotl") as AxolotlBody
+	hub.world_completed.connect(func(id: String) -> void: finished=id=="coral_cove")
+	if not hub.enter_world("coral_cove"):
+		print("CORAL WALK: FAIL — world unavailable")
 		quit(1)
 		return
-
-	var hub := packed.instantiate()
-	hub.set("profile_path", "")
-	root.add_child(hub)
-	current_scene = hub
-
-	var probe := Node.new()
-	probe.name = "CoralWalkProbe"
-	probe.set_script(load(PROBE_PATH))
-	root.add_child(probe)
-
-	var watchdog := Timer.new()
-	watchdog.name = "Watchdog"
-	watchdog.wait_time = float(FRAME_BUDGET) \
-		/ float(Engine.physics_ticks_per_second)
-	watchdog.one_shot = true
-	# Autostart rather than start(): a Timer refuses to start before it is in
-	# the tree, and add_child() lands the frame after this runs.
-	watchdog.autostart = true
-	watchdog.timeout.connect(_on_timeout)
-	root.add_child(watchdog)
-
-
-func _on_timeout() -> void:
-	print("CORAL WALK: the probe never finished within %d physics frames"
-		% FRAME_BUDGET)
-	quit(1)
+	for i in range(30):
+		await physics_frame
+	var pilot := RoutePilot.new(CoralRoute.waypoints(),hub._active_world.global_position)
+	var frames := 0
+	for i in range(18000):
+		await physics_frame
+		frames=i
+		if finished:
+			break
+		pilot.step(body)
+		if not pilot.stuck_reason().is_empty():
+			break
+	pilot.release_all()
+	for i in range(10):
+		await physics_frame
+	if not finished or hub.is_in_world():
+		failures.append("finish must return to hub: "+pilot.stuck_reason())
+	var data := stage.get_save_system().get_world_data("coral_cove")
+	if not bool(data.get("completed",false)):
+		failures.append("completion was not saved")
+	if (data.get("resourceInstances",{}) as Dictionary).size()!=7:
+		failures.append("route must collect seven unique seeds")
+	if not hub.enter_world("coral_cove"):
+		failures.append("completed world cannot be revisited")
+	for i in range(10):
+		await physics_frame
+	var systems: Node = hub._active_world.get_children().back()
+	if not (systems is WorldSystems) or not (systems as WorldSystems).get_restoration().all_restored():
+		failures.append("restoration must survive hub return")
+	print("CORAL WALK: ","PASS" if failures.is_empty() else "FAIL"," (",frames," frames)")
+	for failure in failures:
+		print("  ",failure)
+	quit(0 if failures.is_empty() else 1)

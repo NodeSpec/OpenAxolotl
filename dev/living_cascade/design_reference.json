@@ -1,0 +1,421 @@
+{
+  "status": "logic_audited_blockout_validation_required",
+  "revision": 2,
+  "units": "metres",
+  "axes": {
+    "x": "east",
+    "y": "up",
+    "negative_z": "north"
+  },
+  "origin": "incoming stream water surface, before parent transform",
+  "joins": [
+    {
+      "id": "JOIN_00",
+      "xyz": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "JOIN_12",
+      "xyz": [
+        -8,
+        0.4,
+        -18
+      ]
+    },
+    {
+      "id": "JOIN_23",
+      "xyz": [
+        -22,
+        0.8,
+        -44
+      ]
+    },
+    {
+      "id": "JOIN_34",
+      "xyz": [
+        12,
+        0.8,
+        -56
+      ]
+    },
+    {
+      "id": "JOIN_45",
+      "xyz": [
+        24,
+        6.8,
+        -92
+      ]
+    },
+    {
+      "id": "JOIN_56",
+      "xyz": [
+        8,
+        7,
+        -104
+      ]
+    },
+    {
+      "id": "JOIN_OUT",
+      "xyz": [
+        -38,
+        1,
+        -110
+      ]
+    }
+  ],
+  "route_guides": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      -8,
+      0.4,
+      -18
+    ],
+    [
+      -20,
+      0.4,
+      -25
+    ],
+    [
+      -24,
+      0.6,
+      -34
+    ],
+    [
+      -22,
+      0.8,
+      -44
+    ],
+    [
+      -22,
+      -1.6,
+      -50
+    ],
+    [
+      -10,
+      -1.6,
+      -58
+    ],
+    [
+      4,
+      -1.6,
+      -58
+    ],
+    [
+      12,
+      0.8,
+      -56
+    ],
+    [
+      22,
+      2.4,
+      -66
+    ],
+    [
+      30,
+      4.4,
+      -78
+    ],
+    [
+      24,
+      6.8,
+      -92
+    ],
+    [
+      22,
+      6.8,
+      -100
+    ],
+    [
+      8,
+      7,
+      -104
+    ],
+    [
+      6,
+      6.2,
+      -104
+    ],
+    [
+      0,
+      5.8,
+      -110
+    ],
+    [
+      -18,
+      2.5,
+      -119
+    ],
+    [
+      -27,
+      0.4,
+      -110
+    ],
+    [
+      -28,
+      0.4,
+      -104
+    ],
+    [
+      -38,
+      1,
+      -110
+    ]
+  ],
+  "route_horizontal_length_m": 223.99027229530944,
+  "sections": [
+    {
+      "id": "S01",
+      "name": "Arrival Pool",
+      "box": [
+        -12,
+        -18,
+        12,
+        4
+      ],
+      "entry": [
+        0,
+        0,
+        0
+      ],
+      "exit": [
+        -8,
+        0.4,
+        -18
+      ],
+      "time": "30–45 seconds",
+      "purpose": "Release the player from the lagoon stream; establish the destination and the safe-water language.",
+      "beats": [
+        "Enter through JOIN_00 in a 6 m wide channel. Taper current to zero over the final 6 m before the pool.",
+        "Provide a 12 × 10 m swimming basin, surface Y=0, bed Y=-2.0; a separate 4 × 6 m shallow shelf rises to Y=-0.3.",
+        "Place CP_01 on a 4 × 4 m dry pad at (3,0.4,-8). Follow a continuous bank to JOIN_12; no mandatory jump here."
+      ],
+      "water": "Surface 0.0; swimming depth 2.0 m. Shore slopes rise continuously to +0.4. Enable shallow-wading treatment only on the shelf; validate immersion thresholds against the body.",
+      "camera": "Reserve the view from (0,2.4,3) toward (0,8,-88). The central root opening must frame the crown; keep arrival foliage below 1.2 m in this sight corridor.",
+      "recovery": "No failure hazard. Pool edges offer two broad exits. A player arriving without a tail must still reach both.",
+      "content": "CP_01; three visual guide clusters. No required pickup or enemy.",
+      "art": "Warm wet stone, clear water, sparse peach flowers. Foreground stepping stones lead left; distant crown starts muted.",
+      "checks": "Arrival cannot immediately sweep the player onward. From the normal follow camera, show the next bank exit and the crown without rotating the camera."
+    },
+    {
+      "id": "S02",
+      "name": "Stepping-stone Garden",
+      "box": [
+        -34,
+        -44,
+        -6,
+        -18
+      ],
+      "entry": [
+        -8,
+        0.4,
+        -18
+      ],
+      "exit": [
+        -22,
+        0.8,
+        -44
+      ],
+      "time": "60–90 seconds",
+      "purpose": "Teach aimed hopping over forgiving water; let swimming serve as recovery.",
+      "beats": [
+        "Approach via a broad bank within the section. Place four principal landings P21–P24 along the route; each clear top is at least 3 × 3 m.",
+        "Specify successive edge-to-edge gaps of 1.2, 1.6 and 2.0 m; landing tops rise from +0.4 to +0.8, with no single rise over 0.4 m. Use continuous approach/exit banks to reach the section joins.",
+        "O1 is a single out-and-back optional spur from P22. Place its 3 × 3 m rescue landing at a 2.4 m edge gap, no more than 0.4 m above P22, in the west-side pocket. Return to P22 or drop into recovery water. The plotted O1 line is a pocket location, not a dimensioned jump; do not force the old P23 reconnection."
+      ],
+      "water": "Surface 0.0; bed -2.0. Recovery water connects every missed jump to a ramp near the start or finish of the stone cluster. No current at landings.",
+      "camera": "Reserve at least 5 m of scenery-free orbit space behind each takeoff. Show the complete landing top; avoid plant silhouettes across edges.",
+      "recovery": "Swimming under the stepping stones is an intentional easier alternative. A miss has a nearby ramp (target return within 10 seconds); both routes merge at JOIN_23 before the root dive. Side banks prevent skipping S03.",
+      "content": "Optional discovery O1: hermit snail. A short collectible arc indicates each jump; collectibles are guidance, not required progression.",
+      "art": "Broad moss caps and pale stone sides. Reeds distinguish safe water edges. Background boulders receive no jump-guiding flowers.",
+      "checks": "Verify all three jumps using the current capsule and both held and briefly pressed jump inputs. Confirm optional ledge access never gates progression."
+    },
+    {
+      "id": "S03",
+      "name": "Hollow-root Dive",
+      "box": [
+        -34,
+        -68,
+        12,
+        -44
+      ],
+      "entry": [
+        -22,
+        0.8,
+        -44
+      ],
+      "exit": [
+        12,
+        0.8,
+        -56
+      ],
+      "time": "60–90 seconds",
+      "purpose": "Teach one clear dive beneath a root and reconnect visibly to the terrace ascent.",
+      "beats": [
+        "Descend from JOIN_23 to water at (-22,0,-48), then swim through (-22,-1.6,-50), (-10,-1.6,-58) and (4,-1.6,-58). Surface in the basin at (8,0,-56). These submerged Y values are capsule-centre targets.",
+        "Use a 6 m wide submerged corridor, bed -3.2. The root obstacle extends down to -0.5, leaving a 2.7 m vertical opening beneath it. Keep the underwater turn radius at least 6 m.",
+        "A 4 m wide ramp rises from the resurfacing basin to JOIN_34 at +0.8. Optional O2 branches near (-10,-1.6,-58), enters a lit pocket at (-12,-1.6,-65), and returns near (4,-1.6,-58)."
+      ],
+      "water": "Single connected surface at 0.0; no mandatory boost and no current. End the overhead obstruction before the exit basin so the player can surface visibly.",
+      "camera": "Tunnel is 6 m wide and the ordinary swimming camera follows at 4.5 m. Test collision shortening at the bend; widen the chamber if the player or exit becomes obscured.",
+      "recovery": "Player may reverse at any time. Decorative root collision closes the dry shortcut; broad open water at both mouths provides orientation. The root and side banks must span the corridor and be non-climbable; root top must exceed the accessible bank by at least 3.2 m so hopping over is not an alternate mandatory route.",
+      "content": "Optional discovery O2: lantern shrimp. Glowing shrimp silhouettes mark the main route; O2 uses a distinct secondary cluster.",
+      "art": "Cool cyan under the root; warm exit light on the right. Keep water clear enough to see the opening from the approach.",
+      "checks": "Verified capsule: radius 0.5 m, full height 1.6 m, upright even when swimming. At centre Y=-1.6 the top is -0.8 and bottom -2.4, giving 0.3 m clearance under the -0.5 root and 0.8 m above the -3.2 bed. Test turns and camera shortening in blockout."
+    },
+    {
+      "id": "S04",
+      "name": "Cascade Terraces",
+      "box": [
+        12,
+        -92,
+        36,
+        -52
+      ],
+      "entry": [
+        12,
+        0.8,
+        -56
+      ],
+      "exit": [
+        24,
+        6.8,
+        -92
+      ],
+      "time": "90–150 seconds",
+      "purpose": "Combine hopping, short swimming and one modest climb in three readable clusters.",
+      "beats": [
+        "Cluster A runs toward (22,2.4,-66): two +0.8 m rises on at least 3 × 3 m landings, each with at most 1.6 m horizontal edge gap.",
+        "Cluster B reaches (30,4.4,-78): a short bank climb of 2.0 m, with a continuous alternate ramp. Pool B has a 5 m swim beneath a shallow root brow before a broad exit.",
+        "Cluster C reaches (24,6.8,-92): three +0.8 m rises, each with at most 1.6 m edge gap, interleaved with broad resting ledges. Keep all mandatory dry paths at least 3 m wide."
+      ],
+      "water": "Three separate pools: A surface 1.8 / bed -0.2; B surface 3.8 / bed 1.0; C surface 5.8 / bed 3.8. Decorative spillways link them visually; a lower recovery gutter at surface 0.0 leads to the entry ramp. Pool B brow underside 3.2 leaves 2.2 m clearance. Each upper pool has its own retaining bed and shore, horizontally separated from every lower dry ledge and climb face. Keep water Areas out of the lower approach and bypass ramp; spilling visual water has no Area. Pool B dive target is capsule-centre Y=2.1: top 2.9 and bottom 1.3 provide 0.3 m clearance above and below.",
+      "camera": "Follow the winding east-bank route. Keep the outer side open to the valley; inner root walls remain outside takeoff-camera sightlines. Reserve 5 m around rest ledges.",
+      "recovery": "CP_02 at (16,0.8,-57), on a 4 × 4 m pad. Catch missed jumps in the nearest pool or lower gutter; provide ramps back to each cluster. Climb bypass supports reduced capability. Upper-cluster misses return via local pool ramps, not routinely to Y=0; reserve the lower gutter for rare wide misses. Recovery ramps reconnect at the start of the failed cluster and cannot discharge into S06.",
+      "content": "Two kelp seeds on broad mandatory ledges: (22,2.4,-66) and (30,4.4,-78). No combat required in revision 1.",
+      "art": "Readable wet/dry transitions, pale pool beds, moss on usable top faces. The crown becomes larger at every rest ledge.",
+      "checks": "Check each combined rise-and-gap pair, not only maximum jump range. Catch water must cover the actual miss trajectories. Confirm no current or decorative waterfall blocks the ramp bypass."
+    },
+    {
+      "id": "S05",
+      "name": "Restoration Garden",
+      "box": [
+        8,
+        -110,
+        36,
+        -92
+      ],
+      "entry": [
+        24,
+        6.8,
+        -92
+      ],
+      "exit": [
+        8,
+        7,
+        -104
+      ],
+      "time": "90–150 seconds",
+      "purpose": "Pause, reward exploration, and make restoration visibly open the finale.",
+      "beats": [
+        "A 26 × 18 m garden envelope centred near (22,-101) contains an 8 × 6 m basin and a continuous bank at Y=6.8–7.0. Provide at least 3 m clear dry width on the route, with local widening for pickups.",
+        "Place seven seeds on the accessible garden bank. The two terrace seeds are helpful extras: nine available for a total restoration cost of seven. A player arriving with zero seeds can complete the gate entirely within the garden.",
+        "Restoration advances automatically on pickup: the third total seed pays for resourced, the seventh total seed pays for restored and opens JOIN_56. Reveal effects must remain readable from every garden pickup. No deposit station or extra interaction is assumed."
+      ],
+      "water": "Garden basin surface 6.2; bed 4.2; 4 m wide sloping exits. Finale intake uses the same 6.2 surface, accessible by stepping down from the +7.0 gate lip. The dry checkpoint is outside the basin footprint X=18…26, Z=-104…-98. Shores, ramps and the gate approach remain unobstructed.",
+      "camera": "Reserve a wide view across the restored crown and down toward the arrival pool. CP_03 faces the gate; no automatic camera cut is required.",
+      "recovery": "CP_03 moves to (24,6.8,-94), on a 4 × 4 m dry pad beside the entrance and outside the basin. Activate it across the required approach so it cannot be missed. All seven garden seeds are accessible before the gate; terrace backtracking is optional.",
+      "content": "Nine seeds total: two in S04 and seven in S05. Garden positions: (27,6.8,-95), (31,6.8,-99), (29,6.8,-105), (21,6.8,-107), (13,7,-103), (16,7,-97), (12,7,-101). Treat Y as support height and add pickup clearance. A bank path connects all seven. Optional discoveries do not pay the gate cost.",
+      "art": "Barren: muted crown and sparse flowers. Resourced: partial foliage. Restored: peach blooms, clearer focal lighting, gate retracts. Keep collision stable except the explicit gate.",
+      "checks": "Check entry with 0, 1 or 2 terrace seeds: restoration occurs after respectively 7, 6 or 5 garden pickups. On uninterrupted fresh collection, totals 3 and 7 trigger phases; banked balances are 0 immediately after each spend. Test save/reload and seed respawn behavior explicitly; do not assume unique persisted resource instances."
+    },
+    {
+      "id": "S06",
+      "name": "Waterfall Run",
+      "box": [
+        -40,
+        -124,
+        8,
+        -84
+      ],
+      "entry": [
+        8,
+        7,
+        -104
+      ],
+      "exit": [
+        -38,
+        1,
+        -110
+      ],
+      "time": "45–75 seconds",
+      "purpose": "Deliver a short controllable water descent, then a calm reward and exit.",
+      "beats": [
+        "Step down from JOIN_56 into the chute at (6,6.2,-104), then follow (0,5.8,-110), (-18,2.5,-119), (-27,0.4,-110), and the reward pool at (-28,0.4,-104). Water-surface points are not submerged body targets.",
+        "Use a banked, continuously descending water chute beside the scenic vertical waterfall. The player never needs to swim up a waterfall or fall through an unbounded water sheet.",
+        "Place the dive bar at (-12,3.6,-116), now on the straight segment from (0,5.8,-110) to (-18,2.5,-119). This provides 13.4 m of straight approach and 6.7 m of straight exit before the bend. At the bar: surface 3.6, underside 3.0, bed 0.8, capsule-centre dive target 1.9 (0.3 m clearance each side). Finish in the 12 × 10 m pool centred (-28,0.4,-104), then use the +1.0 bank to JOIN_OUT."
+      ],
+      "water": "Water surfaces: 6.2 → 5.8 → 2.5 → 0.4, then level into the reward pool. At the intermediate bar the interpolated surface is 3.6. Depth is at least 2.8 m along the bar approach and clearance zone. Proposed current is 1 m/s. Keep sloped water volumes unrotated in world axes: the body currently combines the returned slope with world-space velocity. Specify gradient in X/Z. Use a level, still reward pool and no positive step at any seam. Smooth both corners within the expanded S06 envelope; use dedicated junction volumes with deterministic priority and continuous surfaces. Exact junction bounds remain a blockout requirement.",
+      "camera": "Open sky above the chute and a visible straight approach to the bar. Keep spray out of the player's silhouette and the landing pool visible before the final bend.",
+      "recovery": "High side banks contain the slide; small rest eddies at bends allow stopping. The dive bar is a collision obstacle with a reversible approach, not an instant-kill hazard. CP_03 is the restart if a genuine out-of-bounds fall occurs.",
+      "content": "Tide pearl remains an optional discovery on the reachable final bank. Put the completion volume across the only exit lane immediately before JOIN_OUT, using the existing reach_volume finish callback. Do not require the pearl, a boss, or a currently undefined next-world portal to finish.",
+      "art": "White water and gold flower accents climax here, then settle to clear turquoise. The large central waterfall remains scenic, spatially separate from the playable chute.",
+      "checks": "Verify current ramps and junction selection in both directions. Surface following only engages with nonzero flow, neutral vertical input and centre within 0.65 m of the surface; submerged players must actively steer down with the chute. The dive is player-controlled. At the bar, 13.4 m approach allows about 1.9 seconds at 6+1 m/s, but boost can reduce it to under 1 second: telegraph before the straight and retain collision/reversal safety. Check no-boost and boosted runs, tail-loss control and stopping."
+    }
+  ],
+  "warning": "Design reference only; not a Godot runtime manifest. Landing edges and capsule offsets require blockout validation.",
+  "checkpoints": [
+    {
+      "id": "CP_01",
+      "support_xyz": [
+        3,
+        0.4,
+        -8
+      ]
+    },
+    {
+      "id": "CP_02",
+      "support_xyz": [
+        16,
+        0.8,
+        -57
+      ]
+    },
+    {
+      "id": "CP_03",
+      "support_xyz": [
+        24,
+        6.8,
+        -94
+      ]
+    }
+  ],
+  "integration": {
+    "alignment": "Translation only, as current hub loader does; maintain unrotated world-axis water volumes.",
+    "stream_entry": "One stream_entry marker at JOIN_00; match the actual outlet channel tangent and cross-section during blockout.",
+    "containment": "Continuous non-climbable dividing ridge separates S04/S05 from S06. Ridge rises at least 3.2 m above the highest accessible adjoining support. Closed gate spans the complete corridor including underwater bed-to-top bounds; no side, top or underwater bypass. Root dive has equivalent lateral closure.",
+    "finish": "Use current reach_volume mechanism and verify its completion persistence; pearl optional. No unimplemented onward portal.",
+    "resources": "9 available, 7 spent automatically; 7 all in S05 to eliminate required backtracking. Existing resources are types, not guaranteed unique persisted instances.",
+    "migration": "Future build must reconcile old boss/open_sea/fleet_core dependencies and save compatibility explicitly; do not only remove scene nodes."
+  },
+  "implementation_progress": {
+    "completed_chunks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "stage": "playable_development_blockout",
+    "as_built_record": "living-cascade-execution-plan.md",
+    "validated": "seven passing headless suites; continuous arrival-to-finish route, chute current/dive/reversal/boost/stopping, containment, restoration and isolated save/reload",
+    "remaining": "chunk 7; production world/save/lives integration, lagoon connection, final art, camera review and profiling"
+  }
+}

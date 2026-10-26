@@ -1,0 +1,72 @@
+{
+  "input": "C:\\Users\\ltben\\Documents\\OpenAxolotl-main\\asset_inbox\\Meshy_AI_Jungle_Stone_Terrace_0913173344_texture-optimized.glb",
+  "output": "C:\\Users\\ltben\\Documents\\Codex\\2026-09-11\\ana\\work\\cascade-assets\\bank_terrace\\bank_terrace.glb",
+  "budget": 24000,
+  "meshes": 1,
+  "diagonal": 2.416549605104916,
+  "weld": {
+    "distance": 2.416549605104916e-05,
+    "merged": 818660,
+    "openEdgesBefore": 1410415,
+    "openEdgesAfter": 22106,
+    "openEdgesAfterDecimation": 6476
+  },
+  "reduction": {
+    "ratio": 0.010236069349369843,
+    "trianglesBefore": 2344650,
+    "trianglesAfter": 24000,
+    "skipped": false
+  },
+  "deviation": [
+    {
+      "direction": "decimated_to_original",
+      "samples": 12000,
+      "mean": 0.0011239187067723212,
+      "p95": 0.0033271795487962662,
+      "max": 0.011132432147860527,
+      "worstAt": [
+        0.5944,
+        0.0597,
+        0.184
+      ],
+      "maxAsFractionOfDiagonal": 0.004606746794828243,
+      "p95AsFractionOfDiagonal": 0.0013768306438931201
+    },
+    {
+      "direction": "original_to_decimated",
+      "samples": 12000,
+      "mean": 0.0011848528916241958,
+      "p95": 0.0034975005546584725,
+      "max": 0.010693696327507496,
+      "worstAt": [
+        0.6082,
+        0.0603,
+        0.189
+      ],
+      "maxAsFractionOfDiagonal": 0.004425192143756231,
+      "p95AsFractionOfDiagonal": 0.0014473117155427177
+    }
+  ],
+  "images": [],
+  "imagesRenamed": [
+    {
+      "image": "Image_0",
+      "to": "base_color",
+      "role": "base_color"
+    },
+    {
+      "image": "Image_2",
+      "to": "normal",
+      "role": "normal"
+    },
+    {
+      "image": "Image_1",
+      "to": "metallic_roughness",
+      "role": "metallic_roughness"
+    }
+  ],
+  "blender": "4.5.3 LTS",
+  "asset": "bank_terrace",
+  "final_bytes": 6545736,
+  "final_sha256": "77c0cfe18412e989d59975492d275f256c001502c122980b88d7eb0d630921e7"
+}

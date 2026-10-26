@@ -1,0 +1,379 @@
+[gd_scene format=3 uid="uid://bftgpcnn3x0kj"]
+
+[ext_resource type="PackedScene" path="res://dev/living_cascade/arrival_refinements.tscn" id="arrival_refinements"]
+[ext_resource type="Script" uid="uid://bpp7f8pdd5cc7" path="res://core/camera/camera_follow.gd" id="camera"]
+[ext_resource type="Script" path="res://dev/living_cascade/preview_session.gd" id="session"]
+[ext_resource type="PackedScene" path="res://dev/living_cascade/restoration_garden.tscn" id="restoration_garden"]
+[ext_resource type="PackedScene" path="res://dev/living_cascade/containment.tscn" id="containment"]
+[ext_resource type="PackedScene" path="res://dev/living_cascade/chute.tscn" id="chute"]
+[ext_resource type="PackedScene" path="res://dev/living_cascade/garden.tscn" id="garden"]
+[ext_resource type="PackedScene" path="res://core/rendering/world_lighting.tscn" id="lighting"]
+[ext_resource type="PackedScene" path="res://core/controller/axolotl_body.tscn" id="player"]
+[ext_resource type="PackedScene" path="res://dev/living_cascade/root_dive.tscn" id="root_dive"]
+[ext_resource type="PackedScene" path="res://dev/living_cascade/terraces.tscn" id="terraces"]
+[ext_resource type="Script" uid="uid://bllkdaqqtmd1l" path="res://core/controller/water_volume.gd" id="water"]
+[ext_resource type="Material" path="res://core/rendering/water_surface.tres" id="water_material"]
+
+[sub_resource type="StandardMaterial3D" id="LC_2"]
+albedo_color = Color(0.68, 0.63, 0.43, 1)
+
+[sub_resource type="BoxMesh" id="LC_4"]
+size = Vector3(12, 1, 10)
+
+[sub_resource type="BoxShape3D" id="LC_5"]
+size = Vector3(12, 1, 10)
+
+[sub_resource type="BoxMesh" id="LC_6"]
+size = Vector3(6, 1, 6.2)
+
+[sub_resource type="BoxShape3D" id="LC_7"]
+size = Vector3(6, 1, 6.2)
+
+[sub_resource type="BoxShape3D" id="LC_8"]
+size = Vector3(12, 2, 10.2)
+
+[sub_resource type="PlaneMesh" id="LC_9"]
+size = Vector2(12, 10.2)
+subdivide_width = 12
+subdivide_depth = 12
+
+[sub_resource type="BoxShape3D" id="LC_10"]
+size = Vector3(6, 2, 6.2)
+
+[sub_resource type="PlaneMesh" id="LC_11"]
+size = Vector2(6, 6.2)
+subdivide_width = 12
+subdivide_depth = 12
+
+[sub_resource type="StandardMaterial3D" id="LC_1"]
+albedo_color = Color(0.39, 0.49, 0.32, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="LC_12"]
+size = Vector3(7, 1.4, 8)
+
+[sub_resource type="BoxShape3D" id="LC_13"]
+size = Vector3(7, 1.4, 8)
+
+[sub_resource type="BoxMesh" id="LC_14"]
+size = Vector3(20, 1.4, 8)
+
+[sub_resource type="BoxShape3D" id="LC_15"]
+size = Vector3(20, 1.4, 8)
+
+[sub_resource type="BoxMesh" id="LC_16"]
+size = Vector3(5.5461698, 0.5, 4)
+
+[sub_resource type="BoxShape3D" id="LC_17"]
+size = Vector3(5.5461698, 0.5, 4)
+
+[sub_resource type="BoxMesh" id="LC_18"]
+size = Vector3(2, 6, 12)
+
+[sub_resource type="BoxShape3D" id="LC_19"]
+size = Vector3(2, 6, 12)
+
+[sub_resource type="BoxMesh" id="LC_20"]
+size = Vector3(2, 6, 6)
+
+[sub_resource type="BoxShape3D" id="LC_21"]
+size = Vector3(2, 6, 6)
+
+[sub_resource type="BoxMesh" id="LC_22"]
+size = Vector3(2, 6, 6)
+
+[sub_resource type="BoxShape3D" id="LC_23"]
+size = Vector3(2, 6, 6)
+
+[sub_resource type="BoxMesh" id="LC_24"]
+size = Vector3(10, 6, 2)
+
+[sub_resource type="BoxShape3D" id="LC_25"]
+size = Vector3(10, 6, 2)
+
+[sub_resource type="BoxMesh" id="LC_26"]
+size = Vector3(2, 6, 16)
+
+[sub_resource type="BoxShape3D" id="LC_27"]
+size = Vector3(2, 6, 16)
+
+[sub_resource type="BoxMesh" id="LC_28"]
+size = Vector3(2, 6, 8)
+
+[sub_resource type="BoxShape3D" id="LC_29"]
+size = Vector3(2, 6, 8)
+
+[sub_resource type="BoxMesh" id="LC_30"]
+size = Vector3(16, 6, 2)
+
+[sub_resource type="BoxShape3D" id="LC_31"]
+size = Vector3(16, 6, 2)
+
+[sub_resource type="StandardMaterial3D" id="LC_3"]
+albedo_color = Color(0.97, 0.72, 0.3, 1)
+
+[sub_resource type="BoxMesh" id="LC_32"]
+size = Vector3(4, 0.01, 4)
+
+[sub_resource type="BoxShape3D" id="LC_33"]
+size = Vector3(4, 0.01, 4)
+
+[node name="LivingCascadeBlockout" type="Node3D" unique_id=1514614826]
+
+[node name="Lighting" parent="." unique_id=2055630189 instance=ExtResource("lighting")]
+
+[node name="Sections" type="Node3D" parent="." unique_id=1025992936]
+
+[node name="S01" type="Node3D" parent="Sections" unique_id=430423362]
+metadata/build_status = "arrival_prototype"
+metadata/section_title = "Arrival Pool"
+
+[node name="JOIN_00" type="Marker3D" parent="Sections/S01" unique_id=1683433260 groups=["stream_entry"]]
+
+[node name="CP_01" type="Marker3D" parent="Sections/S01" unique_id=1452801441]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.4, -8)
+
+[node name="PoolBed" type="StaticBody3D" parent="Sections/S01" unique_id=421847184]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -2.5, -7)
+
+[node name="Mesh" type="MeshInstance3D" parent="Sections/S01/PoolBed" unique_id=1389035804]
+material_override = SubResource("LC_2")
+mesh = SubResource("LC_4")
+
+[node name="Collision" type="CollisionShape3D" parent="Sections/S01/PoolBed" unique_id=900550809]
+shape = SubResource("LC_5")
+
+[node name="EntryBed" type="StaticBody3D" parent="Sections/S01" unique_id=225392449]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5, 1)
+
+[node name="Mesh" type="MeshInstance3D" parent="Sections/S01/EntryBed" unique_id=995503294]
+material_override = SubResource("LC_2")
+mesh = SubResource("LC_6")
+
+[node name="Collision" type="CollisionShape3D" parent="Sections/S01/EntryBed" unique_id=1504003154]
+shape = SubResource("LC_7")
+
+[node name="ArrivalWater" type="Area3D" parent="Sections/S01" unique_id=897383715]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, -1, -7)
+collision_layer = 0
+script = ExtResource("water")
+explicit_surface = true
+surface_height = 1.0
+shallow_wading_enabled = true
+
+[node name="Collision" type="CollisionShape3D" parent="Sections/S01/ArrivalWater" unique_id=1430573013]
+shape = SubResource("LC_8")
+
+[node name="Surface" type="MeshInstance3D" parent="Sections/S01/ArrivalWater" unique_id=1060890195]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material_override = ExtResource("water_material")
+mesh = SubResource("LC_9")
+
+[node name="EntryWater" type="Area3D" parent="Sections/S01" unique_id=1402150192]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1)
+collision_layer = 0
+script = ExtResource("water")
+explicit_surface = true
+surface_height = 1.0
+shallow_wading_enabled = true
+
+[node name="Collision" type="CollisionShape3D" parent="Sections/S01/EntryWater" unique_id=1927514615]
+shape = SubResource("LC_10")
+
+[node name="Surface" type="MeshInstance3D" parent="Sections/S01/EntryWater" unique_id=490488810]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material_override = ExtResource("water_material")
+mesh = SubResource("LC_11")
+
+[node name="EastBank" type="StaticBody3D" parent="Sections/S01" unique_id=2127290983]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, -0.3, -8)
+
+[node name="Mesh" type="MeshInstance3D" parent="Sections/S01/EastBank" unique_id=1867261167]
+material_override = SubResource("LC_1")
+mesh = SubResource("LC_12")
+
+[node name="Collision" type="CollisionShape3D" parent="Sections/S01/EastBank" unique_id=1977915026]
+shape = SubResource("LC_13")
+
+[node name="ExitBank" type="StaticBody3D" parent="Sections/S01" unique_id=2018326164]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -0.3, -16)
+
+[node name="Mesh" type="MeshInstance3D" parent="Sections/S01/ExitBank" unique_id=274666655]
+material_override = SubResource("LC_1")
+mesh = SubResource("LC_14")
+
+[node name="Collision" type="CollisionShape3D" parent="Sections/S01/ExitBank" unique_id=1694526378]
+shape = SubResource("LC_15")
+
+[node name="ShoreRamp" type="StaticBody3D" parent="Sections/S01" unique_id=628025469]
+transform = Transform3D(0.90152305, -0.4327311, 0, 0.4327311, 0.90152305, 0, 0, 0, 1, -1.3918172, -1.0253807, -8)
+
+[node name="Mesh" type="MeshInstance3D" parent="Sections/S01/ShoreRamp" unique_id=2069677159]
+material_override = SubResource("LC_2")
+mesh = SubResource("LC_16")
+
+[node name="Collision" type="CollisionShape3D" parent="Sections/S01/ShoreRamp" unique_id=1896638208]
+shape = SubResource("LC_17")
+
+[node name="WestWall" type="StaticBody3D" parent="Sections/S01" unique_id=1480095473]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 1, -7)
+
+[node name="Mesh" type="MeshInstance3D" parent="Sections/S01/WestWall" unique_id=375539377]
+material_override = SubResource("LC_1")
+mesh = SubResource("LC_18")
+
+[node name="Collision" type="CollisionShape3D" parent="Sections/S01/WestWall" unique_id=228006512]
+shape = SubResource("LC_19")
+
+[node name="EntryWestWall" type="StaticBody3D" parent="Sections/S01" unique_id=1760209573]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, 1)
+
+[node name="Mesh" type="MeshInstance3D" parent="Sections/S01/EntryWestWall" unique_id=1961911704]
+material_override = SubResource("LC_1")
+mesh = SubResource("LC_20")
+
+[node name="Collision" type="CollisionShape3D" parent="Sections/S01/EntryWestWall" unique_id=569719073]
+shape = SubResource("LC_21")
+
+[node name="EntryEastWall" type="StaticBody3D" parent="Sections/S01" unique_id=579734134]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, 1)
+
+[node name="Mesh" type="MeshInstance3D" parent="Sections/S01/EntryEastWall" unique_id=1201168056]
+material_override = SubResource("LC_1")
+mesh = SubResource("LC_22")
+
+[node name="Collision" type="CollisionShape3D" parent="Sections/S01/EntryEastWall" unique_id=476306834]
+shape = SubResource("LC_23")
+
+[node name="EntryBackstop" type="StaticBody3D" parent="Sections/S01" unique_id=434456663]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 5)
+
+[node name="Mesh" type="MeshInstance3D" parent="Sections/S01/EntryBackstop" unique_id=306777358]
+material_override = SubResource("LC_1")
+mesh = SubResource("LC_24")
+
+[node name="Collision" type="CollisionShape3D" parent="Sections/S01/EntryBackstop" unique_id=1799286810]
+shape = SubResource("LC_25")
+
+[node name="EastOuterWall" type="StaticBody3D" parent="Sections/S01" unique_id=1090769764]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 1, -10)
+
+[node name="Mesh" type="MeshInstance3D" parent="Sections/S01/EastOuterWall" unique_id=1228180564]
+material_override = SubResource("LC_1")
+mesh = SubResource("LC_26")
+
+[node name="Collision" type="CollisionShape3D" parent="Sections/S01/EastOuterWall" unique_id=1584037302]
+shape = SubResource("LC_27")
+
+[node name="WestExitWall" type="StaticBody3D" parent="Sections/S01" unique_id=437165780]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 1, -16)
+
+[node name="Mesh" type="MeshInstance3D" parent="Sections/S01/WestExitWall" unique_id=288238870]
+material_override = SubResource("LC_1")
+mesh = SubResource("LC_28")
+
+[node name="Collision" type="CollisionShape3D" parent="Sections/S01/WestExitWall" unique_id=1852591925]
+shape = SubResource("LC_29")
+
+[node name="PrototypeEndWall" type="StaticBody3D" parent="Sections/S01" unique_id=1039780258]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, -21)
+
+[node name="Mesh" type="MeshInstance3D" parent="Sections/S01/PrototypeEndWall" unique_id=394089532]
+material_override = SubResource("LC_1")
+mesh = SubResource("LC_30")
+
+[node name="Collision" type="CollisionShape3D" parent="Sections/S01/PrototypeEndWall" unique_id=90864724]
+shape = SubResource("LC_31")
+
+[node name="CheckpointPad" type="StaticBody3D" parent="Sections/S01" unique_id=2017613570]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.395, -8)
+
+[node name="Mesh" type="MeshInstance3D" parent="Sections/S01/CheckpointPad" unique_id=475456028]
+material_override = SubResource("LC_3")
+mesh = SubResource("LC_32")
+
+[node name="Collision" type="CollisionShape3D" parent="Sections/S01/CheckpointPad" unique_id=1108372229]
+shape = SubResource("LC_33")
+
+[node name="ArrivalSign" type="Label3D" parent="Sections/S01" unique_id=95573438]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 3, -4)
+pixel_size = 0.012
+billboard = 1
+text = "LIVING CASCADE / ARRIVAL PROTOTYPE
+Swim into the pool, follow the sand ramp to the bank."
+
+[node name="EndSign" type="Label3D" parent="Sections/S01" unique_id=569653627]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 3, -19)
+pixel_size = 0.012
+billboard = 1
+text = "JOIN 12 / STEPPING-STONE GARDEN
+Jump across the stones or swim around them."
+
+[node name="ArrivalRefinements" parent="Sections/S01" unique_id=723210262 instance=ExtResource("arrival_refinements")]
+
+[node name="S02" type="Node3D" parent="Sections" unique_id=137410877]
+metadata/build_status = "garden_prototype"
+metadata/section_title = "Stepping-stone Garden"
+
+[node name="JOIN_12" type="Marker3D" parent="Sections/S02" unique_id=608731054]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.4, -18)
+
+[node name="Garden" parent="Sections/S02" unique_id=1227575537 instance=ExtResource("garden")]
+
+[node name="S03" type="Node3D" parent="Sections" unique_id=4169717]
+metadata/build_status = "root_dive_prototype"
+metadata/section_title = "Hollow-root Dive"
+
+[node name="JOIN_23" type="Marker3D" parent="Sections/S03" unique_id=933255558]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0.8, -44)
+
+[node name="RootDive" parent="Sections/S03" unique_id=841137740 instance=ExtResource("root_dive")]
+
+[node name="S04" type="Node3D" parent="Sections" unique_id=1365812446]
+metadata/build_status = "terraces_prototype"
+metadata/section_title = "Cascade Terraces"
+
+[node name="JOIN_34" type="Marker3D" parent="Sections/S04" unique_id=893285899]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.8, -56)
+
+[node name="CP_02" type="Marker3D" parent="Sections/S04" unique_id=469867417]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0.8, -57)
+
+[node name="Terraces" parent="Sections/S04" unique_id=81868853 instance=ExtResource("terraces")]
+
+[node name="S05" type="Node3D" parent="Sections" unique_id=820704914]
+metadata/build_status = "restoration_prototype"
+metadata/section_title = "Restoration Garden"
+
+[node name="JOIN_45" type="Marker3D" parent="Sections/S05" unique_id=1848315182]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 6.8, -92)
+
+[node name="CP_03" type="Marker3D" parent="Sections/S05" unique_id=1446727459]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 6.8, -94)
+
+[node name="RestorationGarden" parent="Sections/S05" instance=ExtResource("restoration_garden")]
+
+[node name="S06" type="Node3D" parent="Sections" unique_id=1410137070]
+metadata/build_status = "chute_prototype"
+metadata/section_title = "Waterfall Run"
+
+[node name="JOIN_56" type="Marker3D" parent="Sections/S06" unique_id=1881399276]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 7, -104)
+
+[node name="JOIN_OUT" type="Marker3D" parent="Sections/S06" unique_id=261817845]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 1, -110)
+
+[node name="Chute" parent="Sections/S06" instance=ExtResource("chute")]
+
+[node name="Axolotl" parent="." unique_id=87056388 instance=ExtResource("player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 1)
+
+[node name="Camera" type="Camera3D" parent="." unique_id=1884330049]
+current = true
+script = ExtResource("camera")
+target_path = NodePath("../Axolotl")
+
+[node name="Containment" parent="." instance=ExtResource("containment")]
+
+[node name="PreviewSession" type="Node" parent="."]
+script = ExtResource("session")

@@ -30,6 +30,16 @@ enum Cue {
 	MOVEMENT_DIVE,
 	MOVEMENT_WADDLE_STEP,
 	MOVEMENT_HOP,
+	CRAYFISH_PICKUP,
+	DANCE_UNLOCKED,
+	TAIL_WHACK,
+	SPIN_CHARGE,
+	SLIDE,
+	LANDING,
+	NET_CAUGHT,
+	NET_ESCAPE,
+	CHECKPOINT,
+
 }
 
 ## The two movement gestures a producer reports WITHOUT naming a grammar: a

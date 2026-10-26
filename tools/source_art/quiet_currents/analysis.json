@@ -1,0 +1,31 @@
+{
+  "title": "Quiet Currents \u2014 bright pop groove",
+  "bpm": 104,
+  "meter": "4/4",
+  "key": "D major",
+  "bars": 48,
+  "seconds": 110.76922902494331,
+  "events": 1704,
+  "sample_rate": 44100,
+  "peak_dbfs": -4.999999888090177,
+  "rms_dbfs": -23.850805690657843,
+  "decoded_peak_dbfs": -4.962664122390778,
+  "decoded_seam_max_delta": 0.0018302388489246368,
+  "ogg_bytes": 1272511,
+  "source_library": "VSCO 2 Community Edition and VCSL, CC0-1.0",
+  "instruments": [
+    "harp",
+    "piano",
+    "marimba",
+    "bass",
+    "kick",
+    "snare",
+    "hat"
+  ],
+  "swing_ratio": 0.52,
+  "gameplay_player_db": {
+    "land": -10,
+    "water": -13
+  },
+  "sha256": "0d635617bd2b068331b137aa8d9c1e1e3774ab3eede063f2369d99d9d0a70eaa"
+}

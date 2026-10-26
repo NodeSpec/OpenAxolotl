@@ -36,6 +36,7 @@ enum Verb {
 	GILL_MOD_ACTIVATE,
 	GILL_MOD_NEXT,
 	GILL_MOD_PREV,
+	DANCE,
 }
 
 ## Verbs that resolve to a direction rather than a press. Their binding carries a

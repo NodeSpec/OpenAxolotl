@@ -141,6 +141,19 @@ func open_world(module_id: String, declared: Dictionary) -> SaveCompatibilityPol
 			# fork must restore the player's progress.
 			var fresh := _fresh_world(current)
 			fresh["quarantined"] = entry.duplicate(true)
+			# Explicit opt-in for an authored redesign: retain matching earned IDs,
+			# while preserving the complete prior layout blob for rollback.
+			if bool(declared.get("retainKnownProgressOnRedesign",false)):
+				fresh["completed"] = bool(entry.get("completed",false))
+				fresh["unlocked"] = bool(entry.get("unlocked",false))
+				var prior_regions: Dictionary = entry.get("regions",{}) as Dictionary
+				for id: String in current.regions:
+					if prior_regions.has(id):
+						(fresh["regions"] as Dictionary)[id] = prior_regions[id]
+				for id: String in current.collectibles:
+					if id in entry.get("collectibles",[]):
+						(fresh["collectibles"] as Array).append(id)
+				fresh["layoutRevision"] = String(declared.get("layoutRevision",""))
 			worlds[module_id] = fresh
 			if not _quarantined_modules.has(module_id):
 				_quarantined_modules.append(module_id)

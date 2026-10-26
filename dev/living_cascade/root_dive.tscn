@@ -1,0 +1,533 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://core/controller/water_volume.gd" id="water"]
+[ext_resource type="Material" path="res://core/rendering/water_surface.tres" id="watermat"]
+[ext_resource type="Script" path="res://dev/living_cascade/garden_preview.gd" id="preview"]
+[sub_resource type="StandardMaterial3D" id="R_1"]
+albedo_color = Color(0.25, 0.36, 0.25, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="R_2"]
+albedo_color = Color(0.64, 0.6, 0.43, 1)
+
+[sub_resource type="StandardMaterial3D" id="R_3"]
+albedo_color = Color(0.15, 0.8, 0.9, 1)
+emission_enabled = true
+emission = Color(0.1, 0.6, 0.85, 1)
+
+[sub_resource type="BoxMesh" id="R_4"]
+size = Vector3(37, 1, 16)
+
+[sub_resource type="BoxShape3D" id="R_5"]
+size = Vector3(37, 1, 16)
+
+[sub_resource type="BoxMesh" id="R_6"]
+size = Vector3(18, 1, 6)
+
+[sub_resource type="BoxShape3D" id="R_7"]
+size = Vector3(18, 1, 6)
+
+[sub_resource type="BoxShape3D" id="R_8"]
+size = Vector3(37, 3.2, 16.1)
+
+[sub_resource type="PlaneMesh" id="R_9"]
+size = Vector2(37, 16.1)
+subdivide_width = 20
+subdivide_depth = 10
+
+[sub_resource type="BoxShape3D" id="R_10"]
+size = Vector3(18, 3.2, 6.100000000000001)
+
+[sub_resource type="PlaneMesh" id="R_11"]
+size = Vector2(18, 6.100000000000001)
+subdivide_width = 20
+subdivide_depth = 10
+
+[sub_resource type="BoxMesh" id="R_12"]
+size = Vector3(4, 0.5, 6.4031242374328485)
+
+[sub_resource type="BoxShape3D" id="R_13"]
+size = Vector3(4, 0.5, 6.4031242374328485)
+
+[sub_resource type="BoxMesh" id="R_14"]
+size = Vector3(5, 1.6, 4)
+
+[sub_resource type="BoxShape3D" id="R_15"]
+size = Vector3(5, 1.6, 4)
+
+[sub_resource type="BoxMesh" id="R_16"]
+size = Vector3(8.94427190999916, 0.5, 4)
+
+[sub_resource type="BoxShape3D" id="R_17"]
+size = Vector3(8.94427190999916, 0.5, 4)
+
+[sub_resource type="BoxMesh" id="R_18"]
+size = Vector3(4, 1.6, 8)
+
+[sub_resource type="BoxShape3D" id="R_19"]
+size = Vector3(4, 1.6, 8)
+
+[sub_resource type="BoxMesh" id="R_20"]
+size = Vector3(33, 6.5, 10)
+
+[sub_resource type="BoxShape3D" id="R_21"]
+size = Vector3(33, 6.5, 10)
+
+[sub_resource type="BoxMesh" id="R_22"]
+size = Vector3(18, 6.5, 6)
+
+[sub_resource type="BoxShape3D" id="R_23"]
+size = Vector3(18, 6.5, 6)
+
+[sub_resource type="BoxMesh" id="R_24"]
+size = Vector3(2, 8.4, 20)
+
+[sub_resource type="BoxShape3D" id="R_25"]
+size = Vector3(2, 8.4, 20)
+
+[sub_resource type="BoxMesh" id="R_26"]
+size = Vector3(6, 8.4, 2)
+
+[sub_resource type="BoxShape3D" id="R_27"]
+size = Vector3(6, 8.4, 2)
+
+[sub_resource type="BoxMesh" id="R_28"]
+size = Vector3(31, 8.4, 2)
+
+[sub_resource type="BoxShape3D" id="R_29"]
+size = Vector3(31, 8.4, 2)
+
+[sub_resource type="BoxMesh" id="R_30"]
+size = Vector3(14, 8.4, 2)
+
+[sub_resource type="BoxShape3D" id="R_31"]
+size = Vector3(14, 8.4, 2)
+
+[sub_resource type="BoxMesh" id="R_32"]
+size = Vector3(6, 8.4, 2)
+
+[sub_resource type="BoxShape3D" id="R_33"]
+size = Vector3(6, 8.4, 2)
+
+[sub_resource type="BoxMesh" id="R_34"]
+size = Vector3(22, 8.4, 2)
+
+[sub_resource type="BoxShape3D" id="R_35"]
+size = Vector3(22, 8.4, 2)
+
+[sub_resource type="BoxMesh" id="R_36"]
+size = Vector3(2, 8.4, 6)
+
+[sub_resource type="BoxShape3D" id="R_37"]
+size = Vector3(2, 8.4, 6)
+
+[sub_resource type="BoxMesh" id="R_38"]
+size = Vector3(2, 8.4, 6)
+
+[sub_resource type="BoxShape3D" id="R_39"]
+size = Vector3(2, 8.4, 6)
+
+[sub_resource type="BoxMesh" id="R_40"]
+size = Vector3(8, 8.4, 2)
+
+[sub_resource type="BoxShape3D" id="R_41"]
+size = Vector3(8, 8.4, 2)
+
+[sub_resource type="BoxMesh" id="R_42"]
+size = Vector3(8, 8.4, 2)
+
+[sub_resource type="BoxShape3D" id="R_43"]
+size = Vector3(8, 8.4, 2)
+
+[sub_resource type="BoxMesh" id="R_44"]
+size = Vector3(2, 8.4, 6)
+
+[sub_resource type="BoxShape3D" id="R_45"]
+size = Vector3(2, 8.4, 6)
+
+[sub_resource type="BoxMesh" id="R_46"]
+size = Vector3(2, 8.4, 2)
+
+[sub_resource type="BoxShape3D" id="R_47"]
+size = Vector3(2, 8.4, 2)
+
+[sub_resource type="BoxMesh" id="R_48"]
+size = Vector3(2, 8.4, 12)
+
+[sub_resource type="BoxShape3D" id="R_49"]
+size = Vector3(2, 8.4, 12)
+
+[sub_resource type="SphereMesh" id="R_50"]
+radius = 0.12
+height = 0.24
+
+[sub_resource type="SphereMesh" id="R_51"]
+radius = 0.12
+height = 0.24
+
+[sub_resource type="SphereMesh" id="R_52"]
+radius = 0.12
+height = 0.24
+
+[sub_resource type="SphereMesh" id="R_53"]
+radius = 0.12
+height = 0.24
+
+[sub_resource type="SphereMesh" id="R_54"]
+radius = 0.12
+height = 0.24
+
+[sub_resource type="SphereMesh" id="R_55"]
+radius = 0.12
+height = 0.24
+
+[sub_resource type="SphereShape3D" id="R_56"]
+radius = 0.7
+
+[sub_resource type="SphereMesh" id="R_57"]
+radius = 0.3
+height = 0.6
+
+
+[sub_resource type="BoxShape3D" id="ExitWaterShape"]
+size = Vector3(4.2, 3.2, 8)
+[sub_resource type="PlaneMesh" id="ExitWaterMesh"]
+size = Vector2(4.2, 8)
+subdivide_width = 8
+subdivide_depth = 8
+[sub_resource type="BoxShape3D" id="ExitBedShape"]
+size = Vector3(4, 1, 8)
+[sub_resource type="BoxMesh" id="ExitBedMesh"]
+size = Vector3(4, 1, 8)
+
+[node name="RootDive" type="Node3D"]
+script = ExtResource("preview")
+collectible_id = "lantern_shrimp"
+display_name = "Lantern shrimp"
+
+[node name="MainBed" type="StaticBody3D" parent="."]
+position = Vector3(-10.5, -3.7, -54)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="MainBed"]
+mesh = SubResource("R_4")
+material_override = SubResource("R_2")
+
+[node name="Collision" type="CollisionShape3D" parent="MainBed"]
+shape = SubResource("R_5")
+
+[node name="SecretBed" type="StaticBody3D" parent="."]
+position = Vector3(-7, -3.7, -65)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="SecretBed"]
+mesh = SubResource("R_6")
+material_override = SubResource("R_2")
+
+[node name="Collision" type="CollisionShape3D" parent="SecretBed"]
+shape = SubResource("R_7")
+
+[node name="MainWater" type="Area3D" parent="."]
+position = Vector3(-10.5, -1.6, -54.05)
+script = ExtResource("water")
+explicit_surface = true
+surface_height = 1.6
+shallow_wading_enabled = true
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="MainWater"]
+shape = SubResource("R_8")
+
+[node name="Surface" type="MeshInstance3D" parent="MainWater"]
+position = Vector3(0, 1.6, 0)
+mesh = SubResource("R_9")
+material_override = ExtResource("watermat")
+
+[node name="SecretWater" type="Area3D" parent="."]
+position = Vector3(-7, -1.6, -64.95)
+script = ExtResource("water")
+explicit_surface = true
+surface_height = 1.6
+shallow_wading_enabled = true
+collision_layer = 0
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="SecretWater"]
+shape = SubResource("R_10")
+
+[node name="Surface" type="MeshInstance3D" parent="SecretWater"]
+position = Vector3(0, 1.6, 0)
+mesh = SubResource("R_11")
+material_override = ExtResource("watermat")
+
+[node name="EntryReturnRamp" type="StaticBody3D" parent="."]
+position = Vector3(-27, -1.3952172023607579, -48.3438262381114)
+rotation = Vector3(-0.6747409422235526, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="EntryReturnRamp"]
+mesh = SubResource("R_12")
+material_override = SubResource("R_2")
+
+[node name="Collision" type="CollisionShape3D" parent="EntryReturnRamp"]
+shape = SubResource("R_13")
+
+[node name="EntryReturnBank" type="StaticBody3D" parent="."]
+position = Vector3(-27.5, 0, -44)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="EntryReturnBank"]
+mesh = SubResource("R_14")
+material_override = SubResource("R_1")
+
+[node name="Collision" type="CollisionShape3D" parent="EntryReturnBank"]
+shape = SubResource("R_15")
+
+[node name="EastExitRamp" type="StaticBody3D" parent="."]
+position = Vector3(8.11180339887499, -1.4236067977499791, -56)
+rotation = Vector3(0, 0, 0.4636476090008061)
+
+[node name="Mesh" type="MeshInstance3D" parent="EastExitRamp"]
+mesh = SubResource("R_16")
+material_override = SubResource("R_2")
+
+[node name="Collision" type="CollisionShape3D" parent="EastExitRamp"]
+shape = SubResource("R_17")
+
+[node name="RootRoof" type="StaticBody3D" parent="."]
+position = Vector3(-12.5, 2.75, -57)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="RootRoof"]
+mesh = SubResource("R_20")
+material_override = SubResource("R_1")
+
+[node name="Collision" type="CollisionShape3D" parent="RootRoof"]
+shape = SubResource("R_21")
+
+[node name="SecretRoof" type="StaticBody3D" parent="."]
+position = Vector3(-7, 2.75, -65)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="SecretRoof"]
+mesh = SubResource("R_22")
+material_override = SubResource("R_1")
+
+[node name="Collision" type="CollisionShape3D" parent="SecretRoof"]
+shape = SubResource("R_23")
+
+[node name="WestWall" type="StaticBody3D" parent="."]
+position = Vector3(-30, 1, -54)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="WestWall"]
+mesh = SubResource("R_24")
+material_override = SubResource("R_1")
+
+[node name="Collision" type="CollisionShape3D" parent="WestWall"]
+shape = SubResource("R_25")
+
+[node name="EntranceLeft" type="StaticBody3D" parent="."]
+position = Vector3(-32, 1, -45)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="EntranceLeft"]
+mesh = SubResource("R_26")
+material_override = SubResource("R_1")
+
+[node name="Collision" type="CollisionShape3D" parent="EntranceLeft"]
+shape = SubResource("R_27")
+
+[node name="EntranceRight" type="StaticBody3D" parent="."]
+position = Vector3(-3.5, 1, -45)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="EntranceRight"]
+mesh = SubResource("R_28")
+material_override = SubResource("R_1")
+
+[node name="Collision" type="CollisionShape3D" parent="EntranceRight"]
+shape = SubResource("R_29")
+
+[node name="NorthWallWest" type="StaticBody3D" parent="."]
+position = Vector3(-23, 1, -63)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="NorthWallWest"]
+mesh = SubResource("R_30")
+material_override = SubResource("R_1")
+
+[node name="Collision" type="CollisionShape3D" parent="NorthWallWest"]
+shape = SubResource("R_31")
+
+[node name="NorthWallEast" type="StaticBody3D" parent="."]
+position = Vector3(5, 1, -63)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="NorthWallEast"]
+mesh = SubResource("R_32")
+material_override = SubResource("R_1")
+
+[node name="Collision" type="CollisionShape3D" parent="NorthWallEast"]
+shape = SubResource("R_33")
+
+[node name="SecretBackWall" type="StaticBody3D" parent="."]
+position = Vector3(-7, 1, -69)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="SecretBackWall"]
+mesh = SubResource("R_34")
+material_override = SubResource("R_1")
+
+[node name="Collision" type="CollisionShape3D" parent="SecretBackWall"]
+shape = SubResource("R_35")
+
+[node name="SecretLeftWall" type="StaticBody3D" parent="."]
+position = Vector3(-17, 1, -65)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="SecretLeftWall"]
+mesh = SubResource("R_36")
+material_override = SubResource("R_1")
+
+[node name="Collision" type="CollisionShape3D" parent="SecretLeftWall"]
+shape = SubResource("R_37")
+
+[node name="SecretRightWall" type="StaticBody3D" parent="."]
+position = Vector3(3, 1, -65)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="SecretRightWall"]
+mesh = SubResource("R_38")
+material_override = SubResource("R_1")
+
+[node name="Collision" type="CollisionShape3D" parent="SecretRightWall"]
+shape = SubResource("R_39")
+
+[node name="ExitNorthWall" type="StaticBody3D" parent="."]
+position = Vector3(12, 1, -61)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="ExitNorthWall"]
+mesh = SubResource("R_40")
+material_override = SubResource("R_1")
+
+[node name="Collision" type="CollisionShape3D" parent="ExitNorthWall"]
+shape = SubResource("R_41")
+
+[node name="ExitSouthWall" type="StaticBody3D" parent="."]
+position = Vector3(12, 1, -51)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="ExitSouthWall"]
+mesh = SubResource("R_42")
+material_override = SubResource("R_1")
+
+[node name="Collision" type="CollisionShape3D" parent="ExitSouthWall"]
+shape = SubResource("R_43")
+
+[node name="EastWallUpper" type="StaticBody3D" parent="."]
+position = Vector3(9, 1, -48)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="EastWallUpper"]
+mesh = SubResource("R_44")
+material_override = SubResource("R_1")
+
+[node name="Collision" type="CollisionShape3D" parent="EastWallUpper"]
+shape = SubResource("R_45")
+
+[node name="EastWallLower" type="StaticBody3D" parent="."]
+position = Vector3(9, 1, -61)
+rotation = Vector3(0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="EastWallLower"]
+mesh = SubResource("R_46")
+material_override = SubResource("R_1")
+
+[node name="Collision" type="CollisionShape3D" parent="EastWallLower"]
+shape = SubResource("R_47")
+
+[node name="DiveLabel" type="Label3D" parent="."]
+position = Vector3(-22, 2.8, -47)
+text = "HOLLOW-ROOT DIVE\nFollow the cyan lights beneath the root."
+billboard = 1
+pixel_size = 0.009
+
+[node name="EndLabel" type="Label3D" parent="."]
+position = Vector3(13, 3, -56)
+text = "JOIN 34 / CASCADE TERRACES\nFollow the rising mossy landings."
+billboard = 1
+pixel_size = 0.009
+
+[node name="RescueLabel" type="Label3D" parent="."]
+position = Vector3(-12, -0.8, -65)
+text = "OPTIONAL / LANTERN SHRIMP"
+billboard = 1
+pixel_size = 0.009
+
+[node name="Guide0" type="MeshInstance3D" parent="."]
+position = Vector3(-22, -1.6, -50)
+mesh = SubResource("R_50")
+material_override = SubResource("R_3")
+
+[node name="Guide1" type="MeshInstance3D" parent="."]
+position = Vector3(-18, -1.6, -55)
+mesh = SubResource("R_51")
+material_override = SubResource("R_3")
+
+[node name="Guide2" type="MeshInstance3D" parent="."]
+position = Vector3(-10, -1.6, -58)
+mesh = SubResource("R_52")
+material_override = SubResource("R_3")
+
+[node name="Guide3" type="MeshInstance3D" parent="."]
+position = Vector3(-2, -1.6, -58)
+mesh = SubResource("R_53")
+material_override = SubResource("R_3")
+
+[node name="Guide4" type="MeshInstance3D" parent="."]
+position = Vector3(4, -1.6, -58)
+mesh = SubResource("R_54")
+material_override = SubResource("R_3")
+
+[node name="Guide5" type="MeshInstance3D" parent="."]
+position = Vector3(8, -0.2, -56)
+mesh = SubResource("R_55")
+material_override = SubResource("R_3")
+
+[node name="Rescue" type="Area3D" parent="."]
+position = Vector3(-12, -1.6, -65)
+collision_layer = 0
+collision_mask = 1
+metadata/collectible_id = "lantern_shrimp"
+
+[node name="Collision" type="CollisionShape3D" parent="Rescue"]
+shape = SubResource("R_56")
+
+[node name="ShrimpPlaceholder" type="MeshInstance3D" parent="Rescue"]
+mesh = SubResource("R_57")
+material_override = SubResource("R_3")
+
+
+[node name="ExitWater" type="Area3D" parent="."]
+position = Vector3(10, -1.6, -56)
+script = ExtResource("water")
+explicit_surface = true
+surface_height = 1.6
+shallow_wading_enabled = true
+collision_layer = 0
+collision_mask = 1
+[node name="Collision" type="CollisionShape3D" parent="ExitWater"]
+shape = SubResource("ExitWaterShape")
+[node name="Surface" type="MeshInstance3D" parent="ExitWater"]
+position = Vector3(0, 1.6, 0)
+mesh = SubResource("ExitWaterMesh")
+material_override = ExtResource("watermat")
+[node name="ExitBed" type="StaticBody3D" parent="."]
+position = Vector3(10, -3.7, -56)
+[node name="Mesh" type="MeshInstance3D" parent="ExitBed"]
+mesh = SubResource("ExitBedMesh")
+material_override = SubResource("R_2")
+[node name="Collision" type="CollisionShape3D" parent="ExitBed"]
+shape = SubResource("ExitBedShape")

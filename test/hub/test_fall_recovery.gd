@@ -122,10 +122,10 @@ func test_req_003_every_world_has_a_floor_under_all_of_its_playable_space() -> v
 
 		var floors: Array[Area3D] = []
 		for node: Node in world.find_children("*", "Area3D", true, false):
-			if (node as Area3D).is_in_group("pit_volume"):
+			if (node as Area3D).is_in_group("pit_volume") or (node as Area3D).is_in_group("safe_return_volume"):
 				floors.append(node as Area3D)
 		assert_int(floors.size()).override_failure_message(
-			"%s declares no pit_volume, so a fall in it never ends" % path
+			"%s declares no pit or nonlethal return volume, so an escaped fall never ends" % path
 			).is_greater_equal(1)
 
 		var covered := AABB()

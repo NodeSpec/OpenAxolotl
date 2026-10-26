@@ -161,18 +161,17 @@ func test_the_greybox_instances_the_rig_and_worlds_ship_no_lighting() -> void:
 	template.free()
 
 
-func test_every_water_volume_wears_the_shared_unshaded_water_surface() -> void:
-	# Water is a volume the player looks through, not a surface that catches
-	# the sun. The look is the client's, in one shader material every
-	# WaterVolume mesh references, so it reads the same in every world.
+func test_every_water_volume_wears_the_shared_lit_transparent_water_surface() -> void:
+	# Shared sunlight response must coexist with visibility through the water.
 	var material: ShaderMaterial = load(WATER_MATERIAL_PATH)
 	assert_object(material).is_not_null()
 	assert_object(material.shader).override_failure_message(
 		"the water material must carry the shared water shader").is_not_null()
 	var code := material.shader.code
 	assert_bool(code.contains("unshaded")).override_failure_message(
-		"the water shader must stay unshaded so lighting cannot blow it out"
-		).is_true()
+		"shared water must respond to the actual sun").is_false()
+	assert_bool(code.contains("SPECULAR") and code.contains("NORMAL")
+		and code.contains("hint_screen_texture")).is_true()
 	assert_bool(code.contains("ALPHA")).override_failure_message(
 		"the water must stay translucent; an opaque surface hides the axolotl"
 		).is_true()
@@ -185,9 +184,9 @@ func test_every_water_volume_wears_the_shared_unshaded_water_surface() -> void:
 			% scene_path).is_greater(0)
 		for volume: Node in volumes:
 			for mesh: Node in volume.find_children("*", "MeshInstance3D", true, false):
-				var worn := (mesh as MeshInstance3D).get_surface_override_material(0)
+				var worn := (mesh as MeshInstance3D).get_active_material(0) as ShaderMaterial
 				assert_object(worn).is_not_null()
-				assert_str(worn.resource_path).override_failure_message(
+				assert_str(worn.shader.resource_path).override_failure_message(
 					("%s: a water mesh wears its own tint instead of the shared "
-					+ "surface") % scene_path).is_equal(WATER_MATERIAL_PATH)
+					+ "surface") % scene_path).is_equal(material.shader.resource_path)
 		scene.free()

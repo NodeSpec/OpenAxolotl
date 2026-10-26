@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-26",
+  "purpose": "Preserve the locally developed game before the planned architecture and quality rectification.",
+  "source": "Local OpenAxolotl-main game folder",
+  "destinationBranch": "codex-branch",
+  "remoteBase": "b6678a8aaad67af27d4a879e655316ea3fb31bcd",
+  "integration": [
+    "Includes Living Cascade, terrain and collision work, hero backpack and movement, enemy animations and population, crayfish, music, tests and authoring tools.",
+    "Preserves the branch's newer dash gameplay and action-clip timing changes when merging local controller and animation code.",
+    "Preserves the repository's existing NodeSpec model and architecture document; reconciliation with the newer NodeSpec project is a separate operation.",
+    "Includes source-side Godot import settings so fresh checkouts retain texture mipmaps and model import configuration.",
+    "Excludes Godot caches, raw asset inbox uploads, archived design iterations and generated review captures."
+  ],
+  "validation": {
+    "godotVersion": "4.7.2.stable",
+    "freshCheckoutImport": "Passed after redirecting editor user data to a writable workspace directory.",
+    "levelContract": {"target": "worlds/coral_cove", "passed": true, "violations": []},
+    "fullGodotSuiteBeforeImportSettingsRestoration": {"passed": 644, "failed": 8, "total": 652},
+    "focusedGodotSuiteAfterImportSettingsRestoration": {
+      "passed": 16,
+      "failed": 0,
+      "suites": ["test_dash_gameplay_pass", "test_hero_action_timing", "test_cascade_assets"],
+      "resolvedFailure": "test_polished_sections_have_real_mipmapped_surface_maps"
+    },
+    "remainingFullSuiteFailuresNotRectified": [
+      "test_req_012_every_machine_declares_what_it_takes_to_put_down",
+      "test_req_012_each_machine_takes_exactly_the_strikes_it_declares",
+      "test_req_012_a_defeated_hookline_cannot_take_the_equipped_mod",
+      "test_req_002_a_lost_tail_reduces_swim_speed_by_the_tuned_multiplier",
+      "test_req_040_the_dressed_valley_stays_inside_the_triangle_budget",
+      "test_every_kit_prop_loads_with_meshes_and_vertex_colour_albedo",
+      "test_req_011_gameplay_reads_move_but_gameplay_authority_does_not"
+    ],
+    "pythonSuite": {
+      "total": 181,
+      "failures": 6,
+      "errors": 3,
+      "skipped": 7,
+      "environment": "Writable temporary directory; OAX_UNDER_TEST_HARNESS=1 prevents nested setup/CI recursion.",
+      "issues": [
+        "Asset contract layout, naming and provenance validation failures.",
+        "Static gate's INI parser cannot parse multiline project.godot shader global dictionaries; affects three tests and the CI envelope assertion.",
+        "Six terrain texture source files exceed the existing 16 MiB import-source budget."
+      ]
+    },
+    "limitations": "This is a preservation snapshot, not a release qualification. The full Godot suite was not rerun after the focused import-settings fix. No NodeSpec acceptance criteria are marked verified by this snapshot."
+  }
+}

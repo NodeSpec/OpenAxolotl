@@ -1,0 +1,132 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/lagoon_meshy/boulder_cluster.glb" id="1_rock"]
+[ext_resource type="PackedScene" path="res://assets/environment/lagoon_meshy/coral_rock.glb" id="2_coral"]
+[ext_resource type="PackedScene" path="res://assets/environment/lagoon_meshy/flower_cluster.glb" id="3_flower"]
+
+[node name="ImportedModels" type="Node3D"]
+
+[node name="BoulderFrontLeft" parent="." instance=ExtResource("1_rock")]
+position = Vector3(-7.4, 0.10, 7.6)
+rotation = Vector3(0, 0.4, 0)
+scale = Vector3(1.65, 1.65, 1.65)
+
+[node name="BoulderFrontRight" parent="." instance=ExtResource("1_rock")]
+position = Vector3(7.6, 0.10, 7.3)
+rotation = Vector3(0, -0.7, 0)
+scale = Vector3(1.5, 1.5, 1.5)
+
+[node name="BoulderWestShallows" parent="." instance=ExtResource("1_rock")]
+position = Vector3(-10.5, -0.20, 2.7)
+rotation = Vector3(0, 1.6, 0)
+scale = Vector3(1.4, 1.4, 1.4)
+
+[node name="BoulderEastShallows" parent="." instance=ExtResource("1_rock")]
+position = Vector3(10.5, -0.17, 1.0)
+rotation = Vector3(0, -0.3, 0)
+scale = Vector3(1.45, 1.45, 1.45)
+
+[node name="BoulderWestBank" parent="." instance=ExtResource("1_rock")]
+position = Vector3(-10.9, -0.02, -3.2)
+rotation = Vector3(0, -1.2, 0)
+scale = Vector3(1.7, 1.7, 1.7)
+
+[node name="BoulderEastBank" parent="." instance=ExtResource("1_rock")]
+position = Vector3(10.9, -0.02, -4.0)
+rotation = Vector3(0, 0.9, 0)
+scale = Vector3(1.6, 1.6, 1.6)
+
+[node name="BoulderWestTunnel" parent="." instance=ExtResource("1_rock")]
+position = Vector3(-9.35, -0.06, -7.6)
+rotation = Vector3(0, 0.3, 0)
+scale = Vector3(1.25, 1.25, 1.25)
+
+[node name="BoulderEastTunnel" parent="." instance=ExtResource("1_rock")]
+position = Vector3(9.4, -0.06, -7.2)
+rotation = Vector3(0, 2.2, 0)
+scale = Vector3(1.15, 1.15, 1.15)
+
+[node name="BoulderNearBeach" parent="." instance=ExtResource("1_rock")]
+position = Vector3(-11.1, 0.14, 10.0)
+rotation = Vector3(0, -0.5, 0)
+scale = Vector3(1.4, 1.4, 1.4)
+
+[node name="CoralBetweenWestTunnels" parent="." instance=ExtResource("2_coral")]
+position = Vector3(-3.0, -0.22, -5.35)
+rotation = Vector3(0, 0.35, 0)
+scale = Vector3(0.78, 0.78, 0.78)
+
+[node name="CoralBetweenEastTunnels" parent="." instance=ExtResource("2_coral")]
+position = Vector3(3.0, -0.22, -5.5)
+rotation = Vector3(0, -0.65, 0)
+scale = Vector3(0.72, 0.72, 0.72)
+
+[node name="CoralWestEntrance" parent="." instance=ExtResource("2_coral")]
+position = Vector3(-9.1, -0.14, -6.2)
+rotation = Vector3(0, 0.6, 0)
+scale = Vector3(0.95, 0.95, 0.95)
+
+[node name="CoralEastEntrance" parent="." instance=ExtResource("2_coral")]
+position = Vector3(9.2, -0.14, -5.75)
+rotation = Vector3(0, -0.6, 0)
+scale = Vector3(0.82, 0.82, 0.82)
+
+[node name="CoralWestWaterline" parent="." instance=ExtResource("2_coral")]
+position = Vector3(-9.8, -0.16, -0.4)
+rotation = Vector3(0, 1.1, 0)
+scale = Vector3(0.68, 0.68, 0.68)
+
+[node name="CoralEastWaterline" parent="." instance=ExtResource("2_coral")]
+position = Vector3(9.8, -0.16, 3.7)
+rotation = Vector3(0, -0.35, 0)
+scale = Vector3(0.85, 0.85, 0.85)
+
+[node name="CoralNearWestShore" parent="." instance=ExtResource("2_coral")]
+position = Vector3(-8.35, -0.14, 5.45)
+rotation = Vector3(0, 0.15, 0)
+scale = Vector3(0.75, 0.75, 0.75)
+
+[node name="CoralNearEastShore" parent="." instance=ExtResource("2_coral")]
+position = Vector3(7.9, -0.16, 5.4)
+rotation = Vector3(0, -1.1, 0)
+scale = Vector3(0.58, 0.58, 0.58)
+
+[node name="FlowersFrontLeft" parent="." instance=ExtResource("3_flower")]
+position = Vector3(-6.6, 0.14, 9.3)
+rotation = Vector3(0, 0.5, 0)
+scale = Vector3(1.25, 1.25, 1.25)
+
+[node name="FlowersFrontRight" parent="." instance=ExtResource("3_flower")]
+position = Vector3(6.6, 0.14, 9.3)
+rotation = Vector3(0, -0.3, 0)
+scale = Vector3(1.15, 1.15, 1.15)
+
+[node name="FlowersWestBeach" parent="." instance=ExtResource("3_flower")]
+position = Vector3(-10.0, 0.14, 7.75)
+rotation = Vector3(0, -0.6, 0)
+scale = Vector3(0.95, 0.95, 0.95)
+
+[node name="FlowersEastBeach" parent="." instance=ExtResource("3_flower")]
+position = Vector3(10.0, 0.14, 7.7)
+rotation = Vector3(0, 0.8, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+
+[node name="FlowersWestRockGarden" parent="." instance=ExtResource("3_flower")]
+position = Vector3(-12.1, 0.16, 0.0)
+rotation = Vector3(0, 1.1, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+
+[node name="FlowersEastRockGarden" parent="." instance=ExtResource("3_flower")]
+position = Vector3(12.1, 0.16, -1.9)
+rotation = Vector3(0, -1.2, 0)
+scale = Vector3(0.95, 0.95, 0.95)
+
+[node name="FlowersWestTunnelBank" parent="." instance=ExtResource("3_flower")]
+position = Vector3(-10.8, 0.16, -6.2)
+rotation = Vector3(0, 0.4, 0)
+scale = Vector3(0.85, 0.85, 0.85)
+
+[node name="FlowersEastTunnelBank" parent="." instance=ExtResource("3_flower")]
+position = Vector3(10.8, 0.16, -6.6)
+rotation = Vector3(0, -0.8, 0)
+scale = Vector3(0.8, 0.8, 0.8)

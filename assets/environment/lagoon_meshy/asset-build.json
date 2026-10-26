@@ -1,0 +1,226 @@
+[
+  {
+    "name": "coral_rock",
+    "source": "Meshy_AI_coral_rock_decor_0909023358_image-to-3d-texture.glb",
+    "source_sha256": "245cccd37f011ff90e27df31a624504110b841986b7f5d283c7a080569925790",
+    "source_triangles": 1943356,
+    "game_triangles": 63999,
+    "source_bounds_blender": [
+      [
+        -0.9518960118293762,
+        -0.949999988079071,
+        -0.8899239897727966
+      ],
+      [
+        0.9513850212097168,
+        0.9517319798469543,
+        0.8877890110015869
+      ]
+    ],
+    "textures": [
+      {
+        "name": "Image_0",
+        "source_size": [
+          4096,
+          4096
+        ],
+        "game_size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Image_1",
+        "source_size": [
+          2048,
+          2048
+        ],
+        "game_size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Image_2",
+        "source_size": [
+          4096,
+          4096
+        ],
+        "game_size": [
+          2048,
+          2048
+        ]
+      }
+    ],
+    "game_file": "coral_rock.glb",
+    "game_bytes": 5850008
+  },
+  {
+    "name": "boulder_cluster",
+    "source": "Meshy_AI_boulder_rock_cluster_0909023324_image-to-3d-texture.glb",
+    "source_sha256": "51212feec5ec92f2e69a30a43410f8608e468214500cc6a994160f11fbd9c5fc",
+    "source_triangles": 1916772,
+    "game_triangles": 28000,
+    "source_bounds_blender": [
+      [
+        -0.9517070055007935,
+        -0.9409559965133667,
+        -0.3026309907436371
+      ],
+      [
+        0.9509490132331848,
+        0.9416059851646423,
+        0.3011940121650696
+      ]
+    ],
+    "textures": [
+      {
+        "name": "Image_0",
+        "source_size": [
+          4096,
+          4096
+        ],
+        "game_size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Image_1",
+        "source_size": [
+          2048,
+          2048
+        ],
+        "game_size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Image_2",
+        "source_size": [
+          4096,
+          4096
+        ],
+        "game_size": [
+          2048,
+          2048
+        ]
+      }
+    ],
+    "game_file": "boulder_cluster.glb",
+    "game_bytes": 3830788
+  },
+  {
+    "name": "flower_cluster",
+    "source": "Meshy_AI_flower_cluster_0909023349_image-to-3d-texture.glb",
+    "source_sha256": "b2a53540f12e688b34adffb0d75a6ce61f28410a4837ecd26c3e50eda3f9e1ad",
+    "source_triangles": 1941428,
+    "game_triangles": 63999,
+    "source_bounds_blender": [
+      [
+        -0.9514700174331665,
+        -0.849636971950531,
+        -0.6401309967041016
+      ],
+      [
+        0.9508529901504517,
+        0.8479120135307312,
+        0.6483290195465088
+      ]
+    ],
+    "textures": [
+      {
+        "name": "Image_0",
+        "source_size": [
+          4096,
+          4096
+        ],
+        "game_size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Image_1",
+        "source_size": [
+          2048,
+          2048
+        ],
+        "game_size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Image_2",
+        "source_size": [
+          4096,
+          4096
+        ],
+        "game_size": [
+          2048,
+          2048
+        ]
+      }
+    ],
+    "game_file": "flower_cluster.glb",
+    "game_bytes": 6240888
+  },
+  {
+    "name": "waterfall_arch",
+    "source": "Meshy_AI_rock_arch_waterfall_0909023338_image-to-3d-texture.glb",
+    "source_sha256": "b222d43dd6744e6c7a60bb2f91740edf5eff0b1fe020ae01a18f66be6e9649ec",
+    "source_triangles": 1866896,
+    "game_triangles": 96000,
+    "source_bounds_blender": [
+      [
+        -0.9249500036239624,
+        -0.9509119987487793,
+        -0.6337159872055054
+      ],
+      [
+        0.9351469874382019,
+        0.9519069790840149,
+        0.6504009962081909
+      ]
+    ],
+    "textures": [
+      {
+        "name": "Image_0",
+        "source_size": [
+          4096,
+          4096
+        ],
+        "game_size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Image_1",
+        "source_size": [
+          2048,
+          2048
+        ],
+        "game_size": [
+          2048,
+          2048
+        ]
+      },
+      {
+        "name": "Image_2",
+        "source_size": [
+          4096,
+          4096
+        ],
+        "game_size": [
+          2048,
+          2048
+        ]
+      }
+    ],
+    "game_file": "waterfall_arch.glb",
+    "game_bytes": 8980060
+  }
+]

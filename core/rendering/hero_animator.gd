@@ -42,6 +42,8 @@ const HURT := "hurt"
 const ROLL := "roll"
 const SPIN := "spin"
 const WHACK := "whack"
+const DANCE := "dance"
+var allow_water_whack := false
 
 ## Clips that describe an ongoing state rather than an event. Godot's glTF
 ## import leaves every clip non-looping, so the ongoing ones are set to loop
@@ -51,7 +53,7 @@ const LOOPING: Array[String] = [IDLE, WADDLE, SWIM, FALL]
 ## The one-shots, in the order a clash is resolved: a flinch outranks a dodge,
 ## because being hit interrupts what you were doing. Anything already playing
 ## from this list is otherwise left to finish.
-const ACTIONS: Array[String] = [HURT, ROLL, SPIN, WHACK]
+const ACTIONS: Array[String] = [HURT, ROLL, SPIN, WHACK, DANCE]
 
 ## Below this vertical speed a body in the air is neither rising nor falling
 ## in any way worth animating, and the clip would flicker at the apex.
@@ -72,6 +74,10 @@ var _current: String = ""
 ## The one-shot currently overriding locomotion, and how much of it is left.
 var _action: String = ""
 var _action_remaining: float = 0.0
+var _action_duration: float = 0.0
+var _lower_phase: float = 0.0
+var _lower_walking: bool = false
+var _leg_tracks: Dictionary = {}
 
 
 ## Which clip a body in this state should be playing.
@@ -93,11 +99,29 @@ func bind(model: Node) -> bool:
 	if players.is_empty():
 		return false
 	_player = players[0] as AnimationPlayer
+	for library_name: StringName in _player.get_animation_library_list():
+		var copy := _player.get_animation_library(library_name).duplicate(true) as AnimationLibrary
+		_player.remove_animation_library(library_name)
+		_player.add_animation_library(library_name,copy)
+	var skeletons := model.find_children("*","Skeleton3D",true,false)
+	if not skeletons.is_empty():
+		HeroActionClips.install(_player,skeletons[0] as Skeleton3D)
+	_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 	for name: String in LOOPING:
 		if _player.has_animation(name):
 			_player.get_animation(name).loop_mode = Animation.LOOP_LINEAR
+	if _player.has_animation(WADDLE):
+		var walk := _player.get_animation(WADDLE)
+		for track: int in walk.get_track_count():
+			if walk.track_get_type(track) == Animation.TYPE_ROTATION_3D:
+				var path: NodePath = walk.track_get_path(track)
+				if path.get_subname_count() > 0:
+					_leg_tracks[String(path.get_subname(0))] = track
 	return true
 
+
+func install_dance(skeleton: Skeleton3D, feet: Dictionary) -> void:
+	if _player!=null:preload("res://core/rendering/hero_dance_clips.gd").install(_player,skeleton,feet)
 
 func is_bound() -> bool:
 	return _player != null
@@ -123,7 +147,10 @@ func play_hurt() -> void:
 ##
 ## A negative target keeps legacy behaviour and uses the authored clip length.
 ## Returns false when there is nothing to play — no player, no such clip, or a
-## higher-ranked action already running.
+## higher-ranked action already running. A rig that predates one of these clips
+## therefore keeps moving normally rather than freezing on a clip it does not
+## have, which is the same forgiveness `bind` extends to a model with no
+## AnimationPlayer at all.
 func play_action(action: String, target_duration: float = -1.0) -> bool:
 	if _player == null or not _player.has_animation(action):
 		return false
@@ -143,13 +170,12 @@ func play_action(action: String, target_duration: float = -1.0) -> bool:
 		return false
 
 	_action = action
-	_action_remaining = visible_duration
+	_lower_phase = get_gait_phase()
+	_action_duration = visible_duration
+	_action_remaining = _action_duration
 	_current = action
-	# AnimationPlayer speed_scale multiplies playback rate. A 1.0 s authored
-	# clip targeting a 0.5 s gameplay window therefore runs at 2x; a 0.25 s clip
-	# targeting 0.5 s runs at 0.5x. The visual and the mechanic end together.
 	_player.speed_scale = authored_length / visible_duration
-	_player.play(action, BLEND_SECONDS)
+	_player.play(action, 0.045)
 	return true
 
 
@@ -157,28 +183,69 @@ func play_action(action: String, target_duration: float = -1.0) -> bool:
 func get_current_action() -> String:
 	return _action if _action_remaining > 0.0 else ""
 
+func get_action_phase() -> float:
+	return clampf(1.0-_action_remaining/_action_duration,0,1) if _action_duration > 0 else 0.0
+
+func get_gait_phase() -> float:
+	if _current == WHACK:
+		return _lower_phase
+	if _player == null or _current != WADDLE:
+		return 0.0
+	return fposmod(_player.current_animation_position/_player.get_animation(WADDLE).length,1.0)
+
+func has_walking_feet() -> bool:
+	return _current == WADDLE or (_current == WHACK and _lower_walking)
+
+func walking_leg_pose(bone: String) -> Quaternion:
+	if _player == null or not _leg_tracks.has(bone):
+		return Quaternion.IDENTITY
+	var clip := _player.get_animation(WADDLE)
+	return clip.rotation_track_interpolate(int(_leg_tracks[bone]),_lower_phase*clip.length)
+
+func reset() -> void:
+	_action = ""
+	_action_remaining = 0.0
+	_lower_walking = false
+	_current = ""
+	if _player != null:
+		_player.stop()
+
 
 func step(delta: float, in_water: bool, grounded: bool,
 		velocity: Vector3) -> void:
 	if _player == null:
 		return
+	var planar := Vector2(velocity.x, velocity.z).length()
+	_lower_walking = grounded and not in_water and planar > MOVING_SPEED
+	if _action == WHACK and _lower_walking:
+		_lower_phase = fposmod(_lower_phase+delta*clampf(planar/1.2,0.0,4.5),1.0)
 	if _action_remaining > 0.0:
+		if (_action == SPIN and not in_water) or (_action==ROLL and in_water) or (_action==WHACK and in_water and not allow_water_whack) or (_action==DANCE and (in_water or not grounded)):
+			_action_remaining = 0.0
+			_action = ""
 		_action_remaining -= delta
 		if _action_remaining > 0.0:
+			if _player.is_inside_tree():
+				_player.advance(delta)
 			return
 		_action = ""
 
-	var planar := Vector2(velocity.x, velocity.z).length()
 	var wanted := choose_clip(in_water, grounded, velocity.y, planar)
 	if wanted != _current and _player.has_animation(wanted):
+		var returning_to_walk: bool = _current == WHACK and wanted == WADDLE
 		_current = wanted
-		_player.play(wanted, BLEND_SECONDS)
+		var blend := 0.20 if wanted == SWIM or _player.current_animation == SWIM else BLEND_SECONDS
+		_player.play(wanted, blend)
+		if returning_to_walk and _player.is_inside_tree():
+			_player.seek(_lower_phase*_player.get_animation(WADDLE).length,true)
 
 	# A waddle at half speed should not play at full tempo: tying playback to
 	# travel is what stops the legs from skating over the ground.
 	if _current == WADDLE:
-		_player.speed_scale = clampf(planar / 2.5, 0.6, 1.8)
+		_player.speed_scale = clampf(planar/1.2,0.0,4.5)*_player.get_animation(WADDLE).length
 	elif _current == SWIM:
 		_player.speed_scale = clampf(velocity.length() / 6.0, 0.5, 1.8)
 	else:
 		_player.speed_scale = 1.0
+	if _player.is_inside_tree():
+		_player.advance(delta)

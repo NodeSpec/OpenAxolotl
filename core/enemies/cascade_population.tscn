@@ -1,0 +1,119 @@
+[gd_scene load_steps=5 format=3]
+[ext_resource type="Script" path="res://core/enemies/fleet_encounter.gd" id="1"]
+[ext_resource type="PackedScene" path="res://core/enemies/visuals/netbot_visual.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://core/enemies/visuals/hookline_rig_visual.tscn" id="3"]
+[sub_resource type="SphereShape3D" id="Body"]
+radius = 0.58
+[node name="EnemyPopulation" type="Node3D"]
+
+[node name="S02_N01" type="Area3D" parent="." groups=["enemy"]]
+position = Vector3(-16, 0.846, -23)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1")
+underwater = false
+notice_range = 6.0
+leash_radius = 1.7
+patrol_radius = 0.45
+metadata/enemy_id = "netbot"
+[node name="CollisionShape3D" type="CollisionShape3D" parent="S02_N01"]
+shape = SubResource("Body")
+[node name="Visual" parent="S02_N01" instance=ExtResource("2")]
+
+[node name="S02_N02" type="Area3D" parent="." groups=["enemy"]]
+position = Vector3(-17, 1.34, -42.5)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1")
+underwater = false
+notice_range = 5.0
+leash_radius = 1.0
+patrol_radius = 0.45
+metadata/enemy_id = "netbot"
+[node name="CollisionShape3D" type="CollisionShape3D" parent="S02_N02"]
+shape = SubResource("Body")
+[node name="Visual" parent="S02_N02" instance=ExtResource("2")]
+
+[node name="S03_H02" type="Area3D" parent="." groups=["enemy"]]
+position = Vector3(-22, -1.6, -51)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1")
+underwater = true
+notice_range = 6.0
+leash_radius = 1.2
+patrol_radius = 0.45
+metadata/enemy_id = "hookline_rig"
+[node name="CollisionShape3D" type="CollisionShape3D" parent="S03_H02"]
+shape = SubResource("Body")
+[node name="Visual" parent="S03_H02" instance=ExtResource("3")]
+
+[node name="S03_H01" type="Area3D" parent="." groups=["enemy"]]
+position = Vector3(-10, -1.6, -63)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1")
+underwater = true
+notice_range = 5.0
+leash_radius = 0.0
+patrol_radius = 0.0
+metadata/enemy_id = "hookline_rig"
+[node name="CollisionShape3D" type="CollisionShape3D" parent="S03_H01"]
+shape = SubResource("Body")
+[node name="Visual" parent="S03_H01" instance=ExtResource("3")]
+
+[node name="S04_N01" type="Area3D" parent="." groups=["enemy"]]
+position = Vector3(30, 2.94, -72.5)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1")
+underwater = false
+notice_range = 5.0
+leash_radius = 1.2
+patrol_radius = 0.45
+metadata/enemy_id = "netbot"
+[node name="CollisionShape3D" type="CollisionShape3D" parent="S04_N01"]
+shape = SubResource("Body")
+[node name="Visual" parent="S04_N01" instance=ExtResource("2")]
+
+[node name="S04_H01" type="Area3D" parent="." groups=["enemy"]]
+position = Vector3(15, 1.1, -68)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1")
+underwater = true
+notice_range = 5.0
+leash_radius = 0.0
+patrol_radius = 0.0
+metadata/enemy_id = "hookline_rig"
+[node name="CollisionShape3D" type="CollisionShape3D" parent="S04_H01"]
+shape = SubResource("Body")
+[node name="Visual" parent="S04_H01" instance=ExtResource("3")]
+
+[node name="S02_H01" type="Area3D" parent="." groups=["enemy"]]
+position = Vector3(-23, 1.35, -42)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1")
+underwater = false
+notice_range = 5.0
+leash_radius = 0.0
+patrol_radius = 0.0
+metadata/enemy_id = "hookline_rig"
+[node name="CollisionShape3D" type="CollisionShape3D" parent="S02_H01"]
+shape = SubResource("Body")
+[node name="Visual" parent="S02_H01" instance=ExtResource("3")]
+
+[node name="S04_H02" type="Area3D" parent="." groups=["enemy"]]
+position = Vector3(24, 2.94, -74)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1")
+underwater = false
+notice_range = 5.0
+leash_radius = 0.0
+patrol_radius = 0.0
+metadata/enemy_id = "hookline_rig"
+[node name="CollisionShape3D" type="CollisionShape3D" parent="S04_H02"]
+shape = SubResource("Body")
+[node name="Visual" parent="S04_H02" instance=ExtResource("3")]

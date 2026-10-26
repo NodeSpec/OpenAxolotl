@@ -1,0 +1,72 @@
+{
+  "input": "C:\\Users\\ltben\\Documents\\OpenAxolotl-main\\asset_inbox\\Meshy_AI_Mossy_Stone_Island_0913173318_texture-optimized.glb",
+  "output": "C:\\Users\\ltben\\Documents\\Codex\\2026-09-11\\ana\\work\\cascade-assets\\mossy_stone\\mossy_stone.glb",
+  "budget": 24000,
+  "meshes": 1,
+  "diagonal": 2.7864851810671163,
+  "weld": {
+    "distance": 2.7864851810671165e-05,
+    "merged": 903864,
+    "openEdgesBefore": 1534586,
+    "openEdgesAfter": 28992,
+    "openEdgesAfterDecimation": 7521
+  },
+  "reduction": {
+    "ratio": 0.010345465259281067,
+    "trianglesBefore": 2319857,
+    "trianglesAfter": 24000,
+    "skipped": false
+  },
+  "deviation": [
+    {
+      "direction": "decimated_to_original",
+      "samples": 12000,
+      "mean": 0.001291166197348889,
+      "p95": 0.004014860466122626,
+      "max": 0.012632359750568867,
+      "worstAt": [
+        -0.0963,
+        -0.1218,
+        0.2974
+      ],
+      "maxAsFractionOfDiagonal": 0.004533438697754409,
+      "p95AsFractionOfDiagonal": 0.0014408332380167511
+    },
+    {
+      "direction": "original_to_decimated",
+      "samples": 12000,
+      "mean": 0.001358647144851676,
+      "p95": 0.004313488327898083,
+      "max": 0.01279862504452467,
+      "worstAt": [
+        -0.4247,
+        -0.7481,
+        -0.1353
+      ],
+      "maxAsFractionOfDiagonal": 0.004593107162918157,
+      "p95AsFractionOfDiagonal": 0.0015480033259126047
+    }
+  ],
+  "images": [],
+  "imagesRenamed": [
+    {
+      "image": "Image_0",
+      "to": "base_color",
+      "role": "base_color"
+    },
+    {
+      "image": "Image_2",
+      "to": "normal",
+      "role": "normal"
+    },
+    {
+      "image": "Image_1",
+      "to": "metallic_roughness",
+      "role": "metallic_roughness"
+    }
+  ],
+  "blender": "4.5.3 LTS",
+  "asset": "mossy_stone",
+  "final_bytes": 6295992,
+  "final_sha256": "aa69b5f04f7b15814c7ef3f8732a6c94d52218a013e2b5f44b41a17bc963543b"
+}

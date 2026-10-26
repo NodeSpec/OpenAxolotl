@@ -1,0 +1,163 @@
+[
+  {
+    "asset": "rock_face_03",
+    "source": "https://polyhaven.com/a/rock_face_03",
+    "license": "CC0-1.0",
+    "authors": {
+      "Dario Barresi": "Photography",
+      "Rico Cilliers": "Processing"
+    },
+    "dimensions": [
+      2699.9995708465576,
+      2699.9995708465576
+    ],
+    "files": [
+      {
+        "file": "rock_face_03_diff_2k.jpg",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rock_face_03/rock_face_03_diff_2k.jpg",
+        "bytes": 3814362,
+        "sha256": "644ee79df7ffbf5f6afc330b64dd3f33794bab8820915fe61ffe0c88ecfd7ece"
+      },
+      {
+        "file": "rock_face_03_arm_2k.png",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/2k/rock_face_03/rock_face_03_arm_2k.png",
+        "bytes": 17501637,
+        "sha256": "8b306caf9c78d7293cc2baf4caa6214612e1f0be70660771b85cbb3faafe9c2d"
+      },
+      {
+        "file": "rock_face_03_nor_gl_2k.png",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/2k/rock_face_03/rock_face_03_nor_gl_2k.png",
+        "bytes": 23159678,
+        "sha256": "53044f276b4f1c3041b91c7d4767bda0d75cb4b2d237f08b64eb4e95ee456a93"
+      }
+    ]
+  },
+  {
+    "asset": "mossy_rock",
+    "source": "https://polyhaven.com/a/mossy_rock",
+    "license": "CC0-1.0",
+    "authors": {
+      "Rob Tuytel": "All"
+    },
+    "dimensions": [
+      3000,
+      3000
+    ],
+    "files": [
+      {
+        "file": "mossy_rock_diff_2k.jpg",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/mossy_rock/mossy_rock_diff_2k.jpg",
+        "bytes": 4535360,
+        "sha256": "98ecbd1d19953433f5909b79958992b1da2b45addbee772d1d4c27287f368499"
+      },
+      {
+        "file": "mossy_rock_nor_gl_2k.png",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/2k/mossy_rock/mossy_rock_nor_gl_2k.png",
+        "bytes": 8716359,
+        "sha256": "b72a20fb7101bd962150c1061cd1d798c2b2d77815092543593eb23d3f0f1735"
+      },
+      {
+        "file": "mossy_rock_arm_2k.png",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/2k/mossy_rock/mossy_rock_arm_2k.png",
+        "bytes": 6584312,
+        "sha256": "c4a644ab39a49fb293e7b7bf291bc6f163d0510e877681fa94b1a18d57ebf4b0"
+      }
+    ]
+  },
+  {
+    "asset": "sand_01",
+    "source": "https://polyhaven.com/a/sand_01",
+    "license": "CC0-1.0",
+    "authors": {
+      "Rob Tuytel": "All"
+    },
+    "dimensions": [
+      1500,
+      1500
+    ],
+    "files": [
+      {
+        "file": "sand_01_diff_2k.jpg",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/sand_01/sand_01_diff_2k.jpg",
+        "bytes": 1984816,
+        "sha256": "f311767ab68e132cb9de4160493a71ff17ec765c699d411facd5154d9a9a9c18"
+      },
+      {
+        "file": "sand_01_arm_2k.png",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/2k/sand_01/sand_01_arm_2k.png",
+        "bytes": 15345093,
+        "sha256": "6ab2b99e9b95b2e9792e6d51276d6eb8b773ba3673904b300789f0e344ed89d6"
+      },
+      {
+        "file": "sand_01_nor_gl_2k.png",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/2k/sand_01/sand_01_nor_gl_2k.png",
+        "bytes": 21778772,
+        "sha256": "fc1d2f1af4c6166cbc0dc696999f7a92a207b8fbd22208fa384a6c03299b942f"
+      }
+    ]
+  },
+  {
+    "asset": "leafy_grass",
+    "source": "https://polyhaven.com/a/leafy_grass",
+    "license": "CC0-1.0",
+    "authors": {
+      "Charlotte Baglioni": "All"
+    },
+    "dimensions": [
+      2000,
+      2000
+    ],
+    "files": [
+      {
+        "file": "leafy_grass_diff_2k.jpg",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/leafy_grass/leafy_grass_diff_2k.jpg",
+        "bytes": 4766204,
+        "sha256": "8e1c6d21365d4b89bc5a35ab664da98a78dbc3ab9ba6100474881c8619a5b113"
+      },
+      {
+        "file": "leafy_grass_nor_gl_2k.png",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/2k/leafy_grass/leafy_grass_nor_gl_2k.png",
+        "bytes": 24430051,
+        "sha256": "476a34f2f60186f51644c3b9560d7659531a033f993b01f274f939e447f3de25"
+      },
+      {
+        "file": "leafy_grass_arm_2k.png",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/2k/leafy_grass/leafy_grass_arm_2k.png",
+        "bytes": 18216000,
+        "sha256": "ae94a44475b5793ca72cc8f9ad26f0ccd03bc5f72b0992e5070a38f923ea0bf9"
+      }
+    ]
+  },
+  {
+    "asset": "dry_river_pebbles",
+    "source": "https://polyhaven.com/a/dry_river_pebbles",
+    "license": "CC0-1.0",
+    "authors": {
+      "Amal Kumar": "All"
+    },
+    "dimensions": [
+      2000.9167194366455,
+      2000.917911529541
+    ],
+    "files": [
+      {
+        "file": "dry_river_pebbles_diff_2k.jpg",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/dry_river_pebbles/dry_river_pebbles_diff_2k.jpg",
+        "bytes": 3251744,
+        "sha256": "f3d3b581bffc78be28b1eb4b73101bff574841944fb6867be901b3bc03d1bda7"
+      },
+      {
+        "file": "dry_river_pebbles_arm_2k.png",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/2k/dry_river_pebbles/dry_river_pebbles_arm_2k.png",
+        "bytes": 14712273,
+        "sha256": "ec1af6ca06e99aa4210d850c0fd94af528f72b3f6260a8c2697a35ab7deeee6e"
+      },
+      {
+        "file": "dry_river_pebbles_nor_gl_2k.png",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/2k/dry_river_pebbles/dry_river_pebbles_nor_gl_2k.png",
+        "bytes": 26201783,
+        "sha256": "c3adbfb9b12c201603f7e93d0bfc70bfd5d07531bc092cdec1f5b0140ad4c630"
+      }
+    ]
+  }
+]

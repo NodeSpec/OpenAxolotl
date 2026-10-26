@@ -55,6 +55,7 @@ var _was_holding: bool = false
 ## Set when a hop fires and cleared on landing: a jump the player chose to
 ## end early must not also be eligible for coyote time on the way down.
 var _airborne_by_hop: bool = false
+var _rise_cut_applied: bool = false
 
 
 func _init(tuning: TuningData) -> void:
@@ -100,6 +101,7 @@ func consume() -> void:
 	_buffer_remaining = 0.0
 	_coyote_remaining = 0.0
 	_airborne_by_hop = true
+	_rise_cut_applied = false
 
 
 ## The vertical velocity after applying the release cut. `holding` is the
@@ -109,8 +111,10 @@ func consume() -> void:
 ## Only ever reduces a RISING velocity: cutting a fall would be a mid-air brake,
 ## and cutting a rise the player is still asking for would steal the full jump.
 func cut_rise(vertical_speed: float, holding: bool) -> float:
-	if holding or vertical_speed <= 0.0 or not _airborne_by_hop:
+	if holding or vertical_speed <= 0.0 or not _airborne_by_hop or _rise_cut_applied:
 		return vertical_speed
+	# Apply once per jump; multiplying every frame makes tap height depend on FPS.
+	_rise_cut_applied = true
 	return vertical_speed * clampf(_tuning.get_number(CUT_KEY), 0.0, 1.0)
 
 

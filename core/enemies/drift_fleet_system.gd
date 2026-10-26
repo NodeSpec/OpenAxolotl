@@ -55,9 +55,9 @@ extends RefCounted
 ## it here rather than knowing it is what lets a forked world ship a machine
 ## with its own weight without touching the runtime.
 ##
-## DEFEAT IS A KNOCK-OUT THAT STAYS DOWN, NOT A DESTRUCTION. These are faceless
-## industrial machines and the game may not depict violence done to anything
-## that reads as alive (REQ-019 AC-5). And "for good" means for the ATTEMPT:
+## DEFEAT IS ATTEMPT-SCOPED. Living Cascade now breaks these industrial robots
+## into mechanical pieces at the player's request. No living creatures share
+## that effect. "For good" means for the ATTEMPT:
 ## [method reset_defeats] puts the whole roster back on its feet, and the Game
 ## Client calls it on a checkpoint respawn — so a player who dies re-fights the
 ## stretch they died in rather than walking an emptied level.
@@ -272,6 +272,10 @@ func _counter_active(affordance: String) -> bool:
 func is_entangled() -> bool:
 	return not _entangles.is_empty()
 
+
+## Clears a captured player's original slow when the escape challenge ends.
+func release_entanglement(unit_id: String) -> void:
+	if _entangles.has(unit_id): _release_entangle(unit_id, true)
 
 func _release_entangle(unit_id: String, escaped: bool) -> void:
 	_entangles.erase(unit_id)

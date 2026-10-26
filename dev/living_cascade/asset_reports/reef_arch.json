@@ -1,0 +1,72 @@
+{
+  "input": "C:\\Users\\ltben\\Documents\\OpenAxolotl-main\\asset_inbox\\Meshy_AI_Coralvine_Arch_0913195214_texture-optimized.glb",
+  "output": "C:\\Users\\ltben\\Documents\\Codex\\2026-09-11\\ana\\work\\cascade-assets\\reef_arch\\reef_arch.glb",
+  "budget": 16000,
+  "meshes": 1,
+  "diagonal": 2.9679054263539957,
+  "weld": {
+    "distance": 2.967905426353996e-05,
+    "merged": 1020313,
+    "openEdgesBefore": 1726393,
+    "openEdgesAfter": 30081,
+    "openEdgesAfterDecimation": 8627
+  },
+  "reduction": {
+    "ratio": 0.006875655067293325,
+    "trianglesBefore": 2327051,
+    "trianglesAfter": 15999,
+    "skipped": false
+  },
+  "deviation": [
+    {
+      "direction": "decimated_to_original",
+      "samples": 12000,
+      "mean": 0.005975244094801954,
+      "p95": 0.017288731038570405,
+      "max": 0.048370569944381714,
+      "worstAt": [
+        0.5128,
+        0.6797,
+        -0.0645
+      ],
+      "maxAsFractionOfDiagonal": 0.016297881163890002,
+      "p95AsFractionOfDiagonal": 0.005825229768122773
+    },
+    {
+      "direction": "original_to_decimated",
+      "samples": 12000,
+      "mean": 0.007092125357722572,
+      "p95": 0.020374744758009912,
+      "max": 0.04942655563354492,
+      "worstAt": [
+        -0.6422,
+        0.1747,
+        0.587
+      ],
+      "maxAsFractionOfDiagonal": 0.016653682827846815,
+      "p95AsFractionOfDiagonal": 0.006865024935460906
+    }
+  ],
+  "images": [],
+  "imagesRenamed": [
+    {
+      "image": "Image_0",
+      "to": "base_color",
+      "role": "base_color"
+    },
+    {
+      "image": "Image_2",
+      "to": "normal",
+      "role": "normal"
+    },
+    {
+      "image": "Image_1",
+      "to": "metallic_roughness",
+      "role": "metallic_roughness"
+    }
+  ],
+  "blender": "4.5.3 LTS",
+  "asset": "reef_arch",
+  "final_bytes": 6590504,
+  "final_sha256": "40baa28fde68a35ff2d202f52541f9a71c1b688b61b86709c8e7f9586686b03b"
+}

@@ -64,14 +64,25 @@ var _was_grounded: bool = true
 ## Visual only: a body whose model carries no AnimationPlayer simply never
 ## binds, which is what the bare bodies the walk probes build do.
 var _animator: HeroAnimator
+var _motion: HeroMotion
+var _model_base_position := Vector3.ZERO
 
 ## Overlapping water volumes, counted rather than flagged: two volumes meeting at
 ## a seam must not read as "left the water" when the player crosses the join.
 var _water_volumes: int = 0
+var _water_sources: Array[WaterVolume] = []
+var _immersed: bool = false
 
 
 func _ready() -> void:
 	initialise()
+	floor_snap_length = 0.18
+	var trail := WaterTrail.new()
+	trail.name = "WaterTrail"
+	add_child(trail)
+	var surface_effects := HeroSurfaceEffects.new()
+	surface_effects.name = "HeroSurfaceEffects"
+	add_child(surface_effects)
 
 
 ## Builds the controller, the input system and the visual layer. Idempotent,
@@ -112,7 +123,7 @@ func initialise() -> void:
 	_input.set_grammar(_controller.get_grammar())
 
 	_controller.set_anchor_source(SceneAnchorSource.new(self))
-	_controller.sync_body_position(global_position)
+	_controller.sync_body_position(global_position if is_inside_tree() else position)
 
 	if not model_path.is_empty():
 		_model = get_node_or_null(model_path) as Node3D
@@ -121,8 +132,23 @@ func initialise() -> void:
 		# The look is the client's: dress the imported model in the shared
 		# hero materials, whatever the exporter wrote into the file.
 		HeroSkin.apply(_model)
+		preload("res://core/rendering/hero_backpack.gd").attach(_model)
 		_model_base_scale = _model.scale
 		_animator.bind(_model)
+		_model_base_position = _model.position
+		var skeletons := _model.find_children("*","Skeleton3D",true,false)
+		if not skeletons.is_empty():
+			_motion = HeroMotion.new()
+			_motion.name = "SecondaryMotion"
+			(skeletons[0] as Skeleton3D).add_child(_motion)
+			_motion.bind(self,_model)
+			_animator.install_dance(skeletons[0] as Skeleton3D,_motion._feet)
+	_input.ability_verb_requested.connect(_on_hero_ability)
+	if _model!=null:
+		_soundscape=preload("res://core/audio/game_soundscape.gd").new()
+		_soundscape.name="Soundscape";add_child(_soundscape)
+		_make_dance_hud()
+		_input.device_changed.connect(func(_device: String,_prompts: String) -> void:_refresh_dance_hud())
 	_squash = HeroSquash.new(_tuning)
 	_controller.hopped.connect(_squash.on_hop)
 
@@ -194,17 +220,73 @@ func get_input_system() -> InputSystem:
 func get_animator() -> HeroAnimator:
 	return _animator
 
+func get_visual_motion() -> HeroMotion:
+	return _motion
+
+func reset_visual_motion() -> void:
+	if _motion != null:
+		_motion.reset_pose(_controller.get_heading_yaw())
+	if _animator != null:
+		_animator.reset()
+
 
 ## The visual half of losing a capability (REQ-019's comedic register): the
 ## world's runtime calls this when the regeneration system announces a loss,
 ## so the flinch is tied to the event rather than guessed from motion.
 func play_hurt() -> void:
+	stop_dance()
 	if _animator != null:
 		_animator.play_hurt()
 
 
 func is_in_water() -> bool:
-	return _water_volumes > 0
+	return _water_volumes > 0 or _immersed
+
+
+func register_water(volume: WaterVolume) -> void:
+	if not _water_sources.has(volume):
+		_water_sources.append(volume)
+	refresh_water_state()
+
+
+func unregister_water(volume: WaterVolume) -> void:
+	_water_sources.erase(volume)
+	refresh_water_state()
+
+
+func get_water_volume() -> WaterVolume:
+	var selected: WaterVolume = null
+	for volume: WaterVolume in _water_sources:
+		if is_instance_valid(volume) and (selected == null or volume.water_priority > selected.water_priority):
+			selected = volume
+	return selected
+
+
+func refresh_water_state() -> void:
+	var previous: bool = is_in_water()
+	var volume: WaterVolume = get_water_volume()
+	var point: Vector3 = global_position if is_inside_tree() else position
+	_immersed = volume != null and volume.should_swim(point, _immersed)
+	if previous != is_in_water():
+		water_state_changed.emit(is_in_water())
+
+
+func clear_water_contacts() -> void:
+	for volume: WaterVolume in _water_sources:
+		if is_instance_valid(volume):
+			volume.forget_body(self)
+	_water_sources.clear()
+	refresh_water_state()
+
+
+func resample_water_contacts() -> void:
+	if not is_inside_tree():
+		return
+	# Teleports within the same Area3D do not produce another entry signal.
+	for node: Node in get_tree().get_nodes_in_group("water_volumes"):
+		var volume := node as WaterVolume
+		if volume != null and volume.can_process() and volume.contains_point(global_position,0.55):
+			volume.track_body(self)
 
 
 ## The swing plays here rather than in the controller for the same reason the
@@ -237,51 +319,120 @@ func _unhandled_input(event: InputEvent) -> void:
 
 # --- The frame ---------------------------------------------------------------
 
+var _net_captured := false
+var _capture_ui: CanvasLayer
+var _capture_label: Label
+
+func set_net_captured(value: bool) -> void:
+	if value:stop_dance()
+	if _animator!=null:_animator.allow_water_whack=value
+	_net_captured=value
+	velocity=Vector3.ZERO
+	if _controller != null: _controller.set_net_captured(value)
+	if _input != null:
+		_input.clear()
+		_input.set_grammar(MovementGrammar.Grammar.LAND if value else _controller.get_grammar())
+	if not value and is_instance_valid(_capture_ui):
+		_capture_ui.queue_free();_capture_ui=null;_capture_label=null
+
+func show_net_capture(seconds: float, count: int) -> void:
+	if not is_instance_valid(_capture_label):
+		_capture_ui=CanvasLayer.new();_capture_ui.layer=30;add_child(_capture_ui)
+		_capture_label=Label.new();_capture_label.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
+		_capture_label.position=Vector2(-280,-125);_capture_label.custom_minimum_size=Vector2(560,90)
+		_capture_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+		_capture_label.add_theme_font_size_override("font_size",26)
+		_capture_label.add_theme_color_override("font_outline_color",Color.BLACK)
+		_capture_label.add_theme_constant_override("outline_size",6)
+		_capture_ui.add_child(_capture_label)
+	_capture_label.text="CAUGHT — TAIL WHACK TO ESCAPE!\n%d / 3 whacks   ·   %.1f seconds" % [count,seconds]
+
 func _physics_process(delta: float) -> void:
 	if _controller == null or _input == null:
 		return
+	# Deep-water surface launches retain the physics server's exit timing.
+	for volume: WaterVolume in _water_sources.duplicate():
+		if not is_instance_valid(volume):
+			_water_sources.erase(volume)
+		elif not volume.can_process() or (volume.shallow_wading_enabled and not volume.contains_point(global_position,0.55)):
+			volume.forget_body(self)
+			_water_sources.erase(volume)
+	refresh_water_state()
 
 	# The controller reasons about the body's position for the grapple and the
 	# climb ceiling, so it is told where the body actually ended up last frame
 	# rather than integrating a position of its own that could drift from the
 	# one collision resolved.
-	_controller.sync_body_position(global_position)
+	_controller.sync_body_position(global_position if is_inside_tree() else position)
 	_controller.set_grounded(is_on_floor())
 
 	var intent := _input.poll_intent()
 	intent.direction = _camera_relative(intent.direction)
-	_controller.physics_step(delta, is_in_water(), intent)
+	if is_dancing() and (is_in_water() or not is_on_floor() or not intent.direction.is_zero_approx() or not intent.verbs.is_empty()):stop_dance()
+	_controller.physics_step(delta, is_in_water(),PlayerIntent.none() if is_dancing() else intent)
+	if is_dancing():_controller.set_velocity(Vector3.ZERO)
 
 	velocity = _controller.get_velocity()
 	_apply_gravity(delta)
+	var drift := Vector3.ZERO
+	var water: WaterVolume = get_water_volume()
+	if water != null and is_in_water():
+		drift = water.flow_at(global_position)
+		velocity += drift
+		if not drift.is_zero_approx() and is_zero_approx(intent.direction.y) and global_position.y > water.surface_at(global_position)-0.65:
+			velocity.y = minf(velocity.y, water.surface_slope_at(global_position).dot(Vector2(velocity.x,velocity.z)))
 
-	move_and_slide()
+	var motion_start := global_position
+	if _net_captured or is_dancing():
+		velocity=Vector3.ZERO;drift=Vector3.ZERO
+	else:
+		# Swimming has no floor or slope stops: glide along rock and tunnel walls.
+		motion_mode = MOTION_MODE_FLOATING if is_in_water() else MOTION_MODE_GROUNDED
+		wall_min_slide_angle = 0.0 if is_in_water() else deg_to_rad(15.0)
+		move_and_slide()
 
-	_update_climb(intent, delta)
+	if not _net_captured: _update_climb(intent, delta)
 
 	# A landing is the floor flag going false to true on land. Water has no
 	# floor to slap; brushing the seabed while swimming is not a landing.
 	var grounded := is_on_floor()
 	if grounded and not _was_grounded and not is_in_water():
 		_squash.on_land()
+		play_sound(&"landing")
 	_was_grounded = grounded
 
-	_animator.step(delta, is_in_water(), grounded, velocity)
+	# Animation follows measured travel, including slopes and collision stops.
+	var travelled_velocity := (global_position - motion_start) / maxf(delta, 0.0001)
+	var animation_velocity := travelled_velocity - drift if is_in_water() else travelled_velocity
+	var was_dancing:=is_dancing()
+	_animator.step(delta, is_in_water(), grounded, animation_velocity)
+	if was_dancing and not is_dancing():
+		if _soundscape!=null:_soundscape.call("set_dancing",false)
+		_refresh_dance_hud()
 
 	if _model != null:
 		# Yaw then pitch, in that order: the pitch is about the model's OWN
 		# lateral axis, so it has to be applied after the turn or a diving
 		# axolotl swimming east would tip sideways instead of nose-down.
-		_model.rotation = Vector3(_controller.get_pitch(),
-			_controller.get_heading_yaw(), 0.0)
+		if _motion != null:
+			_motion.prepare(delta,is_in_water(),grounded,travelled_velocity,_controller.get_heading_yaw(),_controller.get_pitch(),get_floor_normal() if grounded else Vector3.UP)
+			_model.rotation = _motion.visual_rotation
+			_model.position = _model_base_position+Vector3.UP*_motion.visual_offset
+		else:
+			_model.rotation = Vector3(_controller.get_pitch(),_controller.get_heading_yaw(),0)
 		_model.scale = _model_base_scale * _squash.step(delta)
 
 	# Collision may have cancelled the motion the controller asked for — walking
 	# into a wall, or landing. Handing the resolved velocity back keeps the
 	# controller's momentum honest instead of letting it accumulate speed against
 	# geometry it never actually moved through.
-	_controller.set_velocity(velocity)
-	_controller.sync_body_position(global_position)
+	var relative_velocity: Vector3 = velocity - drift
+	if not drift.is_zero_approx():
+		for axis: int in 3:
+			if is_zero_approx(velocity[axis]):
+				relative_velocity[axis] = 0.0
+	_controller.set_velocity(relative_velocity)
+	_controller.sync_body_position(global_position if is_inside_tree() else position)
 
 
 ## Climbing needs the physics world, which is why the controller cannot start it
@@ -367,5 +518,70 @@ func _on_grammar_changed(grammar: MovementGrammar.Grammar) -> void:
 	# The Input System resolves bindings against the active grammar, which is how
 	# W means swim in water and waddle on land. Without this the whole
 	# context-sensitive scheme would resolve against a grammar frozen at startup.
-	_input.set_grammar(grammar)
+	_input.set_grammar(MovementGrammar.Grammar.LAND if _net_captured else grammar)
 	grammar_changed.emit(grammar)
+
+
+
+# Cosmetic groove reward: progression is delivered by the world's collectible system.
+const DANCE_UNLOCK_COUNT := 5
+var crayfish_count := 0
+var _soundscape: Node
+var _dance_label: Label
+var _dance_hud: CanvasLayer
+func is_dancing() -> bool:
+	return _animator!=null and _animator.get_current_action()==HeroAnimator.DANCE
+func set_crayfish_count(count: int, celebrate: bool=false) -> void:
+	var was_unlocked:=crayfish_count>=DANCE_UNLOCK_COUNT
+	crayfish_count=maxi(crayfish_count,count)
+	_refresh_dance_hud()
+	if celebrate and not was_unlocked and crayfish_count>=DANCE_UNLOCK_COUNT:play_sound(&"dance_unlocked")
+func play_sound(id: StringName) -> void:
+	if _soundscape!=null:_soundscape.call("play",id)
+func _make_dance_hud() -> void:
+	_dance_hud=CanvasLayer.new();_dance_hud.layer=12;add_child(_dance_hud)
+	_dance_label=Label.new();_dance_hud.add_child(_dance_label)
+	_dance_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	_dance_label.offset_left=-350;_dance_label.offset_right=-20;_dance_label.offset_top=18;_dance_label.offset_bottom=83
+	_dance_label.custom_minimum_size=Vector2(330,65)
+	_dance_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
+	_dance_label.add_theme_font_size_override("font_size",19)
+	_dance_label.add_theme_constant_override("outline_size",5)
+	_refresh_dance_hud()
+func _refresh_dance_hud() -> void:
+	if _dance_label==null:return
+	var prompt:="G" if _input==null or _input.get_device()==InputDevice.Kind.KEYBOARD_MOUSE else "D-pad Down"
+	_dance_label.text=("Glowing crayfish  %d / %d" % [mini(crayfish_count,DANCE_UNLOCK_COUNT),DANCE_UNLOCK_COUNT])+ ("\n"+prompt+": dance on shore" if crayfish_count>=DANCE_UNLOCK_COUNT else "\nCollect five to unlock the groove")
+	if is_dancing():_dance_label.text="Crayfish groove!\nMove or press "+prompt+" to stop"
+func _on_hero_ability(id: String) -> void:
+	if id=="dance":request_dance()
+func can_dance() -> bool:
+	if crayfish_count<DANCE_UNLOCK_COUNT or _net_captured or is_in_water() or not is_on_floor() or velocity.length()>.45:return false
+	if _controller.is_climbing() or _controller.get_grapple().is_attached() or not _animator.get_current_action().is_empty():return false
+	if get_floor_normal().y<.82 or test_move(global_transform,Vector3.UP*.85):return false
+	# Check the small dance footprint so a heel tap cannot hang over a ledge.
+	for offset: Vector3 in [Vector3(.5,0,.45),Vector3(-.5,0,.45),Vector3(.5,0,-.45),Vector3(-.5,0,-.45)]:
+		var point:=global_position+offset
+		var query:=PhysicsRayQueryParameters3D.create(point,point+Vector3.DOWN*1.3,collision_mask,[get_rid()])
+		var hit:=get_world_3d().direct_space_state.intersect_ray(query)
+		if hit.is_empty() or (hit["normal"] as Vector3).y<.7:return false
+	return true
+func request_dance() -> bool:
+	if is_dancing():stop_dance();return true
+	if not can_dance():
+		if _dance_label!=null:_dance_label.text="Collect five crayfish to dance" if crayfish_count<DANCE_UNLOCK_COUNT else "Find a flat, clear spot on shore to dance"
+		return false
+	if not _animator.play_action(HeroAnimator.DANCE):return false
+	velocity=Vector3.ZERO;_controller.set_velocity(Vector3.ZERO)
+	if _soundscape!=null:_soundscape.call("set_dancing",true)
+	_refresh_dance_hud();return true
+func stop_dance() -> void:
+	if not is_dancing():return
+	_animator.reset()
+	if _soundscape!=null:_soundscape.call("set_dancing",false)
+	_refresh_dance_hud()
+
+## Visual suit mount only. Powers will be registered through the controller's
+## capability/ability interfaces when the supplied suit's design is available.
+func get_suit_mount() -> Node3D:
+	return get_node_or_null("Model/SuitMount") as Node3D
