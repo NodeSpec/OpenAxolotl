@@ -1,7 +1,7 @@
 {
   "specVersion": 1,
   "generatedBy": "nodespec",
-  "specHash": "a288bf87eb430ac95059527097379fac7ab434aa9f01d9610a24d935a425b3eb",
+  "specHash": "8e9f293b4cfbdd8fd5e599a3bae7601654fa0b802fb395ba9399b0b800071283",
   "vision": "OpenAxolotl is a joyful single-player adventure game where families explore and restore imaginative worlds, then create adventures of their own together. A shared library of polished characters, environments and mechanics helps turn their ideas into playable levels. Reviewed community adventures become new destinations for everyone to explore.\n\nTHE GAME COMES FIRST. Children should enjoy the shipped game without creating anything or needing an AI account. Our axolotl's expressive movement, land-and-water traversal, readable robot encounters, discoveries and restoration rewards create the sense of adventure. Astro Bot inspires pacing, clarity and responsiveness; matching another game's production quality is an aspiration, not an unmeasured acceptance claim.\n\nPLAY, CREATE, SHARE. Play official adventures. With a parent, remix a small playable starter using the shared asset/gameplay kit, Codex and NodeSpec, previewing and iterating in Godot. Direct Godot editing remains supported. Submit a level for automated checks and human review; approved, versioned adventures can be downloaded and played through the hub. Creation is optional, parent-led for young children, and separate from the child-facing game.\n\nFOUR RESPONSIBILITIES. Core game systems own the hero, movement, camera, combat, regeneration/capabilities, checkpoints, saves, restoration, collectibles, audio and common enemy behaviors. A reusable Level Kit packages approved assets with materials, collision and supported gameplay behavior. Individual levels own layout, placements, objectives and presentation configuration. Authoring and distribution own the starter workflow, export/validation, review, curated catalog and package lifecycle. Levels use a small versioned public World API; shared code contains no hardcoded coordinates for a particular world.\n\nCONTENT EXTENSIONS. Local authoring may use code and Godot scenes. Published downloadable level packages contain only supported declarative content and approved component/asset references. Arbitrary scripts, native extensions and executable scene resources are excluded from that package format. New powers or enemy logic that require executable changes are separately reviewed core contributions. The package schema and loader must be designed and tested; this is a target architecture, not a claim that the current repository already implements it.\n\nFIRST ADVENTURE REFERENCE. Open Lagoon is the safe starting cove. Its leftmost downstream tunnel connects to Coral Cove, currently presented as The Living Cascade: Arrival Pool; Stepping-stone Garden; Hollow-root Dive; Cascade Terraces; Restoration Garden; Waterfall Run; completion and return to the hub. The current finish uses a reach_volume trigger, not a mandatory boss. Preserve three checkpoints, optional discoveries, glowing crayfish and the optional dance reward. Three Netbots occupy land; five Hooklines are distributed across land and underwater positions. The restoration gate requires seven total seeds, with nine available and seven accessible within the garden alone. Accessible shores, entrance seams and underwater/pool boundaries are contained; accidental fallthrough is a defect. A whirlpool, additional suit powers and a new boss remain future work until separately specified.\n\nDELIVERY. Desktop is the first release target. Tablet play is a later feasibility milestone requiring measured performance, touch controls and readable UI on named devices; it is not promised by the current art quality. Consoles are deferred. This remains a single-player game, not a general-purpose engine or a multiplayer platform.\n\nOPEN CONTRIBUTION. Establish code licensing, asset remix/redistribution rights, provenance, credits and contributor permissions before inviting public reuse. The repository's code license does not automatically cover externally generated models, textures or music. Publish only packages that pass conformance checks, human play/content review and measured device budgets. Approval identifies immutable package bytes; updates are reviewed again and withdrawn releases are removed from future distribution.\n\nThis new project records the agreed end state and the first-level reference. Existing implementation is context only: no requirement is considered verified until fresh evidence is attached after the repository is connected. Do not overwrite this specification with older repository anchors during connection.",
   "constraints": [],
   "preferences": {},
@@ -366,11 +366,6 @@
     },
     {
       "requirementId": "REQ-002",
-      "nodeId": "22222222-0000-4000-8000-000000000015",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-002",
       "nodeId": "b0c02000-2026-4020-8000-000000000002",
       "mappingType": "implements"
     },
@@ -396,107 +391,7 @@
     },
     {
       "requirementId": "REQ-007",
-      "nodeId": "22222222-0000-4000-8000-000000000006",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-007",
       "nodeId": "b0c02000-2026-4020-8000-000000000005",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000001",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000002",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000003",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000004",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000005",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000007",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000008",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000009",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000010",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000011",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000012",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000013",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000016",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000017",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000018",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000019",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000021",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000022",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-008",
-      "nodeId": "22222222-0000-4000-8000-000000000023",
       "mappingType": "implements"
     },
     {
@@ -506,22 +401,7 @@
     },
     {
       "requirementId": "REQ-009",
-      "nodeId": "22222222-0000-4000-8000-000000000014",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-009",
-      "nodeId": "22222222-0000-4000-8000-000000000025",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-009",
       "nodeId": "b0c02000-2026-4020-8000-000000000007",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-010",
-      "nodeId": "22222222-0000-4000-8000-000000000020",
       "mappingType": "implements"
     },
     {
@@ -532,11 +412,6 @@
     {
       "requirementId": "REQ-011",
       "nodeId": "b0c02000-2026-4020-8000-000000000010",
-      "mappingType": "implements"
-    },
-    {
-      "requirementId": "REQ-012",
-      "nodeId": "22222222-0000-4000-8000-000000000024",
       "mappingType": "implements"
     },
     {
