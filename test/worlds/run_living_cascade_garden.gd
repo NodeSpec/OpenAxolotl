@@ -158,3 +158,4 @@ func reset_body(position: Vector3) -> void:
 func _check(ok: bool, label: String) -> void:
 	if not ok:
 		failures.append(label)
+

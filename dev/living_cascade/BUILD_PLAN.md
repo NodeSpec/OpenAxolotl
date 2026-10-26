@@ -315,3 +315,4 @@ The Living Cascade is now the leftmost tunnel when facing the exits. Its manifes
 ## Supplied asset integration - 13 September 2026
 
 Nine source models now contribute the root/crown arches, cliff and reef wall relief, stone surfaces, ledges and underwater dressing. All 372 collision shapes remain; the linked-asset scene totals 395,289 triangles including the hero. Gameplay, unit, level-contract and static checks pass. The GPU quality-order benchmark remains flagged because Low measured slower than Medium; no threshold was relaxed. See ASSET_PASS.md for preparation reports, exact placements, validation, limitations and rollback details.
+

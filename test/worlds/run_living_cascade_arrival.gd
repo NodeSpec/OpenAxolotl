@@ -57,3 +57,4 @@ func _run() -> void:
 func _check(ok: bool, message: String) -> void:
 	if not ok:
 		_failures.append(message)
+

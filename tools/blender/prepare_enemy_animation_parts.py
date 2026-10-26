@@ -50,3 +50,4 @@ for name in ['netbot','hookline_rig']:
     report[name]={'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'parts':counts,'pivots_blender':pivots,'triangles':sum(counts.values()),'removed_connector_triangles':assignments.count('REMOVE')}
 (OUT/'preparation.json').write_text(json.dumps(report,indent=2))
 print(json.dumps(report))
+

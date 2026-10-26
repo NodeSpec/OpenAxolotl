@@ -16,3 +16,5 @@ static func waypoints() -> Array[RoutePilot.Waypoint]:
 	]:
 		result.append(RoutePilot.at(String(row[0]),Vector3(float(row[1]),float(row[2]),float(row[3])),"Living Cascade %d" % result.size()))
 	return result
+
+

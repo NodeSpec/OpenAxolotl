@@ -1,38 +1,10 @@
-# Godot
+# Generated Godot and tool caches only. Source assets and .import settings belong in Git.
 .godot/
-# Keep source-side .import settings: they preserve texture mipmaps, compression,
-# model import options and resource UIDs. Only .godot contains generated caches.
-
-# Local captures, incoming source uploads and superseded design snapshots.
-/review/*
-!/review/.gitkeep
-/asset_inbox/
-/dev/archive/
-# export_presets.cfg is COMMITTED here on purpose. The usual reason to ignore
-# it is embedded signing credentials; ours carries none, and CI cannot produce
-# the REQ-018 build without it.
-
-# Build output
-build/
-bin/
-
-# Toolchain fetched by scripts/setup.sh
-.toolchain/
-
-# Python
 __pycache__/
 *.py[cod]
-
-# Python packaging metadata from pip install -e .
 *.egg-info/
-
-# Textures Godot extracts from an embedded-texture .glb on import. They are
-# regenerated from the model on any fresh checkout, and they arrive with the
-# exporter's own capitalised names, which the Asset Contract's lower_snake_case
-# rule rejects. Generated files, so: ignored, not renamed.
-*_base_color.jpg
-*_metallic_roughness.jpg
-*_normal.jpg
-*_base_color.jpg.import
-*_metallic_roughness.jpg.import
-*_normal.jpg.import
+/.toolchain/
+/build/
+/bin/
+/review/*
+!/review/.gitkeep

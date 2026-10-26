@@ -341,3 +341,7 @@ func model_transform(node: Node3D,ancestor: Node3D) -> Transform3D:
 func erase(node: Node) -> void:
 	node.get_parent().remove_child(node)
 	node.free()
+
+
+
+

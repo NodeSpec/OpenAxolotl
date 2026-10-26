@@ -102,3 +102,4 @@ func _update_cables() -> void:
 		var line := hook.position - socket
 		var alignment := Basis(Quaternion(Vector3.UP,line.normalized()))
 		cable.transform = Transform3D(Basis(alignment.x,alignment.y*line.length(),alignment.z),(socket+hook.position)*0.5)
+

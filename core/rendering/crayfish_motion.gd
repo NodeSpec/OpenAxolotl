@@ -183,3 +183,4 @@ func _animate(delta: float) -> void:
 func is_swimming() -> bool:return _water
 func home_position() -> Vector3:return _home
 func movement_speed() -> float:return _speed
+

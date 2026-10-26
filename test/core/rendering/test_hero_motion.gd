@@ -188,3 +188,4 @@ func test_whack_reaches_a_forward_target_instead_of_curling_behind() -> void:
 	var root_rest: Vector3 = skeleton.get_bone_rest(skeleton.find_bone("root")).origin
 	assert_float(HeroActionClips.whack_root_position(root_rest,1.0).distance_to(root_rest)).is_less(0.0001)
 	model.free()
+

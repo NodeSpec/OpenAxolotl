@@ -134,3 +134,4 @@ func build() -> void:
 		print("BUILT ",kind," clips=",player.get_animation_list())
 		source.free();actor.free()
 	quit()
+

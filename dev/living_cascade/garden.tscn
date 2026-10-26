@@ -334,3 +334,4 @@ position = Vector3(-22, 3, -44)
 text = "JOIN 23 / ROOT DIVE\nFollow the cyan lights into the water."
 billboard = 1
 pixel_size = 0.01
+

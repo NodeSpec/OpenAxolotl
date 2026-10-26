@@ -23,3 +23,4 @@ func _ready() -> void:
 		var button:=Button.new();button.text=clip.capitalize();buttons.add_child(button)
 		button.pressed.connect(func() -> void:
 			for actor: Node3D in actors: actor.call("play_state",StringName(clip)))
+

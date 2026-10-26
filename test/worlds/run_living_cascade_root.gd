@@ -174,3 +174,4 @@ func key(code: Key, pressed: bool) -> void:
 func _check(ok: bool, message: String) -> void:
 	if not ok:
 		failures.append(message)
+

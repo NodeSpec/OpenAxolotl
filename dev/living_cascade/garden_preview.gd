@@ -31,3 +31,4 @@ func _on_rescue_touched(body: Node3D) -> void:
 	area.set_deferred("monitoring", false)
 	(get_node("RescueLabel") as Label3D).text = display_name.to_upper() + " RESCUED"
 	rescue_collected.emit()
+
