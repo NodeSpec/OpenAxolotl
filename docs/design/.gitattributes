@@ -1,0 +1,2 @@
+# Preserve original drawing bytes so the provenance hashes survive checkout.
+references/*.svg -text whitespace=cr-at-eol
