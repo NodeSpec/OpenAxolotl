@@ -41,7 +41,7 @@ var _device: InputDevice.Kind = InputDevice.Kind.KEYBOARD_MOUSE
 ## Physical input ids currently down that steer, for the active device only.
 var _held: Dictionary = {}
 
-## Physical input ids currently down that resolve to a PRESS verb. Kept apart
+## Physical input ids currently down that resolve to a PRESS verb (including abilities). Kept apart
 ## from `_held` because the two are read for different questions: `_held` is
 ## summed into a direction, this is projected into the sustained verb set.
 var _down: Dictionary = {}
@@ -93,8 +93,7 @@ func _switch_device(device: InputDevice.Kind) -> void:
 	if device == _device:
 		return
 	_device = device
-	_held.clear()
-	_down.clear()
+	clear()
 	device_changed.emit(InputDevice.device_id(device),
 		InputDevice.prompt_set(device))
 
@@ -120,7 +119,17 @@ func handle_event(event: InputEvent) -> bool:
 	var source := InputDevice.from_event(event)
 	if source == InputDevice.UNKNOWN:
 		return false
-	_switch_device(source as InputDevice.Kind)
+	# Only intentional activity can take control from the other device. A
+	# centred stick or late key-up must not erase the current player's input.
+	if source != _device:
+		if event is InputEventJoypadMotion:
+			var motion := event as InputEventJoypadMotion
+			var ids := InputDevice.axis_ids(motion)
+			if _axis_is_centred(motion.axis_value, _axis_deadzone(source as InputDevice.Kind, ids)):
+				return false
+		elif not InputDevice.is_pressed(event):
+			return false
+		_switch_device(source as InputDevice.Kind)
 
 	if event is InputEventJoypadMotion:
 		return _handle_axis(event as InputEventJoypadMotion)
@@ -147,8 +156,8 @@ func _handle_axis(event: InputEventJoypadMotion) -> bool:
 	var negative := ids[1]
 
 	var steering := _bindings.direction_for(_device, _grammar, positive) != Vector3.ZERO or _bindings.direction_for(_device, _grammar, negative) != Vector3.ZERO
-	var deadzone := 0.18 if steering else InputDevice.AXIS_DEADZONE
-	if absf(event.axis_value) <= deadzone:
+	var deadzone := _axis_deadzone(_device, ids)
+	if _axis_is_centred(event.axis_value, deadzone):
 		var released := _release(positive)
 		return _release(negative) or released
 
@@ -158,6 +167,17 @@ func _handle_axis(event: InputEventJoypadMotion) -> bool:
 	if steering and _held.has(active):
 		_held[active] = clampf((absf(event.axis_value) - deadzone) / (1.0 - deadzone), 0.0, 1.0)
 	return handled
+
+
+func _axis_is_centred(value: float, deadzone: float) -> bool:
+	# InputEvent stores float32; include the exact configured boundary after rounding.
+	return absf(value) <= deadzone or is_equal_approx(absf(value), deadzone)
+
+
+func _axis_deadzone(device: InputDevice.Kind, ids: PackedStringArray) -> float:
+	var steering := _bindings.direction_for(device, _grammar, ids[0]) != Vector3.ZERO \
+		or _bindings.direction_for(device, _grammar, ids[1]) != Vector3.ZERO
+	return 0.18 if steering else InputDevice.AXIS_DEADZONE
 
 
 func _press(physical: String) -> bool:
@@ -172,13 +192,17 @@ func _press(physical: String) -> bool:
 	if verb == InputVerb.UNKNOWN:
 		return handled
 
+	# Axis events repeat while a trigger stays pressed. They update steering
+	# magnitude above, but only a fresh down edge can request an action.
+	if _down.has(physical):
+		return true
+	_down[physical] = true
 	var typed := verb as InputVerb.Verb
 	if InputVerb.is_movement(typed):
 		# Remembered as down as well as pressed. The press is what fires the
 		# verb; the down state is what a verb reading the RELEASE needs, and it
 		# is recorded here rather than derived later because by the time the
 		# key comes back up the binding may have been remapped.
-		_down[physical] = true
 		var movement := InputVerb.movement_equivalent(typed)
 		if not _pressed.has(movement):
 			_pressed.append(movement)
@@ -247,6 +271,15 @@ func clear() -> void:
 	_held.clear()
 	_down.clear()
 	_pressed.clear()
+
+
+## Non-consuming steering intent for camera idle assistance. A player pressing
+## into a wall still owns the camera, even when collision makes velocity zero.
+func has_directional_input() -> bool:
+	for physical: String in _held:
+		if float(_held[physical]) > 0.0 and _bindings.direction_for(_device, _grammar, physical) != Vector3.ZERO:
+			return true
+	return false
 
 
 func is_held(physical: String) -> bool:

@@ -489,6 +489,10 @@ func _move_player_to(position_3d: Vector3) -> void:
 	var body := player as AxolotlBody
 	if body == null:
 		return
+	# Preserve framing, but do not recenter toward travel from the old location.
+	var camera := body.get_camera()
+	if camera != null:
+		camera.set_yaw_deg(camera.get_yaw_deg())
 	body.clear_water_contacts()
 	body.reset_visual_motion()
 	body.resample_water_contacts.call_deferred()

@@ -841,3 +841,89 @@ func test_req_037_clear_drops_the_sustained_set() -> void:
 	assert_bool(system.poll_intent().sustains(MovementGrammar.Verb.HOP)
 	).override_failure_message(
 		"a respawn must not carry a held jump into the new life").is_false()
+
+
+# --- Interrupted input and physical press edges -----------------------------
+
+func test_idle_pad_noise_does_not_cancel_keyboard_movement() -> void:
+	var system := _system()
+	system.handle_event(_key(KEY_W, true))
+	for value: float in [0.0, 0.1, -0.18, 0.18]:
+		system.handle_event(_pad_axis(JOY_AXIS_LEFT_X, value))
+		assert_int(system.get_device()).is_equal(InputDevice.Kind.KEYBOARD_MOUSE)
+		assert_bool(system.is_held("key.w")).is_true()
+	# Crossing the steering deadzone is intentional, even below 0.5.
+	system.handle_event(_pad_axis(JOY_AXIS_LEFT_X, 0.3))
+	assert_int(system.get_device()).is_equal(InputDevice.Kind.GAMEPAD)
+	assert_bool(system.poll_intent().direction.x > 0.0).is_true()
+
+
+func test_late_release_from_old_device_does_not_cancel_new_device() -> void:
+	var system := _system()
+	system.handle_event(_key(KEY_W, true))
+	system.handle_event(_pad_axis(JOY_AXIS_LEFT_X, 0.7))
+	system.handle_event(_key(KEY_W, false))
+	assert_int(system.get_device()).is_equal(InputDevice.Kind.GAMEPAD)
+	assert_bool(system.poll_intent().direction.x > 0.0).is_true()
+
+
+func test_device_change_drops_pending_actions_from_old_device() -> void:
+	var system := _system()
+	system.set_grammar(MovementGrammar.Grammar.LAND)
+	system.handle_event(_key(KEY_SPACE, true))
+	system.handle_event(_pad_axis(JOY_AXIS_LEFT_X, 0.7))
+	assert_array(system.poll_intent().verbs).is_empty()
+
+
+func test_trigger_action_fires_once_until_released() -> void:
+	var system := _system()
+	var errors: Array[InputError] = []
+	assert_bool(system.get_bindings().rebind(InputVerb.Verb.DASH,
+		InputDevice.Kind.GAMEPAD, "pad.axis.2.+", errors)).is_true()
+	system.handle_event(_pad_axis(2, 0.7))
+	assert_bool(system.poll_intent().wants(MovementGrammar.Verb.DASH)).is_true()
+	system.handle_event(_pad_axis(2, 0.9))
+	assert_array(system.poll_intent().verbs).is_empty()
+	system.handle_event(_pad_axis(2, 0.0))
+	system.handle_event(_pad_axis(2, 0.8))
+	assert_bool(system.poll_intent().wants(MovementGrammar.Verb.DASH)).is_true()
+
+
+func test_repeated_ability_press_is_not_a_second_activation() -> void:
+	var system := _system()
+	var requests: Array[String] = []
+	system.ability_verb_requested.connect(func(id: String) -> void: requests.append(id))
+	system.handle_event(_pad_button(12, true))
+	system.handle_event(_pad_button(12, true))
+	assert_int(requests.size()).is_equal(1)
+	system.handle_event(_pad_button(12, false))
+	system.handle_event(_pad_button(12, true))
+	assert_int(requests.size()).is_equal(2)
+
+
+func test_focus_loss_hook_clears_held_and_pending_player_input() -> void:
+	var system := _system()
+	system.set_grammar(MovementGrammar.Grammar.LAND)
+	system.handle_event(_key(KEY_W, true))
+	system.handle_event(_key(KEY_SPACE, true))
+	# Source wiring check plus the actual clear() contract. Instantiating the
+	# full hero requires imported art; keep this input suite asset-independent.
+	var source := _read("res://core/controller/axolotl_body.gd")
+	assert_str(source).contains("if what == NOTIFICATION_APPLICATION_FOCUS_OUT and _input != null:\n\t\t_input.clear()")
+	system.clear()
+	var intent := system.poll_intent()
+	assert_bool(intent.direction == Vector3.ZERO).is_true()
+	assert_array(intent.verbs).is_empty()
+	assert_array(intent.sustained).is_empty()
+
+
+func test_directional_query_does_not_drain_queued_actions() -> void:
+	var system := _system()
+	system.set_grammar(MovementGrammar.Grammar.LAND)
+	assert_bool(system.has_directional_input()).is_false()
+	system.handle_event(_key(KEY_W, true))
+	system.handle_event(_key(KEY_SPACE, true))
+	assert_bool(system.has_directional_input()).is_true()
+	assert_bool(system.poll_intent().wants(MovementGrammar.Verb.HOP)).is_true()
+	system.handle_event(_key(KEY_W, false))
+	assert_bool(system.has_directional_input()).is_false()

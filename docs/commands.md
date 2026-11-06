@@ -146,3 +146,16 @@ camera-relative movement and the two would spiral.
 
 Sensitivity, pitch limits, invert and the assist are all `camera.look.*` keys
 in `core/tuning/tuning.json`.
+
+## Focused input and camera regression check
+
+On an already imported checkout, use this bounded headless check while iterating
+on controls, without launching or rendering the game scene:
+
+```sh
+godot --headless --audio-driver Dummy --path . --script test/run_input_checks.gd
+```
+
+This reuses the regular test runner and only selects the input and pure camera suites. It does
+not replace the full harness. See [input playtest refinements](input-playtest-refinements.md)
+for current evidence, limitations and the short manual handoff/focus test.

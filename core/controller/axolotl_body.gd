@@ -311,6 +311,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 
+func _notification(what: int) -> void:
+	# The OS may consume key-up while another window is focused. Drop both
+	# held movement and queued actions rather than continuing to steer.
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and _input != null:
+		_input.clear()
+
+
 # --- The frame ---------------------------------------------------------------
 
 var _net_captured := false

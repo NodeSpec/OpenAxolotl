@@ -35,11 +35,6 @@ extends Camera3D
 ## origin, which makes a mis-wired scene obvious instead of merely wrong.
 @export var target_path: NodePath
 
-## Below this speed the camera keeps the yaw it has. Without it a stationary
-## axolotl produces a zero-length velocity whose atan2 is arbitrary, and the
-## camera would spin while the player stands still.
-const YAW_HOLD_SPEED := 0.25
-
 var _rig: CameraRig
 var _target: Node3D
 var _body: AxolotlBody
@@ -51,8 +46,7 @@ var _look: LookInput
 ## replacing it: the rig still decides how far above the axolotl to sit in
 ## water versus on land, and the player leans from there.
 var _pitch_offset_deg: float = 0.0
-## Seconds since the player last touched the look axis or the movement keys.
-var _idle_seconds: float = 0.0
+var _idle_assist: CameraIdleAssist
 
 
 func _ready() -> void:
@@ -68,6 +62,7 @@ func _ready() -> void:
 	_rig = CameraRig.new(tuning)
 	_rig.set_occluder_probe(SceneOccluderProbe.new(self))
 	_look = LookInput.new(tuning)
+	_idle_assist = CameraIdleAssist.new(tuning)
 
 	if not target_path.is_empty():
 		_target = get_node_or_null(target_path) as Node3D
@@ -110,7 +105,8 @@ func get_yaw_deg() -> float:
 ## by where the camera looks.
 func set_yaw_deg(yaw_deg: float) -> void:
 	_yaw_deg = wrapf(yaw_deg, -180.0, 180.0)
-	_idle_seconds = 0.0
+	if _idle_assist != null:
+		_idle_assist.reset(true)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -165,32 +161,11 @@ func _apply_look(delta: float) -> void:
 	if not look.is_zero_approx():
 		_yaw_deg = wrapf(_yaw_deg + look.x, -180.0, 180.0)
 		_pitch_offset_deg = _look.clamp_pitch(_pitch_offset_deg + look.y)
-		_idle_seconds = 0.0
-		return
 
-	_idle_seconds += delta
-	_assist(delta)
-
-
-## Ease the camera back behind the direction of travel — but only once the
-## player has been hands-off long enough that it cannot be mistaken for the
-## camera fighting them, and only while they are actually moving.
-func _assist(delta: float) -> void:
-	if _body == null:
-		return
-	var travel := _body.velocity
-	travel.y = 0.0
-	if travel.length() < YAW_HOLD_SPEED:
-		return
-	if _idle_seconds < _tuning.get_number(LookInput.ASSIST_DELAY_KEY):
-		return
-
-	# Godot's -Z forward: the yaw that puts the camera BEHIND the direction of
-	# travel is the heading itself.
-	var behind := rad_to_deg(atan2(-travel.x, -travel.z))
-	var step := _tuning.get_number(LookInput.ASSIST_SPEED_KEY) * delta
-	var difference := wrapf(behind - _yaw_deg, -180.0, 180.0)
-	_yaw_deg = wrapf(_yaw_deg + clampf(difference, -step, step), -180.0, 180.0)
+	var travel := _body.velocity if _body != null else Vector3.ZERO
+	var steering := _body != null and _body.get_input_system() != null \
+		and _body.get_input_system().has_directional_input()
+	_yaw_deg = _idle_assist.step(delta, _yaw_deg, travel, not look.is_zero_approx(), steering)
 
 
 func _apply() -> void:

@@ -1113,6 +1113,9 @@ func _return_player_to(position: Vector3, checkpoint_id: String) -> void:
 		_place_at(player, position)
 		var body := player as AxolotlBody
 		if body != null:
+			var camera := body.get_camera()
+			if camera != null:
+				camera.set_yaw_deg(camera.get_yaw_deg())
 			body.clear_water_contacts()
 			body.velocity = Vector3.ZERO
 			if body.get_input_system() != null:
