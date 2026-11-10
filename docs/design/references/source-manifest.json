@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "published": "2026-10-28",
+  "scope": "First Adventure design references only; not a NodeSpec native export or runtime manifest.",
+  "sourceHtmlSha256": "88a36b992b9d89003e1d82a830fd16f2a2c5133a5f58cfd78b62fe2abd7116fb",
+  "rights": "User-supplied project references published at user request. This record does not assign new licenses or certify third-party asset rights.",
+  "files": [
+    {
+      "path": "docs/design/references/living-cascade-hero-map.png",
+      "source": "living-cascade-design.html embedded PNG",
+      "sha256": "9d0b2c15653e0ab1d544703f4479a3640201d478e3389687eba0711b6a8c7eb6",
+      "bytes": 3335182,
+      "role": "Original concept illustration; mood/composition, not measured geometry.",
+      "treatment": "Byte-identical copy; embedded concept PNG extracted without re-encoding."
+    },
+    {
+      "path": "docs/design/references/living-cascade-overhead.svg",
+      "source": "living-cascade-overhead.svg",
+      "sha256": "b85fbc587a68458692dc58d8b294a4ecbcbd5e8764add72bf6ff2602ea20aa08",
+      "bytes": 8183,
+      "role": "Revision 2 broad layout; planning envelopes, not collision edges.",
+      "treatment": "Byte-identical copy; embedded concept PNG extracted without re-encoding."
+    },
+    {
+      "path": "docs/design/references/living-cascade-elevation.svg",
+      "source": "living-cascade-elevation.svg",
+      "sha256": "5a642969db5c0f58eb0904ef0f7bf6decf8697ce530f3d58268b4178c85d2f5d",
+      "bytes": 4212,
+      "role": "Revision 2 schematic heights; vertical scale exaggerated.",
+      "treatment": "Byte-identical copy; embedded concept PNG extracted without re-encoding."
+    },
+    {
+      "path": "docs/design/references/lagoon-gameplay-reference.png",
+      "source": "cascade-polish-lagoon-reference.png",
+      "sha256": "9c6aa22c206ec23faf007e64e8f28f01094b3eb2f7cdc8a16b6da2fef902912b",
+      "bytes": 721402,
+      "role": "Historical gameplay capture; appearance benchmark, not current evidence.",
+      "treatment": "Byte-identical copy; embedded concept PNG extracted without re-encoding."
+    }
+  ]
+}

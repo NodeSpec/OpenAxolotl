@@ -19,8 +19,11 @@ None recorded for this node. Standing conditions the build must honour (security
 
 ## Implementation Context
 
-<!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
+
+Own core/progression, core/save (except shell lifetime composition), core/regen, core/collectibles, core/restoration, existing core/gillmod and crayfish reward presentation. Document persistence and reset snapshots explicitly. Use stable world/collectible identities; five unique crayfish unlock a reusable dance without spending them. Keep pickups in authored accessible habitats and align visible creatures with triggers. Dance requires a clear flat shore and cancels on movement, water entry, damage, capture and reset, with no invulnerability. Coordinate cancellation with hero/enemies and namespaces with installation. Existing Gill Mods are optional; future suits and whirlpool are gaps, not completed features.
+
+This document describes planned work. All completion boxes remain open until current evidence or recorded human approval is attached. Keep the existing task keys and criterion identities. Shared payload schemas are normative even where generic dependency guidance describes only wiring.
 
 ## Implementation Tasks
 
@@ -29,41 +32,71 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
   Create the source layout, build files, and test harness this node's working code lives in.
   Start from the catalog's suggested structure: `scripts/main.gd`, `scenes/main.tscn`, `project.godot`, `export_presets.cfg`.
+  - [ ] Inventory the current bound implementation including `test/core/progression/test_life_system.gd`, `core/restoration/restoration_store.gd`, `core/collectibles/save_collectible_store.gd`, `core/gillmod/gill_mod_error.gd`; record each retained component, migration gap and owning dependency before changing files.
+  - [ ] Use the existing repository/project and test harness; adapt the current component in place rather than creating a parallel scaffold.
+  - [ ] Document checkpoint snapshot and life/capability loss rules from the current implementation.
+  - [ ] Record a baseline fixture and observable behavior for this component at the pinned gameplay commit; keep historical results separate from fresh proof.
 - [ ] **T2 — Expose the interface Versioned World Runtime API consumes, per Contract "Progress Snapshot v1" (dependency).** <!-- t:a2ce1280 -->
   Record the endpoint/identifiers Versioned World Runtime API needs in this node's config artifacts — coordinate with Versioned World Runtime API.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
+  - [ ] Map the existing producer/consumer wiring for Progress Snapshot v1 to the connected component and its attached schema; document any adapter and version boundary without implementing the neighbor's internals.
+  - [ ] Exercise one conforming exchange and applicable missing/incompatible/reset case through that interface; use local fixtures during development and the real provider before final acceptance.
 - [ ] **T3 — Expose the interface Adventure Catalog & Installation consumes, per Contract "Progress Snapshot v1" (dependency).** <!-- t:9c252060 -->
   Record the endpoint/identifiers Adventure Catalog & Installation needs in this node's config artifacts — coordinate with Adventure Catalog & Installation.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
+  - [ ] Map the existing producer/consumer wiring for Progress Snapshot v1 to the connected component and its attached schema; document any adapter and version boundary without implementing the neighbor's internals.
+  - [ ] Exercise one conforming exchange and applicable missing/incompatible/reset case through that interface; use local fixtures during development and the real provider before final acceptance.
 - [ ] **T4 — Implement: "Crayfish move within authored shore or underwater habitats with their pickup trigger aligned to the visible creature; they cannot escape into inaccessible terrain." (REQ-006).** <!-- t:cc643a30 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-006 "Crayfish move within authored shore or underwater habitats with their pickup trigger aligned to the visible creature; they cannot escape into inaccessible terrain."
+  - [ ] Implement this criterion within the existing owned component and public contracts, using five distinct and repeated crayfish pickups, habitat movement and dance start/cancellation on shore/water/damage/reset as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T5 — Implement: "Collecting five unique glowing crayfish unlocks a reusable dance; repeated collection of the same identity cannot increase the saved total." (REQ-006).** <!-- t:d73ef1d1 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-006 "Collecting five unique glowing crayfish unlocks a reusable dance; repeated collection of the same identity cannot increase the saved total."
+  - [ ] Implement this criterion within the existing owned component and public contracts, using five distinct and repeated crayfish pickups, habitat movement and dance start/cancellation on shore/water/damage/reset as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T6 — Implement: "Dance starts only on a flat, clear shore while stationary; movement, water entry, damage, capture or checkpoint reset cancels it. It grants no invulnerability and consumes no collected crayfish." (REQ-006).** <!-- t:37416fc1 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-006 "Dance starts only on a flat, clear shore while stationary; movement, water entry, damage, capture or checkpoint reset cancels it. It grants no invulnerability and consumes no collected crayfish."
+  - [ ] Implement this criterion within the existing owned component and public contracts, using five distinct and repeated crayfish pickups, habitat movement and dance start/cancellation on shore/water/damage/reset as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T7 — Implement: "The hero stands on hind legs for the line-dance-inspired routine with a separate groove cue; ordinary background music remains unobtrusive and has independent volume control." (REQ-006).** <!-- t:4b735b20 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-006 "The hero stands on hind legs for the line-dance-inspired routine with a separate groove cue; ordinary background music remains unobtrusive and has independent volume control."
+  - [ ] Prepare a repeatable human-review setup for five distinct and repeated crayfish pickups, habitat movement and dance start/cancellation on shore/water/damage/reset; record controls, camera, build and relevant device/settings.
+  - [ ] Capture the evidence and record the review decision against this exact criterion; name corrective work for failures and leave approval pending until the user confirms.
 - [ ] **T8 — Implement: "Checkpoint activation and respawn restore position, velocity and the documented capability/life snapshot without leaving attack, capture or dance states active." (REQ-007).** <!-- t:85a9d1a3 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-007 "Checkpoint activation and respawn restore position, velocity and the documented capability/life snapshot without leaving attack, capture or dance states active." — possible coordination point: Contract "Progress Snapshot v1" (dependency) from Versioned World Runtime API (keyword signal only)
+  - [ ] Implement this criterion within the existing owned component and public contracts, using checkpoint activation, death/capture reset, reload, capability loss and independent world save identities as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T9 — Implement: "Restoration, completion, unique discoveries and dance unlock persist through save/reload under documented namespaces." (REQ-007).** <!-- t:3db1a0a0 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-007 "Restoration, completion, unique discoveries and dance unlock persist through save/reload under documented namespaces."
+  - [ ] Implement this criterion within the existing owned component and public contracts, using checkpoint activation, death/capture reset, reload, capability loss and independent world save identities as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T10 — Implement: "Unavailable abilities or reduced capability do not softlock the first adventure; mandatory recovery paths remain reachable." (REQ-007).** <!-- t:3d8cefc0 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-007 "Unavailable abilities or reduced capability do not softlock the first adventure; mandatory recovery paths remain reachable." — possible coordination point: Contract "Progress Snapshot v1" (dependency) from Adventure Catalog & Installation (keyword signal only)
+  - [ ] Implement this criterion within the existing owned component and public contracts, using checkpoint activation, death/capture reset, reload, capability loss and independent world save identities as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T11 — Implement: "Document exactly which encounters can remove capability or consume a life; neither the future whirlpool nor future suit powers are treated as implemented requirements." (REQ-007).** <!-- t:a92beda3 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-007 "Document exactly which encounters can remove capability or consume a life; neither the future whirlpool nor future suit powers are treated as implemented requirements."
-- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+  - [ ] Prepare a repeatable human-review setup for checkpoint activation, death/capture reset, reload, capability loss and independent world save identities; record controls, camera, build and relevant device/settings.
+  - [ ] Capture the evidence and record the review decision against this exact criterion; name corrective work for failures and leave approval pending until the user confirms.
+- [ ] **T12 — Implement: "Riverheart progress distinguishes captive, freed/carried and returned/restored states; checkpoint reset, reload and migration from the old seed-gate save cannot lose the artifact, duplicate it or permanently lock the finale." (REQ-007).** <!-- t:0a0fc365 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-007 "Riverheart progress distinguishes captive, freed/carried and returned/restored states; checkpoint reset, reload and migration from the old seed-gate save cannot lose the artifact, duplicate it or permanently lock the finale." — possible coordination point: Contract "Progress Snapshot v1" (dependency) from Versioned World Runtime API (keyword signal only)
+- [ ] **T13 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
+  - [ ] Run the component's current automated binding scenarios at the pushed implementation commit and report each result against its exact criterion; leave skipped/stale checks open.
+  - [ ] Collect the required human review and its evidence separately; do not auto-tick manual criteria or equate a headless pass with visual quality.
+  - [ ] Check every work-order step, dependency contract and remaining migration gap before declaring completion; hand off unresolved items with owner and reproduction.
 
 **Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Existing Implementation, Technology Guidance, and node context as your references. Write each work order's steps under its task line as indented checkbox lines (`  - [ ] <step>`), one action each, naming the file, setting or interface it changes, and send them with update_artifact (propose_patches, passing base_sequence) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact; the steps stay with their work order when this doc regenerates. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
 
@@ -112,6 +145,8 @@ Preserve existing regeneration/capability, lives/checkpoint and Gill Mod concept
   → covered by Task T10
 - [ ] Document exactly which encounters can remove capability or consume a life; neither the future whirlpool nor future suit powers are treated as implemented requirements. (manual)
   → covered by Task T11
+- [ ] Riverheart progress distinguishes captive, freed/carried and returned/restored states; checkpoint reset, reload and migration from the old seed-gate save cannot lose the artifact, duplicate it or permanently lock the finale.
+  → covered by Task T12
 
 ## Interface Contracts
 
@@ -313,6 +348,7 @@ Startup/initialization order based on edge directions and interaction patterns.
 | `test/core/collectibles/test_collectibles_system.gd` | source | --- | draft |
 | `core/collectibles/collectible_def.gd` | source | --- | draft |
 | `test/core/restoration/test_restoration_system.gd.uid` | config | --- | draft |
+| `.nodespec/tests/req-007.tests.md` - Test plan for requirement: Consistent recovery, capabilities and saved progress | test-plan | markdown | draft |
 | `core/gillmod/gill_mod_system.gd` | source | --- | draft |
 | `core/regen/capability.gd` | source | --- | draft |
 | `core/collectibles/collectible_kind.gd.uid` | config | --- | draft |
@@ -357,6 +393,7 @@ Startup/initialization order based on edge directions and interaction patterns.
 | `test/core/progression/test_life_system.gd.uid` | config | --- | draft |
 | `core/save/world_contract_shape.gd` | source | --- | draft |
 | `core/progression/capability_restorer.gd` | source | --- | draft |
+| `.nodespec/tests/req-006.tests.md` - Test plan for requirement: Glowing crayfish and an optional dance reward | test-plan | markdown | draft |
 | `test/core/save/test_save_system.gd` | source | --- | draft |
 | `core/collectibles/collectibles_system.gd` | source | --- | draft |
 | `core/regen/feedback_table.gd` | source | --- | draft |

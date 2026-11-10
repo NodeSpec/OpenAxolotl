@@ -5,30 +5,30 @@
 |---|---|---|---|---|---|
 | [REQ-001](#req-001--a-complete-single-player-adventure-before-creation) — A complete single-player adventure before creation | ⬜ pending | 0/3 | 0/10 | 0/0/0 of 0 | OpenAxolotl Game Shell |
 | [REQ-002](#req-002--expressive-smooth-axolotl-movement-and-animation) — Expressive, smooth axolotl movement and animation | ⬜ pending | 0/10 | 0/16 | 0/0/0 of 0 | Hero Motion & Animation |
-| [REQ-003](#req-003--readable-camera-controls-and-accessible-feedback) — Readable camera, controls and accessible feedback | ⬜ pending | 0/6 | 0/10 | 0/0/0 of 0 | Input, Camera & Accessibility |
-| [REQ-004](#req-004--nearby-enemies-with-readable-smooth-behavior) — Nearby enemies with readable, smooth behavior | ⬜ pending | 0/5 | 0/14 | 0/0/0 of 0 | Drift Fleet Encounters |
-| [REQ-005](#req-005--netbot-capture-and-hookline-attack-rules) — Netbot capture and Hookline attack rules | ⬜ pending | 0/5 | 0/14 | 0/0/0 of 0 | Drift Fleet Encounters |
-| [REQ-006](#req-006--glowing-crayfish-and-an-optional-dance-reward) — Glowing crayfish and an optional dance reward | ⬜ pending | 0/4 | 0/12 | 0/0/0 of 0 | Progress, Recovery & Rewards |
-| [REQ-007](#req-007--consistent-recovery-capabilities-and-saved-progress) — Consistent recovery, capabilities and saved progress | ⬜ pending | 0/4 | 0/12 | 0/0/0 of 0 | Progress, Recovery & Rewards |
+| [REQ-003](#req-003--readable-camera-controls-and-accessible-feedback) — Readable camera, controls and accessible feedback | ⬜ pending | 0/6 | 0/10 | 0/0/0 of 1 | Input, Camera & Accessibility |
+| [REQ-004](#req-004--nearby-enemies-with-readable-smooth-behavior) — Nearby enemies with readable, smooth behavior | ⬜ pending | 0/6 | 0/15 | 0/0/0 of 0 | Drift Fleet Encounters |
+| [REQ-005](#req-005--netbot-capture-and-hookline-attack-rules) — Netbot capture and Hookline attack rules | ⬜ pending | 0/5 | 0/15 | 0/0/0 of 0 | Drift Fleet Encounters |
+| [REQ-006](#req-006--glowing-crayfish-and-an-optional-dance-reward) — Glowing crayfish and an optional dance reward | ⬜ pending | 0/4 | 0/13 | 0/0/0 of 0 | Progress, Recovery & Rewards |
+| [REQ-007](#req-007--consistent-recovery-capabilities-and-saved-progress) — Consistent recovery, capabilities and saved progress | ⬜ pending | 0/5 | 0/13 | 0/0/0 of 0 | Progress, Recovery & Rewards |
 | [REQ-008](#req-008--four-architectural-responsibilities-and-a-versioned-world-api) — Four architectural responsibilities and a versioned World API | ⬜ pending | 0/6 | 0/15 | 0/0/0 of 0 | Versioned World Runtime API |
-| [REQ-009](#req-009--a-reusable-gameplay-kit-with-coherent-presentation) — A reusable gameplay kit with coherent presentation | ⬜ pending | 0/6 | 0/13 | 0/0/0 of 0 | Reusable Level & Asset Kit |
+| [REQ-009](#req-009--a-reusable-gameplay-kit-with-coherent-presentation) — A reusable gameplay kit with coherent presentation | ⬜ pending | 0/7 | 0/15 | 0/0/0 of 0 | Reusable Level & Asset Kit |
 | [REQ-010](#req-010--a-small-approachable-family-level-creation-workflow) — A small, approachable family level-creation workflow | ⬜ pending | 0/5 | 0/9 | 0/0/0 of 0 | Family Workshop & Starter |
 | [REQ-011](#req-011--a-bounded-versioned-downloadable-content-format) — A bounded, versioned downloadable content format | ⬜ pending | 0/5 | 0/18 | 0/0/0 of 0 | Content Export & Conformance |
 | [REQ-012](#req-012--automated-content-checks-and-reproducible-builds) — Automated content checks and reproducible builds | ⬜ pending | 0/6 | 0/18 | 0/0/0 of 0 | Content Export & Conformance |
-| [REQ-013](#req-013--human-review-before-community-publication) — Human review before community publication | ⬜ pending | 0/4 | 0/11 | 0/0/0 of 0 | Curated Review & Release |
+| [REQ-013](#req-013--human-review-before-community-publication) — Human review before community publication | ⬜ pending | 0/4 | 0/12 | 0/0/0 of 0 | Curated Review & Release |
 | [REQ-014](#req-014--curated-discovery-and-reliable-package-installation) — Curated discovery and reliable package installation | ⬜ pending | 0/5 | 0/14 | 0/0/0 of 0 | Adventure Catalog & Installation |
 | [REQ-015](#req-015--compatible-updates-save-migrations-and-withdrawal) — Compatible updates, save migrations and withdrawal | ⬜ pending | 0/4 | 0/14 | 0/0/0 of 0 | Adventure Catalog & Installation |
-| [REQ-016](#req-016--explicit-code-asset-and-contributor-rights) — Explicit code, asset and contributor rights | ⬜ pending | 0/3 | 0/11 | 0/0/0 of 0 | Curated Review & Release |
+| [REQ-016](#req-016--explicit-code-asset-and-contributor-rights) — Explicit code, asset and contributor rights | ⬜ pending | 0/3 | 0/12 | 0/0/0 of 0 | Curated Review & Release |
 | [REQ-017](#req-017--desktop-first-quality-with-a-separate-tablet-decision) — Desktop-first quality with a separate tablet decision | ⬜ pending | 0/6 | 0/15 | 0/0/0 of 0 | Quality Evidence & Migration Gates |
 | [REQ-018](#req-018--repository-onboarding-preserves-this-end-state-specification) — Repository onboarding preserves this end-state specification | ⬜ pending | 0/5 | 0/15 | 0/0/0 of 0 | Quality Evidence & Migration Gates |
-| [REQ-019](#req-019--open-lagoon-and-the-leftmost-tunnel) — Open Lagoon and the leftmost tunnel | ⬜ pending | 0/3 | 0/30 | 0/0/0 of 0 | Official Adventure: Lagoon & Living Cascade |
-| [REQ-020](#req-020--s01--arrival-pool) — S01 — Arrival Pool | ⬜ pending | 0/3 | 0/30 | 0/0/0 of 0 | Official Adventure: Lagoon & Living Cascade |
-| [REQ-021](#req-021--s02--stepping-stone-garden) — S02 — Stepping-stone Garden | ⬜ pending | 0/3 | 0/30 | 0/0/0 of 0 | Official Adventure: Lagoon & Living Cascade |
-| [REQ-022](#req-022--s03--hollow-root-dive) — S03 — Hollow-root Dive | ⬜ pending | 0/3 | 0/30 | 0/0/0 of 0 | Official Adventure: Lagoon & Living Cascade |
-| [REQ-023](#req-023--s04--cascade-terraces) — S04 — Cascade Terraces | ⬜ pending | 0/3 | 0/30 | 0/0/0 of 0 | Official Adventure: Lagoon & Living Cascade |
-| [REQ-024](#req-024--s05--restoration-garden-and-crown-arch) — S05 — Restoration Garden and crown arch | ⬜ pending | 0/4 | 0/30 | 0/0/0 of 0 | Official Adventure: Lagoon & Living Cascade |
-| [REQ-025](#req-025--s06--waterfall-run-and-reward-pool) — S06 — Waterfall Run and reward pool | ⬜ pending | 0/3 | 0/30 | 0/0/0 of 0 | Official Adventure: Lagoon & Living Cascade |
-| [REQ-026](#req-026--finish-persist-and-return-to-open-lagoon) — Finish, persist and return to Open Lagoon | ⬜ pending | 0/3 | 0/30 | 0/0/0 of 0 | Official Adventure: Lagoon & Living Cascade |
+| [REQ-019](#req-019--open-lagoon-and-the-leftmost-tunnel) — Open Lagoon and the leftmost tunnel | ⬜ pending | 0/3 | 0/32 | 0/0/0 of 0 | Official Adventure: Lagoon & Living Cascade |
+| [REQ-020](#req-020--s01--arrival-pool) — S01 — Arrival Pool | ⬜ pending | 0/4 | 0/32 | 0/0/0 of 0 | Official Adventure: Lagoon & Living Cascade |
+| [REQ-021](#req-021--s02--stepping-stone-garden) — S02 — Stepping-stone Garden | ⬜ pending | 0/3 | 0/32 | 0/0/0 of 0 | Official Adventure: Lagoon & Living Cascade |
+| [REQ-022](#req-022--s03--hollow-root-dive) — S03 — Hollow-root Dive | ⬜ pending | 0/3 | 0/32 | 0/0/0 of 0 | Official Adventure: Lagoon & Living Cascade |
+| [REQ-023](#req-023--s04--cascade-terraces) — S04 — Cascade Terraces | ⬜ pending | 0/3 | 0/32 | 0/0/0 of 0 | Official Adventure: Lagoon & Living Cascade |
+| [REQ-024](#req-024--s05--free-the-riverheart-and-restore-the-cascade) — S05 — Free the Riverheart and restore the Cascade | ⬜ pending | 0/4 | 0/32 | 0/0/0 of 0 | Official Adventure: Lagoon & Living Cascade |
+| [REQ-025](#req-025--s06--waterfall-run-and-reward-pool) — S06 — Waterfall Run and reward pool | ⬜ pending | 0/3 | 0/32 | 0/0/0 of 0 | Official Adventure: Lagoon & Living Cascade |
+| [REQ-026](#req-026--finish-persist-and-return-to-open-lagoon) — Finish, persist and return to Open Lagoon | ⬜ pending | 0/4 | 0/32 | 0/0/0 of 0 | Official Adventure: Lagoon & Living Cascade |
 
 ## REQ-001 — A complete single-player adventure before creation <!-- r:REQ-001 -->
 status: pending · criteria 0/3 · tasks 0/10 · tests 0/0/0 of 0
@@ -78,7 +78,7 @@ status: pending · criteria 0/10 · tasks 0/16 · tests 0/0/0 of 0
 ### Tasks — Hero Motion & Animation <!-- n:b0c02000-2026-4020-8000-000000000002 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Implement the integration with Input, Camera & Accessibility (godot) per Contract "Semantic Input Frame v1" (dependency).** <!-- t:bb26635f -->
-- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v1" (dependency).** <!-- t:8692c42f -->
+- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v2" (dependency).** <!-- t:4c52ade0 -->
 - [ ] **T4 — Expose the interface Drift Fleet Encounters consumes, per Contract "Hero Motion and Action Snapshot v1" (dependency).** <!-- t:d9b523c8 -->
 - [ ] **T5 — Expose the interface Versioned World Runtime API consumes, per Contract "Hero Motion and Action Snapshot v1" (dependency).** <!-- t:b6a706a0 -->
 - [ ] **T6 — Implement: "Land/water transitions retain the configured momentum, keep collision and visual pose aligned, and do not leave the player in the wrong movement grammar." (REQ-002).** <!-- t:691ce13d -->
@@ -95,7 +95,7 @@ status: pending · criteria 0/10 · tasks 0/16 · tests 0/0/0 of 0
 ### Tests — .nodespec/tests/req-002.tests.md
 
 ## REQ-003 — Readable camera, controls and accessible feedback <!-- r:REQ-003 -->
-status: pending · criteria 0/6 · tasks 0/10 · tests 0/0/0 of 0
+status: pending · criteria 0/6 · tasks 0/10 · tests 0/0/0 of 1
 ### Criteria
 - [ ] Every mandatory action is available on keyboard/mouse and gamepad; remapped inputs update the prompts.
   ↳ tasks: T4 ☐ (Input, Camera & Accessibility)
@@ -121,9 +121,10 @@ status: pending · criteria 0/6 · tasks 0/10 · tests 0/0/0 of 0
 - [ ] **T9 — Implement: "Approve controller feel and camera framing in the same character reel, including a reduced-motion profile, before expanding world dressing." (REQ-003).** <!-- t:8779fa87 -->
 - [ ] **T10 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
 ### Tests — .nodespec/tests/req-003.tests.md
+- ▫️ input-camera-focused-regressions — Focused control and idle-camera regression pass
 
 ## REQ-004 — Nearby enemies with readable, smooth behavior <!-- r:REQ-004 -->
-status: pending · criteria 0/5 · tasks 0/14 · tests 0/0/0 of 0
+status: pending · criteria 0/6 · tasks 0/15 · tests 0/0/0 of 0
 ### Criteria
 - [ ] An enemy acquires the player only inside its authored awareness range and valid line of sight, respects its home leash and habitat, and returns smoothly when pursuit ends.
   ↳ tasks: T4 ☐ (Drift Fleet Encounters)
@@ -135,6 +136,8 @@ status: pending · criteria 0/5 · tasks 0/14 · tests 0/0/0 of 0
   ↳ tasks: T7 ☐ (Drift Fleet Encounters)
 - [ ] Enemy acceleration, heading and pose transitions use versioned habitat-specific tuning and pass the same timed pursuit/return replay at 30, 60 and 120 render FPS without different attack counts or out-of-habitat motion.
   ↳ tasks: T8 ☐ (Drift Fleet Encounters)
+- [ ] Review one Netbot land encounter and one Hookline underwater encounter for weight, anticipation, contact, follow-through and smooth obstacle/pursuit/return transitions before expanding the population; Runoff Drone and Dredger require separate animation and interaction approval before production placement.
+  ↳ tasks: T9 ☐ (Drift Fleet Encounters)
 ### Tasks — Drift Fleet Encounters <!-- n:b0c02000-2026-4020-8000-000000000004 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Implement the integration with Hero Motion & Animation (godot) per Contract "Hero Motion and Action Snapshot v1" (dependency).** <!-- t:7e5f80fa -->
@@ -144,26 +147,28 @@ status: pending · criteria 0/5 · tasks 0/14 · tests 0/0/0 of 0
 - [ ] **T6 — Implement: "A valid strike defeats an ordinary robot once per action, produces bounded mechanical debris, disables its attack/collision as appropriate, and cleans up debris." (REQ-004).** <!-- t:59502ef8 -->
 - [ ] **T7 — Implement: "Production encounters are reviewed for smooth acceleration, turning and pose transitions, readable timing and space to evade." (REQ-004).** <!-- t:193b4927 -->
 - [ ] **T8 — Implement: "Enemy acceleration, heading and pose transitions use versioned habitat-specific tuning and pass the same timed pursuit/return replay at 30, 60 and 120 render FPS without different attack counts or out-of-habitat motion." (REQ-004).** <!-- t:40c83f14 -->
-- [ ] **T9 — Implement: "Netbot uses the animated net contact socket; three distinct tail-whack presses strictly before two seconds escape capture, while timeout resets to the active checkpoint without an additional life penalty." (REQ-005).** <!-- t:d2bab822 -->
-- [ ] **T10 — Implement: "Escaping a net clears the capture state but does not automatically defeat Netbot; a later valid attack can defeat it." (REQ-005).** <!-- t:97d546be -->
-- [ ] **T11 — Implement: "Hookline throws toward the committed player position and retracts over three seconds without homing or new recovery hits; any equipped-Gill-Mod snag uses the bounded existing timer." (REQ-005).** <!-- t:a0bb6ee8 -->
-- [ ] **T12 — Implement: "A player without a Gill Mod can evade or defeat Hookline and can complete the first adventure." (REQ-005).** <!-- t:2d9f4a59 -->
-- [ ] **T13 — Implement: "Net capture, escape, death and checkpoint reset cancel all outstanding attack tokens and contact windows; a held button counts as one press, and an escape input at or after the two-second deadline fails." (REQ-005).** <!-- t:de4c7082 -->
-- [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T9 — Implement: "Review one Netbot land encounter and one Hookline underwater encounter for weight, anticipation, contact, follow-through and smooth obstacle/pursuit/return transitions before expanding the population; Runoff Drone and Dredger require separate animation and interaction approval before production placement." (REQ-004).** <!-- t:ca19a752 -->
+- [ ] **T10 — Implement: "Netbot uses the animated net contact socket; three distinct tail-whack presses strictly before two seconds escape capture, while timeout resets to the active checkpoint without an additional life penalty." (REQ-005).** <!-- t:d2bab822 -->
+- [ ] **T11 — Implement: "Escaping a net clears the capture state but does not automatically defeat Netbot; a later valid attack can defeat it." (REQ-005).** <!-- t:97d546be -->
+- [ ] **T12 — Implement: "Hookline throws toward the committed player position and retracts over three seconds without homing or new recovery hits; any equipped-Gill-Mod snag uses the bounded existing timer." (REQ-005).** <!-- t:a0bb6ee8 -->
+- [ ] **T13 — Implement: "A player without a Gill Mod can evade or defeat Hookline and can complete the first adventure." (REQ-005).** <!-- t:2d9f4a59 -->
+- [ ] **T14 — Implement: "Net capture, escape, death and checkpoint reset cancel all outstanding attack tokens and contact windows; a held button counts as one press, and an escape input at or after the two-second deadline fails." (REQ-005).** <!-- t:de4c7082 -->
+- [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-004.tests.md
 
 ## REQ-005 — Netbot capture and Hookline attack rules <!-- r:REQ-005 -->
-status: pending · criteria 0/5 · tasks 0/14 · tests 0/0/0 of 0
+status: pending · criteria 0/5 · tasks 0/15 · tests 0/0/0 of 0
 ### Criteria
 - [ ] Netbot uses the animated net contact socket; three distinct tail-whack presses strictly before two seconds escape capture, while timeout resets to the active checkpoint without an additional life penalty.
-  ↳ tasks: T9 ☐ (Drift Fleet Encounters)
-- [ ] Escaping a net clears the capture state but does not automatically defeat Netbot; a later valid attack can defeat it.
   ↳ tasks: T10 ☐ (Drift Fleet Encounters)
-- [ ] Hookline throws toward the committed player position and retracts over three seconds without homing or new recovery hits; any equipped-Gill-Mod snag uses the bounded existing timer.
+- [ ] Escaping a net clears the capture state but does not automatically defeat Netbot; a later valid attack can defeat it.
   ↳ tasks: T11 ☐ (Drift Fleet Encounters)
-- [ ] A player without a Gill Mod can evade or defeat Hookline and can complete the first adventure.
+- [ ] Hookline throws toward the committed player position and retracts over three seconds without homing or new recovery hits; any equipped-Gill-Mod snag uses the bounded existing timer.
   ↳ tasks: T12 ☐ (Drift Fleet Encounters)
-- [ ] Net capture, escape, death and checkpoint reset cancel all outstanding attack tokens and contact windows; a held button counts as one press, and an escape input at or after the two-second deadline fails.
+- [ ] A player without a Gill Mod can evade or defeat Hookline and can complete the first adventure.
   ↳ tasks: T13 ☐ (Drift Fleet Encounters)
+- [ ] Net capture, escape, death and checkpoint reset cancel all outstanding attack tokens and contact windows; a held button counts as one press, and an escape input at or after the two-second deadline fails.
+  ↳ tasks: T14 ☐ (Drift Fleet Encounters)
 ### Tasks — Drift Fleet Encounters <!-- n:b0c02000-2026-4020-8000-000000000004 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Implement the integration with Hero Motion & Animation (godot) per Contract "Hero Motion and Action Snapshot v1" (dependency).** <!-- t:7e5f80fa -->
@@ -173,15 +178,17 @@ status: pending · criteria 0/5 · tasks 0/14 · tests 0/0/0 of 0
 - [ ] **T6 — Implement: "A valid strike defeats an ordinary robot once per action, produces bounded mechanical debris, disables its attack/collision as appropriate, and cleans up debris." (REQ-004).** <!-- t:59502ef8 -->
 - [ ] **T7 — Implement: "Production encounters are reviewed for smooth acceleration, turning and pose transitions, readable timing and space to evade." (REQ-004).** <!-- t:193b4927 -->
 - [ ] **T8 — Implement: "Enemy acceleration, heading and pose transitions use versioned habitat-specific tuning and pass the same timed pursuit/return replay at 30, 60 and 120 render FPS without different attack counts or out-of-habitat motion." (REQ-004).** <!-- t:40c83f14 -->
-- [ ] **T9 — Implement: "Netbot uses the animated net contact socket; three distinct tail-whack presses strictly before two seconds escape capture, while timeout resets to the active checkpoint without an additional life penalty." (REQ-005).** <!-- t:d2bab822 -->
-- [ ] **T10 — Implement: "Escaping a net clears the capture state but does not automatically defeat Netbot; a later valid attack can defeat it." (REQ-005).** <!-- t:97d546be -->
-- [ ] **T11 — Implement: "Hookline throws toward the committed player position and retracts over three seconds without homing or new recovery hits; any equipped-Gill-Mod snag uses the bounded existing timer." (REQ-005).** <!-- t:a0bb6ee8 -->
-- [ ] **T12 — Implement: "A player without a Gill Mod can evade or defeat Hookline and can complete the first adventure." (REQ-005).** <!-- t:2d9f4a59 -->
-- [ ] **T13 — Implement: "Net capture, escape, death and checkpoint reset cancel all outstanding attack tokens and contact windows; a held button counts as one press, and an escape input at or after the two-second deadline fails." (REQ-005).** <!-- t:de4c7082 -->
-- [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T9 — Implement: "Review one Netbot land encounter and one Hookline underwater encounter for weight, anticipation, contact, follow-through and smooth obstacle/pursuit/return transitions before expanding the population; Runoff Drone and Dredger require separate animation and interaction approval before production placement." (REQ-004).** <!-- t:ca19a752 -->
+- [ ] **T10 — Implement: "Netbot uses the animated net contact socket; three distinct tail-whack presses strictly before two seconds escape capture, while timeout resets to the active checkpoint without an additional life penalty." (REQ-005).** <!-- t:d2bab822 -->
+- [ ] **T11 — Implement: "Escaping a net clears the capture state but does not automatically defeat Netbot; a later valid attack can defeat it." (REQ-005).** <!-- t:97d546be -->
+- [ ] **T12 — Implement: "Hookline throws toward the committed player position and retracts over three seconds without homing or new recovery hits; any equipped-Gill-Mod snag uses the bounded existing timer." (REQ-005).** <!-- t:a0bb6ee8 -->
+- [ ] **T13 — Implement: "A player without a Gill Mod can evade or defeat Hookline and can complete the first adventure." (REQ-005).** <!-- t:2d9f4a59 -->
+- [ ] **T14 — Implement: "Net capture, escape, death and checkpoint reset cancel all outstanding attack tokens and contact windows; a held button counts as one press, and an escape input at or after the two-second deadline fails." (REQ-005).** <!-- t:de4c7082 -->
+- [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-005.tests.md
 
 ## REQ-006 — Glowing crayfish and an optional dance reward <!-- r:REQ-006 -->
-status: pending · criteria 0/4 · tasks 0/12 · tests 0/0/0 of 0
+status: pending · criteria 0/4 · tasks 0/13 · tests 0/0/0 of 0
 ### Criteria
 - [ ] Crayfish move within authored shore or underwater habitats with their pickup trigger aligned to the visible creature; they cannot escape into inaccessible terrain.
   ↳ tasks: T4 ☐ (Progress, Recovery & Rewards)
@@ -203,10 +210,12 @@ status: pending · criteria 0/4 · tasks 0/12 · tests 0/0/0 of 0
 - [ ] **T9 — Implement: "Restoration, completion, unique discoveries and dance unlock persist through save/reload under documented namespaces." (REQ-007).** <!-- t:3db1a0a0 -->
 - [ ] **T10 — Implement: "Unavailable abilities or reduced capability do not softlock the first adventure; mandatory recovery paths remain reachable." (REQ-007).** <!-- t:3d8cefc0 -->
 - [ ] **T11 — Implement: "Document exactly which encounters can remove capability or consume a life; neither the future whirlpool nor future suit powers are treated as implemented requirements." (REQ-007).** <!-- t:a92beda3 -->
-- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T12 — Implement: "Riverheart progress distinguishes captive, freed/carried and returned/restored states; checkpoint reset, reload and migration from the old seed-gate save cannot lose the artifact, duplicate it or permanently lock the finale." (REQ-007).** <!-- t:0a0fc365 -->
+- [ ] **T13 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-006.tests.md
 
 ## REQ-007 — Consistent recovery, capabilities and saved progress <!-- r:REQ-007 -->
-status: pending · criteria 0/4 · tasks 0/12 · tests 0/0/0 of 0
+status: pending · criteria 0/5 · tasks 0/13 · tests 0/0/0 of 0
 ### Criteria
 - [ ] Checkpoint activation and respawn restore position, velocity and the documented capability/life snapshot without leaving attack, capture or dance states active.
   ↳ tasks: T8 ☐ (Progress, Recovery & Rewards)
@@ -216,6 +225,8 @@ status: pending · criteria 0/4 · tasks 0/12 · tests 0/0/0 of 0
   ↳ tasks: T10 ☐ (Progress, Recovery & Rewards)
 - [ ] Document exactly which encounters can remove capability or consume a life; neither the future whirlpool nor future suit powers are treated as implemented requirements.
   ↳ tasks: T11 ☐ (Progress, Recovery & Rewards)
+- [ ] Riverheart progress distinguishes captive, freed/carried and returned/restored states; checkpoint reset, reload and migration from the old seed-gate save cannot lose the artifact, duplicate it or permanently lock the finale.
+  ↳ tasks: T12 ☐ (Progress, Recovery & Rewards)
 ### Tasks — Progress, Recovery & Rewards <!-- n:b0c02000-2026-4020-8000-000000000005 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Expose the interface Versioned World Runtime API consumes, per Contract "Progress Snapshot v1" (dependency).** <!-- t:a2ce1280 -->
@@ -228,7 +239,9 @@ status: pending · criteria 0/4 · tasks 0/12 · tests 0/0/0 of 0
 - [ ] **T9 — Implement: "Restoration, completion, unique discoveries and dance unlock persist through save/reload under documented namespaces." (REQ-007).** <!-- t:3db1a0a0 -->
 - [ ] **T10 — Implement: "Unavailable abilities or reduced capability do not softlock the first adventure; mandatory recovery paths remain reachable." (REQ-007).** <!-- t:3d8cefc0 -->
 - [ ] **T11 — Implement: "Document exactly which encounters can remove capability or consume a life; neither the future whirlpool nor future suit powers are treated as implemented requirements." (REQ-007).** <!-- t:a92beda3 -->
-- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T12 — Implement: "Riverheart progress distinguishes captive, freed/carried and returned/restored states; checkpoint reset, reload and migration from the old seed-gate save cannot lose the artifact, duplicate it or permanently lock the finale." (REQ-007).** <!-- t:0a0fc365 -->
+- [ ] **T13 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-007.tests.md
 
 ## REQ-008 — Four architectural responsibilities and a versioned World API <!-- r:REQ-008 -->
 status: pending · criteria 0/6 · tasks 0/15 · tests 0/0/0 of 0
@@ -250,7 +263,7 @@ status: pending · criteria 0/6 · tasks 0/15 · tests 0/0/0 of 0
 - [ ] **T2 — Implement the integration with Hero Motion & Animation (godot) per Contract "Hero Motion and Action Snapshot v1" (dependency).** <!-- t:7e5f80fa -->
 - [ ] **T3 — Implement the integration with Drift Fleet Encounters (godot) per Contract "Declarative World Definition v1" (dependency).** <!-- t:e92f0a9f -->
 - [ ] **T4 — Implement the integration with Progress, Recovery & Rewards (godot) per Contract "Progress Snapshot v1" (dependency).** <!-- t:dc8702b0 -->
-- [ ] **T5 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v1" (dependency).** <!-- t:8692c42f -->
+- [ ] **T5 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v2" (dependency).** <!-- t:4c52ade0 -->
 - [ ] **T6 — Expose the interface Official Adventure: Lagoon & Living Cascade consumes, per Contract "Declarative World Definition v1" (dependency).** <!-- t:a99b59db -->
 - [ ] **T7 — Expose the interface OpenAxolotl Game Shell consumes, per Contract "Declarative World Definition v1" (dependency).** <!-- t:2dc49412 -->
 - [ ] **T8 — Expose the interface Content Export & Conformance consumes, per Contract "Declarative World Definition v1" (dependency).** <!-- t:120869ff -->
@@ -261,36 +274,42 @@ status: pending · criteria 0/6 · tasks 0/15 · tests 0/0/0 of 0
 - [ ] **T13 — Implement: "A single runtime composition point wires shared services; level content never writes the player physics root, imports private runtime members or registers arbitrary scripts through the downloadable content path." (REQ-008).** <!-- t:37967156 -->
 - [ ] **T14 — Implement: "Document the migration from the current script-bearing level contract and global no-network policy to separate trusted local-authoring and data-only download paths; catalog networking is isolated from world behavior and offline gameplay remains supported." (REQ-008).** <!-- t:841d99c6 -->
 - [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-008.tests.md
 
 ## REQ-009 — A reusable gameplay kit with coherent presentation <!-- r:REQ-009 -->
-status: pending · criteria 0/6 · tasks 0/13 · tests 0/0/0 of 0
+status: pending · criteria 0/7 · tasks 0/15 · tests 0/0/0 of 0
 ### Criteria
-- [ ] Each catalog entry has a stable ID/version, supported parameters, required dependencies, habitat/collision rules and rights/provenance metadata.
-  ↳ tasks: T7 ☐ (Reusable Level & Asset Kit)
-- [ ] Gameplay prefabs ship with appropriate collision, interaction volumes and bounded behavior; decorative motion cannot move gameplay collision.
+- [ ] Each catalog entry has a stable ID/version, supported parameters, required dependencies, habitat/collision rules and rights/provenance metadata. Inclusion in the official creator kit requires an owner-authorized reusable-asset or character approval tied to its content digest and pinned dependencies; an adventure approval cannot substitute for it.
   ↳ tasks: T8 ☐ (Reusable Level & Asset Kit)
-- [ ] Land surfaces, shores, grass, rock, underwater depth gradients, waterfall origins, hero and enemies meet the starting-lagoon visual reference at gameplay distance without stretched pixelated textures or distracting repetition.
+- [ ] Gameplay prefabs ship with appropriate collision, interaction volumes and bounded behavior; decorative motion cannot move gameplay collision.
   ↳ tasks: T9 ☐ (Reusable Level & Asset Kit)
-- [ ] Art and sound review checks action readability, sensible material scale, adjustable low-level background music and a distinct dance cue; asset and device budgets are recorded separately.
+- [ ] Land surfaces, shores, grass, rock, underwater depth gradients, waterfall origins, hero and enemies meet the starting-lagoon visual reference at gameplay distance without stretched pixelated textures or distracting repetition.
   ↳ tasks: T10 ☐ (Reusable Level & Asset Kit)
-- [ ] The kit records mesh units, pivot/forward conventions, visual bounds, gameplay hulls, material scale and animation sockets; importing a revised model fails visibly when its required rig/socket contract is incompatible.
+- [ ] Art and sound review checks action readability, sensible material scale, adjustable low-level background music and a distinct dance cue; asset and device budgets are recorded separately.
   ↳ tasks: T11 ☐ (Reusable Level & Asset Kit)
-- [ ] Approve one representative shore-to-underwater section with final lighting, material blends, silhouette variety and collision before extending the same treatment across all sections.
+- [ ] The kit records mesh units, pivot/forward conventions, visual bounds, gameplay hulls, material scale and animation sockets; importing a revised model fails visibly when its required rig/socket contract is incompatible.
   ↳ tasks: T12 ☐ (Reusable Level & Asset Kit)
+- [ ] Approve one representative shore-to-underwater section with final lighting, material blends, silhouette variety and collision before extending the same treatment across all sections.
+  ↳ tasks: T13 ☐ (Reusable Level & Asset Kit)
+- [ ] Approve a matched gameplay-camera lighting review of sunlit shallows, vegetation/root shade, cooler deep pools and sheltered root chambers: underwater light patterns affect appropriate surfaces and Skippy, shadows/caustics respect enclosure, vegetation preserves sightlines and collision clearance, and restoration improves water/plant/light presentation without obscuring routes or attacks.
+  ↳ tasks: T14 ☐ (Reusable Level & Asset Kit)
 ### Tasks — Reusable Level & Asset Kit <!-- n:b0c02000-2026-4020-8000-000000000007 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
-- [ ] **T2 — Expose the interface Versioned World Runtime API consumes, per Contract "Approved Kit Entry v1" (dependency).** <!-- t:a316d3e6 -->
-- [ ] **T3 — Expose the interface Hero Motion & Animation consumes, per Contract "Approved Kit Entry v1" (dependency).** <!-- t:6e56a29f -->
-- [ ] **T4 — Expose the interface Official Adventure: Lagoon & Living Cascade consumes, per Contract "Approved Kit Entry v1" (dependency).** <!-- t:dd472da1 -->
-- [ ] **T5 — Expose the interface Family Workshop & Starter consumes, per Contract "Approved Kit Entry v1" (dependency).** <!-- t:91979131 -->
-- [ ] **T6 — Expose the interface Content Export & Conformance consumes, per Contract "Approved Kit Entry v1" (dependency).** <!-- t:3772a3ad -->
-- [ ] **T7 — Implement: "Each catalog entry has a stable ID/version, supported parameters, required dependencies, habitat/collision rules and rights/provenance metadata." (REQ-009).** <!-- t:d32fc35b -->
-- [ ] **T8 — Implement: "Gameplay prefabs ship with appropriate collision, interaction volumes and bounded behavior; decorative motion cannot move gameplay collision." (REQ-009).** <!-- t:efe3ed71 -->
-- [ ] **T9 — Implement: "Land surfaces, shores, grass, rock, underwater depth gradients, waterfall origins, hero and enemies meet the starting-lagoon visual reference at gameplay distance without stretched pixelated textures or distracting repetition." (REQ-009).** <!-- t:a64aeb36 -->
-- [ ] **T10 — Implement: "Art and sound review checks action readability, sensible material scale, adjustable low-level background music and a distinct dance cue; asset and device budgets are recorded separately." (REQ-009).** <!-- t:0adcb690 -->
-- [ ] **T11 — Implement: "The kit records mesh units, pivot/forward conventions, visual bounds, gameplay hulls, material scale and animation sockets; importing a revised model fails visibly when its required rig/socket contract is incompatible." (REQ-009).** <!-- t:a5a67e34 -->
-- [ ] **T12 — Implement: "Approve one representative shore-to-underwater section with final lighting, material blends, silhouette variety and collision before extending the same treatment across all sections." (REQ-009).** <!-- t:e5a6a803 -->
-- [ ] **T13 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T2 — Expose the interface Versioned World Runtime API consumes, per Contract "Approved Kit Entry v2" (dependency).** <!-- t:aa37f339 -->
+- [ ] **T3 — Expose the interface Hero Motion & Animation consumes, per Contract "Approved Kit Entry v2" (dependency).** <!-- t:2553a350 -->
+- [ ] **T4 — Expose the interface Official Adventure: Lagoon & Living Cascade consumes, per Contract "Approved Kit Entry v2" (dependency).** <!-- t:7688776e -->
+- [ ] **T5 — Expose the interface Family Workshop & Starter consumes, per Contract "Approved Kit Entry v2" (dependency).** <!-- t:2fdf24fe -->
+- [ ] **T6 — Expose the interface Content Export & Conformance consumes, per Contract "Approved Kit Entry v2" (dependency).** <!-- t:a9c52afa -->
+- [ ] **T7 — Expose the interface Curated Review & Release consumes, per Contract "Contribution Review Decision v1" (custom).** <!-- t:089b97a1 -->
+- [ ] **T8 — Implement: "Each catalog entry has a stable ID/version, supported parameters, required dependencies, habitat/collision rules and rights/provenance metadata. Inclusion in the official creator kit requires an owner-authorized reusable-asset or character approval tied to its content digest and pinned dependencies; an adventure approval cannot substitute for it." (REQ-009).** <!-- t:12be3429 -->
+- [ ] **T9 — Implement: "Gameplay prefabs ship with appropriate collision, interaction volumes and bounded behavior; decorative motion cannot move gameplay collision." (REQ-009).** <!-- t:efe3ed71 -->
+- [ ] **T10 — Implement: "Land surfaces, shores, grass, rock, underwater depth gradients, waterfall origins, hero and enemies meet the starting-lagoon visual reference at gameplay distance without stretched pixelated textures or distracting repetition." (REQ-009).** <!-- t:a64aeb36 -->
+- [ ] **T11 — Implement: "Art and sound review checks action readability, sensible material scale, adjustable low-level background music and a distinct dance cue; asset and device budgets are recorded separately." (REQ-009).** <!-- t:0adcb690 -->
+- [ ] **T12 — Implement: "The kit records mesh units, pivot/forward conventions, visual bounds, gameplay hulls, material scale and animation sockets; importing a revised model fails visibly when its required rig/socket contract is incompatible." (REQ-009).** <!-- t:a5a67e34 -->
+- [ ] **T13 — Implement: "Approve one representative shore-to-underwater section with final lighting, material blends, silhouette variety and collision before extending the same treatment across all sections." (REQ-009).** <!-- t:e5a6a803 -->
+- [ ] **T14 — Implement: "Approve a matched gameplay-camera lighting review of sunlit shallows, vegetation/root shade, cooler deep pools and sheltered root chambers: underwater light patterns affect appropriate surfaces and Skippy, shadows/caustics respect enclosure, vegetation preserves sightlines and collision clearance, and restoration improves water/plant/light presentation without obscuring routes or attacks." (REQ-009).** <!-- t:f410c049 -->
+- [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-009.tests.md
 
 ## REQ-010 — A small, approachable family level-creation workflow <!-- r:REQ-010 -->
 status: pending · criteria 0/5 · tasks 0/9 · tests 0/0/0 of 0
@@ -301,25 +320,26 @@ status: pending · criteria 0/5 · tasks 0/9 · tests 0/0/0 of 0
   ↳ tasks: T5 ☐ (Family Workshop & Starter)
 - [ ] A newcomer test covers setup, describing an idea, editing, previewing, checking and exporting; the 15–30 minute first-remix goal is measured after setup and reported honestly.
   ↳ tasks: T6 ☐ (Family Workshop & Starter)
-- [ ] Parent-facing instructions clearly distinguish local experimentation, supported downloadable content and executable core contributions.
+- [ ] Parent-facing instructions distinguish private local experimentation, reusable asset/character submissions, playable-level submissions and executable core contributions. They explain the parent's operator role, that submission does not guarantee publication, and that no child account or public profile is required; an observed family walkthrough confirms this is understandable.
   ↳ tasks: T7 ☐ (Family Workshop & Starter)
 - [ ] A family trial starts from a clean pinned-toolchain setup and records time, errors and assistance for a bounded AI-assisted remix and an equivalent direct-Godot edit; export and playtest must succeed without core changes.
   ↳ tasks: T8 ☐ (Family Workshop & Starter)
 ### Tasks — Family Workshop & Starter <!-- n:b0c02000-2026-4020-8000-000000000009 -->
 - [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
-- [ ] **T2 — Implement the integration with Content Export & Conformance (python-backend) per Contract "Data-only Level Package Manifest v1" (dependency).** <!-- t:ff704c25 -->
-- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v1" (dependency).** <!-- t:8692c42f -->
+- [ ] **T2 — Implement the integration with Content Export & Conformance (python-backend) per Contract "Data-only Level Package Manifest v2" (dependency).** <!-- t:8114da52 -->
+- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v2" (dependency).** <!-- t:4c52ade0 -->
 - [ ] **T4 — Implement: "The starter plays from spawn to finish and demonstrates land, water, one enemy, checkpoint, collectible and one restoration or supported ability gate through the same public interfaces as official levels." (REQ-010).** <!-- t:3e257213 -->
 - [ ] **T5 — Implement: "A documented first remix changes one bounded part of the starter and passes conformance without editing core systems." (REQ-010).** <!-- t:433ed3f9 -->
 - [ ] **T6 — Implement: "A newcomer test covers setup, describing an idea, editing, previewing, checking and exporting; the 15–30 minute first-remix goal is measured after setup and reported honestly." (REQ-010).** <!-- t:d5cf0d46 -->
-- [ ] **T7 — Implement: "Parent-facing instructions clearly distinguish local experimentation, supported downloadable content and executable core contributions." (REQ-010).** <!-- t:e070de01 -->
+- [ ] **T7 — Implement: "Parent-facing instructions distinguish private local experimentation, reusable asset/character submissions, playable-level submissions and executable core contributions. They explain the parent's operator role, that submission does not guarantee publication, and that no child account or public profile is required; an observed family walkthrough confirms this is understandable." (REQ-010).** <!-- t:2bf8c193 -->
 - [ ] **T8 — Implement: "A family trial starts from a clean pinned-toolchain setup and records time, errors and assistance for a bounded AI-assisted remix and an equivalent direct-Godot edit; export and playtest must succeed without core changes." (REQ-010).** <!-- t:74cbe57f -->
 - [ ] **T9 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-010.tests.md
 
 ## REQ-011 — A bounded, versioned downloadable content format <!-- r:REQ-011 -->
 status: pending · criteria 0/5 · tasks 0/18 · tests 0/0/0 of 0
 ### Criteria
-- [ ] The machine-readable package schema defines identity/version, contract/runtime/kit compatibility, sections, spawn, checkpoints, objectives, finish, asset references, save schema, credits and integrity metadata.
+- [ ] The machine-readable package schema defines identity/version, contract/runtime/kit compatibility, sections, spawn, checkpoints, objectives, finish, asset references, save schema, credits and integrity metadata. Its manifest pins exact dependency versions and digests, and approved playable releases reference only approved reusable asset/character versions.
   ↳ tasks: T13 ☐ (Content Export & Conformance)
 - [ ] Export and load reject scripts, native extensions, executable resource/scene references, unknown behavior IDs, invalid parameter ranges and paths outside the package namespace.
   ↳ tasks: T14 ☐ (Content Export & Conformance)
@@ -332,22 +352,23 @@ status: pending · criteria 0/5 · tasks 0/18 · tests 0/0/0 of 0
 ### Tasks — Content Export & Conformance <!-- n:b0c02000-2026-4020-8000-000000000010 -->
 - [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
 - [ ] **T2 — Implement the integration with Versioned World Runtime API (godot) per Contract "Declarative World Definition v1" (dependency).** <!-- t:277a8bd7 -->
-- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v1" (dependency).** <!-- t:8692c42f -->
-- [ ] **T4 — Expose the interface Family Workshop & Starter consumes, per Contract "Data-only Level Package Manifest v1" (dependency).** <!-- t:cbc0b876 -->
-- [ ] **T5 — Expose the interface Curated Review & Release consumes, per Contract "Conformance Evidence v1" (dependency).** <!-- t:4edd0a25 -->
-- [ ] **T6 — Expose the interface Quality Evidence & Migration Gates consumes, per Contract "Conformance Evidence v1" (dependency).** <!-- t:b9dcea9e -->
+- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v2" (dependency).** <!-- t:4c52ade0 -->
+- [ ] **T4 — Expose the interface Family Workshop & Starter consumes, per Contract "Data-only Level Package Manifest v2" (dependency).** <!-- t:3f6f9f89 -->
+- [ ] **T5 — Expose the interface Curated Review & Release consumes, per Contract "Conformance Evidence v2" (dependency).** <!-- t:d0819852 -->
+- [ ] **T6 — Expose the interface Quality Evidence & Migration Gates consumes, per Contract "Conformance Evidence v2" (dependency).** <!-- t:c9dc71d1 -->
 - [ ] **T7 — Implement: "CI runs level/schema checks, asset checks, public-API/static rules, representative real-input route tests and the relevant core regressions from a documented clean setup." (REQ-012).** <!-- t:bb634300 -->
 - [ ] **T8 — Implement: "Validation detects missing markers, unreachable required progression, gate bypasses, capsule-sized containment gaps and invalid habitat placement." (REQ-012).** <!-- t:1bd7db58 -->
-- [ ] **T9 — Implement: "Package validation enforces file-count, compressed/uncompressed size and allowed-resource limits, safe paths and integrity checks before activation." (REQ-012).** <!-- t:ebd42c47 -->
+- [ ] **T9 — Implement: "Package validation enforces file-count, compressed/uncompressed size and allowed-resource limits, safe paths and integrity checks before activation. It rejects missing, unapproved, withdrawn or digest-mismatched dependencies for official publication and produces diagnostics identifying the exact submission and dependency." (REQ-012).** <!-- t:03785036 -->
 - [ ] **T10 — Implement: "Each acceptance criterion records a current result or an explicit manual review; skipped, stale or historical checks are not reported as passing." (REQ-012).** <!-- t:42414c38 -->
 - [ ] **T11 — Implement: "Test plans use one initial binding scenario per automated acceptance criterion and a separate manual checklist; performance measurements use a rendered build and visual quality is never inferred from a headless pass." (REQ-012).** <!-- t:d706a0f2 -->
 - [ ] **T12 — Implement: "Route tests drive the production controller with real input through entrance, pools, underwater turns and every section; teleporting between checkpoints cannot count as traversal proof." (REQ-012).** <!-- t:7ea1bddc -->
-- [ ] **T13 — Implement: "The machine-readable package schema defines identity/version, contract/runtime/kit compatibility, sections, spawn, checkpoints, objectives, finish, asset references, save schema, credits and integrity metadata." (REQ-011).** <!-- t:104bb36d -->
+- [ ] **T13 — Implement: "The machine-readable package schema defines identity/version, contract/runtime/kit compatibility, sections, spawn, checkpoints, objectives, finish, asset references, save schema, credits and integrity metadata. Its manifest pins exact dependency versions and digests, and approved playable releases reference only approved reusable asset/character versions." (REQ-011).** <!-- t:ee377283 -->
 - [ ] **T14 — Implement: "Export and load reject scripts, native extensions, executable resource/scene references, unknown behavior IDs, invalid parameter ranges and paths outside the package namespace." (REQ-011).** <!-- t:6b45c654 -->
 - [ ] **T15 — Implement: "A conforming starter exports and loads through the same runtime content path used for approved community levels." (REQ-011).** <!-- t:25a8aae8 -->
 - [ ] **T16 — Implement: "A proposed mechanic requiring new executable behavior is routed to a separate reviewed core-code change rather than smuggled into a downloadable level." (REQ-011).** <!-- t:477c6433 -->
 - [ ] **T17 — Implement: "Trusted editor authoring may use scripts and scenes, but export compiles supported placements into the downloadable data schema; the runtime never loads a submitted executable scene or script as content." (REQ-011).** <!-- t:3d826860 -->
 - [ ] **T18 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-011.tests.md
 
 ## REQ-012 — Automated content checks and reproducible builds <!-- r:REQ-012 -->
 status: pending · criteria 0/6 · tasks 0/18 · tests 0/0/0 of 0
@@ -356,7 +377,7 @@ status: pending · criteria 0/6 · tasks 0/18 · tests 0/0/0 of 0
   ↳ tasks: T7 ☐ (Content Export & Conformance)
 - [ ] Validation detects missing markers, unreachable required progression, gate bypasses, capsule-sized containment gaps and invalid habitat placement.
   ↳ tasks: T8 ☐ (Content Export & Conformance)
-- [ ] Package validation enforces file-count, compressed/uncompressed size and allowed-resource limits, safe paths and integrity checks before activation.
+- [ ] Package validation enforces file-count, compressed/uncompressed size and allowed-resource limits, safe paths and integrity checks before activation. It rejects missing, unapproved, withdrawn or digest-mismatched dependencies for official publication and produces diagnostics identifying the exact submission and dependency.
   ↳ tasks: T9 ☐ (Content Export & Conformance)
 - [ ] Each acceptance criterion records a current result or an explicit manual review; skipped, stale or historical checks are not reported as passing.
   ↳ tasks: T10 ☐ (Content Export & Conformance)
@@ -367,51 +388,54 @@ status: pending · criteria 0/6 · tasks 0/18 · tests 0/0/0 of 0
 ### Tasks — Content Export & Conformance <!-- n:b0c02000-2026-4020-8000-000000000010 -->
 - [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
 - [ ] **T2 — Implement the integration with Versioned World Runtime API (godot) per Contract "Declarative World Definition v1" (dependency).** <!-- t:277a8bd7 -->
-- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v1" (dependency).** <!-- t:8692c42f -->
-- [ ] **T4 — Expose the interface Family Workshop & Starter consumes, per Contract "Data-only Level Package Manifest v1" (dependency).** <!-- t:cbc0b876 -->
-- [ ] **T5 — Expose the interface Curated Review & Release consumes, per Contract "Conformance Evidence v1" (dependency).** <!-- t:4edd0a25 -->
-- [ ] **T6 — Expose the interface Quality Evidence & Migration Gates consumes, per Contract "Conformance Evidence v1" (dependency).** <!-- t:b9dcea9e -->
+- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v2" (dependency).** <!-- t:4c52ade0 -->
+- [ ] **T4 — Expose the interface Family Workshop & Starter consumes, per Contract "Data-only Level Package Manifest v2" (dependency).** <!-- t:3f6f9f89 -->
+- [ ] **T5 — Expose the interface Curated Review & Release consumes, per Contract "Conformance Evidence v2" (dependency).** <!-- t:d0819852 -->
+- [ ] **T6 — Expose the interface Quality Evidence & Migration Gates consumes, per Contract "Conformance Evidence v2" (dependency).** <!-- t:c9dc71d1 -->
 - [ ] **T7 — Implement: "CI runs level/schema checks, asset checks, public-API/static rules, representative real-input route tests and the relevant core regressions from a documented clean setup." (REQ-012).** <!-- t:bb634300 -->
 - [ ] **T8 — Implement: "Validation detects missing markers, unreachable required progression, gate bypasses, capsule-sized containment gaps and invalid habitat placement." (REQ-012).** <!-- t:1bd7db58 -->
-- [ ] **T9 — Implement: "Package validation enforces file-count, compressed/uncompressed size and allowed-resource limits, safe paths and integrity checks before activation." (REQ-012).** <!-- t:ebd42c47 -->
+- [ ] **T9 — Implement: "Package validation enforces file-count, compressed/uncompressed size and allowed-resource limits, safe paths and integrity checks before activation. It rejects missing, unapproved, withdrawn or digest-mismatched dependencies for official publication and produces diagnostics identifying the exact submission and dependency." (REQ-012).** <!-- t:03785036 -->
 - [ ] **T10 — Implement: "Each acceptance criterion records a current result or an explicit manual review; skipped, stale or historical checks are not reported as passing." (REQ-012).** <!-- t:42414c38 -->
 - [ ] **T11 — Implement: "Test plans use one initial binding scenario per automated acceptance criterion and a separate manual checklist; performance measurements use a rendered build and visual quality is never inferred from a headless pass." (REQ-012).** <!-- t:d706a0f2 -->
 - [ ] **T12 — Implement: "Route tests drive the production controller with real input through entrance, pools, underwater turns and every section; teleporting between checkpoints cannot count as traversal proof." (REQ-012).** <!-- t:7ea1bddc -->
-- [ ] **T13 — Implement: "The machine-readable package schema defines identity/version, contract/runtime/kit compatibility, sections, spawn, checkpoints, objectives, finish, asset references, save schema, credits and integrity metadata." (REQ-011).** <!-- t:104bb36d -->
+- [ ] **T13 — Implement: "The machine-readable package schema defines identity/version, contract/runtime/kit compatibility, sections, spawn, checkpoints, objectives, finish, asset references, save schema, credits and integrity metadata. Its manifest pins exact dependency versions and digests, and approved playable releases reference only approved reusable asset/character versions." (REQ-011).** <!-- t:ee377283 -->
 - [ ] **T14 — Implement: "Export and load reject scripts, native extensions, executable resource/scene references, unknown behavior IDs, invalid parameter ranges and paths outside the package namespace." (REQ-011).** <!-- t:6b45c654 -->
 - [ ] **T15 — Implement: "A conforming starter exports and loads through the same runtime content path used for approved community levels." (REQ-011).** <!-- t:25a8aae8 -->
 - [ ] **T16 — Implement: "A proposed mechanic requiring new executable behavior is routed to a separate reviewed core-code change rather than smuggled into a downloadable level." (REQ-011).** <!-- t:477c6433 -->
 - [ ] **T17 — Implement: "Trusted editor authoring may use scripts and scenes, but export compiles supported placements into the downloadable data schema; the runtime never loads a submitted executable scene or script as content." (REQ-011).** <!-- t:3d826860 -->
 - [ ] **T18 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-012.tests.md
 
 ## REQ-013 — Human review before community publication <!-- r:REQ-013 -->
-status: pending · criteria 0/4 · tasks 0/11 · tests 0/0/0 of 0
+status: pending · criteria 0/4 · tasks 0/12 · tests 0/0/0 of 0
 ### Criteria
-- [ ] Publication is blocked until required automated checks and recorded human approvals are present for the exact package digest and version.
-  ↳ tasks: T7 ☐ (Curated Review & Release)
-- [ ] The review checklist covers playability, recovery, clarity, content suitability, accessibility, asset rights and measured performance on the declared hardware tier.
+- [ ] Official publication requires passing automated checks and recorded owner-authorized human approval for the exact submission type, identity, version, content digest and pinned dependencies. Contributors and automated agents cannot approve or publish their own submissions without explicit owner delegation; an asset/character reuse approval cannot authorize a playable level.
   ↳ tasks: T8 ☐ (Curated Review & Release)
-- [ ] Changing submitted bytes invalidates approval and requires a new version/review; a rejected candidate remains unavailable to the public catalog.
+- [ ] Human review checks age appropriateness for children aged 5–9, cohesive art and gameplay, playability, recovery, clarity, accessibility, rights and measured performance on the declared hardware tier. Asset/character reviews include animation, materials, collision and supported behavior; level reviews play the complete route and its assembled content. Names, descriptions, thumbnails and audio are included.
   ↳ tasks: T9 ☐ (Curated Review & Release)
-- [ ] Credits, contributor permissions and parent-led submission instructions are understandable before submission.
+- [ ] Changing submitted content, public-facing metadata or pinned dependencies invalidates the applicable approval and requires a new version/review. Draft, changes-requested and rejected submissions are excluded from public catalogs; review decisions record reviewer identity, scope, reason and time, and only authorized owners/delegates may change release status.
   ↳ tasks: T10 ☐ (Curated Review & Release)
+- [ ] Credits, contributor permissions and parent-led submission instructions are understandable before submission.
+  ↳ tasks: T11 ☐ (Curated Review & Release)
 ### Tasks — Curated Review & Release <!-- n:b0c02000-2026-4020-8000-000000000011 -->
 - [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
-- [ ] **T2 — Implement the integration with Content Export & Conformance (python-backend) per Contract "Conformance Evidence v1" (dependency).** <!-- t:20a5bfbb -->
-- [ ] **T3 — Expose the interface Adventure Catalog & Installation consumes, per Contract "Signed Catalog Release v1" (dependency).** <!-- t:f2e86f67 -->
-- [ ] **T4 — Implement: "The exportable asset catalog excludes assets lacking a recorded approved redistribution/remix status and required attribution." (REQ-016).** <!-- t:99caf038 -->
-- [ ] **T5 — Implement: "Review and publish the code license, asset reuse terms, generator/third-party obligations and contributor permissions before inviting public reuse or submissions." (REQ-016).** <!-- t:24e63f0e -->
-- [ ] **T6 — Implement: "Each published package retains its credited asset manifest and required attribution through installation and updates." (REQ-016).** <!-- t:8a7c604e -->
-- [ ] **T7 — Implement: "Publication is blocked until required automated checks and recorded human approvals are present for the exact package digest and version." (REQ-013).** <!-- t:8205f641 -->
-- [ ] **T8 — Implement: "The review checklist covers playability, recovery, clarity, content suitability, accessibility, asset rights and measured performance on the declared hardware tier." (REQ-013).** <!-- t:cd703194 -->
-- [ ] **T9 — Implement: "Changing submitted bytes invalidates approval and requires a new version/review; a rejected candidate remains unavailable to the public catalog." (REQ-013).** <!-- t:5fe34be9 -->
-- [ ] **T10 — Implement: "Credits, contributor permissions and parent-led submission instructions are understandable before submission." (REQ-013).** <!-- t:6f2bfd24 -->
-- [ ] **T11 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T2 — Implement the integration with Content Export & Conformance (python-backend) per Contract "Conformance Evidence v2" (dependency).** <!-- t:1e26203c -->
+- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Contribution Review Decision v1" (custom).** <!-- t:e26989ea -->
+- [ ] **T4 — Expose the interface Adventure Catalog & Installation consumes, per Contract "Signed Catalog Release v2" (dependency).** <!-- t:5b76a738 -->
+- [ ] **T5 — Implement: "The exportable asset catalog excludes assets lacking a recorded approved redistribution/remix status and required attribution." (REQ-016).** <!-- t:99caf038 -->
+- [ ] **T6 — Implement: "Review and publish the code license, asset reuse terms, generator/third-party obligations, contributor permissions and separate official branding/publication policy before inviting public reuse or submissions. Parent-facing terms explain that open-source reuse or a fork does not confer official approval, and public credit can use a parent-approved alias without publishing a child's personal details." (REQ-016).** <!-- t:215da80e -->
+- [ ] **T7 — Implement: "Each published package retains its credited asset manifest and required attribution through installation and updates." (REQ-016).** <!-- t:8a7c604e -->
+- [ ] **T8 — Implement: "Official publication requires passing automated checks and recorded owner-authorized human approval for the exact submission type, identity, version, content digest and pinned dependencies. Contributors and automated agents cannot approve or publish their own submissions without explicit owner delegation; an asset/character reuse approval cannot authorize a playable level." (REQ-013).** <!-- t:e1f86860 -->
+- [ ] **T9 — Implement: "Human review checks age appropriateness for children aged 5–9, cohesive art and gameplay, playability, recovery, clarity, accessibility, rights and measured performance on the declared hardware tier. Asset/character reviews include animation, materials, collision and supported behavior; level reviews play the complete route and its assembled content. Names, descriptions, thumbnails and audio are included." (REQ-013).** <!-- t:dceb5b30 -->
+- [ ] **T10 — Implement: "Changing submitted content, public-facing metadata or pinned dependencies invalidates the applicable approval and requires a new version/review. Draft, changes-requested and rejected submissions are excluded from public catalogs; review decisions record reviewer identity, scope, reason and time, and only authorized owners/delegates may change release status." (REQ-013).** <!-- t:2a43bb0d -->
+- [ ] **T11 — Implement: "Credits, contributor permissions and parent-led submission instructions are understandable before submission." (REQ-013).** <!-- t:6f2bfd24 -->
+- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-013.tests.md
 
 ## REQ-014 — Curated discovery and reliable package installation <!-- r:REQ-014 -->
 status: pending · criteria 0/5 · tasks 0/14 · tests 0/0/0 of 0
 ### Criteria
-- [ ] Only approved compatible non-withdrawn package versions appear as installable releases, with author credits and compatibility information.
+- [ ] Only owner-authorized, approved, compatible and non-withdrawn playable package versions appear as installable adventures, with reviewed author credits and compatibility information. Drafts, rejected submissions and asset-only approvals cannot appear as playable releases; the child-facing game contains no unmoderated upload feed or public chat.
   ↳ tasks: T5 ☐ (Adventure Catalog & Installation)
 - [ ] Downloads are staged, verified against the approved release record and activated atomically; interruption, invalid content or failed verification preserves the previous working install.
   ↳ tasks: T6 ☐ (Adventure Catalog & Installation)
@@ -423,10 +447,10 @@ status: pending · criteria 0/5 · tasks 0/14 · tests 0/0/0 of 0
   ↳ tasks: T9 ☐ (Adventure Catalog & Installation)
 ### Tasks — Adventure Catalog & Installation <!-- n:b0c02000-2026-4020-8000-000000000012 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
-- [ ] **T2 — Implement the integration with Curated Review & Release (python-backend) per Contract "Signed Catalog Release v1" (dependency).** <!-- t:d731ec28 -->
+- [ ] **T2 — Implement the integration with Curated Review & Release (python-backend) per Contract "Signed Catalog Release v2" (dependency).** <!-- t:23796697 -->
 - [ ] **T3 — Implement the integration with Progress, Recovery & Rewards (godot) per Contract "Progress Snapshot v1" (dependency).** <!-- t:dc8702b0 -->
 - [ ] **T4 — Expose the interface OpenAxolotl Game Shell consumes, per Contract "Installed Adventure State v1" (dependency).** <!-- t:78a30660 -->
-- [ ] **T5 — Implement: "Only approved compatible non-withdrawn package versions appear as installable releases, with author credits and compatibility information." (REQ-014).** <!-- t:a237c0e5 -->
+- [ ] **T5 — Implement: "Only owner-authorized, approved, compatible and non-withdrawn playable package versions appear as installable adventures, with reviewed author credits and compatibility information. Drafts, rejected submissions and asset-only approvals cannot appear as playable releases; the child-facing game contains no unmoderated upload feed or public chat." (REQ-014).** <!-- t:6e77c2bc -->
 - [ ] **T6 — Implement: "Downloads are staged, verified against the approved release record and activated atomically; interruption, invalid content or failed verification preserves the previous working install." (REQ-014).** <!-- t:2d9aa792 -->
 - [ ] **T7 — Implement: "A missing or incompatible world shows an actionable unavailable state while the hub and other installed worlds remain playable." (REQ-014).** <!-- t:1941b28f -->
 - [ ] **T8 — Implement: "Official and previously installed supported content remains playable without a network connection or AI account." (REQ-014).** <!-- t:776cf03a -->
@@ -434,8 +458,9 @@ status: pending · criteria 0/5 · tasks 0/14 · tests 0/0/0 of 0
 - [ ] **T10 — Implement: "Progress is isolated by stable world identity and save-schema version; one level cannot read or overwrite another level's save namespace." (REQ-015).** <!-- t:773fb9d1 -->
 - [ ] **T11 — Implement: "Updates declare compatibility/migration behavior; failed migrations retain the prior installation and recoverable save data." (REQ-015).** <!-- t:d4372c64 -->
 - [ ] **T12 — Implement: "Removing a level preserves progress by default; irreversible progress deletion requires an explicit separate player action." (REQ-015).** <!-- t:85dbabc9 -->
-- [ ] **T13 — Implement: "Withdrawn releases stop being offered for installation; rollback is offered only when both runtime and save-schema compatibility permit it." (REQ-015).** <!-- t:5b629178 -->
+- [ ] **T13 — Implement: "Withdrawn releases stop being offered for installation; rollback is offered only when runtime and save-schema compatibility permit it. Withdrawal of an asset/character version identifies every dependent official release and blocks new publication/distribution of affected versions pending owner review; it does not silently delete installed worlds or saved progress." (REQ-015).** <!-- t:40fda135 -->
 - [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-014.tests.md
 
 ## REQ-015 — Compatible updates, save migrations and withdrawal <!-- r:REQ-015 -->
 status: pending · criteria 0/4 · tasks 0/14 · tests 0/0/0 of 0
@@ -446,14 +471,14 @@ status: pending · criteria 0/4 · tasks 0/14 · tests 0/0/0 of 0
   ↳ tasks: T11 ☐ (Adventure Catalog & Installation)
 - [ ] Removing a level preserves progress by default; irreversible progress deletion requires an explicit separate player action.
   ↳ tasks: T12 ☐ (Adventure Catalog & Installation)
-- [ ] Withdrawn releases stop being offered for installation; rollback is offered only when both runtime and save-schema compatibility permit it.
+- [ ] Withdrawn releases stop being offered for installation; rollback is offered only when runtime and save-schema compatibility permit it. Withdrawal of an asset/character version identifies every dependent official release and blocks new publication/distribution of affected versions pending owner review; it does not silently delete installed worlds or saved progress.
   ↳ tasks: T13 ☐ (Adventure Catalog & Installation)
 ### Tasks — Adventure Catalog & Installation <!-- n:b0c02000-2026-4020-8000-000000000012 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
-- [ ] **T2 — Implement the integration with Curated Review & Release (python-backend) per Contract "Signed Catalog Release v1" (dependency).** <!-- t:d731ec28 -->
+- [ ] **T2 — Implement the integration with Curated Review & Release (python-backend) per Contract "Signed Catalog Release v2" (dependency).** <!-- t:23796697 -->
 - [ ] **T3 — Implement the integration with Progress, Recovery & Rewards (godot) per Contract "Progress Snapshot v1" (dependency).** <!-- t:dc8702b0 -->
 - [ ] **T4 — Expose the interface OpenAxolotl Game Shell consumes, per Contract "Installed Adventure State v1" (dependency).** <!-- t:78a30660 -->
-- [ ] **T5 — Implement: "Only approved compatible non-withdrawn package versions appear as installable releases, with author credits and compatibility information." (REQ-014).** <!-- t:a237c0e5 -->
+- [ ] **T5 — Implement: "Only owner-authorized, approved, compatible and non-withdrawn playable package versions appear as installable adventures, with reviewed author credits and compatibility information. Drafts, rejected submissions and asset-only approvals cannot appear as playable releases; the child-facing game contains no unmoderated upload feed or public chat." (REQ-014).** <!-- t:6e77c2bc -->
 - [ ] **T6 — Implement: "Downloads are staged, verified against the approved release record and activated atomically; interruption, invalid content or failed verification preserves the previous working install." (REQ-014).** <!-- t:2d9aa792 -->
 - [ ] **T7 — Implement: "A missing or incompatible world shows an actionable unavailable state while the hub and other installed worlds remain playable." (REQ-014).** <!-- t:1941b28f -->
 - [ ] **T8 — Implement: "Official and previously installed supported content remains playable without a network connection or AI account." (REQ-014).** <!-- t:776cf03a -->
@@ -461,30 +486,33 @@ status: pending · criteria 0/4 · tasks 0/14 · tests 0/0/0 of 0
 - [ ] **T10 — Implement: "Progress is isolated by stable world identity and save-schema version; one level cannot read or overwrite another level's save namespace." (REQ-015).** <!-- t:773fb9d1 -->
 - [ ] **T11 — Implement: "Updates declare compatibility/migration behavior; failed migrations retain the prior installation and recoverable save data." (REQ-015).** <!-- t:d4372c64 -->
 - [ ] **T12 — Implement: "Removing a level preserves progress by default; irreversible progress deletion requires an explicit separate player action." (REQ-015).** <!-- t:85dbabc9 -->
-- [ ] **T13 — Implement: "Withdrawn releases stop being offered for installation; rollback is offered only when both runtime and save-schema compatibility permit it." (REQ-015).** <!-- t:5b629178 -->
+- [ ] **T13 — Implement: "Withdrawn releases stop being offered for installation; rollback is offered only when runtime and save-schema compatibility permit it. Withdrawal of an asset/character version identifies every dependent official release and blocks new publication/distribution of affected versions pending owner review; it does not silently delete installed worlds or saved progress." (REQ-015).** <!-- t:40fda135 -->
 - [ ] **T14 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-015.tests.md
 
 ## REQ-016 — Explicit code, asset and contributor rights <!-- r:REQ-016 -->
-status: pending · criteria 0/3 · tasks 0/11 · tests 0/0/0 of 0
+status: pending · criteria 0/3 · tasks 0/12 · tests 0/0/0 of 0
 ### Criteria
 - [ ] The exportable asset catalog excludes assets lacking a recorded approved redistribution/remix status and required attribution.
-  ↳ tasks: T4 ☐ (Curated Review & Release)
-- [ ] Review and publish the code license, asset reuse terms, generator/third-party obligations and contributor permissions before inviting public reuse or submissions.
   ↳ tasks: T5 ☐ (Curated Review & Release)
-- [ ] Each published package retains its credited asset manifest and required attribution through installation and updates.
+- [ ] Review and publish the code license, asset reuse terms, generator/third-party obligations, contributor permissions and separate official branding/publication policy before inviting public reuse or submissions. Parent-facing terms explain that open-source reuse or a fork does not confer official approval, and public credit can use a parent-approved alias without publishing a child's personal details.
   ↳ tasks: T6 ☐ (Curated Review & Release)
+- [ ] Each published package retains its credited asset manifest and required attribution through installation and updates.
+  ↳ tasks: T7 ☐ (Curated Review & Release)
 ### Tasks — Curated Review & Release <!-- n:b0c02000-2026-4020-8000-000000000011 -->
 - [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
-- [ ] **T2 — Implement the integration with Content Export & Conformance (python-backend) per Contract "Conformance Evidence v1" (dependency).** <!-- t:20a5bfbb -->
-- [ ] **T3 — Expose the interface Adventure Catalog & Installation consumes, per Contract "Signed Catalog Release v1" (dependency).** <!-- t:f2e86f67 -->
-- [ ] **T4 — Implement: "The exportable asset catalog excludes assets lacking a recorded approved redistribution/remix status and required attribution." (REQ-016).** <!-- t:99caf038 -->
-- [ ] **T5 — Implement: "Review and publish the code license, asset reuse terms, generator/third-party obligations and contributor permissions before inviting public reuse or submissions." (REQ-016).** <!-- t:24e63f0e -->
-- [ ] **T6 — Implement: "Each published package retains its credited asset manifest and required attribution through installation and updates." (REQ-016).** <!-- t:8a7c604e -->
-- [ ] **T7 — Implement: "Publication is blocked until required automated checks and recorded human approvals are present for the exact package digest and version." (REQ-013).** <!-- t:8205f641 -->
-- [ ] **T8 — Implement: "The review checklist covers playability, recovery, clarity, content suitability, accessibility, asset rights and measured performance on the declared hardware tier." (REQ-013).** <!-- t:cd703194 -->
-- [ ] **T9 — Implement: "Changing submitted bytes invalidates approval and requires a new version/review; a rejected candidate remains unavailable to the public catalog." (REQ-013).** <!-- t:5fe34be9 -->
-- [ ] **T10 — Implement: "Credits, contributor permissions and parent-led submission instructions are understandable before submission." (REQ-013).** <!-- t:6f2bfd24 -->
-- [ ] **T11 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T2 — Implement the integration with Content Export & Conformance (python-backend) per Contract "Conformance Evidence v2" (dependency).** <!-- t:1e26203c -->
+- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Contribution Review Decision v1" (custom).** <!-- t:e26989ea -->
+- [ ] **T4 — Expose the interface Adventure Catalog & Installation consumes, per Contract "Signed Catalog Release v2" (dependency).** <!-- t:5b76a738 -->
+- [ ] **T5 — Implement: "The exportable asset catalog excludes assets lacking a recorded approved redistribution/remix status and required attribution." (REQ-016).** <!-- t:99caf038 -->
+- [ ] **T6 — Implement: "Review and publish the code license, asset reuse terms, generator/third-party obligations, contributor permissions and separate official branding/publication policy before inviting public reuse or submissions. Parent-facing terms explain that open-source reuse or a fork does not confer official approval, and public credit can use a parent-approved alias without publishing a child's personal details." (REQ-016).** <!-- t:215da80e -->
+- [ ] **T7 — Implement: "Each published package retains its credited asset manifest and required attribution through installation and updates." (REQ-016).** <!-- t:8a7c604e -->
+- [ ] **T8 — Implement: "Official publication requires passing automated checks and recorded owner-authorized human approval for the exact submission type, identity, version, content digest and pinned dependencies. Contributors and automated agents cannot approve or publish their own submissions without explicit owner delegation; an asset/character reuse approval cannot authorize a playable level." (REQ-013).** <!-- t:e1f86860 -->
+- [ ] **T9 — Implement: "Human review checks age appropriateness for children aged 5–9, cohesive art and gameplay, playability, recovery, clarity, accessibility, rights and measured performance on the declared hardware tier. Asset/character reviews include animation, materials, collision and supported behavior; level reviews play the complete route and its assembled content. Names, descriptions, thumbnails and audio are included." (REQ-013).** <!-- t:dceb5b30 -->
+- [ ] **T10 — Implement: "Changing submitted content, public-facing metadata or pinned dependencies invalidates the applicable approval and requires a new version/review. Draft, changes-requested and rejected submissions are excluded from public catalogs; review decisions record reviewer identity, scope, reason and time, and only authorized owners/delegates may change release status." (REQ-013).** <!-- t:2a43bb0d -->
+- [ ] **T11 — Implement: "Credits, contributor permissions and parent-led submission instructions are understandable before submission." (REQ-013).** <!-- t:6f2bfd24 -->
+- [ ] **T12 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-016.tests.md
 
 ## REQ-017 — Desktop-first quality with a separate tablet decision <!-- r:REQ-017 -->
 status: pending · criteria 0/6 · tasks 0/15 · tests 0/0/0 of 0
@@ -504,7 +532,7 @@ status: pending · criteria 0/6 · tasks 0/15 · tests 0/0/0 of 0
 ### Tasks — Quality Evidence & Migration Gates <!-- n:b0c02000-2026-4020-8000-000000000013 -->
 - [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
 - [ ] **T2 — Implement the integration with OpenAxolotl Game Shell (godot) per Contract "Quality Run Record v1" (dependency).** <!-- t:5af229f9 -->
-- [ ] **T3 — Implement the integration with Content Export & Conformance (python-backend) per Contract "Conformance Evidence v1" (dependency).** <!-- t:20a5bfbb -->
+- [ ] **T3 — Implement the integration with Content Export & Conformance (python-backend) per Contract "Conformance Evidence v2" (dependency).** <!-- t:1e26203c -->
 - [ ] **T4 — Implement: "Name the desktop baseline hardware and approve numerical frame-time, memory, load-time and restoration-hitch budgets before release performance sign-off." (REQ-017).** <!-- t:301b2c0e -->
 - [ ] **T5 — Implement: "A reproducible benchmark exercises the decorated first adventure with water, active enemies, debris and restoration and reports its measurements against the approved budgets." (REQ-017).** <!-- t:c3c83c42 -->
 - [ ] **T6 — Implement: "A tablet release is not committed until touch controls, UI readability, memory, sustained thermal/frame-time behavior and distribution constraints are demonstrated on named devices." (REQ-017).** <!-- t:c99f94fc -->
@@ -517,6 +545,7 @@ status: pending · criteria 0/6 · tasks 0/15 · tests 0/0/0 of 0
 - [ ] **T13 — Implement: "Track implementation gaps separately from desired behavior, including content export/loader, curated distribution, future suit powers, whirlpool and boss placement." (REQ-018).** <!-- t:4f3440ba -->
 - [ ] **T14 — Implement: "Before code changes, record a source inventory, baseline input replays and rendered captures, open defects and migration ownership; existing historical test reports are reference material only." (REQ-018).** <!-- t:ade9dc50 -->
 - [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-017.tests.md
 
 ## REQ-018 — Repository onboarding preserves this end-state specification <!-- r:REQ-018 -->
 status: pending · criteria 0/5 · tasks 0/15 · tests 0/0/0 of 0
@@ -534,7 +563,7 @@ status: pending · criteria 0/5 · tasks 0/15 · tests 0/0/0 of 0
 ### Tasks — Quality Evidence & Migration Gates <!-- n:b0c02000-2026-4020-8000-000000000013 -->
 - [ ] **T1 — Scaffold the Python component.** <!-- t:8265a1f5 -->
 - [ ] **T2 — Implement the integration with OpenAxolotl Game Shell (godot) per Contract "Quality Run Record v1" (dependency).** <!-- t:5af229f9 -->
-- [ ] **T3 — Implement the integration with Content Export & Conformance (python-backend) per Contract "Conformance Evidence v1" (dependency).** <!-- t:20a5bfbb -->
+- [ ] **T3 — Implement the integration with Content Export & Conformance (python-backend) per Contract "Conformance Evidence v2" (dependency).** <!-- t:1e26203c -->
 - [ ] **T4 — Implement: "Name the desktop baseline hardware and approve numerical frame-time, memory, load-time and restoration-hitch budgets before release performance sign-off." (REQ-017).** <!-- t:301b2c0e -->
 - [ ] **T5 — Implement: "A reproducible benchmark exercises the decorated first adventure with water, active enemies, debris and restoration and reports its measurements against the approved budgets." (REQ-017).** <!-- t:c3c83c42 -->
 - [ ] **T6 — Implement: "A tablet release is not committed until touch controls, UI readability, memory, sustained thermal/frame-time behavior and distribution constraints are demonstrated on named devices." (REQ-017).** <!-- t:c99f94fc -->
@@ -547,9 +576,10 @@ status: pending · criteria 0/5 · tasks 0/15 · tests 0/0/0 of 0
 - [ ] **T13 — Implement: "Track implementation gaps separately from desired behavior, including content export/loader, curated distribution, future suit powers, whirlpool and boss placement." (REQ-018).** <!-- t:4f3440ba -->
 - [ ] **T14 — Implement: "Before code changes, record a source inventory, baseline input replays and rendered captures, open defects and migration ownership; existing historical test reports are reference material only." (REQ-018).** <!-- t:ade9dc50 -->
 - [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-018.tests.md
 
 ## REQ-019 — Open Lagoon and the leftmost tunnel <!-- r:REQ-019 -->
-status: pending · criteria 0/3 · tasks 0/30 · tests 0/0/0 of 0
+status: pending · criteria 0/3 · tasks 0/32 · tests 0/0/0 of 0
 ### Criteria
 - [ ] The leftmost tunnel enters the Living Cascade arrival area using the correct production transform and supports the intended return path.
   ↳ tasks: T5 ☐ (Official Adventure: Lagoon & Living Cascade)
@@ -560,7 +590,7 @@ status: pending · criteria 0/3 · tasks 0/30 · tests 0/0/0 of 0
 ### Tasks — Official Adventure: Lagoon & Living Cascade <!-- n:b0c02000-2026-4020-8000-000000000008 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Implement the integration with Versioned World Runtime API (godot) per Contract "Declarative World Definition v1" (dependency).** <!-- t:277a8bd7 -->
-- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v1" (dependency).** <!-- t:8692c42f -->
+- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v2" (dependency).** <!-- t:4c52ade0 -->
 - [ ] **T4 — Expose the interface OpenAxolotl Game Shell consumes, per Contract "Declarative World Definition v1" (dependency).** <!-- t:2dc49412 -->
 - [ ] **T5 — Implement: "The leftmost tunnel enters the Living Cascade arrival area using the correct production transform and supports the intended return path." (REQ-019).** <!-- t:cfdb8a6e -->
 - [ ] **T6 — Implement: "Hub and inlet collision contain the shipped player capsule with no unsupported entrance strips; accidental escape resets safely." (REQ-019).** <!-- t:6c5484e7 -->
@@ -571,37 +601,42 @@ status: pending · criteria 0/3 · tasks 0/30 · tests 0/0/0 of 0
 - [ ] **T11 — Implement: "Crossing the designated finish volume after restoration records coral_cove.completed once and triggers the supported hub return flow." (REQ-026).** <!-- t:d6473845 -->
 - [ ] **T12 — Implement: "Completion works without optional discoveries, dance unlock or defeating every enemy." (REQ-026).** <!-- t:bcd49602 -->
 - [ ] **T13 — Implement: "Save/reload and re-entry preserve the documented restoration/completion/discovery state and do not leave the player captured, dancing or carrying stale velocity." (REQ-026).** <!-- t:a4a2baf2 -->
-- [ ] **T14 — Implement: "CP_03 activates on the required approach; all seven garden seeds are accessible before the finale gate opens." (REQ-024).** <!-- t:607a4101 -->
-- [ ] **T15 — Implement: "Restoration spends three seeds for the first phase and four more for the second; seven total opens the gate, with nine seeds available across S04/S05." (REQ-024).** <!-- t:f177ced3 -->
-- [ ] **T16 — Implement: "Fresh entry with zero, one or two terrace seeds completes after seven, six or five garden seeds respectively; save/reload cannot softlock the gate." (REQ-024).** <!-- t:084dbd51 -->
-- [ ] **T17 — Implement: "The visible restoration and gate opening are readable from the garden pickups; no deposit station, boss or enemy-clear objective is introduced." (REQ-024).** <!-- t:cb68b910 -->
-- [ ] **T18 — Implement: "The inlet current tapers to a stop before the pool and CP_01 activates on its reachable dry pad." (REQ-020).** <!-- t:9a1f2693 -->
-- [ ] **T19 — Implement: "Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required." (REQ-020).** <!-- t:484fc9d7 -->
-- [ ] **T20 — Implement: "The normal camera shows the next bank exit and crown destination without foliage obscuring them." (REQ-020).** <!-- t:817c0c06 -->
-- [ ] **T21 — Implement: "CP_02 activates on the approach, and all three clusters are traversable within the measured current controller envelope, including the continuous climb bypass." (REQ-023).** <!-- t:66eaadfa -->
-- [ ] **T22 — Implement: "Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate." (REQ-023).** <!-- t:d8894c40 -->
-- [ ] **T23 — Implement: "The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats." (REQ-023).** <!-- t:a0c78ba6 -->
-- [ ] **T24 — Implement: "The chute is continuously contained and descending; ordinary and boosted runs can negotiate the dive bar and reach the reward pool without unbounded falls." (REQ-025).** <!-- t:b430bd41 -->
-- [ ] **T25 — Implement: "The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall." (REQ-025).** <!-- t:bafad331 -->
-- [ ] **T26 — Implement: "The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required." (REQ-025).** <!-- t:9abb274b -->
-- [ ] **T27 — Implement: "The actual upright player capsule can dive beneath the root, negotiate the turn, reverse and resurface at the terrace ramp without sticking or leaving the water bounds." (REQ-022).** <!-- t:edcc02bb -->
-- [ ] **T28 — Implement: "The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return." (REQ-022).** <!-- t:ee0ab42d -->
-- [ ] **T29 — Implement: "Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional." (REQ-022).** <!-- t:7197271a -->
-- [ ] **T30 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T14 — Implement: "Approve a brief, skippable completion celebration that clearly credits Skippy with restoring the Cascade before hub return; re-entry and replay do not duplicate rewards or erase the Riverheart outcome." (REQ-026).** <!-- t:dbe14822 -->
+- [ ] **T15 — Implement: "CP_03 activates before the extraction challenge; Skippy can reach and free the Riverheart using supported familiar movement and attack interactions, including a documented reduced-capability recovery route." (REQ-024).** <!-- t:2d6d9116 -->
+- [ ] **T16 — Implement: "Only returning the freed Riverheart to its ancient cradle commits restoration and opens the finale; seeds, crayfish, discoveries and ordinary enemy defeats are not prerequisites." (REQ-024).** <!-- t:3d5b6e64 -->
+- [ ] **T17 — Implement: "Captive, freed/carried and returned/restored states survive checkpoint reset, save/reload and re-entry without artifact loss, duplicate activation or a locked open-path contradiction; old seed-gate saves migrate under a documented versioned policy." (REQ-024).** <!-- t:fffc4294 -->
+- [ ] **T18 — Implement: "Approve a production-camera sequence showing the extraction threat, readable restraints and safe attack windows, Skippy's artifact discovery reaction, the carry/return action, water/plant/light restoration and the newly available waterfall route." (REQ-024).** <!-- t:7c59bf28 -->
+- [ ] **T19 — Implement: "The inlet current tapers to a stop before the pool and CP_01 activates on its reachable dry pad." (REQ-020).** <!-- t:9a1f2693 -->
+- [ ] **T20 — Implement: "Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required." (REQ-020).** <!-- t:484fc9d7 -->
+- [ ] **T21 — Implement: "The normal camera shows the next bank exit and crown destination without foliage obscuring them." (REQ-020).** <!-- t:817c0c06 -->
+- [ ] **T22 — Implement: "A family playtest can identify that Skippy is seeking the Riverheart to heal the Cascade after the arrival reveal; the clue and destination are readable without relying only on text, color or audio." (REQ-020).** <!-- t:954887ae -->
+- [ ] **T23 — Implement: "CP_02 activates on the approach, and all three clusters are traversable within the measured current controller envelope, including the continuous climb bypass." (REQ-023).** <!-- t:66eaadfa -->
+- [ ] **T24 — Implement: "Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate." (REQ-023).** <!-- t:d8894c40 -->
+- [ ] **T25 — Implement: "The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats." (REQ-023).** <!-- t:a0c78ba6 -->
+- [ ] **T26 — Implement: "The chute is continuously contained and descending; ordinary and boosted runs can negotiate the dive bar and reach the reward pool without unbounded falls." (REQ-025).** <!-- t:b430bd41 -->
+- [ ] **T27 — Implement: "The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall." (REQ-025).** <!-- t:bafad331 -->
+- [ ] **T28 — Implement: "The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required." (REQ-025).** <!-- t:9abb274b -->
+- [ ] **T29 — Implement: "The actual upright player capsule can dive beneath the root, negotiate the turn, reverse and resurface at the terrace ramp without sticking or leaving the water bounds." (REQ-022).** <!-- t:edcc02bb -->
+- [ ] **T30 — Implement: "The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return." (REQ-022).** <!-- t:ee0ab42d -->
+- [ ] **T31 — Implement: "Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional." (REQ-022).** <!-- t:7197271a -->
+- [ ] **T32 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-019.tests.md
 
 ## REQ-020 — S01 — Arrival Pool <!-- r:REQ-020 -->
-status: pending · criteria 0/3 · tasks 0/30 · tests 0/0/0 of 0
+status: pending · criteria 0/4 · tasks 0/32 · tests 0/0/0 of 0
 ### Criteria
 - [ ] The inlet current tapers to a stop before the pool and CP_01 activates on its reachable dry pad.
-  ↳ tasks: T18 ☐ (Official Adventure: Lagoon & Living Cascade)
-- [ ] Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required.
   ↳ tasks: T19 ☐ (Official Adventure: Lagoon & Living Cascade)
-- [ ] The normal camera shows the next bank exit and crown destination without foliage obscuring them.
+- [ ] Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required.
   ↳ tasks: T20 ☐ (Official Adventure: Lagoon & Living Cascade)
+- [ ] The normal camera shows the next bank exit and crown destination without foliage obscuring them.
+  ↳ tasks: T21 ☐ (Official Adventure: Lagoon & Living Cascade)
+- [ ] A family playtest can identify that Skippy is seeking the Riverheart to heal the Cascade after the arrival reveal; the clue and destination are readable without relying only on text, color or audio.
+  ↳ tasks: T22 ☐ (Official Adventure: Lagoon & Living Cascade)
 ### Tasks — Official Adventure: Lagoon & Living Cascade <!-- n:b0c02000-2026-4020-8000-000000000008 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Implement the integration with Versioned World Runtime API (godot) per Contract "Declarative World Definition v1" (dependency).** <!-- t:277a8bd7 -->
-- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v1" (dependency).** <!-- t:8692c42f -->
+- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v2" (dependency).** <!-- t:4c52ade0 -->
 - [ ] **T4 — Expose the interface OpenAxolotl Game Shell consumes, per Contract "Declarative World Definition v1" (dependency).** <!-- t:2dc49412 -->
 - [ ] **T5 — Implement: "The leftmost tunnel enters the Living Cascade arrival area using the correct production transform and supports the intended return path." (REQ-019).** <!-- t:cfdb8a6e -->
 - [ ] **T6 — Implement: "Hub and inlet collision contain the shipped player capsule with no unsupported entrance strips; accidental escape resets safely." (REQ-019).** <!-- t:6c5484e7 -->
@@ -612,26 +647,29 @@ status: pending · criteria 0/3 · tasks 0/30 · tests 0/0/0 of 0
 - [ ] **T11 — Implement: "Crossing the designated finish volume after restoration records coral_cove.completed once and triggers the supported hub return flow." (REQ-026).** <!-- t:d6473845 -->
 - [ ] **T12 — Implement: "Completion works without optional discoveries, dance unlock or defeating every enemy." (REQ-026).** <!-- t:bcd49602 -->
 - [ ] **T13 — Implement: "Save/reload and re-entry preserve the documented restoration/completion/discovery state and do not leave the player captured, dancing or carrying stale velocity." (REQ-026).** <!-- t:a4a2baf2 -->
-- [ ] **T14 — Implement: "CP_03 activates on the required approach; all seven garden seeds are accessible before the finale gate opens." (REQ-024).** <!-- t:607a4101 -->
-- [ ] **T15 — Implement: "Restoration spends three seeds for the first phase and four more for the second; seven total opens the gate, with nine seeds available across S04/S05." (REQ-024).** <!-- t:f177ced3 -->
-- [ ] **T16 — Implement: "Fresh entry with zero, one or two terrace seeds completes after seven, six or five garden seeds respectively; save/reload cannot softlock the gate." (REQ-024).** <!-- t:084dbd51 -->
-- [ ] **T17 — Implement: "The visible restoration and gate opening are readable from the garden pickups; no deposit station, boss or enemy-clear objective is introduced." (REQ-024).** <!-- t:cb68b910 -->
-- [ ] **T18 — Implement: "The inlet current tapers to a stop before the pool and CP_01 activates on its reachable dry pad." (REQ-020).** <!-- t:9a1f2693 -->
-- [ ] **T19 — Implement: "Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required." (REQ-020).** <!-- t:484fc9d7 -->
-- [ ] **T20 — Implement: "The normal camera shows the next bank exit and crown destination without foliage obscuring them." (REQ-020).** <!-- t:817c0c06 -->
-- [ ] **T21 — Implement: "CP_02 activates on the approach, and all three clusters are traversable within the measured current controller envelope, including the continuous climb bypass." (REQ-023).** <!-- t:66eaadfa -->
-- [ ] **T22 — Implement: "Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate." (REQ-023).** <!-- t:d8894c40 -->
-- [ ] **T23 — Implement: "The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats." (REQ-023).** <!-- t:a0c78ba6 -->
-- [ ] **T24 — Implement: "The chute is continuously contained and descending; ordinary and boosted runs can negotiate the dive bar and reach the reward pool without unbounded falls." (REQ-025).** <!-- t:b430bd41 -->
-- [ ] **T25 — Implement: "The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall." (REQ-025).** <!-- t:bafad331 -->
-- [ ] **T26 — Implement: "The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required." (REQ-025).** <!-- t:9abb274b -->
-- [ ] **T27 — Implement: "The actual upright player capsule can dive beneath the root, negotiate the turn, reverse and resurface at the terrace ramp without sticking or leaving the water bounds." (REQ-022).** <!-- t:edcc02bb -->
-- [ ] **T28 — Implement: "The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return." (REQ-022).** <!-- t:ee0ab42d -->
-- [ ] **T29 — Implement: "Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional." (REQ-022).** <!-- t:7197271a -->
-- [ ] **T30 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T14 — Implement: "Approve a brief, skippable completion celebration that clearly credits Skippy with restoring the Cascade before hub return; re-entry and replay do not duplicate rewards or erase the Riverheart outcome." (REQ-026).** <!-- t:dbe14822 -->
+- [ ] **T15 — Implement: "CP_03 activates before the extraction challenge; Skippy can reach and free the Riverheart using supported familiar movement and attack interactions, including a documented reduced-capability recovery route." (REQ-024).** <!-- t:2d6d9116 -->
+- [ ] **T16 — Implement: "Only returning the freed Riverheart to its ancient cradle commits restoration and opens the finale; seeds, crayfish, discoveries and ordinary enemy defeats are not prerequisites." (REQ-024).** <!-- t:3d5b6e64 -->
+- [ ] **T17 — Implement: "Captive, freed/carried and returned/restored states survive checkpoint reset, save/reload and re-entry without artifact loss, duplicate activation or a locked open-path contradiction; old seed-gate saves migrate under a documented versioned policy." (REQ-024).** <!-- t:fffc4294 -->
+- [ ] **T18 — Implement: "Approve a production-camera sequence showing the extraction threat, readable restraints and safe attack windows, Skippy's artifact discovery reaction, the carry/return action, water/plant/light restoration and the newly available waterfall route." (REQ-024).** <!-- t:7c59bf28 -->
+- [ ] **T19 — Implement: "The inlet current tapers to a stop before the pool and CP_01 activates on its reachable dry pad." (REQ-020).** <!-- t:9a1f2693 -->
+- [ ] **T20 — Implement: "Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required." (REQ-020).** <!-- t:484fc9d7 -->
+- [ ] **T21 — Implement: "The normal camera shows the next bank exit and crown destination without foliage obscuring them." (REQ-020).** <!-- t:817c0c06 -->
+- [ ] **T22 — Implement: "A family playtest can identify that Skippy is seeking the Riverheart to heal the Cascade after the arrival reveal; the clue and destination are readable without relying only on text, color or audio." (REQ-020).** <!-- t:954887ae -->
+- [ ] **T23 — Implement: "CP_02 activates on the approach, and all three clusters are traversable within the measured current controller envelope, including the continuous climb bypass." (REQ-023).** <!-- t:66eaadfa -->
+- [ ] **T24 — Implement: "Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate." (REQ-023).** <!-- t:d8894c40 -->
+- [ ] **T25 — Implement: "The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats." (REQ-023).** <!-- t:a0c78ba6 -->
+- [ ] **T26 — Implement: "The chute is continuously contained and descending; ordinary and boosted runs can negotiate the dive bar and reach the reward pool without unbounded falls." (REQ-025).** <!-- t:b430bd41 -->
+- [ ] **T27 — Implement: "The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall." (REQ-025).** <!-- t:bafad331 -->
+- [ ] **T28 — Implement: "The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required." (REQ-025).** <!-- t:9abb274b -->
+- [ ] **T29 — Implement: "The actual upright player capsule can dive beneath the root, negotiate the turn, reverse and resurface at the terrace ramp without sticking or leaving the water bounds." (REQ-022).** <!-- t:edcc02bb -->
+- [ ] **T30 — Implement: "The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return." (REQ-022).** <!-- t:ee0ab42d -->
+- [ ] **T31 — Implement: "Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional." (REQ-022).** <!-- t:7197271a -->
+- [ ] **T32 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-020.tests.md
 
 ## REQ-021 — S02 — Stepping-stone Garden <!-- r:REQ-021 -->
-status: pending · criteria 0/3 · tasks 0/30 · tests 0/0/0 of 0
+status: pending · criteria 0/3 · tasks 0/32 · tests 0/0/0 of 0
 ### Criteria
 - [ ] The main landings and continuous banks connect S01 to S03 with capsule-sized clearance; the swimming alternative rejoins before the root dive.
   ↳ tasks: T8 ☐ (Official Adventure: Lagoon & Living Cascade)
@@ -642,7 +680,7 @@ status: pending · criteria 0/3 · tasks 0/30 · tests 0/0/0 of 0
 ### Tasks — Official Adventure: Lagoon & Living Cascade <!-- n:b0c02000-2026-4020-8000-000000000008 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Implement the integration with Versioned World Runtime API (godot) per Contract "Declarative World Definition v1" (dependency).** <!-- t:277a8bd7 -->
-- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v1" (dependency).** <!-- t:8692c42f -->
+- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v2" (dependency).** <!-- t:4c52ade0 -->
 - [ ] **T4 — Expose the interface OpenAxolotl Game Shell consumes, per Contract "Declarative World Definition v1" (dependency).** <!-- t:2dc49412 -->
 - [ ] **T5 — Implement: "The leftmost tunnel enters the Living Cascade arrival area using the correct production transform and supports the intended return path." (REQ-019).** <!-- t:cfdb8a6e -->
 - [ ] **T6 — Implement: "Hub and inlet collision contain the shipped player capsule with no unsupported entrance strips; accidental escape resets safely." (REQ-019).** <!-- t:6c5484e7 -->
@@ -653,37 +691,40 @@ status: pending · criteria 0/3 · tasks 0/30 · tests 0/0/0 of 0
 - [ ] **T11 — Implement: "Crossing the designated finish volume after restoration records coral_cove.completed once and triggers the supported hub return flow." (REQ-026).** <!-- t:d6473845 -->
 - [ ] **T12 — Implement: "Completion works without optional discoveries, dance unlock or defeating every enemy." (REQ-026).** <!-- t:bcd49602 -->
 - [ ] **T13 — Implement: "Save/reload and re-entry preserve the documented restoration/completion/discovery state and do not leave the player captured, dancing or carrying stale velocity." (REQ-026).** <!-- t:a4a2baf2 -->
-- [ ] **T14 — Implement: "CP_03 activates on the required approach; all seven garden seeds are accessible before the finale gate opens." (REQ-024).** <!-- t:607a4101 -->
-- [ ] **T15 — Implement: "Restoration spends three seeds for the first phase and four more for the second; seven total opens the gate, with nine seeds available across S04/S05." (REQ-024).** <!-- t:f177ced3 -->
-- [ ] **T16 — Implement: "Fresh entry with zero, one or two terrace seeds completes after seven, six or five garden seeds respectively; save/reload cannot softlock the gate." (REQ-024).** <!-- t:084dbd51 -->
-- [ ] **T17 — Implement: "The visible restoration and gate opening are readable from the garden pickups; no deposit station, boss or enemy-clear objective is introduced." (REQ-024).** <!-- t:cb68b910 -->
-- [ ] **T18 — Implement: "The inlet current tapers to a stop before the pool and CP_01 activates on its reachable dry pad." (REQ-020).** <!-- t:9a1f2693 -->
-- [ ] **T19 — Implement: "Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required." (REQ-020).** <!-- t:484fc9d7 -->
-- [ ] **T20 — Implement: "The normal camera shows the next bank exit and crown destination without foliage obscuring them." (REQ-020).** <!-- t:817c0c06 -->
-- [ ] **T21 — Implement: "CP_02 activates on the approach, and all three clusters are traversable within the measured current controller envelope, including the continuous climb bypass." (REQ-023).** <!-- t:66eaadfa -->
-- [ ] **T22 — Implement: "Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate." (REQ-023).** <!-- t:d8894c40 -->
-- [ ] **T23 — Implement: "The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats." (REQ-023).** <!-- t:a0c78ba6 -->
-- [ ] **T24 — Implement: "The chute is continuously contained and descending; ordinary and boosted runs can negotiate the dive bar and reach the reward pool without unbounded falls." (REQ-025).** <!-- t:b430bd41 -->
-- [ ] **T25 — Implement: "The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall." (REQ-025).** <!-- t:bafad331 -->
-- [ ] **T26 — Implement: "The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required." (REQ-025).** <!-- t:9abb274b -->
-- [ ] **T27 — Implement: "The actual upright player capsule can dive beneath the root, negotiate the turn, reverse and resurface at the terrace ramp without sticking or leaving the water bounds." (REQ-022).** <!-- t:edcc02bb -->
-- [ ] **T28 — Implement: "The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return." (REQ-022).** <!-- t:ee0ab42d -->
-- [ ] **T29 — Implement: "Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional." (REQ-022).** <!-- t:7197271a -->
-- [ ] **T30 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T14 — Implement: "Approve a brief, skippable completion celebration that clearly credits Skippy with restoring the Cascade before hub return; re-entry and replay do not duplicate rewards or erase the Riverheart outcome." (REQ-026).** <!-- t:dbe14822 -->
+- [ ] **T15 — Implement: "CP_03 activates before the extraction challenge; Skippy can reach and free the Riverheart using supported familiar movement and attack interactions, including a documented reduced-capability recovery route." (REQ-024).** <!-- t:2d6d9116 -->
+- [ ] **T16 — Implement: "Only returning the freed Riverheart to its ancient cradle commits restoration and opens the finale; seeds, crayfish, discoveries and ordinary enemy defeats are not prerequisites." (REQ-024).** <!-- t:3d5b6e64 -->
+- [ ] **T17 — Implement: "Captive, freed/carried and returned/restored states survive checkpoint reset, save/reload and re-entry without artifact loss, duplicate activation or a locked open-path contradiction; old seed-gate saves migrate under a documented versioned policy." (REQ-024).** <!-- t:fffc4294 -->
+- [ ] **T18 — Implement: "Approve a production-camera sequence showing the extraction threat, readable restraints and safe attack windows, Skippy's artifact discovery reaction, the carry/return action, water/plant/light restoration and the newly available waterfall route." (REQ-024).** <!-- t:7c59bf28 -->
+- [ ] **T19 — Implement: "The inlet current tapers to a stop before the pool and CP_01 activates on its reachable dry pad." (REQ-020).** <!-- t:9a1f2693 -->
+- [ ] **T20 — Implement: "Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required." (REQ-020).** <!-- t:484fc9d7 -->
+- [ ] **T21 — Implement: "The normal camera shows the next bank exit and crown destination without foliage obscuring them." (REQ-020).** <!-- t:817c0c06 -->
+- [ ] **T22 — Implement: "A family playtest can identify that Skippy is seeking the Riverheart to heal the Cascade after the arrival reveal; the clue and destination are readable without relying only on text, color or audio." (REQ-020).** <!-- t:954887ae -->
+- [ ] **T23 — Implement: "CP_02 activates on the approach, and all three clusters are traversable within the measured current controller envelope, including the continuous climb bypass." (REQ-023).** <!-- t:66eaadfa -->
+- [ ] **T24 — Implement: "Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate." (REQ-023).** <!-- t:d8894c40 -->
+- [ ] **T25 — Implement: "The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats." (REQ-023).** <!-- t:a0c78ba6 -->
+- [ ] **T26 — Implement: "The chute is continuously contained and descending; ordinary and boosted runs can negotiate the dive bar and reach the reward pool without unbounded falls." (REQ-025).** <!-- t:b430bd41 -->
+- [ ] **T27 — Implement: "The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall." (REQ-025).** <!-- t:bafad331 -->
+- [ ] **T28 — Implement: "The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required." (REQ-025).** <!-- t:9abb274b -->
+- [ ] **T29 — Implement: "The actual upright player capsule can dive beneath the root, negotiate the turn, reverse and resurface at the terrace ramp without sticking or leaving the water bounds." (REQ-022).** <!-- t:edcc02bb -->
+- [ ] **T30 — Implement: "The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return." (REQ-022).** <!-- t:ee0ab42d -->
+- [ ] **T31 — Implement: "Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional." (REQ-022).** <!-- t:7197271a -->
+- [ ] **T32 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-021.tests.md
 
 ## REQ-022 — S03 — Hollow-root Dive <!-- r:REQ-022 -->
-status: pending · criteria 0/3 · tasks 0/30 · tests 0/0/0 of 0
+status: pending · criteria 0/3 · tasks 0/32 · tests 0/0/0 of 0
 ### Criteria
 - [ ] The actual upright player capsule can dive beneath the root, negotiate the turn, reverse and resurface at the terrace ramp without sticking or leaving the water bounds.
-  ↳ tasks: T27 ☐ (Official Adventure: Lagoon & Living Cascade)
-- [ ] The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return.
-  ↳ tasks: T28 ☐ (Official Adventure: Lagoon & Living Cascade)
-- [ ] Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional.
   ↳ tasks: T29 ☐ (Official Adventure: Lagoon & Living Cascade)
+- [ ] The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return.
+  ↳ tasks: T30 ☐ (Official Adventure: Lagoon & Living Cascade)
+- [ ] Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional.
+  ↳ tasks: T31 ☐ (Official Adventure: Lagoon & Living Cascade)
 ### Tasks — Official Adventure: Lagoon & Living Cascade <!-- n:b0c02000-2026-4020-8000-000000000008 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Implement the integration with Versioned World Runtime API (godot) per Contract "Declarative World Definition v1" (dependency).** <!-- t:277a8bd7 -->
-- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v1" (dependency).** <!-- t:8692c42f -->
+- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v2" (dependency).** <!-- t:4c52ade0 -->
 - [ ] **T4 — Expose the interface OpenAxolotl Game Shell consumes, per Contract "Declarative World Definition v1" (dependency).** <!-- t:2dc49412 -->
 - [ ] **T5 — Implement: "The leftmost tunnel enters the Living Cascade arrival area using the correct production transform and supports the intended return path." (REQ-019).** <!-- t:cfdb8a6e -->
 - [ ] **T6 — Implement: "Hub and inlet collision contain the shipped player capsule with no unsupported entrance strips; accidental escape resets safely." (REQ-019).** <!-- t:6c5484e7 -->
@@ -694,37 +735,40 @@ status: pending · criteria 0/3 · tasks 0/30 · tests 0/0/0 of 0
 - [ ] **T11 — Implement: "Crossing the designated finish volume after restoration records coral_cove.completed once and triggers the supported hub return flow." (REQ-026).** <!-- t:d6473845 -->
 - [ ] **T12 — Implement: "Completion works without optional discoveries, dance unlock or defeating every enemy." (REQ-026).** <!-- t:bcd49602 -->
 - [ ] **T13 — Implement: "Save/reload and re-entry preserve the documented restoration/completion/discovery state and do not leave the player captured, dancing or carrying stale velocity." (REQ-026).** <!-- t:a4a2baf2 -->
-- [ ] **T14 — Implement: "CP_03 activates on the required approach; all seven garden seeds are accessible before the finale gate opens." (REQ-024).** <!-- t:607a4101 -->
-- [ ] **T15 — Implement: "Restoration spends three seeds for the first phase and four more for the second; seven total opens the gate, with nine seeds available across S04/S05." (REQ-024).** <!-- t:f177ced3 -->
-- [ ] **T16 — Implement: "Fresh entry with zero, one or two terrace seeds completes after seven, six or five garden seeds respectively; save/reload cannot softlock the gate." (REQ-024).** <!-- t:084dbd51 -->
-- [ ] **T17 — Implement: "The visible restoration and gate opening are readable from the garden pickups; no deposit station, boss or enemy-clear objective is introduced." (REQ-024).** <!-- t:cb68b910 -->
-- [ ] **T18 — Implement: "The inlet current tapers to a stop before the pool and CP_01 activates on its reachable dry pad." (REQ-020).** <!-- t:9a1f2693 -->
-- [ ] **T19 — Implement: "Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required." (REQ-020).** <!-- t:484fc9d7 -->
-- [ ] **T20 — Implement: "The normal camera shows the next bank exit and crown destination without foliage obscuring them." (REQ-020).** <!-- t:817c0c06 -->
-- [ ] **T21 — Implement: "CP_02 activates on the approach, and all three clusters are traversable within the measured current controller envelope, including the continuous climb bypass." (REQ-023).** <!-- t:66eaadfa -->
-- [ ] **T22 — Implement: "Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate." (REQ-023).** <!-- t:d8894c40 -->
-- [ ] **T23 — Implement: "The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats." (REQ-023).** <!-- t:a0c78ba6 -->
-- [ ] **T24 — Implement: "The chute is continuously contained and descending; ordinary and boosted runs can negotiate the dive bar and reach the reward pool without unbounded falls." (REQ-025).** <!-- t:b430bd41 -->
-- [ ] **T25 — Implement: "The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall." (REQ-025).** <!-- t:bafad331 -->
-- [ ] **T26 — Implement: "The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required." (REQ-025).** <!-- t:9abb274b -->
-- [ ] **T27 — Implement: "The actual upright player capsule can dive beneath the root, negotiate the turn, reverse and resurface at the terrace ramp without sticking or leaving the water bounds." (REQ-022).** <!-- t:edcc02bb -->
-- [ ] **T28 — Implement: "The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return." (REQ-022).** <!-- t:ee0ab42d -->
-- [ ] **T29 — Implement: "Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional." (REQ-022).** <!-- t:7197271a -->
-- [ ] **T30 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T14 — Implement: "Approve a brief, skippable completion celebration that clearly credits Skippy with restoring the Cascade before hub return; re-entry and replay do not duplicate rewards or erase the Riverheart outcome." (REQ-026).** <!-- t:dbe14822 -->
+- [ ] **T15 — Implement: "CP_03 activates before the extraction challenge; Skippy can reach and free the Riverheart using supported familiar movement and attack interactions, including a documented reduced-capability recovery route." (REQ-024).** <!-- t:2d6d9116 -->
+- [ ] **T16 — Implement: "Only returning the freed Riverheart to its ancient cradle commits restoration and opens the finale; seeds, crayfish, discoveries and ordinary enemy defeats are not prerequisites." (REQ-024).** <!-- t:3d5b6e64 -->
+- [ ] **T17 — Implement: "Captive, freed/carried and returned/restored states survive checkpoint reset, save/reload and re-entry without artifact loss, duplicate activation or a locked open-path contradiction; old seed-gate saves migrate under a documented versioned policy." (REQ-024).** <!-- t:fffc4294 -->
+- [ ] **T18 — Implement: "Approve a production-camera sequence showing the extraction threat, readable restraints and safe attack windows, Skippy's artifact discovery reaction, the carry/return action, water/plant/light restoration and the newly available waterfall route." (REQ-024).** <!-- t:7c59bf28 -->
+- [ ] **T19 — Implement: "The inlet current tapers to a stop before the pool and CP_01 activates on its reachable dry pad." (REQ-020).** <!-- t:9a1f2693 -->
+- [ ] **T20 — Implement: "Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required." (REQ-020).** <!-- t:484fc9d7 -->
+- [ ] **T21 — Implement: "The normal camera shows the next bank exit and crown destination without foliage obscuring them." (REQ-020).** <!-- t:817c0c06 -->
+- [ ] **T22 — Implement: "A family playtest can identify that Skippy is seeking the Riverheart to heal the Cascade after the arrival reveal; the clue and destination are readable without relying only on text, color or audio." (REQ-020).** <!-- t:954887ae -->
+- [ ] **T23 — Implement: "CP_02 activates on the approach, and all three clusters are traversable within the measured current controller envelope, including the continuous climb bypass." (REQ-023).** <!-- t:66eaadfa -->
+- [ ] **T24 — Implement: "Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate." (REQ-023).** <!-- t:d8894c40 -->
+- [ ] **T25 — Implement: "The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats." (REQ-023).** <!-- t:a0c78ba6 -->
+- [ ] **T26 — Implement: "The chute is continuously contained and descending; ordinary and boosted runs can negotiate the dive bar and reach the reward pool without unbounded falls." (REQ-025).** <!-- t:b430bd41 -->
+- [ ] **T27 — Implement: "The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall." (REQ-025).** <!-- t:bafad331 -->
+- [ ] **T28 — Implement: "The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required." (REQ-025).** <!-- t:9abb274b -->
+- [ ] **T29 — Implement: "The actual upright player capsule can dive beneath the root, negotiate the turn, reverse and resurface at the terrace ramp without sticking or leaving the water bounds." (REQ-022).** <!-- t:edcc02bb -->
+- [ ] **T30 — Implement: "The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return." (REQ-022).** <!-- t:ee0ab42d -->
+- [ ] **T31 — Implement: "Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional." (REQ-022).** <!-- t:7197271a -->
+- [ ] **T32 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-022.tests.md
 
 ## REQ-023 — S04 — Cascade Terraces <!-- r:REQ-023 -->
-status: pending · criteria 0/3 · tasks 0/30 · tests 0/0/0 of 0
+status: pending · criteria 0/3 · tasks 0/32 · tests 0/0/0 of 0
 ### Criteria
 - [ ] CP_02 activates on the approach, and all three clusters are traversable within the measured current controller envelope, including the continuous climb bypass.
-  ↳ tasks: T21 ☐ (Official Adventure: Lagoon & Living Cascade)
-- [ ] Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate.
-  ↳ tasks: T22 ☐ (Official Adventure: Lagoon & Living Cascade)
-- [ ] The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats.
   ↳ tasks: T23 ☐ (Official Adventure: Lagoon & Living Cascade)
+- [ ] Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate.
+  ↳ tasks: T24 ☐ (Official Adventure: Lagoon & Living Cascade)
+- [ ] The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats.
+  ↳ tasks: T25 ☐ (Official Adventure: Lagoon & Living Cascade)
 ### Tasks — Official Adventure: Lagoon & Living Cascade <!-- n:b0c02000-2026-4020-8000-000000000008 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Implement the integration with Versioned World Runtime API (godot) per Contract "Declarative World Definition v1" (dependency).** <!-- t:277a8bd7 -->
-- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v1" (dependency).** <!-- t:8692c42f -->
+- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v2" (dependency).** <!-- t:4c52ade0 -->
 - [ ] **T4 — Expose the interface OpenAxolotl Game Shell consumes, per Contract "Declarative World Definition v1" (dependency).** <!-- t:2dc49412 -->
 - [ ] **T5 — Implement: "The leftmost tunnel enters the Living Cascade arrival area using the correct production transform and supports the intended return path." (REQ-019).** <!-- t:cfdb8a6e -->
 - [ ] **T6 — Implement: "Hub and inlet collision contain the shipped player capsule with no unsupported entrance strips; accidental escape resets safely." (REQ-019).** <!-- t:6c5484e7 -->
@@ -735,39 +779,42 @@ status: pending · criteria 0/3 · tasks 0/30 · tests 0/0/0 of 0
 - [ ] **T11 — Implement: "Crossing the designated finish volume after restoration records coral_cove.completed once and triggers the supported hub return flow." (REQ-026).** <!-- t:d6473845 -->
 - [ ] **T12 — Implement: "Completion works without optional discoveries, dance unlock or defeating every enemy." (REQ-026).** <!-- t:bcd49602 -->
 - [ ] **T13 — Implement: "Save/reload and re-entry preserve the documented restoration/completion/discovery state and do not leave the player captured, dancing or carrying stale velocity." (REQ-026).** <!-- t:a4a2baf2 -->
-- [ ] **T14 — Implement: "CP_03 activates on the required approach; all seven garden seeds are accessible before the finale gate opens." (REQ-024).** <!-- t:607a4101 -->
-- [ ] **T15 — Implement: "Restoration spends three seeds for the first phase and four more for the second; seven total opens the gate, with nine seeds available across S04/S05." (REQ-024).** <!-- t:f177ced3 -->
-- [ ] **T16 — Implement: "Fresh entry with zero, one or two terrace seeds completes after seven, six or five garden seeds respectively; save/reload cannot softlock the gate." (REQ-024).** <!-- t:084dbd51 -->
-- [ ] **T17 — Implement: "The visible restoration and gate opening are readable from the garden pickups; no deposit station, boss or enemy-clear objective is introduced." (REQ-024).** <!-- t:cb68b910 -->
-- [ ] **T18 — Implement: "The inlet current tapers to a stop before the pool and CP_01 activates on its reachable dry pad." (REQ-020).** <!-- t:9a1f2693 -->
-- [ ] **T19 — Implement: "Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required." (REQ-020).** <!-- t:484fc9d7 -->
-- [ ] **T20 — Implement: "The normal camera shows the next bank exit and crown destination without foliage obscuring them." (REQ-020).** <!-- t:817c0c06 -->
-- [ ] **T21 — Implement: "CP_02 activates on the approach, and all three clusters are traversable within the measured current controller envelope, including the continuous climb bypass." (REQ-023).** <!-- t:66eaadfa -->
-- [ ] **T22 — Implement: "Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate." (REQ-023).** <!-- t:d8894c40 -->
-- [ ] **T23 — Implement: "The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats." (REQ-023).** <!-- t:a0c78ba6 -->
-- [ ] **T24 — Implement: "The chute is continuously contained and descending; ordinary and boosted runs can negotiate the dive bar and reach the reward pool without unbounded falls." (REQ-025).** <!-- t:b430bd41 -->
-- [ ] **T25 — Implement: "The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall." (REQ-025).** <!-- t:bafad331 -->
-- [ ] **T26 — Implement: "The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required." (REQ-025).** <!-- t:9abb274b -->
-- [ ] **T27 — Implement: "The actual upright player capsule can dive beneath the root, negotiate the turn, reverse and resurface at the terrace ramp without sticking or leaving the water bounds." (REQ-022).** <!-- t:edcc02bb -->
-- [ ] **T28 — Implement: "The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return." (REQ-022).** <!-- t:ee0ab42d -->
-- [ ] **T29 — Implement: "Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional." (REQ-022).** <!-- t:7197271a -->
-- [ ] **T30 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T14 — Implement: "Approve a brief, skippable completion celebration that clearly credits Skippy with restoring the Cascade before hub return; re-entry and replay do not duplicate rewards or erase the Riverheart outcome." (REQ-026).** <!-- t:dbe14822 -->
+- [ ] **T15 — Implement: "CP_03 activates before the extraction challenge; Skippy can reach and free the Riverheart using supported familiar movement and attack interactions, including a documented reduced-capability recovery route." (REQ-024).** <!-- t:2d6d9116 -->
+- [ ] **T16 — Implement: "Only returning the freed Riverheart to its ancient cradle commits restoration and opens the finale; seeds, crayfish, discoveries and ordinary enemy defeats are not prerequisites." (REQ-024).** <!-- t:3d5b6e64 -->
+- [ ] **T17 — Implement: "Captive, freed/carried and returned/restored states survive checkpoint reset, save/reload and re-entry without artifact loss, duplicate activation or a locked open-path contradiction; old seed-gate saves migrate under a documented versioned policy." (REQ-024).** <!-- t:fffc4294 -->
+- [ ] **T18 — Implement: "Approve a production-camera sequence showing the extraction threat, readable restraints and safe attack windows, Skippy's artifact discovery reaction, the carry/return action, water/plant/light restoration and the newly available waterfall route." (REQ-024).** <!-- t:7c59bf28 -->
+- [ ] **T19 — Implement: "The inlet current tapers to a stop before the pool and CP_01 activates on its reachable dry pad." (REQ-020).** <!-- t:9a1f2693 -->
+- [ ] **T20 — Implement: "Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required." (REQ-020).** <!-- t:484fc9d7 -->
+- [ ] **T21 — Implement: "The normal camera shows the next bank exit and crown destination without foliage obscuring them." (REQ-020).** <!-- t:817c0c06 -->
+- [ ] **T22 — Implement: "A family playtest can identify that Skippy is seeking the Riverheart to heal the Cascade after the arrival reveal; the clue and destination are readable without relying only on text, color or audio." (REQ-020).** <!-- t:954887ae -->
+- [ ] **T23 — Implement: "CP_02 activates on the approach, and all three clusters are traversable within the measured current controller envelope, including the continuous climb bypass." (REQ-023).** <!-- t:66eaadfa -->
+- [ ] **T24 — Implement: "Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate." (REQ-023).** <!-- t:d8894c40 -->
+- [ ] **T25 — Implement: "The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats." (REQ-023).** <!-- t:a0c78ba6 -->
+- [ ] **T26 — Implement: "The chute is continuously contained and descending; ordinary and boosted runs can negotiate the dive bar and reach the reward pool without unbounded falls." (REQ-025).** <!-- t:b430bd41 -->
+- [ ] **T27 — Implement: "The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall." (REQ-025).** <!-- t:bafad331 -->
+- [ ] **T28 — Implement: "The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required." (REQ-025).** <!-- t:9abb274b -->
+- [ ] **T29 — Implement: "The actual upright player capsule can dive beneath the root, negotiate the turn, reverse and resurface at the terrace ramp without sticking or leaving the water bounds." (REQ-022).** <!-- t:edcc02bb -->
+- [ ] **T30 — Implement: "The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return." (REQ-022).** <!-- t:ee0ab42d -->
+- [ ] **T31 — Implement: "Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional." (REQ-022).** <!-- t:7197271a -->
+- [ ] **T32 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-023.tests.md
 
-## REQ-024 — S05 — Restoration Garden and crown arch <!-- r:REQ-024 -->
-status: pending · criteria 0/4 · tasks 0/30 · tests 0/0/0 of 0
+## REQ-024 — S05 — Free the Riverheart and restore the Cascade <!-- r:REQ-024 -->
+status: pending · criteria 0/4 · tasks 0/32 · tests 0/0/0 of 0
 ### Criteria
-- [ ] CP_03 activates on the required approach; all seven garden seeds are accessible before the finale gate opens.
-  ↳ tasks: T14 ☐ (Official Adventure: Lagoon & Living Cascade)
-- [ ] Restoration spends three seeds for the first phase and four more for the second; seven total opens the gate, with nine seeds available across S04/S05.
+- [ ] CP_03 activates before the extraction challenge; Skippy can reach and free the Riverheart using supported familiar movement and attack interactions, including a documented reduced-capability recovery route.
   ↳ tasks: T15 ☐ (Official Adventure: Lagoon & Living Cascade)
-- [ ] Fresh entry with zero, one or two terrace seeds completes after seven, six or five garden seeds respectively; save/reload cannot softlock the gate.
+- [ ] Only returning the freed Riverheart to its ancient cradle commits restoration and opens the finale; seeds, crayfish, discoveries and ordinary enemy defeats are not prerequisites.
   ↳ tasks: T16 ☐ (Official Adventure: Lagoon & Living Cascade)
-- [ ] The visible restoration and gate opening are readable from the garden pickups; no deposit station, boss or enemy-clear objective is introduced.
+- [ ] Captive, freed/carried and returned/restored states survive checkpoint reset, save/reload and re-entry without artifact loss, duplicate activation or a locked open-path contradiction; old seed-gate saves migrate under a documented versioned policy.
   ↳ tasks: T17 ☐ (Official Adventure: Lagoon & Living Cascade)
+- [ ] Approve a production-camera sequence showing the extraction threat, readable restraints and safe attack windows, Skippy's artifact discovery reaction, the carry/return action, water/plant/light restoration and the newly available waterfall route.
+  ↳ tasks: T18 ☐ (Official Adventure: Lagoon & Living Cascade)
 ### Tasks — Official Adventure: Lagoon & Living Cascade <!-- n:b0c02000-2026-4020-8000-000000000008 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Implement the integration with Versioned World Runtime API (godot) per Contract "Declarative World Definition v1" (dependency).** <!-- t:277a8bd7 -->
-- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v1" (dependency).** <!-- t:8692c42f -->
+- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v2" (dependency).** <!-- t:4c52ade0 -->
 - [ ] **T4 — Expose the interface OpenAxolotl Game Shell consumes, per Contract "Declarative World Definition v1" (dependency).** <!-- t:2dc49412 -->
 - [ ] **T5 — Implement: "The leftmost tunnel enters the Living Cascade arrival area using the correct production transform and supports the intended return path." (REQ-019).** <!-- t:cfdb8a6e -->
 - [ ] **T6 — Implement: "Hub and inlet collision contain the shipped player capsule with no unsupported entrance strips; accidental escape resets safely." (REQ-019).** <!-- t:6c5484e7 -->
@@ -778,37 +825,40 @@ status: pending · criteria 0/4 · tasks 0/30 · tests 0/0/0 of 0
 - [ ] **T11 — Implement: "Crossing the designated finish volume after restoration records coral_cove.completed once and triggers the supported hub return flow." (REQ-026).** <!-- t:d6473845 -->
 - [ ] **T12 — Implement: "Completion works without optional discoveries, dance unlock or defeating every enemy." (REQ-026).** <!-- t:bcd49602 -->
 - [ ] **T13 — Implement: "Save/reload and re-entry preserve the documented restoration/completion/discovery state and do not leave the player captured, dancing or carrying stale velocity." (REQ-026).** <!-- t:a4a2baf2 -->
-- [ ] **T14 — Implement: "CP_03 activates on the required approach; all seven garden seeds are accessible before the finale gate opens." (REQ-024).** <!-- t:607a4101 -->
-- [ ] **T15 — Implement: "Restoration spends three seeds for the first phase and four more for the second; seven total opens the gate, with nine seeds available across S04/S05." (REQ-024).** <!-- t:f177ced3 -->
-- [ ] **T16 — Implement: "Fresh entry with zero, one or two terrace seeds completes after seven, six or five garden seeds respectively; save/reload cannot softlock the gate." (REQ-024).** <!-- t:084dbd51 -->
-- [ ] **T17 — Implement: "The visible restoration and gate opening are readable from the garden pickups; no deposit station, boss or enemy-clear objective is introduced." (REQ-024).** <!-- t:cb68b910 -->
-- [ ] **T18 — Implement: "The inlet current tapers to a stop before the pool and CP_01 activates on its reachable dry pad." (REQ-020).** <!-- t:9a1f2693 -->
-- [ ] **T19 — Implement: "Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required." (REQ-020).** <!-- t:484fc9d7 -->
-- [ ] **T20 — Implement: "The normal camera shows the next bank exit and crown destination without foliage obscuring them." (REQ-020).** <!-- t:817c0c06 -->
-- [ ] **T21 — Implement: "CP_02 activates on the approach, and all three clusters are traversable within the measured current controller envelope, including the continuous climb bypass." (REQ-023).** <!-- t:66eaadfa -->
-- [ ] **T22 — Implement: "Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate." (REQ-023).** <!-- t:d8894c40 -->
-- [ ] **T23 — Implement: "The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats." (REQ-023).** <!-- t:a0c78ba6 -->
-- [ ] **T24 — Implement: "The chute is continuously contained and descending; ordinary and boosted runs can negotiate the dive bar and reach the reward pool without unbounded falls." (REQ-025).** <!-- t:b430bd41 -->
-- [ ] **T25 — Implement: "The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall." (REQ-025).** <!-- t:bafad331 -->
-- [ ] **T26 — Implement: "The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required." (REQ-025).** <!-- t:9abb274b -->
-- [ ] **T27 — Implement: "The actual upright player capsule can dive beneath the root, negotiate the turn, reverse and resurface at the terrace ramp without sticking or leaving the water bounds." (REQ-022).** <!-- t:edcc02bb -->
-- [ ] **T28 — Implement: "The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return." (REQ-022).** <!-- t:ee0ab42d -->
-- [ ] **T29 — Implement: "Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional." (REQ-022).** <!-- t:7197271a -->
-- [ ] **T30 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T14 — Implement: "Approve a brief, skippable completion celebration that clearly credits Skippy with restoring the Cascade before hub return; re-entry and replay do not duplicate rewards or erase the Riverheart outcome." (REQ-026).** <!-- t:dbe14822 -->
+- [ ] **T15 — Implement: "CP_03 activates before the extraction challenge; Skippy can reach and free the Riverheart using supported familiar movement and attack interactions, including a documented reduced-capability recovery route." (REQ-024).** <!-- t:2d6d9116 -->
+- [ ] **T16 — Implement: "Only returning the freed Riverheart to its ancient cradle commits restoration and opens the finale; seeds, crayfish, discoveries and ordinary enemy defeats are not prerequisites." (REQ-024).** <!-- t:3d5b6e64 -->
+- [ ] **T17 — Implement: "Captive, freed/carried and returned/restored states survive checkpoint reset, save/reload and re-entry without artifact loss, duplicate activation or a locked open-path contradiction; old seed-gate saves migrate under a documented versioned policy." (REQ-024).** <!-- t:fffc4294 -->
+- [ ] **T18 — Implement: "Approve a production-camera sequence showing the extraction threat, readable restraints and safe attack windows, Skippy's artifact discovery reaction, the carry/return action, water/plant/light restoration and the newly available waterfall route." (REQ-024).** <!-- t:7c59bf28 -->
+- [ ] **T19 — Implement: "The inlet current tapers to a stop before the pool and CP_01 activates on its reachable dry pad." (REQ-020).** <!-- t:9a1f2693 -->
+- [ ] **T20 — Implement: "Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required." (REQ-020).** <!-- t:484fc9d7 -->
+- [ ] **T21 — Implement: "The normal camera shows the next bank exit and crown destination without foliage obscuring them." (REQ-020).** <!-- t:817c0c06 -->
+- [ ] **T22 — Implement: "A family playtest can identify that Skippy is seeking the Riverheart to heal the Cascade after the arrival reveal; the clue and destination are readable without relying only on text, color or audio." (REQ-020).** <!-- t:954887ae -->
+- [ ] **T23 — Implement: "CP_02 activates on the approach, and all three clusters are traversable within the measured current controller envelope, including the continuous climb bypass." (REQ-023).** <!-- t:66eaadfa -->
+- [ ] **T24 — Implement: "Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate." (REQ-023).** <!-- t:d8894c40 -->
+- [ ] **T25 — Implement: "The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats." (REQ-023).** <!-- t:a0c78ba6 -->
+- [ ] **T26 — Implement: "The chute is continuously contained and descending; ordinary and boosted runs can negotiate the dive bar and reach the reward pool without unbounded falls." (REQ-025).** <!-- t:b430bd41 -->
+- [ ] **T27 — Implement: "The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall." (REQ-025).** <!-- t:bafad331 -->
+- [ ] **T28 — Implement: "The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required." (REQ-025).** <!-- t:9abb274b -->
+- [ ] **T29 — Implement: "The actual upright player capsule can dive beneath the root, negotiate the turn, reverse and resurface at the terrace ramp without sticking or leaving the water bounds." (REQ-022).** <!-- t:edcc02bb -->
+- [ ] **T30 — Implement: "The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return." (REQ-022).** <!-- t:ee0ab42d -->
+- [ ] **T31 — Implement: "Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional." (REQ-022).** <!-- t:7197271a -->
+- [ ] **T32 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-024.tests.md
 
 ## REQ-025 — S06 — Waterfall Run and reward pool <!-- r:REQ-025 -->
-status: pending · criteria 0/3 · tasks 0/30 · tests 0/0/0 of 0
+status: pending · criteria 0/3 · tasks 0/32 · tests 0/0/0 of 0
 ### Criteria
 - [ ] The chute is continuously contained and descending; ordinary and boosted runs can negotiate the dive bar and reach the reward pool without unbounded falls.
-  ↳ tasks: T24 ☐ (Official Adventure: Lagoon & Living Cascade)
-- [ ] The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall.
-  ↳ tasks: T25 ☐ (Official Adventure: Lagoon & Living Cascade)
-- [ ] The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required.
   ↳ tasks: T26 ☐ (Official Adventure: Lagoon & Living Cascade)
+- [ ] The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall.
+  ↳ tasks: T27 ☐ (Official Adventure: Lagoon & Living Cascade)
+- [ ] The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required.
+  ↳ tasks: T28 ☐ (Official Adventure: Lagoon & Living Cascade)
 ### Tasks — Official Adventure: Lagoon & Living Cascade <!-- n:b0c02000-2026-4020-8000-000000000008 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Implement the integration with Versioned World Runtime API (godot) per Contract "Declarative World Definition v1" (dependency).** <!-- t:277a8bd7 -->
-- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v1" (dependency).** <!-- t:8692c42f -->
+- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v2" (dependency).** <!-- t:4c52ade0 -->
 - [ ] **T4 — Expose the interface OpenAxolotl Game Shell consumes, per Contract "Declarative World Definition v1" (dependency).** <!-- t:2dc49412 -->
 - [ ] **T5 — Implement: "The leftmost tunnel enters the Living Cascade arrival area using the correct production transform and supports the intended return path." (REQ-019).** <!-- t:cfdb8a6e -->
 - [ ] **T6 — Implement: "Hub and inlet collision contain the shipped player capsule with no unsupported entrance strips; accidental escape resets safely." (REQ-019).** <!-- t:6c5484e7 -->
@@ -819,26 +869,29 @@ status: pending · criteria 0/3 · tasks 0/30 · tests 0/0/0 of 0
 - [ ] **T11 — Implement: "Crossing the designated finish volume after restoration records coral_cove.completed once and triggers the supported hub return flow." (REQ-026).** <!-- t:d6473845 -->
 - [ ] **T12 — Implement: "Completion works without optional discoveries, dance unlock or defeating every enemy." (REQ-026).** <!-- t:bcd49602 -->
 - [ ] **T13 — Implement: "Save/reload and re-entry preserve the documented restoration/completion/discovery state and do not leave the player captured, dancing or carrying stale velocity." (REQ-026).** <!-- t:a4a2baf2 -->
-- [ ] **T14 — Implement: "CP_03 activates on the required approach; all seven garden seeds are accessible before the finale gate opens." (REQ-024).** <!-- t:607a4101 -->
-- [ ] **T15 — Implement: "Restoration spends three seeds for the first phase and four more for the second; seven total opens the gate, with nine seeds available across S04/S05." (REQ-024).** <!-- t:f177ced3 -->
-- [ ] **T16 — Implement: "Fresh entry with zero, one or two terrace seeds completes after seven, six or five garden seeds respectively; save/reload cannot softlock the gate." (REQ-024).** <!-- t:084dbd51 -->
-- [ ] **T17 — Implement: "The visible restoration and gate opening are readable from the garden pickups; no deposit station, boss or enemy-clear objective is introduced." (REQ-024).** <!-- t:cb68b910 -->
-- [ ] **T18 — Implement: "The inlet current tapers to a stop before the pool and CP_01 activates on its reachable dry pad." (REQ-020).** <!-- t:9a1f2693 -->
-- [ ] **T19 — Implement: "Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required." (REQ-020).** <!-- t:484fc9d7 -->
-- [ ] **T20 — Implement: "The normal camera shows the next bank exit and crown destination without foliage obscuring them." (REQ-020).** <!-- t:817c0c06 -->
-- [ ] **T21 — Implement: "CP_02 activates on the approach, and all three clusters are traversable within the measured current controller envelope, including the continuous climb bypass." (REQ-023).** <!-- t:66eaadfa -->
-- [ ] **T22 — Implement: "Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate." (REQ-023).** <!-- t:d8894c40 -->
-- [ ] **T23 — Implement: "The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats." (REQ-023).** <!-- t:a0c78ba6 -->
-- [ ] **T24 — Implement: "The chute is continuously contained and descending; ordinary and boosted runs can negotiate the dive bar and reach the reward pool without unbounded falls." (REQ-025).** <!-- t:b430bd41 -->
-- [ ] **T25 — Implement: "The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall." (REQ-025).** <!-- t:bafad331 -->
-- [ ] **T26 — Implement: "The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required." (REQ-025).** <!-- t:9abb274b -->
-- [ ] **T27 — Implement: "The actual upright player capsule can dive beneath the root, negotiate the turn, reverse and resurface at the terrace ramp without sticking or leaving the water bounds." (REQ-022).** <!-- t:edcc02bb -->
-- [ ] **T28 — Implement: "The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return." (REQ-022).** <!-- t:ee0ab42d -->
-- [ ] **T29 — Implement: "Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional." (REQ-022).** <!-- t:7197271a -->
-- [ ] **T30 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T14 — Implement: "Approve a brief, skippable completion celebration that clearly credits Skippy with restoring the Cascade before hub return; re-entry and replay do not duplicate rewards or erase the Riverheart outcome." (REQ-026).** <!-- t:dbe14822 -->
+- [ ] **T15 — Implement: "CP_03 activates before the extraction challenge; Skippy can reach and free the Riverheart using supported familiar movement and attack interactions, including a documented reduced-capability recovery route." (REQ-024).** <!-- t:2d6d9116 -->
+- [ ] **T16 — Implement: "Only returning the freed Riverheart to its ancient cradle commits restoration and opens the finale; seeds, crayfish, discoveries and ordinary enemy defeats are not prerequisites." (REQ-024).** <!-- t:3d5b6e64 -->
+- [ ] **T17 — Implement: "Captive, freed/carried and returned/restored states survive checkpoint reset, save/reload and re-entry without artifact loss, duplicate activation or a locked open-path contradiction; old seed-gate saves migrate under a documented versioned policy." (REQ-024).** <!-- t:fffc4294 -->
+- [ ] **T18 — Implement: "Approve a production-camera sequence showing the extraction threat, readable restraints and safe attack windows, Skippy's artifact discovery reaction, the carry/return action, water/plant/light restoration and the newly available waterfall route." (REQ-024).** <!-- t:7c59bf28 -->
+- [ ] **T19 — Implement: "The inlet current tapers to a stop before the pool and CP_01 activates on its reachable dry pad." (REQ-020).** <!-- t:9a1f2693 -->
+- [ ] **T20 — Implement: "Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required." (REQ-020).** <!-- t:484fc9d7 -->
+- [ ] **T21 — Implement: "The normal camera shows the next bank exit and crown destination without foliage obscuring them." (REQ-020).** <!-- t:817c0c06 -->
+- [ ] **T22 — Implement: "A family playtest can identify that Skippy is seeking the Riverheart to heal the Cascade after the arrival reveal; the clue and destination are readable without relying only on text, color or audio." (REQ-020).** <!-- t:954887ae -->
+- [ ] **T23 — Implement: "CP_02 activates on the approach, and all three clusters are traversable within the measured current controller envelope, including the continuous climb bypass." (REQ-023).** <!-- t:66eaadfa -->
+- [ ] **T24 — Implement: "Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate." (REQ-023).** <!-- t:d8894c40 -->
+- [ ] **T25 — Implement: "The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats." (REQ-023).** <!-- t:a0c78ba6 -->
+- [ ] **T26 — Implement: "The chute is continuously contained and descending; ordinary and boosted runs can negotiate the dive bar and reach the reward pool without unbounded falls." (REQ-025).** <!-- t:b430bd41 -->
+- [ ] **T27 — Implement: "The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall." (REQ-025).** <!-- t:bafad331 -->
+- [ ] **T28 — Implement: "The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required." (REQ-025).** <!-- t:9abb274b -->
+- [ ] **T29 — Implement: "The actual upright player capsule can dive beneath the root, negotiate the turn, reverse and resurface at the terrace ramp without sticking or leaving the water bounds." (REQ-022).** <!-- t:edcc02bb -->
+- [ ] **T30 — Implement: "The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return." (REQ-022).** <!-- t:ee0ab42d -->
+- [ ] **T31 — Implement: "Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional." (REQ-022).** <!-- t:7197271a -->
+- [ ] **T32 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-025.tests.md
 
 ## REQ-026 — Finish, persist and return to Open Lagoon <!-- r:REQ-026 -->
-status: pending · criteria 0/3 · tasks 0/30 · tests 0/0/0 of 0
+status: pending · criteria 0/4 · tasks 0/32 · tests 0/0/0 of 0
 ### Criteria
 - [ ] Crossing the designated finish volume after restoration records coral_cove.completed once and triggers the supported hub return flow.
   ↳ tasks: T11 ☐ (Official Adventure: Lagoon & Living Cascade)
@@ -846,10 +899,12 @@ status: pending · criteria 0/3 · tasks 0/30 · tests 0/0/0 of 0
   ↳ tasks: T12 ☐ (Official Adventure: Lagoon & Living Cascade)
 - [ ] Save/reload and re-entry preserve the documented restoration/completion/discovery state and do not leave the player captured, dancing or carrying stale velocity.
   ↳ tasks: T13 ☐ (Official Adventure: Lagoon & Living Cascade)
+- [ ] Approve a brief, skippable completion celebration that clearly credits Skippy with restoring the Cascade before hub return; re-entry and replay do not duplicate rewards or erase the Riverheart outcome.
+  ↳ tasks: T14 ☐ (Official Adventure: Lagoon & Living Cascade)
 ### Tasks — Official Adventure: Lagoon & Living Cascade <!-- n:b0c02000-2026-4020-8000-000000000008 -->
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
 - [ ] **T2 — Implement the integration with Versioned World Runtime API (godot) per Contract "Declarative World Definition v1" (dependency).** <!-- t:277a8bd7 -->
-- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v1" (dependency).** <!-- t:8692c42f -->
+- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v2" (dependency).** <!-- t:4c52ade0 -->
 - [ ] **T4 — Expose the interface OpenAxolotl Game Shell consumes, per Contract "Declarative World Definition v1" (dependency).** <!-- t:2dc49412 -->
 - [ ] **T5 — Implement: "The leftmost tunnel enters the Living Cascade arrival area using the correct production transform and supports the intended return path." (REQ-019).** <!-- t:cfdb8a6e -->
 - [ ] **T6 — Implement: "Hub and inlet collision contain the shipped player capsule with no unsupported entrance strips; accidental escape resets safely." (REQ-019).** <!-- t:6c5484e7 -->
@@ -860,20 +915,23 @@ status: pending · criteria 0/3 · tasks 0/30 · tests 0/0/0 of 0
 - [ ] **T11 — Implement: "Crossing the designated finish volume after restoration records coral_cove.completed once and triggers the supported hub return flow." (REQ-026).** <!-- t:d6473845 -->
 - [ ] **T12 — Implement: "Completion works without optional discoveries, dance unlock or defeating every enemy." (REQ-026).** <!-- t:bcd49602 -->
 - [ ] **T13 — Implement: "Save/reload and re-entry preserve the documented restoration/completion/discovery state and do not leave the player captured, dancing or carrying stale velocity." (REQ-026).** <!-- t:a4a2baf2 -->
-- [ ] **T14 — Implement: "CP_03 activates on the required approach; all seven garden seeds are accessible before the finale gate opens." (REQ-024).** <!-- t:607a4101 -->
-- [ ] **T15 — Implement: "Restoration spends three seeds for the first phase and four more for the second; seven total opens the gate, with nine seeds available across S04/S05." (REQ-024).** <!-- t:f177ced3 -->
-- [ ] **T16 — Implement: "Fresh entry with zero, one or two terrace seeds completes after seven, six or five garden seeds respectively; save/reload cannot softlock the gate." (REQ-024).** <!-- t:084dbd51 -->
-- [ ] **T17 — Implement: "The visible restoration and gate opening are readable from the garden pickups; no deposit station, boss or enemy-clear objective is introduced." (REQ-024).** <!-- t:cb68b910 -->
-- [ ] **T18 — Implement: "The inlet current tapers to a stop before the pool and CP_01 activates on its reachable dry pad." (REQ-020).** <!-- t:9a1f2693 -->
-- [ ] **T19 — Implement: "Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required." (REQ-020).** <!-- t:484fc9d7 -->
-- [ ] **T20 — Implement: "The normal camera shows the next bank exit and crown destination without foliage obscuring them." (REQ-020).** <!-- t:817c0c06 -->
-- [ ] **T21 — Implement: "CP_02 activates on the approach, and all three clusters are traversable within the measured current controller envelope, including the continuous climb bypass." (REQ-023).** <!-- t:66eaadfa -->
-- [ ] **T22 — Implement: "Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate." (REQ-023).** <!-- t:d8894c40 -->
-- [ ] **T23 — Implement: "The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats." (REQ-023).** <!-- t:a0c78ba6 -->
-- [ ] **T24 — Implement: "The chute is continuously contained and descending; ordinary and boosted runs can negotiate the dive bar and reach the reward pool without unbounded falls." (REQ-025).** <!-- t:b430bd41 -->
-- [ ] **T25 — Implement: "The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall." (REQ-025).** <!-- t:bafad331 -->
-- [ ] **T26 — Implement: "The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required." (REQ-025).** <!-- t:9abb274b -->
-- [ ] **T27 — Implement: "The actual upright player capsule can dive beneath the root, negotiate the turn, reverse and resurface at the terrace ramp without sticking or leaving the water bounds." (REQ-022).** <!-- t:edcc02bb -->
-- [ ] **T28 — Implement: "The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return." (REQ-022).** <!-- t:ee0ab42d -->
-- [ ] **T29 — Implement: "Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional." (REQ-022).** <!-- t:7197271a -->
-- [ ] **T30 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+- [ ] **T14 — Implement: "Approve a brief, skippable completion celebration that clearly credits Skippy with restoring the Cascade before hub return; re-entry and replay do not duplicate rewards or erase the Riverheart outcome." (REQ-026).** <!-- t:dbe14822 -->
+- [ ] **T15 — Implement: "CP_03 activates before the extraction challenge; Skippy can reach and free the Riverheart using supported familiar movement and attack interactions, including a documented reduced-capability recovery route." (REQ-024).** <!-- t:2d6d9116 -->
+- [ ] **T16 — Implement: "Only returning the freed Riverheart to its ancient cradle commits restoration and opens the finale; seeds, crayfish, discoveries and ordinary enemy defeats are not prerequisites." (REQ-024).** <!-- t:3d5b6e64 -->
+- [ ] **T17 — Implement: "Captive, freed/carried and returned/restored states survive checkpoint reset, save/reload and re-entry without artifact loss, duplicate activation or a locked open-path contradiction; old seed-gate saves migrate under a documented versioned policy." (REQ-024).** <!-- t:fffc4294 -->
+- [ ] **T18 — Implement: "Approve a production-camera sequence showing the extraction threat, readable restraints and safe attack windows, Skippy's artifact discovery reaction, the carry/return action, water/plant/light restoration and the newly available waterfall route." (REQ-024).** <!-- t:7c59bf28 -->
+- [ ] **T19 — Implement: "The inlet current tapers to a stop before the pool and CP_01 activates on its reachable dry pad." (REQ-020).** <!-- t:9a1f2693 -->
+- [ ] **T20 — Implement: "Two broad water exits and the bank route to S02 remain reachable without a tail; optional crayfish are not required." (REQ-020).** <!-- t:484fc9d7 -->
+- [ ] **T21 — Implement: "The normal camera shows the next bank exit and crown destination without foliage obscuring them." (REQ-020).** <!-- t:817c0c06 -->
+- [ ] **T22 — Implement: "A family playtest can identify that Skippy is seeking the Riverheart to heal the Cascade after the arrival reveal; the clue and destination are readable without relying only on text, color or audio." (REQ-020).** <!-- t:954887ae -->
+- [ ] **T23 — Implement: "CP_02 activates on the approach, and all three clusters are traversable within the measured current controller envelope, including the continuous climb bypass." (REQ-023).** <!-- t:66eaadfa -->
+- [ ] **T24 — Implement: "Catch pools and ramps return the player to the relevant cluster, preserve capsule clearance and do not bypass the S05 restoration gate." (REQ-023).** <!-- t:d8894c40 -->
+- [ ] **T25 — Implement: "The two terrace seeds are reachable; one land Netbot, one underwater Hookline and one land Hookline have valid support/habitats." (REQ-023).** <!-- t:a0c78ba6 -->
+- [ ] **T26 — Implement: "The chute is continuously contained and descending; ordinary and boosted runs can negotiate the dive bar and reach the reward pool without unbounded falls." (REQ-025).** <!-- t:b430bd41 -->
+- [ ] **T27 — Implement: "The dive obstacle supports stopping/reversal and active vertical control; the player is never required to swim up the waterfall." (REQ-025).** <!-- t:bafad331 -->
+- [ ] **T28 — Implement: "The tide pearl and crayfish remain optional, and accidental escape uses nonlethal checkpoint recovery; no whirlpool or boss is required." (REQ-025).** <!-- t:9abb274b -->
+- [ ] **T29 — Implement: "The actual upright player capsule can dive beneath the root, negotiate the turn, reverse and resurface at the terrace ramp without sticking or leaving the water bounds." (REQ-022).** <!-- t:edcc02bb -->
+- [ ] **T30 — Implement: "The root and banks prevent a dry shortcut while preserving both open-water mouths and the optional grotto return." (REQ-022).** <!-- t:ee0ab42d -->
+- [ ] **T31 — Implement: "Two underwater Hooklines respect their habitats and swim clearances; crayfish and the lantern shrimp remain optional." (REQ-022).** <!-- t:7197271a -->
+- [ ] **T32 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+### Tests — .nodespec/tests/req-026.tests.md

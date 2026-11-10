@@ -29,3 +29,29 @@ Original project files are backed up in the task workspace under `work/movement-
 ## Natural swimming turn refinement
 
 Free swimming visual yaw now ramps angular speed, with a 240-degree/s cap and 850-degree/s² acceleration. The head leads within a bounded neck angle, the torso banks, and the turn propagates down the tail. Actions retain their existing response. Pose reset clears turn momentum. This modifies visual orientation only; controller steering, collision geometry and passage paths are unchanged. Added tests cover angular acceleration, rate limits, settling, neck bounds and reset.
+
+## Riverheart milestone — first hero pass, 10 November 2026
+
+This bounded pass begins REQ-002 before encounter-section construction. The [current storyboard](design/first-adventure-storyboard.md) puts Skippy's motion first, route clearance second, then one polished encounter, lighting/vegetation and the Riverheart sequence. Historical counts above are not fresh verification of this revision.
+
+Walking starts above 0.25 m/s and continues until measured speed falls to 0.15 m/s. This small hysteresis removes idle/walk chatter around the threshold without delaying the controller. The gait clock is retained through stops and moving tail whacks. On the last whack frame, only the time remaining after the action advances locomotion; the legs no longer consume the same time twice. Animation speed still follows actual collision-resolved displacement.
+
+Landing squash now scales smoothly with incoming velocity into the contacted floor normal, from no deformation at or below 0.6 m/s to the existing full deformation at 6 m/s. Higher impacts stay bounded and volume-preserving. Tiny floor reacquisitions do not emit a full landing sound. Checkpoint visual reset clears squash, gait/action phase, swim effort, swim offset and swim-turn momentum. Wetness still dries gradually.
+
+### Transition policy v1 — implemented subset
+
+| Transition | Current policy | Remaining quality work |
+| --- | --- | --- |
+| Idle → start/travel | Start above 0.25 m/s; restore gait phase; 0.12 s blend | Authored start pose and multi-joint foot contact |
+| Travel → stop/idle | Stop at or below 0.15 m/s; retain phase; 0.12 s blend | Authored braking and turn-in-place poses |
+| Walking → whack → walking | Preserve walking feet; action priority unchanged; consume action-boundary time once | Production-camera review of all directional strikes |
+| Rise → fall → land | Existing hop/fall selection; floor-normal impact scales visual landing | Dedicated landing clip and varied slope/contact reel |
+| Land ↔ swim | Existing 0.20 s clip blend and procedural body posture | Surface/dive silhouettes and full seam traversal review |
+| Swim turn/idle | Existing bounded turn, traveling tail wave and idle paddling | Improved rig and normal/slow-motion approval |
+| Capture/dance/damage | Existing action priority and cancellation rules retained | Full token/interruption matrix remains open |
+| Checkpoint reset | Clear action/gait, squash and procedural swimming pose | Full adventure reset/re-entry acceptance remains open |
+
+Fresh evidence: 62 focused unit tests passed, plus the live AnimationPlayer gait-continuity probe (six assertions). The live probe verifies stop/resume, a tail-whack ending between sample boundaries, and action/phase reset. Run it with Godot `--headless --path . --script res://test/core/rendering/run_hero_gait.gd`. A scripted Lagoon input sample captured idle, travel, whack, hop, fall and landing with the production hero/camera; Compatibility before/after images are motion inspection only, not a rendering-quality comparison or deterministic traversal proof. A separate Forward+ capture uses the project's normal renderer.
+
+The twelve-bone model still has only one joint per leg. This pass does not provide full leg IK, a new rig, complete transition coverage, an approved animation reel, or a cleared collision route. The Riverheart gameplay and new encounter section are not implemented here. The mobile prototype remains parked.
+

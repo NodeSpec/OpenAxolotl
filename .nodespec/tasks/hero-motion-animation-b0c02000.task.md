@@ -19,8 +19,13 @@ None recorded for this node. Standing conditions the build must honour (security
 
 ## Implementation Context
 
-<!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
+
+Migrate core/controller and core/rendering/hero_* in place. Audit axolotl_controller.gd, axolotl_body.gd, player_intent.gd, movement_grammar.gd, hero_motion.gd and hero_animator.gd before introducing adapters. Exactly one physics owner writes the player root; presentation, backpack and effects read snapshots. Sample semantic input once per 60 Hz physics tick, then blend presentation independently. Audit production rig weights and limb chains before promising planted feet. Preserve forward tail-whack reach, folded swimming limbs, traveling body/tail motion and gentle underwater-idle feet. Use transition/action tokens for attack, capture, dance and reset cancellation. Approve the production-camera reel with the camera owner before expanding dressing.
+
+This document describes planned work. All completion boxes remain open until current evidence or recorded human approval is attached. Keep the existing task keys and criterion identities. Shared payload schemas are normative even where generic dependency guidance describes only wiring.
+
+Curation integration: consume approved kit descriptors through Approved Kit Entry v2. Preserve the hero motion, animation and collision requirements; moderation, submissions and publishing remain outside the hero runtime.
 
 ## Implementation Tasks
 
@@ -29,51 +34,86 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
   Create the source layout, build files, and test harness this node's working code lives in.
   Start from the catalog's suggested structure: `scripts/main.gd`, `scenes/main.tscn`, `project.godot`, `export_presets.cfg`.
+  - [ ] Inventory the current bound implementation including `test/core/rendering/test_hero_surface.gd`, `core/controller/bubble_boost.gd`, `test/core/controller/test_movement_polish.gd`, `core/controller/climb_surface.gd`; record each retained component, migration gap and owning dependency before changing files.
+  - [ ] Use the existing repository/project and test harness; adapt the current component in place rather than creating a parallel scaffold.
+  - [ ] Record production-camera and slow-motion baseline reels plus timed input replays before editing.
+  - [ ] Record a baseline fixture and observable behavior for this component at the pinned gameplay commit; keep historical results separate from fresh proof.
 - [ ] **T2 — Implement the integration with Input, Camera & Accessibility (godot) per Contract "Semantic Input Frame v1" (dependency).** <!-- t:bb26635f -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v1" (dependency).** <!-- t:8692c42f -->
+  - [ ] Map the existing producer/consumer wiring for Semantic Input Frame v1 to the connected component and its attached schema; document any adapter and version boundary without implementing the neighbor's internals.
+  - [ ] Exercise one conforming exchange and applicable missing/incompatible/reset case through that interface; use local fixtures during development and the real provider before final acceptance.
+- [ ] **T3 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v2" (dependency).** <!-- t:4c52ade0 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
+  - [ ] Resolve immutable Approved Kit Entry v2 identities, versions, content hashes and dependency manifests; add an explicit migration/rejection path for v1 rather than silently accepting it as approved.
+  - [ ] Use fixtures for approved, missing, wrong-scope, changed and withdrawn entries; retain existing collision/rig/material behavior and make incompatibility actionable at the consumer boundary.
 - [ ] **T4 — Expose the interface Drift Fleet Encounters consumes, per Contract "Hero Motion and Action Snapshot v1" (dependency).** <!-- t:d9b523c8 -->
   Record the endpoint/identifiers Drift Fleet Encounters needs in this node's config artifacts — coordinate with Drift Fleet Encounters.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
+  - [ ] Map the existing producer/consumer wiring for Hero Motion and Action Snapshot v1 to the connected component and its attached schema; document any adapter and version boundary without implementing the neighbor's internals.
+  - [ ] Exercise one conforming exchange and applicable missing/incompatible/reset case through that interface; use local fixtures during development and the real provider before final acceptance.
 - [ ] **T5 — Expose the interface Versioned World Runtime API consumes, per Contract "Hero Motion and Action Snapshot v1" (dependency).** <!-- t:b6a706a0 -->
   Record the endpoint/identifiers Versioned World Runtime API needs in this node's config artifacts — coordinate with Versioned World Runtime API.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
+  - [ ] Map the existing producer/consumer wiring for Hero Motion and Action Snapshot v1 to the connected component and its attached schema; document any adapter and version boundary without implementing the neighbor's internals.
+  - [ ] Exercise one conforming exchange and applicable missing/incompatible/reset case through that interface; use local fixtures during development and the real provider before final acceptance.
 - [ ] **T6 — Implement: "Land/water transitions retain the configured momentum, keep collision and visual pose aligned, and do not leave the player in the wrong movement grammar." (REQ-002).** <!-- t:691ce13d -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-002 "Land/water transitions retain the configured momentum, keep collision and visual pose aligned, and do not leave the player in the wrong movement grammar." — possible coordination point: Contract "Hero Motion and Action Snapshot v1" (dependency) from Drift Fleet Encounters (keyword signal only)
+  - [ ] Implement this criterion within the existing owned component and public contracts, using the production hero replay covering starts/stops, reversal, slopes, land/water transitions, attacks, capture and reset at 30/60/120 render FPS with a fixed 60 Hz physics step as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T7 — Implement: "Movement and facing accelerate and decelerate continuously at 30, 60 and 120 Hz; a swimming reversal turns through a bounded arc instead of snapping." (REQ-002).** <!-- t:5d9323f9 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-002 "Movement and facing accelerate and decelerate continuously at 30, 60 and 120 Hz; a swimming reversal turns through a bounded arc instead of snapping." — possible coordination point: Contract "Hero Motion and Action Snapshot v1" (dependency) from Drift Fleet Encounters (keyword signal only)
+  - [ ] Implement this criterion within the existing owned component and public contracts, using the production hero replay covering starts/stops, reversal, slopes, land/water transitions, attacks, capture and reset at 30/60/120 render FPS with a fixed 60 Hz physics step as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T8 — Implement: "Swimming folds the feet toward the body with a traveling body/tail wave; underwater idle preserves gentle foot motion; tail whack visibly reaches forward and has a bounded hit window." (REQ-002).** <!-- t:d4b5447a -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-002 "Swimming folds the feet toward the body with a traveling body/tail wave; underwater idle preserves gentle foot motion; tail whack visibly reaches forward and has a bounded hit window." — possible coordination point: Contract "Hero Motion and Action Snapshot v1" (dependency) from Drift Fleet Encounters (keyword signal only)
+  - [ ] Implement this criterion within the existing owned component and public contracts, using the production hero replay covering starts/stops, reversal, slopes, land/water transitions, attacks, capture and reset at 30/60/120 render FPS with a fixed 60 Hz physics step as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T9 — Implement: "Review walking, hopping, climbing, swimming, turning, tail whack and spin charge in the production camera; underwater spin bubbles/current and land-slide surface disturbance communicate the action without obscuring threats." (REQ-002).** <!-- t:a159cffd -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-002 "Review walking, hopping, climbing, swimming, turning, tail whack and spin charge in the production camera; underwater spin bubbles/current and land-slide surface disturbance communicate the action without obscuring threats." — possible coordination point: Contract "Hero Motion and Action Snapshot v1" (dependency) from Drift Fleet Encounters (keyword signal only)
+  - [ ] Prepare a repeatable human-review setup for the production hero replay covering starts/stops, reversal, slopes, land/water transitions, attacks, capture and reset at 30/60/120 render FPS with a fixed 60 Hz physics step; record controls, camera, build and relevant device/settings.
+  - [ ] Capture the evidence and record the review decision against this exact criterion; name corrective work for failures and leave approval pending until the user confirms.
 - [ ] **T10 — Implement: "The character has exactly one authoritative physics-root writer; animation, backpack and surface effects cannot change the collision root, damage reach or movement velocity." (REQ-002).** <!-- t:cfaeac8e -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-002 "The character has exactly one authoritative physics-root writer; animation, backpack and surface effects cannot change the collision root, damage reach or movement velocity." — possible coordination point: Contract "Hero Motion and Action Snapshot v1" (dependency) from Drift Fleet Encounters (keyword signal only)
+  - [ ] Implement this criterion within the existing owned component and public contracts, using the production hero replay covering starts/stops, reversal, slopes, land/water transitions, attacks, capture and reset at 30/60/120 render FPS with a fixed 60 Hz physics step as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T11 — Implement: "At a fixed 60 Hz physics step, the same timed input replay rendered at 30, 60 and 120 FPS finishes within 5 percent of reference travel distance and 5 degrees of reference heading, with identical action and checkpoint events." (REQ-002).** <!-- t:34fb634b -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-002 "At a fixed 60 Hz physics step, the same timed input replay rendered at 30, 60 and 120 FPS finishes within 5 percent of reference travel distance and 5 degrees of reference heading, with identical action and checkpoint events." — possible coordination point: Contract "Hero Motion and Action Snapshot v1" (dependency) from Drift Fleet Encounters (keyword signal only)
+  - [ ] Implement this criterion within the existing owned component and public contracts, using the production hero replay covering starts/stops, reversal, slopes, land/water transitions, attacks, capture and reset at 30/60/120 render FPS with a fixed 60 Hz physics step as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T12 — Implement: "Allowed locomotion inputs affect simulation within two physics ticks; buffered jump and interruption windows are configurable and tests cover their boundary ticks." (REQ-002).** <!-- t:fdf4d565 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-002 "Allowed locomotion inputs affect simulation within two physics ticks; buffered jump and interruption windows are configurable and tests cover their boundary ticks." — possible coordination point: Contract "Semantic Input Frame v1" (dependency) to Input, Camera & Accessibility (keyword signal only)
+  - [ ] Implement this criterion within the existing owned component and public contracts, using the production hero replay covering starts/stops, reversal, slopes, land/water transitions, attacks, capture and reset at 30/60/120 render FPS with a fixed 60 Hz physics step as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T13 — Implement: "A versioned animation transition table covers idle, start, travel, turn, stop, jump, fall, land, swim, surface, dive, attack, capture, dance and reset; every allowed edge exits without a stuck pose, duplicate action event or stale blend." (REQ-002).** <!-- t:bd9aa3b2 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-002 "A versioned animation transition table covers idle, start, travel, turn, stop, jump, fall, land, swim, surface, dive, attack, capture, dance and reset; every allowed edge exits without a stuck pose, duplicate action event or stale blend." — possible coordination point: Contract "Hero Motion and Action Snapshot v1" (dependency) from Versioned World Runtime API (keyword signal only)
+  - [ ] Implement this criterion within the existing owned component and public contracts, using the production hero replay covering starts/stops, reversal, slopes, land/water transitions, attacks, capture and reset at 30/60/120 render FPS with a fixed 60 Hz physics step as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T14 — Implement: "Audit and approve the production rig, skin weights, clip coverage and contact chains; document whether each limb supports planted-foot solving and replace the current one-joint limb limitation before promising full foot locking." (REQ-002).** <!-- t:2f75d092 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-002 "Audit and approve the production rig, skin weights, clip coverage and contact chains; document whether each limb supports planted-foot solving and replace the current one-joint limb limitation before promising full foot locking." — possible coordination point: Contract "Hero Motion and Action Snapshot v1" (dependency) from Drift Fleet Encounters (keyword signal only)
+  - [ ] Prepare a repeatable human-review setup for the production hero replay covering starts/stops, reversal, slopes, land/water transitions, attacks, capture and reset at 30/60/120 render FPS with a fixed 60 Hz physics step; record controls, camera, build and relevant device/settings.
+  - [ ] Capture the evidence and record the review decision against this exact criterion; name corrective work for failures and leave approval pending until the user confirms.
 - [ ] **T15 — Implement: "Approve a fixed production-camera reel at normal speed and slow motion covering starts, stops, reversals, slopes, landing, swimming transitions and moving attacks; resolve visible foot sliding, snapping, broken deformation and mechanical body/tail motion before declaring the character-polish milestone complete." (REQ-002).** <!-- t:a767140a -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-002 "Approve a fixed production-camera reel at normal speed and slow motion covering starts, stops, reversals, slopes, landing, swimming transitions and moving attacks; resolve visible foot sliding, snapping, broken deformation and mechanical body/tail motion before declaring the character-polish milestone complete." — possible coordination point: Contract "Semantic Input Frame v1" (dependency) to Input, Camera & Accessibility (keyword signal only)
+  - [ ] Prepare a repeatable human-review setup for the production hero replay covering starts/stops, reversal, slopes, land/water transitions, attacks, capture and reset at 30/60/120 render FPS with a fixed 60 Hz physics step; record controls, camera, build and relevant device/settings.
+  - [ ] Capture the evidence and record the review decision against this exact criterion; name corrective work for failures and leave approval pending until the user confirms.
 - [ ] **T16 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
+  - [ ] Run the component's current automated binding scenarios at the pushed implementation commit and report each result against its exact criterion; leave skipped/stale checks open.
+  - [ ] Collect the required human review and its evidence separately; do not auto-tick manual criteria or equate a headless pass with visual quality.
+  - [ ] Check every work-order step, dependency contract and remaining migration gap before declaring completion; hand off unresolved items with owner and reproduction.
 
 **Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Existing Implementation, Technology Guidance, and node context as your references. Write each work order's steps under its task line as indented checkbox lines (`  - [ ] <step>`), one action each, naming the file, setting or interface it changes, and send them with update_artifact (propose_patches, passing base_sequence) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact; the steps stay with their work order when this doc regenerates. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
 
@@ -96,7 +136,7 @@ The whole vision is one read away: get_outcome_board lists every sentence with i
 
 ### REQ-002: Expressive, smooth axolotl movement and animation
 Category: functional | Status: pending
-Retain the character's distinct land and water movement, responsive transitions and readable actions. Polish is measured through motion continuity and play review rather than a claim of parity with Astro Bot.
+PRIORITY 1: improve Skippy's responsive movement and expressive animation before building the new encounter section. Audit the rig and contact chains, then address start/stop, gait continuity, turns, landings and land/water/action transitions. Preserve gameplay-root authority and existing combat timing. A first code pass is not approval of the rig or professional animation milestone.
 
 **Acceptance criteria — your task boxes:**
 - [ ] Land/water transitions retain the configured momentum, keep collision and visual pose aligned, and do not leave the player in the wrong movement grammar.
@@ -435,7 +475,7 @@ Retain the character's distinct land and water movement, responsive transitions 
 ```
 
 ### SENDS TO: Reusable Level & Asset Kit (shared-library)
-- **Contract:** Approved Kit Entry v1
+- **Contract:** Approved Kit Entry v2
 - **Protocol:** dependency
 - **Spec Format:** json_schema
 - **Their Technology:** godot
@@ -444,7 +484,7 @@ Retain the character's distinct land and water movement, responsive transitions 
 ```
 {
   "type": "object",
-  "title": "Approved Kit Entry v1",
+  "title": "Approved Kit Entry v2",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "required": [
     "schemaVersion",
@@ -461,7 +501,10 @@ Retain the character's distinct land and water movement, responsive transitions 
     "version",
     "dependencies",
     "habitats",
-    "forwardAxis"
+    "forwardAxis",
+    "contentSha256",
+    "reviewId",
+    "dependencyManifestSha256"
   ],
   "properties": {
     "kind": {
@@ -529,6 +572,10 @@ Retain the character's distinct land and water movement, responsive transitions 
         ]
       }
     },
+    "reviewId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_.:-]+$"
+    },
     "resourceId": {
       "type": "string",
       "pattern": "^[a-zA-Z0-9_.:-]+$"
@@ -546,16 +593,40 @@ Retain the character's distinct land and water movement, responsive transitions 
     "dependencies": {
       "type": "array",
       "items": {
-        "type": "string",
-        "pattern": "^[a-zA-Z0-9_.:-]+$"
-      }
+        "type": "object",
+        "required": [
+          "entryId",
+          "version",
+          "contentSha256"
+        ],
+        "properties": {
+          "entryId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.:-]+$"
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contentSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "contentSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     },
     "metersPerUnit": {
       "type": "number",
       "exclusiveMinimum": 0
     },
     "schemaVersion": {
-      "const": 1
+      "const": 2
     },
     "licenseRecordId": {
       "type": "string",
@@ -586,9 +657,13 @@ Retain the character's distinct land and water movement, responsive transitions 
         }
       },
       "additionalProperties": false
+    },
+    "dependencyManifestSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     }
   },
-  "description": "Every entry resolves to pinned approved resources and a typed configuration schema. Numeric parameters must be bounded in that schema. Collision geometry is authored for traversal, separate from decorative detail; rig joint/socket requirements are explicit in asset metadata. Unknown entries fail export.",
+  "description": "Every entry resolves to pinned approved resources and a typed configuration schema. Numeric parameters must be bounded in that schema. Collision geometry is authored for traversal, separate from decorative detail; rig joint/socket requirements are explicit in asset metadata. Unknown entries fail export. Official kit publication requires a matching approved Contribution Review Decision v1 with reusable_asset scope, subjectKind asset or character, matching identity/version/content digest and dependency-manifest digest, and current owner authorization. dependencies pins exact versions/digests; stable IDs alone are insufficient. The content digest covers the complete resource manifest and reviewed public metadata, excluding the approval receipt itself to avoid a circular hash. Kit approval never approves an assembled level. This is a v2 target contract; v1 input is not silently treated as approved.",
   "additionalProperties": false
 }
 ```
@@ -603,7 +678,7 @@ Startup/initialization order based on edge directions and interaction patterns.
 
 **Must be available BEFORE this node starts:**
 - Input, Camera & Accessibility (this node calls/depends on it via Semantic Input Frame v1 (dependency))
-- Reusable Level & Asset Kit (this node calls/depends on it via Approved Kit Entry v1 (dependency))
+- Reusable Level & Asset Kit (this node calls/depends on it via Approved Kit Entry v2 (dependency))
 
 **Depends on THIS node being available:**
 - Drift Fleet Encounters (initiates Hero Motion and Action Snapshot v1 against this node (dependency))
@@ -699,6 +774,7 @@ Startup/initialization order based on edge directions and interaction patterns.
 | `core/rendering/hero_backpack.gd.uid` | config | --- | draft |
 | `core/controller/player_intent.gd` | source | --- | draft |
 | `core/rendering/hero_animator.gd` | source | --- | draft |
-| `test/core/rendering/test_hero_animator.gd` | test-plan | --- | draft |
+| `test/core/rendering/test_hero_animator.gd` | source | gdscript | draft |
+| `.nodespec/tests/req-002.tests.md` - Test plan for requirement: Expressive, smooth axolotl movement and animation | test-plan | markdown | draft |
 | `core/rendering/hero_footprint.gdshader.uid` | config | --- | draft |
 | `core/rendering/hero_backpack.gd` | source | --- | draft |

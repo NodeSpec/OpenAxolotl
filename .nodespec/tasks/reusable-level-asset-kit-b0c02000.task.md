@@ -19,8 +19,13 @@ None recorded for this node. Standing conditions the build must honour (security
 
 ## Implementation Context
 
-<!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
+
+Curate assets, core/rendering shared surfaces, core/audio and Blender tooling into approved reusable entries. Shared character source art belongs here; animation behavior belongs to hero/enemies. Keep asset_inbox and reference art as unapproved source/reference until redistribution rights and production suitability are recorded. Maintain scale, axes, bounds, sockets, rig requirements and low-friction collision profiles separate from visual detail. Keep textures, underwater depth gradients and material quality comparable to the lagoon. Approve one representative decorated section before repeating it across the route. Binary GLBs, audio/textures and .res files use lossless Git LFS; pointer URLs are storage metadata, not runtime network dependencies.
+
+This document describes planned work. All completion boxes remain open until current evidence or recorded human approval is attached. Keep the existing task keys and criterion identities. Shared payload schemas are normative even where generic dependency guidance describes only wiring.
+
+Curation integration: own the reusable kit's resource metadata and approved-entry ingestion boundary. Curated Review & Release supplies the owner-authorized Contribution Review Decision; accept reusable_asset scope for an asset/character only after identity, version, content and dependency checks. An approved entry never approves an assembled level. Preserve the existing art, animation, collision and representative-section quality gates.
 
 ## Implementation Tasks
 
@@ -29,44 +34,82 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
   Create the source layout, build files, and test harness this node's working code lives in.
   Start from the catalog's suggested structure: `scripts/main.gd`, `scenes/main.tscn`, `project.godot`, `export_presets.cfg`.
-- [ ] **T2 — Expose the interface Versioned World Runtime API consumes, per Contract "Approved Kit Entry v1" (dependency).** <!-- t:a316d3e6 -->
+  - [ ] Inventory the current bound implementation including `core/rendering/terrain_surface.gdshader`, `core/rendering/terrain/forest_earth.tres`, `tools/blender/build_explorer_backpack.py`, `core/rendering/terrain/coral_shelf_stone.tres`; record each retained component, migration gap and owning dependency before changing files.
+  - [ ] Use the existing repository/project and test harness; adapt the current component in place rather than creating a parallel scaffold.
+  - [ ] Inventory reusable assets and distinguish gameplay hulls from decorative geometry.
+  - [ ] Record a baseline fixture and observable behavior for this component at the pinned gameplay commit; keep historical results separate from fresh proof.
+- [ ] **T2 — Expose the interface Versioned World Runtime API consumes, per Contract "Approved Kit Entry v2" (dependency).** <!-- t:aa37f339 -->
   Record the endpoint/identifiers Versioned World Runtime API needs in this node's config artifacts — coordinate with Versioned World Runtime API.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T3 — Expose the interface Hero Motion & Animation consumes, per Contract "Approved Kit Entry v1" (dependency).** <!-- t:6e56a29f -->
+  - [ ] Resolve immutable Approved Kit Entry v2 identities, versions, content hashes and dependency manifests; add an explicit migration/rejection path for v1 rather than silently accepting it as approved.
+  - [ ] Use fixtures for approved, missing, wrong-scope, changed and withdrawn entries; retain existing collision/rig/material behavior and make incompatibility actionable at the consumer boundary.
+- [ ] **T3 — Expose the interface Hero Motion & Animation consumes, per Contract "Approved Kit Entry v2" (dependency).** <!-- t:2553a350 -->
   Record the endpoint/identifiers Hero Motion & Animation needs in this node's config artifacts — coordinate with Hero Motion & Animation.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T4 — Expose the interface Official Adventure: Lagoon & Living Cascade consumes, per Contract "Approved Kit Entry v1" (dependency).** <!-- t:dd472da1 -->
+  - [ ] Resolve immutable Approved Kit Entry v2 identities, versions, content hashes and dependency manifests; add an explicit migration/rejection path for v1 rather than silently accepting it as approved.
+  - [ ] Use fixtures for approved, missing, wrong-scope, changed and withdrawn entries; retain existing collision/rig/material behavior and make incompatibility actionable at the consumer boundary.
+- [ ] **T4 — Expose the interface Official Adventure: Lagoon & Living Cascade consumes, per Contract "Approved Kit Entry v2" (dependency).** <!-- t:7688776e -->
   Record the endpoint/identifiers Official Adventure: Lagoon & Living Cascade needs in this node's config artifacts — coordinate with Official Adventure: Lagoon & Living Cascade.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T5 — Expose the interface Family Workshop & Starter consumes, per Contract "Approved Kit Entry v1" (dependency).** <!-- t:91979131 -->
+  - [ ] Resolve immutable Approved Kit Entry v2 identities, versions, content hashes and dependency manifests; add an explicit migration/rejection path for v1 rather than silently accepting it as approved.
+  - [ ] Use fixtures for approved, missing, wrong-scope, changed and withdrawn entries; retain existing collision/rig/material behavior and make incompatibility actionable at the consumer boundary.
+- [ ] **T5 — Expose the interface Family Workshop & Starter consumes, per Contract "Approved Kit Entry v2" (dependency).** <!-- t:2fdf24fe -->
   Record the endpoint/identifiers Family Workshop & Starter needs in this node's config artifacts — coordinate with Family Workshop & Starter.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T6 — Expose the interface Content Export & Conformance consumes, per Contract "Approved Kit Entry v1" (dependency).** <!-- t:3772a3ad -->
+  - [ ] Resolve immutable Approved Kit Entry v2 identities, versions, content hashes and dependency manifests; add an explicit migration/rejection path for v1 rather than silently accepting it as approved.
+  - [ ] Use fixtures for approved, missing, wrong-scope, changed and withdrawn entries; retain existing collision/rig/material behavior and make incompatibility actionable at the consumer boundary.
+- [ ] **T6 — Expose the interface Content Export & Conformance consumes, per Contract "Approved Kit Entry v2" (dependency).** <!-- t:a9c52afa -->
   Record the endpoint/identifiers Content Export & Conformance needs in this node's config artifacts — coordinate with Content Export & Conformance.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T7 — Implement: "Each catalog entry has a stable ID/version, supported parameters, required dependencies, habitat/collision rules and rights/provenance metadata." (REQ-009).** <!-- t:d32fc35b -->
+  - [ ] Resolve immutable Approved Kit Entry v2 identities, versions, content hashes and dependency manifests; add an explicit migration/rejection path for v1 rather than silently accepting it as approved.
+  - [ ] Use fixtures for approved, missing, wrong-scope, changed and withdrawn entries; retain existing collision/rig/material behavior and make incompatibility actionable at the consumer boundary.
+- [ ] **T7 — Expose the interface Curated Review & Release consumes, per Contract "Contribution Review Decision v1" (custom).** <!-- t:089b97a1 -->
+  Record the endpoint/identifiers Curated Review & Release needs in this node's config artifacts — coordinate with Curated Review & Release.
+  Build to the contract schema EXACTLY (see Interface Contracts).
+  - [ ] Implement the reusable kit ingestion boundary for Contribution Review Decision v1 supplied by Curated Review & Release; match reusable_asset scope, asset/character identity/version, content digest and pinned dependencies before inclusion.
+  - [ ] Reject mismatched or withdrawn decisions while preserving the last valid kit entry; expose approved metadata without private reviewer discussion or child personal information.
+- [ ] **T8 — Implement: "Each catalog entry has a stable ID/version, supported parameters, required dependencies, habitat/collision rules and rights/provenance metadata. Inclusion in the official creator kit requires an owner-authorized reusable-asset or character approval tied to its content digest and pinned dependencies; an adventure approval cannot substitute for it." (REQ-009).** <!-- t:12be3429 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-009 "Each catalog entry has a stable ID/version, supported parameters, required dependencies, habitat/collision rules and rights/provenance metadata." — possible coordination point: Contract "Approved Kit Entry v1" (dependency) from Versioned World Runtime API (keyword signal only)
-- [ ] **T8 — Implement: "Gameplay prefabs ship with appropriate collision, interaction volumes and bounded behavior; decorative motion cannot move gameplay collision." (REQ-009).** <!-- t:efe3ed71 -->
+  ↳ serves: REQ-009 "Each catalog entry has a stable ID/version, supported parameters, required dependencies, habitat/collision rules and rights/provenance metadata. Inclusion in the official creator kit requires an owner-authorized reusable-asset or character approval tied to its content digest and pinned dependencies; an adventure approval cannot substitute for it." — possible coordination point: Contract "Approved Kit Entry v2" (dependency) from Official Adventure: Lagoon & Living Cascade (keyword signal only)
+  - [ ] Implement the kit inclusion gate against the exact reusable approval receipt and pinned resource metadata; preserve independent material, collision, rig and rights validation.
+  - [ ] Prepare the following binding scenario: Given asset and character entries with valid rights metadata but missing, wrong-scope, mismatched-digest or matching reusable approvals, when the Reusable Level & Asset Kit publication gate resolves each entry and its dependency pins, then only the matching owner-authorized reusable approval permits inclusion and a playable-level approval cannot substitute.
+  - [ ] Implement the publication/validation state transition and run the scenario through the public interface; report fresh evidence only after execution.
+- [ ] **T9 — Implement: "Gameplay prefabs ship with appropriate collision, interaction volumes and bounded behavior; decorative motion cannot move gameplay collision." (REQ-009).** <!-- t:efe3ed71 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-009 "Gameplay prefabs ship with appropriate collision, interaction volumes and bounded behavior; decorative motion cannot move gameplay collision." — possible coordination point: Contract "Approved Kit Entry v1" (dependency) from Hero Motion & Animation (keyword signal only)
-- [ ] **T9 — Implement: "Land surfaces, shores, grass, rock, underwater depth gradients, waterfall origins, hero and enemies meet the starting-lagoon visual reference at gameplay distance without stretched pixelated textures or distracting repetition." (REQ-009).** <!-- t:a64aeb36 -->
+  ↳ serves: REQ-009 "Gameplay prefabs ship with appropriate collision, interaction volumes and bounded behavior; decorative motion cannot move gameplay collision." — possible coordination point: Contract "Approved Kit Entry v2" (dependency) from Hero Motion & Animation (keyword signal only)
+  - [ ] Implement this criterion within the existing owned component and public contracts, using one approved kit entry and one unapproved/missing-license or incompatible entry, placed in the representative decorated land/water section as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
+- [ ] **T10 — Implement: "Land surfaces, shores, grass, rock, underwater depth gradients, waterfall origins, hero and enemies meet the starting-lagoon visual reference at gameplay distance without stretched pixelated textures or distracting repetition." (REQ-009).** <!-- t:a64aeb36 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-009 "Land surfaces, shores, grass, rock, underwater depth gradients, waterfall origins, hero and enemies meet the starting-lagoon visual reference at gameplay distance without stretched pixelated textures or distracting repetition." — possible coordination point: Contract "Approved Kit Entry v1" (dependency) from Hero Motion & Animation (keyword signal only)
-- [ ] **T10 — Implement: "Art and sound review checks action readability, sensible material scale, adjustable low-level background music and a distinct dance cue; asset and device budgets are recorded separately." (REQ-009).** <!-- t:0adcb690 -->
+  ↳ serves: REQ-009 "Land surfaces, shores, grass, rock, underwater depth gradients, waterfall origins, hero and enemies meet the starting-lagoon visual reference at gameplay distance without stretched pixelated textures or distracting repetition." — possible coordination point: Contract "Approved Kit Entry v2" (dependency) from Hero Motion & Animation (keyword signal only)
+  - [ ] Prepare a repeatable human-review setup for one approved kit entry and one unapproved/missing-license or incompatible entry, placed in the representative decorated land/water section; record controls, camera, build and relevant device/settings.
+  - [ ] Capture the evidence and record the review decision against this exact criterion; name corrective work for failures and leave approval pending until the user confirms.
+- [ ] **T11 — Implement: "Art and sound review checks action readability, sensible material scale, adjustable low-level background music and a distinct dance cue; asset and device budgets are recorded separately." (REQ-009).** <!-- t:0adcb690 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-009 "Art and sound review checks action readability, sensible material scale, adjustable low-level background music and a distinct dance cue; asset and device budgets are recorded separately."
-- [ ] **T11 — Implement: "The kit records mesh units, pivot/forward conventions, visual bounds, gameplay hulls, material scale and animation sockets; importing a revised model fails visibly when its required rig/socket contract is incompatible." (REQ-009).** <!-- t:a5a67e34 -->
+  ↳ serves: REQ-009 "Art and sound review checks action readability, sensible material scale, adjustable low-level background music and a distinct dance cue; asset and device budgets are recorded separately." — possible coordination point: Contract "Contribution Review Decision v1" (custom) from Curated Review & Release (keyword signal only)
+  - [ ] Prepare a repeatable human-review setup for one approved kit entry and one unapproved/missing-license or incompatible entry, placed in the representative decorated land/water section; record controls, camera, build and relevant device/settings.
+  - [ ] Capture the evidence and record the review decision against this exact criterion; name corrective work for failures and leave approval pending until the user confirms.
+- [ ] **T12 — Implement: "The kit records mesh units, pivot/forward conventions, visual bounds, gameplay hulls, material scale and animation sockets; importing a revised model fails visibly when its required rig/socket contract is incompatible." (REQ-009).** <!-- t:a5a67e34 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-009 "The kit records mesh units, pivot/forward conventions, visual bounds, gameplay hulls, material scale and animation sockets; importing a revised model fails visibly when its required rig/socket contract is incompatible." — possible coordination point: Contract "Approved Kit Entry v1" (dependency) from Hero Motion & Animation (keyword signal only)
-- [ ] **T12 — Implement: "Approve one representative shore-to-underwater section with final lighting, material blends, silhouette variety and collision before extending the same treatment across all sections." (REQ-009).** <!-- t:e5a6a803 -->
+  ↳ serves: REQ-009 "The kit records mesh units, pivot/forward conventions, visual bounds, gameplay hulls, material scale and animation sockets; importing a revised model fails visibly when its required rig/socket contract is incompatible." — possible coordination point: Contract "Approved Kit Entry v2" (dependency) from Hero Motion & Animation (keyword signal only)
+  - [ ] Implement this criterion within the existing owned component and public contracts, using one approved kit entry and one unapproved/missing-license or incompatible entry, placed in the representative decorated land/water section as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
+- [ ] **T13 — Implement: "Approve one representative shore-to-underwater section with final lighting, material blends, silhouette variety and collision before extending the same treatment across all sections." (REQ-009).** <!-- t:e5a6a803 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-009 "Approve one representative shore-to-underwater section with final lighting, material blends, silhouette variety and collision before extending the same treatment across all sections."
-- [ ] **T13 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
+  - [ ] Prepare a repeatable human-review setup for one approved kit entry and one unapproved/missing-license or incompatible entry, placed in the representative decorated land/water section; record controls, camera, build and relevant device/settings.
+  - [ ] Capture the evidence and record the review decision against this exact criterion; name corrective work for failures and leave approval pending until the user confirms.
+- [ ] **T14 — Implement: "Approve a matched gameplay-camera lighting review of sunlit shallows, vegetation/root shade, cooler deep pools and sheltered root chambers: underwater light patterns affect appropriate surfaces and Skippy, shadows/caustics respect enclosure, vegetation preserves sightlines and collision clearance, and restoration improves water/plant/light presentation without obscuring routes or attacks." (REQ-009).** <!-- t:f410c049 -->
+  No interface contract maps to this criterion — it is this node's internal responsibility.
+  ↳ serves: REQ-009 "Approve a matched gameplay-camera lighting review of sunlit shallows, vegetation/root shade, cooler deep pools and sheltered root chambers: underwater light patterns affect appropriate surfaces and Skippy, shadows/caustics respect enclosure, vegetation preserves sightlines and collision clearance, and restoration improves water/plant/light presentation without obscuring routes or attacks." — possible coordination point: Contract "Contribution Review Decision v1" (custom) from Curated Review & Release (keyword signal only)
+- [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
+  - [ ] Run the component's current automated binding scenarios at the pushed implementation commit and report each result against its exact criterion; leave skipped/stale checks open.
+  - [ ] Collect the required human review and its evidence separately; do not auto-tick manual criteria or equate a headless pass with visual quality.
+  - [ ] Check every work-order step, dependency contract and remaining migration gap before declaring completion; hand off unresolved items with owner and reproduction.
 
 **Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Existing Implementation, Technology Guidance, and node context as your references. Write each work order's steps under its task line as indented checkbox lines (`  - [ ] <step>`), one action each, naming the file, setting or interface it changes, and send them with update_artifact (propose_patches, passing base_sequence) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact; the steps stay with their work order when this doc regenerates. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
 
@@ -83,6 +126,7 @@ The sentences of the project vision that the outcomes behind this node's require
 
 - With a parent, remix a small playable starter using the shared asset/gameplay kit, Codex and NodeSpec, previewing and iterating in Godot.
 - A reusable Level Kit packages approved assets with materials, collision and supported gameplay behavior.
+- Submitted assets and characters are reviewed for reuse in the creator kit separately from complete playable levels; an approved asset never grants automatic approval to a level assembled from it.
 
 The whole vision is one read away: get_outcome_board lists every sentence with its id.
 
@@ -90,26 +134,28 @@ The whole vision is one read away: get_outcome_board lists every sentence with i
 
 ### REQ-009: A reusable gameplay kit with coherent presentation
 Category: functional | Status: pending
-Give creators usable gameplay components rather than isolated meshes: terrain, water, enemies, checkpoints, pickups, gates, materials, lighting and audio with documented parameters.
+Give creators polished reusable gameplay components with reviewed art, collision, animation and documented parameters. The owner-curated kit includes separately approved assets and characters; acceptance into the kit does not publish a level.
 
 **Acceptance criteria — your task boxes:**
-- [ ] Each catalog entry has a stable ID/version, supported parameters, required dependencies, habitat/collision rules and rights/provenance metadata.
-  → covered by Task T7
-- [ ] Gameplay prefabs ship with appropriate collision, interaction volumes and bounded behavior; decorative motion cannot move gameplay collision.
+- [ ] Each catalog entry has a stable ID/version, supported parameters, required dependencies, habitat/collision rules and rights/provenance metadata. Inclusion in the official creator kit requires an owner-authorized reusable-asset or character approval tied to its content digest and pinned dependencies; an adventure approval cannot substitute for it.
   → covered by Task T8
-- [ ] Land surfaces, shores, grass, rock, underwater depth gradients, waterfall origins, hero and enemies meet the starting-lagoon visual reference at gameplay distance without stretched pixelated textures or distracting repetition. (manual)
+- [ ] Gameplay prefabs ship with appropriate collision, interaction volumes and bounded behavior; decorative motion cannot move gameplay collision.
   → covered by Task T9
-- [ ] Art and sound review checks action readability, sensible material scale, adjustable low-level background music and a distinct dance cue; asset and device budgets are recorded separately. (manual)
+- [ ] Land surfaces, shores, grass, rock, underwater depth gradients, waterfall origins, hero and enemies meet the starting-lagoon visual reference at gameplay distance without stretched pixelated textures or distracting repetition. (manual)
   → covered by Task T10
-- [ ] The kit records mesh units, pivot/forward conventions, visual bounds, gameplay hulls, material scale and animation sockets; importing a revised model fails visibly when its required rig/socket contract is incompatible.
+- [ ] Art and sound review checks action readability, sensible material scale, adjustable low-level background music and a distinct dance cue; asset and device budgets are recorded separately. (manual)
   → covered by Task T11
-- [ ] Approve one representative shore-to-underwater section with final lighting, material blends, silhouette variety and collision before extending the same treatment across all sections. (manual)
+- [ ] The kit records mesh units, pivot/forward conventions, visual bounds, gameplay hulls, material scale and animation sockets; importing a revised model fails visibly when its required rig/socket contract is incompatible.
   → covered by Task T12
+- [ ] Approve one representative shore-to-underwater section with final lighting, material blends, silhouette variety and collision before extending the same treatment across all sections. (manual)
+  → covered by Task T13
+- [ ] Approve a matched gameplay-camera lighting review of sunlit shallows, vegetation/root shade, cooler deep pools and sheltered root chambers: underwater light patterns affect appropriate surfaces and Skippy, shadows/caustics respect enclosure, vegetation preserves sightlines and collision clearance, and restoration improves water/plant/light presentation without obscuring routes or attacks. (manual)
+  → covered by Task T14
 
 ## Interface Contracts
 
 ### RECEIVES FROM: Versioned World Runtime API (shared-library)
-- **Contract:** Approved Kit Entry v1
+- **Contract:** Approved Kit Entry v2
 - **Protocol:** dependency
 - **Spec Format:** json_schema
 - **Their Technology:** godot
@@ -118,7 +164,7 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
 ```
 {
   "type": "object",
-  "title": "Approved Kit Entry v1",
+  "title": "Approved Kit Entry v2",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "required": [
     "schemaVersion",
@@ -135,7 +181,10 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
     "version",
     "dependencies",
     "habitats",
-    "forwardAxis"
+    "forwardAxis",
+    "contentSha256",
+    "reviewId",
+    "dependencyManifestSha256"
   ],
   "properties": {
     "kind": {
@@ -203,6 +252,10 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
         ]
       }
     },
+    "reviewId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_.:-]+$"
+    },
     "resourceId": {
       "type": "string",
       "pattern": "^[a-zA-Z0-9_.:-]+$"
@@ -220,16 +273,40 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
     "dependencies": {
       "type": "array",
       "items": {
-        "type": "string",
-        "pattern": "^[a-zA-Z0-9_.:-]+$"
-      }
+        "type": "object",
+        "required": [
+          "entryId",
+          "version",
+          "contentSha256"
+        ],
+        "properties": {
+          "entryId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.:-]+$"
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contentSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "contentSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     },
     "metersPerUnit": {
       "type": "number",
       "exclusiveMinimum": 0
     },
     "schemaVersion": {
-      "const": 1
+      "const": 2
     },
     "licenseRecordId": {
       "type": "string",
@@ -260,15 +337,19 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
         }
       },
       "additionalProperties": false
+    },
+    "dependencyManifestSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     }
   },
-  "description": "Every entry resolves to pinned approved resources and a typed configuration schema. Numeric parameters must be bounded in that schema. Collision geometry is authored for traversal, separate from decorative detail; rig joint/socket requirements are explicit in asset metadata. Unknown entries fail export.",
+  "description": "Every entry resolves to pinned approved resources and a typed configuration schema. Numeric parameters must be bounded in that schema. Collision geometry is authored for traversal, separate from decorative detail; rig joint/socket requirements are explicit in asset metadata. Unknown entries fail export. Official kit publication requires a matching approved Contribution Review Decision v1 with reusable_asset scope, subjectKind asset or character, matching identity/version/content digest and dependency-manifest digest, and current owner authorization. dependencies pins exact versions/digests; stable IDs alone are insufficient. The content digest covers the complete resource manifest and reviewed public metadata, excluding the approval receipt itself to avoid a circular hash. Kit approval never approves an assembled level. This is a v2 target contract; v1 input is not silently treated as approved.",
   "additionalProperties": false
 }
 ```
 
 ### RECEIVES FROM: Hero Motion & Animation (shared-library)
-- **Contract:** Approved Kit Entry v1
+- **Contract:** Approved Kit Entry v2
 - **Protocol:** dependency
 - **Spec Format:** json_schema
 - **Their Technology:** godot
@@ -277,7 +358,7 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
 ```
 {
   "type": "object",
-  "title": "Approved Kit Entry v1",
+  "title": "Approved Kit Entry v2",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "required": [
     "schemaVersion",
@@ -294,7 +375,10 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
     "version",
     "dependencies",
     "habitats",
-    "forwardAxis"
+    "forwardAxis",
+    "contentSha256",
+    "reviewId",
+    "dependencyManifestSha256"
   ],
   "properties": {
     "kind": {
@@ -362,6 +446,10 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
         ]
       }
     },
+    "reviewId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_.:-]+$"
+    },
     "resourceId": {
       "type": "string",
       "pattern": "^[a-zA-Z0-9_.:-]+$"
@@ -379,16 +467,40 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
     "dependencies": {
       "type": "array",
       "items": {
-        "type": "string",
-        "pattern": "^[a-zA-Z0-9_.:-]+$"
-      }
+        "type": "object",
+        "required": [
+          "entryId",
+          "version",
+          "contentSha256"
+        ],
+        "properties": {
+          "entryId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.:-]+$"
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contentSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "contentSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     },
     "metersPerUnit": {
       "type": "number",
       "exclusiveMinimum": 0
     },
     "schemaVersion": {
-      "const": 1
+      "const": 2
     },
     "licenseRecordId": {
       "type": "string",
@@ -419,15 +531,19 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
         }
       },
       "additionalProperties": false
+    },
+    "dependencyManifestSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     }
   },
-  "description": "Every entry resolves to pinned approved resources and a typed configuration schema. Numeric parameters must be bounded in that schema. Collision geometry is authored for traversal, separate from decorative detail; rig joint/socket requirements are explicit in asset metadata. Unknown entries fail export.",
+  "description": "Every entry resolves to pinned approved resources and a typed configuration schema. Numeric parameters must be bounded in that schema. Collision geometry is authored for traversal, separate from decorative detail; rig joint/socket requirements are explicit in asset metadata. Unknown entries fail export. Official kit publication requires a matching approved Contribution Review Decision v1 with reusable_asset scope, subjectKind asset or character, matching identity/version/content digest and dependency-manifest digest, and current owner authorization. dependencies pins exact versions/digests; stable IDs alone are insufficient. The content digest covers the complete resource manifest and reviewed public metadata, excluding the approval receipt itself to avoid a circular hash. Kit approval never approves an assembled level. This is a v2 target contract; v1 input is not silently treated as approved.",
   "additionalProperties": false
 }
 ```
 
 ### RECEIVES FROM: Official Adventure: Lagoon & Living Cascade (shared-library)
-- **Contract:** Approved Kit Entry v1
+- **Contract:** Approved Kit Entry v2
 - **Protocol:** dependency
 - **Spec Format:** json_schema
 - **Their Technology:** godot
@@ -436,7 +552,7 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
 ```
 {
   "type": "object",
-  "title": "Approved Kit Entry v1",
+  "title": "Approved Kit Entry v2",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "required": [
     "schemaVersion",
@@ -453,7 +569,10 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
     "version",
     "dependencies",
     "habitats",
-    "forwardAxis"
+    "forwardAxis",
+    "contentSha256",
+    "reviewId",
+    "dependencyManifestSha256"
   ],
   "properties": {
     "kind": {
@@ -521,6 +640,10 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
         ]
       }
     },
+    "reviewId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_.:-]+$"
+    },
     "resourceId": {
       "type": "string",
       "pattern": "^[a-zA-Z0-9_.:-]+$"
@@ -538,16 +661,40 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
     "dependencies": {
       "type": "array",
       "items": {
-        "type": "string",
-        "pattern": "^[a-zA-Z0-9_.:-]+$"
-      }
+        "type": "object",
+        "required": [
+          "entryId",
+          "version",
+          "contentSha256"
+        ],
+        "properties": {
+          "entryId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.:-]+$"
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contentSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "contentSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     },
     "metersPerUnit": {
       "type": "number",
       "exclusiveMinimum": 0
     },
     "schemaVersion": {
-      "const": 1
+      "const": 2
     },
     "licenseRecordId": {
       "type": "string",
@@ -578,15 +725,19 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
         }
       },
       "additionalProperties": false
+    },
+    "dependencyManifestSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     }
   },
-  "description": "Every entry resolves to pinned approved resources and a typed configuration schema. Numeric parameters must be bounded in that schema. Collision geometry is authored for traversal, separate from decorative detail; rig joint/socket requirements are explicit in asset metadata. Unknown entries fail export.",
+  "description": "Every entry resolves to pinned approved resources and a typed configuration schema. Numeric parameters must be bounded in that schema. Collision geometry is authored for traversal, separate from decorative detail; rig joint/socket requirements are explicit in asset metadata. Unknown entries fail export. Official kit publication requires a matching approved Contribution Review Decision v1 with reusable_asset scope, subjectKind asset or character, matching identity/version/content digest and dependency-manifest digest, and current owner authorization. dependencies pins exact versions/digests; stable IDs alone are insufficient. The content digest covers the complete resource manifest and reviewed public metadata, excluding the approval receipt itself to avoid a circular hash. Kit approval never approves an assembled level. This is a v2 target contract; v1 input is not silently treated as approved.",
   "additionalProperties": false
 }
 ```
 
 ### RECEIVES FROM: Family Workshop & Starter (cli-tool)
-- **Contract:** Approved Kit Entry v1
+- **Contract:** Approved Kit Entry v2
 - **Protocol:** dependency
 - **Spec Format:** json_schema
 - **Their Technology:** python-backend
@@ -595,7 +746,7 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
 ```
 {
   "type": "object",
-  "title": "Approved Kit Entry v1",
+  "title": "Approved Kit Entry v2",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "required": [
     "schemaVersion",
@@ -612,7 +763,10 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
     "version",
     "dependencies",
     "habitats",
-    "forwardAxis"
+    "forwardAxis",
+    "contentSha256",
+    "reviewId",
+    "dependencyManifestSha256"
   ],
   "properties": {
     "kind": {
@@ -680,6 +834,10 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
         ]
       }
     },
+    "reviewId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_.:-]+$"
+    },
     "resourceId": {
       "type": "string",
       "pattern": "^[a-zA-Z0-9_.:-]+$"
@@ -697,16 +855,40 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
     "dependencies": {
       "type": "array",
       "items": {
-        "type": "string",
-        "pattern": "^[a-zA-Z0-9_.:-]+$"
-      }
+        "type": "object",
+        "required": [
+          "entryId",
+          "version",
+          "contentSha256"
+        ],
+        "properties": {
+          "entryId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.:-]+$"
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contentSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "contentSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     },
     "metersPerUnit": {
       "type": "number",
       "exclusiveMinimum": 0
     },
     "schemaVersion": {
-      "const": 1
+      "const": 2
     },
     "licenseRecordId": {
       "type": "string",
@@ -737,15 +919,19 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
         }
       },
       "additionalProperties": false
+    },
+    "dependencyManifestSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     }
   },
-  "description": "Every entry resolves to pinned approved resources and a typed configuration schema. Numeric parameters must be bounded in that schema. Collision geometry is authored for traversal, separate from decorative detail; rig joint/socket requirements are explicit in asset metadata. Unknown entries fail export.",
+  "description": "Every entry resolves to pinned approved resources and a typed configuration schema. Numeric parameters must be bounded in that schema. Collision geometry is authored for traversal, separate from decorative detail; rig joint/socket requirements are explicit in asset metadata. Unknown entries fail export. Official kit publication requires a matching approved Contribution Review Decision v1 with reusable_asset scope, subjectKind asset or character, matching identity/version/content digest and dependency-manifest digest, and current owner authorization. dependencies pins exact versions/digests; stable IDs alone are insufficient. The content digest covers the complete resource manifest and reviewed public metadata, excluding the approval receipt itself to avoid a circular hash. Kit approval never approves an assembled level. This is a v2 target contract; v1 input is not silently treated as approved.",
   "additionalProperties": false
 }
 ```
 
 ### RECEIVES FROM: Content Export & Conformance (cli-tool)
-- **Contract:** Approved Kit Entry v1
+- **Contract:** Approved Kit Entry v2
 - **Protocol:** dependency
 - **Spec Format:** json_schema
 - **Their Technology:** python-backend
@@ -754,7 +940,7 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
 ```
 {
   "type": "object",
-  "title": "Approved Kit Entry v1",
+  "title": "Approved Kit Entry v2",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "required": [
     "schemaVersion",
@@ -771,7 +957,10 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
     "version",
     "dependencies",
     "habitats",
-    "forwardAxis"
+    "forwardAxis",
+    "contentSha256",
+    "reviewId",
+    "dependencyManifestSha256"
   ],
   "properties": {
     "kind": {
@@ -839,6 +1028,10 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
         ]
       }
     },
+    "reviewId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_.:-]+$"
+    },
     "resourceId": {
       "type": "string",
       "pattern": "^[a-zA-Z0-9_.:-]+$"
@@ -856,16 +1049,40 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
     "dependencies": {
       "type": "array",
       "items": {
-        "type": "string",
-        "pattern": "^[a-zA-Z0-9_.:-]+$"
-      }
+        "type": "object",
+        "required": [
+          "entryId",
+          "version",
+          "contentSha256"
+        ],
+        "properties": {
+          "entryId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.:-]+$"
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contentSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "contentSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     },
     "metersPerUnit": {
       "type": "number",
       "exclusiveMinimum": 0
     },
     "schemaVersion": {
-      "const": 1
+      "const": 2
     },
     "licenseRecordId": {
       "type": "string",
@@ -896,9 +1113,147 @@ Give creators usable gameplay components rather than isolated meshes: terrain, w
         }
       },
       "additionalProperties": false
+    },
+    "dependencyManifestSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     }
   },
-  "description": "Every entry resolves to pinned approved resources and a typed configuration schema. Numeric parameters must be bounded in that schema. Collision geometry is authored for traversal, separate from decorative detail; rig joint/socket requirements are explicit in asset metadata. Unknown entries fail export.",
+  "description": "Every entry resolves to pinned approved resources and a typed configuration schema. Numeric parameters must be bounded in that schema. Collision geometry is authored for traversal, separate from decorative detail; rig joint/socket requirements are explicit in asset metadata. Unknown entries fail export. Official kit publication requires a matching approved Contribution Review Decision v1 with reusable_asset scope, subjectKind asset or character, matching identity/version/content digest and dependency-manifest digest, and current owner authorization. dependencies pins exact versions/digests; stable IDs alone are insufficient. The content digest covers the complete resource manifest and reviewed public metadata, excluding the approval receipt itself to avoid a circular hash. Kit approval never approves an assembled level. This is a v2 target contract; v1 input is not silently treated as approved.",
+  "additionalProperties": false
+}
+```
+
+### RECEIVES FROM: Curated Review & Release (cli-tool)
+- **Contract:** Contribution Review Decision v1
+- **Protocol:** custom
+- **Spec Format:** json_schema
+- **Their Technology:** python-backend
+
+**Schema:**
+```
+{
+  "type": "object",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "subjectKind": {
+            "const": "level"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "scope": {
+            "const": "reusable_asset"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "scope": {
+            "const": "playable_level"
+          }
+        }
+      }
+    }
+  ],
+  "title": "Contribution Review Decision v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "required": [
+    "schemaVersion",
+    "reviewId",
+    "subjectKind",
+    "subjectId",
+    "subjectVersion",
+    "contentSha256",
+    "dependencyManifestSha256",
+    "scope",
+    "status",
+    "reviewerId",
+    "authorityRecordId",
+    "decidedAt",
+    "reason",
+    "evidenceIds",
+    "rightsRecordId"
+  ],
+  "properties": {
+    "scope": {
+      "enum": [
+        "reusable_asset",
+        "playable_level"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "approved",
+        "changes_requested",
+        "rejected",
+        "withdrawn"
+      ]
+    },
+    "reviewId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_.:-]+$"
+    },
+    "decidedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "subjectId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_.:-]+$"
+    },
+    "reviewerId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_.:-]+$"
+    },
+    "evidenceIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9_.:-]+$"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "subjectKind": {
+      "enum": [
+        "asset",
+        "character",
+        "level"
+      ]
+    },
+    "contentSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "rightsRecordId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_.:-]+$"
+    },
+    "subjectVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorityRecordId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_.:-]+$"
+    },
+    "dependencyManifestSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "description": "Owner-controlled audit receipt. Validate reviewerId against the owner/delegation authority record and its permitted scope at decision/publication time; strings asserting authority are not trusted proof. Approval requires passing conformance for the same immutable snapshot plus recorded human content/play/rights/performance review. Content includes reviewed public metadata and an immutable resource manifest; dependencyManifestSha256 uses the same canonical sorted pins as the package. Receipts are private review records; public releases expose only approved metadata and references, not child personal details or review discussion. Changed content/dependencies need a new review. Withdrawal records a new audited decision and enumerates dependent releases. This contract specifies planned behavior, not an implemented moderation service.",
   "additionalProperties": false
 }
 ```
@@ -912,11 +1267,12 @@ _Catalog guidance suppressed for this node (metadata.suppressCatalogGuidance) �
 Startup/initialization order based on edge directions and interaction patterns.
 
 **Depends on THIS node being available:**
-- Versioned World Runtime API (initiates Approved Kit Entry v1 against this node (dependency))
-- Hero Motion & Animation (initiates Approved Kit Entry v1 against this node (dependency))
-- Official Adventure: Lagoon & Living Cascade (initiates Approved Kit Entry v1 against this node (dependency))
-- Family Workshop & Starter (initiates Approved Kit Entry v1 against this node (dependency))
-- Content Export & Conformance (initiates Approved Kit Entry v1 against this node (dependency))
+- Versioned World Runtime API (initiates Approved Kit Entry v2 against this node (dependency))
+- Hero Motion & Animation (initiates Approved Kit Entry v2 against this node (dependency))
+- Official Adventure: Lagoon & Living Cascade (initiates Approved Kit Entry v2 against this node (dependency))
+- Family Workshop & Starter (initiates Approved Kit Entry v2 against this node (dependency))
+- Content Export & Conformance (initiates Approved Kit Entry v2 against this node (dependency))
+- Curated Review & Release (initiates Contribution Review Decision v1 against this node (custom))
 
 ## Existing Implementation
 
@@ -953,6 +1309,7 @@ Startup/initialization order based on edge directions and interaction patterns.
 | `assets/environment/cascade_reef_ledge/facade_color.png.import` | config | --- | draft |
 | `core/rendering/water_surface.gdshader.uid` | config | --- | draft |
 | `assets/audio/cascade/movement_hop.wav` | design | --- | draft |
+| `.nodespec/tests/req-009.tests.md` - Test plan for requirement: A reusable gameplay kit with coherent presentation | test-plan | markdown | draft |
 | `assets/audio/cascade/crayfish_pickup.wav` | design | --- | draft |
 | `assets/prop/hookline_rig_animated/hookline_rig_animated_normal.jpg` | design | --- | draft |
 | `core/rendering/world_lighting.gd.uid` | config | --- | draft |

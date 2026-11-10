@@ -19,8 +19,13 @@ None recorded for this node. Standing conditions the build must honour (security
 
 ## Implementation Context
 
-<!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
+
+Use hub/world_systems.gd, hub/world_loader.gd and contracts/level_contract.v1.json as migration input, not proof the target API exists. Separate trusted local script-bearing authoring from data-only downloadable content. Expose versioned checkpoint, collectible, restoration, encounter, save and finish services. Shared code must not own world coordinates or spawn lists. The shell composes services once, and levels use public interfaces rather than player-root writes/private imports. Consumer-to-provider dependency edges describe code wiring; the attached JSON schemas remain normative payload/data contracts despite generic catalog wording saying no payload expected. Preserve offline play while isolating catalog networking.
+
+This document describes planned work. All completion boxes remain open until current evidence or recorded human approval is attached. Keep the existing task keys and criterion identities. Shared payload schemas are normative even where generic dependency guidance describes only wiring.
+
+Curation integration: resolve world component IDs only through the declared kit version and the exact dependency pins of a validated package. Keep private-authoring tools separate from the runtime; this node does not own review decisions or publication.
 
 ## Implementation Tasks
 
@@ -29,46 +34,79 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
   Create the source layout, build files, and test harness this node's working code lives in.
   Start from the catalog's suggested structure: `scripts/main.gd`, `scenes/main.tscn`, `project.godot`, `export_presets.cfg`.
+  - [ ] Inventory the current bound implementation including `hub/world_systems.gd`, `test/hub/test_world_systems.gd`, `hub/hub_error.gd`, `hub/contract_validator.gd`; record each retained component, migration gap and owning dependency before changing files.
+  - [ ] Use the existing repository/project and test harness; adapt the current component in place rather than creating a parallel scaffold.
+  - [ ] Inventory existing level contract and identify breaking changes before implementation.
+  - [ ] Record a baseline fixture and observable behavior for this component at the pinned gameplay commit; keep historical results separate from fresh proof.
 - [ ] **T2 — Implement the integration with Hero Motion & Animation (godot) per Contract "Hero Motion and Action Snapshot v1" (dependency).** <!-- t:7e5f80fa -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
+  - [ ] Map the existing producer/consumer wiring for Hero Motion and Action Snapshot v1 to the connected component and its attached schema; document any adapter and version boundary without implementing the neighbor's internals.
+  - [ ] Exercise one conforming exchange and applicable missing/incompatible/reset case through that interface; use local fixtures during development and the real provider before final acceptance.
 - [ ] **T3 — Implement the integration with Drift Fleet Encounters (godot) per Contract "Declarative World Definition v1" (dependency).** <!-- t:e92f0a9f -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
+  - [ ] Map the existing producer/consumer wiring for Declarative World Definition v1 to the connected component and its attached schema; document any adapter and version boundary without implementing the neighbor's internals.
+  - [ ] Exercise one conforming exchange and applicable missing/incompatible/reset case through that interface; use local fixtures during development and the real provider before final acceptance.
 - [ ] **T4 — Implement the integration with Progress, Recovery & Rewards (godot) per Contract "Progress Snapshot v1" (dependency).** <!-- t:dc8702b0 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
-- [ ] **T5 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v1" (dependency).** <!-- t:8692c42f -->
+  - [ ] Map the existing producer/consumer wiring for Progress Snapshot v1 to the connected component and its attached schema; document any adapter and version boundary without implementing the neighbor's internals.
+  - [ ] Exercise one conforming exchange and applicable missing/incompatible/reset case through that interface; use local fixtures during development and the real provider before final acceptance.
+- [ ] **T5 — Implement the integration with Reusable Level & Asset Kit (godot) per Contract "Approved Kit Entry v2" (dependency).** <!-- t:4c52ade0 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
+  - [ ] Resolve immutable Approved Kit Entry v2 identities, versions, content hashes and dependency manifests; add an explicit migration/rejection path for v1 rather than silently accepting it as approved.
+  - [ ] Use fixtures for approved, missing, wrong-scope, changed and withdrawn entries; retain existing collision/rig/material behavior and make incompatibility actionable at the consumer boundary.
 - [ ] **T6 — Expose the interface Official Adventure: Lagoon & Living Cascade consumes, per Contract "Declarative World Definition v1" (dependency).** <!-- t:a99b59db -->
   Record the endpoint/identifiers Official Adventure: Lagoon & Living Cascade needs in this node's config artifacts — coordinate with Official Adventure: Lagoon & Living Cascade.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
+  - [ ] Map the existing producer/consumer wiring for Declarative World Definition v1 to the connected component and its attached schema; document any adapter and version boundary without implementing the neighbor's internals.
+  - [ ] Exercise one conforming exchange and applicable missing/incompatible/reset case through that interface; use local fixtures during development and the real provider before final acceptance.
 - [ ] **T7 — Expose the interface OpenAxolotl Game Shell consumes, per Contract "Declarative World Definition v1" (dependency).** <!-- t:2dc49412 -->
   Record the endpoint/identifiers OpenAxolotl Game Shell needs in this node's config artifacts — coordinate with OpenAxolotl Game Shell.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
+  - [ ] Map the existing producer/consumer wiring for Declarative World Definition v1 to the connected component and its attached schema; document any adapter and version boundary without implementing the neighbor's internals.
+  - [ ] Exercise one conforming exchange and applicable missing/incompatible/reset case through that interface; use local fixtures during development and the real provider before final acceptance.
 - [ ] **T8 — Expose the interface Content Export & Conformance consumes, per Contract "Declarative World Definition v1" (dependency).** <!-- t:120869ff -->
   Record the endpoint/identifiers Content Export & Conformance needs in this node's config artifacts — coordinate with Content Export & Conformance.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
+  - [ ] Map the existing producer/consumer wiring for Declarative World Definition v1 to the connected component and its attached schema; document any adapter and version boundary without implementing the neighbor's internals.
+  - [ ] Exercise one conforming exchange and applicable missing/incompatible/reset case through that interface; use local fixtures during development and the real provider before final acceptance.
 - [ ] **T9 — Implement: "Shared runtime modules contain no world-specific placement coordinates or world-owned spawn lists; each world owns its layout, objectives and placements." (REQ-008).** <!-- t:b899a4a1 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-008 "Shared runtime modules contain no world-specific placement coordinates or world-owned spawn lists; each world owns its layout, objectives and placements." — possible coordination point: Contract "Hero Motion and Action Snapshot v1" (dependency) to Hero Motion & Animation (keyword signal only)
+  - [ ] Implement this criterion within the existing owned component and public contracts, using a fixture world calling public services, a forbidden private import/root writer and trusted authoring versus data-only runtime loading as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T10 — Implement: "Levels access checkpoint, collectible, restoration, encounter and completion services only through the documented versioned public World API; static checks reject private cross-boundary access." (REQ-008).** <!-- t:6d27cca6 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-008 "Levels access checkpoint, collectible, restoration, encounter and completion services only through the documented versioned public World API; static checks reject private cross-boundary access." — possible coordination point: Contract "Hero Motion and Action Snapshot v1" (dependency) to Hero Motion & Animation (keyword signal only)
+  - [ ] Implement this criterion within the existing owned component and public contracts, using a fixture world calling public services, a forbidden private import/root writer and trusted authoring versus data-only runtime loading as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T11 — Implement: "The contract requires spawn, checkpoints, finish, controller/runtime compatibility and save integration, with explicit optional defaults and migration rules." (REQ-008).** <!-- t:48057c47 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-008 "The contract requires spawn, checkpoints, finish, controller/runtime compatibility and save integration, with explicit optional defaults and migration rules." — possible coordination point: Contract "Hero Motion and Action Snapshot v1" (dependency) to Hero Motion & Animation (keyword signal only)
+  - [ ] Implement this criterion within the existing owned component and public contracts, using a fixture world calling public services, a forbidden private import/root writer and trusted authoring versus data-only runtime loading as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T12 — Implement: "An ownership map assigns each source file to one primary component and documents cross-component contracts before implementation changes." (REQ-008).** <!-- t:a5e9eafa -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-008 "An ownership map assigns each source file to one primary component and documents cross-component contracts before implementation changes." — possible coordination point: Contract "Hero Motion and Action Snapshot v1" (dependency) to Hero Motion & Animation (keyword signal only)
+  - [ ] Prepare a repeatable human-review setup for a fixture world calling public services, a forbidden private import/root writer and trusted authoring versus data-only runtime loading; record controls, camera, build and relevant device/settings.
+  - [ ] Capture the evidence and record the review decision against this exact criterion; name corrective work for failures and leave approval pending until the user confirms.
 - [ ] **T13 — Implement: "A single runtime composition point wires shared services; level content never writes the player physics root, imports private runtime members or registers arbitrary scripts through the downloadable content path." (REQ-008).** <!-- t:37967156 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
-  ↳ serves: REQ-008 "A single runtime composition point wires shared services; level content never writes the player physics root, imports private runtime members or registers arbitrary scripts through the downloadable content path." — possible coordination point: Contract "Approved Kit Entry v1" (dependency) to Reusable Level & Asset Kit (keyword signal only)
+  ↳ serves: REQ-008 "A single runtime composition point wires shared services; level content never writes the player physics root, imports private runtime members or registers arbitrary scripts through the downloadable content path." — possible coordination point: Contract "Approved Kit Entry v2" (dependency) to Reusable Level & Asset Kit (keyword signal only)
+  - [ ] Implement this criterion within the existing owned component and public contracts, using a fixture world calling public services, a forbidden private import/root writer and trusted authoring versus data-only runtime loading as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T14 — Implement: "Document the migration from the current script-bearing level contract and global no-network policy to separate trusted local-authoring and data-only download paths; catalog networking is isolated from world behavior and offline gameplay remains supported." (REQ-008).** <!-- t:841d99c6 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-008 "Document the migration from the current script-bearing level contract and global no-network policy to separate trusted local-authoring and data-only download paths; catalog networking is isolated from world behavior and offline gameplay remains supported." — possible coordination point: Contract "Hero Motion and Action Snapshot v1" (dependency) to Hero Motion & Animation (keyword signal only)
+  - [ ] Prepare a repeatable human-review setup for a fixture world calling public services, a forbidden private import/root writer and trusted authoring versus data-only runtime loading; record controls, camera, build and relevant device/settings.
+  - [ ] Capture the evidence and record the review decision against this exact criterion; name corrective work for failures and leave approval pending until the user confirms.
 - [ ] **T15 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
+  - [ ] Run the component's current automated binding scenarios at the pushed implementation commit and report each result against its exact criterion; leave skipped/stale checks open.
+  - [ ] Collect the required human review and its evidence separately; do not auto-tick manual criteria or equate a headless pass with visual quality.
+  - [ ] Check every work-order step, dependency contract and remaining migration gap before declaring completion; hand off unresolved items with owner and reproduction.
 
 **Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Existing Implementation, Technology Guidance, and node context as your references. Write each work order's steps under its task line as indented checkbox lines (`  - [ ] <step>`), one action each, naming the file, setting or interface it changes, and send them with update_artifact (propose_patches, passing base_sequence) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact; the steps stay with their work order when this doc regenerates. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
 
@@ -551,7 +589,7 @@ Separate core runtime, reusable Level Kit, world content and authoring/distribut
 ```
 
 ### SENDS TO: Reusable Level & Asset Kit (shared-library)
-- **Contract:** Approved Kit Entry v1
+- **Contract:** Approved Kit Entry v2
 - **Protocol:** dependency
 - **Spec Format:** json_schema
 - **Their Technology:** godot
@@ -560,7 +598,7 @@ Separate core runtime, reusable Level Kit, world content and authoring/distribut
 ```
 {
   "type": "object",
-  "title": "Approved Kit Entry v1",
+  "title": "Approved Kit Entry v2",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "required": [
     "schemaVersion",
@@ -577,7 +615,10 @@ Separate core runtime, reusable Level Kit, world content and authoring/distribut
     "version",
     "dependencies",
     "habitats",
-    "forwardAxis"
+    "forwardAxis",
+    "contentSha256",
+    "reviewId",
+    "dependencyManifestSha256"
   ],
   "properties": {
     "kind": {
@@ -645,6 +686,10 @@ Separate core runtime, reusable Level Kit, world content and authoring/distribut
         ]
       }
     },
+    "reviewId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_.:-]+$"
+    },
     "resourceId": {
       "type": "string",
       "pattern": "^[a-zA-Z0-9_.:-]+$"
@@ -662,16 +707,40 @@ Separate core runtime, reusable Level Kit, world content and authoring/distribut
     "dependencies": {
       "type": "array",
       "items": {
-        "type": "string",
-        "pattern": "^[a-zA-Z0-9_.:-]+$"
-      }
+        "type": "object",
+        "required": [
+          "entryId",
+          "version",
+          "contentSha256"
+        ],
+        "properties": {
+          "entryId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.:-]+$"
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contentSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "contentSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     },
     "metersPerUnit": {
       "type": "number",
       "exclusiveMinimum": 0
     },
     "schemaVersion": {
-      "const": 1
+      "const": 2
     },
     "licenseRecordId": {
       "type": "string",
@@ -702,9 +771,13 @@ Separate core runtime, reusable Level Kit, world content and authoring/distribut
         }
       },
       "additionalProperties": false
+    },
+    "dependencyManifestSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     }
   },
-  "description": "Every entry resolves to pinned approved resources and a typed configuration schema. Numeric parameters must be bounded in that schema. Collision geometry is authored for traversal, separate from decorative detail; rig joint/socket requirements are explicit in asset metadata. Unknown entries fail export.",
+  "description": "Every entry resolves to pinned approved resources and a typed configuration schema. Numeric parameters must be bounded in that schema. Collision geometry is authored for traversal, separate from decorative detail; rig joint/socket requirements are explicit in asset metadata. Unknown entries fail export. Official kit publication requires a matching approved Contribution Review Decision v1 with reusable_asset scope, subjectKind asset or character, matching identity/version/content digest and dependency-manifest digest, and current owner authorization. dependencies pins exact versions/digests; stable IDs alone are insufficient. The content digest covers the complete resource manifest and reviewed public metadata, excluding the approval receipt itself to avoid a circular hash. Kit approval never approves an assembled level. This is a v2 target contract; v1 input is not silently treated as approved.",
   "additionalProperties": false
 }
 ```
@@ -1480,7 +1553,7 @@ Startup/initialization order based on edge directions and interaction patterns.
 - Hero Motion & Animation (this node calls/depends on it via Hero Motion and Action Snapshot v1 (dependency))
 - Drift Fleet Encounters (this node calls/depends on it via Declarative World Definition v1 (dependency))
 - Progress, Recovery & Rewards (this node calls/depends on it via Progress Snapshot v1 (dependency))
-- Reusable Level & Asset Kit (this node calls/depends on it via Approved Kit Entry v1 (dependency))
+- Reusable Level & Asset Kit (this node calls/depends on it via Approved Kit Entry v2 (dependency))
 
 **Depends on THIS node being available:**
 - Official Adventure: Lagoon & Living Cascade (initiates Declarative World Definition v1 against this node (dependency))
@@ -1504,6 +1577,7 @@ Startup/initialization order based on edge directions and interaction patterns.
 | `contracts/sanctioned_api.v1.json` | schema | --- | draft |
 | `hub/contract_validator.gd` | source | --- | draft |
 | `test/hub/test_world_systems.gd.uid` | config | --- | draft |
+| `.nodespec/tests/req-008.tests.md` - Test plan for requirement: Four architectural responsibilities and a versioned World API | test-plan | markdown | draft |
 | `test/contracts/test_level_contract.gd.uid` | config | --- | draft |
 | `test/contracts/test_level_contract.gd` | source | --- | draft |
 | `docs/contract-friction.md` | doc | --- | draft |

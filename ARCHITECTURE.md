@@ -8,18 +8,18 @@ component inventory, connection topology, and links to per-component task docume
 | Component | Role | Technology | Parent | Task Document | Test Plan |
 |-----------|------|------------|--------|---------------|-----------|
 | OpenAxolotl Game Shell | game-client | godot | --- | [`.nodespec/tasks/openaxolotl-game-shell-b0c02000.task.md`](./.nodespec/tasks/openaxolotl-game-shell-b0c02000.task.md) | [`.nodespec/tests/req-001.tests.md`](./.nodespec/tests/req-001.tests.md) |
-| Hero Motion & Animation | shared-library | godot | --- | [`.nodespec/tasks/hero-motion-animation-b0c02000.task.md`](./.nodespec/tasks/hero-motion-animation-b0c02000.task.md) | [`test/core/rendering/test_hero_animator.gd`](./test/core/rendering/test_hero_animator.gd) |
+| Hero Motion & Animation | shared-library | godot | --- | [`.nodespec/tasks/hero-motion-animation-b0c02000.task.md`](./.nodespec/tasks/hero-motion-animation-b0c02000.task.md) | [`.nodespec/tests/req-002.tests.md`](./.nodespec/tests/req-002.tests.md) |
 | Input, Camera & Accessibility | shared-library | godot | --- | [`.nodespec/tasks/input-camera-accessibility-b0c02000.task.md`](./.nodespec/tasks/input-camera-accessibility-b0c02000.task.md) | [`.nodespec/tests/req-003.tests.md`](./.nodespec/tests/req-003.tests.md) |
-| Drift Fleet Encounters | shared-library | godot | --- | [`.nodespec/tasks/drift-fleet-encounters-b0c02000.task.md`](./.nodespec/tasks/drift-fleet-encounters-b0c02000.task.md) | [`test/hub/test_world_drift_fleet.gd`](./test/hub/test_world_drift_fleet.gd) |
-| Progress, Recovery & Rewards | shared-library | godot | --- | [`.nodespec/tasks/progress-recovery-rewards-b0c02000.task.md`](./.nodespec/tasks/progress-recovery-rewards-b0c02000.task.md) | --- |
-| Versioned World Runtime API | shared-library | godot | --- | [`.nodespec/tasks/versioned-world-runtime-api-b0c02000.task.md`](./.nodespec/tasks/versioned-world-runtime-api-b0c02000.task.md) | --- |
-| Reusable Level & Asset Kit | shared-library | godot | --- | [`.nodespec/tasks/reusable-level-asset-kit-b0c02000.task.md`](./.nodespec/tasks/reusable-level-asset-kit-b0c02000.task.md) | --- |
-| Official Adventure: Lagoon & Living Cascade | shared-library | godot | --- | [`.nodespec/tasks/official-adventure-lagoon-living-cascade-b0c02000.task.md`](./.nodespec/tasks/official-adventure-lagoon-living-cascade-b0c02000.task.md) | --- |
-| Family Workshop & Starter | cli-tool | python-backend | --- | [`.nodespec/tasks/family-workshop-starter-b0c02000.task.md`](./.nodespec/tasks/family-workshop-starter-b0c02000.task.md) | --- |
-| Content Export & Conformance | cli-tool | python-backend | --- | [`.nodespec/tasks/content-export-conformance-b0c02000.task.md`](./.nodespec/tasks/content-export-conformance-b0c02000.task.md) | --- |
-| Curated Review & Release | cli-tool | python-backend | --- | [`.nodespec/tasks/curated-review-release-b0c02000.task.md`](./.nodespec/tasks/curated-review-release-b0c02000.task.md) | --- |
-| Adventure Catalog & Installation | shared-library | godot | --- | [`.nodespec/tasks/adventure-catalog-installation-b0c02000.task.md`](./.nodespec/tasks/adventure-catalog-installation-b0c02000.task.md) | --- |
-| Quality Evidence & Migration Gates | cli-tool | python-backend | --- | [`.nodespec/tasks/quality-evidence-migration-gates-b0c02000.task.md`](./.nodespec/tasks/quality-evidence-migration-gates-b0c02000.task.md) | --- |
+| Drift Fleet Encounters | shared-library | godot | --- | [`.nodespec/tasks/drift-fleet-encounters-b0c02000.task.md`](./.nodespec/tasks/drift-fleet-encounters-b0c02000.task.md) | [`.nodespec/tests/req-005.tests.md`](./.nodespec/tests/req-005.tests.md) |
+| Progress, Recovery & Rewards | shared-library | godot | --- | [`.nodespec/tasks/progress-recovery-rewards-b0c02000.task.md`](./.nodespec/tasks/progress-recovery-rewards-b0c02000.task.md) | [`.nodespec/tests/req-007.tests.md`](./.nodespec/tests/req-007.tests.md) |
+| Versioned World Runtime API | shared-library | godot | --- | [`.nodespec/tasks/versioned-world-runtime-api-b0c02000.task.md`](./.nodespec/tasks/versioned-world-runtime-api-b0c02000.task.md) | [`.nodespec/tests/req-008.tests.md`](./.nodespec/tests/req-008.tests.md) |
+| Reusable Level & Asset Kit | shared-library | godot | --- | [`.nodespec/tasks/reusable-level-asset-kit-b0c02000.task.md`](./.nodespec/tasks/reusable-level-asset-kit-b0c02000.task.md) | [`.nodespec/tests/req-009.tests.md`](./.nodespec/tests/req-009.tests.md) |
+| Official Adventure: Lagoon & Living Cascade | shared-library | godot | --- | [`.nodespec/tasks/official-adventure-lagoon-living-cascade-b0c02000.task.md`](./.nodespec/tasks/official-adventure-lagoon-living-cascade-b0c02000.task.md) | [`.nodespec/tests/req-020.tests.md`](./.nodespec/tests/req-020.tests.md) |
+| Family Workshop & Starter | cli-tool | python-backend | --- | [`.nodespec/tasks/family-workshop-starter-b0c02000.task.md`](./.nodespec/tasks/family-workshop-starter-b0c02000.task.md) | [`.nodespec/tests/req-010.tests.md`](./.nodespec/tests/req-010.tests.md) |
+| Content Export & Conformance | cli-tool | python-backend | --- | [`.nodespec/tasks/content-export-conformance-b0c02000.task.md`](./.nodespec/tasks/content-export-conformance-b0c02000.task.md) | [`.nodespec/tests/req-012.tests.md`](./.nodespec/tests/req-012.tests.md) |
+| Curated Review & Release | cli-tool | python-backend | --- | [`.nodespec/tasks/curated-review-release-b0c02000.task.md`](./.nodespec/tasks/curated-review-release-b0c02000.task.md) | [`.nodespec/tests/req-013.tests.md`](./.nodespec/tests/req-013.tests.md) |
+| Adventure Catalog & Installation | shared-library | godot | --- | [`.nodespec/tasks/adventure-catalog-installation-b0c02000.task.md`](./.nodespec/tasks/adventure-catalog-installation-b0c02000.task.md) | [`.nodespec/tests/req-014.tests.md`](./.nodespec/tests/req-014.tests.md) |
+| Quality Evidence & Migration Gates | cli-tool | python-backend | --- | [`.nodespec/tasks/quality-evidence-migration-gates-b0c02000.task.md`](./.nodespec/tasks/quality-evidence-migration-gates-b0c02000.task.md) | [`.nodespec/tests/req-017.tests.md`](./.nodespec/tests/req-017.tests.md) |
 
 ## Connection Topology
 
@@ -30,23 +30,24 @@ component inventory, connection topology, and links to per-component task docume
 | Versioned World Runtime API | Hero Motion & Animation | dependency | Hero Motion and Action Snapshot v1 |
 | Versioned World Runtime API | Drift Fleet Encounters | dependency | Declarative World Definition v1 |
 | Versioned World Runtime API | Progress, Recovery & Rewards | dependency | Progress Snapshot v1 |
-| Versioned World Runtime API | Reusable Level & Asset Kit | dependency | Approved Kit Entry v1 |
-| Hero Motion & Animation | Reusable Level & Asset Kit | dependency | Approved Kit Entry v1 |
+| Versioned World Runtime API | Reusable Level & Asset Kit | dependency | Approved Kit Entry v2 |
+| Hero Motion & Animation | Reusable Level & Asset Kit | dependency | Approved Kit Entry v2 |
 | Official Adventure: Lagoon & Living Cascade | Versioned World Runtime API | dependency | Declarative World Definition v1 |
-| Official Adventure: Lagoon & Living Cascade | Reusable Level & Asset Kit | dependency | Approved Kit Entry v1 |
+| Official Adventure: Lagoon & Living Cascade | Reusable Level & Asset Kit | dependency | Approved Kit Entry v2 |
 | OpenAxolotl Game Shell | Versioned World Runtime API | dependency | Declarative World Definition v1 |
 | OpenAxolotl Game Shell | Input, Camera & Accessibility | dependency | Semantic Input Frame v1 |
 | OpenAxolotl Game Shell | Official Adventure: Lagoon & Living Cascade | dependency | Declarative World Definition v1 |
 | OpenAxolotl Game Shell | Adventure Catalog & Installation | dependency | Installed Adventure State v1 |
-| Family Workshop & Starter | Content Export & Conformance | dependency | Data-only Level Package Manifest v1 |
-| Family Workshop & Starter | Reusable Level & Asset Kit | dependency | Approved Kit Entry v1 |
+| Family Workshop & Starter | Content Export & Conformance | dependency | Data-only Level Package Manifest v2 |
+| Family Workshop & Starter | Reusable Level & Asset Kit | dependency | Approved Kit Entry v2 |
 | Content Export & Conformance | Versioned World Runtime API | dependency | Declarative World Definition v1 |
-| Content Export & Conformance | Reusable Level & Asset Kit | dependency | Approved Kit Entry v1 |
-| Curated Review & Release | Content Export & Conformance | dependency | Conformance Evidence v1 |
-| Adventure Catalog & Installation | Curated Review & Release | dependency | Signed Catalog Release v1 |
+| Content Export & Conformance | Reusable Level & Asset Kit | dependency | Approved Kit Entry v2 |
+| Curated Review & Release | Content Export & Conformance | dependency | Conformance Evidence v2 |
+| Adventure Catalog & Installation | Curated Review & Release | dependency | Signed Catalog Release v2 |
 | Adventure Catalog & Installation | Progress, Recovery & Rewards | dependency | Progress Snapshot v1 |
 | Quality Evidence & Migration Gates | OpenAxolotl Game Shell | dependency | Quality Run Record v1 |
-| Quality Evidence & Migration Gates | Content Export & Conformance | dependency | Conformance Evidence v1 |
+| Quality Evidence & Migration Gates | Content Export & Conformance | dependency | Conformance Evidence v2 |
+| Curated Review & Release | Reusable Level & Asset Kit | custom | Contribution Review Decision v1 |
 
 ## Task Documents
 
@@ -73,8 +74,29 @@ Use these as the primary brief when implementing or modifying a component.
 Each requirement has a test plan documenting acceptance criteria assessments,
 recommended test types, framework suggestions, and test scenarios.
 
-- **Drift Fleet Encounters**: [`test/hub/test_world_drift_fleet.gd`](./test/hub/test_world_drift_fleet.gd)
+- **Reusable Level & Asset Kit**: [`.nodespec/tests/req-009.tests.md`](./.nodespec/tests/req-009.tests.md)
+- **Official Adventure: Lagoon & Living Cascade**: [`.nodespec/tests/req-020.tests.md`](./.nodespec/tests/req-020.tests.md)
+- **Official Adventure: Lagoon & Living Cascade**: [`.nodespec/tests/req-025.tests.md`](./.nodespec/tests/req-025.tests.md)
+- **Official Adventure: Lagoon & Living Cascade**: [`.nodespec/tests/req-023.tests.md`](./.nodespec/tests/req-023.tests.md)
+- **Progress, Recovery & Rewards**: [`.nodespec/tests/req-007.tests.md`](./.nodespec/tests/req-007.tests.md)
+- **Content Export & Conformance**: [`.nodespec/tests/req-012.tests.md`](./.nodespec/tests/req-012.tests.md)
+- **Curated Review & Release**: [`.nodespec/tests/req-013.tests.md`](./.nodespec/tests/req-013.tests.md)
+- **Drift Fleet Encounters**: [`.nodespec/tests/req-005.tests.md`](./.nodespec/tests/req-005.tests.md)
+- **Content Export & Conformance**: [`.nodespec/tests/req-011.tests.md`](./.nodespec/tests/req-011.tests.md)
+- **Adventure Catalog & Installation**: [`.nodespec/tests/req-014.tests.md`](./.nodespec/tests/req-014.tests.md)
+- **Official Adventure: Lagoon & Living Cascade**: [`.nodespec/tests/req-021.tests.md`](./.nodespec/tests/req-021.tests.md)
+- **Adventure Catalog & Installation**: [`.nodespec/tests/req-015.tests.md`](./.nodespec/tests/req-015.tests.md)
+- **Quality Evidence & Migration Gates**: [`.nodespec/tests/req-017.tests.md`](./.nodespec/tests/req-017.tests.md)
+- **Drift Fleet Encounters**: [`.nodespec/tests/req-004.tests.md`](./.nodespec/tests/req-004.tests.md)
+- **Family Workshop & Starter**: [`.nodespec/tests/req-010.tests.md`](./.nodespec/tests/req-010.tests.md)
+- **Curated Review & Release**: [`.nodespec/tests/req-016.tests.md`](./.nodespec/tests/req-016.tests.md)
+- **Progress, Recovery & Rewards**: [`.nodespec/tests/req-006.tests.md`](./.nodespec/tests/req-006.tests.md)
+- **Official Adventure: Lagoon & Living Cascade**: [`.nodespec/tests/req-022.tests.md`](./.nodespec/tests/req-022.tests.md)
+- **Quality Evidence & Migration Gates**: [`.nodespec/tests/req-018.tests.md`](./.nodespec/tests/req-018.tests.md)
 - **OpenAxolotl Game Shell**: [`.nodespec/tests/req-001.tests.md`](./.nodespec/tests/req-001.tests.md)
+- **Official Adventure: Lagoon & Living Cascade**: [`.nodespec/tests/req-024.tests.md`](./.nodespec/tests/req-024.tests.md)
+- **Versioned World Runtime API**: [`.nodespec/tests/req-008.tests.md`](./.nodespec/tests/req-008.tests.md)
+- **Official Adventure: Lagoon & Living Cascade**: [`.nodespec/tests/req-026.tests.md`](./.nodespec/tests/req-026.tests.md)
 - **Input, Camera & Accessibility**: [`.nodespec/tests/req-003.tests.md`](./.nodespec/tests/req-003.tests.md)
-- **Hero Motion & Animation**: [`test/core/rendering/test_hero_animator.gd`](./test/core/rendering/test_hero_animator.gd)
+- **Official Adventure: Lagoon & Living Cascade**: [`.nodespec/tests/req-019.tests.md`](./.nodespec/tests/req-019.tests.md)
 - **Hero Motion & Animation**: [`.nodespec/tests/req-002.tests.md`](./.nodespec/tests/req-002.tests.md)

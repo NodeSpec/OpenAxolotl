@@ -1,7 +1,7 @@
 {
   "modelVersion": 3,
   "generatedBy": "nodespec",
-  "modelHash": "dadd85ef09f053bec2ae3baeb14ee84931e06a34a75c73cb2ee7a23ef570bf14",
+  "modelHash": "e31055d4346d9cba153dbf8906bd133b4509a8942be0a563ad13efb0874422b8",
   "nodes": [
     {
       "id": "b0c02000-2026-4020-8000-000000000001",
@@ -371,6 +371,13 @@
       "label": "Conformance Evidence v1",
       "direction": "unidirectional",
       "contentHash": "bb100604d0ed6dada484200baf8934ca2e983acd5bee06a40b34432d22047ee6"
+    },
+    {
+      "id": "b0c02200-2026-4020-8000-000000000023",
+      "source": "b0c02000-2026-4020-8000-000000000011",
+      "target": "b0c02000-2026-4020-8000-000000000007",
+      "contractId": "b0c02100-2026-4020-8000-000000000011",
+      "contentHash": "4380bf19d269d4e79a5d4ed3554aef8685c438913548e28b828c03f0e0c95fa2"
     }
   ],
   "contracts": [
@@ -900,13 +907,13 @@
     {
       "id": "b0c02100-2026-4020-8000-000000000005",
       "kind": "dependency",
-      "name": "Approved Kit Entry v1",
+      "name": "Approved Kit Entry v2",
       "specFormat": "json_schema",
-      "schemaHash": "6a84c8964d60029f3c7772d8da95c5467a7f45225393f0af8902c31d85f1e0ac",
-      "contentHash": "51a7d50636c46f4c2207fc6482ad8eb23c7d95506d591eafbd488f2c956ee161",
+      "schemaHash": "347e51c127b8ea3fef963cbfb0e0b12b29d47f3c44ad2caa9f91d25101ab9cde",
+      "contentHash": "69c350a712439f0d7e0a1ce2afae08fe1f6fdeb281b8798ba778b71720be0b9a",
       "schema": {
         "type": "object",
-        "title": "Approved Kit Entry v1",
+        "title": "Approved Kit Entry v2",
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "required": [
           "schemaVersion",
@@ -923,7 +930,10 @@
           "version",
           "dependencies",
           "habitats",
-          "forwardAxis"
+          "forwardAxis",
+          "contentSha256",
+          "reviewId",
+          "dependencyManifestSha256"
         ],
         "properties": {
           "kind": {
@@ -991,6 +1001,10 @@
               ]
             }
           },
+          "reviewId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.:-]+$"
+          },
           "resourceId": {
             "type": "string",
             "pattern": "^[a-zA-Z0-9_.:-]+$"
@@ -1008,16 +1022,40 @@
           "dependencies": {
             "type": "array",
             "items": {
-              "type": "string",
-              "pattern": "^[a-zA-Z0-9_.:-]+$"
-            }
+              "type": "object",
+              "required": [
+                "entryId",
+                "version",
+                "contentSha256"
+              ],
+              "properties": {
+                "entryId": {
+                  "type": "string",
+                  "pattern": "^[a-zA-Z0-9_.:-]+$"
+                },
+                "version": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "contentSha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              },
+              "additionalProperties": false
+            },
+            "uniqueItems": true
+          },
+          "contentSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
           },
           "metersPerUnit": {
             "type": "number",
             "exclusiveMinimum": 0
           },
           "schemaVersion": {
-            "const": 1
+            "const": 2
           },
           "licenseRecordId": {
             "type": "string",
@@ -1048,22 +1086,26 @@
               }
             },
             "additionalProperties": false
+          },
+          "dependencyManifestSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
           }
         },
-        "description": "Every entry resolves to pinned approved resources and a typed configuration schema. Numeric parameters must be bounded in that schema. Collision geometry is authored for traversal, separate from decorative detail; rig joint/socket requirements are explicit in asset metadata. Unknown entries fail export.",
+        "description": "Every entry resolves to pinned approved resources and a typed configuration schema. Numeric parameters must be bounded in that schema. Collision geometry is authored for traversal, separate from decorative detail; rig joint/socket requirements are explicit in asset metadata. Unknown entries fail export. Official kit publication requires a matching approved Contribution Review Decision v1 with reusable_asset scope, subjectKind asset or character, matching identity/version/content digest and dependency-manifest digest, and current owner authorization. dependencies pins exact versions/digests; stable IDs alone are insufficient. The content digest covers the complete resource manifest and reviewed public metadata, excluding the approval receipt itself to avoid a circular hash. Kit approval never approves an assembled level. This is a v2 target contract; v1 input is not silently treated as approved.",
         "additionalProperties": false
       }
     },
     {
       "id": "b0c02100-2026-4020-8000-000000000006",
       "kind": "dependency",
-      "name": "Data-only Level Package Manifest v1",
+      "name": "Data-only Level Package Manifest v2",
       "specFormat": "json_schema",
-      "schemaHash": "d2ff14e0e5575eb7402162793c780af66538cd47a7a3dfb0569f846cda69bfb6",
-      "contentHash": "b106a8b01fbcfc65f779ec11b724d23022c7b475fc3438cec0d06bd324801d23",
+      "schemaHash": "08151bb46c3917ff28add7a009eb29b2d1a6473c88639086fba4ca46c2e1ec00",
+      "contentHash": "07bfac8f2c32601be5ec76c59c4f8d4347ef2647edb638ce98c7eec664211873",
       "schema": {
         "type": "object",
-        "title": "Data-only Level Package Manifest v1",
+        "title": "Data-only Level Package Manifest v2",
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "required": [
           "schemaVersion",
@@ -1077,7 +1119,9 @@
           "creditsPath",
           "kitVersion",
           "saveSchemaVersion",
-          "validationProfileId"
+          "validationProfileId",
+          "dependencies",
+          "dependencyManifestSha256"
         ],
         "properties": {
           "files": {
@@ -1133,8 +1177,35 @@
             "type": "string",
             "minLength": 1
           },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "entryId",
+                "version",
+                "contentSha256"
+              ],
+              "properties": {
+                "entryId": {
+                  "type": "string",
+                  "pattern": "^[a-zA-Z0-9_.:-]+$"
+                },
+                "version": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "contentSha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              },
+              "additionalProperties": false
+            },
+            "uniqueItems": true
+          },
           "schemaVersion": {
-            "const": 1
+            "const": 2
           },
           "unpackedBytes": {
             "type": "integer",
@@ -1158,32 +1229,39 @@
           "validationProfileId": {
             "type": "string",
             "pattern": "^[a-zA-Z0-9_.:-]+$"
+          },
+          "dependencyManifestSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
           }
         },
-        "description": "Published package permits only validated data and explicitly approved resource encodings; executable scripts and scene-attached code are forbidden. Paths must be relative normalized non-symlink paths without traversal; declared and extracted sizes obey a versioned limit profile. Authoring scripts may be used only locally to produce validated data. Raw Godot PCK import is not the published-content security boundary.",
+        "description": "Published package permits only validated data and explicitly approved resource encodings; executable scripts and scene-attached code are forbidden. Paths must be relative normalized non-symlink paths without traversal; declared and extracted sizes obey a versioned limit profile. Authoring scripts may be used only locally to produce validated data. Raw Godot PCK import is not the published-content security boundary. dependencies pins every transitive kit resource used by the definition to an exact entry/version/digest; reject conflicting versions, duplicate entryIds, missing pins or cycles. dependencyManifestSha256 hashes the documented canonical sorted dependency array. Resolve definition kitEntryIds only through this manifest and the declared kitVersion; no floating latest references. Official release requires separate playable_level approval even when every dependency is approved. Private preview is not a publication approval. v1 packages require an explicit conversion and fresh review.",
         "additionalProperties": false
       }
     },
     {
       "id": "b0c02100-2026-4020-8000-000000000007",
       "kind": "dependency",
-      "name": "Conformance Evidence v1",
+      "name": "Conformance Evidence v2",
       "specFormat": "json_schema",
-      "schemaHash": "b3494dfc05966112bdfc4a50ad8122c84cc03b9911fb80dfb59555c5dded1edd",
-      "contentHash": "fd562cb4f3b1b324c7caddf7d6438e5b1edcdf189397644fc7b4e2ad79e2f7d1",
+      "schemaHash": "eda0eadc50dfc660817279f74e8175f85ad3087ab8664ee6f91c373f206b1bd7",
+      "contentHash": "cd4e801d8c6198031a555365682fa14e45b5e2fae2d47097bdac032f953a399f",
       "schema": {
         "type": "object",
-        "title": "Conformance Evidence v1",
+        "title": "Conformance Evidence v2",
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "required": [
           "schemaVersion",
-          "worldId",
           "packageSha256",
           "validatorVersion",
           "profileId",
           "result",
           "checks",
-          "evidencePaths"
+          "evidencePaths",
+          "subjectKind",
+          "subjectId",
+          "subjectVersion",
+          "dependencyManifestSha256"
         ],
         "properties": {
           "checks": {
@@ -1231,13 +1309,20 @@
             ],
             "type": "string"
           },
-          "worldId": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9_.:-]+$"
-          },
           "profileId": {
             "type": "string",
             "pattern": "^[a-zA-Z0-9_.:-]+$"
+          },
+          "subjectId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.:-]+$"
+          },
+          "subjectKind": {
+            "enum": [
+              "asset",
+              "character",
+              "level"
+            ]
           },
           "evidencePaths": {
             "type": "array",
@@ -1251,27 +1336,35 @@
             "pattern": "^[a-f0-9]{64}$"
           },
           "schemaVersion": {
-            "const": 1
+            "const": 2
+          },
+          "subjectVersion": {
+            "type": "string",
+            "minLength": 1
           },
           "validatorVersion": {
             "type": "string",
             "minLength": 1
+          },
+          "dependencyManifestSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
           }
         },
-        "description": "Evidence binds exact immutable package bytes and validator/profile versions. Unrun never counts as pass. Diagnostics identify offending paths/fields; static checks do not prove real-player traversal or art quality. Human sign-offs are separate.",
+        "description": "Evidence binds exact immutable package bytes and validator/profile versions. Unrun never counts as pass. Diagnostics identify offending paths/fields; static checks do not prove real-player traversal or art quality. Human sign-offs are separate. v2 identifies asset, character or level subjects explicitly (subjectId is worldId for a level). packageSha256 hashes the reviewed submission snapshot including public metadata. Select the validation profile by subjectKind; a level additionally needs complete-route checks, while an asset/character needs material, rig, collision and resource-budget checks. This report cannot grant approval or publication.",
         "additionalProperties": false
       }
     },
     {
       "id": "b0c02100-2026-4020-8000-000000000008",
       "kind": "dependency",
-      "name": "Signed Catalog Release v1",
+      "name": "Signed Catalog Release v2",
       "specFormat": "json_schema",
-      "schemaHash": "98b77246aec98efbc6a5ada01fefec144b2b5dbbff5b133993b3c468ca70e4c6",
-      "contentHash": "4092a56a3f7da3921d77e759e6970b76097444540b3b6f103ade8a8bae939dc7",
+      "schemaHash": "6a4501619aae2b1e9131a43ce5007c1a8561b9a4bb9e3e90ee88a2ff3c93e479",
+      "contentHash": "8a31fe7c5b3377860d025fe1ccf5aac265a64c9cc0cf021749130ebbc3f2a4e0",
       "schema": {
         "type": "object",
-        "title": "Signed Catalog Release v1",
+        "title": "Signed Catalog Release v2",
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "required": [
           "schemaVersion",
@@ -1286,7 +1379,9 @@
           "rightsRecordId",
           "status",
           "keyId",
-          "signature"
+          "signature",
+          "approvalScope",
+          "dependencyManifestSha256"
         ],
         "properties": {
           "bytes": {
@@ -1324,12 +1419,15 @@
             "type": "string",
             "minLength": 1
           },
+          "approvalScope": {
+            "const": "playable_level"
+          },
           "packageSha256": {
             "type": "string",
             "pattern": "^[a-f0-9]{64}$"
           },
           "schemaVersion": {
-            "const": 1
+            "const": 2
           },
           "rightsRecordId": {
             "type": "string",
@@ -1341,9 +1439,13 @@
           "minimumGameVersion": {
             "type": "string",
             "minLength": 1
+          },
+          "dependencyManifestSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
           }
         },
-        "description": "Maintainer approves immutable bytes after play, content, rights and performance review. Sign a canonical versioned payload with a trusted publisher key; algorithm/key rotation/encoding specification must be settled in implementation design before networking. Runtime verifies signature and digest before activation; package changes invalidate approval. No arbitrary remote code execution.",
+        "description": "Maintainer approves immutable bytes after play, content, rights and performance review. Sign a canonical versioned payload with a trusted publisher key; algorithm/key rotation/encoding specification must be settled in implementation design before networking. Runtime verifies signature and digest before activation; package changes invalidate approval. No arbitrary remote code execution. Only the owner or an explicitly delegated publisher may sign the official release after validating current reviewer authorization and a playable_level decision matching worldId/version/packageSha256/dependencyManifestSha256. A reusable_asset approval never authorizes this record. Reviewed public metadata must match the approved submission snapshot. Reject withdrawn approval/dependencies at publication and distribution; offline installed content follows the documented preservation policy. v2 signs all declared fields except signature using the separately specified canonical encoding.",
         "additionalProperties": false
       }
     },
@@ -1511,6 +1613,138 @@
         "description": "One binding scenario per criterion; exact source, settings and evidence required. Rendered target-hardware performance evidence is distinct from headless functional tests. Manual quality gates need human approval. Historical renders or old reports are not current verification.",
         "additionalProperties": false
       }
+    },
+    {
+      "id": "b0c02100-2026-4020-8000-000000000011",
+      "kind": "custom",
+      "name": "Contribution Review Decision v1",
+      "specFormat": "json_schema",
+      "schemaHash": "c523958d2005e400e86eac0c2b6b0effeceb225faa595370af2014f16123d072",
+      "contentHash": "660f548f1d3ea45de50520db290d5339b6a37ba03f387c4f81f713999e196e30",
+      "schema": {
+        "type": "object",
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "subjectKind": {
+                  "const": "level"
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "scope": {
+                  "const": "reusable_asset"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "scope": {
+                  "const": "playable_level"
+                }
+              }
+            }
+          }
+        ],
+        "title": "Contribution Review Decision v1",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "required": [
+          "schemaVersion",
+          "reviewId",
+          "subjectKind",
+          "subjectId",
+          "subjectVersion",
+          "contentSha256",
+          "dependencyManifestSha256",
+          "scope",
+          "status",
+          "reviewerId",
+          "authorityRecordId",
+          "decidedAt",
+          "reason",
+          "evidenceIds",
+          "rightsRecordId"
+        ],
+        "properties": {
+          "scope": {
+            "enum": [
+              "reusable_asset",
+              "playable_level"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "approved",
+              "changes_requested",
+              "rejected",
+              "withdrawn"
+            ]
+          },
+          "reviewId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.:-]+$"
+          },
+          "decidedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "subjectId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.:-]+$"
+          },
+          "reviewerId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.:-]+$"
+          },
+          "evidenceIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9_.:-]+$"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "subjectKind": {
+            "enum": [
+              "asset",
+              "character",
+              "level"
+            ]
+          },
+          "contentSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "schemaVersion": {
+            "const": 1
+          },
+          "rightsRecordId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.:-]+$"
+          },
+          "subjectVersion": {
+            "type": "string",
+            "minLength": 1
+          },
+          "authorityRecordId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.:-]+$"
+          },
+          "dependencyManifestSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "description": "Owner-controlled audit receipt. Validate reviewerId against the owner/delegation authority record and its permitted scope at decision/publication time; strings asserting authority are not trusted proof. Approval requires passing conformance for the same immutable snapshot plus recorded human content/play/rights/performance review. Content includes reviewed public metadata and an immutable resource manifest; dependencyManifestSha256 uses the same canonical sorted pins as the package. Receipts are private review records; public releases expose only approved metadata and references, not child personal details or review discussion. Changed content/dependencies need a new review. Withdrawal records a new audited decision and enumerates dependent releases. This contract specifies planned behavior, not an implemented moderation service.",
+        "additionalProperties": false
+      }
     }
   ],
   "artifacts": [
@@ -1581,7 +1815,8 @@
       "id": "0295e4e2-f371-4e41-9548-a69d41093659",
       "nodeId": "b0c02000-2026-4020-8000-000000000012",
       "path": ".nodespec/tasks/adventure-catalog-installation-b0c02000.task.md",
-      "kind": "task"
+      "kind": "task",
+      "contentHash": "00000000134862b4"
     },
     {
       "id": "02b2363b-f9fc-5b3d-9bf2-f020b19419c1",
@@ -1913,6 +2148,13 @@
       "contentHash": "0000000000000df0"
     },
     {
+      "id": "0d2d6c8f-8361-4348-9ac7-d37a25a4585a",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": "docs/design/.gitattributes",
+      "kind": "config",
+      "contentHash": "0000000039b41c70"
+    },
+    {
       "id": "0d7f41c1-c3e8-5438-8ec1-8984de6bc86b",
       "nodeId": "b0c02000-2026-4020-8000-000000000008",
       "path": "dev/living_cascade/cascade_basin_seals.gd",
@@ -1946,6 +2188,13 @@
       "path": "core/enemies/net_capture.gd.uid",
       "kind": "config",
       "contentHash": "00000000114880a7"
+    },
+    {
+      "id": "0e1dbc2e-2acd-40b4-9f49-6b3af4b69f82",
+      "nodeId": "b0c02000-2026-4020-8000-000000000007",
+      "path": ".nodespec/tests/req-009.tests.md",
+      "kind": "test-plan",
+      "contentHash": "000000001c040c77"
     },
     {
       "id": "0e33a8a0-7ced-5f1a-ade9-d07d3c445320",
@@ -1988,6 +2237,13 @@
       "path": "core/rendering/world_lighting.gd.uid",
       "kind": "config",
       "contentHash": "000000004709e321"
+    },
+    {
+      "id": "0f776376-03e5-4b73-8f28-c42dbcf81c45",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": ".nodespec/tests/req-020.tests.md",
+      "kind": "test-plan",
+      "contentHash": "000000003d699025"
     },
     {
       "id": "0f87bc13-c1ce-5464-9162-b7eea5b3fc31",
@@ -2121,6 +2377,13 @@
       "path": "pyproject.toml",
       "kind": "config",
       "contentHash": "0000000056a88e72"
+    },
+    {
+      "id": "14bf7a75-9182-4309-ab19-7c6dee2b2bea",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": ".nodespec/tests/req-025.tests.md",
+      "kind": "test-plan",
+      "contentHash": "0000000047113213"
     },
     {
       "id": "14e06913-1473-5dc8-b087-950959d5eeef",
@@ -2410,6 +2673,13 @@
       "contentHash": "000000001a71f718"
     },
     {
+      "id": "1a801890-53ad-4a3f-b506-1e4a360ad59c",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": "docs/design/references/concept-and-drawings.md",
+      "kind": "doc",
+      "contentHash": "0000000033c9ff35"
+    },
+    {
       "id": "1b1111d5-d4a4-5242-8edd-d5b79d83e0e8",
       "nodeId": "b0c02000-2026-4020-8000-000000000005",
       "path": "core/regen/capability_state.gd.uid",
@@ -2610,7 +2880,7 @@
       "nodeId": "b0c02000-2026-4020-8000-000000000002",
       "path": "docs/character-movement-polish.md",
       "kind": "doc",
-      "contentHash": "000000005e729e50"
+      "contentHash": "000000007986e00c"
     },
     {
       "id": "241a9fe3-4d00-5b11-8ca4-ce7537474613",
@@ -2756,7 +3026,8 @@
       "id": "26fded4a-7052-4381-8322-e1a781084e7f",
       "nodeId": "b0c02000-2026-4020-8000-000000000001",
       "path": ".nodespec/tasks/openaxolotl-game-shell-b0c02000.task.md",
-      "kind": "task"
+      "kind": "task",
+      "contentHash": "000000004432f2cb"
     },
     {
       "id": "27180912-2334-4556-8778-899001122334",
@@ -3336,7 +3607,8 @@
       "id": "3783675f-6884-4687-bdea-332c723532d2",
       "nodeId": "b0c02000-2026-4020-8000-000000000005",
       "path": ".nodespec/tasks/progress-recovery-rewards-b0c02000.task.md",
-      "kind": "task"
+      "kind": "task",
+      "contentHash": "000000002eade178"
     },
     {
       "id": "37d55ad4-0b18-5754-9cd2-75c6c733bd48",
@@ -3346,11 +3618,25 @@
       "contentHash": "00000000446346ae"
     },
     {
+      "id": "384e2045-2ab5-495e-b583-289e8b21ca6c",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": "docs/design/references/lagoon-gameplay-reference.png",
+      "kind": "doc",
+      "contentHash": "000000007c2de9a9"
+    },
+    {
       "id": "3884bb9f-489c-557b-8cf2-1f6a6216ebca",
       "nodeId": "b0c02000-2026-4020-8000-000000000002",
       "path": "test/core/rendering/test_hero_backpack.gd",
       "kind": "source",
       "contentHash": "000000003819c4b2"
+    },
+    {
+      "id": "391c6c7b-7801-4d8c-9984-eac346f51adc",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": ".nodespec/tests/req-023.tests.md",
+      "kind": "test-plan",
+      "contentHash": "0000000054c4e756"
     },
     {
       "id": "3962f771-8b90-5e77-9be1-e88f9b267fad",
@@ -3489,7 +3775,8 @@
       "id": "3c1ebe56-f4b3-44d0-b37d-ca5f7ae8f299",
       "nodeId": "b0c02000-2026-4020-8000-000000000011",
       "path": ".nodespec/tasks/curated-review-release-b0c02000.task.md",
-      "kind": "task"
+      "kind": "task",
+      "contentHash": "0000000056878481"
     },
     {
       "id": "3c4d5e6f-7081-4c92-8d13-e4f506071823",
@@ -3733,7 +4020,8 @@
       "id": "43494b02-0a81-4b04-ad38-66037ebf9e64",
       "nodeId": "b0c02000-2026-4020-8000-000000000007",
       "path": ".nodespec/tasks/reusable-level-asset-kit-b0c02000.task.md",
-      "kind": "task"
+      "kind": "task",
+      "contentHash": "0000000039f88698"
     },
     {
       "id": "4355fe04-c382-59f8-8660-9742cef7f585",
@@ -3741,6 +4029,13 @@
       "path": "assets/environment/lagoon_meshy/coral_rock_Image_0.jpg.import",
       "kind": "config",
       "contentHash": "000000005c92ec9a"
+    },
+    {
+      "id": "4404313a-bf45-4481-aaae-966d9a27c214",
+      "nodeId": "b0c02000-2026-4020-8000-000000000005",
+      "path": ".nodespec/tests/req-007.tests.md",
+      "kind": "test-plan",
+      "contentHash": "00000000117b3f48"
     },
     {
       "id": "44bc31a5-3293-5686-b22c-2d4bd4d28e2a",
@@ -3974,6 +4269,13 @@
       "contentHash": "00000000413bbefe"
     },
     {
+      "id": "4b8830f8-ba08-4c07-8597-617f81a9a66a",
+      "nodeId": "b0c02000-2026-4020-8000-000000000010",
+      "path": ".nodespec/tests/req-012.tests.md",
+      "kind": "test-plan",
+      "contentHash": "000000004ae2bac3"
+    },
+    {
       "id": "4bd7d030-5407-5ab1-b432-d6d0384ee33f",
       "nodeId": "b0c02000-2026-4020-8000-000000000002",
       "path": "core/rendering/hero_slide_scuff.gdshader",
@@ -4054,7 +4356,8 @@
       "id": "4d588c45-6655-4560-802d-89d0ab18ea2c",
       "nodeId": "b0c02000-2026-4020-8000-000000000010",
       "path": ".nodespec/tasks/content-export-conformance-b0c02000.task.md",
-      "kind": "task"
+      "kind": "task",
+      "contentHash": "00000000297b6703"
     },
     {
       "id": "4d5b6ab6-f5bf-5a34-bcc4-63fe4d3cc0da",
@@ -4125,6 +4428,13 @@
       "path": "assets/environment/lagoon_meshy/boulder_cluster_Image_0.jpg.import",
       "kind": "config",
       "contentHash": "0000000025de6037"
+    },
+    {
+      "id": "4f77a771-416b-4a0b-aaf8-4f2a3c686ef6",
+      "nodeId": "b0c02000-2026-4020-8000-000000000011",
+      "path": ".nodespec/tests/req-013.tests.md",
+      "kind": "test-plan",
+      "contentHash": "0000000009b7c798"
     },
     {
       "id": "4fe62942-a278-5f56-9de2-4733c44df0de",
@@ -4687,6 +4997,12 @@
       "contentHash": "000000007230989d"
     },
     {
+      "id": "6159a1a9-74f1-42e3-8661-4d9f25fe7158",
+      "nodeId": "b0c02000-2026-4020-8000-000000000004",
+      "path": ".nodespec/tests/req-005.tests.md",
+      "kind": "test-plan"
+    },
+    {
       "id": "61b21aff-3f9c-57f0-ac55-5e05db65a381",
       "nodeId": "b0c02000-2026-4020-8000-000000000007",
       "path": "assets/environment/lagoon_meshy/shore_rock.glb.import",
@@ -4953,6 +5269,13 @@
       "contentHash": "0000000014b9969f"
     },
     {
+      "id": "6a43c34c-8f0a-47b7-985c-3a4352dd03af",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": "docs/design/references/living-cascade-hero-map.png",
+      "kind": "doc",
+      "contentHash": "000000005a684c8a"
+    },
+    {
       "id": "6a798172-6354-4453-8627-180912233445",
       "nodeId": "b0c02000-2026-4020-8000-000000000010",
       "path": "fixtures/worlds/missing_checkpoint/world.json",
@@ -5058,6 +5381,13 @@
       "contentHash": "00000000004143c7"
     },
     {
+      "id": "6f00cada-64b4-493f-975e-ba4d0ac1b5f0",
+      "nodeId": "b0c02000-2026-4020-8000-000000000010",
+      "path": ".nodespec/tests/req-011.tests.md",
+      "kind": "test-plan",
+      "contentHash": "000000005b309976"
+    },
+    {
       "id": "6f043e6a-be43-5209-9cb0-cfcd38957d39",
       "nodeId": "b0c02000-2026-4020-8000-000000000005",
       "path": "core/save/world_contract_shape.gd.uid",
@@ -5147,6 +5477,13 @@
       "path": "core/rendering/terrain/river_sand.tres",
       "kind": "source",
       "contentHash": "000000007a33d340"
+    },
+    {
+      "id": "7176762d-d8b4-4de1-82dd-77975cc5de61",
+      "nodeId": "b0c02000-2026-4020-8000-000000000012",
+      "path": ".nodespec/tests/req-014.tests.md",
+      "kind": "test-plan",
+      "contentHash": "00000000564d9c23"
     },
     {
       "id": "71809122-3344-4556-8778-990011223344",
@@ -5289,6 +5626,13 @@
       "contentHash": "0000000003c74e38"
     },
     {
+      "id": "7741f843-37a2-47f3-bc51-e626526e6fad",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": "docs/design/references/source-manifest.json",
+      "kind": "config",
+      "contentHash": "00000000114a48b0"
+    },
+    {
       "id": "774b1eca-0336-5adf-ac7c-a75bf6c835b6",
       "nodeId": "b0c02000-2026-4020-8000-000000000007",
       "path": "assets/character/explorer_backpack/explorer_backpack_Canvas_olive_color.png",
@@ -5415,6 +5759,13 @@
       "contentHash": "000000003966d994"
     },
     {
+      "id": "7b0c1027-b81a-4afd-93c0-682c2139b028",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": "docs/design/first-adventure-storyboard.md",
+      "kind": "doc",
+      "contentHash": "000000002b24a0c6"
+    },
+    {
       "id": "7b10c33c-e23c-56cb-9b8c-d2a28108c7ba",
       "nodeId": "b0c02000-2026-4020-8000-000000000003",
       "path": "core/camera/look_input.gd.uid",
@@ -5497,6 +5848,13 @@
       "path": "test/core/save/test_save_system.gd.uid",
       "kind": "config",
       "contentHash": "000000004faa278e"
+    },
+    {
+      "id": "7d146820-1fc8-46d1-bd59-4c7abda367f6",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": ".nodespec/tests/req-021.tests.md",
+      "kind": "test-plan",
+      "contentHash": "0000000072af7688"
     },
     {
       "id": "7d63759f-bcc9-53be-99c1-5c3939b36d3a",
@@ -5800,6 +6158,13 @@
       "contentHash": "000000001bcdb5a2"
     },
     {
+      "id": "8602bc05-c0a9-4ba8-89a4-f8c7c73944d9",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": "docs/design/references/living-cascade-overhead.svg",
+      "kind": "doc",
+      "contentHash": "000000007308f456"
+    },
+    {
       "id": "8622d9f9-f891-5290-94ad-90a742e7c565",
       "nodeId": "b0c02000-2026-4020-8000-000000000007",
       "path": "assets/audio/cascade/checkpoint.wav.import",
@@ -5852,7 +6217,8 @@
       "id": "88159329-fc28-4637-897f-2952f5175890",
       "nodeId": "b0c02000-2026-4020-8000-000000000004",
       "path": ".nodespec/tasks/drift-fleet-encounters-b0c02000.task.md",
-      "kind": "task"
+      "kind": "task",
+      "contentHash": "0000000032f0e180"
     },
     {
       "id": "881c7856-fd8e-51d7-a4d3-6fcf32ac4c34",
@@ -6002,6 +6368,13 @@
       "contentHash": "0000000075d42972"
     },
     {
+      "id": "8b847555-5cfb-4569-8009-6a693bcf880e",
+      "nodeId": "b0c02000-2026-4020-8000-000000000012",
+      "path": ".nodespec/tests/req-015.tests.md",
+      "kind": "test-plan",
+      "contentHash": "000000001b3dd2be"
+    },
+    {
       "id": "8b9c0d1e-2f30-4b41-9c52-d3e4f5060812",
       "nodeId": "b0c02000-2026-4020-8000-000000000003",
       "path": "core/camera/camera_hint.gd",
@@ -6084,6 +6457,13 @@
       "path": "core/rendering/terrain/river_stone.tres",
       "kind": "source",
       "contentHash": "000000003efb299f"
+    },
+    {
+      "id": "8e6e438d-73ce-4e12-9380-01c853e26d25",
+      "nodeId": "b0c02000-2026-4020-8000-000000000013",
+      "path": ".nodespec/tests/req-017.tests.md",
+      "kind": "test-plan",
+      "contentHash": "000000001e2ae08d"
     },
     {
       "id": "8e833561-8210-5d77-8d30-e875af437466",
@@ -6247,6 +6627,13 @@
       "contentHash": "000000006936557a"
     },
     {
+      "id": "9406e196-f6b3-4e4d-97df-763318c70346",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": "docs/design/references/living-cascade-elevation.svg",
+      "kind": "doc",
+      "contentHash": "0000000073038f47"
+    },
+    {
       "id": "9443ed36-42ed-5a85-8ecd-214198f3d9bd",
       "nodeId": "b0c02000-2026-4020-8000-000000000007",
       "path": "test/core/rendering/test_terrain_shell.gd.uid",
@@ -6376,7 +6763,8 @@
       "id": "99089a9b-6ef2-4880-86eb-04b2af0e4540",
       "nodeId": "b0c02000-2026-4020-8000-000000000002",
       "path": ".nodespec/tasks/hero-motion-animation-b0c02000.task.md",
-      "kind": "task"
+      "kind": "task",
+      "contentHash": "000000002d49378b"
     },
     {
       "id": "990de24b-97c9-53eb-8805-be1265fddcb1",
@@ -6523,7 +6911,7 @@
       "nodeId": "b0c02000-2026-4020-8000-000000000013",
       "path": "ARCHITECTURE.md",
       "kind": "doc",
-      "contentHash": "0000000046c77d84"
+      "contentHash": "0000000066b36646"
     },
     {
       "id": "9d06cec3-8d25-5be8-9086-2edc2f5889c6",
@@ -6531,6 +6919,13 @@
       "path": "tools/test_decimate_model.py",
       "kind": "source",
       "contentHash": "00000000785c7a3e"
+    },
+    {
+      "id": "9d099667-5861-4399-90b1-119494129b62",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": "docs/design/.gdignore",
+      "kind": "config",
+      "contentHash": "000000004e2b7263"
     },
     {
       "id": "9dd9cdaf-2b87-5b29-984b-5872eb1cf091",
@@ -6722,6 +7117,13 @@
       "contentHash": "0000000050905330"
     },
     {
+      "id": "a5ebd50e-37bd-44f0-9dbf-75b66e0d6a20",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": "docs/design/design-consistency-audit.md",
+      "kind": "doc",
+      "contentHash": "000000007a98b605"
+    },
+    {
       "id": "a5f2c71d-eded-5809-a0ed-f136bcf676d1",
       "nodeId": "b0c02000-2026-4020-8000-000000000007",
       "path": "assets/environment/coral_branch/coral_branch.glb.import",
@@ -6788,7 +7190,7 @@
       "id": "a7c3e5f1-2b4d-4068-8e9a-1c2d3e4f5002",
       "nodeId": "b0c02000-2026-4020-8000-000000000004",
       "path": "test/hub/test_world_drift_fleet.gd",
-      "kind": "test-plan",
+      "kind": "source",
       "contentHash": "000000006bc99cab"
     },
     {
@@ -6816,7 +7218,8 @@
       "id": "a81de609-bf4d-44ca-be3b-4a2b4a280423",
       "nodeId": "b0c02000-2026-4020-8000-000000000009",
       "path": ".nodespec/tasks/family-workshop-starter-b0c02000.task.md",
-      "kind": "task"
+      "kind": "task",
+      "contentHash": "0000000033291255"
     },
     {
       "id": "a835d2a5-ece2-567b-b845-4ea6267341dd",
@@ -7022,6 +7425,19 @@
       "contentHash": "0000000039936826"
     },
     {
+      "id": "af1a3227-2243-435b-bd00-5ad30b59fe9b",
+      "nodeId": "b0c02000-2026-4020-8000-000000000004",
+      "path": ".nodespec/tests/req-004.tests.md",
+      "kind": "test-plan"
+    },
+    {
+      "id": "af7a510c-85af-4b07-a00d-01154b270a10",
+      "nodeId": "b0c02000-2026-4020-8000-000000000009",
+      "path": ".nodespec/tests/req-010.tests.md",
+      "kind": "test-plan",
+      "contentHash": "00000000116e2c57"
+    },
+    {
       "id": "afd63283-a0b8-582e-95b5-b62bf8f4054d",
       "nodeId": "b0c02000-2026-4020-8000-000000000005",
       "path": "core/rendering/crayfish_motion.gd",
@@ -7132,6 +7548,13 @@
       "path": "core/camera/camera_follow.gd.uid",
       "kind": "config",
       "contentHash": "00000000161d2f77"
+    },
+    {
+      "id": "b27b440c-c899-45dd-86a5-42e9b992480e",
+      "nodeId": "b0c02000-2026-4020-8000-000000000011",
+      "path": ".nodespec/tests/req-016.tests.md",
+      "kind": "test-plan",
+      "contentHash": "000000006a8356af"
     },
     {
       "id": "b2880100-445b-5f34-b3e4-11d75008bd5c",
@@ -7267,6 +7690,13 @@
       "contentHash": "000000005f9e32b6"
     },
     {
+      "id": "b6910134-b0c8-4697-a208-cb0264d50c41",
+      "nodeId": "b0c02000-2026-4020-8000-000000000005",
+      "path": ".nodespec/tests/req-006.tests.md",
+      "kind": "test-plan",
+      "contentHash": "0000000050b87fe5"
+    },
+    {
       "id": "b71cb2bf-149c-5912-a248-3134b18687f3",
       "nodeId": "b0c02000-2026-4020-8000-000000000002",
       "path": "test/core/rendering/test_hero_backpack.gd.uid",
@@ -7347,7 +7777,8 @@
       "id": "b94ca155-ce4b-4f95-8d20-e5424fc29bbf",
       "nodeId": "b0c02000-2026-4020-8000-000000000008",
       "path": ".nodespec/tasks/official-adventure-lagoon-living-cascade-b0c02000.task.md",
-      "kind": "task"
+      "kind": "task",
+      "contentHash": "000000005ab180cf"
     },
     {
       "id": "b95c819c-c637-47cd-9f30-588ca0c09e3f",
@@ -7411,6 +7842,13 @@
       "path": "tools/test_performance_targets.py",
       "kind": "source",
       "contentHash": "00000000053eead0"
+    },
+    {
+      "id": "bbaa48c8-61c5-4bc3-b0be-b2bdb8473754",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": ".nodespec/tests/req-022.tests.md",
+      "kind": "test-plan",
+      "contentHash": "000000006cecf9ad"
     },
     {
       "id": "bbbb87f1-283c-51b7-a1a2-918572918ba2",
@@ -7593,6 +8031,13 @@
       "path": "assets/environment/sand_shelf_set/sand_shelf_set_normal.jpg",
       "kind": "design",
       "contentHash": "00000000078f329f"
+    },
+    {
+      "id": "c13b0508-2722-442a-b26e-bf869981768b",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": "docs/design/workflow-reference-map.json",
+      "kind": "config",
+      "contentHash": "0000000013e4ced9"
     },
     {
       "id": "c16b946a-ae68-5759-81c4-2839c78faeb0",
@@ -8001,6 +8446,13 @@
       "contentHash": "0000000043f7cb29"
     },
     {
+      "id": "c9e34a7a-7faa-4cb2-8b64-ae19255fae58",
+      "nodeId": "b0c02000-2026-4020-8000-000000000013",
+      "path": ".nodespec/tests/req-018.tests.md",
+      "kind": "test-plan",
+      "contentHash": "000000002a2822ca"
+    },
+    {
       "id": "ca020879-6c73-58ab-86b0-48ee54dc3a99",
       "nodeId": "b0c02000-2026-4020-8000-000000000007",
       "path": "assets/environment/canopy_grove/canopy_grove.glb",
@@ -8081,7 +8533,8 @@
       "id": "cc30048e-132a-4c3a-a704-dd29627cd0c7",
       "nodeId": "b0c02000-2026-4020-8000-000000000001",
       "path": ".nodespec/tests/req-001.tests.md",
-      "kind": "test-plan"
+      "kind": "test-plan",
+      "contentHash": "000000006a234afb"
     },
     {
       "id": "cc971344-d13d-5379-b4f6-b18f80f167d6",
@@ -8133,6 +8586,13 @@
       "contentHash": "0000000017b3a12e"
     },
     {
+      "id": "ce5a10f1-8fa8-407a-84d0-929488105397",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": ".nodespec/tests/req-024.tests.md",
+      "kind": "test-plan",
+      "contentHash": "000000003f79ae78"
+    },
+    {
       "id": "ce7b2065-084a-5336-bf95-b11f02e62d75",
       "nodeId": "b0c02000-2026-4020-8000-000000000007",
       "path": "assets/environment/canopy_grove_tall/provenance.json",
@@ -8159,6 +8619,13 @@
       "path": "assets/environment/cascade_mossy_stone/mossy_stone.glb",
       "kind": "design",
       "contentHash": "00000000394cf104"
+    },
+    {
+      "id": "cf4b718d-8796-4b49-a60a-b1e3a42577bc",
+      "nodeId": "b0c02000-2026-4020-8000-000000000006",
+      "path": ".nodespec/tests/req-008.tests.md",
+      "kind": "test-plan",
+      "contentHash": "00000000710e4a0f"
     },
     {
       "id": "cfaae247-4a23-52a2-a4f4-bc1265ee89f0",
@@ -8532,6 +8999,13 @@
       "contentHash": "000000007fd84316"
     },
     {
+      "id": "d9a10c02-c918-4ad3-ad70-e32b3e049731",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": ".nodespec/tests/req-026.tests.md",
+      "kind": "test-plan",
+      "contentHash": "000000007cb22b52"
+    },
+    {
       "id": "d9ba1150-12d9-5a13-8813-9fddadfc5eb0",
       "nodeId": "b0c02000-2026-4020-8000-000000000007",
       "path": "assets/environment/lagoon_meshy/cliff_rock.glb.import",
@@ -8563,7 +9037,8 @@
       "id": "db50fc6c-f6bf-41bf-b274-4639df4b45da",
       "nodeId": "b0c02000-2026-4020-8000-000000000003",
       "path": ".nodespec/tasks/input-camera-accessibility-b0c02000.task.md",
-      "kind": "task"
+      "kind": "task",
+      "contentHash": "000000003d8ba44c"
     },
     {
       "id": "db7ea737-89df-5d2b-80ba-31d2b9f5d2a0",
@@ -8576,7 +9051,8 @@
       "id": "dbc04099-c668-4938-a186-1a3dc521e0f7",
       "nodeId": "b0c02000-2026-4020-8000-000000000006",
       "path": ".nodespec/tasks/versioned-world-runtime-api-b0c02000.task.md",
-      "kind": "task"
+      "kind": "task",
+      "contentHash": "0000000046185474"
     },
     {
       "id": "dbef0cf3-3f49-57f7-9092-63a882d1905b",
@@ -8715,7 +9191,8 @@
       "id": "dfe6ded2-1ddb-4df7-a20a-1f004bd94d84",
       "nodeId": "b0c02000-2026-4020-8000-000000000013",
       "path": ".nodespec/tasks/quality-evidence-migration-gates-b0c02000.task.md",
-      "kind": "task"
+      "kind": "task",
+      "contentHash": "000000003080d819"
     },
     {
       "id": "dfeafb0d-1e2f-4330-8bbb-123456789012",
@@ -9134,7 +9611,8 @@
       "id": "e9bee5b8-d389-4bc7-bfdb-fe912be7c10b",
       "nodeId": "b0c02000-2026-4020-8000-000000000003",
       "path": ".nodespec/tests/req-003.tests.md",
-      "kind": "test-plan"
+      "kind": "test-plan",
+      "contentHash": "000000001f6779ab"
     },
     {
       "id": "e9cdc890-085d-52a0-9e43-8ca917c51352",
@@ -9448,7 +9926,7 @@
       "id": "f3a1c2d4-5e6f-4708-9a1b-2c3d4e5f6004",
       "nodeId": "b0c02000-2026-4020-8000-000000000002",
       "path": "test/core/rendering/test_hero_animator.gd",
-      "kind": "test-plan",
+      "kind": "source",
       "contentHash": "000000003ae1fd44"
     },
     {
@@ -9494,6 +9972,13 @@
       "contentHash": "000000001ef53a12"
     },
     {
+      "id": "f4f6323c-a7ac-48f5-8070-541578cfe13f",
+      "nodeId": "b0c02000-2026-4020-8000-000000000008",
+      "path": ".nodespec/tests/req-019.tests.md",
+      "kind": "test-plan",
+      "contentHash": "000000004273e194"
+    },
+    {
       "id": "f509e422-e4aa-5c79-a475-0ddc3b5c1e47",
       "nodeId": "b0c02000-2026-4020-8000-000000000007",
       "path": "assets/environment/lagoon_meshy/cliff_rock_Image_0.jpg.import",
@@ -9518,7 +10003,8 @@
       "id": "f683bd8c-e541-4332-b450-8e2aa167aa6b",
       "nodeId": "b0c02000-2026-4020-8000-000000000002",
       "path": ".nodespec/tests/req-002.tests.md",
-      "kind": "test-plan"
+      "kind": "test-plan",
+      "contentHash": "000000004d0df1b8"
     },
     {
       "id": "f6a676f3-f502-5fe9-9db8-0987b8637571",

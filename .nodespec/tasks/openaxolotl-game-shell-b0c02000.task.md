@@ -19,8 +19,11 @@ None recorded for this node. Standing conditions the build must honour (security
 
 ## Implementation Context
 
-<!-- AI-AUTHORED SECTION: NodeSpec never writes prose here. Your text survives regeneration verbatim while the derived sections around it keep refreshing. -->
-_Not yet authored._ **Consuming AI — author this section BEFORE building.** Working from this full packet plus the repository, record the project-specific context no catalog can know: how this node's technology composes with its neighbors in THIS project, the integration specifics behind each interface contract, configuration rationale, and your intended implementation approach. Replace this placeholder (keep the heading) either by editing this file in the repo and pushing — NodeSpec surfaces the edit as a change card for the user to accept — or via an update_artifact patch through propose_patches. If a REVIEW NEEDED line appears here later, the derived context changed after you wrote this: re-verify the section, then delete that line.
+> ⚠ REVIEW NEEDED: the derived sections of this document changed after this context was authored. Re-verify this section against them, update what no longer holds, then delete this line.
+
+Own the game boot, pause/settings and service lifetime composition around project.godot and core/save/game_session.gd. Keep the local gameplay snapshot 2464a14 authoritative; da401e2 changes binary resource storage only. Adapt the existing application rather than creating another Godot project. Wire semantic input, world runtime and installed-world availability at one composition point. The catalog is optional: offline official play must boot, finish and return even if catalog initialization fails. Do not move world placement coordinates into the shell. Verify repeated load/unload and reset cancel stale services and actions.
+
+This document describes planned work. All completion boxes remain open until current evidence or recorded human approval is attached. Keep the existing task keys and criterion identities. Shared payload schemas are normative even where generic dependency guidance describes only wiring.
 
 ## Implementation Tasks
 
@@ -29,31 +32,54 @@ Ordered WORK ORDERS synthesized from the model — this node's deliverable kind,
 - [ ] **T1 — Scaffold the Godot component.** <!-- t:58e89980 -->
   Create the source layout, build files, and test harness this node's working code lives in.
   Start from the catalog's suggested structure: `scripts/main.gd`, `scenes/main.tscn`, `project.godot`, `export_presets.cfg`.
+  - [ ] Inventory the current bound implementation including `core/save/game_session.gd`, `Play Lagoon.cmd`, `Open Lagoon Editor.cmd`; record each retained component, migration gap and owning dependency before changing files.
+  - [ ] Use the existing repository/project and test harness; adapt the current component in place rather than creating a parallel scaffold.
+  - [ ] Capture a clean boot-to-return baseline and catalog all instantiated services.
+  - [ ] Record a baseline fixture and observable behavior for this component at the pinned gameplay commit; keep historical results separate from fresh proof.
 - [ ] **T2 — Implement the integration with Versioned World Runtime API (godot) per Contract "Declarative World Definition v1" (dependency).** <!-- t:277a8bd7 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
+  - [ ] Map the existing producer/consumer wiring for Declarative World Definition v1 to the connected component and its attached schema; document any adapter and version boundary without implementing the neighbor's internals.
+  - [ ] Exercise one conforming exchange and applicable missing/incompatible/reset case through that interface; use local fixtures during development and the real provider before final acceptance.
 - [ ] **T3 — Implement the integration with Input, Camera & Accessibility (godot) per Contract "Semantic Input Frame v1" (dependency).** <!-- t:bb26635f -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
+  - [ ] Map the existing producer/consumer wiring for Semantic Input Frame v1 to the connected component and its attached schema; document any adapter and version boundary without implementing the neighbor's internals.
+  - [ ] Exercise one conforming exchange and applicable missing/incompatible/reset case through that interface; use local fixtures during development and the real provider before final acceptance.
 - [ ] **T4 — Implement the integration with Official Adventure: Lagoon & Living Cascade (godot) per Contract "Declarative World Definition v1" (dependency).** <!-- t:06fe7274 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
+  - [ ] Map the existing producer/consumer wiring for Declarative World Definition v1 to the connected component and its attached schema; document any adapter and version boundary without implementing the neighbor's internals.
+  - [ ] Exercise one conforming exchange and applicable missing/incompatible/reset case through that interface; use local fixtures during development and the real provider before final acceptance.
 - [ ] **T5 — Implement the integration with Adventure Catalog & Installation (godot) per Contract "Installed Adventure State v1" (dependency).** <!-- t:73eedac3 -->
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
+  - [ ] Map the existing producer/consumer wiring for Installed Adventure State v1 to the connected component and its attached schema; document any adapter and version boundary without implementing the neighbor's internals.
+  - [ ] Exercise one conforming exchange and applicable missing/incompatible/reset case through that interface; use local fixtures during development and the real provider before final acceptance.
 - [ ] **T6 — Expose the interface Quality Evidence & Migration Gates consumes, per Contract "Quality Run Record v1" (dependency).** <!-- t:915542b9 -->
   Record the endpoint/identifiers Quality Evidence & Migration Gates needs in this node's config artifacts — coordinate with Quality Evidence & Migration Gates.
   Dependency contract — capture the reference/identifier wiring in this node's config artifacts; no payload schema expected.
+  - [ ] Map the existing producer/consumer wiring for Quality Run Record v1 to the connected component and its attached schema; document any adapter and version boundary without implementing the neighbor's internals.
+  - [ ] Exercise one conforming exchange and applicable missing/incompatible/reset case through that interface; use local fixtures during development and the real provider before final acceptance.
 - [ ] **T7 — Implement: "The shipped build starts and completes an official adventure without an AI account, creator tooling or a network connection." (REQ-001).** <!-- t:8f779291 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-001 "The shipped build starts and completes an official adventure without an AI account, creator tooling or a network connection." — possible coordination point: Contract "Declarative World Definition v1" (dependency) to Official Adventure: Lagoon & Living Cascade (keyword signal only)
+  - [ ] Implement this criterion within the existing owned component and public contracts, using offline boot, official route completion, return and unavailable catalog as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T8 — Implement: "The game contains no multiplayer dependency; optional catalog failures do not prevent playing installed official content." (REQ-001).** <!-- t:36b91ff8 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-001 "The game contains no multiplayer dependency; optional catalog failures do not prevent playing installed official content." — possible coordination point: Contract "Installed Adventure State v1" (dependency) to Adventure Catalog & Installation (keyword signal only)
+  - [ ] Implement this criterion within the existing owned component and public contracts, using offline boot, official route completion, return and unavailable catalog as the focused regression setup.
+  - [ ] Exercise success, boundary and invalid/cancellation cases that apply to this criterion; assert its stated observable behavior and timing rather than internal call order, and report fresh evidence only after execution.
 - [ ] **T9 — Implement: "A recorded family playtest evaluates the clarity and enjoyment of the official start-to-finish route; findings are resolved or explicitly tracked." (REQ-001).** <!-- t:43d44844 -->
   No interface contract maps to this criterion — it is this node's internal responsibility.
   ↳ serves: REQ-001 "A recorded family playtest evaluates the clarity and enjoyment of the official start-to-finish route; findings are resolved or explicitly tracked." — possible coordination point: Contract "Declarative World Definition v1" (dependency) to Official Adventure: Lagoon & Living Cascade (keyword signal only)
+  - [ ] Prepare a repeatable human-review setup for offline boot, official route completion, return and unavailable catalog; record controls, camera, build and relevant device/settings.
+  - [ ] Capture the evidence and record the review decision against this exact criterion; name corrective work for failures and leave approval pending until the user confirms.
 - [ ] **T10 — Verify every acceptance criterion above and tick its box.** <!-- t:7cb6cb39 -->
   Ordering doctrine — plans follow schemas (contract-first TDD): schemas → test plans → implement → verify. Resolve any open [PLACEHOLDER: schema] gap FIRST (get_build_readiness supplies draftInputs; submit the schema via propose_patches update_contract) — test-plan scenarios touching a schemaless contract stay one-line [blocked by schema: …] markers until the schema lands, then the plan refreshes itself.
   AUTOMATED criteria: call get_test_plan for EACH requirement this node serves, implement the plan's test cases, run them, and report every outcome via report_test_results — a passing result flips the criterion's met flag automatically and the response receipt shows which criteria flipped.
   MANUAL criteria (rows marked (manual) above): report_test_results REFUSES to bind them — prove each by ticking its criterion box in this task doc and having the user approve the resulting change card; that approval is the only thing that flips a manual criterion met.
   This node is complete only when every criterion box is ticked and no `[PLACEHOLDER: …]` tag remains open.
+  - [ ] Run the component's current automated binding scenarios at the pushed implementation commit and report each result against its exact criterion; leave skipped/stale checks open.
+  - [ ] Collect the required human review and its evidence separately; do not auto-tick manual criteria or equate a headless pass with visual quality.
+  - [ ] Check every work-order step, dependency contract and remaining migration gap before declaring completion; hand off unresolved items with owner and reproduction.
 
 **Your first action — expand these work orders.** Each task above guarantees WHAT must be covered, not HOW. Before writing any code or configuration, expand every task with the concrete implementation steps for THIS technology in THIS project — the specific resources, settings, files, schemas, and tests — using the Configuration, Interface Contracts, Existing Implementation, Technology Guidance, and node context as your references. Write each work order's steps under its task line as indented checkbox lines (`  - [ ] <step>`), one action each, naming the file, setting or interface it changes, and send them with update_artifact (propose_patches, passing base_sequence) after this doc is accepted, keeping task IDs, criterion citations, and open `[PLACEHOLDER: …]` tags intact; the steps stay with their work order when this doc regenerates. Resolve placeholders with the user through the proposal flow; this node is never complete while one remains open. When the work orders are implemented, verify through the test lane: run get_test_plan for each requirement this node serves, implement and run the plan's tests, and report outcomes via report_test_results — passing results are the evidence that flips criteria met.
 
@@ -76,7 +102,7 @@ The whole vision is one read away: get_outcome_board lists every sentence with i
 
 ### REQ-001: A complete single-player adventure before creation
 Category: functional | Status: pending
-Children can enjoy the shipped official adventure independently of the optional creator ecosystem. Parent-led creation extends a finished game rather than being required to make it playable.
+Children enjoy Skippy's complete single-player adventure without creator tooling: discover ecosystem damage, follow clues, free the Riverheart, restore the Cascade and celebrate the return. Optional creation extends the finished game.
 
 **Acceptance criteria — your task boxes:**
 - [ ] The shipped build starts and completes an official adventure without an AI account, creator tooling or a network connection.
@@ -880,4 +906,5 @@ Startup/initialization order based on edge directions and interaction patterns.
 | `core/save/game_session.gd` | source | --- | draft |
 | `Play Lagoon.cmd` | source | --- | draft |
 | `export_presets.cfg` | config | --- | draft |
+| `.nodespec/tests/req-001.tests.md` - Test plan for requirement: A complete single-player adventure before creation | test-plan | markdown | draft |
 | `Open Lagoon Editor.cmd` | source | --- | draft |
