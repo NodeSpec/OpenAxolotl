@@ -87,9 +87,13 @@ func test_the_shipped_hero_is_skinned_to_a_skeleton() -> void:
 	assert_int(skeletons.size()).override_failure_message(
 		"the hero must import a Skeleton3D").is_equal(1)
 	var skeleton := skeletons[0] as Skeleton3D
+	# Twelve bones the clips key — root, spine, head, two gills, four legs,
+	# three tail segments — and under each leg the four the engine bends:
+	# upper, shin, foot, toe (tools/extend_hero_rig.py, REQ-002 AC-9).
 	assert_int(skeleton.get_bone_count()).override_failure_message(
-		"the documented rig is twelve bones: root, spine, head, two gills, "
-		+ "four legs, three tail segments").is_equal(12)
+		"the documented rig is twenty-eight bones: the twelve the clips key, "
+		+ "and an upper, shin, foot and toe under each of the four legs"
+		).is_equal(28)
 	for bone: String in ["root", "spine", "head", "tail_1"]:
 		assert_int(skeleton.find_bone(bone)).override_failure_message(
 			"the rig must carry the %s bone the clips key" % bone

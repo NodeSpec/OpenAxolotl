@@ -19,7 +19,9 @@ func test_equipment_reuses_the_hero_rig_without_changing_collision() -> void:
 	assert_bool(ATTACHMENT.attach(model) == gear).is_true()
 	assert_int(model.find_children("*", "Skeleton3D", true, false).size()).is_equal(1)
 	var skeleton := model.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
-	assert_int(skeleton.get_bone_count()).is_equal(12)
+	# The hero's own count: twelve bones the clips key and four under each leg
+	# (tools/extend_hero_rig.py). What this holds is that the gear ADDS none.
+	assert_int(skeleton.get_bone_count()).is_equal(28)
 	assert_int(body.find_children("*", "CollisionShape3D", true, false).size()).is_equal(1)
 	var capsule := (body.get_node("Collision") as CollisionShape3D).shape as CapsuleShape3D
 	assert_float(capsule.radius).is_equal_approx(0.5,0.0001)

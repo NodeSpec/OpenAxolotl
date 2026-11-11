@@ -79,6 +79,44 @@ var _lower_phase: float = 0.0
 var _lower_walking: bool = false
 var _leg_tracks: Dictionary = {}
 
+## --- Gait timing on a rig whose legs have joints (REQ-002 AC-9) -------------
+##
+## A walk cycle is not free to take any length it likes. A planted foot stays
+## on its point of ground while the body passes over it, so the distance the
+## body covers during one stance is bounded by how far the LEG can reach — and
+## this animal's legs are short: measured on the shipped rig, a planted foot
+## can stay put for 0.14-0.18 m of body travel before the leg runs out
+## (HeroMotion.planted_span, held by test_hero_legs.gd).
+##
+## The old cadence was `speed / 1.2` cycles per second, i.e. one full cycle
+## per 1.2 m. With feet on the ground for 62% of it, that asked each foot to
+## hold still across 0.74 m: four times its reach. No amount of correction
+## closes that gap; the feet HAD to skate, and tools/hero_gait_probe.gd
+## measured them doing it at 57-72% of body speed.
+##
+## So the cadence is derived from the reach instead. Slow, the animal walks:
+## feet down most of the cycle, stepping exactly as often as it takes to keep
+## each stance inside STANCE_TRAVEL. Fast, the cycle cannot keep shortening
+## without becoming a blur, so it caps and the gait becomes a scurry: feet
+## touch briefly and spend most of the cycle in the air, which is what small
+## short-legged animals actually do at speed.
+
+## How far the body may travel over one planted foot, in metres.
+const STANCE_TRAVEL := 0.16
+
+## Cycles per second above which more steps stop reading as steps.
+const CADENCE_MAX := 5.0
+
+## Share of the cycle a foot spends on the ground, walking and at a scurry.
+const DUTY_WALK := 0.62
+const DUTY_SCURRY := 0.36
+
+## The one-bone cadence, kept for rigs that have no leg joints to plant with.
+const LEGACY_METRES_PER_CYCLE := 1.2
+
+var _jointed_legs: bool = false
+var _planar: float = 0.0
+
 
 ## Which clip a body in this state should be playing.
 static func choose_clip(in_water: bool, grounded: bool,
@@ -88,6 +126,16 @@ static func choose_clip(in_water: bool, grounded: bool,
 	if not grounded:
 		return HOP if vertical_speed > RISING_SPEED else FALL
 	return WADDLE if planar_speed > MOVING_SPEED else IDLE
+
+
+## Share of its cycle a foot is on the ground at this speed.
+static func gait_duty(planar: float) -> float:
+	return lerpf(DUTY_WALK, DUTY_SCURRY, smoothstep(0.6, 3.4, planar))
+
+
+## Walk cycles per second at this speed, for legs that can plant.
+static func gait_cadence(planar: float) -> float:
+	return clampf(planar * gait_duty(planar) / STANCE_TRAVEL, 0.0, CADENCE_MAX)
 
 
 ## Binds the AnimationPlayer the model imported, if it has one. A body with
@@ -106,6 +154,14 @@ func bind(model: Node) -> bool:
 	var skeletons := model.find_children("*","Skeleton3D",true,false)
 	if not skeletons.is_empty():
 		HeroActionClips.install(_player,skeletons[0] as Skeleton3D)
+		# Only a rig with whole leg chains can keep the quicker step honest; a
+		# one-bone leg stepping this fast would just skate faster. The same
+		# all-four-or-none rule HeroMotion fits by, so the two never disagree.
+		_jointed_legs = true
+		for chain: Array[String] in [HeroMotion.UPPERS,HeroMotion.SHINS,HeroMotion.ANKLES,HeroMotion.TOES]:
+			for bone: String in chain:
+				if (skeletons[0] as Skeleton3D).find_bone(bone) < 0:
+					_jointed_legs = false
 	_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 	for name: String in LOOPING:
 		if _player.has_animation(name):
@@ -179,6 +235,22 @@ func get_gait_phase() -> float:
 		return 0.0
 	return fposmod(_player.current_animation_position/_player.get_animation(WADDLE).length,1.0)
 
+## Walk cycles per second right now.
+func get_gait_cadence() -> float:
+	if _jointed_legs:
+		return gait_cadence(_planar)
+	return clampf(_planar / LEGACY_METRES_PER_CYCLE, 0.0, 4.5)
+
+
+## Share of the cycle each foot is on the ground right now.
+func get_gait_duty() -> float:
+	return gait_duty(_planar)
+
+
+func has_jointed_legs() -> bool:
+	return _jointed_legs
+
+
 func has_walking_feet() -> bool:
 	return _current == WADDLE or (_current == WHACK and _lower_walking)
 
@@ -202,9 +274,10 @@ func step(delta: float, in_water: bool, grounded: bool,
 	if _player == null:
 		return
 	var planar := Vector2(velocity.x, velocity.z).length()
+	_planar = planar
 	_lower_walking = grounded and not in_water and planar > MOVING_SPEED
 	if _action == WHACK and _lower_walking:
-		_lower_phase = fposmod(_lower_phase+delta*clampf(planar/1.2,0.0,4.5),1.0)
+		_lower_phase = fposmod(_lower_phase+delta*get_gait_cadence(),1.0)
 	if _action_remaining > 0.0:
 		if (_action == SPIN and not in_water) or (_action==ROLL and in_water) or (_action==WHACK and in_water and not allow_water_whack) or (_action==DANCE and (in_water or not grounded)):
 			_action_remaining = 0.0
@@ -228,7 +301,7 @@ func step(delta: float, in_water: bool, grounded: bool,
 	# A waddle at half speed should not play at full tempo: tying playback to
 	# travel is what stops the legs from skating over the ground.
 	if _current == WADDLE:
-		_player.speed_scale = clampf(planar/1.2,0.0,4.5)*_player.get_animation(WADDLE).length
+		_player.speed_scale = get_gait_cadence()*_player.get_animation(WADDLE).length
 	elif _current == SWIM:
 		_player.speed_scale = clampf(velocity.length() / 6.0, 0.5, 1.8)
 	else:

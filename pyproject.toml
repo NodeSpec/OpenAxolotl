@@ -42,6 +42,7 @@ oax-snapshot = "tools.gameplay_snapshot:main"
 oax-refine = "tools.refine_model:main"
 oax-decimate = "tools.decimate_model:main"
 oax-rig = "tools.rig_model:main"
+oax-extend-rig = "tools.extend_hero_rig:main"
 
 [tool.setuptools]
 packages = ["tools"]

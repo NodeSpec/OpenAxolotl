@@ -23,3 +23,14 @@ Files changed: core/rendering/hero_action_clips.gd, hero_motion.gd, hero_surface
 The whack now pivots the hips approximately 103 degrees at full extension, with the root orbiting around the visual character centre on the ground plane. Shoulders and head counter-turn toward the target. Most tail bend is at the base, with a straighter outer tail so it sweeps outward into a forward strike instead of coiling beside the torso. The pose is applied by the existing SkeletonModifier and restores after the action; no controller/capsule motion is added.
 
 The live rig reached 0.978 m forward of the character centre and 0.437 m ahead of the head. Nine in-game checks passed, including keyboard activation, fixed capsule position and exact root-position recovery. The expanded 47-test focused suite passed; its new spatial regression samples the generated clip across the whole swing and checks forward reach, head clearance, and an above-ground tail. Actual gameplay and overhead captures are in the updated replay. The prior static/level gates were not rerun for this two-file pose adjustment. The existing seven-texture shutdown warning remains. No Git commit.
+
+
+## Leg chains and planted feet
+
+Added November 10, 2026. Full account, measurements and limits: `docs/hero-rig-audit.md`.
+
+- The rig gained four bones under each leg (`upper_xx`, `shin_xx`, `foot_xx`, `toe_xx`) through `tools/extend_hero_rig.py`. The twelve existing bones, the mesh and all clips are unchanged. Every sole is now bound to its own foot; the front-left one had been bound mostly to the head.
+- `HeroMotion` places each foot with a two-bone solve instead of the capped one-bone correction: a foot lands, stays on its point of ground, and lifts when the leg runs out of reach. Clip rotation keyed on `leg_xx` is handed to `upper_xx` so the limb turns at its real shoulder. Swimming limbs paddle about that shoulder with a folding shin.
+- `HeroAnimator` times the walk from leg reach rather than from a fixed 1.2 m per cycle: a walk at low speed, a capped five-cycle-per-second scurry from about 1.4 m/s. A rig without the new bones keeps the old cadence and the old correction.
+- The body rides up to 3 cm lower while walking (`visual_offset` only; the collision capsule is not touched).
+- New tools: `tools/hero_gait_probe.gd` (measures foot slide), `tools/hero_feet_review.gd` (close-up frames).
